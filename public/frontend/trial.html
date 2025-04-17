@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Abroad Chat</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Updated Font Awesome for fas icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+    <!-- Bootstrap Icons (if needed) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" />
+</head>
+
+<body>
+    <section style="max-width: 90rem;">
+        <div class="container-fluid main-container">
+            <nav class="navbar navbar-expand-lg fixed-top">
+                <div class="container">
+                    <a class="navbar-brand" href="home.html">
+                        <span>
+                            <img src="Images/logo.png" img="img-fluid" alt="">
+                        </span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="job.html">Find jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " aria-current="page" href="#">resume help</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="resume_maker.html">resume maker</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="VisaHQ.html">visa hq</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="">insurance</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="#">forex calculator</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="horoscope.html">horoscope</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="Giftandcoupon.html">gifts and coupon</a>
+                            </li>
+
+                        </ul>
+
+                        <button id="main-profile" class="profile-button" data-bs-toggle="modal"
+                            data-bs-target="#profileModal">
+                            <img src="Images/profile-icon.png" alt="Profile">
+                        </button>
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </section>
+
+    <section>
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="container">
+                <h5 style="font-size: 30px;font-weight: 600;">Abroad Deals</h5>
+                <p>Expand Your Horizons with Abroad Deals!<br>
+                    Discover seamless opportunities for buying and selling goods internationally. Whether you’re looking
+                    to source unique products from across the globe or sell your offerings to a worldwide audience,
+                    we've got you covered! Abroad Deals simplifies the process. With secure transactions, reliable
+                    shipping, and expert support, we make it easier than ever to connect buyers and sellers across
+                    borders. Start exploring endless opportunities and take your trade global today!</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <!-- Left Side Buttons -->
+                <div class="d-flex gap-2">
+                    <button class="btn btn-toggle btn-all-categories active" onclick="toggleActive(this)">Item</button>
+                    <button class="btn btn-toggle" onclick="toggleActive(this)">Want to buy</button>
+                </div>
+                <!-- Right Side Add Item / Add Post Button -->
+                <button class="btn btn-add_post" id="addItemBtn" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    + Add Item
+                </button>
+            </div>
+            <h6>Find what you're looking for</h6>
+            <div class="container">
+                <div class="row g-2 mt-2 mb-1 align-items-center">
+                    <div class="col-md-5 d-flex align-items-center">
+                        <div class="input-group w-100">
+                            <span class="input-group-text">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control" placeholder="What are you looking for?">
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center">
+                        <select class="form-select abroad-deal">
+                            <option selected>Select Country</option>
+                            <option value="1">USA</option>
+                            <option value="2">India</option>
+                            <option value="3">UK</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center">
+                        <select class="form-select abroad-deal">
+                            <option selected>Select City</option>
+                            <option value="1">New York</option>
+                            <option value="2">Mumbai</option>
+                            <option value="3">London</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1 d-grid">
+                        <button class="btn btn-search w-100">Search</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function toggleActive(button) {
+                    // Remove 'active' class from all buttons
+                    document.querySelectorAll('.btn-toggle').forEach(btn => btn.classList.remove('active'));
+
+                    // Add 'active' class to the clicked button
+                    button.classList.add('active');
+
+                    // Get the form
+                    const itemForm = document.getElementById('itemForm');
+
+                    // Show 'itemForm' if "Item" button is clicked, otherwise hide it
+                    if (button.textContent.trim() === "Item") {
+                        itemForm.style.display = "block";
+                    } else {
+                        itemForm.style.display = "none";
+                    }
+                }
+
+                // Ensure the form is visible when the page loads
+                document.addEventListener("DOMContentLoaded", function () {
+                    document.getElementById('itemForm').style.display = "block";
+                });
+
+            </script>
+            <!-- Item Form Section -->
+            <div id="itemForm" style="display: block;">
+                <div class="container mb-5">
+                    <section class="uploads">
+                        <!-- Category Filter Section -->
+                        <div class="row">
+                            <div class="d-flex gap-2 p-3">
+                                <button class="btn-sm btn-outline-secondary rounded-pill category-btn active-btn"
+                                    onclick="filterCategory('all', this)">All</button>
+                                <button class="btn btn-outline-secondary btn-sm rounded-pill category-btn"
+                                    onclick="filterCategory('fashion', this)">Fashion</button>
+                                <button class="btn btn-outline-secondary btn-sm rounded-pill category-btn"
+                                    onclick="filterCategory('electronics', this)">Electronics</button>
+                                <button class="btn btn-outline-secondary btn-sm rounded-pill category-btn"
+                                    onclick="filterCategory('tools', this)">Tools</button>
+                            </div>
+
+                            <!-- Product Listing Section -->
+                            <div class="row g-2 mt-0" id="product-list">
+                                <!-- Dynamically Added Products Will Appear Here -->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Add Item Modal -->
+            <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel"
+                aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-white justify-content-center align-items-center">
+                            <h6 class="modal-title text-black d-flex justify-content-center" id="addItemModalLabel">Add
+                                Item</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addItemForm">
+                                <!-- Category Select with Floating Label -->
+                                <div class="mb-3 form-floating">
+                                    <select class="form-select abroad-deal-1 fw-semibold" id="categorySelect"
+                                        aria-label="Category" required>
+                                        <option value="" disabled selected>Choose a Category</option>
+                                        <option value="electronics">Electronics</option>
+                                        <option value="fashion">Fashion</option>
+                                        <option value="tools">Tools</option>
+                                    </select>
+                                    <label for="categorySelect">Category</label>
+                                </div>
+
+                                <!-- Title Input with Floating Label -->
+                                <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold" id="titleInput"
+                                        placeholder="Title" required>
+                                    <label for="titleInput">Title</label>
+                                </div>
+
+                                <!-- Price Input with Floating Label -->
+                                <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold" id="priceInput"
+                                        placeholder="Enter Price" required>
+                                    <label for="priceInput">Enter Price</label>
+                                </div>
+
+                                <!-- Description Textarea with Floating Label -->
+                                <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                    <textarea class="form-control abroad-deal-1 fw-semibold" id="descriptionInput"
+                                        rows="4" placeholder="Describe..." required></textarea>
+                                    <label for="descriptionInput">Description</label>
+                                </div>
+
+                                <!-- Input Group for "Add to your Post" with Image Icon -->
+                                <div class="mb-3 input-group">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold border-0"
+                                        placeholder="Add to your Post" id="addToPostInput">
+                                    <button class="btn abroad-deal-1 fw-semibold border-0"
+                                        style="border-top-right-radius: 5px; border-bottom-right-radius: 5px;"
+                                        type="button" id="uploadImageButton">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                    <!-- File Input (hidden) -->
+                                    <input type="file" id="imageInput" class="d-none" accept="image/*" />
+                                </div>
+
+                                <!-- Dynamically Display Image Here -->
+                                <div id="imagePreviewContainer" class="mb-3" style="display: none;">
+                                    <img id="imagePreview" class="img-fluid" alt="Selected Image"
+                                        style="width: 120px; height: 80px;" />
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-search w-25" id="submitItemButton">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Open file input when image button is clicked
+                document.getElementById('uploadImageButton').addEventListener('click', function () {
+                    document.getElementById('imageInput').click();
+                });
+
+                // Display selected image dynamically
+                document.getElementById('imageInput').addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (event) {
+                            // Show the image preview container
+                            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                            const imagePreview = document.getElementById('imagePreview');
+                            imagePreview.src = event.target.result; // Set the image source
+                            imagePreviewContainer.style.display = 'block'; // Make the preview container visible
+                        };
+                        reader.readAsDataURL(file); // Read the image file
+                    }
+                });
+
+                // Function to handle item submission and dynamically add it to the product list
+                document.getElementById('submitItemButton').addEventListener('click', function () {
+                    // Get the input values
+                    const category = document.getElementById('categorySelect').value;
+                    const title = document.getElementById('titleInput').value;
+                    const price = document.getElementById('priceInput').value;
+                    const description = document.getElementById('descriptionInput').value;
+                    const imageInput = document.getElementById('imageInput').files[0]; // Get the image file
+                    const imageURL = imageInput ? URL.createObjectURL(imageInput) : 'Images/default-image.png'; // Default image if no file selected
+
+                    // Create a new product card element
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('col-lg-3', 'col-md-3', 'col-sm-6', 'col-12', 'product');
+                    productCard.setAttribute('data-category', category);
+
+                    productCard.innerHTML = `
+        <div class="card-bdy-packages" onclick="window.location.href='abroadchat1.html';" style="cursor: pointer;">
+            <img src="${imageURL}" class="bdy-packages-img" alt="Product Image" style="width: 286px; height: 180px;">
+            <div class="card-body">
+                <p class="mt-3 mb-0">${title}</p>
+                <p class="price">NRs. ${price}</p>
+            </div>
+        </div>
+    `;
+
+                    // Add the new product card to the product list
+                    document.getElementById('product-list').appendChild(productCard);
+
+                    // Close the modal
+                    $('#addItemModal').modal('hide');
+
+                    // Reset form fields and image preview
+                    document.getElementById('addItemForm').reset();
+                    document.getElementById('imagePreviewContainer').style.display = 'none';
+                });
+            </script>
+
+
+            <!-- Add Post Modal -->
+            <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel"
+                aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div
+                            class="modal-header bg-white justify-content-center align-items-center border border-bottom">
+                            <h6 class="modal-title text-black d-flex justify-content-center" id="addPostModalLabel"
+                                style="font-size: 24px;">Create Post</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="img/Nirmal.png" width="60" height="60" class="rounded-circle me-2" alt="User">
+                                <span class="ms-2 fw-semibold" style="font-size: 22px; color: #282828;">Nirmal
+                                    G.C.</span>
+                            </div>
+                            <form id="postForm">
+                                <div class="mb-3 form-floating">
+                                    <select class="form-select abroad-deal-1 fw-semibold" id="countrySelect"
+                                        aria-label="Country" required>
+                                        <option value="" disabled selected>Choose a Country</option>
+                                        <option value="usa">USA</option>
+                                        <option value="canada">Canada</option>
+                                        <option value="uk">UK</option>
+                                    </select>
+                                    <label for="countrySelect">Country</label>
+                                </div>
+
+                                <!-- Title Input with Floating Label -->
+                                <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold" id="titleInput"
+                                        placeholder="Title" required>
+                                    <label for="titleInput">Title</label>
+                                </div>
+
+                                <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                    <textarea class="form-control abroad-deal-1 fw-semibold" id="descriptionInput"
+                                        rows="4" placeholder="Describe..." required></textarea>
+                                    <label for="descriptionInput">Description</label>
+                                </div>
+
+                                <div class="form-floating abroad-deal-1 fw-semibold mb-3">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold" id="floatingURL"
+                                        placeholder="Paste URL Link">
+                                    <label for="floatingURL">Paste URL Link</label>
+                                </div>
+
+                                <div class="mb-3 input-group">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold border-0"
+                                        placeholder="Add to your Post" id="addToPostInput">
+                                    <button class="btn abroad-deal-1 fw-semibold border-0"
+                                        style="border-top-right-radius: 5px; border-bottom-right-radius: 5px;"
+                                        type="button" id="uploadImageButton">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                    <!-- File Input (hidden) -->
+                                    <input type="file" id="imageInput" class="d-none" accept="image/*" />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-search w-25" id="submitPost">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- "Want to Buy" Section to display the post -->
+            <div id="wantToBuyForm" style="display: none;">
+                <div class="col-md-9">
+                    <!-- New posts will be inserted here -->
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const submitPostButton = document.getElementById("submitPost");
+
+                    if (submitPostButton) {
+                        submitPostButton.addEventListener("click", function () {
+                            // Capture the input values
+                            const title = document.getElementById("titleInput").value.trim();
+                            const description = document.getElementById("descriptionInput").value.trim();
+                            const urlLink = document.getElementById("floatingURL").value.trim();
+                            const country = document.getElementById("countrySelect").value;
+
+                            // Check if all required fields are filled
+                            if (title !== "" && description !== "" && country !== "") {
+                                // Create the HTML structure for the new post
+                                const newPostHtml = `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="img/Nirmal.png" class="rounded-circle me-2" alt="User" style="height:40px!important;width:40px!important;">
+                                <div>
+                                    <h6 class="mb-0">Nirmal G.C.</h6>
+                                    <small class="text-muted" style="color: #9D9999!important; font-size: 14px;">
+                                        <i class="bi bi-geo-alt"></i> ${country} <i class="bi bi-clock ms-2"></i> Just now
+                                    </small>
+                                </div>
+                                <button class="btn btn-search ms-auto">Message</button>
+                            </div>
+                            <div class="mt-3">
+                                <span class="badge text-black fw-semibold" style="background-color: #F0F2F5; font-size: 1rem;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" width="32" height="24" alt="Flag">
+                                    <span style="padding-left: 5px;">${country}</span>
+                                </span>
+                            </div>
+
+                            <h5 class="mt-3">${title}</h5>
+                            <p class="abroad-p">${description}</p>
+                            <div class="mt-3">
+                                <span class="badge text-primary fw-semibold" style="background-color: #F0F2F5; font-size: 1rem;">
+                                    <a href="${urlLink}" class="text-primary" target="_blank">${urlLink}</a>
+                                </span>
+                            </div>
+                            <hr>
+                            <div class="d-flex gap-4 ms-2">
+                                <div><i class="bi bi-chat"></i> 0</div>
+                                <div><i class="bi bi-share"></i> 0</div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+
+                                // Insert the new post into the "Want to Buy" section
+                                const wantToBuyForm = document.getElementById("wantToBuyForm");
+                                if (wantToBuyForm) {
+                                    wantToBuyForm.style.display = "block"; // Show the section
+                                    const cardContainer = wantToBuyForm.querySelector(".col-md-9"); // Find the card container
+                                    if (cardContainer) {
+                                        cardContainer.insertAdjacentHTML("beforeend", newPostHtml); // Add the new post
+                                    }
+                                }
+
+                                // Reset the modal form fields after submission
+                                document.getElementById("postForm").reset();
+                                const modal = bootstrap.Modal.getInstance(document.getElementById('addPostModal'));
+                                modal.hide(); // Close the modal after submission
+                            } else {
+                                alert("Please fill in all required fields.");
+                            }
+                        });
+                    }
+                });
+            </script>
+
+
+            <!-- Add Post Modal -->
+            <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel"
+                aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div
+                            class="modal-header bg-white justify-content-center align-items-center border border-bottom">
+                            <h6 class="modal-title text-black d-flex justify-content-center" id="addPostModalLabel"
+                                style="font-size: 24px;">Create Post</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="img/Nirmal.png" width="60" height="60" class="rounded-circle me-2" alt="User">
+                                <span class="ms-2 fw-semibold" style="font-size: 22px; color: #282828;">Nirmal
+                                    G.C.</span>
+                            </div>
+                            <form id="postForm">
+                                <div class="mb-3 form-floating">
+                                    <select class="form-select abroad-deal-1 fw-semibold" id="countrySelect"
+                                        aria-label="Country" required>
+                                        <option value="" disabled selected>Choose a Country</option>
+                                        <option value="usa">USA</option>
+                                        <option value="canada">Canada</option>
+                                        <option value="uk">UK</option>
+                                    </select>
+                                    <label for="countrySelect">Country</label>
+                                </div>
+
+                                <!-- Title Input with Floating Label -->
+                                <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold" id="titleInput"
+                                        placeholder="Title" required>
+                                    <label for="titleInput">Title</label>
+                                </div>
+
+                                <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                    <textarea class="form-control abroad-deal-1 fw-semibold" id="descriptionInput"
+                                        rows="4" placeholder="Describe..." required></textarea>
+                                    <label for="descriptionInput">Description</label>
+                                </div>
+
+                                <div class="form-floating abroad-deal-1 fw-semibold mb-3">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold" id="floatingURL"
+                                        placeholder="Paste URL Link">
+                                    <label for="floatingURL">Paste URL Link</label>
+                                </div>
+
+                                <div class="mb-3 input-group">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold border-0"
+                                        placeholder="Add to your Post" id="addToPostInput">
+                                    <button class="btn abroad-deal-1 fw-semibold border-0"
+                                        style="border-top-right-radius: 5px; border-bottom-right-radius: 5px;"
+                                        type="button" id="uploadImageButton">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                    <!-- File Input (hidden) -->
+                                    <input type="file" id="imageInput" class="d-none" accept="image/*" />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-search w-25" id="submitPost">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- "Want to Buy" Section to display the post -->
+            <div id="wantToBuyForm" style="display: none;">
+                <div class="col-md-9">
+                    <!-- New posts will be inserted here -->
+                </div>
+
+            </div>
+
+            <script>
+                // Wait for the submit button to be clicked
+                document.getElementById("submitPost").addEventListener("click", function () {
+                    // Capture the input values
+                    const title = document.getElementById("titleInput").value;
+                    const description = document.getElementById("descriptionInput").value;
+                    const urlLink = document.getElementById("floatingURL").value;
+                    const country = document.getElementById("countrySelect").value;
+
+                    // Check if all required fields are filled
+                    if (title && description && country) {
+                        // Create the HTML structure for the new post
+                        const newPostHtml = `
+<div class="card mb-3">
+<div class="card-body">
+    <div class="d-flex align-items-center">
+        <img src="img/Nirmal.png" class="rounded-circle me-2" alt="User"
+            style="height:40px!important;width:40px!important;">
+        <div>
+            <h6 class="mb-0">Nirmal G.C.</h6>
+            <small class="text-muted" style="color: #9D9999!important; font-size: 14px;">
+                <i class="bi bi-geo-alt"></i> ${country} <i class="bi bi-clock ms-2"></i> Just now
+            </small>
+        </div>
+        <button class="btn btn-search ms-auto">Message</button>
+    </div>
+    <div class="mt-3">
+        <span class="badge text-black fw-semibold" style="background-color: #F0F2F5; font-size: 1rem;">
+            <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg"
+                width="32" height="24" alt="Flag">
+            <span style="padding-left: 5px;">${country}</span>
+        </span>
+    </div>
+
+    <h5 class="mt-3">${title}</h5>
+    <p class="abroad-p">${description}</p>
+    <div class="mt-3">
+        <span class="badge text-primary fw-semibold" style="background-color: #F0F2F5; font-size: 1rem;">
+            <a href="${urlLink}" class="text-primary" target="_blank">${urlLink}</a>
+        </span>
+    </div>
+    <hr>
+    <div class="d-flex gap-4 ms-2">
+        <div><i class="bi bi-chat"></i> 0</div>
+        <div><i class="bi bi-share"></i> 0</div>
+    </div>
+</div>
+</div>
+`;
+
+                        // Insert the new post into the "Want to Buy" section
+                        const wantToBuyForm = document.getElementById("wantToBuyForm");
+                        wantToBuyForm.style.display = "block"; // Show the section
+                        const cardContainer = wantToBuyForm.querySelector(".col-md-9"); // Find the card container
+                        cardContainer.insertAdjacentHTML("beforeend", newPostHtml); // Add the new post
+
+                        // Reset the modal form fields after submission
+                        document.getElementById("postForm").reset();
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('addPostModal'));
+                        modal.hide(); // Close the modal after submission
+                    } else {
+                        alert("Please fill in all required fields.");
+                    }
+                });
+            </script>
+
+    </section>
+
+
+    <style>
+        /* Consistent height for all input elements */
+        .form-control,
+        .form-select,
+        .btn-search {
+            height: 40px;
+            /* Set uniform height */
+            font-size: 16px;
+            /* Consistent font size */
+        }
+
+        /* Ensure the search input box stays consistent */
+        .form-control {
+            padding: 10px;
+            /* Consistent padding */
+        }
+
+        /* Ensure consistent height for the select dropdowns */
+        .form-select.abroad-deal {
+            height: 40px;
+            /* Uniform height */
+        }
+
+        .category-btn {
+            width: 111px;
+            height: 31px;
+            font-size: 14px;
+            color: #676767;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid #000000;
+            border-radius: 50px;
+        }
+
+        .active-btn {
+            background-color: #0064A7 !important;
+            color: white !important;
+            border: 1px solid #0064A7 !important;
+        }
+
+        .category-btn:hover {
+            background-color: #0064A7 !important;
+            color: white !important;
+            border-color: #004AAD !important;
+        }
+
+        .btn-add_post:hover {
+            background-color: #0b5ed7;
+        }
+
+        .btn-toggle,
+        .btn-add_post {
+            border-color: #0064A7;
+            color: white;
+            background-color: #0064a7;
+            height: 44px;
+            width: 148px;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .btn-toggle:not(.active) {
+            background-color: white;
+            color: #0064a7;
+            border: 1px solid #0064a7;
+        }
+
+        .btn-toggle:hover,
+        .btn-toggle.active {
+            background-color: #0064a7;
+            color: white;
+        }
+
+        /* Style the select dropdown */
+        .form-select.abroad-deal {
+            height: 40px;
+            /* Uniform height */
+            border: 1px solid #E3E3E3 !important;
+            /* Light gray border */
+            border-radius: 5px;
+            /* Smooth rounded corners */
+            padding: 5px 10px;
+            /* Proper spacing */
+            font-size: 16px !important;
+            /* Readable font size */
+            background-color: #fff;
+            /* White background */
+            color: #555555 !important;
+            /* Dark gray text */
+        }
+
+        /* Add a hover effect */
+        .form-select.abroad-deal:hover {
+            border-color: #007bff;
+            /* Bootstrap primary blue */
+        }
+
+        /* Add focus effect */
+        .form-select.abroad-deal:focus {
+            border-color: #0056b3;
+            /* Darker blue */
+            box-shadow: 0 0 5px rgba(0, 91, 187, 0.5);
+            /* Subtle glow */
+        }
+
+        /* Ensure consistency in mobile view */
+        @media (max-width: 768px) {
+
+            .form-control,
+            .form-select,
+            .btn-search {
+                height: 36px;
+                /* Slightly smaller height for mobile screens */
+            }
+        }
+
+        /* Set height for the search button */
+        .btn-search {
+            height: 40px;
+            /* Uniform height */
+            background-color: #0064A7;
+            /* Button background */
+            color: white;
+            /* Text color */
+            font-size: 16px;
+            /* Text size */
+            border: none;
+            /* Remove border */
+            border-radius: 5px;
+            /* Rounded corners */
+            cursor: pointer;
+            /* Pointer cursor */
+            transition: background-color 0.3s ease;
+            /* Smooth background change */
+        }
+
+        /* Button hover effect */
+        .btn-search:hover {
+            background-color: white;
+            color: #0064A7;
+            border: 1px solid #0064A7;
+        }
+
+        /* Button focus effect */
+        .btn-search:focus {
+            outline: none;
+            /* Remove default focus outline */
+            box-shadow: 0 0 5px rgba(0, 91, 187, 0.5);
+            /* Glow effect */
+        }
+    </style>
+
+
+    <!-- Custom CSS for Category and Country Select -->
+    <style>
+        /* Style for Category Select */
+        .abroad-deal-1 {
+            background-color: #EEEEEE !important;
+            /* Light background */
+            color: #A1A1A1 !important;
+            /* Text color */
+            border-radius: 5px;
+            /* Rounded corners */
+            font-size: 16px !important;
+            /* Font size */
+        }
+
+        /* Style for Country Select */
+        #countrySelect {
+            background-color: #f8f9fa;
+            /* Light background */
+            color: #333;
+            /* Text color */
+            border: 1px solid #ccc;
+            /* Border color */
+            border-radius: 5px;
+            /* Rounded corners */
+            font-size: 16px;
+            /* Font size */
+        }
+
+
+        /* General styles for the select dropdowns */
+        .form-floating select {
+            height: 45px;
+            /* Ensure the dropdown has enough height */
+        }
+
+        /* Modal Styling */
+        .modal-header {
+            background-color: #f1f1f1;
+        }
+
+        /* Button Styling for Image Upload */
+        #uploadImageButton {
+            border: none;
+            background: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        #uploadImageButton:hover {
+            color: #0056b3;
+        }
+    </style>
+
+    <script src="script.js"></script>
+    <script>
+        function toggleActive(button) {
+            // Remove 'active' class from all buttons
+            document.querySelectorAll('.btn-toggle').forEach(btn => btn.classList.remove('active'));
+
+            // Add 'active' class to the clicked button
+            button.classList.add('active');
+
+            // Get the button and forms
+            const addItemBtn = document.getElementById('addItemBtn');
+            const itemForm = document.getElementById('itemForm');
+            const wantToBuyForm = document.getElementById('wantToBuyForm');
+
+            if (!addItemBtn || !itemForm || !wantToBuyForm) {
+                console.error("One or more elements (itemForm, wantToBuyForm, addItemBtn) are missing.");
+                return;
+            }
+
+            // Toggle forms and update button text
+            if (button.textContent.trim() === "Want to buy") {
+                itemForm.style.display = 'none';  // Hide "Item" form
+                wantToBuyForm.style.display = 'block';  // Show "Want to Buy" form
+                addItemBtn.textContent = "+ Add Post";  // Change button text
+                addItemBtn.setAttribute('data-bs-target', '#addPostModal');  // Change modal target
+            } else {
+                itemForm.style.display = 'block';  // Show "Item" form
+                wantToBuyForm.style.display = 'none';  // Hide "Want to Buy" form
+                addItemBtn.textContent = "+ Add Item";  // Change button text
+                addItemBtn.setAttribute('data-bs-target', '#addItemModal');  // Change modal target
+            }
+        }
+
+        // Set initial state when the page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            const defaultButton = document.querySelector('.btn-all-categories');
+            if (defaultButton) {
+                toggleActive(defaultButton);
+            }
+        });
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</h

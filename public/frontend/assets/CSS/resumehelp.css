@@ -1,0 +1,318 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", serif;
+    
+    
+}
+body h3 {
+  color: #0064A7;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+
+.navbar{
+  background-color: white;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding-left: 2px;
+    padding-right: 2px;
+    
+}
+.navbar .nav-link{
+    color: #0064A7;
+
+}
+.navbar .nav-link:hover{
+  color: #0064A7;
+
+}
+
+
+.navbar .cart img{
+    height: 20px;
+    width: auto;
+    padding-right: 15px;
+}
+
+.navbar .btn{
+    background-color: rgb(0, 100, 167) ;
+    color: white;
+    border-radius: 4px;
+    height: 39px;
+    width: 85px;
+}
+.navbar .btn:hover{
+  background-color:rgb(0, 100, 167);
+  color: white;
+}
+
+.profile-card {
+    background-color: #D4F1F9; /* Light blue background */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+}
+
+.sidebar {
+    min-width: 200px;
+}
+
+.qr-code {
+    width: 80px;
+    height: 80px;
+}
+
+
+
+/* Footer Styling */
+.footer {
+  background-color: #0064A7; /* Bootstrap primary blue */
+  color: white;
+  padding: 50px 0;
+  text-align: center;
+}
+
+/* Logo Styling */
+.footer img.image-fluid {
+  
+  height: 90px;
+  width: 230px;
+  display: flex;
+}
+
+/* Footer Sections */
+.footer h5 {
+  font-size: 16px;
+  font-weight: bold;
+  
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 1.5px;
+ display: flex;
+  
+  
+
+}
+
+.footer p {
+  font-size: 14px;
+  margin: 5px 0;
+  cursor: pointer;
+  display: flex
+  
+}
+
+
+.footer p:hover {
+  text-decoration: underline;
+}
+
+p i {
+  margin-right: 10px; /* Adjust spacing between the icon and the text */
+ margin-top: 3px;
+  vertical-align: middle; /* Aligns the icon with the text */
+}
+
+
+
+/* Parent Container */
+.img {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Default to start alignment */
+  flex-wrap: wrap; /* Ensures responsiveness */
+  gap: 20px;
+}
+
+/* QR Code (Left Side) */
+.img1 {
+  width: 120px;
+  height: 120px;
+}
+
+/* Store Buttons (Right Side) */
+.store-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between buttons */
+}
+
+/* Store Button Images */
+.img2 {
+  width: 150px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.img2:hover {
+  transform: scale(1.05);
+}
+
+/* Social Icons (Below) */
+.footer .icon {
+  display: flex;
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.icon span {
+  color: white;
+  font-size: 24px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.icon span:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+  
+}
+
+/* Responsive Adjustments */
+
+/* Small Screens (Mobile, up to 480px) */
+@media (max-width: 480px) {
+  .img {
+    flex-direction: column;
+    align-items: flex-start; /* Left-aligned for small screens */
+  }
+
+  .img1 {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px; /* Space between image and buttons */
+  }
+
+  .store-buttons {
+    align-items: flex-start; /* Align buttons to the left */
+  }
+
+  .img2 {
+    width: 130px;
+  }
+
+  .icon {
+    margin-top: 15px;
+  }
+
+  .icon span {
+    font-size: 20px;
+  }
+}
+
+/* Medium Screens (Tablets, Portrait, 481px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .img {
+    flex-direction: row;
+    align-items: center;
+    
+  }
+
+  .img1 {
+    width: 110px;
+    height: 110px;
+  }
+
+  .store-buttons {
+    align-items: flex-start;
+  }
+
+  .img2 {
+    width: 140px;
+  }
+
+  .icon {
+    margin-top: 15px;
+  }
+
+  .icon span {
+    font-size: 22px;
+  }
+}
+
+/* Large Screens (Desktop and up, 769px and up) */
+@media (min-width: 769px) {
+  .img {
+    flex-direction: row;
+    
+    align-items: center;
+  }
+
+  .img1 {
+    width: 120px;
+    height: 120px;
+  }
+
+  .store-buttons {
+    flex-direction: column;
+    align-items: flex-start; /* Align buttons to the left */
+  }
+
+  .img2 {
+    width: 150px;
+  }
+
+  .icon {
+    margin-top: 20px;
+  }
+
+  .icon span {
+    font-size: 24px;
+  }
+}
+
+
+
+/* Horizontal Line */
+hr {
+  border-color: #FFFFFFCC;
+  border-radius: 20%;
+
+}
+hr p{
+  text-align: center;
+}
+
+/* Copyright Text */
+.text {
+  font-size: 14px;
+  color: #ddd;
+  margin-top: 10px;
+}
+
+
+ 
+/* 
+<section class="profile">
+
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow p-3" style="width: 20rem;">
+            <div class="card-body text-center position-relative">
+                <button type="button" class="btn-close" aria-label="Close"></button>
+                <img src="Images/profile.jpg" alt="Profile Picture" class="rounded-circle mb-3 profile-img">
+                <h5 class="card-title">Your Name <i class="fa fa-pen"></i></h5>
+                <p class="text-muted"><i class="fas fa-award"></i>Reward Points<br>272.38</p>
+                <ul class="list-unstyled text-start ">
+                  <li><a href="#" class="d-block"><i class="fas fa-user p-1"></i> Profile</a></li>
+                  <hr>
+                  <li><a href="#" class="d-block"><i class="fas fa-lock p-1"></i> Change password</a></li>
+                  <hr>
+                  <li><a href="#" class="d-block"><i class="fas fa-share-alt p-1"></i>  Share</a></li>
+                  <hr>
+                  <li><a href="#" class="d-block"><i class="fas fa-power-off p-1"></i> Logout</a></li>
+              </ul>
+            </div>
+        </div>
+    </div>
+    </section> */

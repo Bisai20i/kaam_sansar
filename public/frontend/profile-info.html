@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Successful</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" />
+</head>
+<style>
+   
+</style>
+
+<body>
+    <section style="max-width: 90rem;">
+        <div class="container-fluid main-container">
+            <nav class="navbar navbar-expand-lg fixed-top">
+                <div class="container">
+                    <a class="navbar-brand" href="#">
+                        <span><img src="Images/logo.png" class="img-fluid" alt=""></span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                              <a class="nav-link" aria-current="page" href="job.html">Find jobs</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link " aria-current="page" href="resumetry.html">resume help</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" aria-current="page" href="trial.html">resume maker</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" aria-current="page" href="VisaHQ.html">visa hq</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" aria-current="page" href="Insurance.html">insurance</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" aria-current="page" href="forex-calculator.html">forex calculator</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" aria-current="page" href="horoscope.html">horoscope</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" aria-current="page" href="Giftandcoupon.html">gifts and coupon</a>
+                            </li>
+              
+                          </ul>
+                        <button id="main-profile" class="profile-button" data-bs-toggle="modal"
+                            data-bs-target="#profileModal">
+                            <img src="Images/profile-icon.png" alt="Profile">
+                        </button>
+                    </div>
+                </div>
+            </nav>
+    </section>
+
+    <div class="container mt-4 py-5">
+        <div class="card-basic border">
+            <h5 class="text-start m-2">Your Profile</h5>
+        </div>
+
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active-profile"
+                        onclick="showSection('basicInfo')">Basic Information</a>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('yourCV')">Your
+                        CV</a>
+                    <a href="#" class="list-group-item list-group-item-action"
+                        onclick="showSection('purchaseHistory')">Purchase History</a>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('editProfile')">Edit
+                        Profile</a>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('myJobs')">My
+                        Jobs</a>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="col-md-9">
+                <div id="basicInfo" class="content-section active">
+                    <div class="card-container border py-3">
+                        <div class="profile-card border">
+                            <p class="text-start">Id No. 44B10000</p>
+                            <img src="Images/aaaa.png" class="profile-img" alt="Profile Image">
+                            <h5 class="mt-3">Manish Shrestha</h5>
+                            <div class="profile-text">
+                                <p>Profession: UI/UX</p>
+                                <p>Referral Code: 44B10000</p>
+                                <p>Location: Pokhara-32</p>
+                            </div>
+                            <img src="Images/qr1.png" class="qr-code" alt="QR Code">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CV Card -->
+                <div id="yourCV" class="content-section">
+                    <div class="card-container border py-3">
+                        <div class="CV-card border">
+                            <div class="cv-card border">
+                                <h5 class="text-start">Phil Dunphy</h5>
+                                <img src="Images/cv-img.jpg" alt="">
+                                <br>
+                                <h2>Realtor</h2>
+                                <h1>About</h1>
+                                <p>It is a long established fact that a reader will be distracted by the readable
+                                    content of
+                                    a page when looking at its layout. The point of using Lorem Ipsum is that it has a
+                                    more-or-less normal distribution of letters, as opposed to using 'Content here,
+                                    content
+                                    here', making it look like readable English.</p>
+                                <h1>Education</h1>
+                                <p>California University</p>
+                                <h1>Projects</h1>
+                                <p>California University</p>
+                                <h1>Skills</h1>
+                                <ul>
+                                    <li>California University</li>
+                                    <li>California University</li>
+                                    <li>California University</li>
+                                </ul>
+                                <h1>Achievement</h1>
+                                <ul>
+                                    <li>California University</li>
+                                    <li>California University</li>
+                                </ul>
+                                <h1>Experience</h1>
+                                <p>California University</p>
+                                <h1>Language</h1>
+                                <ul>
+                                    <li>California University</li>
+                                    <li>California University</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Purchase History-->
+                <div id="purchaseHistory" class="content-section">
+                    <div class="card-container border py-3">
+                        <div class="row">
+                            <!-- Job Listings Column -->
+                            <div class="col-md-8">
+                                <!-- First Purchase Card -->
+                                <div class="purchase-card mb-4"> <!-- Added margin-bottom to space out the cards -->
+                                    <img src="Images/teddy-bear.jpg" alt="Company Image">
+                                    <button class="delete-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <div class="purchase-card-body">
+                                        <h5 class="card-title">Teddy Bear</h5>
+                                        <p>Quantity: 5pcs</p>
+                                        <p>Source: Company Website</p>
+                                    </div>
+                                    <div class="full-width-border"></div>
+                                    <div class="purchase-card-footer">
+                                        <small>Purchase Date: 2020-01-01</small>
+                                    </div>
+                                </div>
+
+                                <!-- Second Purchase Card -->
+                                <div class="purchase-card mb-4">
+                                    <img src="Images/teddy-bear.jpg" alt="Company Image">
+                                    <button class="delete-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <div class="purchase-card-body">
+                                        <h5 class="card-title">Teddy Bear</h5>
+                                        <p>Quantity: 5pcs</p>
+                                        <p>Source: Company Website</p>
+                                    </div>
+                                    <div class="full-width-border"></div>
+                                    <div class="purchase-card-footer">
+                                        <small>Purchase Date: 2020-01-01</small>
+                                    </div>
+                                </div>
+
+                                <div class="purchase-card mb-4">
+                                    <img src="Images/teddy-bear.jpg" alt="Company Image">
+                                    <button class="delete-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <button class="delete-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <div class="purchase-card-body">
+                                        <h5 class="card-title">Teddy Bear</h5>
+                                        <p>Quantity: 5pcs</p>
+                                        <p>Source: Company Website</p>
+                                    </div>
+                                    <div class="full-width-border"></div>
+                                    <div class="purchase-card-footer">
+                                        <small>Purchase Date: 2020-01-01</small>
+                                    </div>
+                                </div>
+
+                                <div class="purchase-card mb-4">
+                                    <img src="Images/teddy-bear.jpg" alt="Company Image">
+                                    <button class="delete-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <button class="delete-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <div class="purchase-card-body">
+                                        <h5 class="card-title">Teddy Bear</h5>
+                                        <p>Quantity: 5pcs</p>
+                                        <p>Source: Company Website</p>
+                                    </div>
+                                    <div class="full-width-border"></div>
+                                    <div class="purchase-card-footer">
+                                        <small>Purchase Date: 2020-01-01</small>
+                                    </div>
+                                </div>
+
+                                <div class="purchase-card mb-4">
+                                    <img src="Images/teddy-bear.jpg" alt="Company Image">
+                                    <button class="delete-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <div class="purchase-card-body">
+                                        <h5 class="card-title">Teddy Bear</h5>
+                                        <p>Quantity: 5pcs</p>
+                                        <p>Source: Company Website</p>
+                                    </div>
+                                    <div class="full-width-border"></div>
+                                    <div class="purchase-card-footer">
+                                        <small>Purchase Date: 2020-01-01</small>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Responsive Box Column -->
+                            <div class="col-md-4">
+                                <div class="additional-info border p-2">
+                                    <p>This is a fully responsive box that can be used for additional content.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Edit Profile-->
+                <div id="editProfile" class="content-section">
+                    <div class="edit-profile-card border py-3">
+                        <img src="Images/profile.jpg" class="rounded-circle mb-3" alt="Profile Picture">
+                        <form>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="Full Name: Swostika Poudel">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control"
+                                    placeholder="Current Address: Pokhara-32, Kaski">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control"
+                                    placeholder="Permanent Address: Pokhara-32, Kaski">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="Mobile No.: 9876543210">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="Gender: Female">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="Location: Pokhara-32">
+                            </div>
+                            <div class="mb-3">
+                                <input type="date" class="form-control" value="2002-09-27">
+                            </div>
+                            <div class="save-btn">
+                                <button type="button" class="save-changes-btn">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!--My Jobs-->
+                <div id="myJobs" class="content-section">
+                    <div class="card-container border py-3">
+                        <div class="jobs-card jobs-job">
+                            <div class="job-card-profile">
+                                <img src="Images/job.jpg" alt="Company Image">
+                                <div class="job-card-body">
+                                    <h5 class="card-title">Frontend Developer</h5>
+                                    <p>Company Name: Innovatech Solutions</p>
+                                    <p>Location: Kathmandu, Bagmati, Nepal</p>
+                                    <p>Experience: 2-5 Years</p>
+                                    <p>Source: Company Website</p>
+                                </div>
+                                <div class="full-width-border"></div>
+                                <div class="job-card-footer">
+                                    <small>Apply before: 10 days</small>
+                                    <small>Views: 70</small>
+                                </div>
+                            </div>
+                            <div class="jobs-card pt-3">
+                                <div class="job-card-profile">
+                                    <img src="Images/job.jpg" alt="Company Image">
+                                    <div class="job-card-body">
+                                        <h5 class="card-title">Frontend Developer</h5>
+                                        <p>Company Name: Innovatech Solutions</p>
+                                        <p>Location: Kathmandu, Bagmati, Nepal</p>
+                                        <p>Experience: 2-5 Years</p>
+                                        <p>Source: Company Website</p>
+                                    </div>
+                                    <div class="full-width-border"></div>
+                                    <div class="job-card-footer">
+                                        <small>Apply before: 10 days</small>
+                                        <small>Views: 70</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="jobs-card pt-3">
+                                <div class="job-card-profile">
+                                    <img src="Images/job.jpg" alt="Company Image">
+                                    <div class="job-card-body">
+                                        <h5 class="card-title">Frontend Developer</h5>
+                                        <p>Company Name: Innovatech Solutions</p>
+                                        <p>Location: Kathmandu, Bagmati, Nepal</p>
+                                        <p>Experience: 2-5 Years</p>
+                                        <p>Source: Company Website</p>
+                                    </div>
+                                    <div class="full-width-border"></div>
+                                    <div class="job-card-footer">
+                                        <small>Apply before: 10 days</small>
+                                        <small>Views: 70</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="jobs-card pt-3">
+                                <div class="job-card-profile">
+                                    <img src="Images/job.jpg" alt="Company Image">
+                                    <div class="job-card-body">
+                                        <h5 class="card-title">Frontend Developer</h5>
+                                        <p>Company Name: Innovatech Solutions</p>
+                                        <p>Location: Kathmandu, Bagmati, Nepal</p>
+                                        <p>Experience: 2-5 Years</p>
+                                        <p>Source: Company Website</p>
+                                    </div>
+                                    <div class="full-width-border"></div>
+                                    <div class="job-card-footer">
+                                        <small>Apply before: 10 days</small>
+                                        <small>Views: 70</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add other sections here, like purchaseHistory, editProfile, etc. -->
+    </div>
+    </div>
+
+
+    <section class="footer">
+        <div class="container">
+            <div class="row pt-5">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-2 py-3">
+                            <img src="Images/logolast.png" class="image-fluid" alt="">
+                        </div>
+                        <div class="col-lg-2 py-3">
+                            <h5 class="pb-3">Quick Link</h5>
+                            <p><a href="#" class="text-decoration-none text-white quick-link p-0">Home</a></p>
+                            <p><a href="#" class="text-decoration-none text-white quick-link p-0">About Us</a></p>
+                            <p><a href="#" class="text-decoration-none text-white quick-link p-0">Articles</a></p>
+                            <p><a href="#" class="text-decoration-none text-white quick-link p-0">Contact Us</a></p>
+                        </div>
+                        <div class="col-lg-3 py-3">
+                            <h5 class="pb-3">Contact Us</h5>
+                            <p><i class="fa fa-map-marker-alt"></i> Kathmandu, Nepal</p>
+                            <p><i class="fa fa-envelope"></i> sandeepsingh.y2018@hmail.com</p>
+                            <p><i class="fas fa-phone"></i> 9745620743 | 9814317185</p>
+                        </div>
+                        <div class="col-lg-2 py-3">
+                            <h5 class="pb-3">Links</h5>
+                            <p>Privacy Policy</p>
+                            <p>Terms & Condition</p>
+                        </div>
+                        <div class="col-lg-3 py-3">
+                            <h5 class="pb-3">Download App</h5>
+                            <div class="img">
+                                <img class="img1" src="Images/pattern.png" alt="QR Code">
+                                <div class="store-buttons">
+                                    <a href="https://apps.apple.com/us/app/yourapp/id123456789" target="_blank">
+                                        <img class="img2" src="Images/appstore.png" alt="App Store">
+                                    </a>
+                                    <a href="https://play.google.com/store/apps/details?id=com.example.yourapp"
+                                        target="_blank">
+                                        <img class="img2" src="Images/google.png" alt="Google Play Store">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <span><i class="fab fa-facebook"></i></span>
+                                <span><i class="fab fa-twitter"></i></span>
+                                <span><i class="fab fa-instagram"></i></span>
+                                <span><i class="fab fa-linkedin"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <a>Copyright @2021 Job Finder | All rights reserved.</a>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="JS/home.js">
+        
+    </script>
+</body>
+
+</html>

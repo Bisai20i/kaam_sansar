@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Abroad Chat</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Updated Font Awesome for fas icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+    <!-- Bootstrap Icons (if needed) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" />
+</head>
+
+<body>
+    <section style="max-width: 90rem;">
+
+        <div class="container-fluid main-container">
+
+            <nav class="navbar navbar-expand-lg fixed-top">
+                <div class="container">
+                    <a class="navbar-brand" href="home.html">
+                        <span>
+                            <img src="Images/logo.png" img="img-fluid" alt="">
+                        </span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="job.html">Find jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " aria-current="page" href="resumetry.html">resume help</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="trial.html">resume maker</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="VisaHQ.html">visa hq</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="Insurance.html">insurance</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="forex-calculator.html">forex
+                                    calculator</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="horoscope.html">horoscope</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="Giftandcoupon.html">gifts and coupon</a>
+                            </li>
+
+                        </ul>
+
+                        <button id="main-profile" class="profile-button" data-bs-toggle="modal"
+                            data-bs-target="#profileModal">
+                            <img src="Images/profile-icon.png" alt="Profile">
+                        </button>
+
+                        <button class="btn-register" data-bs-toggle="modal" data-bs-target="#completeModal">Create
+                        </button>
+
+                    </div>
+                </div>
+            </nav>
+
+    </section>
+    <section>
+        <!-- Profile Header -->
+        <div class="profile-header abroad-ad"></div>
+
+        <div class="container mb-4">
+            <h1 class="mb-3" style="color: #0064A7; font-size: 26px;">Abroad Deals</h1>
+            <div class="mb-4 d-flex justify-content-center justify-content-md-between align-items-center flex-wrap">
+                <!-- Left Side Buttons -->
+                <div class="d-flex gap-2">
+                    <button class="btn-toggle rounded btn-all-categories active"
+                        onclick="toggleActive(this)">Item</button>
+                    <button class="btn-toggle rounded " onclick="toggleActive(this)">Want to buy</button>
+                </div>
+                <!-- Right Side Add Item / Add Post Button -->
+                <button class="btn-add_post rounded ms-2" id="addItemBtn" data-bs-toggle="modal"
+                    data-bs-target="#addItemModal">
+                    + Add Item
+                </button>
+
+            </div>
+            <h6 style="font-size: 20px;">Find what you're looking for</h6>
+
+            <div class="row g-2 mt-2 mb-1 align-items-center">
+                <div class="col-md-5 d-flex align-items-center">
+                    <div class="input-group w-100">
+                        <span class="input-group-text">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control py-2" placeholder="What are you looking for?">
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <select class="form-select abroad-deal py-2">
+                        <option selected>Select Country</option>
+                        <option value="1">USA</option>
+                        <option value="2">India</option>
+                        <option value="3">UK</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <select class="form-select abroad-deal py-2">
+                        <option selected>Select City</option>
+                        <option value="1">New York</option>
+                        <option value="2">Mumbai</option>
+                        <option value="3">London</option>
+                    </select>
+                </div>
+                <div class="col-md-1 d-grid">
+                    <button class="btn-search w-100 py-2">Search</button>
+                </div>
+
+                <div class="row">
+                    <div class="d-flex gap-2 p-3">
+                        <button class="btn-sm btn-outline-secondary rounded-pill category-btn active-btn"
+                            onclick="filterCategory('all', this)">All</button>
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill category-btn"
+                            onclick="filterCategory('fashion', this)">Fashion</button>
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill category-btn"
+                            onclick="filterCategory('electronics', this)">Electronics</button>
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill category-btn"
+                            onclick="filterCategory('tools', this)">Tools</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function toggleActive(button) {
+                    // Remove 'active' class from all buttons
+                    document.querySelectorAll('.btn-toggle').forEach(btn => btn.classList.remove('active'));
+
+                    // Add 'active' class to the clicked button
+                    button.classList.add('active');
+
+                    // Get the form
+                    const itemForm = document.getElementById('itemForm');
+
+                    // Show 'itemForm' if "Item" button is clicked, otherwise hide it
+                    if (button.textContent.trim() === "Item") {
+                        itemForm.style.display = "block";
+                    } else {
+                        itemForm.style.display = "none";
+                    }
+                }
+
+                // Ensure the form is visible when the page loads
+                document.addEventListener("DOMContentLoaded", function () {
+                    document.getElementById('itemForm').style.display = "block";
+                });
+
+            </script>
+            <!-- Item Form Section -->
+            <div id="itemForm" style="display: block;">
+                <section class="uploads mb-4">
+                    <!-- Category Filter Section -->
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-0 px-2" id="product-list">
+                        <div class="col product" data-category="electronics"
+                            onclick="window.location.href='abroadchat1.html';" style="cursor: pointer;">
+                            <div class="card-bdy-packages">
+                                <img src="Images/image.png" class="bdy-packages-img">
+                                <div class="card-body">
+                                    <p class="mt-3 mb-0">Samsung S24 Ultra</p>
+                                    <p class="price">NRs. 1500</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col product" data-category="electronics">
+                            <div class="card-bdy-packages">
+                                <img src="Images/img2.png" class="bdy-packages-img">
+                                <div class="card-body">
+                                    <p class="mt-3 mb-0">MacBook M2 Pro</p>
+                                    <p class="price">NRs. 1500</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col product" data-category="fashion">
+                            <div class="card-bdy-packages">
+                                <img src="Images/img3.png" class="bdy-packages-img">
+                                <div class="card-body">
+                                    <p class="mt-3 mb-0">Gucci Jacket</p>
+                                    <p class="price">NRs. 1500</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col product" data-category="fashion">
+                            <div class="card-bdy-packages">
+                                <img src="Images/img4.png" class="bdy-packages-img">
+                                <div class="card-body">
+                                    <p class="mt-3 mb-0">Dior Sunglasses</p>
+                                    <p class="price">NRs. 1500</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col product" data-category="fashion">
+                            <div class="card-bdy-packages">
+                                <img src="Images/img5.png" class="bdy-packages-img">
+                                <div class="card-body">
+                                    <p class="mt-3 mb-0">Chanel Boot</p>
+                                    <p class="price">NRs. 1500</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col product" data-category="fashion">
+                            <div class="card-bdy-packages">
+                                <img src="Images/img6.png" class="bdy-packages-img">
+                                <div class="card-body">
+                                    <p class="mt-3 mb-0">Louboutin Heels</p>
+                                    <p class="price">NRs. 1500</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col product" data-category="tools">
+                            <div class="card-bdy-packages">
+                                <img src="Images/img7.png" class="bdy-packages-img">
+                                <div class="card-body">
+                                    <p class="mt-3 mb-0">Power Drill</p>
+                                    <p class="price">NRs. 1500</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col product" data-category="tools">
+                            <div class="card-bdy-packages">
+                                <img src="Images/img8.png" class="bdy-packages-img">
+                                <div class="card-body">
+                                    <p class="mt-3 mb-0">Hand Saw</p>
+                                    <p class="price">NRs. 1500</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+    </section>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-white justify-content-center align-items-center">
+                    <h6 class="modal-title text-black d-flex justify-content-center" id="addItemModalLabel">Add
+                        Item</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addItemForm">
+                        <!-- Category Select with Floating Label -->
+                        <div class="mb-3 form-floating">
+                            <select class="form-select abroad-deal-1 fw-semibold" id="categorySelect"
+                                aria-label="Category" required>
+                                <option value="" disabled selected>Choose a Category</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="tools">Tools</option>
+                            </select>
+                            <label for="categorySelect">Category</label>
+                        </div>
+
+                        <!-- Title Input with Floating Label -->
+                        <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                            <input type="text" class="form-control abroad-deal-1 fw-semibold" id="titleInput"
+                                placeholder="Title" required>
+                            <label for="titleInput">Title</label>
+                        </div>
+
+                        <!-- Price Input with Floating Label -->
+                        <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                            <input type="text" class="form-control abroad-deal-1 fw-semibold" id="priceInput"
+                                placeholder="Enter Price" required>
+                            <label for="priceInput">Enter Price</label>
+                        </div>
+
+                        <!-- Description Textarea with Floating Label -->
+                        <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                            <textarea class="form-control abroad-deal-1 fw-semibold" id="descriptionInput" rows="4"
+                                placeholder="Describe..." required></textarea>
+                            <label for="descriptionInput">Description</label>
+                        </div>
+
+                        <!-- Input Group for "Add to your Post" with Image Icon -->
+                        <div class="input-group w-100">
+                            <input type="text" class="form-control abroad-deal-2 fw-semibold border-0"
+                                placeholder="Add to your Post" id="addToPostInput-2" readonly>
+                            <span class="input-group-text abroad-deal-2 border-0 rounded-end">
+                                <button class="btn fw-semibold border-0 h-100" type="button" id="uploadImageButton-2">
+                                    <i class="fas fa-image abroad-deal-2"></i>
+                                </button>
+                            </span>
+                        
+                            <!-- Hidden File Input -->
+                            <input type="file" id="imageInput-2" class="d-none" accept="image/*">
+                        </div>
+                        
+                        <!-- Image Preview Container -->
+                        <div id="imagePreviewContainer-2" class="d-none">
+                            <img id="imagePreview-2" src="" alt="Selected Image" class="img-fluid mt-2">
+                            <button id="removeImageButton-2" class="btn btn-danger mt-2">Remove</button>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-search w-25" id="submitItemButton">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Post Modal -->
+    <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-white justify-content-center align-items-center border border-bottom">
+                    <h6 class="modal-title text-black d-flex justify-content-center" id="addPostModalLabel"
+                        style="font-size: 24px;">Create Post</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="img/Nirmal.png" width="60" height="60" class="rounded-circle me-2" alt="User">
+                        <span class="ms-2 fw-semibold" style="font-size: 22px; color: #282828;">Nirmal
+                            G.C.</span>
+                    </div>
+                    <form id="newPostForm">
+                        <div class="mb-3 form-floating">
+                            <select class="form-select abroad-deal-1 fw-semibold" id="newCountrySelect"
+                                aria-label="Country" required>
+                                <option value="" disabled selected>Choose a Country</option>
+                                <option value="usa">USA</option>
+                                <option value="canada">Canada</option>
+                                <option value="uk">UK</option>
+                            </select>
+                            <label for="newCountrySelect">Country</label>
+                        </div>
+
+                        <!-- Title Input with Floating Label -->
+                        <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                            <input type="text" class="form-control abroad-deal-1 fw-semibold" id="newTitleInput"
+                                placeholder="Title" required>
+                            <label for="newTitleInput">Title</label>
+                        </div>
+
+                        <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                            <textarea class="form-control abroad-deal-1 fw-semibold" id="newDescriptionInput" rows="4"
+                                placeholder="Describe..." required></textarea>
+                            <label for="newDescriptionInput">Description</label>
+                        </div>
+
+                        <div class="form-floating abroad-deal-1 fw-semibold mb-3">
+                            <input type="text" class="form-control abroad-deal-1 fw-semibold" id="newFloatingURL"
+                                placeholder="Paste URL Link">
+                            <label for="newFloatingURL">Paste URL Link</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <div class="input-group w-100">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold border-0"
+                                        placeholder="Add to your Post" id="newAddToPostInput" readonly>
+                                    <span class="input-group-text abroad-deal-1 border-0 rounded-end">
+                                        <button class="btn fw-semibold border-0 h-100" type="button"
+                                            id="newUploadImageButton-1">
+                                            <i class="fas fa-image abroad-deal-1"></i>
+                                        </button>
+                                    </span>
+
+                                    <!-- Hidden File Input -->
+                                    <input type="file" id="newImageInput" class="d-none" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Image Preview Section -->
+                        <div id="newImagePreviewContainer" class="mb-3 d-none">
+                            <img id="newImagePreview" class="img-fluid rounded" alt="Selected Image"
+                                style="width: 120px; height: 80px; object-fit: cover;">
+                            <button class="btn btn-danger btn-sm mt-2" id="removeImageButton">Remove</button>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-search w-25" id="submitPost">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="wantToBuyForm" style="display: none;">
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Left Section: Cards -->
+                <div class="col-md-9">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="img/Nirmal.png" class="rounded-circle me-2" alt="User"
+                                    style="height:40px!important;width:40px!important;">
+                                <div>
+                                    <h6 class="mb-0">Nirmal G.C.</h6>
+                                    <small class="text-muted" style="color: #9D9999!important; font-size: 14px;">
+                                        <i class="bi bi-geo-alt me-1"></i> Pokhara
+                                        <i class="bi bi-clock ms-2"></i> 2h
+                                    </small>
+                                </div>
+                                <button class="btn btn-search h-100 ms-auto">Message</button>
+                            </div>
+                            <div class="mt-3">
+                                <span class="badge text-black fw-semibold"
+                                    style="background-color: #F0F2F5; font-size: 1rem;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg"
+                                        width="32" height="24" alt="Flag">
+                                    <span style="padding-left: 5px;">United States</span>
+                                </span>
+                            </div>
+
+                            <h5 class="mt-3">Looking for iPhone 15 Pro Max</h5>
+                            <p>I need someone traveling from the US to Nepal who can bring an iPhone 15 Pro Max
+                                (256GB, Blue Titanium). Willing to pay the retail price plus a reasonable
+                                carrying fee. Please contact me if you're traveling soon!</p>
+                            <a href="https://www.tukisoft.com.np/aboutus"
+                                target="_blank">https://www.tukisoft.com.np/aboutus</a>
+
+                            <hr>
+                            <div class="d-flex gap-4 ms-2">
+                                <div><i class="bi bi-chat"></i> 0</div>
+                                <div><i class="bi bi-share"></i> 0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="img/Nirmal.png" class="rounded-circle me-2" alt="User"
+                                    style="height:40px!important;width:40px!important;">
+                                <div>
+                                    <h6 class="mb-0">Nirmal G.C.</h6>
+                                    <small class="text-muted" style="color: #9D9999!important; font-size: 14px;">
+                                        <i class="bi bi-geo-alt me-1"></i> Pokhara
+                                        <i class="bi bi-clock ms-2"></i> 2h
+                                    </small>
+                                </div>
+                                <button class="btn btn-search ms-auto">Message</button>
+                            </div>
+                            <div class="mt-3">
+                                <span class="badge text-black fw-semibold"
+                                    style="background-color: #F0F2F5; font-size: 1rem;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg"
+                                        width="32" height="24" alt="Flag">
+                                    <span style="padding-left: 5px;">United States</span>
+                                </span>
+                            </div>
+
+                            <h5 class="mt-3">Looking for iPhone 15 Pro Max</h5>
+                            <p>I need someone traveling from the US to Nepal who can bring an iPhone 15 Pro Max
+                                (256GB, Blue Titanium). Willing to pay the retail price plus a reasonable
+                                carrying fee. Please contact me if you're traveling soon!</p>
+                            <a href="https://www.tukisoft.com.np/aboutus"
+                                target="_blank">https://www.tukisoft.com.np/aboutus</a>
+
+                            <div class="mt-2 w-100" style="overflow: hidden; border-radius: 8px;">
+                                <img src="img/ad.png" alt="" class="img-fluid w-100"
+                                    style="height: auto; object-fit: cover;">
+                            </div>
+
+                            <hr>
+                            <div class="d-flex gap-4 ms-2">
+                                <div><i class="bi bi-chat"></i> 0</div>
+                                <div><i class="bi bi-share"></i> 0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Section: Ad Banner -->
+                <div class="col-md-3 border d-flex align-items-center justify-content-center">
+                    <div class="ad-banner">Advertisement Banner</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    </section>
+
+
+    <section class="footer">
+        <div class="container">
+            <div class="row pt-5 "> <!-- Centered content -->
+                <div class="col-lg-12"> <!-- Restricting width for better alignment -->
+                    <div class="row ">
+                        <div class="col-lg-2 py-3">
+                            <img src="Images/logolast.png" class="image-fluid" alt="">
+                        </div>
+
+                        <div class="col-lg-2 py-3">
+                            <h5 class="pb-3">Quick Link</h5>
+                            <p><a href="#" class="text-decoration-none text-white quick-link p-0">Home</a></p>
+                            <p><a href="#" class="text-decoration-none text-white quick-link p-0">About Us</a></p>
+                            <p><a href="#" class="text-decoration-none text-white quick-link p-0">Articles</a></p>
+                            <p><a href="#" class="text-decoration-none text-white quick-link p-0">Contact Us</a></p>
+                        </div>
+
+                        <div class="col-lg-3 py-3">
+                            <h5 class="pb-3">Contact Us</h5>
+                            <p><i class="fa fa-map-marker-alt"></i>Kathmandu,Nepal</p>
+                            <p><i class="fa fa-envelope"></i>sandeepsingh.y2018@hmail.com</p>
+                            <p><i class="fas fa-phone"></i>9745620743 | 9814317185</p>
+                        </div>
+
+                        <div class="col-lg-2 py-3">
+                            <h5 class="pb-3">Links</h5>
+                            <p>Privacy Policy</p>
+                            <p>Terms & Condition</p>
+                        </div>
+                        <div class="col-lg-3 py-3">
+                            <h5 class="pb-3">Download App</h5>
+                            <div class="img">
+                                <!-- Left Side: QR Code -->
+                                <img class="img1" src="Images/pattern.png" alt="QR Code">
+
+                                <!-- Right Side: Store Buttons -->
+                                <div class="store-buttons">
+                                    <a href="https://apps.apple.com/us/app/yourapp/id123456789" target="_blank">
+                                        <img class="img2" src="Images/appstore.png" alt="App Store">
+                                    </a>
+                                    <a href="https://play.google.com/store/apps/details?id=com.example.yourapp"
+                                        target="_blank">
+                                        <img class="img2" src="Images/google.png" alt="Google Play Store">
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Social Icons Below -->
+                            <div class="icon">
+                                <span><i class="fab fa-facebook"></i></span>
+                                <span><i class="fab fa-twitter"></i></span>
+                                <span><i class="fab fa-instagram"></i></span>
+                                <span><i class="fab fa-linkedin"></i></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <a>Copyright @2021 Job Finder | All rights reserved.</a>
+
+    </section>
+
+    <script>
+   document.getElementById("uploadImageButton-2").addEventListener("click", function () {
+    document.getElementById("imageInput-2").click();
+});
+
+document.getElementById("imageInput-2").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        if (!file.type.startsWith("image/")) {
+            alert("Please upload a valid image file.");
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("imagePreview-2").src = e.target.result;
+            document.getElementById("addToPostInput-2").value = file.name; // Display filename in input
+            document.getElementById("imagePreviewContainer-2").classList.remove("d-none");
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Remove Image Functionality
+document.getElementById("removeImageButton-2").addEventListener("click", function () {
+    document.getElementById("imagePreview-2").src = "";
+    document.getElementById("addToPostInput-2").value = "";
+    document.getElementById("imageInput-2").value = ""; // Reset file input
+    document.getElementById("imagePreviewContainer-2").classList.add("d-none");
+});
+
+
+document.getElementById('uploadImageButton-1').addEventListener('click', function () {
+    document.getElementById('imageInput').click();
+});
+
+document.getElementById('imageInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const imagePreview = document.getElementById('imagePreview');
+            imagePreview.src = event.target.result;
+            imagePreviewContainer.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+
+    </script>
+
+    <!-- Modal for completing profile 1-->
+    <div class="modal fade" id="completeModal" tabindex="-1" aria-labelledby="completeModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h3 class="modal-title text-center" id="completeModalLabel">Complete your profile</h3>
+                <p class="text-center text-muted">Tell us a bit about yourself to get started</p>
+                <!-- Close Button -->
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="mb-4 text-center">
+                        <div class="d-flex align-items-start justify-content-center">
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="d-flex align-items-center justify-content-center"
+                                    style="width: 100%; position: relative;">
+                                    <div>
+                                        <div class="rounded-circle text-white d-flex align-items-center justify-content-center mb-2"
+                                            style="width: 32px; height: 32px; background-color: #0064A7; border: 2px solid #0064A7;">
+                                            1
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="small">Looking for</p>
+                            </div>
+
+                            <div class="d-flex align-items-center mt-3"
+                                style="height: 2px; background-color: #ddd; width: 60px;">
+                            </div>
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-2 text-white"
+                                    style="width: 32px; height: 32px; border: 2px solid #ddd;">2
+                                </div>
+                                <p class="small">Profile Details</p>
+                            </div>
+                            <div class="d-flex align-items-center mt-3"
+                                style="height: 2px; background-color: #ddd; width: 60px;">
+                            </div>
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white"
+                                    style="width: 32px; height: 32px; border: 2px solid #ddd;">3
+                                </div>
+                                <p class="small">Choose a CV</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">What you are looking for?</label>
+                        <br>
+                        <label class="form-text">Selected an option:</label>
+                        <select class="form-select ">
+                            <option>Internship</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff"
+                            data-bs-toggle="modal" data-bs-target="#completeModal1">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for completing profile 2-->
+    <div class="modal fade" id="completeModal1" tabindex="-1" aria-labelledby="completeModalLabel1" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h3 class="modal-title text-center" id="completeModalLabel1">Complete your profile</h3>
+                <p class="text-center text-muted">Tell us a bit about yourself to get started</p>
+                <!-- Close Button -->
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+
+                <div class="modal-body">
+                    <div class="mb-4 text-center">
+                        <div class="d-flex align-items-start justify-content-center">
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="d-flex align-items-center justify-content-center"
+                                    style="width: 100%; position: relative;">
+                                    <div>
+                                        <div class="rounded-circle text-white d-flex align-items-center justify-content-center mb-2"
+                                            style="width: 32px; height: 32px; background-color: #0064A7; border: 2px solid #0064A7;">
+                                            1
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="small">Looking for</p>
+                            </div>
+
+                            <div class="d-flex align-items-center mt-3"
+                                style="height: 2px; background-color: #ddd; width: 60px;">
+                            </div>
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center mb-2 text-white"
+                                    style="width: 32px; height: 32px; border: 2px solid #ddd; background-color: #0064A7">
+                                    2
+                                </div>
+                                <p class="small">Profile Details</p>
+                            </div>
+
+                            <div class="d-flex align-items-center mt-3"
+                                style="height: 2px; background-color: #ddd; width: 60px;">
+                            </div>
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white"
+                                    style="width: 32px; height: 32px; border: 2px solid #ddd;">3
+                                </div>
+                                <p class="small">Choose a CV</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="text-center mb-4">Create Profile</h2>
+
+                    <div class="text-center mb-4">
+                        <img src="img/Nirmal.png" class="rounded-circle w-25 h-25 object-cover border border-secondary"
+                            alt="Profile Photo">
+                    </div>
+
+                    <p class="text-center text-muted mb-4">Upload up to 5 photos. Click to select primary photo</p>
+
+
+
+                    <div class="row mb-4 d-flex justify-content-center">
+
+                        <div class="col-3">
+                            <div
+                                class="border border-secondary rounded d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1">
+                                <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                    onchange="previewImage(event, 0)" style="z-index: 1; cursor: pointer;" />
+                                <i class="fas fa-plus text-muted position-absolute" style="top: 40%; left: 40%;"></i>
+                                <img src="" class="w-100 h-100 d-none" alt="Preview Image" id="preview-0" />
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div
+                                class="border border-secondary rounded d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1">
+                                <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                    onchange="previewImage(event, 1)" style="z-index: 1; cursor: pointer;" />
+                                <i class="fas fa-plus text-muted position-absolute" style="top: 40%; left: 40%;"></i>
+                                <img src="" class="w-100 h-100 d-none" alt="Preview Image" id="preview-1" />
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div
+                                class="border border-secondary rounded d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1">
+                                <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                    onchange="previewImage(event, 2)" style="z-index: 1; cursor: pointer;" />
+                                <i class="fas fa-plus text-muted position-absolute" style="top: 40%; left: 40%;"></i>
+                                <img src="" class="w-100 h-100 d-none" alt="Preview Image" id="preview-2" />
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div
+                                class="border border-secondary rounded d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1">
+                                <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                    onchange="previewImage(event, 3)" style="z-index: 1; cursor: pointer;" />
+                                <i class="fas fa-plus text-muted position-absolute" style="top: 40%; left: 40%;"></i>
+                                <img src="" class="w-100 h-100 d-none" alt="Preview Image" id="preview-3" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2" placeholder="Full Name: Sagari Poudel"
+                                style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2" placeholder="Country: Nepal"
+                                style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2" placeholder="I am : Student"
+                                style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2" placeholder="I am looking for : Internship"
+                                style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2"
+                                placeholder="Designation: Senior UI/UX Designer"
+                                style="border-color: #8C8C8C; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2"
+                                placeholder="Expected Salary Range: NPR 50000 - 100000"
+                                style="border-color: #8C8C8C; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2"
+                                placeholder="Current Address: Pokhara-32, Kaski"
+                                style="border-color: #8C8C8C; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2"
+                                placeholder="Permanent Address: Pokhara-32, Kaski"
+                                style="border-color: #8C8C8C; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control mb-2" placeholder="Email Address: example@gmail.com"
+                                style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2" placeholder="Mobile No.: 98XXXXXXXX"
+                                style="border-color: #8C8C8C; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2" placeholder="Gender: Female"
+                                style="border-color: #8C8C8C; color: #818181;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="date" class="form-control mb-4" placeholder="Date of Birth: 2002-09-27"
+                                style="border-color: #8C8C8C; color: #818181;" />
+                        </div>
+                    </form>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
+                            data-bs-toggle="modal" data-bs-target="#completeModal">Back</button>
+                        <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff"
+                            data-bs-toggle="modal" data-bs-target="#completeModal2">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for completing profile 3 -->
+    <div class="modal fade" id="completeModal2" tabindex="-1" aria-labelledby="completeModalLabel2" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h3 class="modal-title text-center" id="completeModalLabel2">Complete your profile</h3>
+                <p class="text-center text-muted">Tell us a bit about yourself to get started</p>
+                <!-- Close Button -->
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="mb-4 text-center">
+                        <div class="d-flex align-items-start justify-content-center">
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="d-flex align-items-center justify-content-center"
+                                    style="width: 100%; position: relative;">
+                                    <div>
+                                        <div class="rounded-circle text-white d-flex align-items-center justify-content-center mb-2"
+                                            style="width: 32px; height: 32px; background-color: #0064A7; border: 2px solid #0064A7;">
+                                            1
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="small">Looking for</p>
+                            </div>
+
+                            <div class="d-flex align-items-center mt-3"
+                                style="height: 2px; background-color: #ddd; width: 60px;">
+                            </div>
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center mb-2 text-white"
+                                    style="width: 32px; height: 32px; border: 2px solid #ddd; background-color: #0064A7">
+                                    2
+                                </div>
+                                <p class="small">Profile Details</p>
+                            </div>
+                            <div class="d-flex align-items-center mt-3"
+                                style="height: 2px; background-color: #ddd; width: 60px;">
+                            </div>
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white"
+                                    style="width: 32px; height: 32px; border: 2px solid #ddd; background-color: #0064A7">
+                                    3
+                                </div>
+                                <p class="small">Choose a CV</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fs-4 font-weight-semibold mb-0">Choose CV</h2>
+                        <a href="resume.html" style="color: #0064A7;">See More Templates <i
+                                class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div
+                        class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4 mb-4 d-flex align-content-center justify-content-center">
+                        <div class="col">
+                            <div class="border p-2 rounded">
+                                <img src="img/cv-2.png" alt="CV template" class="img-fluid w-100" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border p-2 rounded">
+                                <img src="img/cv-3.png" alt="CV template" class="img-fluid w-100" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border p-2 rounded">
+                                <img src="img/cv-1.png" alt="CV template" class="img-fluid w-100" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
+                        data-bs-toggle="modal" data-bs-target="#completeModal1">Back</button>
+                    <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff">Edit
+                        CV</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="JS/script.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

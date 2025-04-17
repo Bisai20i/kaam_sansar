@@ -1,0 +1,2550 @@
+html,
+body {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Page Background */
+body {
+  background-color: #fff;
+  padding-top: 3rem;
+  /* Reduced gap for a smaller space (70px / 16) */
+}
+
+/* Navbar styling */
+.navbar {
+  font-size: 0.8125rem;
+  /* 13px / 16 */
+  font-weight: 600;
+  text-transform: uppercase;
+  font-family: 'Roboto', sans-serif;
+  padding-left: 0.1255rem;
+  /* 2px / 16 */
+  padding-right: 0.125rem;
+  /* 2px / 16 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+ 
+  /* Added subtle shadow for better visibility */
+}
+
+/* Navbar brand */
+.navbar-brand img {
+  max-width: 9.375rem;
+  /* 150px / 16 */
+  height: auto;
+}
+
+/* Navbar links */
+.navbar .nav-link {
+  color: #0064A7;
+}
+
+.navbar .btn {
+  color: #fff;
+  border: 1px solid #0064A7;
+  font-weight: 600px;
+  background-color: #0064A7;
+}
+
+.navbar .btn-login {
+  color: #fff;
+  border: 1px solid #0064A7;
+  font-weight: 600px;
+  background-color: #0064A7;
+  height: 39px;
+  width: 85px;
+  border: 1px solid #0064A7;
+  border-radius: 3px;
+}
+
+.navbar .btn-login:hover{
+  color:#0064A7 ;
+  border: 1px solid #0064A7;
+  font-weight: 600px;
+  background-color: white;
+  
+ 
+}
+
+.navbar .btn-register {
+  color:#0064A7 ;
+  border: 1px solid #0064A7;
+  font-weight: 600px;
+  background-color: white;
+  height: 39px;
+  width: 85px;
+  border: 1px solid #0064A7;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+.navbar .btn-register:hover{
+  color:white ;
+  border: 1px solid #0064A7;
+  font-weight: 600px;
+  background-color: #0064A7;
+
+}
+
+/* Profile button styling */
+.profile-button {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-button img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid #0064A7;
+}
+
+
+#profileModal .modal-dialog.modal-sm {
+    max-width: 399px;
+    /* Adjust the size as needed */
+}
+
+/* Position the modal slightly left and top */
+#profileModal .modal-dialog {
+    position: fixed;
+    top: 45%;
+    /* Adjust this value to move it further down or up */
+    right: 10%;
+    /* Adjust this value to move it further left or right */
+    transform: translateY(-50%);
+    margin: 0;
+    width: 40%;
+}
+
+/* Make the modal content smaller */
+#profileModal .modal-content {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding-left: 100px;
+}
+
+/* Modal Title Styling */
+#profileModal .modal-title {
+    color: #3C78A1;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Close Button Styling */
+#profileModal .btn-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+/* Profile Image */
+#profileModal .profile-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #0064A7;
+}
+
+/* Card Title */
+#profileModal .card-title {
+    font-size: 20px;
+    color: #0064A7;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+#profileModal .card-title i {
+    font-size: 14px;
+    cursor: pointer;
+    color: #0064A7;
+}
+
+/* Reward Points */
+#profileModal .text-muted {
+    font-size: 14px;
+    color: #3C78A1 !important;
+    font-weight: 500;
+}
+
+/* List Styling */
+#profileModal .list-unstyled li {
+    list-style: none;
+    text-align: left;
+    padding: 8px 0;
+}
+
+#profileModal .list-unstyled li a {
+    color: #0064A7;
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease-in-out;
+}
+
+#profileModal .list-unstyled li a:hover {
+    color: #007bff;
+}
+
+#profileModal .list-unstyled li i {
+    font-size: 16px;
+}
+
+
+
+/* Horizontal Line */
+#profileModal hr {
+    margin: 5px 0;
+    border: none;
+    border-top: 2px solid #BBBBBB !important;
+}
+
+.d-block i {
+    transition: text-decoration 0.3s ease;
+}
+
+.d-block:hover i {
+    text-decoration: underline;
+}
+
+
+/* Body */
+.popular {
+  background-color: #196BA6;
+}
+
+
+.search-container {
+  background-color: #196BA6;
+  max-width: 1080px;
+  min-width: auto;
+
+  .aaa {
+
+    max-width: 1000px;
+    min-width: auto;
+  }
+}
+
+
+.search-inputs input {
+  height: 46px;
+  font-size: 15px;
+  border-radius: 5px;
+  max-width: 700px;
+  min-width: 100px;
+
+}
+
+button.search-button {
+  height: 46px;
+  width: 125px;
+  font-size: 15px;
+  border-radius: 5px;
+  background-color: #196BA6;
+  color: white;
+}
+
+.row-popular-search {
+  margin-top: 30px;
+
+}
+
+.popular-search .btn {
+  width: 160px;
+  min-width: 50px;
+  height:80px;
+  font-size: 15px;
+  background-color: #328FD2;
+  color: white;
+  border: none;
+  text-wrap: wrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.popular-search .btn:hover {
+  background-color: #328FD2;
+  color: white;
+}
+
+/* Input buttons */
+.input-container {
+  position: relative;
+}
+
+.input-container i {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  /* Adjust to your preference */
+  transform: translateY(-50%);
+  color: #888;
+  /* Icon color */
+}
+
+.input-container input {
+  padding-left: 30px;
+  /* Make space for the icon inside the input */
+}
+
+
+/* JOBS_ICONS */
+
+.job-card h5 {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.job-card img {
+  height: 150px;
+  object-fit: cover;
+}
+
+.job-card .card {
+  border-radius: 10px;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  border-color: #328FD2;
+  border: 2px solid #328FD2;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+
+}
+
+.job-card .card:hover {
+  transform: scale(1.02);
+}
+
+/* View-more button */
+button.view-more {
+  border-radius: 5px;
+  border: 2px solid #328FD2;
+  border-color: #328FD2;
+  color: #328FD2;
+}
+
+button.view-more:hover {
+  border-radius: 5px;
+  border: 2px solid #328FD2;
+  border-color: #328FD2;
+  color: #328FD2;
+}
+
+
+/* Fav */
+.favourite-btn {
+  background-color: transparent;
+  /* Make the background transparent */
+  border: none;
+  /* Remove border */
+  padding: 0;
+  /* Remove padding */
+  cursor: pointer;
+  /* Change cursor to indicate clickable */
+  display: inline-flex;
+  /* Align the image properly */
+  align-items: center;
+  /* Vertically align the image */
+  justify-content: center;
+  /* Horizontally center the image */
+  width: 14px;
+  /* Set a fixed width */
+  height: 15px;
+  /* Set a fixed height */
+  transition: transform 0.2s ease;
+  /* Add a smooth transition effect */
+  float: right;
+}
+
+.favourite-btn img {
+  width: 100%;
+  /* Make the image take up the full button area */
+  height: 100%;
+  /* Make the image take up the full button area */
+  object-fit: contain;
+  /* Ensure the image keeps its aspect ratio */
+}
+
+/* Optional: Add hover effect */
+.favourite-btn:hover {
+  transform: scale(1.1);
+  /* Slightly increase the size of the button on hover */
+}
+
+
+/* Banner */
+.bn {
+  background: linear-gradient(90deg, #0064A7 16.5%, #FFFFFF 100%);
+
+}
+
+.banner-content {
+  color: white;
+  background-image: url(../Images/planehimal.png);
+  background-repeat: no-repeat;
+  background-position: right bottom;
+
+}
+
+@media (max-width: 1024px) {
+  .banner-content {
+    background-position: right bottom;
+    /* Center the background image */
+    background-size: cover;
+    /* Adjust to cover the container */
+  }
+}
+
+/* For devices with max-width 768px (Tablets and smaller screens) */
+@media (max-width: 768px) {
+  .banner-content {
+    background-position: right bottom;
+    /* Adjust the background for smaller screens */
+    background-size: contain;
+    /* Ensures the background image fits within the container */
+  }
+}
+
+/* For devices with max-width 480px (Mobile devices) */
+@media (max-width: 480px) {
+  .banner-content {
+    background-position: center center;
+    /* Center the background image on smaller mobile screens */
+    background-size: contain;
+    /* Adjust the image to fit within the container */
+  }
+}
+
+
+.banner-content h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.banner-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.banner-content ul li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.banner-content ul li i {
+  color: white;
+  margin-right: 10px;
+  margin-left: 10px;
+
+}
+
+.button-container {
+  display: flex;
+  /* Use Flexbox */
+  justify-content: center;
+  /* Horizontally center the button */
+  align-items: center;
+  /* Vertically center the button */
+  margin-top: -60px;
+  height: auto;
+  /* Make the container take full viewport height */
+}
+
+.btn.btn-book-now {
+  background-color: #0064A7;
+  border: 1px solid #0064A7;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 2rem;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  /* Ensures text color is white */
+}
+
+.btn-book-now:hover {
+  background-color: #0064A7;
+}
+
+
+
+
+
+/* PW Section */
+/* General Card Styling */
+.card-container {
+  display: flex;
+  align-items: stretch;
+  /* Makes all cards the same height */
+  justify-content: center;
+
+  .card1 {
+    position: relative;
+    color: white;
+    text-align: center;
+    border: none;
+    overflow: hidden;
+    height: 100%;
+    /* Ensures equal height */
+    border-radius: 10px;
+  }
+}
+
+.card1 img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  /* Ensures images fill the card without distortion */
+  filter: brightness(50%);
+}
+
+.card-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+}
+
+.card-content h4 {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.card-content p {
+  font-size: 1rem;
+  opacity: 0.9;
+  /* Slight transparency to match the soft look */
+  color: white;
+}
+
+.card-container .btn {
+  background-color: #196BA6;
+  border: none;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+}
+
+.card-container .btn:hover {
+  background-color: #196BA6;
+}
+
+/* CTA */
+
+.cta {
+  background-color: #196BA6;
+}
+
+.cta-section {
+  background-image: url(../Images/qrwala.png);
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  color: white;
+  background-size: 30%;
+  padding-left: 10px;
+
+}
+
+@media (max-width: 1024px) {
+  .cta-section {
+    background-position: right bottom;
+    /* Centers the image on medium screens */
+    background-size: 40%;
+    /* Make the image smaller */
+  }
+}
+
+/* For screens smaller than or equal to 768px */
+@media (max-width: 868px) {
+  .cta-section {
+    background-position: right bottom;
+    /* Ensure the image is centered on small screens */
+    background-size: 35%;
+    /* Make the image even smaller */
+  }
+}
+
+/* For screens smaller than or equal to 480px (phones) */
+@media (max-width: 480px) {
+  .cta-section {
+    background-position: right bottom;
+    /* Center the image */
+    background-size: 40%;
+    /* Further reduce the size of the background image */
+  }
+}
+
+.cta {
+  position: relative;
+
+
+}
+
+.qr {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 120px;
+  /* Default size */
+  border: none;
+  transition: all 0.3s ease-in-out;
+  /* Smooth transition */
+}
+
+/* For Tablets (iPad) and Smaller Screens */
+@media (max-width: 1200px) {
+  .qr {
+    top: 50px;
+    left: auto;
+    right: 200px;
+    transform: none;
+    max-width: 150px;
+    /* Smaller QR size */
+    height: 100px;
+
+  }
+}
+
+/* For Mobile Devices (Standard Smartphones) */
+@media (max-width: 868px) {
+  .qr {
+    top: 10px;
+    right: 10px;
+    max-width: 90px;
+    /* Even smaller for mobile */
+    position: absolute !important;
+
+  }
+}
+
+/* For Small Mobile Devices (e.g., older iPhones, small Android phones) */
+@media (max-width: 550px) {
+  .qr {
+    top: 110px;
+    right: 75px;
+    max-width: 90px;
+    /* Further reduced size for small screens */
+    background-position: center center;
+    height: 60px;
+    width: 60px;
+    position: relative;
+
+
+  }
+}
+
+
+
+.cta-section h3 {
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: white;
+}
+
+
+.cta-section a img {
+  height: 50px;
+  width: auto;
+  max-width: 100%;
+  /* Ensures it doesn't exceed its container */
+  display: block;
+  /* Prevents inline spacing issues */
+}
+
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+  .cta-section a img {
+    height: 40px;
+    /* Reduce height for tablets */
+  }
+}
+
+/* Mobile (≤ 480px) - Align to Right */
+@media (max-width: 480px) {
+  .cta-section {
+    text-align: start;
+    /* Align the image to the right */
+  }
+
+  .cta-section a img {
+    height: 40px;
+    /* Smaller for mobile */
+
+  }
+}
+
+
+
+
+
+
+/* News and Articles Section */
+
+
+
+/* Gift */
+
+.gift-section {
+  padding: 30px 0;
+}
+
+.gift-card {
+  /* background-color: #007bff; */
+  color: white;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  height: 250px;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+
+.gift-card h5,
+.gift-card p {
+  position: relative;
+  z-index: 2;
+}
+
+/* .abroad-deals {
+  background-color: #0056b3;
+} */
+.abroad-deals img {
+  width: 100%;
+
+}
+
+.btn.view-more {
+  background-color: transparent;
+  color: #0064A7;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  border: 1px solid #0064A7;
+  width: auto;
+}
+
+
+
+/* Logo Styling */
+.footer img.image-fluid {
+
+  height: 90px;
+  width: 230px;
+  display: flex;
+}
+
+/* Footer Sections */
+.footer h5 {
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 1.5px;
+  display: flex;
+
+
+
+}
+
+.footer p {
+  font-size: 14px;
+  margin: 5px 0;
+  cursor: pointer;
+  display: flex
+}
+
+
+.footer p:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+p i {
+  margin-right: 10px;
+  /* Adjust spacing between the icon and the text */
+  margin-top: 3px;
+  vertical-align: middle;
+  /* Aligns the icon with the text */
+}
+
+
+
+/* Parent Container */
+.img {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  /* Default to start alignment */
+  flex-wrap: wrap;
+  /* Ensures responsiveness */
+  gap: 20px;
+}
+
+/* QR Code (Left Side) */
+.img1 {
+  width: 120px;
+  height: 120px;
+}
+
+/* Store Buttons (Right Side) */
+.store-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Space between buttons */
+}
+
+/* Store Button Images */
+.img2 {
+  width: 150px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.img2:hover {
+  transform: scale(1.05);
+}
+
+/* Social Icons (Below) */
+.icon {
+  display: flex;
+
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.icon span {
+  color: white;
+  font-size: 24px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.icon span:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Responsive Adjustments */
+
+/* Small Screens (Mobile, up to 480px) */
+@media (max-width: 480px) {
+  .img {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .img1 {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
+  }
+
+  .store-buttons {
+    align-items: flex-start;
+  }
+
+  .img2 {
+    width: 130px;
+  }
+
+  .icon {
+    margin-top: 15px;
+  }
+
+  .icon span {
+    font-size: 20px;
+  }
+
+  /* Smaller Button for Mobile */
+  .btn.view-more {
+    font-size: 10px;
+    /* Reduce text size */
+    padding: 4px 8px;
+    /* Smaller padding */
+    width: auto;
+    /* Adjust width if needed */
+  }
+}
+
+
+
+/* Medium Screens (Tablets, Portrait, 481px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .img {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .img1 {
+    width: 110px;
+    height: 110px;
+  }
+
+  .store-buttons {
+    align-items: flex-start;
+  }
+
+  .img2 {
+    width: 140px;
+  }
+
+  .icon {
+    margin-top: 15px;
+  }
+
+  .icon span {
+    font-size: 22px;
+  }
+
+  /* Button adjustments */
+  .btn.view-more {
+    width: auto;
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+/* Large Screens (Desktop and up, 769px and up) */
+@media (min-width: 769px) {
+  .img {
+    flex-direction: row;
+    align-items: start;
+  }
+
+  .img1 {
+    width: 120px;
+    height: 120px;
+  }
+
+  .store-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .img2 {
+    width: 150px;
+  }
+
+  .icon {
+    margin-top: 20px;
+  }
+
+  .icon span {
+    font-size: 24px;
+  }
+
+  /* Button adjustments */
+  .btn.view-more {
+    width: auto;
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+}
+
+
+/* Horizontal Line */
+hr {
+  border-color: #FFFFFFCC;
+  border-radius: 20%;
+
+}
+
+hr p {
+  text-align: center;
+}
+
+/* Copyright Text */
+.text {
+  font-size: 14px;
+  color: #ddd;
+  margin-top: 10px;
+}
+
+
+
+/* Login Modal Styles */
+.modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.modal-header .modal-title {
+  align-items: center;
+}
+
+/* Form Input Styles */
+.form-floating .form-control {
+  height: 50px;
+  /* Uniform height for input fields */
+  border-radius: 8px;
+  padding-right: 40px;
+  /* Space for the eye icon */
+  margin-bottom: 15px;
+  font-size: 1rem;
+  /* Consistent font size */
+}
+
+/* Adjust the First Name and Last Name input fields */
+.col-md-6 {
+  padding-left: 10px;
+  /* Remove padding from the left */
+  padding-right: 0;
+  /* Remove padding from the right */
+}
+
+.col-md-6 input.form-control {
+  width: 100%;
+}
+
+.col-md-6:first-child {
+  margin-left: 0px;
+  /* Adjusted gap to be smaller */
+}
+
+.col-md-6:first-child {
+  margin-right: 0px;
+  /* Adjusted gap to be smaller */
+}
+
+/* Eye Icon Styles */
+.eye-icon {
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.eye-icon img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Button Logo Styles */
+.btn-logo {
+  width: 20px;
+  height: 20px;
+}
+
+/* Phone Input Styles */
+#registerphone {
+  height: 58px;
+  width: 100%;
+  padding-left: 60px;
+  /* Adjust padding to accommodate the flag */
+  margin-bottom: 15px;
+}
+
+/* Password Input Styles */
+#password {
+  height: 50px;
+  width: 100%;
+  padding-left: 10px;
+  margin-bottom: 15px;
+}
+
+/* Style for Input Container */
+.input-container {
+  position: relative;
+}
+
+/* Terms and Conditions Checkbox */
+.form-check {
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+/* Submit Button Styles */
+button[type="submit"] {
+  height: 50px;
+  width: 100%;
+  background-color: #0064A7;
+  /* Updated color */
+  color: white;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  margin-top: 15px;
+}
+
+/* Hover Effect for Submit Button */
+button[type="submit"]:hover {
+  background-color: #005283;
+}
+
+/* Style for the Divider Text */
+.text-muted {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* Style for the "Create an Account" Link */
+.text-primary {
+  font-weight: 600;
+  color: #0064A7;
+}
+
+.text-primary:hover {
+  text-decoration: underline;
+  color: #005283;
+}
+
+/* Social Button Styles */
+.btn-outline-secondary {
+  background-color: #fff !important;
+  border: 0.5px solid #A6A6A6 !important;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  width: 192px;
+  height: 52px;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #0064A7!important;
+  color: #fff!important;
+  /* Changes text color to white */
+  border-color: #0064A7!important;
+  /* Matches the border with hover color */
+}
+
+.btn-outline-secondary img {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  /* Adjust spacing between image and text */
+}
+
+/* Adjust the layout for input fields and icons */
+.input-icon {
+  position: relative;
+  bottom: 10px;
+  left: 10px;
+  font-size: 20px;
+  color: #6c757d;
+}
+
+/* Optional: Adjust form fields and labels */
+.form-floating {
+  position: relative;
+}
+
+/* Fix Overlapping Layout */
+.iti {
+  width: 100% !important;
+  background-color: white;
+}
+
+/* Styles for Remember Me Checkbox */
+.form-check-label {
+  font-size: 0.85rem;
+}
+
+/* Adjust Styles for Mobile-Friendly Layout */
+@media (max-width: 767px) {
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .d-flex button {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .card {
+    width: 100%;
+    padding: 15px;
+  }
+
+  /* Add margin between input fields in mobile view */
+  .form-floating .form-control,
+  .phone input,
+  #password,
+  #confirmPassword,
+  .form-check input,
+  button[type="submit"] {
+    margin-bottom: 15px;
+    /* Adds spacing between form fields */
+  }
+}
+
+/* Mobile-Friendly Padding for Inputs */
+@media (max-width: 767px) {
+  .form-control {
+    padding-left: 15px;
+  }
+}
+
+
+
+/*JOB LISTING*/
+/* Main container with maximum width */
+.container {
+  max-width: 90rem;
+  /* 1440px / 16 */
+  margin-top: 10px;
+  /* Space to accommodate fixed navbar */
+  border-radius: 0.5rem;
+  /* 8px / 16 */
+  margin-bottom: 10px;
+}
+
+/* Image and Button Section */
+.image-and-button {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  /* 20px / 16 */
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  /* 20px / 16 */
+  border-top: 0.0625rem solid #ddd;
+  /* 2px / 16 */
+  border-bottom: 0.0625rem solid #ddd;
+  /* 2px / 16 */
+  padding: 0.9375rem;
+  /* 15px / 16 */
+  box-sizing: border-box;
+}
+
+.job-image {
+  width: 100%;
+  height: 9.875rem;
+  /* 158px / 16 */
+  display: block;
+  object-fit: cover;
+  border-radius: 7px, 7px, 7px, 0px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.company-logo {
+  max-width: 7rem;
+  /* 100px / 16 */
+  height: auto;
+}
+
+/* Apply Now button */
+.apply-button {
+  padding: 0.3125rem 1.125rem;
+  /* 5px 18px / 16 */
+  background-color: #0064A7;
+  color: white;
+  border: none;
+  border-radius: 0.3125rem;
+  /* 5px / 16 */
+  text-decoration: none;
+  display: inline-block;
+  width: 7.25rem;
+  /* 116px / 16 */
+  height: 2.125rem;
+  /* 34px / 16 */
+  font-size: 1rem;
+}
+
+.apply-button:hover {
+  background-color: #0064A7;
+}
+
+/* Job details section styling */
+.job-details-section {
+  border: 0.0625rem solid #ddd;
+  /* 1px / 16 */
+  background-color: #fff;
+  border-radius: 0.5rem;
+  /* 8px / 16 */
+  margin-top: 80px;
+}
+
+/* Job title styling */
+.job-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.625rem;
+  /* 10px / 16 */
+  border-bottom: 0.0625rem solid #ddd;
+  /* 1px / 16 */
+  padding-bottom: 0.625rem;
+  /* 10px / 16 */
+}
+
+/* Additional border for the "Job Description" heading */
+h1.job-title {
+  border-bottom: 0.0625rem solid #ddd;
+  /* 2px / 16 */
+  padding-bottom: 0.625rem;
+  /* 10px / 16 */
+  margin-bottom: 1.25rem;
+  /* 20px / 16 */
+}
+
+/* Add border to each meta information */
+.meta-container {
+  font-size: 1rem;
+  margin-bottom: 0.625rem;
+  /* 10px / 16 */
+  border-bottom: 0.0625rem solid #ddd;
+  /* 2px / 16 */
+  padding-bottom: 0.625rem;
+  /* 10px / 16 */
+}
+
+/* Meta label styling */
+.meta-label {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Job meta section styling */
+.job-meta {
+  margin-bottom: 1.25rem;
+  /* 20px / 16 */
+  border: 0.0625rem solid #fff;
+  /* 1px / 16 */
+  padding: 0.9375rem;
+  /* 15px / 16 */
+  background-color: #ffff;
+  border-radius: 0.5rem;
+  /* 8px / 16 */
+}
+
+.job-meta p {
+  margin-bottom: 0.5rem;
+  /* 8px / 16 */
+}
+
+/* Job description section */
+.job-description {
+  margin-bottom: 1.25rem;
+  /* 20px / 16 */
+}
+
+.job-description h3 {
+  margin-top: 1.25rem;
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+  /* 20px / 16 */
+}
+
+/* Sidebar Categories Styling */
+.job-categories {
+  margin-top: auto;
+  /* margin-bottom: 1.25rem; */
+  /* 20px / 16 */
+  border: 0.0625rem solid #ddd;
+  /* 1px / 16 */
+  padding: 0.9375rem;
+  /* 15px / 16 */
+  background-color: #fff;
+  border-radius: 0.5rem;
+  /* 8px / 16 */
+}
+
+/* Add border below the category, skill, and location titles */
+.job-categories .sidebar-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.625rem;
+  /* 10px / 16 */
+  color: #0064A7;
+  /* Change font color to #0674A7 */
+  border-bottom: 0.0625rem solid #ddd;
+  /* 1px / 16, border below the title */
+  padding-bottom: 0.625rem;
+  /* 10px / 16 */
+}
+
+/* Sidebar Category List Styling */
+.job-categories ul,
+.category-list {
+  list-style: none;
+  padding: 0;
+}
+
+.job-categories li,
+.category-list li {
+  margin-bottom: 0.625rem;
+  /* 10px / 16 */
+}
+
+.job-categories a,
+.category-list li a {
+  text-decoration: none;
+  color: #0064A7;
+  /* Change link color to #0674A7 */
+}
+
+.job-categories a:hover,
+.category-list li a:hover {
+  text-decoration: underline;
+}
+
+/* Sidebar Section Styling */
+.sidebar-section {
+  margin-top: 1.25rem;
+  /* 20px / 16 */
+  padding: 1.25rem;
+  /* 20px / 16 */
+  border: 0.0625rem solid #ddd;
+  /* 1px / 16 */
+  background-color: #fff;
+  border-radius: 0.5rem;
+  /* 8px / 16 */
+}
+
+.sidebar-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.625rem;
+  /* 10px / 16 */
+  color: #333;
+}
+
+/* Mobile Responsiveness for up to 17rem (272px) */
+@media (max-width: 10rem) {
+
+  /* 272px / 16 */
+  .image-and-button {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9375rem;
+    /* 15px / 16 */
+    text-align: center;
+  }
+
+  .job-categories {
+    width: 100%;
+  }
+
+  .container {
+    max-width: 100%;
+    padding-left: 0.625rem;
+    /* 10px / 16 */
+    padding-right: 0.625rem;
+    /* 10px / 16 */
+  }
+
+  .navbar .nav-link {
+    font-size: 0.75rem;
+    /* 12px / 16 */
+  }
+
+  .job-title {
+    font-size: 1.125rem;
+    /* 18px / 16 */
+  }
+
+  .container .row {
+    display: block;
+  }
+
+  .job-categories {
+    margin-top: 1.25rem;
+    /* 20px / 16 */
+  }
+
+  .col-md-8,
+  .col-md-4 {
+    width: 100%;
+  }
+
+  .job-meta,
+  .job-description {
+    font-size: 0.875rem;
+    /* 14px / 16 */
+  }
+
+  .job-description h3 {
+    font-size: 1.125rem;
+    /* 18px / 16 */
+  }
+}
+
+#profileModal .modal-dialog.modal-sm {
+  max-width: 399px;
+  /* Adjust the size as needed */
+}
+
+/* Position the modal slightly left and top */
+#profileModal .modal-dialog {
+  position: fixed;
+  top: 45%;
+  /* Adjust this value to move it further down or up */
+  right: 10%;
+  /* Adjust this value to move it further left or right */
+  transform: translateY(-50%);
+  margin: 0;
+  width: 40%;
+}
+
+/* Make the modal content smaller */
+#profileModal .modal-content {
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding-left: 100px;
+}
+
+/* Modal Title Styling */
+#profileModal .modal-title {
+  color: #3C78A1;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Close Button Styling */
+#profileModal .btn-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+/* Profile Image */
+#profileModal .profile-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #0064A7;
+}
+
+/* Card Title */
+#profileModal .card-title {
+  font-size: 20px;
+  color: #0064A7;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+#profileModal .card-title i {
+  font-size: 14px;
+  cursor: pointer;
+  color: #0064A7;
+}
+
+/* Reward Points */
+#profileModal .text-muted {
+  font-size: 14px;
+  color: #3C78A1 !important;
+  font-weight: 500;
+}
+
+/* List Styling */
+#profileModal .list-unstyled li {
+  list-style: none;
+  text-align: left;
+  padding: 8px 0;
+}
+
+#profileModal .list-unstyled li a {
+  color: #0064A7;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease-in-out;
+}
+
+#profileModal .list-unstyled li a:hover {
+  color: #007bff;
+}
+
+#profileModal .list-unstyled li i {
+  font-size: 16px;
+}
+
+
+
+/* Horizontal Line */
+#profileModal hr {
+  margin: 5px 0;
+  border: none;
+  border-top: 2px solid #BBBBBB !important;
+}
+
+.d-block i {
+  transition: text-decoration 0.3s ease;
+}
+
+.d-block:hover i {
+  text-decoration: underline;
+}
+
+/* Basic-Info */
+
+/* General Styling */
+.Basic-Info {
+  background-color: #f8f9fa;
+
+}
+
+.container {
+  max-width: 900px;
+
+}
+
+
+/* Sidebar Styling */
+.top-border {
+  height: 40px;
+}
+
+.list-group-item:first-child {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+}
+
+.list-group a {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+
+}
+
+.active-profile {
+  background-color: #fff !important;
+  color: #0064A7 !important;
+
+}
+
+.active-profile:hover {
+  background-color: #fff !important;
+  color: #0064A7 !important;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Profile Card */
+.profile-card {
+  background-color: #DDF7FF;
+  border: 1px solid #000000;
+  padding: 15px;
+  height: 530px;
+  width: 480px;
+  text-align: center;
+  border-radius: 0px;
+  position: relative;
+}
+
+.profile-card p {
+  text-align: start;
+  padding-top: 0px;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+/* Profile Image */
+.profile-img {
+  width: 164px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #196BA6;
+
+}
+
+/* QR Code */
+.qr-code {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  object-fit: cover;
+  bottom: 36px;
+  right: 15px;
+
+}
+
+
+/* Profile Text */
+.profile-card h5 {
+  font-weight: bold;
+  margin-top: 10px;
+
+}
+
+/* Spacing for Information */
+
+
+.profile-text {
+  padding-top: 120px;
+}
+
+.profile-text p {
+  margin: 3px 0;
+}
+
+.job-card-1 {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  flex-wrap: wrap;
+  background: #fff;
+  width: 100%;
+  height: auto;
+  position: relative;
+  flex-direction: row;
+}
+
+.job-card-1 img {
+  max-width: 150px;
+  /* Adjust size */
+  height: 130px;
+  border-radius: 5px;
+  display: block;
+}
+
+.job-card-body {
+  flex: 1;
+  margin-left: 20px;
+}
+
+/* Single continuous line below image & text */
+.full-width-border {
+  border-top: 1px solid black;
+  /* Adjust color */
+  width: 100%;
+  margin-top: 10px;
+  /* Adjust spacing */
+  padding: 0%;
+
+}
+
+.job-card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: gray;
+  margin-top: 10px;
+  width: 100%;
+}
+
+
+.job-job p {
+  font-size: 16px;
+  padding: 0%;
+  margin: 1%;
+
+}
+
+.job-job h5 {
+  font-size: 26px;
+
+}
+
+/*Job Category list by ....*/
+
+/* Category box styling */
+.category-box {
+  border: 0.2px solid #A6A6A6;
+  /* Light gray border for the boxes */
+  padding: 20px;
+  border-radius: 7px;
+  background-color: #F3F3F3;
+  /* White background for the boxes */
+  margin-bottom: 17px;
+  /* Space between boxes */
+  height: auto;
+  /* Set a fixed height for all boxes */
+  text-align: left;
+}
+
+.category-title {
+  font-size: 32px !important;
+  color: #0064A7;
+  text-align: left !important;
+  margin-bottom: 20px !important;
+  font-weight: bold;
+}
+
+/* Custom styling for job categories */
+.category-box ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.category-box li {
+  color: #196BA6;
+  text-align: left;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  /* Adjusted line spacing for better readability */
+  font-size: 18px;
+  margin-bottom: 12px;
+  /* Adds spacing between each list item */
+}
+
+.category-list {
+  list-style: none;
+  padding: 0;
+}
+
+.category-list li {
+  margin-bottom: 10px;
+}
+
+.category-link {
+  text-decoration: none;
+  color: black;
+  /* Default text color */
+  font-weight: 500;
+  transition: color 0.3s ease-in-out;
+}
+
+.category-link:hover {
+  color: #005283;
+  /* Change to your preferred hover color */
+  text-decoration: none !important;
+}
+
+/* Job job text */
+.job-job p {
+  font-size: 16px;
+  padding: 0;
+  margin: 1%;
+}
+
+.job-job h5 {
+  font-size: 22px;
+  font-weight: bold;
+  /* Add bold style for better emphasis */
+  color: #333;
+  /* Slightly darker color for the title */
+}
+
+/* Optional: Adding hover effect on text elements without underline */
+.job-card-body h5:hover {
+  transition: color 0.3s ease;
+  /* Smooth transition for text color */
+}
+
+.job-job p:hover {
+  transition: color 0.3s ease;
+  /* Smooth transition for text color */
+}
+
+.password-card {
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* .form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.1rem;
+} */
+
+.input-group-text {
+  cursor: pointer;
+}
+
+
+
+.forgot-password .bg-primary {
+  background-color: #196BA6 !important;
+  border-radius: 50%;
+
+}
+
+/* Hide all content sections by default
+.content-section {
+  display: none;
+} */
+
+/* Only display active sections */
+.content-section.active {
+  display: block;
+}
+
+/* Styling for active sidebar links */
+.active-profile {
+  background-color: #007bff;
+  color: white;
+}
+
+.Your-CV h5 p a {
+  text-align: start;
+
+}
+
+.CV-card {
+  background-color: #DDF7FF;
+  border: 1px solid #000000;
+  padding: 15px;
+  max-height: 880px;
+  max-width: 720px;
+  text-align: center;
+  border-radius: 0px;
+  position: relative;
+  border: 1px solid;
+  border-radius: 1%;
+}
+
+.CV-card p {
+  text-align: start;
+  padding-top: 0px;
+  font-size: 17px;
+  font-weight: 400;
+
+}
+
+.cv-card {
+  background-color: white;
+  max-height: 859px;
+  max-width: 699px;
+  padding: 10px !important;
+  border: 1px solid;
+  border-radius: 1%;
+
+}
+
+.cv-card img {
+  position: absolute;
+  height: 104px;
+  width: 104px;
+  border: 0px solid;
+  object-fit: cover;
+  border-radius: 50%;
+  right: 40px;
+  top: 40px;
+
+
+}
+
+.cv-card h5 {
+  font-size: 30px;
+  font-weight: 400;
+  color: #0064A7;
+}
+
+.cv-card h1 {
+  text-align: start !important;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0064A7;
+}
+
+.cv-card h2 {
+  font-size: 20px;
+  font-weight: 500;
+  text-align: start;
+  color: #838181;
+}
+
+.cv-card p {
+  font-size: 15px;
+  font-weight: 400;
+  color: #838181;
+}
+
+.cv-card ul li {
+  font-size: 15px;
+  font-weight: 400;
+  color: #838181;
+  text-align: start;
+}
+
+.purchase-card {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-left: 20px;
+  margin-right: 10px;
+  flex-wrap: wrap;
+  background: #fff;
+  max-width: 630px !important;
+  max-height: 174px;
+  position: relative;
+  flex-direction: row;
+
+
+}
+
+.purchase-card img {
+  max-width: 94px;
+  /* Adjust size */
+  height: 92px;
+  border-radius: 5px;
+  display: block;
+}
+
+.purchase-card-body {
+  flex: 1;
+  margin-left: 20px;
+}
+
+/* Single continuous line below image & text */
+.full-width-border {
+  border-top: 0.5px solid #9D9999;
+  /* Adjust color */
+  width: 100%;
+  margin-top: 10px;
+  /* Adjust spacing */
+  padding: 0%;
+
+}
+
+.purchase-card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: gray;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.purchase-card p {
+  font-size: 16px;
+  padding: 0%;
+  margin: 0%;
+  font-weight: 400;
+  color: #000;
+
+}
+
+.purchase-card h5 {
+  font-size: 24px;
+  font-weight: 400;
+  color: #000000;
+
+}
+
+.purchase-card-footer small {
+  font-size: 12px;
+  font-weight: 300;
+
+}
+
+.additional-info {
+  height: 364px;
+  max-width: 630px;
+  margin-right: 10px;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+
+
+.purchase-card .delete-btn {
+  background-color: white;
+  position: absolute;
+  top: 20%;
+  right: 20px;
+  /* Adjust to your preference */
+  transform: translateY(-50%);
+  /* Center the button vertically and align it to the right */
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 15px;
+  transition: transform 0.2s ease;
+  float: right;
+  color: #0064A7CC;
+}
+
+.purchase-card .delete-btn i {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.delete-btn:hover {
+  transform: scale(1.1);
+}
+
+.edit-profile-card input,
+.edit-profile-card select {
+  min-height: 40px;
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid #818181;
+  border-radius: 4px;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Prevents overflow issues */
+}
+
+/* Improved focus state */
+.edit-profile-card input:focus,
+.edit-profile-card select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+.edit-profile-card {
+  padding: 30px;
+  /* Adds space inside the card */
+
+}
+
+img.rounded-circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  max-width: 100%;
+  right: -20px;
+  top: 0px;
+
+}
+
+.edit-profile-card .save-btn {
+  display: flex;
+  justify-content: center;
+  /* Center the button horizontally */
+  margin-top: 10px;
+  /* Adds some space above the button */
+}
+
+.edit-profile-card .save-changes-btn {
+  background-color: #196BA6;
+  height: 40px;
+  width: 152px;
+  border: 1px solid #196BA6;
+  border-radius: 4px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  /* Horizontally centers the text in the button */
+  align-items: center;
+  margin-top: 20px;
+}
+
+
+.job-card-profile {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  flex-wrap: wrap;
+  background: #fff;
+  max-width: 815px;
+  max-height: 254px;
+  position: relative;
+  flex-direction: row;
+
+}
+
+.job-card-profile img {
+  max-width: 150px;
+  /* Adjust size */
+  height: 150px;
+  border-radius: 5px;
+  display: block;
+}
+
+.job-card-body {
+  flex: 1;
+  margin-left: 20px;
+}
+
+/* Single continuous line below image & text */
+.full-width-border {
+  border-top: 1px solid black;
+  /* Adjust color */
+  width: 100%;
+  margin-top: 10px;
+  /* Adjust spacing */
+  padding: 0%;
+
+}
+
+.job-card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: gray;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.jobs-job {
+  width: 800px;
+  height: auto;
+
+}
+
+.jobs-job p {
+  font-size: 16px;
+  padding: 0%;
+  margin: 1%;
+
+}
+
+.jobs-job h5 {
+  font-size: 26px;
+
+}
+
+
+:root {
+  --primary-color: #196ba6;
+  --primary-color-light: #328fd2;
+  --white: #ffffff;
+}
+
+.payment .primary_color_bg,
+.payment .primary_color_bg:hover,
+.converter .primary_color_bg,
+.converter .primary_color_bg:hover {
+  background: var(--primary-color) !important;
+  color: white;
+}
+
+.converter .primary_color_border,
+.converter .primary_color_border:hover {
+  border: 1px solid var(--primary-color);
+  background: white;
+  color: var(--primary-color);
+}
+
+.converter .primary_color_text {
+  color: var(--primary-color);
+}
+
+/* .active { */
+/* <<<<<<< HEAD
+  background-color: #0056b3 !important;
+=======
+  background: var(--primary-color) !important;
+} */
+
+.converter .primary_border {
+  border: 1px solid var(--primary-color) !important;
+  color: var(--primary-color);
+}
+
+/* currency-converter */
+.converter .dropdown-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.converter .dropdown-toggle::after {
+  margin-left: 10px;
+}
+
+.converter .flag-icon {
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--primary-color);
+  border-radius: 50%;
+  padding: 1rem;
+}
+
+.converter .currency-selector {
+  min-width: 160px;
+}
+
+.converter .dropdown-menu {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.converter .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.page-item.active .page-link {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--white) !important;
+}
+
+.pi {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pio {
+  position: absolute;
+}
+
+.aspect_16_9 {
+  aspect-ratio: 16/9;
+}
+
+.visa-application
+{
+color: #0064A7;
+}
+
+.step-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  position: relative;
+  border-bottom: 2px solid gray;
+}
+
+.step-highlight {
+  position: absolute;
+  bottom: -2px;
+  height: 2px;
+  width: 50%;
+  background: #0064A7;
+  transition: left 0.3s ease-in-out;
+  left: 0;
+}
+
+.step-button {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  color: #A4A4A4;
+  white-space: nowrap;
+}
+
+.step-button.active1 {
+  background-color: white;
+  color: #0064A7;
+}
+
+.step-button i {
+  font-size: 1.5rem;
+}
+
+.step-button span {
+  display: block;
+  font-size: 1rem;
+}
+
+.visa-input {
+  background-color: #E6E7E7 !important;
+  color: #A6A6A6 !important;
+}
+
+.visa-dropdown {
+  background-color: #E6E7E7 !important;
+  color: #A6A6A6 !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+
+.img-payment {
+  width: 130px !important;
+  height: auto !important;
+  position: relative !important;
+}
+
+/* .btn-pay,
+.btn-next {
+  width: 90px;
+  height: auto;
+  background: #0064A7 !important;
+>>>>>>> bsai
+  color: white !important;
+  border: 1px solid #00408a;
+} */
+
+
+
+
+/* Layout for the row container */
+/* Horoscope Header */
+.horoscope-header,
+.visa-header {
+  border-bottom: 2px solid #196BA6 !important;
+  padding-bottom: 10px;
+}
+
+/* Style for image previews in one row */
+.image-preview {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  overflow-x: auto;
+  /* Allow scrolling if images overflow horizontally */
+}
+
+.image-preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.form-container {
+  background: transparent;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+}
+
+.dropdown-container {
+  flex: 1;
+  min-width: 210px;
+  height: 80px;
+  position: relative;
+  gap: 1px;
+  background: white;
+  padding: 5px;
+}
+
+.dropdown-label {
+  font-size: 16px;
+  color: gray;
+}
+
+/* .form-select {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  border: none !important;
+  color: #0064A7 !important;
+  height: auto;
+  padding-left: none !important;
+}
+
+.form-select:focus {
+  box-shadow: none;
+} */
+.visa {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  border: none !important;
+  color: #0064A7 !important;
+  height: auto;
+  padding-left: none !important;
+}
+
+.visa:focus {
+  box-shadow: none;
+}
+
+.btn-apply,
+.btn-apply-1 {
+  background: #0064A7;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px 20px;
+  border: 0.5px solid #ffffff;
+  margin-top: 20px;
+}
+
+.btn-apply-1:hover {
+  border: 1px solid #0064A7;
+  background: #ffffff;
+  color: #0064A7;
+}
+
+.btn-apply:hover {
+  background: #ffffff;
+  color: #000;
+}
+
+.visa-title {
+  color: #196BA6;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+@media (max-width: 995px) {
+  .form-container {
+    max-width: 540px;
+  }
+}
+
+/* Responsive Design for Visa Buttons */
+@media (max-width: 1000px) {
+
+  /* If you have a header for your visa section */
+  .visa-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Container adjustments */
+  .button-container-visa {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    padding-top: 20px;
+  }
+
+  /* Two buttons per row on screens up to 990px */
+  .button-container-visa button {
+    flex: 1 1 calc(50% - 10px);
+    margin: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* One button per row on extra small screens */
+  .button-container-visa button {
+    flex: 1 1 100%;
+    margin: 5px 0;
+  }
+}

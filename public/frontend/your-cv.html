@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login Succesfull</title>
+  <link rel="stylesheet" href="CSS/styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" />
+</head>
+
+<body>
+  <section style="max-width: 90rem;">
+  
+    <div class="container-fluid main-container">
+      
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <span>
+            <img src="Images/logo.png" img="img-fluid" alt="">
+          </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Find jobs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="#">resume help</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">resume maker</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">visa hq</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">insurance</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">forex calculator</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">horoscope</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">gifts and coupon</a>
+            </li>
+
+          </ul>
+
+          <button id="main-profile" class="profile-button" data-bs-toggle="modal" data-bs-target="#profileModal">
+            <img src="Images/profile-icon.png" alt="Profile">
+          </button>
+
+        </div>
+      </div>
+    </nav>
+
+  </section>
+  <section class="Your-CV">
+      <style>
+        .Your-CV h5 p a{
+          text-align: start;
+        
+        }
+        .CV-card{
+  background-color: #DDF7FF;
+  border: 1px solid #000000;
+  padding: 15px;
+  max-height: 880px;
+  max-width: 720px;
+  text-align: center;
+  border-radius: 0px;
+  position: relative;
+  border: 1px solid;
+border-radius: 1%;
+}
+.CV-card p{
+text-align:start;
+padding-top: 0px;
+font-size: 17px;
+font-weight: 400;
+
+}
+
+            .cv-card{
+            background-color: white;
+            max-height: 859px;
+            max-width: 699px;
+            padding: 10px!important;
+            border: 1px solid;
+           border-radius: 1%;
+
+          }
+          .cv-card img{
+            position: absolute;
+           height: 104px;
+           width: 104px;
+            border: 0px solid;
+            object-fit: cover;
+            border-radius: 50%;
+            right: 40px;
+            top: 40px;
+           
+
+          }
+          .cv-card h5{
+            font-size: 30px;
+            font-weight: 400;
+            color: #0064A7 ;
+          }
+          .cv-card h1 {
+            text-align: start!important;
+            font-size: 16px;
+            font-weight: 600;
+            color: #0064A7; 
+          }
+        .cv-card h2{
+            font-size: 20px;
+            font-weight: 500;
+            text-align: start;
+            color: #838181;
+        }
+        .cv-card p{
+            font-size: 15px;
+            font-weight: 400;
+            color: #838181;
+        }
+        .cv-card ul li{
+            font-size: 15px;
+            font-weight: 400;
+            color: #838181 ;
+            text-align: start;
+        }
+
+      </style>
+   <!-- 2nd -->
+    <div class="container mt-4 py-5">
+      <div class="card-cv border ">
+        <h5 class="text-start m-2">Your Profile</h5>
+      </div>
+      
+
+      <div class="row g-0 ">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+          <div class="list-group">
+            <a href="profile-info.html" class="list-group-item list-group-item-action   ">Basic Information</a>
+            <a href="your-cv.html" class="list-group-item list-group-item-action active-profile">Your CV</a>
+            <a href="purchase-history.html" class="list-group-item list-group-item-action">Purchase History</a>
+            <a href="edit-profile.html" class="list-group-item list-group-item-action">Edit Profile</a>
+            <a href="my-jobs.html" class="list-group-item list-group-item-action">My Jobs</a>
+          </div>
+        </div>
+
+        <!-- Profile Card -->
+        
+        <div class="col-md-9">
+          <div class="card-container border py-3">
+            <div class="CV-card border">
+              <div class="cv-card border">
+             <h5 class="text-start ">Phil Dunphy</h5>
+             <img src="Images/cv-img.jpg" alt="">
+             <br>
+             <h2>Realtor</h2>
+             <h1>About</h1>
+             <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
+            <h1>Education</h1>
+            <p>Califonia University</p>
+            <h1>Projects</h1>
+            <p>Califonia University</p>
+            <h1>Skills</h1>
+            <ul>
+                <li> Califonia University</li>
+               <li> Califonia University</li>
+               <li> Califonia University</li> 
+            </ul>
+            <h1>Achieviment</h1>
+            <ul>
+               <li> Califonia University</li>
+               <li> Califonia University</li> 
+            </ul>
+            <h1>Experience</h1>
+            <p>Califonia Universisty</p>
+            <h1>Language</h1>
+            <ul>
+               <li> Califonia University</li>
+               <li> Califonia University</li> 
+            </ul>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
+   
+  <section class="footer">
+    <div class="container">
+      <div class="row pt-5 "> <!-- Centered content -->
+        <div class="col-lg-12"> <!-- Restricting width for better alignment -->
+          <div class="row ">
+            <div class="col-lg-2 py-3">
+              <img src="Images/logolast.png" class="image-fluid" alt="">
+            </div>
+
+            <div class="col-lg-2 py-3">
+              <h5 class="pb-3">Quick Link</h5>
+              <p><a href="#" class="text-decoration-none text-white quick-link p-0">Home</a></p>
+              <p><a href="#" class="text-decoration-none text-white quick-link p-0">About Us</a></p>
+              <p><a href="#" class="text-decoration-none text-white quick-link p-0">Articles</a></p>
+              <p><a href="#" class="text-decoration-none text-white quick-link p-0">Contact Us</a></p>
+          </div>
+
+            <div class="col-lg-3 py-3">
+              <h5 class="pb-3">Contact Us</h5>
+              <p><i class="fa fa-map-marker-alt"></i>Kathmandu,Nepal</p>
+              <p><i class="fa fa-envelope"></i>sandeepsingh.y2018@hmail.com</p>
+              <p><i class="fas fa-phone"></i>9745620743 | 9814317185</p>
+            </div>
+
+            <div class="col-lg-2 py-3">
+              <h5 class="pb-3">Links</h5>
+              <p>Privacy Policy</p>
+              <p>Terms & Condition</p>
+            </div>
+
+
+
+
+            <div class="col-lg-3 py-3">
+              <h5 class="pb-3">Download App</h5>
+              <div class="img">
+                <!-- Left Side: QR Code -->
+                <img class="img1" src="Images/pattern.png" alt="QR Code">
+
+                <!-- Right Side: Store Buttons -->
+                <div class="store-buttons">
+                  <a href="https://apps.apple.com/us/app/yourapp/id123456789" target="_blank">
+                    <img class="img2" src="Images/appstore.png" alt="App Store">
+                  </a>
+                  <a href="https://play.google.com/store/apps/details?id=com.example.yourapp" target="_blank">
+                    <img class="img2" src="Images/google.png" alt="Google Play Store">
+                  </a>
+                </div>
+              </div>
+              
+
+              <!-- Social Icons Below -->
+              <div class="icon">
+                <span><i class="fab fa-facebook"></i></span>
+                <span><i class="fab fa-twitter"></i></span>
+                <span><i class="fab fa-instagram"></i></span>
+                <span><i class="fab fa-linkedin"></i></span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <a>Copyright @2021 Kamsansar | All rights reserved.</a>
+
+  </section>
+
+  </div>
+
+  <script src="JS/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

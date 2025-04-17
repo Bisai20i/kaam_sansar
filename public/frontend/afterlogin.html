@@ -1,0 +1,965 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login Succesfull</title>
+  <link rel="stylesheet" href="CSS/styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" />
+</head>
+
+<body>
+  <section style="max-width: 90rem;">
+
+    <div class="container-fluid main-container">
+
+      <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="#">
+            <span>
+              <img src="Images/logo.png" img="img-fluid" alt="">
+            </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">Find jobs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="#">resume help</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">resume maker</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">visa hq</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">insurance</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">forex calculator</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">horoscope</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">gifts and coupon</a>
+              </li>
+
+            </ul>
+
+            <button id="main-profile" class="profile-button" data-bs-toggle="modal" data-bs-target="#profileModal">
+              <img src="Images/profile-icon.png" alt="Profile">
+            </button>
+
+            <button class="btn-register" data-bs-toggle="modal" data-bs-target="#completeModal">Create
+            </button>
+
+          </div>
+        </div>
+      </nav>
+
+  </section>
+
+  <section class="popular ">
+    <div class="container-fluid search-container text-white py-4">
+
+      <div class="container ">
+        <div class="row ">
+          <div class="col-lg-12 search-inputs">
+            <h2 class="mt-5">Discover Your Next Opportunity.</h2>
+            <div class="row mt-4 ">
+              <!-- Input for Keywords -->
+              <div class="col-lg-5 col-md-6 col-sm-12 col-12 mb-2 d-flex justify-content-center input-container">
+                <i class="fa fa-user"></i>
+                <input type="text" class="form-control" placeholder="Key words">
+                <!-- <i class="fa fa-chevron-down"></i> -->
+              </div>
+              <!-- Input for Location -->
+              <div class="col-lg-5 col-md-6 col-sm-12 col-12 mb-2 d-flex justify-content-center input-container">
+                <i class="fa fa-map-marker-alt"></i>
+                <input type="text" class="form-control" placeholder="Enter location, city, country, etc">
+              </div>
+              <!-- Search Button -->
+              <div class="col-lg-2 col-md-12 col-sm-12 col-12 mb-2">
+                <button class="btn btn-light search-button">
+                  <i class="fa fa-search"></i> Search</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <div class="row popular-search ">
+          <div class="col-lg-12 ">
+            <h4 class="mt-5">Popular Search</h4>
+            <div class="row text-center">
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn">Work From Home</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn">Part-Time</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">Data Analyst</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">Delivery Driver</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">UI/UX Designer</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn">Nurse</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">Work From Home</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">Part-Time</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">Data Analyst</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">Delivery Driver</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">UI/UX Designer</button>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 ">
+                <button class="btn ">Nurse</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Profile Section-->
+      <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content p-4">
+            <h5 class="modal-title text-center" id="profileModalLabel">Your Profile</h5>
+            <!-- Close Button Fixed to Top Right -->
+            <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+            <div class="modal-body">
+              <div class="text-center">
+                <img src="Images/profile.jpg" alt="Profile Picture" class="rounded-circle mb-3 profile-img"
+                  style="width: 100px; height: 100px;">
+                <h5 class="card-title">Manisha Shrestha<a href="#" class="d-block">
+                    <i class="fa fa-pen p-1"></i>
+                  </a>
+                </h5>
+                <p class="text-muted"><i class="fas fa-award"></i> Reward Points<br>272.38</p>
+              </div>
+              <ul class="list-unstyled text-start">
+                <li><a href="profile-info.html" class="d-block"><i class="fas fa-user p-1"></i> Profile</a></li>
+                <hr>
+                <li><a href="reward.html" class="d-block"><i class="fas fa-award p-1"></i> Reward Points</a></li>
+                <hr>
+                <li><a href="#" class="d-block"><i class="fas fa-folder p-1"></i> My document</a></li>
+                <hr>
+                <li><a href="changepassword.html" class="d-block"><i class="fas fa-lock p-1"></i> Change password</a>
+                </li>
+                <hr>
+                <li><a href="#" class="d-block"><i class="fas fa-share-alt p-1"></i> Share</a></li>
+                <hr>
+                <li><a href="#" class="d-block"><i class="fas fa-power-off p-1"></i> Logout</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+
+
+  <section class="jobs">
+    <div class="container my-5">
+      <h3 class="mb-4">Top Jobs</h3>
+      <div class="row g-3">
+        <!-- Job 1 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/image1.jpg" class="card-img-top" alt="BMW">
+            <div class="card-body">
+              <button class="favourite-btn">
+                <img src="Images/Vector.png" alt="Favorite">
+              </button>
+              <h5 class="card-title">Manager</h5>
+
+              <p class="card-text text-muted mb-1">Entry level</p>
+              <p class="card-text text-muted">Newroad-8, Pokhara, Nepal</p>
+              <p class="card-text text-muted"><small>3 days ago</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 2 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/image2.jpg" class="card-img-top" alt="Laptop">
+            <div class="card-body">
+              <button class="favourite-btn">
+                <img src="Images/Vector.png" alt="Favorite">
+              </button>
+              <h5 class="card-title">Manager</h5>
+
+              <p class="card-text text-muted mb-1">Entry level</p>
+              <p class="card-text text-muted">Newroad-8, Pokhara, Nepal</p>
+              <p class="card-text text-muted"><small>3 days ago</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 3 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/image3.jpg" class="card-img-top" alt="Royal Enfield">
+            <div class="card-body">
+              <button class="favourite-btn">
+                <img src="Images/Vector.png" alt="Favorite">
+              </button>
+              <h5 class="card-title">Manager</h5>
+              <p class="card-text text-muted mb-1">Entry level</p>
+              <p class="card-text text-muted">Newroad-8, Pokhara, Nepal</p>
+              <p class="card-text text-muted"><small>3 days ago</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 4 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/image4.jpg" class="card-img-top" alt="McDonald's">
+            <div class="card-body">
+              <button class="favourite-btn">
+                <img src="Images/Vector.png" alt="Favorite">
+              </button>
+              <h5 class="card-title">Manager</h5>
+              <p class="card-text text-muted mb-1">Entry level</p>
+              <p class="card-text text-muted">Newroad-8, Pokhara, Nepal</p>
+              <p class="card-text text-muted"><small>3 days ago</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- View More Button -->
+      <div class="text-center mt-4">
+        <button class="btn view-more">View More</button>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="bn">
+    <div class="container">
+      <div class="banner">
+        <div class="banner-content py-3">
+          <h2>Book Flight Tickets</h2>
+
+          <ul>
+            <li><i class="fas fa-check-square"></i> Buy both Domestic and International flight tickets</li>
+            <li><i class="fas fa-check-square"></i> Get many offers on every purchase</li>
+            <li><i class="fas fa-check-square"></i> Safe and well-maintained planes</li>
+          </ul>
+          <div class="button-container">
+            <button class="btn btn-book-now">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section>
+
+    <div class="container my-4">
+      <div class="row g-4 card-container">
+        <!-- Passport Renewal -->
+        <div class="col-md-6 d-flex">
+          <div class="card1 w-100">
+            <img src="Images/passport.png" alt="Passport Renewal">
+            <div class="card-content">
+              <h4>Get Your Passport Renewed Today</h4>
+              <p>Renew Your Passport Easily and Hassle-Free</p>
+              <a href="#" class="btn ">Start Renewal Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Work Permit Renewal -->
+        <div class="col-md-6 d-flex">
+          <div class="card1 w-100">
+            <img src="Images/sharam.png" alt="Work Permit Renewal">
+            <div class="card-content">
+              <h4>Get Your Work Permit Renewed Today</h4>
+              <p>Trusted and Reliable Assistance for Securing Your Work Permit.</p>
+              <a href="#" class="btn ">Start Renewal Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+
+  <section class="cta">
+    <div class="container">
+      <!-- CTA Section -->
+      <div class="cta-section py-5 mb-5">
+        <h3>Fuel Your Ambition, <br>Find Your Next Big Opportunity</h3>
+        <p>Your Dream Career Awaits - Download Our Job <br>Portal App and Start Your Journey to Success!</p>
+        <div class="qr">
+          <img src="Images/qr1.png" alt="Centered Image" class="qr me-5">
+        </div>
+        <div>
+          <div>
+            <a href="https://play.google.com/store/apps/details?id=com.example.yourapp" href="#" class="btn "
+              target="_blank" class="ml-3"><img src="Images/google.png" alt="Google Play"></a>
+
+            <a href="https://apps.apple.com/us/app/yourapp/id123456789" href="#" class="btn " target="_blank"
+              class="ml-3"><img src="Images/appstore.png" alt="App Store"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="news">
+    <!-- News and Articles Section -->
+    <div class="container my-5">
+      <h3 class="mb-4">News and Articles</h3>
+      <div class="row g-3">
+        <!-- Job 1 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/tesla.jpg" class="card-img-top" alt="BMW">
+            <div class="card-body">
+              <h5 class="card-title">Tesla's Latest Innovation Sparks Industry Buzz</h5>
+              <p class="card-text text-muted"><small>2024/12/30</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 2 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/market.jpg" class="card-img-top" alt="Laptop">
+            <div class="card-body">
+              <h5 class="card-title">Markets Rally as Investors Eye Federal Reserve Policy Updates</h5>
+              <p class="card-text text-muted"><small>2024/12/30</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 3 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/shop.jpg" class="card-img-top" alt="Royal Enfield">
+            <div class="card-body">
+              <h5 class="card-title">Commodity Prices Spike, Adding Pressure to Global Markets</h5>
+              <p class="card-text text-muted"><small>2024/12/30</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 4 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/shop1.jpg" class="card-img-top" alt="McDonald's">
+            <div class="card-body">
+              <h5 class="card-title">Asian Markets Rebound Following Global Downturn</h5>
+              <p class="card-text text-muted"><small>2024/12/30</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="gift">
+    <div class="container gift-section">
+      <h3 class="mb-4">Gift and Coupons</h3>
+      <div class="row justify-content-center g-3">
+        <div class="col-lg-12">
+          <div class="row d-flex justify-content-center">
+            <div class="col-md-2 col-lg-2 col-sm-6 col-6 py-3">
+              <div class="gift-card">
+                <img src="Images/gift.png" alt="img-fluid">
+              </div>
+            </div>
+            <div class="col-md-2  col-lg-2 col-sm-6 col-6 py-3">
+              <div class="gift-card">
+                <img src="Images/gift.png" alt="img-fluid">
+              </div>
+            </div>
+            <div class="col-md-2  col-lg-2 col-sm-6 col-6 py-3">
+              <div class="gift-card">
+                <img src="Images/gift.png" alt="img-fluid">
+              </div>
+            </div>
+            <div class="col-md-2  col-lg-2 col-sm-6 col-6 py-3">
+              <div class="gift-card">
+                <img src="Images/gift.png" alt="img-fluid">
+              </div>
+            </div>
+            <div class="col-md-2  col-lg-2 col-sm-12 col-12 py-3">
+              <div class="gift-card">
+                <img src="Images/giftiphone.png" alt="img-fluid">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <button class="btn view-more">View More</button>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="ads">
+    <div class="container my-5">
+      <h3 class="mb-4">Recent Ads</h3>
+      <div class="row g-3">
+        <!-- Job 1 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/ads1.jpg" class="card-img-top" alt="BMW">
+            <div class="card-body">
+              <h5 class="card-title">Room For Rent</h5>
+              <p class="card-text text-muted mb-1">Kathmandu</p>
+              <p class="card-text text-muted"><small>2 min ago</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 2 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/ads2.jpg" class="card-img-top" alt="Laptop">
+            <div class="card-body">
+              <h5 class="card-title">Looking For Staff</h5>
+              <p class="card-text text-muted mb-1">Pokhara</p>
+              <p class="card-text text-muted"><small>2 min ago </small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 3 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/ads3.jpg" class="card-img-top" alt="Royal Enfield">
+            <div class="card-body">
+              <h5 class="card-title">Room For Rent</h5>
+              <p class="card-text text-muted mb-1">Kathmandu</p>
+              <p class="card-text text-muted"><small>1 hrs ago</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 4 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/ads4.jpg" class="card-img-top" alt="McDonald's">
+            <div class="card-body">
+              <h5 class="card-title">Looking For Driver</h5>
+              <p class="card-text text-muted mb-1">Biratnagar</p>
+              <p class="card-text text-muted"><small>1 hrs ago</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- View More Button -->
+      <div class="text-center mt-4">
+        <button class="btn view-more">View More</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="podcast">
+    <div class="container my-5">
+      <h3 class="mb-4">Podcast</h3>
+      <div class="row g-3">
+        <!-- Job 1 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/tesla.jpg" class="card-img-top" alt="BMW">
+            <div class="card-body">
+              <h5 class="card-title">Podcast with Utsav Dhungana</h5>
+              <p class="card-text text-muted mb-1">15:30 min</p>
+              <p class="card-text text-muted"><small>2024/12/30</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 2 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/tesla.jpg" class="card-img-top" alt="Laptop">
+            <div class="card-body">
+              <h5 class="card-title">Podcast with Utsav Dhungana</h5>
+              <p class="card-text text-muted mb-1">15:30 min</p>
+              <p class="card-text text-muted"><small>2024/12/30</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 3 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/tesla.jpg" class="card-img-top" alt="Royal Enfield">
+            <div class="card-body">
+              <h5 class="card-title">Podcast with Utsav Dhungana</h5>
+              <p class="card-text text-muted mb-1">15:30 min</p>
+              <p class="card-text text-muted"><small>2024/12/30</small></p>
+            </div>
+          </div>
+        </div>
+        <!-- Job 4 -->
+        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+          <div class="card">
+            <img src="Images/tesla.jpg" class="card-img-top" alt="McDonald's">
+            <div class="card-body">
+              <h5 class="card-title">Podcast with Utsav Dhungana</h5>
+              <p class="card-text text-muted mb-1">15:30 min</p>
+              <p class="card-text text-muted"><small>2024/12/30</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- View More Button -->
+      <div class="text-center mt-4">
+        <button class="btn view-more">View More</button>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <section class="footer">
+    <div class="container">
+      <div class="row pt-5 "> <!-- Centered content -->
+        <div class="col-lg-12"> <!-- Restricting width for better alignment -->
+          <div class="row ">
+            <div class="col-lg-2 py-3">
+              <img src="Images/logolast.png" class="image-fluid" alt="">
+            </div>
+
+            <div class="col-lg-2 py-3">
+              <h5 class="pb-3">Quick Link</h5>
+              <p>Home</p>
+              <p>About Us</p>
+              <p>Articles</p>
+              <p>Contact Us</p>
+            </div>
+
+            <div class="col-lg-3 py-3">
+              <h5 class="pb-3">Contact Us</h5>
+              <p><i class="fa fa-map-marker-alt"></i>Kathmandu,Nepal</p>
+              <p><i class="fa fa-envelope"></i>sandeepsingh.y2018@hmail.com</p>
+              <p><i class="fas fa-phone"></i>9745620743 | 9814317185</p>
+            </div>
+
+            <div class="col-lg-2 py-3">
+              <h5 class="pb-3">Links</h5>
+              <p>Privacy Policy</p>
+              <p>Terms & Condition</p>
+            </div>
+
+
+
+
+            <div class="col-lg-3 py-3">
+              <h5 class="pb-3">Download App</h5>
+              <div class="img">
+                <!-- Left Side: QR Code -->
+                <img class="img1" src="Images/pattern.png" alt="QR Code">
+
+                <!-- Right Side: Store Buttons -->
+                <div class="store-buttons">
+                  <a href="https://apps.apple.com/us/app/yourapp/id123456789" target="_blank">
+                    <img class="img2" src="Images/appstore.png" alt="App Store">
+                  </a>
+                  <a href="https://play.google.com/store/apps/details?id=com.example.yourapp" target="_blank">
+                    <img class="img2" src="Images/google.png" alt="Google Play Store">
+                  </a>
+                </div>
+              </div>
+
+              <!-- Social Icons Below -->
+              <div class="icon">
+                <span><i class="fab fa-facebook"></i></span>
+                <span><i class="fab fa-twitter"></i></span>
+                <span><i class="fab fa-instagram"></i></span>
+                <span><i class="fab fa-linkedin"></i></span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <a>Copyright @2021 Job Finder | All rights reserved.</a>
+
+  </section>
+
+  </div>
+
+      <!-- Modal for completing profile 1-->
+      <div class="modal fade" id="completeModal" tabindex="-1" aria-labelledby="completeModalLabel" aria-hidden="true"
+      data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content p-4">
+              <h3 class="modal-title text-center" id="completeModalLabel">Complete your profile</h3>
+              <p class="text-center text-muted">Tell us a bit about yourself to get started</p>
+              <!-- Close Button -->
+              <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              <div class="modal-body">
+                  <div class="mb-4 text-center">
+                      <div class="d-flex align-items-start justify-content-center">
+
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="d-flex align-items-center justify-content-center"
+                                  style="width: 100%; position: relative;">
+                                  <div>
+                                      <div class="rounded-circle text-white d-flex align-items-center justify-content-center mb-2"
+                                          style="width: 32px; height: 32px; background-color: #0064A7; border: 2px solid #0064A7;">
+                                          1
+                                      </div>
+                                  </div>
+                              </div>
+                              <p class="small">Looking for</p>
+                          </div>
+
+                          <div class="d-flex align-items-center mt-3"
+                              style="height: 2px; background-color: #ddd; width: 60px;">
+                          </div>
+
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-2 text-white"
+                                  style="width: 32px; height: 32px; border: 2px solid #ddd;">2
+                              </div>
+                              <p class="small">Profile Details</p>
+                          </div>
+                          <div class="d-flex align-items-center mt-3"
+                              style="height: 2px; background-color: #ddd; width: 60px;">
+                          </div>
+
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white"
+                                  style="width: 32px; height: 32px; border: 2px solid #ddd;">3
+                              </div>
+                              <p class="small">Choose a CV</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="mb-3">
+                      <label class="form-label fw-semibold">What you are looking for?</label>
+                      <br>
+                      <label class="form-text">Selected an option:</label>
+                      <select class="form-select ">
+                          <option>Internship</option>
+                      </select>
+                  </div>
+
+                  <div class="d-flex justify-content-between mt-4">
+                      <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
+                          data-bs-dismiss="modal">Cancel</button>
+                      <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff"
+                          data-bs-toggle="modal" data-bs-target="#completeModal1">Next</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Modal for completing profile 2-->
+  <div class="modal fade" id="completeModal1" tabindex="-1" aria-labelledby="completeModalLabel1" aria-hidden="true"
+      data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content p-4">
+              <h3 class="modal-title text-center" id="completeModalLabel1">Complete your profile</h3>
+              <p class="text-center text-muted">Tell us a bit about yourself to get started</p>
+              <!-- Close Button -->
+              <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+
+              <div class="modal-body">
+                  <div class="mb-4 text-center">
+                      <div class="d-flex align-items-start justify-content-center">
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="d-flex align-items-center justify-content-center"
+                                  style="width: 100%; position: relative;">
+                                  <div>
+                                      <div class="rounded-circle text-white d-flex align-items-center justify-content-center mb-2"
+                                          style="width: 32px; height: 32px; background-color: #0064A7; border: 2px solid #0064A7;">
+                                          1
+                                      </div>
+                                  </div>
+                              </div>
+                              <p class="small">Looking for</p>
+                          </div>
+
+                          <div class="d-flex align-items-center mt-3"
+                              style="height: 2px; background-color: #ddd; width: 60px;">
+                          </div>
+
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="rounded-circle d-flex align-items-center justify-content-center mb-2 text-white"
+                                  style="width: 32px; height: 32px; border: 2px solid #ddd; background-color: #0064A7">
+                                  2
+                              </div>
+                              <p class="small">Profile Details</p>
+                          </div>
+
+                          <div class="d-flex align-items-center mt-3"
+                              style="height: 2px; background-color: #ddd; width: 60px;">
+                          </div>
+
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white"
+                                  style="width: 32px; height: 32px; border: 2px solid #ddd;">3
+                              </div>
+                              <p class="small">Choose a CV</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <h2 class="text-center mb-4">Create Profile</h2>
+
+                  <div class="text-center mb-4">
+                      <img src="img/Nirmal.png" class="rounded-circle w-25 h-25 object-cover border border-secondary"
+                          alt="Profile Photo">
+                  </div>
+
+                  <p class="text-center text-muted mb-4">Upload up to 5 photos. Click to select primary photo</p>
+
+
+
+                  <div class="row mb-4 d-flex justify-content-center">
+
+                      <div class="col-3">
+                          <div
+                              class="border border-secondary rounded d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1">
+                              <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                  onchange="previewImage(event, 0)" style="z-index: 1; cursor: pointer;" />
+                              <i class="fas fa-plus text-muted position-absolute" style="top: 40%; left: 40%;"></i>
+                              <img src="" class="w-100 h-100 d-none" alt="Preview Image" id="preview-0" />
+                          </div>
+                      </div>
+
+                      <div class="col-3">
+                          <div
+                              class="border border-secondary rounded d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1">
+                              <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                  onchange="previewImage(event, 1)" style="z-index: 1; cursor: pointer;" />
+                              <i class="fas fa-plus text-muted position-absolute" style="top: 40%; left: 40%;"></i>
+                              <img src="" class="w-100 h-100 d-none" alt="Preview Image" id="preview-1" />
+                          </div>
+                      </div>
+
+                      <div class="col-3">
+                          <div
+                              class="border border-secondary rounded d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1">
+                              <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                  onchange="previewImage(event, 2)" style="z-index: 1; cursor: pointer;" />
+                              <i class="fas fa-plus text-muted position-absolute" style="top: 40%; left: 40%;"></i>
+                              <img src="" class="w-100 h-100 d-none" alt="Preview Image" id="preview-2" />
+                          </div>
+                      </div>
+
+                      <div class="col-3">
+                          <div
+                              class="border border-secondary rounded d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1">
+                              <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                  onchange="previewImage(event, 3)" style="z-index: 1; cursor: pointer;" />
+                              <i class="fas fa-plus text-muted position-absolute" style="top: 40%; left: 40%;"></i>
+                              <img src="" class="w-100 h-100 d-none" alt="Preview Image" id="preview-3" />
+                          </div>
+                      </div>
+                  </div>
+
+                  <form>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2" placeholder="Full Name: Sagari Poudel"
+                              style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2" placeholder="Country: Nepal"
+                              style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2" placeholder="I am : Student"
+                              style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2" placeholder="I am looking for : Internship"
+                              style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2"
+                              placeholder="Designation: Senior UI/UX Designer"
+                              style="border-color: #8C8C8C; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2"
+                              placeholder="Expected Salary Range: NPR 50000 - 100000"
+                              style="border-color: #8C8C8C; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2"
+                              placeholder="Current Address: Pokhara-32, Kaski"
+                              style="border-color: #8C8C8C; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2"
+                              placeholder="Permanent Address: Pokhara-32, Kaski"
+                              style="border-color: #8C8C8C; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="email" class="form-control mb-2" placeholder="Email Address: example@gmail.com"
+                              style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2" placeholder="Mobile No.: 98XXXXXXXX"
+                              style="border-color: #8C8C8C; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control mb-2" placeholder="Gender: Female"
+                              style="border-color: #8C8C8C; color: #818181;" />
+                      </div>
+                      <div class="form-group">
+                          <input type="date" class="form-control mb-4" placeholder="Date of Birth: 2002-09-27"
+                              style="border-color: #8C8C8C; color: #818181;" />
+                      </div>
+                  </form>
+
+                  <div class="d-flex justify-content-between mt-4">
+                      <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
+                          data-bs-toggle="modal" data-bs-target="#completeModal">Back</button>
+                      <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff"
+                          data-bs-toggle="modal" data-bs-target="#completeModal2">Next</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Modal for completing profile 3 -->
+  <div class="modal fade" id="completeModal2" tabindex="-1" aria-labelledby="completeModalLabel2" aria-hidden="true"
+      data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content p-4">
+              <h3 class="modal-title text-center" id="completeModalLabel2">Complete your profile</h3>
+              <p class="text-center text-muted">Tell us a bit about yourself to get started</p>
+              <!-- Close Button -->
+              <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              <div class="modal-body">
+                  <div class="mb-4 text-center">
+                      <div class="d-flex align-items-start justify-content-center">
+
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="d-flex align-items-center justify-content-center"
+                                  style="width: 100%; position: relative;">
+                                  <div>
+                                      <div class="rounded-circle text-white d-flex align-items-center justify-content-center mb-2"
+                                          style="width: 32px; height: 32px; background-color: #0064A7; border: 2px solid #0064A7;">
+                                          1
+                                      </div>
+                                  </div>
+                              </div>
+                              <p class="small">Looking for</p>
+                          </div>
+
+                          <div class="d-flex align-items-center mt-3"
+                              style="height: 2px; background-color: #ddd; width: 60px;">
+                          </div>
+
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="rounded-circle d-flex align-items-center justify-content-center mb-2 text-white"
+                                  style="width: 32px; height: 32px; border: 2px solid #ddd; background-color: #0064A7">
+                                  2
+                              </div>
+                              <p class="small">Profile Details</p>
+                          </div>
+                          <div class="d-flex align-items-center mt-3"
+                              style="height: 2px; background-color: #ddd; width: 60px;">
+                          </div>
+
+                          <div class="d-flex flex-column align-items-center">
+                              <div class="rounded-circle d-flex align-items-center justify-content-center text-white"
+                                  style="width: 32px; height: 32px; border: 2px solid #ddd; background-color: #0064A7">
+                                  3
+                              </div>
+                              <p class="small">Choose a CV</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                      <h2 class="fs-4 font-weight-semibold mb-0">Choose CV</h2>
+                      <a href="resume.html" style="color: #0064A7;">See More Templates <i
+                              class="fas fa-arrow-right"></i></a>
+                  </div>
+                  <div
+                      class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4 mb-4 d-flex align-content-center justify-content-center">
+                      <div class="col">
+                          <div class="border p-2 rounded">
+                              <img src="img/cv-2.png" alt="CV template" class="img-fluid w-100" />
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="border p-2 rounded">
+                              <img src="img/cv-3.png" alt="CV template" class="img-fluid w-100" />
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="border p-2 rounded">
+                              <img src="img/cv-1.png" alt="CV template" class="img-fluid w-100" />
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
+                      data-bs-toggle="modal" data-bs-target="#completeModal1">Back</button>
+                  <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff">Edit
+                      CV</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+
+
+  <script src="JS/home.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
