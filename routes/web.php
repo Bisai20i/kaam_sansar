@@ -217,6 +217,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
     Route::get('/user-inbox', [MessageController::class, 'user_inbox'])->name('jobseeker.inbox');
     Route::post('/sender-messages', [MessageController::class, 'sender_messages']);
+    Route::get('/search-user', [MessageController::class, 'search_user'])->name('jobseeker.search');
 
     Route::prefix('profile')->middleware(['auth'])->group(function () {
         Route::get('/basic-info', [JobSeekerDashboardController::class, 'basicInfo'])->name('profile.basicInfo');

@@ -4,11 +4,16 @@
     <div class="container mt-4 mb-4 pt-5">
         <div class="d-flex justify-content-between py-3 px-4 border align-items-center border-bottom-0">
             <h5 class="fw-bold mb-0">My Inbox</h5>
-            <div class="input-group w-50">
+            <div class="input-group w-50 position-relative">
                 <span class="input-group-text border border-end-0 bg-transparent">
                     <i class="fas fa-search"></i>
                 </span>
-                <input type="text" class="form-control border-start-0" placeholder="Search">
+                <input type="search" name="searchQuery" oninput="handleSearch(this.value)" class="form-control border-start-0"
+                    placeholder="Search">
+                <div id='searchReasults' class="d-none position-absolute top-100 start-0 w-100 rounded bg-white border p-2"
+                    style="z-index: 100;">
+
+                </div>
             </div>
         </div>
 
@@ -95,17 +100,22 @@
         // Enable pusher logging - don't include this in production
         Pusher.logToConsole = true;
 
+        console.log(document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
+
         var pusher = new Pusher('b08e227bde29e3142eb1', {
             cluster: 'ap2',
-            authEndpoint: '/broadcasting/auth', // Laravel's default auth route
-            auth: {
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            }
         });
+        // var pusher = new Pusher('b08e227bde29e3142eb1', {
+        //     cluster: 'ap2',
+        //     authEndpoint: '/broadcasting/auth', // Laravel's default auth route
+        //     auth: {
+        //         headers: {
+        //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        //         }
+        //     }
+        // });
 
-        var channel = pusher.subscribe('private-chat.' + "{{ Auth::guard('job_seekers')->id() }}");
+        var channel = pusher.subscribe('chat.' + "{{ Auth::guard('job_seekers')->id() }}");
         channel.bind('new-message', function(data) {
             let message = data.message
             if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
@@ -364,5 +374,69 @@
             }
 
         }
+    </script>
+
+
+
+    {{-- // script to handle debounce --}}
+    <script>
+
+        // document.querySelector('[name="searchQuery"]').addEventListener('change', function(e){
+        //     console.log('hello')
+        //     if(e.target.value === ''){
+        //         console.log("is empty")
+        //         $('#searchReasults').addClass('d-none');
+        //     }else{
+        //         console.log("is not empty")
+        //         $('#searchReasults').removeClass('d-none');
+        //     }
+                
+            
+        // });
+
+        function debounce(func, delay) {
+            let timer;
+            return function(...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        }
+
+        // Your actual search logic
+        function performSearch(query) {
+
+            if(query === '') {
+                $('#searchReasults').html('')
+                $('#searchReasults').addClass('d-none');
+                return false;
+            }
+            console.log("Searching for:", query);
+            $('#searchReasults').removeClass('d-none');
+            fetch(getBaseUrl() + '/jobseeker/search-user?searchstr=' + query, {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    let users = data.users
+                    $('#searchReasults').html(`
+                    <ul class="list-group">
+                        ${users.map(user => `<li class="list-group-item d-flex align-items-center">
+                                <img src="${user.userThumbnail}" alt="Avatar" class="img img-fluid rounded-circle me-2" style="height: 40px; width:40px; curser: pointer;">
+                                ${user.firstName} ${user.lastName}
+                                </li>`).join('')}
+                    </ul>
+                `);
+                    console.log("Results:", data.users);
+                    // handle results
+                });
+        }
+
+        const handleSearch = debounce(performSearch, 1500);
     </script>
 @endpush

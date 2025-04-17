@@ -223,6 +223,79 @@ class MessageController extends Controller
         }
     }
 
+
+    public function search_user(Request $request){
+
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+
+        // Determine authenticated user based on request type
+        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+
+        // Ensure user is authenticated and matches the requested profile
+        if (! $user) {
+            return $isMobile
+            ? response()->json([
+                'status'  => false,
+                'message' => 'User not authenticated or access denied.',
+            ])
+            : redirect()->route('login')->with('error', 'Unauthorized access.');
+        }
+
+        try {
+
+            $searchstr = $request->searchstr;
+
+            $results = JobSeeker::where('firstName', 'LIKE', '%' . $searchstr . '%')
+                ->orWhere('lastName', 'LIKE', $searchstr . '%')
+                ->select('id', 'firstName', 'lastName', 'userThumbnail')
+                ->get();
+
+            if(!$results->isEmpty()){
+
+                $results->transform(function ($result){
+
+                    if($result->userThumbnail && is_array($result->userThumbnail)){
+                        $thumbnails = $result->userThumbnail;
+
+                        if (count($thumbnails) > 0) {
+                            // Remove slashes if somehow they're still escaped (optional)
+                            $path = str_replace('\\/', '/', $thumbnails[0]);
+
+                            $result->userThumbnail = asset('storage/' . $path);
+                        }
+                    }
+
+                    return $result;
+                });
+
+                return response()->json([
+                    'status'=>true,
+                    'message'=>'Users Found Successfully',
+                    'users'=>$results
+                ],200);
+            }
+
+            return response()->json([
+               'status' => false,
+               'message' => 'No Users Found'
+            ],404);
+
+            
+
+        } catch (\Exception $e) {
+            return $isMobile
+            ? response()->json([
+                'status'  => false,
+                'message' => 'Unexpected Error Occrued',
+                'errors'  => $e->getMessage(),
+            ])
+            : redirect()->route('login')->with('error', 'Unauthorized access.');
+        }
+
+
+        
+    }
+
     // public function fireEvent(){
     //     $message = new Message();
     //     $message->sender_id = 1;

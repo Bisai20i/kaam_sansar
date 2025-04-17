@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Horoscope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
 
 class HoroscopeController extends Controller
 {
@@ -21,18 +18,17 @@ class HoroscopeController extends Controller
     {
         //retrive all horoscope detail
 
-        $type = $request->get('type', 'daily');  // Default to 'daily' if no type is passed
-        $horoscopes = Horoscope::where('type', $type)->get();        
-        $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
+        $type       = $request->get('type', 'daily'); // Default to 'daily' if no type is passed
+        $horoscopes = Horoscope::where('type', $type)->get();
+        $isMobile   = request()->has('request_type') && request()->input('request_type') === 'mobile';
 
         if ($isMobile) {
             return response()->json($horoscopes);
         } else {
-            return view('backend.horoscope.lists', compact('horoscopes','type'));
+            return view('backend.horoscope.lists', compact('horoscopes', 'type'));
         }
 
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -43,7 +39,7 @@ class HoroscopeController extends Controller
     {
         //redirect to create page
         return view('backend.horoscope.create');
-        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -56,29 +52,27 @@ class HoroscopeController extends Controller
         //validated request
         $validator = Validator::make($request->all(), [
             'zodiacSignEnglish' => 'required|string',
-            'zodiacSignNepali' => 'required|string',
-            'nameStartLetter' => 'required|string',
-            'birthMonth' => 'required|string',
-            'contentNp' => 'required|string',
-            'contentEn' => 'required|string',
-            'publishDate' => 'required|string',
-            'type' => 'required|in:daily,weekly,monthly,yearly',
-            'zodiacImgNepali' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'zodiacImgEnglish' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'zodiacSignNepali'  => 'required|string',
+            'nameStartLetter'   => 'required|string',
+            'birthMonth'        => 'required|string',
+            'contentNp'         => 'required|string',
+            'contentEn'         => 'required|string',
+            'publishDate'       => 'required|string',
+            'type'              => 'required|in:daily,weekly,monthly,yearly',
+            'zodiacImgNepali'   => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'zodiacImgEnglish'  => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        
         // Handle validation errors
         if ($validator->fails()) {
             Log::error('Validation errors: ', $validator->errors()->toArray());
-                return redirect()->back()->withErrors($validator->errors())->withInput();
+            return redirect()->back()->withErrors($validator->errors())->withInput();
         }
         //slug created
-        $zodiacslug = $this->generateUniqueSlug($request->zodiacSignEnglish,'zodiacSignSlug');
-        $typeslug = $this->generateUniqueSlug($request->zodiacSignEnglish,'typeSlug');
-        
+        $zodiacslug = $this->generateUniqueSlug($request->zodiacSignEnglish, 'zodiacSignSlug');
+        $typeslug   = $this->generateUniqueSlug($request->zodiacSignEnglish, 'typeSlug');
 
-        // Error handling 
+        // Error handling
         $errors = [];
 
         if ($zodiacslug === null) {
@@ -90,39 +84,36 @@ class HoroscopeController extends Controller
 
         //handle zodaic image
 
-        $zodiacImgNepali = handleUpload('zodiacImgNepali');
+        $zodiacImgNepali  = handleUpload('zodiacImgNepali');
         $zodiacImgEnglish = handleUpload('zodiacImgEnglish');
 
         //create new horoscope record
-         $horoscope = new Horoscope();
-         $horoscope->zodiacSignEnglish =$request->input('zodiacSignEnglish');
-         $horoscope->zodiacSignNepali =$request->input('zodiacSignNepali');
-         $horoscope->type =$request->input('type');
-         $horoscope->contentEn=$request->input('contentEn');
-         $horoscope->contentNp=$request->input('contentNp');
-         $horoscope->publishDate=$request->input('publishDate');
-         $horoscope->nameStartLetter=$request->input('nameStartLetter');
-         $horoscope->birthMonth=$request->input('birthMonth');
-         $horoscope->zodiacSignSlug=$zodiacslug;
-         $horoscope->typeSlug=$typeslug;
-         $horoscope->zodiacImgNepali=$zodiacImgNepali;
-         $horoscope->zodiacImgEnglish=$zodiacImgEnglish;
+        $horoscope                    = new Horoscope();
+        $horoscope->zodiacSignEnglish = $request->input('zodiacSignEnglish');
+        $horoscope->zodiacSignNepali  = $request->input('zodiacSignNepali');
+        $horoscope->type              = $request->input('type');
+        $horoscope->contentEn         = $request->input('contentEn');
+        $horoscope->contentNp         = $request->input('contentNp');
+        $horoscope->publishDate       = $request->input('publishDate');
+        $horoscope->nameStartLetter   = $request->input('nameStartLetter');
+        $horoscope->birthMonth        = $request->input('birthMonth');
+        $horoscope->zodiacSignSlug    = $zodiacslug;
+        $horoscope->typeSlug          = $typeslug;
+        $horoscope->zodiacImgNepali   = $zodiacImgNepali;
+        $horoscope->zodiacImgEnglish  = $zodiacImgEnglish;
         //save to database
-         $horoscope->save();
+        $horoscope->save();
 
-         //redirect back with success message
+        //redirect back with success message
 
-         return redirect()->route('horoscope.index')->with('succes','Horoscope created successfully');
-
-
-
+        return redirect()->route('horoscope.index')->with('succes', 'Horoscope created successfully');
 
     }
     //slug generated function
 
     private function generateUniqueSlug($title, $column, $id = 0)
     {
-        $slug = Str::slug($title);
+        $slug         = Str::slug($title);
         $originalSlug = $slug;
 
         // Get existing slugs
@@ -144,7 +135,6 @@ class HoroscopeController extends Controller
         return $slug;
     }
 
-
     /**
      * Display the specified resource.
      *
@@ -153,22 +143,21 @@ class HoroscopeController extends Controller
      */
     public function show(Request $request, $id)
     {
- //Check if request is from mobile using request_type
- $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        //Check if request is from mobile using request_type
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 // get the horoscope detail
-$gethoroscope = Horoscope::findOrFail($id);
+        $gethoroscope = Horoscope::findOrFail($id);
 
-if (!$gethoroscope){
-    return $isMobile
-       ? $this->responseError('Horoscope detail not found', 404)
-       : redirect()->back()->with('error','Horoscope details not found');
-}
- return $isMobile
-     ? $this->responseSuccess('Horoscope details found', $gethoroscope)
-     : redirect()->back()->with('success', 'Horoscope details found');
+        if (! $gethoroscope) {
+            return $isMobile
+            ? $this->responseError('Horoscope detail not found', 404)
+            : redirect()->back()->with('error', 'Horoscope details not found');
+        }
+        return $isMobile
+        ? $this->responseSuccess('Horoscope details found', $gethoroscope)
+        : redirect()->back()->with('success', 'Horoscope details found');
 
-
-}
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -180,7 +169,7 @@ if (!$gethoroscope){
     {
         //edit the respective horoscope detail
         $horoscope = Horoscope::findOrFail($id);
-        return view('backend.horoscope.create',compact('horoscope'));
+        return view('backend.horoscope.create', compact('horoscope'));
     }
 
     /**
@@ -195,34 +184,34 @@ if (!$gethoroscope){
         // Validate the request
         $validator = Validator::make($request->all(), [
             'zodiacSignEnglish' => 'required|string',
-            'zodiacSignNepali' => 'required|string',
-            'nameStartLetter' => 'required|string',
-            'birthMonth' => 'required|string',
-            'contentNp' => 'required|string',
-            'contentEn' => 'required|string',
-            'publishDate' => 'required|string',
-            'type' => 'required|in:daily,weekly,monthly,yearly',
-            'zodiacImgNepali' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'zodiacImgEnglish' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'zodiacSignNepali'  => 'required|string',
+            'nameStartLetter'   => 'required|string',
+            'birthMonth'        => 'required|string',
+            'contentNp'         => 'required|string',
+            'contentEn'         => 'required|string',
+            'publishDate'       => 'required|string',
+            'type'              => 'required|in:daily,weekly,monthly,yearly',
+            'zodiacImgNepali'   => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'zodiacImgEnglish'  => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
+
         // Handle validation errors
         if ($validator->fails()) {
             Log::error('Validation errors: ', $validator->errors()->toArray());
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
-        
+
         // Get the existing horoscope
         $horoscope = Horoscope::find($id);
-        
-        if (!$horoscope) {
+
+        if (! $horoscope) {
             return redirect()->route('horoscope.index')->with('error', 'Horoscope not found.');
         }
-        
+
         // Slug creation logic using the unique slug method
         $zodiacslug = $this->generateUniqueSlug($request->zodiacSign, 'zodiacSignSlug', $id);
-        $typeslug = $this->generateUniqueSlug($request->type, 'typeSlug', $id);
-        
+        $typeslug   = $this->generateUniqueSlug($request->type, 'typeSlug', $id);
+
         // Error handling for slugs
         $errors = [];
         if ($zodiacslug === null) {
@@ -231,34 +220,32 @@ if (!$gethoroscope){
         if ($typeslug === null) {
             $errors['type'] = 'The type "' . $request->type . '" already exists for this zodiac sign. Please choose a different type.';
         }
-        
-        // Handle zodiac image upload (only if a new image is provided)
-        $zodiacImgNepali = $request->hasFile('zodiacImgNepali') ? $request->file('zodiacImgNepali')->store('zodiac_images') : $horoscope->zodiacImgNepali;
-        $zodiacImgEnglish = $request->hasFile('zodiacImgEnglish') ? $request->file('zodiacImgEnglish')->store('zodiac_images') : $horoscope->zodiacImgEnglish;
-    
+
+        // Handle zodiac image upload (only if a new image is provided) handleUpload('zodiacImgNepali')
+        $zodiacImgNepali  = $request->hasFile('zodiacImgNepali') ? handleUpload('zodiacImgNepali') : $horoscope->zodiacImgNepali;
+        $zodiacImgEnglish = $request->hasFile('zodiacImgEnglish') ? handleUpload('zodiacImgEnglish') : $horoscope->zodiacImgEnglish;
+
         // Update horoscope record
-        $horoscope->zodiacSignEnglish =$request->input('zodiacSignEnglish');
-        $horoscope->zodiacSignNepali =$request->input('zodiacSignNepali');
-        $horoscope->type =$request->input('type');
-        $horoscope->contentEn=$request->input('contentEn');
-        $horoscope->contentNp=$request->input('contentNp');
-        $horoscope->publishDate=$request->input('publishDate');
-        $horoscope->nameStartLetter=$request->input('nameStartLetter');
-        $horoscope->birthMonth=$request->input('birthMonth');
-        $horoscope->zodiacSignSlug=$zodiacslug;
-        $horoscope->typeSlug=$typeslug;
-        $horoscope->zodiacImgNepali=$zodiacImgNepali;
-        $horoscope->zodiacImgEnglish=$zodiacImgEnglish;
-        
+        $horoscope->zodiacSignEnglish = $request->input('zodiacSignEnglish');
+        $horoscope->zodiacSignNepali  = $request->input('zodiacSignNepali');
+        $horoscope->type              = $request->input('type');
+        $horoscope->contentEn         = $request->input('contentEn');
+        $horoscope->contentNp         = $request->input('contentNp');
+        $horoscope->publishDate       = $request->input('publishDate');
+        $horoscope->nameStartLetter   = $request->input('nameStartLetter');
+        $horoscope->birthMonth        = $request->input('birthMonth');
+        $horoscope->zodiacSignSlug    = $zodiacslug;
+        $horoscope->typeSlug          = $typeslug;
+        $horoscope->zodiacImgNepali   = $zodiacImgNepali;
+        $horoscope->zodiacImgEnglish  = $zodiacImgEnglish;
+
         // Save the updated record
         $horoscope->save();
         Log::info('Updated horoscope data: ', $horoscope->toArray());
-        
+
         // Redirect back with success message
         return redirect()->route('horoscope.index')->with('success', 'Horoscope updated successfully');
     }
-    
-    
 
     /**
      * Remove the specified resource from storage.
@@ -272,19 +259,18 @@ if (!$gethoroscope){
         $horoscope = Horoscope::findOrFail($id);
         $horoscope->delete();
         return redirect()->route('horoscope.index')->with('succes', 'Horoscope deleted successfully');
-        
+
     }
 
-    
-     /**
+    /**
      * Handle error response.
      */
     protected function responseError($message, $statusCode, $errors = [])
     {
         return response()->json([
-            'status' => 'error',
+            'status'  => 'error',
             'message' => $message,
-            'errors' => $errors
+            'errors'  => $errors,
         ], $statusCode);
     }
     /**
@@ -293,9 +279,9 @@ if (!$gethoroscope){
     protected function responseSuccess($message, $data = [], $statusCode = 200)
     {
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => $message,
-            'data' => $data
+            'data'    => $data,
         ], $statusCode);
     }
 }
