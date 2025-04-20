@@ -32,14 +32,16 @@ class AboardController extends Controller
         return view('backend.aboards.lists', compact('aboards', 'categories'));
     }
 
-    public function aboard(){
+    public function aboard( Request $request){
         $categories = ProductCategory::all();
         $items = Aboard::where('publishStatus', 'publish')
         ->where('status', 'Available')
         ->get();
         // $items = Aboard::all();
-
-        return view('frontend.aboarddeals.aboard',compact('categories','items'));
+        $type = $request->has('type') && in_array($request->input('type'), $validTypes)
+        ? $request->input('type')
+        : 'Item';
+        return view('frontend.aboarddeals.aboard',compact('categories','items','type'));
 
     }
     public function create()
@@ -47,6 +49,8 @@ class AboardController extends Controller
         $categories = ProductCategory::all();
         return view('backend.aboards.create', compact('categories'));
     }
+
+
     public function store(Request $request)
     {
         // return $request->all();
@@ -446,7 +450,7 @@ $type = $request->has('type') && in_array($request->input('type'), $validTypes)
         }
 
         // For web, return the search results in a view
-        return view('product.index', compact('ads'))->with('success', 'Aboard Deals fetched successfully!');
+        return view('frontend.aboarddeals.aboard',compact('ads','categories','items','type'));
     } catch (\Exception $e) {
         Log::error("Error during advertisement search: " . $e->getMessage());
 

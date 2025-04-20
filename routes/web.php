@@ -96,6 +96,8 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     // Route for aboard deals
     // Route for aboard deals
     Route::resource('aboards', AboardController::class);
+    Route::get('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
+
     Route::put('aboards/{id}/publish', [AboardController::class, 'publish'])->name('aboards.publish');
     Route::put('aboards/{id}/unpublish', [AboardController::class, 'unpublish'])->name('aboards.unpublish');
 
