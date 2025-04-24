@@ -84,7 +84,6 @@
                         itemForm.style.display = "none";
                     }
                 }
-
                 // Ensure the form is visible when the page loads
                 document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById('itemForm').style.display = "block";
@@ -274,6 +273,8 @@
                     });
                 });
             </script>
+
+
             <script>
                 // Global filter variables
                 let selectedCategory = 'all';

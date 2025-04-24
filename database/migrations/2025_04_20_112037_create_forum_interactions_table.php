@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('discussion_forums', function (Blueprint $table) {
+        Schema::create('forum_interactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('forum_id')->constrained('discussion_forums')->cascadeOnDelete();
             $table->foreignId('jobSeekerId')->constrained('job_seekers')->cascadeOnDelete();
-            $table->string('topic');
-            $table->longText('description');
-            $table->json('images')->nullable();
-            $table->boolean('pinned')->default(false);
-            $table->enum('category',["education","investment","scammer","office","other"])->default("other");
+            $table->enum('type',['like','dislike']);
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('discussion_forums');
+        Schema::dropIfExists('forum_interactions');
     }
 };

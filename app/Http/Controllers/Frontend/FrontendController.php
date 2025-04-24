@@ -18,6 +18,10 @@ use App\Models\VisaType;
 use App\Models\UserComment;
 use App\Models\DiscussionForum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Follower;
+use App\Models\JobSeeker;
+use App\Models\ForumInteraction;
 
 class FrontendController extends Controller
 {
@@ -533,6 +537,13 @@ class FrontendController extends Controller
         return view('frontend.resume.index');
     }
 
+    /**
+     * Shows the discussion forum where users can post topics and comment on them
+     * 
+     * @param Request $request
+     * 
+     * @return \Illuminate\Http\Response
+     */
     public function discussionForum(Request $request){
 
         $searchstr    = $request->query('searchstr', null);
@@ -541,8 +552,14 @@ class FrontendController extends Controller
         // return $request;
         // return $request;
         
-
         $forumPosts = DiscussionForum::with('jobSeeker:id,firstName,lastName,temporaryLocation,userThumbnail')
+            ->withCount(['forumInteraction as likes' => function ($query) {
+                $query->where('type', 'like');
+            }])
+            ->withCount(['forumInteraction as dislikes' => function ($query){
+                $query->where('type', 'dislike');
+            }])
+            ->withCount('forumComment as comments')
             ->when(
                 in_array($category, ['other', 'education', 'investment', 'scammer', 'office']),
                 fn($query) => $query->where('category', $category)
@@ -550,12 +567,14 @@ class FrontendController extends Controller
             ->when(
                 $searchstr,
                 fn($query) => $query->where('topic', 'LIKE', $searchstr . '%')
-                                    ->orWhere('description', 'LIKE', $searchstr . '%')
+                    ->orWhere('description', 'LIKE', $searchstr . '%')
             )
             ->latest()
             ->get();
+
+        $has_user = Auth::guard('job_seekers')->check() ?? false;
         
-        $forumPosts->transform(function ($forumPost) {
+        $forumPosts->transform(function ($forumPost) use($has_user) {
             if ($forumPost->jobSeeker && is_array($forumPost->jobSeeker->userThumbnail)) {
                 $thumbnails = $forumPost->jobSeeker->userThumbnail;
 
@@ -577,11 +596,79 @@ class FrontendController extends Controller
 
             $forumPost->images = $imageLinks;
 
+            if(Auth::guard('job_seekers')->check()){
+
+                $forumPost->followed = Follower::where('followed_to', $forumPost->jobSeeker->id)->where('followed_by', Auth::guard('job_seekers')->id())->exists();
+
+            }
+            else{
+                $forumPost->followed = false;
+            }
+
+            if($has_user){
+                $forumPost->interaction = ForumInteraction::where('forum_id', $forumPost->id)->where('jobSeekerId', Auth::guard('job_seekers')->id())->first();
+            }
+
             return $forumPost;
         });
 
+        // $hot_topics = DiscussionForum::withCount('forumInteraction as count')
+        //     ->orderBy('count', 'desc')
+        //     ->limit(4)
+        //     ->get();
+
+        // return $forumPosts;
         
         return view('frontend.discussion.index',compact('forumPosts'));
+    }
+
+
+    public function forumProfile($id){
+
+        $profile = JobSeeker::select('id','firstName','lastName','temporaryLocation','userThumbnail')
+            ->where('id',$id)
+            ->with(['discussionForum' => function ($query) {
+                $query->orderBy('pinned', 'desc');
+                $query->orderBy('created_at', 'desc');              
+            }])
+            
+            ->first();
+
+        $profile->userThumbnail ? $profile->userThumbnail = asset('storage/'.$profile->userThumbnail[0]) : null;
+        $profile->postCount = $profile->discussionForum->count();
+        $profile->followers = Follower::where('followed_to', $profile->id)->count();
+        $profile->followings = Follower::where('followed_by', $profile->id)->count();
+        $profile->followed = Follower::where('followed_to', $profile->id)->where('followed_by', Auth::guard('job_seekers')->id())->exists();
+
+        if($profile->postCount > 0){
+
+            $profile->discussionForum->transform(function ($forumPost) {
+                $imagePaths = $forumPost->images ? $forumPost->images : [];
+                $imageLinks = array_map(function ($path) {
+                    return asset('storage/' . $path);
+                }, $imagePaths);
+
+                $forumPost->images = $imageLinks;
+
+                if(Auth::guard('job_seekers')->check()){
+                    $forumPost->interaction = ForumInteraction::where('forum_id', $forumPost->id)->where('jobSeekerId', Auth::guard('job_seekers')->id())->first();
+                }
+
+                $forumPost->likes = $forumPost->forumInteraction->where('type', 'like')->count();
+                $forumPost->dislikes = $forumPost->forumInteraction->where('type', 'dislike')->count();
+                $forumPost->comments = $forumPost->forumComment->count();
+                
+                return $forumPost;
+            });
+            
+
+        }
+
+        // return $profile;
+
+        
+
+       return view('frontend.discussion.forum-profile',compact('profile'));
     }
 
     public function advertisements(){

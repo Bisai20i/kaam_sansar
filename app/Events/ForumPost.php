@@ -39,4 +39,11 @@ class ForumPost implements ShouldBroadcastNow
     public function broadcastAs(){
         return 'forum-posted';
     }
+
+    public function broadcastWith()
+    {
+        return [
+            'message' => $this->message
+        ];
+    }
 }

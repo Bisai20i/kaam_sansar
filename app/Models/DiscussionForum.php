@@ -20,4 +20,8 @@ class DiscussionForum extends Model
     public function forumComment(){
         return $this->hasMany(ForumComment::class, 'forum_id');
     }
+
+    public function forumInteraction(){
+        return $this->hasMany(ForumInteraction::class, 'forum_id');
+    }
 }

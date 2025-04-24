@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="d-flex flex-column text-end ps-2">
                                     <small
-                                        class="text-muted mb-1 text-nowrap pe-md-1">{{ $conversation->created_at->format('h:i A') }}</small>
+                                        class="text-muted mb-1 text-nowrap pe-md-1">{{ $conversation->created_at->diffForHumans() }}</small>
                                     <button class="btn w-100 h-100 py-md-2 px-md-5"
                                         data-user-id="{{ $conversation->otherUser->id }}"
                                         data-user-name="{{ $conversation->otherUser->firstName . ' ' . $conversation->otherUser->lastName }}"
@@ -185,6 +185,7 @@
 
 
             try {
+                $('#messageContainer').html('<p class="text-center text-secondary my-2 "><small>Loading Messages ....</small></p>')
                 const response = await fetch(getBaseUrl() + '/jobseeker/sender-messages', {
                     method: 'POST',
                     headers: {
@@ -227,9 +228,14 @@
                 if (data.status) {
 
                     //update response in the message box
-                    if (data.messages.length > 0) {
-                        $('#messageContainer').html('')
+                    if (!data.messages.length > 0) {
+                        $('#messageContainer').html('<p class="text-center text-secondary my-2 "><small>Conversation Not Stated Yet!</small></p>')
                     }
+                    else{
+                        $('#messageContainer').html('')                   
+                 }
+                
+
 
 
 
@@ -424,14 +430,21 @@
                 .then(res => res.json())
                 .then(data => {
                     let users = data.users
-                    $('#searchReasults').html(`
-                    <ul class="list-group">
-                        ${users.map(user => `<li class="list-group-item d-flex align-items-center">
-                                <img src="${user.userThumbnail}" alt="Avatar" class="img img-fluid rounded-circle me-2" style="height: 40px; width:40px; curser: pointer;">
-                                ${user.firstName} ${user.lastName}
-                                </li>`).join('')}
-                    </ul>
-                `);
+
+                    if(data.status){
+                        $('#searchReasults').html(`
+                            <ul class="list-group">
+                                ${users.map(user => `<li class="list-group-item d-flex align-items-center" data-user-id="${user.id}" onclick="openChat(this)" data-user-name="${user.firstName} ${user.lastName}">
+                                        <img src="${user.userThumbnail}" alt="Avatar" class="img img-fluid rounded-circle me-2" style="height: 40px; width:40px; curser: pointer;">
+                                        ${user.firstName} ${user.lastName}
+                                    </li>`).join('')}
+                            </ul>
+                        `);
+                    }
+                    else{
+                        $('#searchReasults').html(' <p class="text-center text-danger my-1 rounded bg-danger-subtle py-1"> No users found </p>')
+                    }
+                   
                     console.log("Results:", data.users);
                     // handle results
                 });

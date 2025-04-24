@@ -37,6 +37,7 @@ use App\Http\Controllers\DiscussionForumController;
 use App\Http\Controllers\PassportRenewalController;
 use App\Http\Controllers\ResumeHelpController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ForumInteractionController;
 
 
 // Authentication Routes
@@ -192,7 +193,9 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::patch('deactivate', [JobSeekerController::class, 'deactivate']);
     Route::patch('delete', [JobSeekerController::class, 'delete']);
     Route::get('getProfile/{user_id?}', [JobSeekerController::class, 'getProfile'])->name('jobseeker.getProfile');
-    Route::get('getAbroadDeals/{user_id?}', [JobSeekerController::class, 'getAbroadDeals'])->name('jobseeker.getAbroadDeals');
+
+    Route::get('getAbroadDeals', [JobSeekerController::class, 'getAbroadDeals'])->name('jobseeker.getAbroadDeals');
+    
     Route::get('getAdvertisements/{user_id?}', [JobSeekerController::class, 'getAdvertisements'])->name('jobseeker.getAdvertisements');
     Route::get('getCV/{user_id?}', [JobSeekerController::class, 'getCV'])->name('jobseeker.getCV');
     Route::get('editProfile/{user_id?}', [JobSeekerController::class, 'editProfile'])->name('jobseeker.editProfile');
@@ -330,6 +333,14 @@ Route::prefix('giftNCoupon')->group(function () {
 Route::prefix('discussion')->group(function () {
     Route::resource('discussion_forum',DiscussionForumController::class)->except('index', 'create', 'edit')->middleware('auth:job_seekers');
     Route::get('/index', [FrontendController::class, 'discussionForum'])->name('frontend.discussion');
+    Route::get('/profile/{id}', [FrontendController::class, 'forumProfile'])->name('discussion.profile');
+    Route::post('/follow-user', [DiscussionForumController::class, 'followToUser'])->name('discussion.followuser')->middleware('auth:job_seekers');
+    Route::post('/interact', [ForumInteractionController::class, 'interact'])->name('discussion.interact')->middleware('auth:job_seekers');
+    Route::get('/pin-post/{id}', [DiscussionForumController::class, 'togglePinnedPost'])->name('discussion.pinpost')->middleware('auth:job_seekers');
+    Route::get('/comments/{id}', [DiscussionForumController::class, 'loadComment']);
+    Route::post('/add-comment', [DiscussionForumController::class, 'addComment'])->name('discussion.addcomment')->middleware('auth:job_seekers');
+    Route::delete('delete-comment/{id}', [DiscussionForumController::class, 'deleteComment'])->name('discussion.deletecomment')->middleware('auth:job_seekers');
+    Route::delete('delete-image',[DiscussionForumController::class, 'deleteImage'])->name('discussion.deleteimage')->middleware('auth:job_seekers');
 });
 Route::prefix('advertisements')->group(function () {
     Route::get('/', [FrontendController::class, 'advertisements'])->name('frontend.advertisements');
