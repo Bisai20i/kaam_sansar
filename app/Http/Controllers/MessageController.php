@@ -263,6 +263,10 @@ class MessageController extends Controller
 
                             $result->userThumbnail = asset('storage/' . $path);
                         }
+                        
+                    }
+                    else{
+                        $result->userThumbnail = asset('frontend/assets/Images/profile.jpg');
                     }
 
                     return $result;

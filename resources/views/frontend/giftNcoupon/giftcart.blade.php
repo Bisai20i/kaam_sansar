@@ -286,7 +286,7 @@
 
                             setTimeout(() => {
                                 errorMessage.remove()
-                            }, 1200);
+                            }, 1500);
                         }
                     });
                 }

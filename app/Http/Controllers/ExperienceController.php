@@ -36,7 +36,7 @@ class ExperienceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeexperience(Request $request)
+    public function store(Request $request)
     {
         // Check if the request is from mobile using request_type
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
@@ -55,18 +55,18 @@ class ExperienceController extends Controller
 
         //Validate request data
         $validator = Validator::make($request->all(), [
-            'jobTitle' => 'required|string|max:255',  // Job title is required and must be a string with max length of 255
-            'companyName' => 'required|string|max:255',  // Company name is required and must be a string with max length of 255
-            'location' => 'required|string|max:255',  // Location is required and must be a string with max length of 255
-            'startDate' => 'required|date|before_or_equal:endDate',  // Start date must be a valid date and cannot be after the end date
-            'endDate' => 'nullable|date|after_or_equal:startDate',  // End date is optional, but if provided, it must be a valid date and after or equal to start date
-            'experienceDescription' => 'required|string|max:1000',  // Required experience description with max length of 1000 characters
-            'salaryRating' => 'nullable|integer|min:1|max:5',  // Salary rating between 1 and 5
-            'salaryFeedback' => 'nullable|string|max:500',  // Optional salary feedback, max 500 characters
-            'workingEnvironmentRating' => 'nullable|integer|min:1|max:5',  // Working environment rating between 1 and 5
-            'workingEnvironmentFeedback' => 'nullable|string|max:500',  // Optional feedback for working environment, max 500 characters
-            'benefitsRating' => 'nullable|integer|min:1|max:5',  // Benefits rating between 1 and 5
-            'benefitsFeedback' => 'nullable|string|max:500',
+            'experience.*.jobTitle' => 'required|string|max:255',  // Job title is required and must be a string with max length of 255
+            'experience.*.companyName' => 'required|string|max:255',  // Company name is required and must be a string with max length of 255
+            'experience.*.location' => 'required|string|max:255',  // Location is required and must be a string with max length of 255
+            'experience.*.startDate' => 'required|date|before_or_equal:endDate',  // Start date must be a valid date and cannot be after the end date
+            'experience.*.endDate' => 'nullable|date|after_or_equal:startDate',  // End date is optional, but if provided, it must be a valid date and after or equal to start date
+            'experience.*.experienceDescription' => 'required|string|max:1000',  // Required experience description with max length of 1000 characters
+            'experience.*.salaryRating' => 'nullable|integer|min:1|max:5',  // Salary rating between 1 and 5
+            'experience.*.salaryFeedback' => 'nullable|string|max:500',  // Optional salary feedback, max 500 characters
+            'experience.*.workingEnvironmentRating' => 'nullable|integer|min:1|max:5',  // Working environment rating between 1 and 5
+            'experience.*.workingEnvironmentFeedback' => 'nullable|string|max:500',  // Optional feedback for working environment, max 500 characters
+            'experience.*.benefitsRating' => 'nullable|integer|min:1|max:5',  // Benefits rating between 1 and 5
+            'experience.*.benefitsFeedback' => 'nullable|string|max:500',
 
         ]);
         // Handle validation errors
@@ -74,34 +74,41 @@ class ExperienceController extends Controller
             Log::error('Validation errors: ', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator->errors())->withInput();
+                :
+                response()->json([
+                    'success' => true,
+                    'message' => 'experience saved successfully.',
+                ]);
         }
 
         //Create a new experience record
-
-        $experience = new Experience();
-        $experience->jobSeekerId = $jobSeekerId;
-        $experience->jobTitle = $request->input('jobTitle');
-        $experience->companyName = $request->input('companyName');
-        $experience->location = $request->input('location');
-        $experience->startDate = $request->input('startDate');
-        $experience->endDate = $request->input('endDate');
-        $experience->experienceDescription = $request->input('experienceDescription');
-        $experience->salaryRating = $request->input('salaryRating');
-        $experience->salaryFeedback = $request->input('salaryFeedback');
-        $experience->workingEnvironmentRating = $request->input('workingEnvironmentRating');
-        $experience->workingEnvironmentFeedback = $request->input('workingEnvironmentFeedback');
-        $experience->benefitsRating = $request->input('benefitsRating');
-        $experience->benefitsFeedback = $request->input('benefitsFeedback');
-                // Save the experience record
-
-        $experience->save();
+        foreach ($request->input('experience') as $experienceData) {
+            $experience = new Experience();
+            $experience->jobSeekerId = $jobSeekerId;
+            $experience->jobTitle = $experienceData['jobTitle'];
+            $experience->companyName = $experienceData['companyName'];
+            $experience->location = $experienceData['location'];
+            $experience->startDate = $experienceData['startDate'];
+            $experience->endDate = $experienceData['endDate'];
+            $experience->experienceDescription = $experienceData['experienceDescription'];
+            $experience->salaryRating = $experienceData['salaryRating'];
+            $experience->salaryFeedback = $experienceData['salaryFeedback'];
+            $experience->workingEnvironmentRating = $experienceData['workingEnvironmentRating'];
+            $experience->workingEnvironmentFeedback = $experienceData['workingEnvironmentFeedback'];
+            $experience->benefitsRating = $experienceData['benefitsRating'];
+            $experience->benefitsFeedback = $experienceData['benefitsFeedback'];
+            $experience->save();
+        }
+        
         Log::info('Experience created successfully with ID: ' . $experience->id);
 
-
         return $isMobile
-        ? $this->responseSuccess('Visa created successfully', $experience)
-        : redirect()->back()->with('success', 'Visa created successfully');
+        ? $this->responseSuccess('experience saved successfully.', $experience)
+        : 
+            response()->json([
+                'success' => true,
+                'message' => 'experience saved successfully.',
+            ]);
 }
     /**
      * Display the specified resource.
@@ -133,8 +140,8 @@ class ExperienceController extends Controller
         }
 
         return $isMobile
-        ? $this->responseSuccess('Experience details found', $experience)
-        : redirect()->back()->with('success', 'Experience details found');
+        ?$this->responseSuccess('Experience details found', $experience)
+        :redirect()->back()->with('success','Achievement details not found');
 
     }
 

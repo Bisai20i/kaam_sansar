@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ForumComment extends Model
+class ForumInteraction extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    public function jobSeeker(){
-        return $this->belongsTo(JobSeeker::class, 'jobSeekerId');
-    }
-
-    public function discussionForum(){
+    public function forum(){
         return $this->belongsTo(DiscussionForum::class, 'forum_id');
     }
+
+    
 }

@@ -1107,7 +1107,7 @@ border-bottom-left-radius: 0;
 @media (max-width: 767px) {
   .btn {
     width: auto;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
   }
 
   .card {

@@ -38,7 +38,7 @@
                     <a href="{{ route('jobseeker.getAdvertisements', ['user_id' => auth()->id()]) }}" data-section="myJobs"
                         class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAdvertisements') ? 'active-profile' : '' }}">My
                         Advertisement</a>
-                    <a href="{{ route('jobseeker.getAbroadDeals', ['user_id' => auth()->id()]) }}" data-section="myJobs"
+                    <a href="{{ route('jobseeker.getAbroadDeals') }}" data-section="myJobs"
                         class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAbroadDeals') ? 'active-profile' : '' }}">My
                         Abroad Deals</a>
                 </div>

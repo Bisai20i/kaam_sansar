@@ -36,64 +36,91 @@ class TrainingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storetraining(Request $request)
+    public function store(Request $request)
     {
-        //Check if the request is from mobile using request_type
-        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-        //Get the authenticated user
-        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-        if (!$user) {
+        try {
+            $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+            $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+    
+            if (!$user) {
+                return $isMobile
+                    ? $this->responseError('Unauthorized', 401)
+                    : redirect()->route('login')->with('error', 'Unauthorized access.');
+            }
+    
+            $jobSeekerId = $user->id;
+            Log::info('Authenticated Job Seeker ID: ' . $jobSeekerId);
+    
+            // Validation rules
+            $validator = Validator::make($request->all(), [
+                'training.*.trainingTitle' => 'required|string|max:255',
+                'training.*.institutionName' => 'required|string|max:255',
+                'training.*.completionDate' => 'required|date',
+                'training.*.certificate' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:2048',
+            ]);
+    
+            if ($validator->fails()) {
+                Log::error('Validation errors: ', $validator->errors()->toArray());
+                return $isMobile
+                    ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
+                    : response()->json([
+                        'success' => false,
+                        'message' => 'Validation failed. Please check your inputs.',
+                        'errors' => $validator->errors()->all(),
+                        'request' => $request->input(),
+                    ]);
+            }
+    
+            // Handle input
+            $trainings = $request->input('training');
+    
+            // 🛠 Wrap single training object into array
+            if (isset($trainings['trainingTitle'])) {
+                $trainings = [$trainings];
+            }
+    
+            Log::info('Received trainings data: ', $trainings);
+            $files = $request->file('training');
+    
+            foreach ($trainings as $index => $trainingData) {
+                $training = new Training();
+                $training->jobSeekerId = $jobSeekerId;
+                $training->trainingTitle = $trainingData['trainingTitle'] ?? null;
+                $training->institutionName = $trainingData['institutionName'] ?? null;
+                $training->completionDate = $trainingData['completionDate'] ?? null;
+    
+                if (isset($files[$index]['certificate']) && $files[$index]['certificate'] instanceof \Illuminate\Http\UploadedFile) {
+                    $certificatePath = $files[$index]['certificate']->store('certificates', 'public');
+                    $training->certificate = $certificatePath;
+                    Log::info("Certificate uploaded for training index $index: $certificatePath");
+                } else {
+                    Log::warning("No certificate uploaded for training index $index.");
+                }
+    
+                $training->save();
+                Log::info('Training saved successfully: ' . $training->id);
+            }
+    
             return $isMobile
-                ? $this->responseError('Unauthorized', 401)
-                : redirect()->route('login')->with('error', 'Unauthorized access.');
-        }
-        Log::info('Authenticated Job Seeker ID: ' . $user->id);
-        $jobSeekerId = $user->id;
-
-        //Validate request data
-        $validator = Validator::make($request->all(), [
-            'trainingTitle' => 'required|string|max:255',
-            'institutionName' => 'required|string|max:255',
-            'completionDate' => 'required|date',
-            'certificate' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        // Handle validation errors
-        if ($validator->fails()) {
-            Log::error('Validation errors: ', $validator->errors()->toArray());
+                ? $this->responseSuccess('Trainings saved successfully.', $trainings)
+                : response()->json([
+                    'success' => true,
+                    'message' => 'Trainings saved successfully.',
+                ]);
+    
+        } catch (\Exception $e) {
+            Log::error('Training store exception: ' . $e->getMessage());
+    
             return $isMobile
-                ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator->errors())->withInput();
+                ? $this->responseError('Something went wrong. Please try again later.', 500)
+                : response()->json([
+                    'success' => false,
+                    'message' => 'Something went wrong. Please try again later.',
+                    'error' => $e->getMessage(), // hide in production
+                ], 500);
         }
-
-        //Handle certificate upload
-
-        $certificateImgPath = handleUpload('certificate');
-
-        //Create training
-        $training = new Training();
-        $training->jobSeekerId = $jobSeekerId;
-        $training->trainingTitle = $request->input('trainingTitle');
-        $training->institutionName = $request->input('institutionName');
-        $training->completionDate = $request->input('completionDate');
-        $training->certificate = $certificateImgPath;
-
-        //Upload training if available
-        if ($certificateImgPath) {
-            Log::info('Training certificate uploaded successfully:' . $training->certificate);
-        } else {
-            Log::error('Training certificate upload failed');
-        }
-
-        //Save training
-        $training->save();
-        Log::info('Training saved successfully:' . $training->id);
-
-        return $isMobile
-            ? $this->responseSuccess('Training saved successfully:', $training)
-            : redirect()->route('profile')->with('success', 'Training saved successfully');
     }
-
+    
     /**
      * Display the specified resource.
      *

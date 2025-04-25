@@ -16,6 +16,9 @@ use App\Models\ResumeHelp;
 use App\Models\UserComment;
 use App\Models\VisaCountryList;
 use App\Models\VisaType;
+use App\Models\Follower;
+use App\Models\ForumInteraction;
+use App\Models\JobSeeker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -966,16 +969,19 @@ class FrontendAPIController extends Controller
 
     public function discussionForum(Request $request)
     {
-
         try {
 
             $searchstr = $request->query('searchstr', null);
             $category  = $request->query('category', null);
 
-            // return $request;
-            // return $request;
-
             $forumPosts = DiscussionForum::with('jobSeeker:id,firstName,lastName,temporaryLocation,userThumbnail')
+                ->withCount(['forumInteraction as likes' => function ($query) {
+                    $query->where('type', 'like');
+                }])
+                ->withCount(['forumInteraction as dislikes' => function ($query) {
+                    $query->where('type', 'dislike');
+                }])
+                ->withCount('forumComment as comments')
                 ->when(
                     in_array($category, ['other', 'education', 'investment', 'scammer', 'office']),
                     fn($query) => $query->where('category', $category)
@@ -987,8 +993,9 @@ class FrontendAPIController extends Controller
                 )
                 ->latest()
                 ->get();
+            // return $forumPosts;
 
-            $forumPosts->transform(function ($forumPost) {
+            $forumPosts->transform(function ($forumPost) use ($request) {
                 if ($forumPost->jobSeeker && is_array($forumPost->jobSeeker->userThumbnail)) {
                     $thumbnails = $forumPost->jobSeeker->userThumbnail;
 
@@ -1009,18 +1016,76 @@ class FrontendAPIController extends Controller
 
                 $forumPost->images = $imageLinks;
 
+                $forumPost->followed = Follower::where('followed_to', $forumPost->jobSeeker->id)->where('followed_by', $request->user()->id)->exists();
+
+                $forumPost->interaction = ForumInteraction::where('forum_id', $forumPost->id)->where('jobSeekerId', $request->user()->id)->first();
+
                 return $forumPost;
             });
 
             return response()->json([
                 'status'  => true,
                 'message' => 'Data fetched successfully',
-                'data'    => [
-                    'seller'       => $seller,
-                    'seller_gifts' => $sellerGifts,
-                ],
+                'data'    => $forumPosts,
             ], 200);
 
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Failed to fetch data',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+
+    }
+
+    public function forumProfile(Request $request, $id)
+    {
+
+        try {
+            $profile = JobSeeker::select('id', 'firstName', 'lastName', 'temporaryLocation', 'userThumbnail')
+                ->where('id', $id)
+                ->with(['discussionForum' => function ($query) {
+                    $query->orderBy('pinned', 'desc');
+                    $query->orderBy('created_at', 'desc');
+                }])
+
+                ->first();
+
+            $profile->userThumbnail ? $profile->userThumbnail = asset('storage/' . $profile->userThumbnail[0]) : null;
+            $profile->postCount                               = $profile->discussionForum->count();
+            $profile->followers                               = Follower::where('followed_to', $profile->id)->count();
+            $profile->followings                              = Follower::where('followed_by', $profile->id)->count();
+            $profile->followed                                = Follower::where('followed_to', $profile->id)->where('followed_by', $request->user()->id)->exists();
+
+            if ($profile->postCount > 0) {
+
+                $profile->discussionForum->transform(function ($forumPost) use($request) {
+                    $imagePaths = $forumPost->images ? $forumPost->images : [];
+                    $imageLinks = array_map(function ($path) {
+                        return asset('storage/' . $path);
+                    }, $imagePaths);
+
+                    $forumPost->images = $imageLinks;
+
+
+                    $forumPost->interaction = ForumInteraction::where('forum_id', $forumPost->id)->where('jobSeekerId', $request->user()->id)->first();
+
+
+                    $forumPost->likes    = $forumPost->forumInteraction->where('type', 'like')->count();
+                    $forumPost->dislikes = $forumPost->forumInteraction->where('type', 'dislike')->count();
+                    $forumPost->comments = $forumPost->forumComment->count();
+
+                    return $forumPost;
+                });
+
+            }
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Data fetched successfully!',
+                'data' => $profile
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => false,

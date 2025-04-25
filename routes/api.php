@@ -1,12 +1,11 @@
 <?php
 
 use App\Http\Controllers\AboardController;
-
 use App\Http\Controllers\AchievementController;
-
 use App\Http\Controllers\AdvertisementCategoryController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DiscussionForumController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\Frontend\FrontendAPIController;
@@ -22,6 +21,7 @@ use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\KundaliController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MyDocumentController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProfileController;
@@ -29,8 +29,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UserCommentController;
-use App\Http\Controllers\MessageController;
-use App\Http\Controllers\DiscussionForumController;
+use App\Http\Controllers\ForumInteractionController;
 use App\Http\Controllers\VisaController;use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -56,7 +55,9 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
     Route::apiResource('api-jobCompany', JobCompanyController::class);
     Route::apiResource('api-jobPost', JobPostController::class);
     Route::apiResource('api-jobSeeker', JobSeekerController::class);
+
     // Jobseeker-specific routes
+
     Route::prefix('jobseeker/mobile')->group(function () {
         Route::post('logout', [JobSeekerController::class, 'logout']);
         Route::post('otp_verify', [JobSeekerController::class, 'otpVerify']);
@@ -73,16 +74,23 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
         Route::get('editProfile/{user_id?}', [JobSeekerController::class, 'editProfile']);
 
         // message api
+
         Route::post('/send-message', [MessageController::class, 'sendMessage']);
         Route::get('/user-inbox', [MessageController::class, 'user_inbox']);
         Route::get('/sender-messages', [MessageController::class, 'sender_messages']);
 
         //discussion forum
 
-
-        Route::apiResource('discussion-forum',DiscussionForumController::class)->except('index', 'create', 'edit');
-        Route::get('/discussion-forum/index', [FrontendAPIController::class, 'discussionForum']);
-
+        Route::apiResource('discussion-forum', DiscussionForumController::class)->except('index', 'create', 'edit'); // good
+        Route::get('/discussion-forums', [FrontendAPIController::class, 'discussionForum']); //good
+        Route::get('/discussion-forum/profile/{id}', [FrontendAPIController::class, 'forumProfile']); //good
+        Route::post('/follow-user', [DiscussionForumController::class, 'followToUser']); //good
+        Route::post('/forum/interact', [ForumInteractionController::class, 'interact']); //good
+        Route::get('/forum/pin-post/{id}', [DiscussionForumController::class, 'togglePinnedPost']); //good
+        Route::get('/forum-comments/{id}', [DiscussionForumController::class, 'loadComment']); //good
+        Route::post('/forum/add-comment', [DiscussionForumController::class, 'addComment']); //good
+        Route::delete('/forum/delete-comment/{id}', [DiscussionForumController::class, 'deleteComment']); //good
+        Route::delete('/forum/delete-image', [DiscussionForumController::class, 'deleteImage']); //good
 
         // resume help api
         Route::get('resume-help', [FrontendAPIController::class, 'resumeHelp']);
@@ -142,6 +150,8 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
 
         //aboard  product
         Route::apiResource('Aboard', AboardController::class);
+
+        Route::get('user-abroads', [AboardController::class, 'userAboards']);
 
         Route::get('aboard/bytype/{type}', [AboardController::class, 'showByType']);
 

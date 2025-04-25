@@ -3,131 +3,213 @@
     Discussion Form
 @endsection
 @section('content')
-    <section class="main  container-fluid pt-5 pb-2">
-        <div class="container">
+    <section class="main  container-fluid pt-5 pb-2" style="box-sizing: border-box;">
+
+        <!-- Modal -->
+        <div class="modal fade" id="createPost" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createPostLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header d-flex">
+                        <h1 class="modal-title fs-5 mx-auto flex-fill" id="createPostLabel">
+                            Create Post
+                        </h1>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <form action="{{ route('discussion_forum.store') }}"
+                            class="d-flex flex-column justify-content-center p-0 mb-4" method="post"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="d-flex align-items-center m-0 mb-2">
+                                <div class="col-auto p-0">
+                                    <img src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail
+                                        ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
+                                        : asset('frontend/assets/Images/profile.jpg') }}"
+                                        class="img-fluid rounded-circle overflow-hidden"
+                                        style="aspect-ratio: 1; width: 3rem;" alt="">
+                                </div>
+                                <div class="col flex-fill ps-2">
+                                    <a href="{{ route('jobseeker.getProfile', @Auth::guard('job_seekers')->user()->id) }}"
+                                        class="text-decoration-none">
+                                        <h5 class="m-0 text-black">
+                                            {{ Auth::guard('job_seekers')->check()
+                                                ? Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName
+                                                : 'User' }}
+                                        </h5>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="form mt-2">
+
+                                <select name="category" class="form-select bg-dark-subtle text-black-50" id="cat"
+                                    aria-label="">
+                                    <option selected>Category</option>
+                                    <option value="education">Education</option>
+                                    <option value="investment">Investment</option>
+                                    <option value="scammer">Scammer</option>
+                                    <option value="office">Office</option>
+                                    <option value="other">Other</option>
+
+                                </select>
+                            </div>
+                            <div class="form-floating text-black-50 mt-3">
+                                <input name="topic" type="text" class="form-control bg-dark-subtle text-black-50"
+                                    id="titleInput" placeholder="Post Title">
+                                <label for="titleInput">Title</label>
+                            </div>
+                            <div class="form-floating text-black-50">
+                                <textarea class="form-control bg-dark-subtle text-black-50" name="description" placeholder="Post Details"
+                                    id="floatingTextarea" style="height: 100px"></textarea>
+                                <label for="floatingTextarea">Describe...</label>
+                            </div>
+                            <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
+                                <p class="flex-grow-1 my-auto text-black-50">Add to your post
+                                </p>
+                                <div class="d-flex gap-3 align-items-center">
+                                    <a href="#" class="primary_color_text">
+                                        <i class="fa-solid fa-location-dot"></i></a>
+                                    <a href="#" class="primary_color_text"
+                                        onclick=" document.getElementById('forumImages').click()">
+                                        <i class="fa-solid fa-image"></i></a>
+                                    <input id="forumImages" class="d-none" type="file" multiple accept="image/*"
+                                        onchange="handleFiles(this.files)" name="images[]">
+                                </div>
+
+                            </div>
+                            <div id="forumPreviewImages" class="row flex-wrap mt-4">
+
+                            </div>
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-primary mx-auto"
+                                    style="background-color: #0064a7;">Post</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm
+                            Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this comment?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                        <button id="deleteCommentButton" data-comment-id="0" onclick="deleteComment(this)"
+                            class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Comment Modal -->
+        <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true"
+            data-forum-id="0"
+            data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}">
+            <div class="modal-dialog modal-lg modal-dialog-centered ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="commentModalLabel">Comments</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <!-- Existing Comments Section -->
+                        <div id="commentsList" style="max-height: 70vh; overflow-y: auto;">
+                            <!-- Example of a single comment -->
+                            <div class="mb-3 p-3 border rounded">
+                                <strong>John Doe</strong>
+                                <p class="mb-1">This is a great feature! Looking forward to seeing more.</p>
+                                <small class="text-muted">Posted on April 21, 2025</small>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Leave New Comment Form -->
+                        <div
+                            class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2 mt-2">
+
+                            <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail"
+                                src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : 'https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg' }}"
+                                style="width: 50px; height:50px;" />
+                            <input class="form-control w-100 p-2" name="comment" id="commentInput"
+                                placeholder="Write a comment...." type="text" required />
+                            <button type="submit" class="border bg-white p-2 border-0 m-0" id="forumCommentButton"
+                                data-forum-id="0" onclick="addComment(this)">
+                                <i class="bi bi-send" style="color:#0064a7;"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container position-relative">
             <div class="row mb-3">
                 <div class="col-lg-3 col-12">
-                    <a href="forumprofile.html" class=" text-decoration-none">
+                    <a href="{{ route('frontend.discussion') }}" class=" text-decoration-none">
                         <h5 class="text-black">Discussion
                             Forum</h5>
                     </a>
                 </div>
 
-                <div class="col-lg-9 col-12 ps-4">
-                    <div class="d-flex gap-2">
-                        <form action="{{ route('frontend.discussion') }}" class="d-flex gap-2 flex-grow-1">
+                <div class="col-lg-9 col-12 ps-2 lg:ps-4">
+                    <div class="">
+                        <form action="{{ route('frontend.discussion') }}" class="row g-2">
                             <div
-                                class="col-auto d-flex flex-fill border border-1 border-dark-subtle rounded-5 align-items-center ps-3 overflow-hidden gap-1">
+                                class="col-12 col-md-auto d-flex flex-fill border border-1 border-dark-subtle rounded-5 align-items-center ps-3 overflow-hidden gap-1">
                                 <i class="fa-solid fa-magnifying-glass text-black-50"></i>
                                 <input type="search" placeholder="Search" name='searchstr'
                                     value="{{ request('searchstr') }}"
-                                    class="w-100 h-100 border-0 m-0 text-black-50 rounded-end-5 px-1"
-                                    style="outline: none;">
+                                    class="w-100 h-100 border-0 m-0 text-black-50 rounded-end-5 px-1 py-2"
+                                    style="outline: none; min">
                             </div>
-                            <div><button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
+                            <div class="col-12 col-md-auto d-flex gap-2 justify-content-center ms-md-3">
+
+                                <button class="btn rounded-5 px-4 text-white text-nowrap"
                                     style="background-color: #0064a7;" type="submit">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
+
+                                <div class="">
+                                    @auth('job_seekers')
+                                        <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
+                                            style="background-color: #0064a7;" data-bs-toggle="modal"
+                                            data-bs-target="#createPost">+
+                                            Create</button>
+                                    @else
+                                        <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="redirect_url" value="{{ url()->current() }}">
+                                        </form>
+
+                                        <a href="#" onclick="document.getElementById('redirectForm').submit(); "
+                                            class="btn rounded-5 px-4 text-white text-nowrap m-auto"
+                                            style="background-color: #0064a7;">
+                                            + Create
+                                        </a>
+                                    @endauth
+                                </div>
                             </div>
                         </form>
 
-                        <div class="col-auto">
 
-                            <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
-                                {{ Auth::guard('job_seekers')->check() ? '' : 'disabled' }}
-                                style="background-color: #0064a7;" data-bs-toggle="modal" data-bs-target="#createPost">+
-                                Create</button>
-
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="createPost" tabindex="-1" aria-labelledby="createPostLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header d-flex">
-                                            <h1 class="modal-title fs-5 mx-auto flex-fill" id="createPostLabel">Create
-                                                Post
-                                            </h1>
-                                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body px-4">
-                                            <form action="{{ route('discussion_forum.store') }}"
-                                                class="d-flex flex-column justify-content-center p-0 mb-4" method="post"
-                                                enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="d-flex align-items-center m-0 mb-2">
-                                                    <div class="col-auto p-0">
-                                                        <img src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail
-                                                            ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
-                                                            : asset('frontend/assets/Images/profile.jpg') }}"
-                                                            class="img-fluid rounded-circle overflow-hidden"
-                                                            style="aspect-ratio: 1; width: 3rem;" alt="">
-                                                    </div>
-                                                    <div class="col flex-fill ps-2">
-                                                        <a href="{{ route('jobseeker.getProfile', @Auth::guard('job_seekers')->user()->id) }}"
-                                                            class="text-decoration-none">
-                                                            <h5 class="m-0 text-black">
-                                                                {{ Auth::guard('job_seekers')->check()
-                                                                    ? Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName
-                                                                    : 'User' }}
-                                                            </h5>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="form mt-2">
-
-                                                    <select name="category" class="form-select bg-dark-subtle text-black-50"
-                                                        id="cat" aria-label="">
-                                                        <option selected>Category</option>
-                                                        <option value="education">Education</option>
-                                                        <option value="investment">Investment</option>
-                                                        <option value="scammer">Scammer</option>
-                                                        <option value="office">Office</option>
-                                                        <option value="other">Other</option>
-
-                                                    </select>
-                                                </div>
-                                                <div class="form-floating text-black-50 mt-3">
-                                                    <input name="topic" type="text"
-                                                        class="form-control bg-dark-subtle text-black-50" id="titleInput"
-                                                        placeholder="Post Title">
-                                                    <label for="titleInput">Title</label>
-                                                </div>
-                                                <div class="form-floating text-black-50">
-                                                    <textarea class="form-control bg-dark-subtle text-black-50" name="description" placeholder="Post Details"
-                                                        id="floatingTextarea" style="height: 100px"></textarea>
-                                                    <label for="floatingTextarea">Describe...</label>
-                                                </div>
-                                                <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
-                                                    <p class="flex-grow-1 my-auto text-black-50">Add to your post</p>
-                                                    <div class="d-flex gap-3 align-items-center">
-                                                        <a href="#" class="primary_color_text">
-                                                            <i class="fa-solid fa-location-dot"></i></a>
-                                                        <a href="#" class="primary_color_text"
-                                                            onclick=" document.getElementById('forumImages').click()">
-                                                            <i class="fa-solid fa-image"></i></a>
-                                                        <input id="forumImages" class="d-none" type="file" multiple
-                                                            accept="image/*" onchange="handleFiles(this.files)"
-                                                            name="images[]">
-                                                    </div>
-
-                                                </div>
-                                                <div id="forumPreviewImages" class="row flex-wrap mt-4">
-
-                                                </div>
-                                                <div class="d-flex justify-content-center mt-3">
-                                                    <button type="submit" class="btn btn-primary mx-auto"
-                                                        style="background-color: #0064a7;">Post</button>
-                                                </div>
-
-                                            </form>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -184,9 +266,9 @@
                     </div>
                 </div>
 
-                <div class="col-lg-9 col-12 ps-5">
-                    <div class="row mb-3">
-                        <div class="nav nav-pills column-gap-4 row-gap-2 justify-content-md-start justify-content-evenly">
+                <div class="col-lg-9 col-12 ps-2 d-flex flex-column">
+                    <div class="d-flex mb-3">
+                        <div class="nav nav-pills column-gap-2 row-gap-2 justify-content-start">
                             <a href=" {{ route('frontend.discussion') }}"
                                 class="nav-link-ads rounded px-3 py-1 border-dark-subtle {{ request('category') == '' ? 'active' : '' }}">All</a>
                             <a href=" {{ route('frontend.discussion', ['category' => 'education']) }}"
@@ -202,13 +284,22 @@
 
                         </div>
                     </div>
-                    <div id="newPostsAlert"
-                        class="d-flex justify-content-center text-secondary d-none gap-2 p-2 align-items-center w-100 flex-wrap">
+                    {{-- <div 
+                        class="d-flex justify-content-center text-secondary gap-2 p-1  align-items-center flex-wrap fixed-top bg-danger-subtle mx-auto rounded-5" style="margin-top: 100px; width: fit-content">
                         <a href=" {{ route('frontend.discussion') }}"><i class="fa-solid fa-arrow-rotate-right p-2"
                                 style="font-size: 1.5rem;"></i></a>
-                        <strong><span id="newPostsCount">0</span> New Posts Available</strong>
+                        <strong class="pe-2"><span id="newPostsCount">0</span> New Posts Available</strong>
+                    </div> --}}
+                    <div id="newPostsAlert"
+                        class="d-none justify-content-center text-secondary gap-2 p-1 px-2 border border-secondary-subtle  align-items-center flex-wrap fixed-top bg-white shadow-sm mx-auto rounded-5"
+                        style="margin-top: 100px; width: fit-content">
+                        <a class="text-decoration-none d-flex align-items-center"
+                            href=" {{ route('frontend.discussion') }}" style="color: #0064a7;"><i
+                                class="fa-solid fa-arrow-rotate-right p-2" style="font-size: 1.5rem;"></i> <strong
+                                class="pe-2"><span id="newPostsCount">0</span> New Posts Available</strong></a>
+
                     </div>
-                    <div class="row">
+                    <div id="forumPosts">
 
                         @if (count($forumPosts) > 0)
                             @foreach ($forumPosts as $forumPost)
@@ -222,7 +313,8 @@
                                                     style="aspect-ratio: 1; width: 3rem;" alt="">
                                             </div>
                                             <div class="col-auto flex-fill ps-2 order-md-1 order-2">
-                                                <a href="forumprofile.html" class="text-decoration-none">
+                                                <a href="{{ route('discussion.profile', ['id' => $forumPost->jobSeeker->id]) }}"
+                                                    class="text-decoration-none">
                                                     <h5 class="m-0 text-black">
                                                         {{ $forumPost->jobSeeker->firstName . ' ' . $forumPost->jobSeeker->lastName }}
                                                     </h5>
@@ -256,18 +348,44 @@
                                             </div>
                                         </div>
 
-                                        <div class="d-flex align-items-center">
-                                            <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2"
-                                                style="background-color: #0064a7;"
-                                                data-user-id="{{ $forumPost->jobSeeker->id }}" onclick="openChat(this)">+
-                                                <span class="d-none d-md-inline">Follow</span></button>
-                                            <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
-                                                style="background-color: #0064a7;"
-                                                data-user-id="{{ $forumPost->jobSeeker->id }}" onclick="openChat(this)"
-                                                data-user-name="{{ $forumPost->jobSeeker->firstName . ' ' . $forumPost->jobSeeker->lastName }}">
-                                                <i class="bi bi-chat-left-text me-1 align-content-center"></i>
-                                                <span class="d-none d-md-inline">Chat</span>
-                                            </button>
+                                        <div class="d-flex flex-wrap align-items-center justify-content-center gap-2">
+                                            @auth('job_seekers')
+                                                <button
+                                                    class="{{ 'buttons' . $forumPost->jobSeeker->id }} btn rounded-5 px-4 text-white text-nowrap"
+                                                    style="background-color: #0064a7;"
+                                                    {{ $forumPost->jobSeeker->id == Auth::guard('job_seekers')->id() ? 'disabled' : '' }}
+                                                    data-user-id="{{ $forumPost->jobSeeker->id }}" onclick="follow(this)">
+                                                    {!! $forumPost->followed
+                                                        ? '- <span class="d-none d-md-inline">Unfollow</span>'
+                                                        : '+ <span class="d-none d-md-inline">Follow</span>' !!}
+
+                                                </button>
+                                                <button class="btn rounded-5 px-4 text-white text-nowrap"
+                                                    style="background-color: #0064a7;"
+                                                    data-user-id="{{ $forumPost->jobSeeker->id }}" onclick="openChat(this)"
+                                                    data-user-name="{{ $forumPost->jobSeeker->firstName . ' ' . $forumPost->jobSeeker->lastName }}">
+                                                    <i class="bi bi-chat-left-text me-1 align-content-center"></i>
+                                                    <span class="d-none d-md-inline">Chat</span>
+                                                </button>
+                                            @else
+                                                <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="redirect_url"
+                                                        value="{{ url()->current() }}">
+                                                </form>
+
+                                                <button class="btn rounded-5 px-4 text-white text-nowrap"
+                                                    style="background-color: #0064a7;"
+                                                    onclick="document.getElementById('redirectForm').submit(); ">+
+                                                    <span class="d-none d-md-inline">Follow</span></button>
+                                                <button class="btn rounded-5 px-4 text-white text-nowrap"
+                                                    style="background-color: #0064a7;"
+                                                    onclick="document.getElementById('redirectForm').submit(); ">
+                                                    <i class="bi bi-chat-left-text me-1 align-content-center"></i>
+                                                    <span class="d-none d-md-inline">Chat</span>
+                                                </button>
+                                            @endauth
+
                                         </div>
                                     </div>
                                 </div>
@@ -287,42 +405,44 @@
                                             </div>
                                         @endforeach
 
-
                                     </div>
                                 @endif
 
 
-                                <div
-                                    class="d-inline-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3">
-                                    <a href="#" class="text-decoration-none text-black">
+                                <div class="d-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3">
+
+                                    <button style="all:unset; cursor: pointer;" onclick="interact(this)"
+                                        class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                        data-type='like' data-forum-id = "{{ $forumPost->id }}">
+
+                                        <i class="fa-{{ $forumPost->interaction ? ($forumPost->interaction->type == 'like' ? 'solid' : 'regular') : 'regular' }} fa-thumbs-up fs-5"
+                                            style="color: #0064a7;"></i>
+
                                         <span>
-                                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M23 10.5C23 9.96957 22.7893 9.46086 22.4142 9.08579C22.0391 8.71071 21.5304 8.5 21 8.5H14.68L15.64 3.93C15.66 3.83 15.67 3.72 15.67 3.61C15.67 3.2 15.5 2.82 15.23 2.55L14.17 1.5L7.59 8.08C7.22 8.45 7 8.95 7 9.5V19.5C7 20.0304 7.21071 20.5391 7.58579 20.9142C7.96086 21.2893 8.46957 21.5 9 21.5H18C18.83 21.5 19.54 21 19.84 20.28L22.86 13.23C22.95 13 23 12.76 23 12.5V10.5ZM1 21.5H5V9.5H1V21.5Z"
-                                                    fill="#196BA6" />
-                                            </svg>
-                                            {{ $forumPost->likes }}</span>
-                                    </a>
-                                    <a href="#" class="text-decoration-none text-black">
+                                            {{ $forumPost->likes > 999 ? round($forumPost->likes / 1000, 1) . ' K' : $forumPost->likes }}
+                                        </span>
+                                    </button>
+
+                                    <button style="all:unset; cursor: pointer;" onclick="interact(this)"
+                                        class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                        data-type='dislike' data-forum-id="{{ $forumPost->id }}">
+
+                                        <i class="fa-{{ $forumPost->interaction ? ($forumPost->interaction->type == 'dislike' ? 'solid' : 'regular') : 'regular' }} fa-thumbs-down fs-5"
+                                            style="color: #0064a7;"></i>
+
                                         <span>
-                                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M19 15.5V3.5H23V15.5H19ZM15 3.5C15.5304 3.5 16.0391 3.71071 16.4142 4.08579C16.7893 4.46086 17 4.96957 17 5.5V15.5C17 16.05 16.78 16.55 16.41 16.91L9.83 23.5L8.77 22.44C8.5 22.17 8.33 21.8 8.33 21.38L8.36 21.07L9.31 16.5H3C2.46957 16.5 1.96086 16.2893 1.58579 15.9142C1.21071 15.5391 1 15.0304 1 14.5V12.5C1 12.24 1.05 12 1.14 11.77L4.16 4.72C4.46 4 5.17 3.5 6 3.5H15ZM15 5.5H5.97L3 12.5V14.5H11.78L10.65 19.82L15 15.47V5.5Z"
-                                                    fill="#196BA6" />
-                                            </svg>
-                                            {{ $forumPost->dislikes }}</span></a>
-                                    <a href="#" class="text-decoration-none text-black">
-                                        <span>
-                                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12 21.5C13.78 21.5 15.5201 20.9722 17.0001 19.9832C18.4802 18.9943 19.6337 17.5887 20.3149 15.9442C20.9961 14.2996 21.1743 12.49 20.8271 10.7442C20.4798 8.99836 19.6226 7.39472 18.364 6.13604C17.1053 4.87737 15.5016 4.0202 13.7558 3.67294C12.01 3.32567 10.2004 3.5039 8.55585 4.18509C6.91131 4.86628 5.50571 6.01983 4.51677 7.49987C3.52784 8.97991 3 10.72 3 12.5C3 13.988 3.36 15.391 4 16.627L3 21.5L7.873 20.5C9.109 21.14 10.513 21.5 12 21.5Z"
-                                                    stroke="#196BA6" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-                                            0</span></a>
+                                            {{ $forumPost->dislikes > 999 ? round($forumPost->dislikes / 1000, 1) . ' K' : $forumPost->dislikes }}</span>
+                                    </button>
+
+                                    <span class="text-decoration-none text-black" data-bs-toggle="modal"
+                                        data-bs-target="#commentModal" data-forum-id="{{ $forumPost->id }}"
+                                        data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
+                                        onclick="loadComments(this)">
+                                        <span class="d-flex align-items-center gap-1" style="cursor: pointer;">
+                                            <i class="fa-solid fa-comment fs-5" style="color: #0064a7;"></i>
+                                            {{ $forumPost->comments > 999 ? round($forumPost->comments / 1000, 1) . ' K' : $forumPost->comments }}
+                                        </span>
+                                    </span>
                                 </div>
                             @endforeach
                         @else
@@ -405,7 +525,163 @@
         });
 
         var channel = pusher.subscribe('forum-post');
+        
         channel.bind('forum-posted', function(data) {
+
+            // console.log(data)
+            let broadcastForum = data.message
+
+            console.log(broadcastForum)
+            let newPost = document.createElement('div');
+
+            newPost.innerHTML = `
+
+                                <div class="row flex-wrap align-items-center gap-2 p-2 d-flex justify-content-between mt-2">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="col-auto p-0 order-0" >
+                                                <img src="${broadcastForum.job_seeker.userThumbnail}"
+                                                    class="img-fluid rounded-circle overflow-hidden"
+                                                    style="aspect-ratio: 1; width: 3rem;" alt="">
+                                            </div>
+                                            <div class="col-auto flex-fill ps-2 order-md-1 order-2">
+                                                <a href="${getBaseUrl()}/jobseeker/getProfile/${broadcastForum.job_seeker.id}"
+                                                    class="text-decoration-none">
+                                                    <h5 class="m-0 text-black">
+                                                        ${broadcastForum.job_seeker.firstName} ${broadcastForum.job_seeker.lastName}
+                                                    </h5>
+                                                </a>
+                                                <div class="d-inline-flex gap-4">
+                                                    <small class="text-black-50 d-flex flex-wrap">
+                                                        <span class='text-no-wrap'>
+                                                            <svg width="14" height="18" viewBox="0 0 14 18"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M6.8 9.725C8.00122 9.725 8.975 8.75122 8.975 7.55C8.975 6.34878 8.00122 5.375 6.8 5.375C5.59878 5.375 4.625 6.34878 4.625 7.55C4.625 8.75122 5.59878 9.725 6.8 9.725Z"
+                                                                    stroke="#9D9999" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path
+                                                                    d="M6.8 1.75C5.26174 1.75 3.78649 2.36107 2.69878 3.44878C1.61107 4.53649 1 6.01174 1 7.55C1 8.9217 1.29145 9.81925 2.0875 10.8125L6.8 16.25L11.5125 10.8125C12.3086 9.81925 12.6 8.9217 12.6 7.55C12.6 6.01174 11.9889 4.53649 10.9012 3.44878C9.81351 2.36107 8.33826 1.75 6.8 1.75Z"
+                                                                    stroke="#9D9999" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                            </svg> ${broadcastForum.job_seeker.temporaryLocation}
+                                                        </span>
+                                                        <span class='text-no-wrap'>
+                                                            <svg width="19" height="18" viewBox="0 0 19 18"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M9.59961 15C11.1909 15 12.717 14.3679 13.8423 13.2426C14.9675 12.1174 15.5996 10.5913 15.5996 9C15.5996 7.4087 14.9675 5.88258 13.8423 4.75736C12.717 3.63214 11.1909 3 9.59961 3C8.00831 3 6.48219 3.63214 5.35697 4.75736C4.23175 5.88258 3.59961 7.4087 3.59961 9C3.59961 10.5913 4.23175 12.1174 5.35697 13.2426C6.48219 14.3679 8.00831 15 9.59961 15ZM9.59961 1.5C10.5845 1.5 11.5598 1.69399 12.4697 2.0709C13.3797 2.44781 14.2065 3.00026 14.9029 3.6967C15.5993 4.39314 16.1518 5.21993 16.5287 6.12987C16.9056 7.03982 17.0996 8.01509 17.0996 9C17.0996 10.9891 16.3094 12.8968 14.9029 14.3033C13.4964 15.7098 11.5887 16.5 9.59961 16.5C5.45211 16.5 2.09961 13.125 2.09961 9C2.09961 7.01088 2.88979 5.10322 4.29631 3.6967C5.70283 2.29018 7.61049 1.5 9.59961 1.5ZM9.97461 5.25V9.1875L13.3496 11.19L12.7871 12.1125L8.84961 9.75V5.25H9.97461Z"
+                                                                    fill="#9D9999" />
+                                                            </svg>
+                                                            Just Now
+                                                        </span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-wrap align-items-center justify-content-center gap-2">
+
+                                                <button class="buttons${broadcastForum.job_seeker.id} btn rounded-5 px-4 text-white text-nowrap"
+                                                    style="background-color: #0064a7;"
+                                                    
+                                                    data-user-id="${broadcastForum.job_seeker.id}" onclick="follow(this)">
+                                                    + <span class="d-none d-md-inline">${broadcastForum.followed}</span>
+                                                   
+
+                                                </button>
+                                                <button class="btn rounded-5 px-4 text-white text-nowrap"
+                                                    style="background-color: #0064a7;"
+                                                    data-user-id="${broadcastForum.job_seeker.id}" onclick="openChat(this)"
+                                                    data-user-name="${broadcastForum.job_seeker.firstName} ${broadcastForum.job_seeker.lastName}">
+                                                    <i class="bi bi-chat-left-text me-1 align-content-center"></i>
+                                                    <span class="d-none d-md-inline">Chat</span>
+                                                </button>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-block me-0 p-0 mt-2" id="broadCastForumPost${broadcastForum.id}">
+                                    <h4>${broadcastForum.topic}</h4>
+                                    <small>${broadcastForum.description}</small>
+                                </div>
+
+
+                                <div class="d-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3">
+
+                                    <button style="all:unset; cursor: pointer;" onclick="interact(this)"
+                                        class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                        data-type='like' data-forum-id = "${broadcastForum.id}">
+
+                                        <i class="fa-regular fa-thumbs-up fs-5"
+                                            style="color: #0064a7;"></i>
+
+                                        <span>
+                                            ${broadcastForum.likes}
+                                        </span>
+                                    </button>
+
+                                    <button style="all:unset; cursor: pointer;" onclick="interact(this)"
+                                        class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                        data-type='dislike' data-forum-id="${broadcastForum.id}">
+
+                                        <i class="fa-regular fa-thumbs-down fs-5"
+                                            style="color: #0064a7;"></i>
+
+                                        <span>
+                                            ${broadcastForum.dislikes}
+                                    </button>
+
+                                    <span class="text-decoration-none text-black" data-bs-toggle="modal"
+                                        data-bs-target="#commentModal" data-forum-id=${broadcastForum.id}"
+                                        data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
+                                        onclick="loadComments(this)">
+                                        <span class="d-flex align-items-center gap-1" style="cursor: pointer;">
+                                            <i class="fa-solid fa-comment fs-5" style="color: #0064a7;"></i>
+                                            0
+                                        </span>
+                                    </span>
+                                </div>
+            
+            
+            `
+
+            document.getElementById('forumPosts').prepend(newPost);
+            if(broadcastForum.images.length > 0){
+                let broadcastImages = document.createElement('div');
+                broadcastImages.classList.add('mt-2', 'text-center', 'row');
+
+                if(broadcastForum.images.length == 1){
+                    broadcastImages.classList.add('row-cols-1');
+                }
+                else{
+                    broadcastImages.classList.add('row-cols-2');
+                }
+
+                broadcastForum.images.forEach(image => {
+                    let img = document.createElement('div');
+                    img.innerHTML = `
+                         <div class="col p-2">
+                            <img src="${image}" class="img-fluid w-100"
+                            style="max-width:500px;" alt="Post Image">
+                            </div>
+                    `
+                    
+                    broadcastImages.appendChild(img);
+
+                })
+
+                newPost.insertBefore(broadcastImages,document.getElementById('broadCastForumPost'+broadcastForum.id).nextSibling)
+                
+                // broadImages.innerHTML= `
+
+                //             child.parentNode.insertBefore(newElement, child.nextSibling);
+
+                // `
+            }
+
             let count = parseInt(document.getElementById('newPostsCount').textContent) + 1
             document.getElementById('newPostsCount').textContent = count
             document.getElementById('newPostsAlert').classList.remove('d-none');
@@ -597,6 +873,379 @@
             //     }
             // });
 
+        }
+    </script>
+
+    <script>
+        function formatDateWithComma(timestamp) {
+            const date = new Date(timestamp);
+            const day = date.getDate();
+            const month = date.toLocaleString('en-US', {
+                month: 'long'
+            });
+            const year = date.getFullYear();
+            return `${day} ${month}, ${year}`;
+        }
+        // script to handle follow and unfollow
+
+        function follow(e) {
+            let userId = e.getAttribute('data-user-id')
+            let currentStatus = e.querySelector('span').textContent
+            // console.log(currentStatus)
+            // console.log(userId)
+            $.ajax({
+                url: getBaseUrl() + '/discussion/follow-user',
+                method: 'POST',
+                data: {
+                    follow_to: userId
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), //  CSRF for Laravel
+                    'X-Requested-With': 'XMLHttpRequest' //  Tell Laravel it's AJAX
+                },
+                beforeSend: function() {
+                    e.innerHTML =
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+                },
+                success: function(response) {
+                    // ✅ What to do on success
+                    console.log(e.querySelector('span'))
+
+                    // "buttons".$forumPost->jobSeeker->id
+
+
+                    if (response.status) {
+
+                        let buttons = document.querySelectorAll(".buttons" + userId)
+
+                        console.log(buttons)
+
+                        buttons.forEach(btn => {
+                            console.log(btn)
+                            if (currentStatus == 'Unfollow') {
+                                btn.innerHTML =
+                                    '+ <span class="d-none d-md-inline">Follow</span>'
+
+                            } else {
+                                btn.innerHTML =
+                                    '- <span class="d-none d-md-inline">Unfollow</span>'
+                            }
+                        })
+
+                        // buttonDivs.forEach(btns => {
+
+                        //     
+
+                        // });
+                        // if (currentStatus == 'Unfollow') {
+                        //     e.innerHTML = `+ <span class="d-none d-md-inline">Follow</span>`
+                        // } else {
+                        //     e.innerHTML = `<span class="d-none d-md-inline">Unfollow</span>`
+                        // }
+
+                    } else {
+                        alert('Something went wrong!')
+                    }
+
+                    console.log('Success:', response);
+                },
+                error: function(xhr, status, error) {
+                    // ❌ Handle errors
+                    e.innerHTML = `+ <span class="d-none d-md-inline">Follow</span>`
+                    console.error('Error:', error);
+                    if (xhr.status === 401) {
+                        window.location.href = '/login';
+                    }
+                }
+
+            });
+        }
+
+        //handle delete comment for forum post
+
+        function handleDelete(e) {
+            let commentId = e.getAttribute('data-comment-id')
+
+            $('#deleteCommentButton').attr('data-comment-id', commentId)
+
+
+        }
+
+
+        function deleteComment(e) {
+
+
+            $.ajax({
+                url: getBaseUrl() + '/discussion/delete-comment/' + e.getAttribute('data-comment-id'),
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), //  CSRF for Laravel
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-HTTP-Method-Override': 'DELETE'
+                },
+                success: function(response) {
+                    // ✅ What to do on success
+                    console.log('Success:', response);
+                    if (response.status) {
+                        $('#deleteModal').modal('hide');
+                        $('#commentModal').modal('show');
+                        loadComments(document.getElementById('commentModal'))
+                    } else {
+                        alert('Something went wrong!')
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    // ❌ Handle errors
+                    console.error('Error:', error);
+                    if (xhr.status === 401) {
+                        window.location.href = '/login';
+                    }
+                }
+            })
+        }
+
+        //load comment of specific forum post
+
+        function loadComments(e) {
+            let postId = e.getAttribute('data-forum-id')
+            console.log(e)
+
+            $('#commentModal').attr('data-forum-id', postId);
+
+            $('#forumCommentButton').attr('data-forum-id', postId)
+            console.log(postId)
+
+            $.ajax({
+                url: getBaseUrl() + '/discussion/comments/' + postId,
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' //  Tell Laravel it's AJAX
+                },
+                beforeSend: function() {
+                    $('#commentsList').html(
+                        '<p class="text-center my-2"><span class="spinner-border spinner-border-sm mx-2" role="status" aria-hidden="true"></span>Loading...</p>'
+                    )
+                },
+                success: function(response) {
+                    $('#commentsList').html('')
+                    console.log(response.data)
+                    // ✅ What to do on success
+                    if (response.status == false) {
+                        $('#commentsList').html(
+                            '<p class="text-center my-2 text-secondary">No Comments yet !</p>')
+                        console.log(response)
+                        return
+                    }
+                    if (response.data.length > 0) {
+
+                        response.data.map((comment) => {
+
+                            if (e.getAttribute('data-current-user-id') == comment.job_seeker.id) {
+                                $('#commentsList').append(`
+                                    <div class="mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
+                                        <div>
+                                        <strong> <img class="rounded-circle me-1" src="${comment.job_seeker.userThumbnail}" width="30" height="30"/> ${comment.job_seeker.firstName + ' ' + comment.job_seeker.lastName}</strong>
+                                        <p class="mb-1">${comment.comment}</p>
+                                        <small class="text-muted">${formatDateWithComma(comment.created_at)}</small>
+                                        </div>
+                                        <button class="btn btn-danger rounded-circle" data-bs-toggle="modal" data-comment-id="${comment.id}"
+                                            data-bs-target="#deleteModal" onclick="handleDelete(this)">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                `)
+                            } else {
+                                $('#commentsList').append(`
+                                <div class="mb-3 p-3 border rounded">
+                                    <div>
+                                    <strong><img class="rounded-circle me-1" src="${comment.job_seeker.userThumbnail}" width="30" height="30"/> ${comment.job_seeker.firstName + ' ' + comment.job_seeker.lastName}</strong>
+                                    <p class="mb-1">${comment.comment}</p>
+                                    <small class="text-muted">${formatDateWithComma(comment.created_at)}</small>
+                                    </div>
+
+                                </div>
+                            `)
+                            }
+
+                        })
+
+                        $('#commentsList').animate({
+                            scrollTop: $('#commentsList')[0].scrollHeight
+                        }, 500)
+                    } else {
+                        $('#commentsList').html(
+                            '<p class="text-center my-2 text-secondary">No Comments yet !</p>')
+                    }
+                    console.log('Success:', response);
+
+                },
+                error: function(xhr, status, error) {
+                    // ❌ Handle errors
+                    $('#commentsList').html('')
+                    console.error('Error:', error);
+                    if (xhr.status === 401) {
+                        window.location.href = '/login';
+                    }
+                }
+            });
+        }
+
+
+        function addComment(e) {
+            let postId = e.getAttribute('data-forum-id')
+            let comment = $('#commentInput').val()
+            if (!comment.trim()) {
+                return;
+            }
+            console.log(postId, comment)
+            $.ajax({
+                url: getBaseUrl() + '/discussion/add-comment',
+                method: 'POST',
+                data: {
+                    forum_id: postId,
+                    comment: comment
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), //  CSRF for Laravel
+                    'X-Requested-With': 'XMLHttpRequest' //  Tell Laravel it's AJAX
+                },
+                beforeSend: function() {
+                    e.innerHtml =
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+
+                },
+                success: function(response) {
+                    // ✅ What to do on success
+                    if (response.status) {
+                        $('#commentInput').val('')
+                        $('#commentsList').append(`
+                            <div class="mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
+                                <div>
+                                <strong> {!! Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail
+                                    ? '<img class="rounded-circle me-1" src="' .
+                                        asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) .
+                                        '" width="30" height="30"/>'
+                                    : '' !!} {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName : '' }}</strong>
+                                <p class="mb-1">${response.data.comment}</p>
+                                <small class="text-muted">${formatDateWithComma(response.data.created_at)}</small>
+                                </div>
+                                <button class="btn btn-danger rounded-circle" data-bs-toggle="modal" data-comment-id="${response.data.id}"
+                                    data-bs-target="#deleteModal" onclick="handleDelete(this)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        `)
+                        $('#commentsList').animate({
+                            scrollTop: $('#commentsList')[0].scrollHeight
+                        }, 500)
+                    } else {
+                        alert('Something went wrong!')
+                    }
+
+                    console.log('Success:', response);
+                },
+                error: function(xhr, status, error) {
+                    // ❌ Handle errors
+                    console.error('Error:', error);
+                    if (xhr.status === 401) {
+                        window.location.href = '/login';
+                    }
+                }
+            });
+        }
+    </script>
+
+
+    <script>
+        async function interact(e) {
+            let type = e.getAttribute('data-type')
+            let postId = e.getAttribute('data-forum-id')
+            console.log(type, postId)
+
+            try {
+                const response = await fetch(getBaseUrl() + '/discussion/interact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        type: type,
+                        post_id: postId
+                    })
+                });
+
+                // Check for HTTP error response (like 401, 422, 500)
+                if (!response.ok) {
+                    // Try to parse JSON error response
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+
+                    // Laravel validation errors (422 Unprocessable Entity)
+                    if (response.status === 422) {
+                        alert('Validation failed: ' + Object.values(errorData.errors).join('\n'));
+                    }
+                    // Laravel unauthenticated (401)
+                    else if (response.status === 401) {
+                        window.location.href = getBaseUrl() + '/login';
+                    } else {
+                        alert('Something went wrong. Please try again.');
+                    }
+
+                    return;
+                }
+
+                const data = await response.json();
+                e.style.transform = 'scale(1)';
+
+                if (data.status) {
+
+                    switch (data.action) {
+                        case 'add':
+                            e.querySelector('span').textContent = parseInt(e.querySelector('span').textContent.trim()) +
+                                1
+                            toggleInteraction(e)
+                            break;
+                        case 'remove':
+                            e.querySelector('span').textContent = parseInt(e.querySelector('span').textContent.trim()) -
+                                1
+                            toggleInteraction(e)
+                            break;
+                        case 'toggle':
+                            let parent = e.parentElement
+                            buttons = parent.querySelectorAll('button')
+                            buttons.forEach(button => {
+                                if (button.getAttribute('data-type') == e.getAttribute('data-type')) {
+                                    button.querySelector('span').textContent = parseInt(button.querySelector(
+                                        'span').textContent.trim()) + 1
+                                    toggleInteraction(button)
+                                } else {
+                                    button.querySelector('span').textContent = parseInt(button.querySelector(
+                                        'span').textContent.trim()) - 1
+                                    toggleInteraction(button)
+                                }
+                            })
+                            break;
+                    }
+
+                }
+
+                console.log('Success:', data);
+
+            } catch (error) {
+                // Network error or unexpected failure
+                console.error(error);
+                e.style.transform = 'scale(1)';
+                alert('Network error. Please check your connection.');
+            }
+
+        }
+
+        function toggleInteraction(e) {
+            e.querySelector('i').classList.toggle('fa-solid');
+            e.querySelector('i').classList.toggle('fa-regular');
         }
     </script>
 @endpush

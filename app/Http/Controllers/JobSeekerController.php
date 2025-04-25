@@ -1,25 +1,26 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Mail\OTPMail;
-use App\Models\JobSeeker;
-use App\Models\JobPost;
+use App\Models\Aboard;
 use App\Models\JobBookmark;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use App\Models\JobPost;
+use App\Models\JobSeeker;
+use App\Models\ProductCategory;
+use App\Models\Advertisement;
+use App\Models\AdvertisementCategory;
 use App\Rules\ValidPhoneNumber;
-use Illuminate\Support\Facades\Log;
-use libphonenumber\PhoneNumberUtil;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use libphonenumber\PhoneNumberFormat;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use libphonenumber\NumberParseException;
 use Illuminate\Support\Facades\Validator;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberUtil;
 
 class JobSeekerController extends Controller
 {
@@ -32,39 +33,39 @@ class JobSeekerController extends Controller
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email_or_phone' => 'required|in:email,phone', // Ensure the value is either "email" or "phone"
-            'email' => [
+            'first_name'            => 'required|max:255',
+            'last_name'             => 'required|max:255',
+            'email_or_phone'        => 'required|in:email,phone', // Ensure the value is either "email" or "phone"
+            'email'                 => [
                 'nullable',
                 'required_if:email_or_phone,email', // Required if email_or_phone is "email"
                 'email',
                 'unique:job_seekers,emailAddress',
             ],
-            'phone_number' => [
+            'phone_number'          => [
                 'nullable',
                 'required_if:email_or_phone,phone', // Required if email_or_phone is "phone"
                 new ValidPhoneNumber($request->country_code),
                 'unique:job_seekers,phoneNumber',
             ],
-            'country_code' => [
+            'country_code'          => [
                 'nullable',
                 'required_if:email_or_phone,phone', // Required if email_or_phone is "phone"
                 'string',
             ],
-            'country' => [
+            'country'               => [
                 'required',
                 'string',
             ],
-            'password' => 'required|min:6',
+            'password'              => 'required|min:6',
             'password_confirmation' => 'required|min:6|same:password',
-            'acceptedTerms' => 'required|accepted',
-            'whoAmI' => ['required', 'in:student,worker'],
+            'acceptedTerms'         => 'required|accepted',
+            'whoAmI'                => ['required', 'in:student,worker'],
 
         ], [
-            'acceptedTerms.required' => 'You must agree to the terms and conditions.',
-            'acceptedTerms.accepted' => 'You must agree to the terms and conditions.',
-            'email.required_if' => 'The email field is required when registering with email.',
+            'acceptedTerms.required'   => 'You must agree to the terms and conditions.',
+            'acceptedTerms.accepted'   => 'You must agree to the terms and conditions.',
+            'email.required_if'        => 'The email field is required when registering with email.',
             'phone_number.required_if' => 'The phone number field is required when registering with phone.',
             'country_code.required_if' => 'The country code field is required when registering with phone.',
         ]);
@@ -75,7 +76,7 @@ class JobSeekerController extends Controller
                     'Validation failed. Please check your inputs.',
                     422,
                     [
-                        'errors' => $validator->errors(),
+                        'errors'         => $validator->errors(),
                         'email_or_phone' => $request->email_or_phone, // Pass the email_or_phone value
                     ]
                 );
@@ -87,7 +88,7 @@ class JobSeekerController extends Controller
         }
 
         // Format phone number for consistent storage
-        $phoneUtil = PhoneNumberUtil::getInstance();
+        $phoneUtil            = PhoneNumberUtil::getInstance();
         $formattedPhoneNumber = null;
 
         if ($request->email_or_phone === 'phone') {
@@ -106,23 +107,23 @@ class JobSeekerController extends Controller
             //         ->withInput();            }
         }
 
-        $otp = rand(1000, 9999);
+        $otp       = rand(1000, 9999);
         $otpExpiry = now()->addMinutes(1);
 
         $user = JobSeeker::create([
-            'phoneNumber' => $formattedPhoneNumber,
-            'password' => Hash::make($request->password),
-            'firstName' => $request->first_name,
-            'lastName' => $request->last_name,
-            'emailAddress' => $request->email ?? null,
-            'otp' => $otp,
-            'otpVerified' => false,
-            'otpExpiry' => $otpExpiry,
-            'acceptedTerms' => $request->has('acceptedTerms'),
-            'countryCode' => $request->country_code,
-            'country' => $request->country,
-            'whoAmI' => $request->whoAmI,
-            'email_or_phone' => $request->email_or_phone
+            'phoneNumber'    => $formattedPhoneNumber,
+            'password'       => Hash::make($request->password),
+            'firstName'      => $request->first_name,
+            'lastName'       => $request->last_name,
+            'emailAddress'   => $request->email ?? null,
+            'otp'            => $otp,
+            'otpVerified'    => false,
+            'otpExpiry'      => $otpExpiry,
+            'acceptedTerms'  => $request->has('acceptedTerms'),
+            'countryCode'    => $request->country_code,
+            'country'        => $request->country,
+            'whoAmI'         => $request->whoAmI,
+            'email_or_phone' => $request->email_or_phone,
         ]);
 
         // Send OTP based on registration method
@@ -153,7 +154,6 @@ class JobSeekerController extends Controller
         Auth::guard('job_seekers')->login($user);
         session()->put('email_or_phone', $user->email_or_phone);
 
-
         return redirect()->route('jobseeker.otp_page')->with(
             'success',
             "Registration successful! Use the OTP for verification sent to your {$user->email_or_phone}."
@@ -169,7 +169,6 @@ class JobSeekerController extends Controller
         // Example: Twilio::sendSMS($phoneNumber, "Your OTP is: $otp");
     }
 
-
     /**
      * Display the OTP verification page.
      *
@@ -178,15 +177,13 @@ class JobSeekerController extends Controller
 
     /******  15fc6e71-8ce0-4ae9-be4b-92575e3607a9  *******/
 
-
-
     public function otp_page()
     {
         // Try to get authenticated user first
         $user = Auth::guard('job_seekers')->user();
 
         // If no authenticated user, try to get from session (forgot password flow)
-        if (!$user) {
+        if (! $user) {
             $email_or_phone = session()->get('email_or_phone');
             if ($email_or_phone == 'phone') {
                 $phone_number = session()->get('phone_number');
@@ -199,25 +196,25 @@ class JobSeekerController extends Controller
             }
 
             // If no user is found, redirect with an error
-            if (!$user) {
+            if (! $user) {
                 return redirect()->back()
                     ->with('error', 'User not found.');
             }
         }
 
         // Check OTP expiry
-        $otpExpiry = $user->otpExpiry;
+        $otpExpiry   = $user->otpExpiry;
         $currentTime = Carbon::now();
 
         // Determine OTP status
         if ($otpExpiry === null || $otpExpiry->isPast()) {
             $timeLeftInSeconds = 0;
-            $canResend = true;
-            $message = 'OTP has expired. Please resend OTP again.';
+            $canResend         = true;
+            $message           = 'OTP has expired. Please resend OTP again.';
         } else {
             $timeLeftInSeconds = $currentTime->diffInSeconds($otpExpiry, false);
-            $canResend = false;
-            $message = 'OTP has been sent. Please enter the OTP within ' . $timeLeftInSeconds . ' seconds.';
+            $canResend         = false;
+            $message           = 'OTP has been sent. Please enter the OTP within ' . $timeLeftInSeconds . ' seconds.';
         }
 
         // Prepare data for the view
@@ -233,7 +230,7 @@ class JobSeekerController extends Controller
 
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
 
-        if (!$user) {
+        if (! $user) {
             if ($isMobile) {
                 return $this->responseError('User not found.', 404);
             }
@@ -271,7 +268,6 @@ class JobSeekerController extends Controller
             return redirect()->back()->with('info', 'User already verified.');
         }
 
-
         if ((int) $user->otp !== (int) $request->otp) {
 
             if ($isMobile) {
@@ -281,10 +277,10 @@ class JobSeekerController extends Controller
             return redirect()->back()->with('error', 'Invalid OTP. Please try again.');
         }
         $user->update([
-            'otpVerified' => true,
+            'otpVerified'     => true,
             'emailVerifiedAt' => now(),
-            'otp' => null,
-            'otpExpiry' => null,
+            'otp'             => null,
+            'otpExpiry'       => null,
         ]);
         if (session()->has('profile_update_data')) {
             $profileData = session()->get('profile_update_data');
@@ -299,34 +295,29 @@ class JobSeekerController extends Controller
         return redirect($redirectUrl)->with('success', 'You have successfully logged in.');
     }
 
-
-
-
     public function login(Request $request)
     {
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
         $isEmail = $request->input('email_or_phone') === 'email';
 
-
-
         // Set validation rules based on the request type and input type
         $rules = $isMobile
-            ? ($isEmail
-                ? ['email' => 'required|email', 'password' => 'required', 'email_or_phone' => 'required']
-                : ['phone_number' => 'required|numeric', 'country_code' => 'required|string', 'password' => 'required', 'email_or_phone' => 'required'])
-            : ($isEmail
-                ? ['login_email' => 'required|email', 'login_password' => 'required', 'email_or_phone' => 'required|in:email']
-                : ['login_phone_number' => 'required|numeric', 'country_code' => 'required|string', 'login_password' => 'required', 'email_or_phone' => 'required|in:phone']);
+        ? ($isEmail
+            ? ['email' => 'required|email', 'password' => 'required', 'email_or_phone' => 'required']
+            : ['phone_number' => 'required|numeric', 'country_code' => 'required|string', 'password' => 'required', 'email_or_phone' => 'required'])
+        : ($isEmail
+            ? ['login_email' => 'required|email', 'login_password' => 'required', 'email_or_phone' => 'required|in:email']
+            : ['login_phone_number' => 'required|numeric', 'country_code' => 'required|string', 'login_password' => 'required', 'email_or_phone' => 'required|in:phone']);
 
         // Custom error messages for web requests
         $messages = $isMobile ? [] : [
-            'login_phone_number.required' => 'The phone number is required.',
-            'login_password.required' => 'The password is required.',
-            'country_code.required' => 'The country code is required.',
-            'email_or_phone.required' => 'The email or phone is required.',
+            'login_phone_number.required'   => 'The phone number is required.',
+            'login_password.required'       => 'The password is required.',
+            'country_code.required'         => 'The country code is required.',
+            'email_or_phone.required'       => 'The email or phone is required.',
             'email_or_phone.email_or_phone' => 'Please enter a valid email or phone number.',
-            'login_email.required' => 'The email field is required.',
+            'login_email.required'          => 'The email field is required.',
         ];
 
         // Validate the request
@@ -334,56 +325,55 @@ class JobSeekerController extends Controller
 
         if ($validator->fails()) {
             return $isMobile
-                ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator)->withInput();
+            ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
+            : redirect()->back()->withErrors($validator)->withInput();
         }
 
         // Determine the credentials based on the input type
         $credentials = $isEmail
-            ? [
-                'emailAddress' => $isMobile ? $request->email : $request->login_email,
-                'password' => $isMobile ? $request->password : $request->login_password,
-            ]
-            : [
-                'phoneNumber' => $this->formatPhoneNumber(
-                    $isMobile ? $request->phone_number : $request->login_phone_number,
-                    $request->country_code
-                ),
-                'password' => $isMobile ? $request->password : $request->login_password,
-            ];
+        ? [
+            'emailAddress' => $isMobile ? $request->email : $request->login_email,
+            'password'     => $isMobile ? $request->password : $request->login_password,
+        ]
+        : [
+            'phoneNumber' => $this->formatPhoneNumber(
+                $isMobile ? $request->phone_number : $request->login_phone_number,
+                $request->country_code
+            ),
+            'password'    => $isMobile ? $request->password : $request->login_password,
+        ];
 
         // Validate phone number format
-        if (!$isEmail && (!isset($credentials['phoneNumber']) || empty($credentials['phoneNumber']))) {
+        if (! $isEmail && (! isset($credentials['phoneNumber']) || empty($credentials['phoneNumber']))) {
             return $isMobile
-                ? $this->responseError('Invalid phone number format.', 422)
-                : back()->withErrors(['email_or_phone' => 'Invalid phone number format.'])->withInput();
+            ? $this->responseError('Invalid phone number format.', 422)
+            : back()->withErrors(['email_or_phone' => 'Invalid phone number format.'])->withInput();
         }
 
         // Validate email format
-        if ($isEmail && (!isset($credentials['emailAddress']) || empty($credentials['emailAddress']))) {
+        if ($isEmail && (! isset($credentials['emailAddress']) || empty($credentials['emailAddress']))) {
             return $isMobile
-                ? $this->responseError('Invalid email format.', 422)
-                : back()->withErrors(['email_or_phone' => 'Invalid email format.'])->withInput();
+            ? $this->responseError('Invalid email format.', 422)
+            : back()->withErrors(['email_or_phone' => 'Invalid email format.'])->withInput();
         }
 
         // Fetch user based on credentials
         $user = $isEmail
-            ? JobSeeker::where('emailAddress', $credentials['emailAddress'])->first()
-            : JobSeeker::where('phoneNumber', $credentials['phoneNumber'])->first();
+        ? JobSeeker::where('emailAddress', $credentials['emailAddress'])->first()
+        : JobSeeker::where('phoneNumber', $credentials['phoneNumber'])->first();
 
         // Validate user and password
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             if ($isEmail) {
                 return $isMobile
-                    ? $this->responseError('Invalid credentials.', 401)
-                    : redirect()->back()->withErrors(['login_email' => 'Invalid email or password.'])->withInput();
+                ? $this->responseError('Invalid credentials.', 401)
+                : redirect()->back()->withErrors(['login_email' => 'Invalid email or password.'])->withInput();
             } else {
                 return $isMobile
-                    ? $this->responseError('Invalid credentials.', 401)
-                    : redirect()->back()->withErrors(['login_phone_number' => 'Invalid phone number or password.'])->withInput();
+                ? $this->responseError('Invalid credentials.', 401)
+                : redirect()->back()->withErrors(['login_phone_number' => 'Invalid phone number or password.'])->withInput();
             }
         }
-
 
         // Handle authentication based on request type
         if ($isMobile) {
@@ -401,14 +391,14 @@ class JobSeekerController extends Controller
         // Check OTP verification
         if ($user->otpVerified != 1) {
             return $isMobile
-                ? $this->responseSuccess('OTP is not verified. Please verify your OTP.', ['jobSeeker' => array_merge($user->toArray(), ['token' => $token ?? null])])
-                : redirect()->route('jobseeker.otp_page')->with('info', 'OTP is not verified. Please verify your OTP.');
+            ? $this->responseSuccess('OTP is not verified. Please verify your OTP.', ['jobSeeker' => array_merge($user->toArray(), ['token' => $token ?? null])])
+            : redirect()->route('jobseeker.otp_page')->with('info', 'OTP is not verified. Please verify your OTP.');
         }
 
         // Return success response
         return $isMobile
-            ? $this->responseSuccess('Login successful.', ['jobSeeker' => array_merge($user->toArray(), ['token' => $token ?? null])])
-            : redirect($request->session()->pull('redirect_url', route('index')))->with('success', 'You have successfully logged in.');
+        ? $this->responseSuccess('Login successful.', ['jobSeeker' => array_merge($user->toArray(), ['token' => $token ?? null])])
+        : redirect($request->session()->pull('redirect_url', route('index')))->with('success', 'You have successfully logged in.');
     }
     private function formatPhoneNumber($phoneNumber, $countryCode)
     {
@@ -416,8 +406,8 @@ class JobSeekerController extends Controller
         try {
             $parsedNumber = $phoneUtil->parse($phoneNumber, strtoupper($countryCode));
             return $phoneUtil->isValidNumber($parsedNumber)
-                ? $phoneUtil->format($parsedNumber, \libphonenumber\PhoneNumberFormat::E164)
-                : null;
+            ? $phoneUtil->format($parsedNumber, \libphonenumber\PhoneNumberFormat::E164)
+            : null;
         } catch (NumberParseException $e) {
             return null;
         }
@@ -429,8 +419,8 @@ class JobSeekerController extends Controller
 
         // Determine the user based on the platform (web or mobile)
         $user = $isMobile
-            ? $request->user() // Sanctum token authentication
-            : Auth::guard('job_seekers')->user(); // Web authentication
+        ? $request->user()                    // Sanctum token authentication
+        : Auth::guard('job_seekers')->user(); // Web authentication
 
         if ($user) {
             if ($isMobile) {
@@ -446,18 +436,18 @@ class JobSeekerController extends Controller
             }
         } else {
             return $isMobile
-                ? $this->responseError('User not found or unauthorized. Please log in.', 401)
+            ? $this->responseError('User not found or unauthorized. Please log in.', 401)
 
-                : redirect()->back()->with('error', 'User not found or unauthorized. Please log in.');
+            : redirect()->back()->with('error', 'User not found or unauthorized. Please log in.');
         }
     }
     public function resendOtp(Request $request)
     {
         // Determine the user type based on the request (mobile or job seekers)
         $isMobile = $request->has('request_type') && $request->request_type === 'mobile';
-        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+        $user     = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         // If user is not authenticated, return an error response
-        if (!$user) {
+        if (! $user) {
             return $this->responseError(
                 'User not found or unauthorized. Please log in.',
                 401
@@ -468,17 +458,16 @@ class JobSeekerController extends Controller
         try {
             // Check if the OTP expiry exists and is not expired
             if ($user->otpExpiry == null || Carbon::now()->greaterThan($user->otpExpiry)) {
-                // Generate a new OTP and expiry time (1 minute)
-                $otp = rand(1000, 9999);  // Random 4-digit OTP
+                                               // Generate a new OTP and expiry time (1 minute)
+                $otp       = rand(1000, 9999); // Random 4-digit OTP
                 $otpExpiry = Carbon::now()->addMinutes(1);
 
                 // Update the user's OTP and expiry time in the database
                 $user->update([
-                    'otp' => $otp,
-                    'otpExpiry' => $otpExpiry,
+                    'otp'         => $otp,
+                    'otpExpiry'   => $otpExpiry,
                     'otpVerified' => false,
                 ]);
-
 
                 // Send OTP via the selected method
                 if ($email_or_phone === 'email') {
@@ -487,9 +476,7 @@ class JobSeekerController extends Controller
                     $this->sendOTPViaSMS($user, $otp);
                 }
 
-
                 $successMessage = 'OTP resent successfully. Please check your ' . $user->email_or_phone . ' or request a new OTP.';
-
 
                 // Return response based on request type
                 if ($isMobile) {
@@ -537,15 +524,15 @@ class JobSeekerController extends Controller
 
         if ($isMobile) {
             $rules = $isEmail
-                ? ['email' => 'required|email', 'email_or_phone' => 'required|in:email']
-                : [
-                    'country_code' => 'required|string',
-                    'phone_number' => 'required|numeric',
-                    'email_or_phone' => 'required|in:phone',
-                ];
+            ? ['email' => 'required|email', 'email_or_phone' => 'required|in:email']
+            : [
+                'country_code'   => 'required|string',
+                'phone_number'   => 'required|numeric',
+                'email_or_phone' => 'required|in:phone',
+            ];
 
             $messages = [
-                'email.required' => 'The email field is required.',
+                'email.required'        => 'The email field is required.',
                 'country_code.required' => 'The country code is required.',
                 'phone_number.required' => 'The phone number is required.',
             ];
@@ -553,49 +540,49 @@ class JobSeekerController extends Controller
             $validator = Validator::make($request->all(), $rules, $messages);
             if ($validator->fails()) {
                 return $isMobile
-                    ? $this->responseError('Validation failed.', 422, $validator->errors())
-                    : redirect()->back()->withErrors($validator->errors());
+                ? $this->responseError('Validation failed.', 422, $validator->errors())
+                : redirect()->back()->withErrors($validator->errors());
             }
         }
 
         try {
             if ($isEmail) {
                 $email = $isMobile ? $request->input('email') : session('email');
-                $user = JobSeeker::where('emailAddress', $email)->first();
+                $user  = JobSeeker::where('emailAddress', $email)->first();
             } else {
                 $phoneNumber = $isMobile ? $request->input('phone_number') : session('phone_number');
                 $countryCode = $isMobile ? $request->input('country_code') : session('country_code');
 
                 $formattedPhoneNumber = $this->formatPhoneNumber($phoneNumber, $countryCode);
-                if (!$formattedPhoneNumber) {
+                if (! $formattedPhoneNumber) {
                     return $isMobile
-                        ? $this->responseError('Invalid phone number format.', 422)
-                        : redirect()->back()->withErrors(['phone_number' => 'Invalid phone number format.'])->withInput();
+                    ? $this->responseError('Invalid phone number format.', 422)
+                    : redirect()->back()->withErrors(['phone_number' => 'Invalid phone number format.'])->withInput();
                 }
 
                 $user = JobSeeker::where('phoneNumber', $formattedPhoneNumber)->first();
             }
 
-            if (!$user) {
+            if (! $user) {
                 return $isMobile
-                    ? $this->responseError('User not found.', 404)
-                    : redirect()->back()->with('error', 'User not found.');
+                ? $this->responseError('User not found.', 404)
+                : redirect()->back()->with('error', 'User not found.');
             }
 
             if ($user->otpExpiry && Carbon::now()->lessThan($user->otpExpiry)) {
                 return $isMobile
-                    ? $this->responseError('OTP already sent. Please wait before requesting again.', 400)
-                    : redirect()->back()->with('error', 'OTP already sent.');
+                ? $this->responseError('OTP already sent. Please wait before requesting again.', 400)
+                : redirect()->back()->with('error', 'OTP already sent.');
             }
 
             // Generate OTP
-            $otp = random_int(1000, 9999);
+            $otp       = random_int(1000, 9999);
             $otpExpiry = Carbon::now()->addMinutes(1);
 
             // Update user OTP
             $user->update([
-                'otp' => $otp,
-                'otpExpiry' => $otpExpiry,
+                'otp'         => $otp,
+                'otpExpiry'   => $otpExpiry,
                 'otpVerified' => false,
             ]);
 
@@ -607,32 +594,26 @@ class JobSeekerController extends Controller
             }
 
             return $isMobile
-                ? $this->responseSuccess('OTP resent successfully.', ['user' => $user], 200)
-                : redirect()->back()->with('success', 'OTP resent successfully.');
+            ? $this->responseSuccess('OTP resent successfully.', ['user' => $user], 200)
+            : redirect()->back()->with('success', 'OTP resent successfully.');
         } catch (\Exception $e) {
             Log::error('Error resending OTP: ' . $e->getMessage(), ['request' => $request->all()]);
 
             return $isMobile
-                ? $this->responseError('An error occurred.', 500)
-                : redirect()->back()->with('error', 'An error occurred.');
+            ? $this->responseError('An error occurred.', 500)
+            : redirect()->back()->with('error', 'An error occurred.');
         }
     }
-
-
 
     public function forgotPassword()
     {
         return view('auth.forgot-password');
     }
 
-
     public function verifyPhonePage()
     {
         return view('frontend.auth.forgot-password');
     }
-
-
-
 
     public function verifyPhone(Request $request)
     {
@@ -640,35 +621,34 @@ class JobSeekerController extends Controller
 
         // Determine request type (API or Web)
 
-        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $isMobile       = $request->has('request_type') && $request->input('request_type') === 'mobile';
         $email_or_phone = $request->input('email_or_phone') === 'phone' ? 'phone' : 'email';
 
-
         // Validation Rules & Messages
-        $rules = [];
+        $rules    = [];
         $messages = [];
 
         if ($email_or_phone == 'phone') {
             $isMobile ?
-                $rules = [
-                    'phone_number' => 'required|numeric',
-                    'country_code' => 'required|string|max:3',
-                    'email_or_phone' => 'required|in:phone',
-                ] : $rules = [
-                    'forgot_phone_number' => 'required|numeric',
-                    'country_code' => 'required|string|max:3',
+            $rules = [
+                'phone_number'   => 'required|numeric',
+                'country_code'   => 'required|string|max:3',
+                'email_or_phone' => 'required|in:phone',
+            ] : $rules = [
+                'forgot_phone_number' => 'required|numeric',
+                'country_code'        => 'required|string|max:3',
 
-                ];
+            ];
             $messages = [
                 'forgot_phone_number.required' => 'The phone number is required.',
-                'country_code.required' => 'The country code is required.',
+                'country_code.required'        => 'The country code is required.',
             ];
         } else {
             $isMobile ? $rules = ['email' => 'required|email', 'email_or_phone' => 'required|in:email'] : $rules = ['forgot_email' => 'required|email'];
 
             $messages = [
-                'email.required' => 'The email field is required.',
-                'forgot_email.required' => 'The email field is required.',
+                'email.required'            => 'The email field is required.',
+                'forgot_email.required'     => 'The email field is required.',
                 'forgot_email.forgot_email' => 'Please enter a valid email address.',
             ];
         }
@@ -678,8 +658,8 @@ class JobSeekerController extends Controller
 
         if ($validator->fails()) {
             return $isMobile
-                ? response()->json(['error' => 'Validation failed', 'messages' => $validator->errors()], 422)
-                : redirect()->back()->withErrors($validator->errors());
+            ? response()->json(['error' => 'Validation failed', 'messages' => $validator->errors()], 422)
+            : redirect()->back()->withErrors($validator->errors());
         }
 
         // Process Phone Verification
@@ -687,33 +667,33 @@ class JobSeekerController extends Controller
             $phoneUtil = PhoneNumberUtil::getInstance();
             try {
                 $isMobile ?
-                    $formattedPhoneNumber = $phoneUtil->format(
-                        $phoneUtil->parse($request->input('phone_number'), strtoupper($request->input('country_code'))),
-                        \libphonenumber\PhoneNumberFormat::E164
-                    )
-                    : $formattedPhoneNumber = $phoneUtil->format(
-                        $phoneUtil->parse($request->input('forgot_phone_number'), strtoupper($request->input('country_code'))),
-                        \libphonenumber\PhoneNumberFormat::E164
-                    );
+                $formattedPhoneNumber = $phoneUtil->format(
+                    $phoneUtil->parse($request->input('phone_number'), strtoupper($request->input('country_code'))),
+                    \libphonenumber\PhoneNumberFormat::E164
+                )
+                : $formattedPhoneNumber = $phoneUtil->format(
+                    $phoneUtil->parse($request->input('forgot_phone_number'), strtoupper($request->input('country_code'))),
+                    \libphonenumber\PhoneNumberFormat::E164
+                );
             } catch (\libphonenumber\NumberParseException $e) {
                 return $isMobile
-                    ? response()->json(['error' => 'Invalid phone number format.'], 422)
-                    : redirect()->back()->with('error', 'Invalid phone number format.');
+                ? response()->json(['error' => 'Invalid phone number format.'], 422)
+                : redirect()->back()->with('error', 'Invalid phone number format.');
             }
 
             // Check if Phone Exists
             $user = JobSeeker::where('phoneNumber', $formattedPhoneNumber)->first();
 
-            if (!$user) {
+            if (! $user) {
                 $message = 'User phone not found. Please register first.';
                 return $isMobile
-                    ? response()->json(['error' => $message], 404)
-                    : redirect()->back()->with('error', $message);
+                ? response()->json(['error' => $message], 404)
+                : redirect()->back()->with('error', $message);
             }
 
             // Generate OTP
-            $otp = rand(1000, 9999);
-            $user->otp = $otp;
+            $otp             = rand(1000, 9999);
+            $user->otp       = $otp;
             $user->otpExpiry = now()->addMinutes(1);
             $user->save();
 
@@ -721,91 +701,87 @@ class JobSeekerController extends Controller
             $this->sendOTPViaSMS($user, $otp);
 
             session([
-                'phone_number' => $formattedPhoneNumber,
+                'phone_number'   => $formattedPhoneNumber,
                 'email_or_phone' => $email_or_phone,
-                'country_code' => $request->input('country_code'),
+                'country_code'   => $request->input('country_code'),
             ]);
 
-
             return $isMobile
-                ? response()->json(['message' => 'Phone Number Verified and OTP sent to your phone.', 'phone_number' => $formattedPhoneNumber, 'otp' => $otp], 200)
-                : redirect()->route('jobseeker.verify-otp-page')->with('success', 'Phone Number Verified and OTP sent to your phone.');
+            ? response()->json(['message' => 'Phone Number Verified and OTP sent to your phone.', 'phone_number' => $formattedPhoneNumber, 'otp' => $otp], 200)
+            : redirect()->route('jobseeker.verify-otp-page')->with('success', 'Phone Number Verified and OTP sent to your phone.');
         }
 
         // Process Email Verification
         if ($email_or_phone == 'email') {
             $isMobile ? $user = JobSeeker::where('emailAddress', $request->input('email'))->first() : $user = JobSeeker::where('emailAddress', $request->input('forgot_email'))->first();
 
-            if (!$user) {
+            if (! $user) {
                 $message = 'User email not found. Please register first.';
                 return $isMobile
-                    ? response()->json(['error' => $message], 404)
-                    : redirect()->back()->with('error', $message);
+                ? response()->json(['error' => $message], 404)
+                : redirect()->back()->with('error', $message);
             }
 
             // Generate OTP for Email (You can use Laravel Notification here)
-            $otp = rand(1000, 9999);
-            $user->otp = $otp;
+            $otp             = rand(1000, 9999);
+            $user->otp       = $otp;
             $user->otpExpiry = now()->addMinutes(1);
             $user->save();
 
             // Send OTP via Email (Implement Email Service Here)
             Mail::to($user->emailAddress)->send(new OTPMail($user, $otp));
             session([
-                'email' => $user->emailAddress, // Fixing the property name
-                'email_or_phone' => $email_or_phone
+                'email'          => $user->emailAddress, // Fixing the property name
+                'email_or_phone' => $email_or_phone,
             ]);
 
             return $isMobile
-                ? response()->json(['message' => 'Email Verified and OTP sent to your email.', 'email' => $user->emailAddress, 'otp' => $otp], 200)
-                : redirect()->route('jobseeker.verify-otp-page')->with('success', 'Email Verified and OTP sent to your email.');
+            ? response()->json(['message' => 'Email Verified and OTP sent to your email.', 'email' => $user->emailAddress, 'otp' => $otp], 200)
+            : redirect()->route('jobseeker.verify-otp-page')->with('success', 'Email Verified and OTP sent to your email.');
         }
     }
 
     public function verifyOtp(Request $request)
     {
-        $isMobile = $request->input('request_type') === 'mobile';
+        $isMobile       = $request->input('request_type') === 'mobile';
         $email_or_phone = $isMobile ? $request->input('email_or_phone') : session('email_or_phone');
 
-
         // Validation Rules & Messages
-        $rules = [];
+        $rules    = [];
         $messages = [];
-
 
         if ($email_or_phone === 'phone') {
             // Validation for Phone-Based OTP Verification
 
             $isMobile ?
-                $rules = [
-                    'country_code' => 'required|string|max:3',
-                    'phone_number' => 'required|numeric|digits:10',
-                    'otp' => 'required|min:4|numeric',
-                    'email_or_phone' => 'required|in:phone',
-                ] : $rules = [
+            $rules = [
+                'country_code'   => 'required|string|max:3',
+                'phone_number'   => 'required|numeric|digits:10',
+                'otp'            => 'required|min:4|numeric',
+                'email_or_phone' => 'required|in:phone',
+            ] : $rules = [
 
-                    'otp' => 'required|min:4|numeric',
-                ];
-
+                'otp' => 'required|min:4|numeric',
+            ];
 
             $messages = [
                 'country_code.required' => 'The country code is required.',
                 'phone_number.required' => 'The phone number is required.',
-                'otp.required' => 'The OTP is required.',
+                'otp.required'          => 'The OTP is required.',
             ];
         } else {
             $isMobile ?
-                $rules = [
-                    'email' => 'required|email',
-                    'otp' => 'required|min:4|numeric',
-                    'email_or_phone' => 'required|in:email',
-                ] :  $rules = [
-                    'otp' => 'required|min:4|numeric',
-                ];
+            $rules = [
+                'email'          => 'required|email',
+                'otp'            => 'required|min:4|numeric',
+                'email_or_phone' => 'required|in:email',
+            ] : $rules = [
+                'otp' => 'required|min:4|numeric',
+            ];
 
             $messages = [
                 'email.required' => 'The email field is required.',
-                'otp.required' => 'The OTP is required.',
+                'otp.required'   => 'The OTP is required.',
             ];
         }
 
@@ -813,8 +789,8 @@ class JobSeekerController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return $isMobile
-                ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator->errors());
+            ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
+            : redirect()->back()->withErrors($validator->errors());
         }
 
         // Handle Phone-Based OTP Verification
@@ -836,19 +812,17 @@ class JobSeekerController extends Controller
                 }
             } catch (\libphonenumber\NumberParseException $e) {
                 return $isMobile
-                    ? response()->json(['error' => 'Invalid phone number format.'], 422)
-                    : redirect()->back()->with('error', 'Invalid phone number format.');
+                ? response()->json(['error' => 'Invalid phone number format.'], 422)
+                : redirect()->back()->with('error', 'Invalid phone number format.');
             }
-
-
 
             // Retrieve phone number (Session for Web, Request for Mobile)
             $phoneNumber = $isMobile ? $request->input('phone_number') : session('phone_number');
-            if (!$phoneNumber) {
+            if (! $phoneNumber) {
                 $message = 'Session expired. Please verify your phone number again.';
                 return $isMobile
-                    ? $this->responseError($message, 400)
-                    : redirect()->back()->with('error', $message);
+                ? $this->responseError($message, 400)
+                : redirect()->back()->with('error', $message);
             }
 
             // Fetch User Based on Phone Number
@@ -856,22 +830,22 @@ class JobSeekerController extends Controller
         } else {
             // Retrieve Email (Session for Web, Request for Mobile)
             $email = $isMobile ? $request->input('email') : session('email');
-            if (!$email) {
+            if (! $email) {
                 $message = 'Session expired. Please verify your email again.';
                 return $isMobile
-                    ? $this->responseError($message, 400)
-                    : redirect()->back()->with('error', $message);
+                ? $this->responseError($message, 400)
+                : redirect()->back()->with('error', $message);
             }
 
             // Fetch User Based on Email
             $user = JobSeeker::where('emailAddress', $email)->first();
         }
 
-        if (!$user) {
+        if (! $user) {
             $message = 'User not found. Please register first.';
             return $isMobile
-                ? $this->responseError($message, 404)
-                : redirect()->back()->with('error', $message);
+            ? $this->responseError($message, 404)
+            : redirect()->back()->with('error', $message);
         }
 
         // Validate OTP and Expiry
@@ -879,34 +853,33 @@ class JobSeekerController extends Controller
         if ($user->otp != $request->input('otp') || $user->otpExpiry < Carbon::now()) {
             $message = 'Invalid or expired OTP. Please try again.';
             return $isMobile
-                ? $this->responseError($message, 401)
-                : redirect()->back()->with('error', $message);
+            ? $this->responseError($message, 401)
+            : redirect()->back()->with('error', $message);
         }
 
         // Update User Data (Clear OTP and Mark as Verified)
         $user->update([
-            'otp' => null,
-            'otpExpiry' => null,
-            'otpVerified' => true
+            'otp'         => null,
+            'otpExpiry'   => null,
+            'otpVerified' => true,
         ]);
 
         // Success Response
         $successMessage = 'OTP verified successfully. You can now reset your password.';
         if ($email_or_phone === 'email') {
             return $isMobile
-                ? $this->responseSuccess($successMessage, [
-                    'email' => $user->emailAddress ?? null,
-                ])
-                : redirect()->route('jobseeker.password_reset_page')->with('success', $successMessage);
+            ? $this->responseSuccess($successMessage, [
+                'email' => $user->emailAddress ?? null,
+            ])
+            : redirect()->route('jobseeker.password_reset_page')->with('success', $successMessage);
         } else {
             return $isMobile
-                ? $this->responseSuccess($successMessage, [
-                    'formatted_phone_number' => $formattedPhoneNumber ?? null,
-                ])
-                : redirect()->route('jobseeker.password_reset_page')->with('success', $successMessage);
+            ? $this->responseSuccess($successMessage, [
+                'formatted_phone_number' => $formattedPhoneNumber ?? null,
+            ])
+            : redirect()->route('jobseeker.password_reset_page')->with('success', $successMessage);
         }
     }
-
 
     /*************  ✨ Codeium Command ⭐  *************/
     /**
@@ -922,12 +895,9 @@ class JobSeekerController extends Controller
         return view('frontend.auth.password_reset');
     }
 
-
     public function resetPassword(Request $request)
     {
         $isMobile = $request->input('request_type') === 'mobile';
-
-
 
         $email_or_phone = $request->input('email_or_phone') === 'phone' ? 'phone' : 'email';
         if ($email_or_phone == 'email') {
@@ -938,56 +908,54 @@ class JobSeekerController extends Controller
 
         if ($isMobile) {
             $rules = $isEmail
-                ? ['email' => 'required|email', 'new_password' => 'required|min:6', 'password_confirmation' => 'required|same:new_password', 'email_or_phone' => 'required|in:email']
-                : ['phone_number' => 'required|numeric', 'country_code' => 'required|string', 'new_password' => 'required|min:6', 'password_confirmation' => 'required|same:new_password', 'email_or_phone' => 'required|in:phone'];
+            ? ['email' => 'required|email', 'new_password' => 'required|min:6', 'password_confirmation' => 'required|same:new_password', 'email_or_phone' => 'required|in:email']
+            : ['phone_number' => 'required|numeric', 'country_code' => 'required|string', 'new_password' => 'required|min:6', 'password_confirmation' => 'required|same:new_password', 'email_or_phone' => 'required|in:phone'];
         } else {
             $rules = $isEmail
-                ? ['new_password' => 'required|min:6', 'confirmation_password' => 'required|same:new_password']
-                : ['new_password' => 'required|min:6', 'confirmation_password' => 'required|same:new_password'];
+            ? ['new_password' => 'required|min:6', 'confirmation_password' => 'required|same:new_password']
+            : ['new_password' => 'required|min:6', 'confirmation_password' => 'required|same:new_password'];
         }
         $messages = [
-            'new_password.required' => 'The new password field is required.',
+            'new_password.required'          => 'The new password field is required.',
             'confirmation_password.required' => 'The confirmation password field is required.',
-            'confirmation_password.same' => 'The confirmation password and password must match.',
+            'confirmation_password.same'     => 'The confirmation password and password must match.',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return $isMobile
-                ? $this->responseError('Validation failed.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator->errors())->withInput();
+            ? $this->responseError('Validation failed.', 422, $validator->errors())
+            : redirect()->back()->withErrors($validator->errors())->withInput();
         }
-
-
 
         try {
             if ($isEmail) {
                 $email = $isMobile ? $request->input('email') : session('email');
-                $user = JobSeeker::where('emailAddress', $email)->first();
+                $user  = JobSeeker::where('emailAddress', $email)->first();
             } else {
                 $phoneNumber = $isMobile ? $request->input('phone_number') : session('phone_number');
                 $countryCode = $isMobile ? $request->input('country_code') : session('country_code');
 
                 $formattedPhoneNumber = $this->formatPhoneNumber($phoneNumber, $countryCode);
-                if (!$formattedPhoneNumber) {
+                if (! $formattedPhoneNumber) {
                     return $isMobile
-                        ? $this->responseError('Invalid phone number format.', 422)
-                        : redirect()->back()->withErrors(['phone_number' => 'Invalid phone number format.'])->withInput();
+                    ? $this->responseError('Invalid phone number format.', 422)
+                    : redirect()->back()->withErrors(['phone_number' => 'Invalid phone number format.'])->withInput();
                 }
 
                 $user = JobSeeker::where('phoneNumber', $formattedPhoneNumber)->first();
             }
 
-            if (!$user) {
+            if (! $user) {
                 return $isMobile
-                    ? $this->responseError('User not found.', 404)
-                    : redirect()->back()->with('error', 'User not found.');
+                ? $this->responseError('User not found.', 404)
+                : redirect()->back()->with('error', 'User not found.');
             }
 
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
 
-            if (!$isMobile) {
+            if (! $isMobile) {
                 session()->forget('email_or_phone');
                 session()->forget('email');
                 session()->forget('phone_number');
@@ -995,18 +963,16 @@ class JobSeekerController extends Controller
             }
 
             return $isMobile
-                ? $this->responseSuccess('Password reset successfully.', ['user' => $user], 200)
-                : redirect()->route('index')->with('success', 'Password reset successfully. Please login.');
+            ? $this->responseSuccess('Password reset successfully.', ['user' => $user], 200)
+            : redirect()->route('index')->with('success', 'Password reset successfully. Please login.');
         } catch (\Exception $e) {
             Log::error('Error resetting password: ' . $e->getMessage(), ['request' => $request->all()]);
 
             return $isMobile
-                ? $this->responseError('An error occurred.', 500)
-                : redirect()->back()->with('error', 'An error occurred.');
+            ? $this->responseError('An error occurred.', 500)
+            : redirect()->back()->with('error', 'An error occurred.');
         }
     }
-
-
 
     public function changePassword()
     {
@@ -1017,15 +983,14 @@ class JobSeekerController extends Controller
     {
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
-
         // Validation rules
         $rules = $isMobile ? [
-            'current_password' => 'required|string|min:6',
-            'new_password' => 'required|string|min:6',
+            'current_password'      => 'required|string|min:6',
+            'new_password'          => 'required|string|min:6',
             'password_confirmation' => 'required',
         ] : [
-            'current_password' => 'required|string|min:6',
-            'new_password' => 'required|string|min:6',
+            'current_password'      => 'required|string|min:6',
+            'new_password'          => 'required|string|min:6',
             'confirmation_password' => 'required|same:new_password',
         ];
 
@@ -1047,7 +1012,7 @@ class JobSeekerController extends Controller
         }
 
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-        if (!$user) {
+        if (! $user) {
             if ($isMobile) {
                 return $this->responseError('User not found.', 404);
             }
@@ -1055,7 +1020,7 @@ class JobSeekerController extends Controller
             return redirect()->back()->with('error', 'User not found.');
         }
 
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (! Hash::check($request->current_password, $user->password)) {
             if ($isMobile) {
                 return $this->responseError('Current password is incorrect.', 401);
             }
@@ -1078,7 +1043,7 @@ class JobSeekerController extends Controller
     public function deactivate(Request $request)
     {
 
-        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $isMobile  = $request->has('request_type') && $request->input('request_type') === 'mobile';
         $validator = Validator::make($request->all(), [
             'password' => 'required|min:6',
         ]);
@@ -1095,14 +1060,14 @@ class JobSeekerController extends Controller
         }
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
 
-        if (!$user) {
+        if (! $user) {
             if ($isMobile) {
                 return $this->responseError('User not found.', 404);
             }
             return redirect()->back()->with('error', 'User not found.');
         }
 
-        if (!Hash::check($request->password, $user->password)) {
+        if (! Hash::check($request->password, $user->password)) {
             if ($isMobile) {
                 return $this->responseError('Password is incorrect.', 401);
             }
@@ -1145,7 +1110,7 @@ class JobSeekerController extends Controller
 
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
 
-        if (!$user) {
+        if (! $user) {
             if ($isMobile) {
                 return $this->responseError('User not found.', 404);
             }
@@ -1153,7 +1118,7 @@ class JobSeekerController extends Controller
             return redirect()->back()->with('error', 'User not found.');
         }
 
-        if (!Hash::check($request->password, $user->password)) {
+        if (! Hash::check($request->password, $user->password)) {
             if ($isMobile) {
                 return $this->responseError('Password is incorrect.', 401);
             }
@@ -1175,9 +1140,9 @@ class JobSeekerController extends Controller
     private function responseSuccess(string $message = null, $data = [], int $status = 200)
     {
         return response()->json([
-            'status' => 'true',
+            'status'  => 'true',
             'message' => $message,
-            'data' => $data,
+            'data'    => $data,
         ], $status);
     }
 
@@ -1187,7 +1152,7 @@ class JobSeekerController extends Controller
     private function responseError(string $message, int $status = 400, $data = null)
     {
         $response = [
-            'status' => 'false',
+            'status'  => 'false',
             'message' => $message,
         ];
 
@@ -1207,7 +1172,7 @@ class JobSeekerController extends Controller
         // Determine authenticated user based on request type
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         // Ensure user is authenticated and matches the requested profile
-        if (!$user || $user->id != $id) {
+        if (! $user || $user->id != $id) {
             if ($isMobile) {
                 return response()->json([
                     'success' => false,
@@ -1221,19 +1186,19 @@ class JobSeekerController extends Controller
         // API response for mobile clients
         if ($isMobile) {
             return response()->json([
-                'status' => true,
+                'status'  => true,
                 'message' => 'Profile fetched successfully.',
-                'data' => [
+                'data'    => [
                     'information' => [
-                        'id_no' => $user->id,
-                        'name' => $user->firstName . ' ' . $user->lastName,
-                        'profession' => $user->profession,
-                        'location' => $user->permanentLocation,
+                        'id_no'         => $user->id,
+                        'name'          => $user->firstName . ' ' . $user->lastName,
+                        'profession'    => $user->profession,
+                        'location'      => $user->permanentLocation,
                         'referral_code' => $user->referralCode,
                     ],
-                    'download' => [
+                    'download'    => [
                         'photo_url' => $user->userThumbnail ? asset('storage/' . $user->userThumbnail[0]) : null,
-                    ]
+                    ],
                 ], // Returning user profile as JSON
             ]);
         }
@@ -1249,7 +1214,7 @@ class JobSeekerController extends Controller
         // Determine authenticated user based on request type
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         // Ensure user is authenticated and matches the requested profile
-        if (!$user || $user->id != $id) {
+        if (! $user || $user->id != $id) {
             if ($isMobile) {
                 return response()->json([
                     'success' => false,
@@ -1279,7 +1244,7 @@ class JobSeekerController extends Controller
         // Determine authenticated user based on request type
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         // Ensure user is authenticated and matches the requested profile
-        if (!$user || $user->id != $id) {
+        if (! $user || $user->id != $id) {
             if ($isMobile) {
                 return response()->json([
                     'success' => false,
@@ -1309,8 +1274,8 @@ class JobSeekerController extends Controller
             // }, $imagePaths);
 
             return response()->json([
-                'status' => true,
-                'user' => $user,
+                'status'      => true,
+                'user'        => $user,
                 'image_links' => $imageLinks,
             ]);
         }
@@ -1326,7 +1291,7 @@ class JobSeekerController extends Controller
         // Determine authenticated user based on request type
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         // Ensure user is authenticated and matches the requested profile
-        if (!$user) {
+        if (! $user) {
             if ($isMobile) {
                 return response()->json([
                     'success' => false,
@@ -1355,8 +1320,8 @@ class JobSeekerController extends Controller
         // API response for mobile clients
         if ($isMobile) {
             return response()->json([
-                'status' => true,
-                'message' => "Profile Picture changed Successfully!"
+                'status'  => true,
+                'message' => "Profile Picture changed Successfully!",
 
             ]);
         }
@@ -1372,7 +1337,7 @@ class JobSeekerController extends Controller
         // Determine authenticated user based on request type
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         // Ensure user is authenticated and matches the requested profile
-        if (!$user) {
+        if (! $user) {
             if ($isMobile) {
                 return response()->json([
                     'success' => false,
@@ -1400,8 +1365,8 @@ class JobSeekerController extends Controller
         // API response for mobile clients
         if ($isMobile) {
             return response()->json([
-                'status' => true,
-                'message' => "Successfully Deleted Image."
+                'status'  => true,
+                'message' => "Successfully Deleted Image.",
 
             ]);
         }
@@ -1410,14 +1375,14 @@ class JobSeekerController extends Controller
         return redirect()->back()->with('success', 'Successfully Deleted Image.');
     }
 
-    public function getAbroadDeals(Request $request, $id)
+    public function getAbroadDeals(Request $request)
     {
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
         // Determine authenticated user based on request type
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         // Ensure user is authenticated and matches the requested profile
-        if (!$user || $user->id != $id) {
+        if (! $user) {
             if ($isMobile) {
                 return response()->json([
                     'success' => false,
@@ -1428,26 +1393,57 @@ class JobSeekerController extends Controller
             return redirect()->route('login')->with('error', 'Please log in to access your profile.');
         }
 
-        // API response for mobile clients
-        if ($isMobile) {
-            return response()->json([
-                'status' => true,
+        try {
 
-            ]);
+            $aboards = Aboard::where('jobSeekerId', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $categories = ProductCategory::all();
+
+            if ($aboards) {
+
+                $aboards->transform(function ($abroad) {
+                    if ($abroad->productThumbnail) {
+                        $abroad->productThumbnail = asset($abroad->productThumbnail);
+                    }
+                    return $abroad;
+                });
+                return $isMobile ?
+                response()->json([
+                    'status'  => true,
+                    'message' => 'Products fetched successfully.',
+                    'data'    => $aboards,
+                ], 200) :
+                view('frontend.profile.partials.my-abroad', compact('aboards', 'categories'));
+
+            }
+            return $aboards;
+
+        } catch (\Exception $e) {
+            if ($isMobile) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => "Validation Error!",
+                    'errors'  => $e->getMessage(),
+
+                ]);
+            }
+
+            return redirect()->back()->with('error', $e->getMessage());
         }
 
-        // Web response (view rendering)
-        return view('frontend.profile.partials.my-abroad', compact('user', 'isMobile'));
     }
 
     public function getAdvertisements(Request $request, $id)
     {
-        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
-        // Determine authenticated user based on request type
+        //Check if the request is from mobile using request_type
+        $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
+
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-        // Ensure user is authenticated and matches the requested profile
-        if (!$user || $user->id != $id) {
+
+        if (! $user || $user->id != $id) {
             if ($isMobile) {
                 return response()->json([
                     'success' => false,
@@ -1458,18 +1454,43 @@ class JobSeekerController extends Controller
             return redirect()->route('login')->with('error', 'Please log in to access your profile.');
         }
 
-        // API response for mobile clients
-        if ($isMobile) {
-            return response()->json([
-                'status' => true,
+        try {
 
-            ]);
+            $ads = Advertisement::where('jobSeekerId', $user->id)->get();
+
+            $ads = $ads->transform(function ($ad) {
+                // Assuming 'image' is the field where the image filename is stored
+                $ad->image_url = $ad->adsThumbnail ? asset($ad->adsThumbnail) : null;
+
+                // Modify according to your image storage path
+                return $ad;
+            });
+            
+            $adsCategory = AdvertisementCategory::all();    
+            // return $adsCategory;
+            // return $ads;
+
+            return $isMobile ?
+            response()->json([
+                'status'  => true,
+                'message' => 'Advertisements fetched successfully.',
+                'data'    => $ads
+            ]) : view('frontend.profile.partials.advertisement', compact('ads'));
+
+        } catch (\Exception $e) {
+
+            if ($isMobile) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => "Validation Error!",
+                    'errors'  => $e->getMessage(),
+
+                ]);
+            }
+
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        // Web response (view rendering)
-        return view('frontend.profile.partials.advertisement', compact('user', 'isMobile'));
     }
-
 
     public function getCV(Request $request, $id)
     {
@@ -1478,7 +1499,7 @@ class JobSeekerController extends Controller
         // Determine authenticated user based on request type
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         // Ensure user is authenticated and matches the requested profile
-        if (!$user || $user->id != $id) {
+        if (! $user || $user->id != $id) {
             if ($isMobile) {
                 return response()->json([
                     'success' => false,
@@ -1501,27 +1522,25 @@ class JobSeekerController extends Controller
         return view('frontend.profile.partials.your-cv', compact('user', 'isMobile'));
     }
 
-
     public function updateProfile(Request $request)
     {
         // dd($request->all());
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
-
         // dd($request->all(), $request->file('images'));
 
         // Define validation rules
         $validator = Validator::make($request->all(), [
-            'fullName' => 'nullable|string',
-            'images' => 'nullable|array|max:5',
-            'images.*' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'dob' => 'nullable|date',
+            'fullName'          => 'nullable|string',
+            'images'            => 'nullable|array|max:5',
+            'images.*'          => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'dob'               => 'nullable|date',
             'temporaryLocation' => 'nullable|string|max:255',
             'permanentLocation' => 'nullable|string|max:255',
-            'gender' => 'nullable|in:male,female,other',
-            'luckyNumber' => 'nullable|numeric',
-            'whoAmI' => 'nullable|in:student,worker,consultant',
-            'profession' => 'nullable|string'
+            'gender'            => 'nullable|in:male,female,other',
+            'luckyNumber'       => 'nullable|numeric',
+            'whoAmI'            => 'nullable|in:student,worker,consultant',
+            'profession'        => 'nullable|string',
         ]);
 
         // return $request->all();
@@ -1535,17 +1554,16 @@ class JobSeekerController extends Controller
                 );
             }
 
-
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
         // Fetch the user record to update
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
 
-        if (!$user) {
+        if (! $user) {
             return $isMobile
-                ? $this->responseError('Unauthorized access.', 403)
-                : redirect()->back()->with('error', 'Unauthorized access.');
+            ? $this->responseError('Unauthorized access.', 403)
+            : redirect()->back()->with('error', 'Unauthorized access.');
         }
 
         //handle files
@@ -1565,12 +1583,12 @@ class JobSeekerController extends Controller
             }
             $imagePaths = [];
             foreach ($files as $file) {
-                $path = $file->store('jobSeekerImage', 'public');
+                $path         = $file->store('jobSeekerImage', 'public');
                 $imagePaths[] = $path;
             }
             // $user->userThumbnail[] = array_merge($user->userThumbnail, $imagePaths);
             if ($user->userThumbnail) {
-                $newArr = array_merge($user->userThumbnail, $imagePaths);
+                $newArr              = array_merge($user->userThumbnail, $imagePaths);
                 $user->userThumbnail = $newArr;
             } else {
                 $user->userThumbnail = $imagePaths;
@@ -1582,33 +1600,41 @@ class JobSeekerController extends Controller
         $parts = preg_split('/\s+/', $fullName, 2); // Split by first space
 
         $firstName = $parts[0] ?? null;
-        $lastName = $parts[1] ?? null;
+        $lastName  = $parts[1] ?? null;
         // Update fields
         if ($firstName && $lastName) {
             $user->firstName = $firstName;
-            $user->lastName = $lastName;
+            $user->lastName  = $lastName;
         }
 
-
-        if ($request->input('dob'))
+        if ($request->input('dob')) {
             $user->dateOfBirth = $request->input('dob');
+        }
 
-
-        if ($request->input('temporaryLocation'))
+        if ($request->input('temporaryLocation')) {
             $user->temporaryLocation = $request->input('temporaryLocation');
+        }
 
-        if ($request->input('permanentLocation'))
+        if ($request->input('permanentLocation')) {
             $user->permanentLocation = $request->input('permanentLocation');
+        }
 
-        if ($request->input('gender'))
+        if ($request->input('gender')) {
             $user->gender = $request->input('gender');
+        }
 
-        if ($request->input('luckyNumber'))
+        if ($request->input('luckyNumber')) {
             $user->luckyNumber = $request->input('luckyNumber');
-        if ($request->input('whoAmI'))
+        }
+
+        if ($request->input('whoAmI')) {
             $user->whoAmI = $request->input('whoAmI');
-        if ($request->input('profession'))
+        }
+
+        if ($request->input('profession')) {
             $user->profession = $request->input('profession');
+        }
+
         // Save updates
         $user->save();
 
@@ -1713,18 +1739,12 @@ class JobSeekerController extends Controller
     //     return redirect()->back()->with('success', 'Profile updated successfully.');
     // }
 
-
     public function clearSessionFlag(Request $request)
     {
         // Clear the session flag
         $request->session()->forget('error');
         return response()->json(['success' => true]);
     }
-
-
-
-
-
 
     // Add this method to handle phone verification
     // public function verifyPhone(Request $request)
@@ -1765,10 +1785,6 @@ class JobSeekerController extends Controller
     //         ->with('success', 'Phone number verified successfully. Please save your profile changes.');
     // }
 
-
-
-
-
     public function myjobs($id)
     {
         try {
@@ -1786,7 +1802,7 @@ class JobSeekerController extends Controller
             $jobs = JobPost::withWhereHas('jobBookmark', function ($query) use ($id) {
                 $query->where("jobSeekerId", $id);
             })
-                ->with('jobCompany')  // Only eager load the jobCompany
+                ->with('jobCompany') // Only eager load the jobCompany
                 ->orderBy('created_at', 'desc')
                 ->where('jobStatus', 'published')
                 ->get();

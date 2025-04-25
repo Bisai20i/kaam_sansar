@@ -4,20 +4,33 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Advertisement;
+use App\Models\Language;
+use App\Models\Training;
+use App\Models\Experience;
+use App\Models\Skill;
+use App\Models\Profile;
+use App\Models\Visa;
+use App\Models\Education;
+use App\Models\Project;
 use App\Models\AdvertisementCategory;
+use App\Models\Achievement;
 use App\Models\BlogsAndPodcast;
+use App\Models\DiscussionForum;
+use App\Models\Follower;
+use App\Models\ForumInteraction;
 use App\Models\GiftCategory;
 use App\Models\GiftCoupon;
 use App\Models\IndustryCategory;
 use App\Models\JobBookmark;
 use App\Models\JobCategory;
 use App\Models\JobPost;
+use App\Models\JobSeeker;
+use App\Models\UserComment;
 use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
 use App\Models\VisaType;
-use App\Models\UserComment;
-use App\Models\DiscussionForum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
 {
@@ -267,7 +280,7 @@ class FrontendController extends Controller
             ->unique()  // Remove duplicate skills
             ->values(); // Reindex collection
                     // dd($similar_jobs);
-        return view('frontend.apply', compact('job_detail', 'similar_jobs', 'categories','skills', 'jobLocation'));
+        return view('frontend.apply', compact('job_detail', 'similar_jobs', 'categories', 'skills', 'jobLocation'));
     }
 
     public function bookmarkjob(Request $request)
@@ -445,7 +458,7 @@ class FrontendController extends Controller
         $giftNcoupons = GiftCoupon::when(
             in_array($type, ['1', '0']),
             fn($query) => $query->where('type', $type)
-            )
+        )
             ->latest()
             ->when($giftCategoryId,
                 fn($query) => $query->where('giftCategoryId', $giftCategoryId)
@@ -468,7 +481,7 @@ class FrontendController extends Controller
 
     public function giftNcouponDescription(Request $request)
     {
-        $id = $request->input('id');
+        $id          = $request->input('id');
         $giftNcoupon = GiftCoupon::with('admin:id,fullName')->find($id);
 
         $similarGifts = GiftCoupon::where('id', '!=', $id)
@@ -483,36 +496,36 @@ class FrontendController extends Controller
             ->take(4)
             ->get();
 
-            // $giftComments->transform(function ($giftComment) {
+        // $giftComments->transform(function ($giftComment) {
 
-            //     if ($giftComment->jobSeeker && $giftComment->jobSeeker->userThumbnail) {
+        //     if ($giftComment->jobSeeker && $giftComment->jobSeeker->userThumbnail) {
 
-            //         $thumbnails = $giftComment->jobSeeker->userThumbnail[0];
+        //         $thumbnails = $giftComment->jobSeeker->userThumbnail[0];
 
-            //         // $userThumbnail = asset('storage/'.$thumbnails);
-            //         // return $userThumbnail;
-            //         $giftComment->jobSeeker->userThumbnail = asset('storage/'.$thumbnails);
+        //         // $userThumbnail = asset('storage/'.$thumbnails);
+        //         // return $userThumbnail;
+        //         $giftComment->jobSeeker->userThumbnail = asset('storage/'.$thumbnails);
 
-            //     }
-            //     return $giftComment;
-            // });
+        //     }
+        //     return $giftComment;
+        // });
 
-            $giftComments->transform(function ($giftComment) {
-                if ($giftComment->jobSeeker && is_array($giftComment->jobSeeker->userThumbnail)) {
-                    $thumbnails = $giftComment->jobSeeker->userThumbnail;
+        $giftComments->transform(function ($giftComment) {
+            if ($giftComment->jobSeeker && is_array($giftComment->jobSeeker->userThumbnail)) {
+                $thumbnails = $giftComment->jobSeeker->userThumbnail;
 
-                    if (count($thumbnails) > 0) {
-                        // Remove slashes if somehow they're still escaped (optional)
-                        $path = str_replace('\\/', '/', $thumbnails[0]);
+                if (count($thumbnails) > 0) {
+                    // Remove slashes if somehow they're still escaped (optional)
+                    $path = str_replace('\\/', '/', $thumbnails[0]);
 
-                        $giftComment->jobSeeker->userThumbnail = asset('storage/' . $path);
-                    } else {
-                        $giftComment->jobSeeker->userThumbnail = null;
-                    }
+                    $giftComment->jobSeeker->userThumbnail = asset('storage/' . $path);
+                } else {
+                    $giftComment->jobSeeker->userThumbnail = null;
                 }
+            }
 
-                return $giftComment;
-            });
+            return $giftComment;
+        });
 
         return view('frontend.giftNcoupon.giftDescription', compact('giftNcoupon', 'similarGifts', 'giftComments'));
 
@@ -532,16 +545,50 @@ class FrontendController extends Controller
         return view('frontend.resume.index');
     }
 
-    public function discussionForum(Request $request){
+    public function resumeMaker()
+    {
 
-        $searchstr    = $request->query('searchstr', null);
-        $category      = $request->query('category', null);
+        $jobSeekerId  = Auth::guard('job_seekers')->id();
+        $profile      = Profile::where('jobSeekerId', $jobSeekerId)->first();
+        $visa         = Visa::where('jobSeekerId', $jobSeekerId)->first();
+        $educations   = Education::where('jobSeekerId', $jobSeekerId)->get();
+        $projects     = Project::where('jobSeekerId', $jobSeekerId)->get();
+        $achievements = Achievement::where('jobSeekerId', $jobSeekerId)->get();
+        $skills       = Skill::where('jobSeekerId', $jobSeekerId)->get();
+        $experiences  = Experience::where('jobSeekerId', $jobSeekerId)->get();
+        $trainings    = Training::where('jobSeekerId', $jobSeekerId)->get();
+        $languages    = Language::where('jobSeekerId', $jobSeekerId)->get();
+
+        return view('frontend.resume.fill_resume', compact(
+            'profile', 'visa', 'educations', 'projects', 'achievements',
+            'skills', 'experiences', 'trainings', 'languages'
+        ));
+    }
+
+    /**
+     * Shows the discussion forum where users can post topics and comment on them
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function discussionForum(Request $request)
+    {
+
+        $searchstr = $request->query('searchstr', null);
+        $category  = $request->query('category', null);
 
         // return $request;
         // return $request;
-        
 
         $forumPosts = DiscussionForum::with('jobSeeker:id,firstName,lastName,temporaryLocation,userThumbnail')
+            ->withCount(['forumInteraction as likes' => function ($query) {
+                $query->where('type', 'like');
+            }])
+            ->withCount(['forumInteraction as dislikes' => function ($query) {
+                $query->where('type', 'dislike');
+            }])
+            ->withCount('forumComment as comments')
             ->when(
                 in_array($category, ['other', 'education', 'investment', 'scammer', 'office']),
                 fn($query) => $query->where('category', $category)
@@ -549,12 +596,14 @@ class FrontendController extends Controller
             ->when(
                 $searchstr,
                 fn($query) => $query->where('topic', 'LIKE', $searchstr . '%')
-                                    ->orWhere('description', 'LIKE', $searchstr . '%')
+                    ->orWhere('description', 'LIKE', $searchstr . '%')
             )
             ->latest()
             ->get();
-        
-        $forumPosts->transform(function ($forumPost) {
+
+        $has_user = Auth::guard('job_seekers')->check() ?? false;
+
+        $forumPosts->transform(function ($forumPost) use ($has_user) {
             if ($forumPost->jobSeeker && is_array($forumPost->jobSeeker->userThumbnail)) {
                 $thumbnails = $forumPost->jobSeeker->userThumbnail;
 
@@ -572,15 +621,32 @@ class FrontendController extends Controller
             $imageLinks = array_map(function ($path) {
                 return asset('storage/' . $path);
             }, $imagePaths);
-            
 
             $forumPost->images = $imageLinks;
+
+            if (Auth::guard('job_seekers')->check()) {
+
+                $forumPost->followed = Follower::where('followed_to', $forumPost->jobSeeker->id)->where('followed_by', Auth::guard('job_seekers')->id())->exists();
+
+            } else {
+                $forumPost->followed = false;
+            }
+
+            if ($has_user) {
+                $forumPost->interaction = ForumInteraction::where('forum_id', $forumPost->id)->where('jobSeekerId', Auth::guard('job_seekers')->id())->first();
+            }
 
             return $forumPost;
         });
 
-        
-        return view('frontend.discussion.index',compact('forumPosts'));
+        // $hot_topics = DiscussionForum::withCount('forumInteraction as count')
+        //     ->orderBy('count', 'desc')
+        //     ->limit(4)
+        //     ->get();
+
+        // return $forumPosts;
+
+        return view('frontend.discussion.index', compact('forumPosts'));
     }
 
     public function advertisements(){

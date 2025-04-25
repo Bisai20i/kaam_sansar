@@ -36,8 +36,9 @@ class LanguageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storelan(Request $request)
+    public function store(Request $request)
     {
+    
         //Check if the request is from mobile
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
@@ -58,8 +59,8 @@ class LanguageController extends Controller
               //validate request data
 
               $validator = Validator::make($request->all(), [
-                  'languageName' => 'required|string|max:255',
-                  'languageProficiency' => 'required|in:Beginner,Intermediate,Proficient',
+                  'language.*.languageName' => 'required|string|max:255',
+                  'language.*.languageProficiency' => 'required|in:Beginner,Intermediate,Proficient',
 
               ]);
 
@@ -68,25 +69,33 @@ class LanguageController extends Controller
                 Log::error('Validation errors:', $validator->errors()->toArray());
                  return $isMobile
                  ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                 : redirect()->back()->withErrors($validator)->withInput();
-
+                : response()->json([
+                    'success' => false,
+                    'message' => 'something went to wronge.',
+                    'errors' => $validator->errors()->all(),
+                    'request' => $request->input(),
+                ])   ;  
 
     }
     //create a new language record
 
-    $language = new Language();
-    $language->languageName = $request->input('languageName');
-    $language->languageProficiency = $request->input('languageProficiency');
-    $language->jobSeekerId = $jobSeekerId;
-    Log::info('new language record is created');
-    $language->save();
+    foreach ($request->input('languages') as $languageData) {
+        $language = new Language();
+        $language->languageName = $languageData['languageName'] ?? null;
+        $language->languageProficiency = $languageData['languageProficiency'] ?? null;
+        $language->jobSeekerId = $jobSeekerId;
+        $language->save();
+    }    
     Log::info('Language created successfully');
 
     // return the response based on request type
-
     return $isMobile
-     ?$this->responseSuccess('Language created successfully', $language->toArray())
-     : redirect()->back()->with('success', 'Language created successfully');
+    ? $this->responseSuccess('Lanagugae saved successfully.', $language)
+    : 
+        response()->json([
+            'success' => true,
+            'message' => 'Language saved successfully.',
+        ])   ;  
 }
 
     /**
