@@ -488,8 +488,8 @@
             <div class="d-flex justify-content-between mt-4">
                 <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
                     data-bs-toggle="modal" data-bs-target="#completeModal1">Back</button>
-                <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff">Edit
-                    CV</button>
+                <a href="{{ route('jobseeker.resume-maker') }}" type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff">Edit
+                    CV</a>
             </div>
         </div>
     </div>

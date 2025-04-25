@@ -36,7 +36,7 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storedata(Request $request)
+    public function store(Request $request)
     {
         // Check if request is from mobile using the request_type parameter
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
@@ -58,6 +58,7 @@ class ProfileController extends Controller
             'lastName' => 'required|string|max:255',
             'phoneNumber' => 'required|string|unique:profiles,phoneNumber,' . $jobSeekerId . ',jobSeekerId',
             'designation' => 'required|string|max:255',
+            'address'=>'required|string|max:255',
             'country' => 'required|string|max:255',
             'bio' => 'required|string|max:1000',
             'profileImg' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
@@ -70,42 +71,59 @@ class ProfileController extends Controller
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
                 : redirect()->back()->withErrors($validator->errors())->withInput();
         }
+        $profileImagePath = null;
 
-    $profileImagePath = handleUpload('profileImg');
-    if(!$profileImagePath) {
-        Log::error('Error uploading profile image.');
-        return $isMobile
-            ? $this->responseError('Error uploading profile image.', 500)
-            : redirect()->back()->with('error', 'Error uploading profile image.');
-
-    }
+        if ($request->hasFile('profileImg')) {
+            $profileImagePath = handleUpload('profileImg');
+        
+            if (!$profileImagePath) {
+                Log::error('Profile image upload failed.');
+                return $isMobile
+                    ? $this->responseError('Error uploading profile image.', 500)
+                    : redirect()->back()->with('error', 'Error uploading profile image.');
+            }
+        }
         // Create a new profile record
-        $profile = new Profile();
-        $profile->jobSeekerId = $jobSeekerId;
-        $profile->firstName = $request->firstName;
-        $profile->lastName = $request->lastName;
-        $profile->phoneNumber = $request->phoneNumber;
-        $profile->designation = $request->designation;
-        $profile->country = $request->country;
-        $profile->bio = $request->bio;
-        $profile->profileImg = $profileImagePath;
-
-        // Log profile details before saving
-        Log::info('Profile data before saving:', $profile->toArray());
-
-        // Save the profile
-        $profile->save();
+        $profileData = [
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'address' => $request->address,
+            'phoneNumber' => $request->phoneNumber,
+            'designation' => $request->designation,
+            'country' => $request->country,
+            'bio' => $request->bio,
+        ];
+        
+        // Only add image if uploaded
+        if ($profileImagePath) {
+            $profileData['profileImg'] = $profileImagePath;
+        }
+        
+        $profile = Profile::updateOrCreate(
+            ['jobSeekerId' => $jobSeekerId], // Search condition
+            $profileData                      // Data to create/update
+        );
 
         // Log saved profile data
         Log::info('Profile saved successfully:', $profile->toArray());
+        session()->flash('step', 2);
 
         // Return response based on request type
+        // return $isMobile
+        //     ? $this->responseSuccess(' Personal Profile saved successfully.', $profile)
+        //     :redirect()->back()
+        //     ->with('success', 'Personal Profile saved successfully.')
+        //     ->withInput();
+        // }
         return $isMobile
-            ? $this->responseSuccess(' Personal Profile saved successfully.', $profile)
-            : redirect()->back()->with('success', ' PersonaloProfile saved successfully.');
+        ? $this->responseSuccess('Personal Profile saved successfully.', $profile)
+        : 
+            response()->json([
+                'success' => true,
+                'message' => 'Personal Profile saved successfully.',
+            ])   ;      
+         
     }
-
-
 
 
 
@@ -129,7 +147,7 @@ class ProfileController extends Controller
                 : redirect()->route('login')->with('error', 'Unauthorized access.');
         }
 
-        Log::info('Authenticated Job Seeker ID: '. $user->id);
+        Log::info('Authenticated Job Seeker ID: ' . $user->id);
 
 
         // Check if the user is authenticated and if they have permission to access the profile
@@ -147,8 +165,8 @@ class ProfileController extends Controller
 
         // Retrieve the profile by the provided ID
         $profile = Profile::where('jobSeekerId', $user->id)
-        ->where('id', $id)
-        ->first();
+            ->where('id', $id)
+            ->first();
 
         if (!$profile) {
             if ($isMobile) {
@@ -159,13 +177,11 @@ class ProfileController extends Controller
             }
 
             return redirect()->back()->with('error', 'Profile not found.');
-
         }
-    if($isMobile)
-    {
-    return $this->responseSuccess('Profile retrieved successfully.', $profile);
-  }
-return redirect()->back()->with('success', 'Profile retrieved successfully.');
+        if ($isMobile) {
+            return $this->responseSuccess('Profile retrieved successfully.', $profile);
+        }
+        return redirect()->back()->with('success', 'Profile retrieved successfully.');
     }
 
 
@@ -205,59 +221,55 @@ return redirect()->back()->with('success', 'Profile retrieved successfully.');
 
         Log::info('Authenticated Job Seeker ID :' . $user->id);
         $jobSeekerId = $user->id;
-    // find the profile
-    $profile = Profile::where('id', $id)->where('jobSeekerId', $jobSeekerId)->first();
+        // find the profile
+        $profile = Profile::where('id', $id)->where('jobSeekerId', $jobSeekerId)->first();
 
-    if (!$profile) {
+        if (!$profile) {
+            return $isMobile
+                ? $this->responseError('Profile not found', 404)
+                : redirect()->back()->with('error', 'Profile not found');
+        }
+
+        // Validate request data
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'phoneNumber' => 'required|string|unique:profiles,phoneNumber,' . $jobSeekerId . ',jobSeekerId',
+            'designation' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'bio' => 'required|string|max:1000',
+            'profileImg' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+        ]);
+        //Handle validation errors
+
+        if ($validator->fails()) {
+            Log::error('Validation errors:', $validator->errors()->toArray());
+            return $isMobile
+                ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
+                : redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+
+        $profileImagePath = handleUpload('profileImg', $profile);
+
+        //update the field
+
+        $profile->firstName = $request->firstName;
+        $profile->lastName = $request->lastName;
+        $profile->phoneNumber = $request->phoneNumber;
+        $profile->designation = $request->designation;
+        $profile->country = $request->country;
+        $profile->bio = $request->bio;
+        $profile->profileImg = $profileImagePath;
+
+        // Log profile details before saving
+        Log::info('Profile data before saving:', $profile->toArray());
+
+
+        //Return the response based on request type
         return $isMobile
-            ? $this->responseError('Profile not found', 404)
-            : redirect()->back()->with('error', 'Profile not found');
-
-
-
+            ? $this->responseSuccess('Profile updated successfully.', $profile)
+            : redirect()->back()->with('success', 'Profile updated successfully.');
     }
-
-    // Validate request data
-    $validator = Validator::make($request->all(), [
-        'firstName' => 'required|string|max:255',
-        'lastName' => 'required|string|max:255',
-        'phoneNumber' => 'required|string|unique:profiles,phoneNumber,' . $jobSeekerId . ',jobSeekerId',
-        'designation' => 'required|string|max:255',
-        'country' => 'required|string|max:255',
-        'bio' => 'required|string|max:1000',
-        'profileImg' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-    ]);
-    //Handle validation errors
-
-    if ($validator->fails()) {
-        Log::error('Validation errors:', $validator->errors()->toArray());
-        return $isMobile
-            ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-            : redirect()->back()->withErrors($validator->errors())->withInput();
-    }
-
-    $profileImagePath = handleUpload('profileImg',$profile);
-
-    //update the field
-
-    $profile->firstName = $request->firstName;
-    $profile->lastName = $request->lastName;
-    $profile->phoneNumber = $request->phoneNumber;
-    $profile->designation = $request->designation;
-    $profile->country = $request->country;
-    $profile->bio = $request->bio;
-    $profile->profileImg = $profileImagePath;
-
-    // Log profile details before saving
-    Log::info('Profile data before saving:', $profile->toArray());
-
-
-    //Return the response based on request type
-     return $isMobile
-     ? $this->responseSuccess('Profile updated successfully.', $profile)
-     : redirect()->back()->with('success', 'Profile updated successfully.');
-
-}
 
     /**
      * Handle error response.

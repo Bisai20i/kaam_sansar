@@ -36,12 +36,11 @@ class VisaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storevisa(Request $request)
-    {
-        // Check if the request is from mobile using request_type
+    public function store(Request $request)
+{
+    try {
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
-        // Get the authenticated user
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         if (!$user) {
             return $isMobile
@@ -50,52 +49,64 @@ class VisaController extends Controller
         }
 
         Log::info('Authenticated Job Seeker ID: ' . $user->id);
-
         $jobSeekerId = $user->id;
 
-
-
-        // Validate request data
         $validator = Validator::make($request->all(), [
             'country' => 'required|string|max:255',
             'visaDetails' => 'required|string|max:1000',
-            'visaExpire'=>'nullable|string',
+            'visaExpire' => 'nullable|date',
             'visaImage' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        // Handle validation errors
         if ($validator->fails()) {
             Log::error('Validation errors: ', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator->errors())->withInput();
+                : response()->json([
+                    'success' => false,
+                    'message' => "Something went wrong",
+                    'errors' => $validator->errors()->toArray(),
+                ]);
         }
 
-        //handle visa image upload
         $visaImagePath = handleUpload('visaImage');
-        // Create a new visa record
+
         $visa = new Visa();
         $visa->jobSeekerId = $jobSeekerId;
         $visa->country = $request->input('country');
         $visa->visaDetails = $request->input('visaDetails');
-        $visa->visaExpire = $request->input('visaExpire');
+        $visa->visaExpire = $request->filled('visaExpire')
+            ? date('Y-m-d H:i:s', strtotime($request->input('visaExpire')))
+            : null;
         $visa->visaImage = $visaImagePath;
-        // Upload the visa image if provided
-        if ($visaImagePath) {
 
+        if ($visaImagePath) {
             Log::info('File uploaded successfully: ' . $visa->visaImage);
         } else {
             Log::warning('No file uploaded.');
         }
 
-        // Save the visa record
         $visa->save();
         Log::info('Visa created successfully with ID: ' . $visa->id);
 
         return $isMobile
-            ? $this->responseSuccess('Visa created successfully', $visa)
-            : redirect()->back()->with('success', 'Visa created successfully');
+            ? $this->responseSuccess('Personal Profile saved successfully.', $visa)
+            : response()->json([
+                'success' => true,
+                'message' => 'Visa saved successfully.',
+            ]);
+    } catch (\Exception $e) {
+        Log::error('Visa store exception: ' . $e->getMessage());
+
+        return $request->has('request_type') && $request->input('request_type') === 'mobile'
+            ? $this->responseError('Something went wrong. Please try again later.', 500)
+            : response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Please try again later.',
+                'error' => $e->getMessage(), // Remove this in production for security
+            ], 500);
     }
+}
 
 
 

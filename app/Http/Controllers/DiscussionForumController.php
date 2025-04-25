@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Validator;
 class DiscussionForumController extends Controller
 {
 
+    public function index(Request $request){
+
+        return view('backend.discussion_forum.index');
+    }
+
     public function loadComment(Request $request, $id)
     {
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';

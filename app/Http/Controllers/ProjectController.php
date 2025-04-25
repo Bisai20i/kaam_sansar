@@ -37,7 +37,7 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeproject(Request $request)
+    public function store(Request $request)
     {
         //Check if the request is from mobile
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
@@ -55,33 +55,39 @@ class ProjectController extends Controller
         //Validate request data
         $validator = Validator::make($request->all(),
         [
-            'projectTitle' => 'required|string|max:255',
-             'projectLink' => 'nullable|url|max:255',
-             'projectDescription'=>'string|max:1000',
+            'project.*.projectTitle' => 'required|string|max:255',
+            'project.*.projectLink' => 'url',
+            'project.*.projectDescription' => 'string',
         ]);
         if ($validator->fails()){
             Log::error('Validation errors:', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator)->withInput();
-        }
+                :   response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed. Please check your inputs.',
+                    'errors' => $validator->errors()->all(),
+                    'request'=>$request->input()
+                ]);   }
 
-        //create a new project record
-        $project = new Project();
-        $project->jobSeekerId = $jobSeekerId;
-        $project->projectTitle = $request->input('projectTitle');
-        $project->projectLink = $request ->input('projectLink');
-        $project->projectDescription = $request ->input('projectDescription');
+        
+                foreach ($request->input('project') as $projectData) {
+                    $project = new Project();
+                    $project->jobSeekerId = $jobSeekerId;
+                    $project->projectTitle = $projectData['projectTitle'];
+                    $project->projectLink = $projectData['projectLink'];
+                    $project->projectDescription = $projectData['projectDescription'];
+                    $project->save();
+                }
         Log::info('new Project record created :'. $project->id);
-        $project->save();
-        Log ::info('Project created successfully:' . $project);
-
         // return the response based on request type
-         return $isMobile
-         ? $this->responseSuccess('Project created successfully.', 201, $project)
-         :redirect()->back()->with('success','Project created successfully.');
-
-
+        return $isMobile
+        ? $this->responseSuccess('Personal Profile saved successfully.', $project)
+        : 
+            response()->json([
+                'success' => true,
+                'message' => 'Project saved successfully.',
+            ])   ;  
 
 
     }

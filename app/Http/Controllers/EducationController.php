@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Education;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -37,9 +38,9 @@ class EducationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeedu(Request $request)
+    public function store(Request $request)
 {
-    // Check if the request is from mobile
+  
     $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
     // Get the authenticated user
@@ -49,45 +50,55 @@ class EducationController extends Controller
             ? $this->responseError('Unauthorized', 401)
             : redirect()->route('login')->with('error', 'Unauthorized access.');
     }
+
     Log::info('Authenticated Job Seeker ID: ' . $user->id);
     $jobSeekerId = $user->id;
 
-    // Validate request data
+    // Validate each education entry
     $validator = Validator::make($request->all(), [
-        'schoolName' => 'required|string|max:255',
-        'degree' => 'required|string|max:255',
-        'city' => 'required|string|max:255',
-        'startDate' => 'required|date',
-        'graduationDate' => 'required|date',
-        'educationDescription' => 'required|string|max:1000',
+        'education.*.schoolName' => 'required|string|max:255',
+        'education.*.degree' => 'required|string|max:255',
+        'education.*.city' => 'required|string|max:255',
+        'education.*.startDate' => 'required',
+        'education.*.graduationDate' => 'required',
+        'education.*.educationDescription' => 'required|string|max:1000',
     ]);
 
     if ($validator->fails()) {
         Log::error('Validation errors: ', $validator->errors()->toArray());
         return $isMobile
             ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-            : redirect()->back()->withErrors($validator)->withInput();
+            : response()->json([
+                'success' => false,
+                'message' => 'Validation failed. Please check your inputs.',
+                'errors' => $validator->errors()->all(),
+                'request'=>$request->input()
+            ]);
     }
 
-    // Create a new education record
-    $education = new Education();
-    $education->jobSeekerId = $jobSeekerId;
-    $education->schoolName = $request->input('schoolName');
-    $education->degree = $request->input('degree');
-    $education->city = $request->input('city');
-    $education->startDate = $request->input('startDate');
-    $education->graduationDate = $request->input('graduationDate');
-    $education->educationDescription = $request->input('educationDescription');
-    Log::info('New education record created: ' . $education->id);
-    $education->save();
-    Log::info('Education created successfully: ' . $education->id);
+    // Process each education entry
+    foreach ($request->input('education') as $educationData) {
+        $education = new Education();
+        $education->schoolName = $educationData['schoolName'];
+        $education->degree = $educationData['degree'];
+        $education->city = $educationData['city'];
+        $education->startDate = Carbon::parse($educationData['startDate'])->format('Y-m-d');
+        $education->graduationDate = Carbon::parse($educationData['graduationDate'])->format('Y-m-d');
+        $education->educationDescription = $educationData['educationDescription'];
+        $education->jobSeekerId = $jobSeekerId; // Associate the education with the user
+        $education->save();
+    }
 
-    // Return the response correctly
+    Log::info('Education created successfully with ID: ' . $education->id);
+
     return $isMobile
-        ? $this->responseSuccess('Education created successfully.', 201, $education) // Ensure the model is passed as data, and 201 is the status
-        : redirect()->back()->with('success', 'Education created successfully.');
+        ? $this->responseSuccess('Education saved successfully.', 200, $education)
+        : response()->json([
+            'success' => true,
+            'message' => 'Education saved successfully.',
+            'education'=>$education
+        ]);
 }
-
 
 
 

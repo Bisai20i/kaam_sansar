@@ -105,7 +105,8 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::resource('productcategory', ProductCategoryController::class);
 
 
-
+    //route for discussion forum
+    Route::get('forum-posts', [DiscussionForumController::class, 'index'])->name('forum.index');
 
 
 
@@ -182,7 +183,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     // abroad deals posting route
     Route::post('abroad_deal_post', [AboardController::class, 'store'])->name('abroad_deal.store');
 
-
+    Route::get('/resume-maker',[FrontendController::class, 'resumeMaker'])->name('jobseeker.resume-maker');
 
     Route::post('logout', [JobSeekerController::class, 'logout'])->name('jobseeker.logout');
     Route::get('/otp_page', [JobSeekerController::class, 'otp_page'])->name('jobseeker.otp_page');
@@ -205,6 +206,16 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('/myjobs/{user_id?}', [JobSeekerController::class, 'myjobs'])->name('jobseeker.myjobs');
     Route::get('/bookmark/remove/{jobId}', [JobSeekerController::class, 'removeBookmark'])->name('jobBookmark.remove');
     // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
+
+    Route::resource('profiles', ProfileController::class);
+    Route::resource('visas', VisaController::class);
+    Route::resource('educations', EducationController::class);
+    Route::resource('projects', ProjectController::class);
+    Route::resource('skills', SkillController::class);
+    Route::resource('achievements', AchievementController::class);
+    Route::resource('experiences', ExperienceController::class);
+    Route::resource('trainings', TrainingController::class);
+    Route::resource('languages', LanguageController::class);
 
     // Route::get('/profile/basic-info', [JobSeekerDashboardController::class, 'basicInfo'])->name('profile.basicInfo');
     // Route::get('/profile/your-cv', [JobSeekerDashboardController::class, 'yourCV'])->name('profile.yourCV');
