@@ -405,12 +405,15 @@
                     @foreach ($ads as $ad)
                         <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
                             <div class="card">
+                            <a href="{{ route('frontend.advertisements') }}"
+                            class="text-decoration-none">
                                 <img src="{{ asset($ad->adsThumbnail) }}" class="card-img-top" alt="adsThumbnail">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $ad->adsTitle }} </h5>
                                     <p class="card-text text-muted mb-1">{{ $ad->location }}</p>
                                     <p class="card-text text-muted"><small>{{ $ad->postedDuration }}</small></p>
                                 </div>
+                                    </a>
                             </div>
                         </div>
                     @endforeach

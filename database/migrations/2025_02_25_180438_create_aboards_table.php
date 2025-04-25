@@ -34,7 +34,9 @@ return new class extends Migration
             $table->longText('productDescription')->nullable();
             $table->string('productOwnerName')->nullable();
             $table->string('contactNumber')->nullable();
-            $table->string('pricing');
+            $table->string('pricing')->nullable();
+            $table->string('urlLink')->nullable();
+
             $table->string('publishStatus')->default('publish');
             $table->string('status')->default('Available');
            $table->timestamps();

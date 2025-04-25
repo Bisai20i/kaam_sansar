@@ -23,9 +23,12 @@ class Aboard extends Model
         'country',
         'location',
         'type',
-        'postedDuration'
+        'postedDuration',
+        'urlLink'
 
     ];
+
+    
 
     public function jobSeeker()
     {

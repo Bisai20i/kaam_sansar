@@ -43,7 +43,6 @@ class FrontendController extends Controller
         $ads = Advertisement::orderBy('created_at', 'desc')
             ->take(4)->get();
 
-        $adsCategory = AdvertisementCategory::all();
         $post        = Advertisement::all();
 
         $giftCoupons = GiftCoupon::orderBy('created_at', 'desc')
@@ -56,7 +55,7 @@ class FrontendController extends Controller
             ->get();
 
         // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'adsCategory', 'post', 'categories', 'giftCoupons'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons'));
     }
 
     public function findJobs()
@@ -585,7 +584,12 @@ class FrontendController extends Controller
     }
 
     public function advertisements(){
-        return view('frontend.advertisements.index');
-    }
+          // Fetch unique categories under the given type
+  $ads =Advertisement::all();
+    $all = AdvertisementCategory::all();
+    $category = AdvertisementCategory::all();
+    $categories = AdvertisementCategory::all();
+    return view('frontend.advertisements.index', compact('all','category','ads','categories'))
+    ->with('success', 'Advertisements retrieved successfully!');    }
 
 }

@@ -92,31 +92,7 @@
     </div>
 
             </div>
-            <!-- <script>
-                function toggleActive(button) {
-                    // Remove 'active' class from all buttons
-                    document.querySelectorAll('.btn-toggle').forEach(btn => btn.classList.remove('active'));
 
-                    // Add 'active' class to the clicked button
-                    button.classList.add('active');
-
-                    // Get the form
-                    const itemForm = document.getElementById('itemForm');
-
-                    // Show 'itemForm' if "Item" button is clicked, otherwise hide it
-                    if (button.textContent.trim() === "Item") {
-                        itemForm.style.display = "block";
-                    } else {
-                        itemForm.style.display = "none";
-                    }
-                }
-
-                // Ensure the form is visible when the page loads
-                document.addEventListener("DOMContentLoaded", function () {
-                    document.getElementById('itemForm').style.display = "block";
-                });
-
-            </script> -->
         
             <!-- Product Listing Section -->
             <div class="row g-2 mt-0" id="product-list">
@@ -126,7 +102,7 @@
          data-category="{{ $ad->productCategoryId }}" 
          data-type="{{ $ad->type }}">
         <div class="card">
-            <div class="card-bdy-packages" onclick="window.location.href='{{ route('aboards.show', $ad->id) }}'" style="cursor: pointer;">
+            <div class="card-bdy-packages" href="{{ route('aboards.show', $ad->id) }}" style="cursor: pointer;">
                 <img src="{{ $ad->productThumbnail ? asset($ad->productThumbnail) : asset('Images/default-image.png') }}" 
                      class="bdy-packages-img" 
                      alt="Product Image" 
@@ -771,50 +747,6 @@ if (type === 'Buy') {
 
         // Post Submission for 'Want to Buy' Section
 
-        // document.getElementById("submitPost").addEventListener("click", function () {
-        //     const title = document.getElementById("newTitleInput").value;
-        //     const description = document.getElementById("newDescriptionInput").value;
-        //     const urlLink = document.getElementById("newFloatingURL").value;
-        //     const country = document.getElementById("newCountrySelect").value;
-
-        //     if (title && description && country) {
-        //         const newPostHtml = `
-        //         <div class="card mb-3">
-        //             <div class="card-body">
-        //                 <div class="d-flex align-items-center">
-        //                     <img src="img/Nirmal.png" class="rounded-circle me-2" alt="User" style="height:40px;width:40px;">
-        //                     <div>
-        //                         <h6 class="mb-0">Nirmal G.C.</h6>
-        //                         <small class="text-muted"><i class="bi bi-geo-alt"></i>${country.toUpperCase()} <i class="bi bi-clock ms-2"></i> Just now</small>
-        //                     </div>
-        //                     <button class="btn btn-search ms-auto">Message</button>
-        //                 </div>
-        //                 <h5 class="mt-3">${title}</h5>
-        //                 <p class="abroad-p">${description}</p>
-        //                 <div class="mt-3">
-        //                     <a href="${urlLink}" class="text-primary" target="_blank">${urlLink}</a>
-        //                 </div>
-        //                 <hr>
-        //                 <div class="d-flex gap-4 ms-2">
-        //                     <div><i class="bi bi-chat"></i> 0</div>
-        //                     <div><i class="bi bi-share"></i> 0</div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //         `;
-
-        //         const wantToBuyForm = document.getElementById("wantToBuyForm");
-        //         wantToBuyForm.style.display = "block";
-        //         const cardContainer = wantToBuyForm.querySelector(".col-md-9");
-        //         cardContainer.insertAdjacentHTML("beforeend", newPostHtml);
-
-        //         document.getElementById("newPostForm").reset();
-        //         const modal = bootstrap.Modal.getInstance(document.getElementById('addPostModal'));
-        //         modal.hide();
-        //     } else {
-        //         alert("Please fill in all required fields.");
-        //     }
-        // });
 
         // Product Category Filtering
 

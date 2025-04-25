@@ -41,7 +41,9 @@ class AdvertisementController extends Controller
         });
     }
 
-        $adsCategory = AdvertisementCategory::all();
+        $category = AdvertisementCategory::all();
+        $categories = AdvertisementCategory::all();
+        $all = AdvertisementCategory::all();
 
         $post = Advertisement::all();
         $adTypes = $this->getEnumValues('advertisements', 'type');
@@ -54,14 +56,14 @@ class AdvertisementController extends Controller
             'message' => 'Advertisements fetched successfully.',
             'data' => [
                     'ads' => $ads,
-                    'categories' => $adsCategory,
+                    'categories' => $category,
                     'adsTypes'=>$adTypes
         ]
      ], 200);
     }
 
         //Return the view for web application
-        return view('backend.advertisement.adscreate', compact('ads','adsCategory','post'));
+        return view('frontend.advertisements.index', compact('ads','category','post','all','categories'));
 
     }
 
@@ -110,7 +112,7 @@ class AdvertisementController extends Controller
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'adsTitle' => 'required|string|max:255',
-            'adsCategoryId' => 'required',
+            'adsCategoryId' => 'nullable',
             'type'=>'nullable',
             'location' => 'required|string|max:255',
             'country' => 'nullable|string|max:255',
@@ -121,7 +123,7 @@ class AdvertisementController extends Controller
             'pricing' => 'required|numeric',
             'status' => 'nullable|string|max:255',
             'publishStatus' => 'nullable|string|max:255',
-            'contactNumber' => 'required|string|max:255',
+            'contactNumber' => 'nullable|string|max:255',
         ]);
 
         // Handle validation errors
@@ -158,6 +160,8 @@ class AdvertisementController extends Controller
     // Automatically set postedDuration based on created_at
     $ads->created_at = Carbon::now();
     $ads->postedDuration = Carbon::now()->diffInDays($ads->created_at) . ' Days';
+    Log::info('Advertisement Updated:', $ads->toArray());
+
         $ads->save();
 
         // Log the saved advertisement
@@ -180,9 +184,17 @@ class AdvertisementController extends Controller
     // Check if the request is from mobile using request_type
     $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
 
+    $ads = Advertisement::findOrFail($id); // This will throw an exception if not found
+
+  
     try {
         // Get the ad details
         $ads = Advertisement::findOrFail($id); // This will throw an exception if not found
+
+        $similarAds = Advertisement::where('adsCategoryId', $ads->adsCategoryId)
+        ->where('id', '!=', $id) // Exclude the current item
+        ->limit(6) // Limit results
+        ->get();
 
         // Return JSON if it's a mobile request
         if ($isMobile) {
@@ -213,7 +225,7 @@ class AdvertisementController extends Controller
 
 
         //Return the view for web application
-        return redirect()->route('ads.index');
+        return view('frontend.advertisements.show',compact('similarAds','ads'));
 
     }
 
@@ -283,7 +295,7 @@ class AdvertisementController extends Controller
         'pricing' => 'required|numeric',
         'status' => 'nullable|string|max:255',
         'publishStatus' => 'nullable|string|max:255',
-        'contactNumber' => 'required|string|max:255',
+        'contactNumber' => 'nullable|string|max:255',
     ]);
 
 
@@ -314,6 +326,8 @@ class AdvertisementController extends Controller
     // Automatically set postedDuration based on created_at
     $ads->created_at = Carbon::now();
     $ads->postedDuration = Carbon::now()->diffInDays($ads->created_at) . ' Days';
+    Log::info('Advertisement Updated:', $ads->toArray());
+
         $ads->save();
 
         // Log the saved advertisement
@@ -409,7 +423,7 @@ class AdvertisementController extends Controller
                     'categories' => $adsCategory
         ]  
       ], 200)
-    : view('ads.index', compact('ads'))->with('success', 'Advertisement retrieved successfully!');
+    : view('ads.index', compact('ads','adsCategory'))->with('success', 'Advertisement retrieved successfully!');
 
 }
 public function showByTypeAndCategory(Request $request, $type, $categoryId = null)
@@ -421,15 +435,16 @@ public function showByTypeAndCategory(Request $request, $type, $categoryId = nul
     $validTypes = Advertisement::distinct()->pluck('type')->toArray();
     if (!in_array($type, $validTypes)) {
         return $isMobile
-            ? response()->json(['status' => false, 'message' => 'Invalid ad type'], 400)
-            : redirect()->back()->with('error', 'Invalid ad type.');
+            ? response()->json(['status' => false, 'message' => 'This type of ads not found'], 400)
+            : redirect()->back()->with('error', 'This type of ads not found.');
     }
 
     // Fetch unique categories under the given type
     $categoryIds = Advertisement::where('type', $type)->pluck('adsCategoryId')->unique();
     $categories = AdvertisementCategory::whereIn('id', $categoryIds)->get();
     $ads = Advertisement::where('type', $type)->orderBy('created_at', 'desc')->paginate(10);
-
+    $category = AdvertisementCategory::all();
+    $all = AdvertisementCategory::all();
 
     // If no category is selected, return only categories
     if (!$categoryId) {
@@ -442,7 +457,7 @@ public function showByTypeAndCategory(Request $request, $type, $categoryId = nul
                     'ads'=>$ads
                     ]
             ], 200)
-            : view('ads.categories', compact('categories', 'type'))
+            : view('frontend.advertisements.index', compact('categories', 'type','category','ads','all'))
                 ->with('success', 'Categories retrieved successfully!');
     }
 
@@ -459,6 +474,7 @@ public function showByTypeAndCategory(Request $request, $type, $categoryId = nul
         ->where('adsCategoryId', $categoryId)
         ->orderBy('created_at', 'desc')
         ->get();
+        $selectedCategory = AdvertisementCategory::find($categoryId);
 
     // API Response (For Mobile)
     if ($isMobile) {
@@ -481,7 +497,7 @@ public function showByTypeAndCategory(Request $request, $type, $categoryId = nul
     }
 
     // Web Response (For Blade View)
-    return view('ads.index', compact('ads', 'category', 'type'))
+    return view('frontend.advertisements.index', compact('ads', 'categories', 'type','category','all','selectedCategory'))
         ->with('success', 'Advertisements retrieved successfully!');
 }
 

@@ -63,12 +63,12 @@
         </li>
 
         <!-- Advertisement Category -->
-        {{-- <li class="menu-item {{ request()->routeIs('advertisementcategory*') ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('advertisementcategory*') ? 'active' : '' }}">
             <a href="{{ route('advertisementcategory.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-square"></i>
                 <div data-i18n="Manage Ads">Manage Ads Category</div>
             </a>
-        </li> --}}
+        </li> 
 
         <!-- Advertisements -->
         {{-- <li class="menu-item {{ request()->routeIs('ads*') ? 'active' : '' }}">

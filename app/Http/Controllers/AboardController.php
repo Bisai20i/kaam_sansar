@@ -18,14 +18,17 @@ class AboardController extends Controller
     public function index()
     {
         $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
-        $aboards = Aboard::orderBy('created_at', 'desc')->simplePaginate(10);
+        $aboards = Aboard::with('jobSeeker')->orderBy('created_at', 'desc')->simplePaginate(10);
         $categories = ProductCategory::all();
+        $jobseek = Aboard::with('jobSeeker');
 
         if ($isMobile) {
             return response()->json([
                 'status' => true,
                 'message' => 'Products fetched successfully.',
-                'data' => $aboards
+                'data' => $aboards,
+
+
             ], 200);
         }
         
@@ -70,13 +73,15 @@ class AboardController extends Controller
             'productCategoryId' => 'required',
             'productDescription' => 'required|string',
             'contactNumber' => 'nullable|string|max:255',
-            'pricing' => 'required|numeric',
+            'pricing' => 'nullable|numeric',
             'status' => 'nullable|string|max:255',
             'publishStatus' => 'nullable|string|max:255',
-            'productThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'productThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'location' => 'nullable',
             'country' => 'nullable',
-            'type' => 'in:Item, Buy',
+            'type' => 'in:Item,Buy',
+            'urlLink'=>'url','nullable',
+
         ]);
     
         // Handle validation failure
@@ -114,6 +119,8 @@ class AboardController extends Controller
         $aboard->type = $request->input('type');
         $aboard->contactNumber = $request->input('contactNumber');
         $aboard->pricing = $request->input('pricing');
+        $aboard->urlLink = $request->input('urlLink');
+
         $aboard->publishStatus = $request->input('publishStatus', 'publish');
         $aboard->productThumbnail = $productThumbnail;
 
@@ -147,6 +154,7 @@ class AboardController extends Controller
              Log::info('Authenticated Job Seeker ID: ' . $user->id);
 
              $jobSeekerId = $user->id;
+             
         try {
             // Get the Aboard details
             $aboard = Aboard::findOrFail($id); // This will throw an exception if not found
@@ -208,13 +216,15 @@ class AboardController extends Controller
             'productDescription' => 'required|string',
             'productOwnerName' => 'nullable|string|max:255',
             'contactNumber' => 'nullable|string|max:255',
-            'pricing' => 'required|numeric',
+            'pricing' => 'nullable|numeric',
             'status' => 'nullable|string|max:255',
             'publishStatus' => 'nullable|string|max:255',
-            'productThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'productThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'location' => 'nullable',
             'country' => 'nullable',
-            'type' => 'in:Item, Buy',
+            'type' => 'in:Item,Buy',
+            'urlLink'=>'url','nullable',
+
         ]);
     
         // Handle validation failure
@@ -244,6 +254,8 @@ class AboardController extends Controller
         $aboard->productThumbnail = $productThumbnail;
         $aboard->created_at = Carbon::now();
         $aboard->postedDuration = Carbon::now()->diffInDays($aboard->created_at) . ' Days';
+        $aboard->urlLink = $request->input('urlLink');
+
         $aboard->save();
     
         Log::info('Product Updated:', $aboard->toArray());

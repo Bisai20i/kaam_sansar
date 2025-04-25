@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 
 class JobSeeker extends Authenticatable implements MustVerifyEmail
 {
@@ -45,6 +47,9 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
         'country'
     ];
 
+
+    protected $appends = ['country_flag'];
+
     // Hidden attributes that should not be serialized (e.g., sensitive data)
     protected $hidden = [
         'password',
@@ -58,6 +63,23 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
         'otpVerified' => 'boolean', // Boolean
         'userThumbnail' => 'array',
     ];
+
+
+    public function getCountryFlagAttribute()
+    {
+        // Make sure countryCode is in uppercase and not null
+        $code = strtoupper($this->countryCode ?? '');
+    
+        // Check if the code has exactly two characters (valid country code)
+        if (strlen($code) === 2) {
+            // Generate the URL for the flag image using the country code
+            return 'https://flagsapi.com/' . strtolower($code) . '/flat/24.png'; // Use flat style and 24px size
+        }
+    
+        return ''; // Return empty if code is invalid or not two characters
+    }
+    
+    
 
     public function isOtpVerified()
     {

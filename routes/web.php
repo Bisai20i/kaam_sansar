@@ -85,9 +85,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::put('/job-post/unpublish/{id}', [JobPostController::class, 'unpublish'])->name('job-post.unpublish');
 
     //Route for advertisement
-    Route::resource('ads', AdvertisementController::class);
-
-
+  
     Route::resource('advertisementcategory', AdvertisementCategoryController::class);
     Route::put('/ads/publish/{id}', [AdvertisementController::class, 'publish'])->name('ads.publish');
     Route::put('/ads/unpublish/{id}', [AdvertisementController::class, 'unpublish'])->name('ads.unpublish');
@@ -335,7 +333,13 @@ Route::prefix('discussion')->group(function () {
 });
 Route::prefix('advertisements')->group(function () {
     Route::get('/', [FrontendController::class, 'advertisements'])->name('frontend.advertisements');
+    Route::get('/Ads/type/{type?}/category/{categoryId?}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByTypeCategory');
+    Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
+    Route::get('Ads/category/{categoryId}',[AdvertisementController::class,'showByCategory'])->name('Ads.showByCategory');
+    Route::post('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
 });
+
+Route::resource('ads', AdvertisementController::class);
 
 
 

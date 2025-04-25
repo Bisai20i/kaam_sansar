@@ -13,20 +13,31 @@
     <div class="row">
         <h3 class="primary_color_text py-2">Advertisement</h3>
     </div>
+@php
+    $type = isset($type) ? $type : '';
+@endphp
 
     <div class="d-flex justify-content-center justify-content-md-between flex-wrap-reverse row-gap-3 ">
         <div class="btn-group mb-3 gap-lg-4 ads_type" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="propertyOptions" id="all" autocomplete="off" checked>
-            <label class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2" for="all">All</label>
+        <a href="{{ route('ads.index')}}"
+           class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2">
+            All
+        </a>
 
-            <input type="radio" class="btn-check" name="propertyOptions" id="buy" autocomplete="off">
-            <label class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2" for="buy">Buy</label>
+        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Buy']) }}"
+   class="btn btn-outline-custom {{ $type == 'Buy' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+            Buy
+        </a>
 
-            <input type="radio" class="btn-check" name="propertyOptions" id="sell" autocomplete="off">
-            <label class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2" for="sell">Sell</label>
+        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Sell']) }}"
+   class="btn btn-outline-custom {{ $type == 'Sell' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+            Sell
+        </a>
 
-            <input type="radio" class="btn-check" name="propertyOptions" id="rent" autocomplete="off">
-            <label class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2" for="rent">Rent</label>
+        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Rent']) }}"
+   class="btn btn-outline-custom {{ $type == 'Rent' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+            Rent
+        </a>
         </div>
         <div>
             <button type="button" class="btn post-ad-btn" data-bs-toggle="modal" data-bs-target="#postAdModal">
@@ -38,6 +49,7 @@
     <div>
         <h5>Find what you are looking for</h5>
         <div class="row g-3 mb-3">
+        <form action="{{ route('ads.search') }}" class="row mt-4 align-items-center">
             <!-- Search Input -->
             <div class="col-lg">
                 <div class="input-group">
@@ -51,173 +63,75 @@
 
             <!-- Country Select -->
             <div class="col-md-6 col-lg-3">
-                <select class="form-select py-2" id="countrySelect" aria-label="">
+                <select class="form-select py-2" id="countrySelect" name="country" aria-label="">
                     <option selected>Select Country</option>
-                    <option value="1">Nepal</option>
-                    <option value="2">USA</option>
-                    <option value="3">Other</option>
+                    <option value="Nepal">Nepal</option>
+                    <option value="USa">USA</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
 
             <!-- City Select -->
             <div class="col-md-6 col-lg-3">
-                <select class="form-select py-2" id="citySelect" aria-label="">
+                <select class="form-select py-2" id="citySelect" name="location" aria-label="">
                     <option selected>Select City</option>
-                    <option value="1">Pokhara</option>
-                    <option value="2">Kathmandu</option>
-                    <option value="3">Other</option>
+                    <option value="Pokhara">Pokhara</option>
+                    <option value="Ktm">Kathmandu</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
 
             <!-- Search Button -->
             <div class="col-4 col-lg-1 mx-auto">
-                <button class="btn text-white w-100 py-2" type="button" style="background-color: #0064a7;">
+                <button class="btn text-white w-100 py-2" type="submit" style="background-color: #0064a7;">
                     Search
                 </button>
             </div>
+</form>
         </div>
     </div>
-
     <div class="nav nav-pills gap-3 justify-content-center justify-content-md-start">
-        <a class="nav-link-ads active rounded-5 px-3 " href="#tab1" data-bs-toggle="pill">All</a>
-        <a class="nav-link-ads rounded-5" href="#tab2" data-bs-toggle="pill">House</a>
-        <a class="nav-link-ads rounded-5" href="#tab3" data-bs-toggle="pill">Apartments</a>
-        <a class="nav-link-ads rounded-5" href="#tab4" data-bs-toggle="pill">Land</a>
-        <a class="nav-link-ads rounded-5" href="#tab5" data-bs-toggle="pill">Office</a>
+    {{-- Show All --}}
+<a class="nav-link-ads active rounded-5 px-3"
+   href="{{ route('Ads.showByTypeCategory') }}"
+   data-bs-toggle="pill">All</a>
+
+   @foreach($categories as $categoryItem)
+    @if($type)
+        <a href="{{ route('Ads.showByTypeCategory', ['type' => $type, 'categoryId' => $categoryItem->id]) }}"
+           class="btn btn-outline-custom {{ isset($selectedCategory) && $selectedCategory->id == $categoryItem->id ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+            {{ $categoryItem->adsCategoryTitle }}
+        </a>
+    @else
+        <a href="{{ route('Ads.showByCategory', ['categoryId' => $categoryItem->id]) }}"
+           class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2">
+            {{ $categoryItem->adsCategoryTitle }}
+        </a>
+    @endif
+@endforeach
+
+
+
+</div>
+
+        
     </div>
-    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1">
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 ms-5">
+        @foreach($ads as $ads)
         <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
+            <div class="card p-0 "><a href="{{route('ads.show',$ads->id)}}" class="text-decoration-none text-black">
+            <img src="{{asset($ads->adsThumbnail)}}" class="card-img-top" alt="Ad Image"
+     style="height: 200px; width: 100%; object-fit: cover; border-radius: 8px;">
                     <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
+                        <h6 class="card-title mb-0">{{$ads->adsTitle}}</h6>
+                        <p class="card-text mb-0">{{$ads->location}}</p>
+                        <p class="card-text"><small class="text-body-secondary">{{$ads->postedDuration}}</small></p>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card p-0 "><a href="adsdetails.html" class="text-decoration-none text-black">
-                    <img src="Images/image.png" class="card-img-top" alt="...">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">Room For Rent</h6>
-                        <p class="card-text mb-0">Kathmandu</p>
-                        <p class="card-text"><small class="text-body-secondary">3 mins ago</small></p>
-                    </div>
-                </a>
-            </div>
-        </div>
+        @endforeach
+    
     </div>
     <div class="row justify-content-center m-3">
         <button class="btn view-more">View More</button>
@@ -234,35 +148,42 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
-                    <!-- Type Dropdown -->
+            <form id="addItemForm" action="{{route('ads.store')}}" method="POST" enctype="multipart/form-data">
+                @csrf
+            <!-- Type Dropdown -->
                     <div class="">
-                        <select class="form-select bg-dark-subtle text-black-50 py-3" id="type" aria-label="">
+                        <select class="form-select bg-dark-subtle text-black-50 py-3" id="type" name="type" aria-label="">
                             <option selected>Type</option>
-                            <option value="1">Buy</option>
-                            <option value="2">Sell</option>
-                            <option value="3">Rent</option>
+                            
+                            <option value="Buy">Buy</option>
+                            <option value="Sell">Sell</option>
+                            <option value="Rent">Rent</option>
                         </select>
                     </div>
                     <div class="mt-3">
-                        <select class="form-select bg-dark-subtle text-black-50 py-3" id="cat" aria-label="">
-                            <option selected>Category</option>
-                            <option value="1">All</option>
-                            <option value="2">House</option>
-                            <option value="3">Land</option>
+                        <select class="form-select bg-dark-subtle text-black-50 py-3" id="cat" name="adsCategoryId" aria-label="">
+                            
+                            <option selected> Select Category</option>
+                            @foreach($all as $al)
+                            <option value="{{$al->id}}">{{$al->adsCategoryTitle}}</option>
+                            @endforeach
                         </select>
                     </div>
 
-                    <div class="mt-3">
-                        <select class="form-select bg-dark-subtle text-black-50 py-3" id="country" aria-label="">
-                            <option selected>Country</option>
-                            <option value="1">Nepal</option>
-                            <option value="2">USA</option>
-                            <option value="3">Other</option>
-                        </select>
+                    <div class="form-floating text-black-50 mt-3">
+                        <input type="text" class="form-control bg-dark-subtle text-black-50" name="country" id="countryInput"
+                            placeholder="Country">
+                        <label for="countryInput">Country</label>
                     </div>
                     <div class="form-floating text-black-50 mt-3">
-                        <input type="text" class="form-control bg-dark-subtle text-black-50" id="titleInput"
+                        <input type="text" class="form-control bg-dark-subtle text-black-50" name="location" id="cityInput"
+                            placeholder="City">
+                        <label for="cityInput">City</label>
+                    </div>
+
+                    
+                    <div class="form-floating text-black-50 mt-3">
+                        <input type="text" class="form-control bg-dark-subtle text-black-50"  name ="adsTitle" id="titleInput"
                             placeholder="Title">
                         <label for="titleInput">Title</label>
                     </div>
@@ -270,29 +191,75 @@
                     <div class="form-floating text-black-50 mb-3">
 
                         <input type="text" class="form-control bg-dark-subtle text-black-50" id="price"
-                            placeholder="Enter price" required>
+                             name ="pricing"placeholder="Enter price" required>
                         <label for="price">Price</label>
 
                     </div>
+                    <div class="form-floating text-black-50 mb-3">
+
+                        <input type="tel" class="form-control bg-dark-subtle text-black-50" id="contact"
+                             name ="contactNumber"placeholder="Enter Contact Number" required>
+                        <label for="contact">Contact No</label>
+
+                    </div>
                     <div class="form-floating text-black-50">
-                        <textarea class="form-control bg-dark-subtle text-black-50" placeholder="Post Details"
+                        <textarea class="form-control bg-dark-subtle text-black-50" name="adsDescription" placeholder="Post Details"
                             id="floatingTextarea" style="height: 100px"></textarea>
                         <label for="floatingTextarea">Describe...</label>
                     </div>
-                    <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
-                        <p class="flex-grow-1 my-auto text-black-50">Add to your post</p>
-                        <div class="d-flex gap-3 align-items-center">
-                            <a href="#" class="primary_color_text">
-                                <i class="fa-solid fa-location-dot"></i></a>
-                            <a href="#" class="primary_color_text">
-                                <i class="fa-solid fa-image"></i></a>
-                        </div>
+                    <div class="d-flex flex-column bg-dark-subtle p-2 gap-2 rounded" style="max-width: 100%;">
+  <!-- Top row -->
+  <div class="d-flex align-items-center gap-3">
+    <p class="flex-grow-1 my-auto text-black-5 mb-0" style="font-size: 0.9rem;">Add to your post</p>
+
+    <!-- Image upload trigger -->
+    <div class="d-flex align-items-center gap-2">
+      <label for="fileInput" class="primary_color_text m-0" style="cursor: pointer;">
+        <i class="fa-solid fa-image fa-lg"></i>
+      </label>
+      <input type="file" id="fileInput" name="adsThumbnail" accept="image/*" class="d-none">
+    </div>
+  </div>
+
+  <!-- Image Preview (small) -->
+  <div id="imagePreview" class="d-flex mt-1" style="height: 60px;"></div>
+</div>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const imagePreview = document.getElementById('imagePreview');
+
+  fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.innerHTML = `
+          <img src="${e.target.result}" alt="Preview" style="height: 100%; width:30%; border-radius: 6px; object-fit: cover;">
+        `;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      imagePreview.innerHTML = '';
+    }
+  });
+</script>
+
                     </div>
                     <div class="d-flex justify-content-center mt-3">
-                        <button type="button" class="btn btn-primary mx-auto"
+                        <button type="submit" class="btn btn-primary "
                             style="background-color: #0064a7;">Submit</button>
                     </div>
                 </form>
+                <script>
+  const postAdModal = document.getElementById('postAdModal');
+  postAdModal.addEventListener('hidden.bs.modal', () => {
+    if (document.activeElement) {
+      document.activeElement.blur();
+    }
+  });
+</script>
+
             </div>
         </div>
     </div>
