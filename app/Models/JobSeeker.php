@@ -65,10 +65,13 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
     ];
 
 
+
+
+
     public function getCountryFlagAttribute()
     {
         // Make sure countryCode is in uppercase and not null
-        $code = strtoupper($this->countryCode ?? '');
+        $code = strtolower($this->countryCode ?? $this->countryShortCode);
     
         // Check if the code has exactly two characters (valid country code)
         if (strlen($code) === 2) {

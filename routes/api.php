@@ -5,6 +5,7 @@ use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\AdvertisementCategoryController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\DiscussionForumController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
@@ -162,6 +163,7 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
         Route::get('aboard/aboardsearch', [AboardController::class, 'search']);
         Route::post('aboard/aboardsearch', [AboardController::class, 'search']);
 
+       Route::apiResource('productcomment',ProductCommentController::class);
         //aboard product category
         Route::apiResource('productCategory', ProductCategoryController::class);
 
@@ -203,6 +205,8 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
             Route::get('/description/{id}', [FrontendAPIController::class, 'giftNcouponDescription']);
             // Route::get('/categories', [GiftCateryController::class, 'index'])->name('giftcategories');
         });
+
+
 
         // Route::prefix('profile')->group(function (){
         //     route::get('/{id}',[JobSeekerController::class, 'getProfile']);

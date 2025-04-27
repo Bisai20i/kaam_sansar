@@ -18,7 +18,7 @@
 @endphp
 
     <div class="d-flex justify-content-center justify-content-md-between flex-wrap-reverse row-gap-3 ">
-        <div class="btn-group mb-3 gap-lg-4 ads_type" role="group" aria-label="Basic radio toggle button group">
+        <div class="btn-group mb-3 gap-lg-1 ads_type" role="group" aria-label="Basic radio toggle button group">
         <a href="{{ route('ads.index')}}"
            class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2">
             All
@@ -40,16 +40,30 @@
         </a>
         </div>
         <div>
-            <button type="button" class="btn post-ad-btn" data-bs-toggle="modal" data-bs-target="#postAdModal">
-                <i class="fas fa-plus me-2"></i>Add Post
+            <button type="button" class="btn post-ad-btn text-white py-2 px-4 fs-5" style="background-color: #0064a7;" data-bs-toggle="modal"  data-bs-target="#postAdModal">
+                <i class="fas fa-plus me-2" ></i>Add Post
             </button>
         </div>
     </div>
+    <!-- <script>
+    document.getElementById('postAdModal').addEventListener('click', function() {
+        @if (Auth::check())
+            // User is logged in: open Add Item Modal
+            var addItemModal = new bootstrap.Modal(document.getElementById('#postAdModal'));
+            postAdModal.show();
+        @else
+            //  User not logged in: open Login Modal
+            var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+        @endif
+    });
+</script> -->
 
     <div>
-        <h5>Find what you are looking for</h5>
+        <h5>Find what you are looking for ?</h5>
         <div class="row g-3 mb-3">
-        <form action="{{ route('ads.search') }}" class="row mt-4 align-items-center">
+        <form action="{{ route('ads.search') }}" method="POST" class="row mt-4 align-items-center">
+            @csrf
             <!-- Search Input -->
             <div class="col-lg">
                 <div class="input-group">
@@ -57,27 +71,29 @@
                         <i class="fas fa-search text-muted"></i>
                     </span>
                     <input type="text" class="form-control border-start-0 ps-0 py-2" style="height: 42px;"
-                        placeholder="What are you looking for..." aria-label="Search">
+                       name="adsTitle"  placeholder="What are you looking for..." aria-label="Search">
                 </div>
             </div>
 
             <!-- Country Select -->
             <div class="col-md-6 col-lg-3">
-                <select class="form-select py-2" id="countrySelect" name="country" aria-label="">
+                <select class="form-select py-2 bg-white text-secondary" id="countrySelect" name="country" aria-label="">
                     <option selected>Select Country</option>
-                    <option value="Nepal">Nepal</option>
-                    <option value="USa">USA</option>
-                    <option value="Other">Other</option>
+                    @foreach($ad as $a)
+                    <option value="{{$a->country}}">{{$a->country}}</option>
+                    @endforeach
+
                 </select>
             </div>
 
             <!-- City Select -->
             <div class="col-md-6 col-lg-3">
-                <select class="form-select py-2" id="citySelect" name="location" aria-label="">
+                <select  class="form-select py-2 bg-white text-secondary" id="citySelect" name="location" aria-label="">
                     <option selected>Select City</option>
-                    <option value="Pokhara">Pokhara</option>
-                    <option value="Ktm">Kathmandu</option>
-                    <option value="Other">Other</option>
+                    @foreach($ad as $a)
+
+                    <option value="{{$a->location}}">{{$a->location}}</option>
+                    @endforeach
                 </select>
             </div>
 
@@ -92,19 +108,19 @@
     </div>
     <div class="nav nav-pills gap-3 justify-content-center justify-content-md-start">
     {{-- Show All --}}
-<a class="nav-link-ads active rounded-5 px-3"
-   href="{{ route('Ads.showByTypeCategory') }}"
-   data-bs-toggle="pill">All</a>
+<a class="nav-link-ads active rounded-pill px-3 d-flex align-items-center" 
+   href="{{ route('ads.index') }}"
+   >All</a>
 
    @foreach($categories as $categoryItem)
     @if($type)
         <a href="{{ route('Ads.showByTypeCategory', ['type' => $type, 'categoryId' => $categoryItem->id]) }}"
-           class="btn btn-outline-custom {{ isset($selectedCategory) && $selectedCategory->id == $categoryItem->id ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+           class="btn btn-outline-custom {{ isset($selectedCategory) && $selectedCategory->id == $categoryItem->id ? 'active' : '' }} rounded-pill mx-1 px-4 border border-2">
             {{ $categoryItem->adsCategoryTitle }}
         </a>
     @else
         <a href="{{ route('Ads.showByCategory', ['categoryId' => $categoryItem->id]) }}"
-           class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2">
+           class="btn btn-outline-custom rounded-pill mx-1 px-4 border border-2">
             {{ $categoryItem->adsCategoryTitle }}
         </a>
     @endif
@@ -115,13 +131,12 @@
 </div>
 
         
-    </div>
-    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 ms-5">
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 ">
         @foreach($ads as $ads)
         <div class="col">
             <div class="card p-0 "><a href="{{route('ads.show',$ads->id)}}" class="text-decoration-none text-black">
             <img src="{{asset($ads->adsThumbnail)}}" class="card-img-top" alt="Ad Image"
-     style="height: 200px; width: 100%; object-fit: cover; border-radius: 8px;">
+     style="height: 200px; width: 100%; object-fit:cover; border-radius: 8px;">
                     <div class="card-body p-2">
                         <h6 class="card-title mb-0">{{$ads->adsTitle}}</h6>
                         <p class="card-text mb-0">{{$ads->location}}</p>
@@ -133,8 +148,10 @@
         @endforeach
     
     </div>
+
     <div class="row justify-content-center m-3">
         <button class="btn view-more">View More</button>
+    </div>
     </div>
 
 </div>

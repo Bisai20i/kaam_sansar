@@ -38,6 +38,7 @@ use App\Http\Controllers\PassportRenewalController;
 use App\Http\Controllers\ResumeHelpController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ForumInteractionController;
+use Illuminate\Support\Facades\Session;
 
 
 // Authentication Routes
@@ -94,8 +95,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     // Route for aboard deals
     // Route for aboard deals
-    Route::resource('aboards', AboardController::class);
-    Route::get('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
+
 
     Route::put('aboards/{id}/publish', [AboardController::class, 'publish'])->name('aboards.publish');
     Route::put('aboards/{id}/unpublish', [AboardController::class, 'unpublish'])->name('aboards.unpublish');
@@ -316,17 +316,28 @@ Route::get('visa-HQ/details', [FrontendController::class, 'visaDetails'])->name(
 
 Route::get('aboardsdeals', [AboardController::class, 'aboard'])->name('aboarddeals');
 
+Route::resource('aboards', AboardController::class);
+Route::post('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
+
+// Route::post('/set-redirect', function (Request $request) {
+//     // ✅ Store redirect URL in session
+//     session(['redirect_url' => $request->input('redirect_url')]);
+
+//     // ✅ Redirect to login instead of index
+//     return redirect()->route('index')->with('info', 'You need to login first ');
+// })->name('set.redirect');
 
 
 Route::post('/set-redirect', function (Request $request) {
     // ✅ Store redirect URL in session
     session(['redirect_url' => $request->input('redirect_url')]);
 
-    // ✅ Redirect to login instead of index
-    return redirect()->route('index')->with('info', 'You need to login first ');
+    // ✅ Set a flag to open the login modal
+    session(['show_login_modal' => true]);
+
+    // ✅ Redirect to index
+    return redirect()->route('index')->with('showLoginModal', true);
 })->name('set.redirect');
-
-
 
 Route::prefix('giftNCoupon')->group(function () {
     Route::get('/home/{type?}/{giftCategoryId?}', [FrontendController::class, 'giftNcoupon'])->name('gift.home');

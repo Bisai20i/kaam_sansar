@@ -53,14 +53,17 @@ class AboardController extends Controller
 
     public function aboard( Request $request){
         $categories = ProductCategory::all();
-        $items      = Aboard::where('publishStatus', 'publish')
+        $ads    = Aboard::where('publishStatus', 'publish')
             ->where('status', 'Available')
             ->get();
-        // $items = Aboard::all();
+            $all = Aboard::all();
+            $uniqueAboards = Aboard::select('country')->distinct()->get();
+            $uniqueCity = Aboard::select('location')->distinct()->get();
+        $items = Aboard::all();
         $type = $request->has('type') && in_array($request->input('type'), $validTypes)
         ? $request->input('type')
         : 'Item';
-        return view('frontend.aboarddeals.aboard',compact('categories','items','type'));
+        return view('frontend.aboarddeals.aboard',compact('categories','ads','type','uniqueAboards','uniqueCity','items'));
 
     }
     public function create()
@@ -165,9 +168,7 @@ class AboardController extends Controller
 
         // Get the authenticated user
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-        Log::info('Authenticated Job Seeker ID: ' . $user->id);
 
-             $jobSeekerId = $user->id;
              
         try {
                                                         // Get the Aboard details
@@ -431,7 +432,13 @@ class AboardController extends Controller
         // Define allowed types
         $validTypes = ['Item', 'Buy'];
 
-        // Set default type to 'Sell' if not provided or invalid
+        $categories  = ProductCategory::all();
+
+        $all = Aboard::all();
+        $items = Aboard::all();
+        $uniqueAboards = $all->unique('country');
+        $uniqueCity = $all->unique('location');
+                // Set default type to 'Sell' if not provided or invalid
         $type = $request->has('type') && in_array($request->input('type'), $validTypes)
         ? $request->input('type')
         : 'Item';
@@ -472,7 +479,7 @@ class AboardController extends Controller
             }
 
         // For web, return the search results in a view
-        return view('frontend.aboarddeals.aboard',compact('ads','categories','items','type'));
+        return view('frontend.aboarddeals.aboard',compact('ads','all','items','type','uniqueAboards','uniqueCity','categories'));
     } catch (\Exception $e) {
         Log::error("Error during advertisement search: " . $e->getMessage());
 

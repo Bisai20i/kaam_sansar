@@ -34,34 +34,51 @@
                 <button class="btn btn-add_post" id="addItemBtn" data-bs-toggle="modal" data-bs-target="#addItemModal">
                     + Add Item
                 </button>
+<!-- <script>
+    document.getElementById('addItemBtn').addEventListener('click', function() {
+        @if (Auth::check())
+            //  User is logged in: open Add Item Modal
+            var addItemModal = new bootstrap.Modal(document.getElementById('addItemModal'));
+            addItemModal.show();
+        @else
+            //  User not logged in: open Login Modal
+            var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+        @endif
+    });
+</script> -->
+
             </div>
-            <form action="{{ route('aboard.search') }}" method="GET">
-    <h6>Find what you're looking for</h6>
+            <form action="{{ route('aboard.search') }}" method="POST">
+                @csrf
+    <h6>Find what you're looking for ?</h6>
     <div class="container">
         <div class="row g-2 mt-2 mb-1 align-items-center">
             <div class="col-md-5 d-flex align-items-center">
-                <div class="input-group w-100">
-                    <span class="input-group-text">
-                        <i class="bi bi-search"></i>
+            <div class="input-group ">
+                    <span class="input-group-text bg-white border-end-0" style="height: 42px;">
+                        <i class="fas fa-search text-muted"></i>
                     </span>
                  
-                    <input type="text" name="productTitle" class="form-control" placeholder="What are you looking for?">
+                    <input type="hidden" name="type" class="form-control" value={{$type}}>
+                    <input type="text" name="productTitle" class="form-control border-start-0" placeholder="What are you looking for?">
                 </div>
             </div>
             <div class="col-md-3 d-flex align-items-center">
-                <select class="form-select abroad-deal" name="country">
-                    <option selected disabled>Select Country</option>
-                    <option value="Nepal">USA</option>
-                    <option value="India">India</option>
-                    <option value="UK">UK</option>
+            <select class="form-select py-2 bg-white" id="countrySelect" name="country" aria-label="">
+            <option selected disabled>Select Country</option>
+                    @foreach($uniqueAboards as $u)
+                    <option value="{{$u->country}}">{{$u->country}}</option>
+                   @endforeach
                 </select>
             </div>
             <div class="col-md-3 d-flex align-items-center">
-                <select class="form-select abroad-deal" name="location">
-                    <option selected disabled>Select City</option>
-                    <option value="Nepal">New York</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="London">London</option>
+            <select class="form-select py-2 bg-white" id="locationSelect" name="Location" aria-label="">
+            <option selected disabled>Select City</option>
+                    @foreach($uniqueCity as $c)
+                    <option value="{{$c->location}}">{{$c->location}}</option>
+                    @endforeach
+                    
                 </select>
             </div>
             <div class="col-md-1 d-grid">
@@ -79,6 +96,11 @@
     <div class="container mb-5">
         <section class="uploads">
             <!-- Category Filter Section -->
+          
+
+        
+            <!-- Product Listing Section -->
+            <div class="row g-2 mt-0" id="product-list">
             <div class="row" >
     <div class="d-flex gap-2 p-3">
         <button class="btn-sm btn-outline-secondary rounded-pill category-btn active-btn"
@@ -92,17 +114,13 @@
     </div>
 
             </div>
-
         
-            <!-- Product Listing Section -->
-            <div class="row g-2 mt-0" id="product-list">
-        
-            @foreach($items->where('type', $type) as $ad)
+            @foreach($ads->where('type', 'Item') as $ad)
     <div class="col-lg-3 col-md-6 col-sm-12 col-12 product" 
          data-category="{{ $ad->productCategoryId }}" 
          data-type="{{ $ad->type }}">
         <div class="card">
-            <div class="card-bdy-packages" href="{{ route('aboards.show', $ad->id) }}" style="cursor: pointer;">
+            <a class="card-bdy" style="width: 100%; height: 280px; object-fit: auto; text-decoration:none;" href="{{ route('aboards.show', $ad->id) }}" style="cursor: pointer;">
                 <img src="{{ $ad->productThumbnail ? asset($ad->productThumbnail) : asset('Images/default-image.png') }}" 
                      class="bdy-packages-img" 
                      alt="Product Image" 
@@ -111,7 +129,7 @@
                     <p class="mt-3 mb-0">{{ $ad->productTitle }}</p>
                     <p class="price">NRs. {{ $ad->pricing }}</p>
                 </div>
-            </div>
+</a>
         </div>
     </div>
 @endforeach
@@ -348,20 +366,7 @@ if (type === 'Buy') {
                     const imageInput = document.getElementById('imageInput').files[0]; // Get the image file
                     const imageURL = imageInput ? URL.createObjectURL(imageInput) : 'Images/default-image.png'; // Default image if no file selected
 
-                    // Create a new product card element
-                    const productCard = document.createElement('div');
-                    productCard.classList.add('col-lg-3', 'col-md-3', 'col-sm-6', 'col-12', 'product');
-                    productCard.setAttribute('data-category', category);
-
-                    productCard.innerHTML = `
-        <div class="card-bdy-packages" onclick="window.location.href='abroadchat1.html';" style="cursor: pointer;">
-            <img src="${imageURL}" class="bdy-packages-img" alt="Product Image" style="width: 286px; height: 180px;">
-            <div class="card-body">
-                <p class="mt-3 mb-0">${title}</p>
-                <p class="price">NRs. ${price}</p>
-            </div>
-        </div>
-    `;
+         
 
                     // Add the new product card to the product list
                     document.getElementById('product-list').appendChild(productCard);
@@ -487,52 +492,69 @@ if (type === 'Buy') {
                 </div>
             </div>
        
-            <!-- "Want to Buy" Section to display the post -->
-            <div id="wantToBuyForm" style="display: none;">
-            @foreach($items->where('type', 'Buy') as $ad)
-
+       <!-- "Want to Buy" Section to display the post -->
+<div id="wantToBuyForm" style="display: none;">
+ 
         <div class="container mt-4">
             <div class="row">
                 <!-- Left Section: Cards -->
+             
                 <div class="col-md-9">
+                @foreach($ads as $ad)
+                @if($ad->type == 'Buy')
                     <div class="card mb-3">
-                    <!-- New posts will be inserted here -->
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <img src="{{asset($ad->productThumbnail)}}" class="rounded-circle me-2" alt="User" style="height:40px;width:40px;">
-                            <div>
-                            <h6 class="mb-0">{{ $ad->jobSeeker->firstName }} {{ $ad->jobSeeker->lastName }}</h6>
-                            <small class="text-muted"><i class="bi bi-geo-alt"></i> <i class="bi bi-clock ms-2"></i>{{$ad->postedDuration}}</small>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset($ad->productThumbnail) }}" class="rounded-circle me-2" alt="User" style="height:40px;width:40px;">
+                                <div>
+                                    <h6 class="mb-0">{{ $ad->jobSeeker->firstName }} {{ $ad->jobSeeker->lastName }}</h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-geo-alt"></i> 
+                                        <i class="bi bi-clock ms-2"></i> 
+                                        {{ $ad->postedDuration }}
+                                    </small>
+                                </div>
+                                <button class="btn btn-search ms-auto">Message</button>
                             </div>
-                            <button class="btn btn-search ms-auto">Message</button>
-                        </div>
-                        <h5 class="mt-3">{{$ad->productTitle }}</h5>
-                        <p class="abroad-p">{{$ad->productDescription}}</p>
-                        <div class="mt-3">
-                            <a href="{{$ad->urlLink}}" class="text-primary" target="_blank">Link</a>
-                        </div>
-        @if(!empty($ad->productThumbnail))
-    <div class="mt-2 w-100" style="overflow: hidden; border-radius: 8px; height: 200px;">
-        <img src="{{ $ad->productThumbnail }}" alt="Product Thumbnail" class="img-fluid w-100 h-100"
-            style="object-fit: cover;">
-    </div>
-@endif
 
+                            <h5 class="mt-3">{{ $ad->productTitle }}</h5>
+                            <p class="abroad-p">{{ $ad->productDescription }}</p>
 
-                        <hr>
-                        <div class="d-flex gap-4 ms-2">
-                            <div><i class="bi bi-chat"></i> 0</div>
-                            <div><i class="bi bi-share"></i> 0</div>
+                            <div class="mt-3">
+                                <a href="{{ $ad->urlLink }}" class="text-primary" target="_blank">Link</a>
+                            </div>
+
+                            @if(!empty($ad->productThumbnail))
+                                <div class="mt-2 w-100" style="overflow: hidden; border-radius: 8px; height: 200px;">
+                                    <img src="{{ $ad->productThumbnail }}" alt="Product Thumbnail" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                            @endif
+
+                            <hr>
+                            <div class="d-flex gap-4 ms-2">
+                                <div><i class="bi bi-chat"></i> 0</div>
+                                <div><i class="bi bi-share"></i> 0</div>
+                            </div>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                 </div>
-                </div>
-                @endforeach
-                
-                 <!-- Right Section: Ad Banner -->
-                 <div class="col-md-3 border d-flex align-items-center justify-content-center">
+
+              
+                <!-- Right Section: Ad Banner -->
+                <div class="col-md-3 border d-flex align-items-center justify-content-center">
                     <div class="ad-banner">Advertisement Banner</div>
                 </div>
+
+            </div>
+        </div>
+       
+    
+</div>
+
+                
+                
                 
 
             </div>

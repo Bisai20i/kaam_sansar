@@ -37,14 +37,18 @@
 
             <div class="col-md-9 ps-md-4 mt-3 mt-md-0 border-0 fixed-height">
                         <h2 class="fw-semibold">{{$ads->adsTitle}}</h2>
-                        <div class="step-container d-flex justify-content-start gap-4">
-                        <button class="btn step-button active1" onclick="setActive(0)">
-                                <span>Description</span>
-                            </button>
-                            <button class="btn step-button" onclick="setActive(1)">
-                                <span>Comment</span>
-                            </button>
-                        </div>
+                        <div class="step-container-gifts gap-4">
+
+<button
+    class="btn step-button-gifts active1" onclick="setActive(0)"
+    >
+    <span>Description</span>
+</button>
+<button class="btn step-button-gifts" onclick="setActive(1)">
+    
+    <span>Comment</span>
+</button>
+</div>
                 <div class="row mt-3 mb-3" id="description">
                     <p>sdfghjkl</p>
                 </div>
@@ -229,12 +233,12 @@
   display: inline-block;
 }
 
-/* Active button */
-.step-button.active1 {
-  text-decoration: underline;
+    /* Style for the active button */
+    .step-button-gifts.active1 {
+    text-decoration: underline;
   color: #0064A7;
-}
 
+}
 
 /* Active border directly under text */
 .step-button.active1 span::after {
@@ -260,7 +264,7 @@
 <!-- ✅ Place script here, before closing body tag -->
 <script>
     function setActive(tabIndex) {
-        var buttons = document.querySelectorAll('.step-button');
+        var buttons = document.querySelectorAll('.step-button-gifts');
         var descriptionSection = document.getElementById('description');
         var commentSection = document.getElementById('comment');
 

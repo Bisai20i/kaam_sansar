@@ -73,6 +73,7 @@
             </div>
         </div>
     </section>
+    
 
     <section class="jobs">
         @if (@$findJobs->count() > 0)

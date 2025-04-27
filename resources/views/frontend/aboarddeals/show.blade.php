@@ -37,13 +37,16 @@
 
             <div class="col-md-9 ps-md-4 mt-3 mt-md-0 border-0 fixed-height">
                 <h2 class="fw-semibold">MacBook M2 Pro</h2>
-                <div class="step-container gap-4">
-                    <button class="btn step-button active1" onclick="setActive(0)">
-                        <span>Description</span>
-                    </button>
-                    <button class="btn step-button" onclick="setActive(1)">
-                        <span>Comment</span>
-                    </button>
+                <div class="step-container-gifts gap-4">
+                <button
+    class="btn step-button-gifts active1" onclick="setActive(0)"
+    >
+    <span>Description</span>
+</button>
+<button class="btn step-button-gifts" onclick="setActive(1)">
+    
+    <span>Comment</span>
+</button>
                 </div>
                 <div class="row mt-3 mb-3" id="description">
                     <p>{{$aboard->productDescription}}</p>
@@ -117,10 +120,10 @@
 
     <div class="row mt-4">
         <h3>Similar product</h3>
-        <div class="row g-2 justify-content-center mt-0" id="product-list">
+        <div class="row g-2 mt-0" id="product-list">
          @foreach($similarProducts as $product )
             <div class="col-lg-3 col-md-3 col-sm-6 col-12 product" data-category="electronics">
-                <div class="card-bdy-packages">
+                <div class="card">
                     <img src="{{asset($product->productThumbnail)}}" class="bdy-packages-img"
                     style="width: 100%; height: 180px; object-fit:auto;">
                     <div class="card-body">
@@ -154,6 +157,24 @@
 </div>
 
 <style>
+
+    /* Style for the active button */
+.step-button-gifts.active1 {
+    text-decoration: underline;
+  color: #0064A7;
+
+}
+
+/* Hide inactive content sections by default */
+.content-section {
+    display: none;
+}
+
+/* Display active content section */
+.content-section.active {
+    display: block;
+}
+
         .chat-box {
             position: fixed;
             bottom: 20px;
@@ -218,7 +239,7 @@
 <!-- ✅ Place script here, before closing body tag -->
 <script>
     function setActive(tabIndex) {
-        var buttons = document.querySelectorAll('.step-button');
+        var buttons = document.querySelectorAll('.step-button-gifts');
         var descriptionSection = document.getElementById('description');
         var commentSection = document.getElementById('comment');
 

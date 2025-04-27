@@ -4,15 +4,15 @@
             <div class="col-lg-12"> <!-- Restricting width for better alignment -->
                 <div class="row ">
                     <div class="col-lg-2 py-3">
-                        <img src="{{ asset('frontend/assets/Images/logolast.png') }}" class="image-fluid" alt="">
+                        <img src="Images/logolast.png" class="image-fluid" alt="">
                     </div>
 
                     <div class="col-lg-2 py-3">
                         <h5 class="pb-3">Quick Link</h5>
-                        <p>Home</p>
-                        <p>About Us</p>
-                        <p>Articles</p>
-                        <p>Contact Us</p>
+                        <p><a href="#" class="text-decoration-none text-white quick-link p-0">Home</a></p>
+                        <p><a href="#" class="text-decoration-none text-white quick-link p-0">About Us</a></p>
+                        <p><a href="#" class="text-decoration-none text-white quick-link p-0">Articles</a></p>
+                        <p><a href="#" class="text-decoration-none text-white quick-link p-0">Contact Us</a></p>
                     </div>
 
                     <div class="col-lg-3 py-3">
@@ -27,43 +27,60 @@
                         <p>Privacy Policy</p>
                         <p>Terms & Condition</p>
                     </div>
+
+
+
+
                     <div class="col-lg-3 py-3">
                         <h5 class="pb-3">Download App</h5>
                         <div class="img">
                             <!-- Left Side: QR Code -->
-                            <img class="img1" src="{{ asset('frontend/assets/Images/pattern.png') }}" alt="QR Code">
+                            <img class="img1" src="Images/pattern.png" alt="QR Code">
 
                             <!-- Right Side: Store Buttons -->
                             <div class="store-buttons">
                                 <a href="https://apps.apple.com/us/app/yourapp/id123456789" target="_blank">
-                                    <img class="img2" src="{{ asset('frontend/assets/Images/appstore.png') }}"
-                                        alt="App Store">
+                                    <img class="img2" src="Images/appstore.png" alt="App Store">
                                 </a>
                                 <a href="https://play.google.com/store/apps/details?id=com.example.yourapp"
                                     target="_blank">
-                                    <img class="img2" src="{{ asset('frontend/assets/Images/google.png') }}"
-                                        alt="Google Play Store">
+                                    <img class="img2" src="Images/google.png" alt="Google Play Store">
                                 </a>
                             </div>
                         </div>
+
+
                         <!-- Social Icons Below -->
                         <div class="icon">
                             <span><i class="fab fa-facebook"></i></span>
-                            <span><i class="fab fa-twitter"></i></span>
-                            <span><i class="fab fa-instagram"></i></span>
-                            <span><i class="fab fa-linkedin"></i></span>
+                            <span><i class="fa fa-twitter"></i></span>
+                            <span><i class="fa fa-instagram"></i></span>
+                            <span><i class="fa fa-linkedin"></i></span>
                         </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-   
 
     <hr>
-    <div class="pb-3">
-        <a>Copyright <?php echo date('Y'); ?> Kaam Sansar | All rights reserved.</a>
-    </div>
-    
+
+    <a>Copyright @2021 Kamsansar | All rights reserved.</a>
 
 </section>
+<style>
+
+.quick-link {
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px;
+}
+
+.quick-link:hover {
+  background-color: #0064A7 !important;
+  color: #faac24 !important;
+}
+</style>

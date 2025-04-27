@@ -234,6 +234,12 @@
         </div>
     </div>
 </div>
+<script>
+    @if(session('showLoginModal'))
+        var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+        loginModal.show();
+    @endif
+</script>
 
 
 <!-- Modal for completing profile 2-->
