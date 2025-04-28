@@ -583,7 +583,7 @@ Resume Maker
                                         </div>
 
                                     </div>
-                                        <div class="d-flex justify-content-between">
+                                    <div class="d-flex justify-content-between">
                                         <button type="button" class="btn add-project float-start" id="addExperienceBtn">
                                             + Add Education
                                         </button>
@@ -591,7 +591,7 @@ Resume Maker
                                             <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
                                             <button type="button" class="btn text-center next-btn" id="submitExperience">Save & Continue</button>
                                         </div>
-                                    </div>  
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -659,9 +659,16 @@ Resume Maker
                                             }
                                         });
                                     </script>
-                                    <button type="button" id="addTraining" class="btn add-project float-start">+ Add Training</button>
-                                    <button type="submit" class="btn next-btn float-end"
-                                        id="submitTraining">Next</button>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn add-project float-start" id="addTraining">
+                                            + Add Training
+                                        </button>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="button" class="btn text-center next-btn" id="submitTraining">Save & Continue</button>
+                                        </div>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -688,29 +695,16 @@ Resume Maker
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn add-project float-start" id="addLanguage">+
-                                        Add
-                                        Language</button>
-                                    <button type="submit" class="btn next-btn float-end fw-semibold">Submit</button>
+                                        <button type="button" class="btn add-project float-start" id="addLanguage">
+                                            + Add Language
+                                        </button>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="button" class="btn text-center next-btn" id="submitLangauge">Save & Continue</button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
-                            <div id="overviewLanguage"></div>
-                            @if ($languages->count() > 0)
-                            @foreach ($languages as $language)
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control custom-input border-end-0"
-                                    placeholder="Language" name="languageName" value="{{ $language->languageName }}" disabled>
-
-                                <select class="form-select custom-input border-start-0 text-end me-3"
-                                    name="languageProficiency" disabled>
-                                    <option>Beginner</option>
-                                    <option>Intermediate</option>
-                                    <option>Advanced</option>
-                                </select>
-                            </div>
-                            @endforeach
-                            @endif
-
                         </div>
                     </div>
                 </div>
@@ -748,14 +742,6 @@ Resume Maker
 
 
 <script>
-    const educationEntries = [];
-    const projectEntries = [];
-    const skillEntries = [];
-    const achievementEntries = [];
-    const experienceEntries = [];
-    const trainingEntries = [];
-    const languageEntries = [];
-    // File upload functionality for Visa section
     document.addEventListener('DOMContentLoaded', function() {
         function previewProfile(event) {
             const reader = new FileReader();
@@ -1249,99 +1235,176 @@ Resume Maker
                 console.error("Error in saving experience:", error);
             }
         });
+        // Collecting Training Form Data
+        function collectTrainingData() {
+            return {
+                trainingTitle: document.getElementById('training-title').value,
+                institutionName: document.getElementById('training-organization').value,
+                completionDate: document.getElementById('training-date').value,
+                certificate: document.getElementById('certificate').files[0], // Handle file upload
+            };
+        }
+
+        // Save Training Data to the Server
+        async function saveTrainingData(trainingData) {
+            console.log("Sending training data:", trainingData); // Debug log
+            const formData = new FormData();
+            formData.append('trainingTitle', trainingData.trainingTitle);
+            formData.append('institutionName', trainingData.institutionName);
+            formData.append('completionDate', trainingData.completionDate);
+            if (trainingData.certificate) {
+                formData.append('certificate', trainingData.certificate);
+            }
+
+            try {
+                const response = await fetch("{{ route('trainings.store') }}", {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+                console.log("Server response:", result); // Debug log
+                return result;
+            } catch (error) {
+                console.error("Error saving training data:", error);
+                return {
+                    success: false
+                };
+            }
+        }
+
+        // Prevent Default Form Submission
+        document.getElementById('trainingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+
+        // Add Training Button Handler
+        document.getElementById('addTraining').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const trainingData = collectTrainingData();
+            console.log("Collected training data:", trainingData); // Debug log
+            try {
+                const result = await saveTrainingData(trainingData);
+                if (result.success) {
+                    // Reset the form after saving
+                    const form = document.getElementById('trainingForm');
+                    form.reset();
+                    imgPreview.innerHTML = ''; // Clear image preview
+                    console.log("Training added successfully!");
+                } else {
+                    console.log("Error saving training:", result);
+                }
+            } catch (error) {
+                console.error("Error saving training:", error);
+            }
+        });
+
+        // Save and Continue (Next) Button Handler
+        document.getElementById('submitTraining').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const trainingData = collectTrainingData();
+            console.log("Collected training data:", trainingData); // Debug log
+            try {
+                const result = await saveTrainingData(trainingData);
+                if (result.success) {
+                    document.getElementById('training').style.display = 'none';
+                    document.getElementById('language').style.display = 'block'; // Assuming next section is 'nextSection'
+                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                    document.getElementById('languageLink').classList.add('active');
+                    console.log("Training saved and moved to next section!");
+                } else {
+                    console.log("Error saving training:", result);
+                }
+            } catch (error) {
+                console.error("Error in saving training:", error);
+            }
+        });
 
 
+        // Collect language data from form
+        function collectLanguageData() {
+            return {
+                languageName: document.getElementsByName('languageName')[0].value,
+                languageProficiency: document.getElementsByName('languageProficiency')[0].value
+            };
+        }
 
-        
-        // document.getElementById('addLanguage').addEventListener('click', function() {
-        //     const languageName = document.getElementsByName('languageName')[0].value;
-        //     const languageProficiency = document.getElementsByName('languageProficiency')[0].value;
+        // Save language data to the server
+        async function saveLanguageData(languageData) {
+            console.log("Sending language data:", languageData); // Debug log
+            try {
+                const response = await fetch("{{ route('languages.store') }}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(languageData)
+                });
+                const result = await response.json();
+                console.log("Server response:", result); // Debug log
+                return result;
+            } catch (error) {
+                console.error("Error saving language data:", error);
+                return {
+                    success: false
+                };
+            }
+        }
 
-        //     if (!languageName.trim()) {
-        //         alert("Please enter a language name.");
-        //         return;
-        //     }
+        // Prevent default form submission
+        document.getElementById('languageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
 
-        //     const languageData = {
-        //         languageName: languageName,
-        //         languageProficiency: languageProficiency
-        //     };
+        // Add Language button handler
+        document.getElementById('addLanguage').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const languageData = collectLanguageData();
+            console.log("Collected language data:", languageData); // Debug log
+            try {
+                const result = await saveLanguageData(languageData);
+                if (result.success) {
+                    // Reset the form after saving
+                    const form = document.getElementById('languageForm');
+                    const formData = new FormData(form);
+                    for (let [name, _] of formData) {
+                        const input = form.querySelector(`[name="${name}"]`);
+                        if (input) input.value = '';
+                    }
+                    console.log("Language added successfully!");
+                } else {
+                    console.log("Error saving language:", result);
+                }
+            } catch (error) {
+                console.error("Error saving language:", error);
+            }
+        });
 
-        //     languageEntries.push(languageData);
+        // Submit button (Save and continue)
+        document.querySelector('submitLangauge').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const languageData = collectLanguageData();
+            console.log("Collected language data:", languageData); // Debug log
+            try {
+                const result = await saveLanguageData(languageData);
+                if (result.success) {
+                    document.getElementById('language').style.display = 'none';
+                    document.getElementById('profile').style.display = 'block'; // change 'nextSectionId' to your next form id
+                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                    document.getElementById('profileLink').classList.add('active'); // change 'nextSectionLinkId' accordingly
+                    console.log("Language saved and moved to next section!");
+                } else {
+                    console.log("Error saving language:", result);
+                }
+            } catch (error) {
+                console.error("Error in saving language:", error);
+            }
+        });
 
-        //     const previewHTML = `
-        //         <div class="border p-2 mb-2 language-preview" data-index="${languageEntries.length - 1}">
-        //             <p><strong>Language Name:</strong> ${languageData.languageName}</p>
-        //             <p><strong>Proficiency:</strong> ${languageData.languageProficiency}</p>
-        //             <button class="btn btn-sm btn-danger remove-btn" onclick="this.parentElement.remove()">Remove</button>
-        //         </div>
-        //     `;
-
-        //     document.getElementById('overviewLanguage').insertAdjacentHTML('beforeend', previewHTML);
-
-        //     // Reset input fields
-        //     document.getElementById('languageForm').reset();
-        //     document.getElementsByName('languageName')[0].focus();
-        // });
-
-        // document.getElementById('languageForm').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-
-        //     // Also add current form data if not already pushed
-        //     const currentLanguage = {
-        //         languageName: document.getElementsByName('languageName')[0].value,
-        //         languageProficiency: document.getElementsByName('languageProficiency')[0].value
-        //     };
-
-        //     const isFilled = currentLanguage.languageName.trim();
-        //     if (isFilled) {
-        //         languageEntries.push(currentLanguage);
-        //     }
-
-        //     fetch("{{ route('languages.store') }}", {
-        //             method: "POST",
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //             },
-        //             body: JSON.stringify({
-        //                 languages: languageEntries
-        //             })
-        //         })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             console.log(data);
-        //             if (data.success) {
-        //                 alert("Resume Submitted Successfully.");
-        //                 document.getElementById('language').style.display = 'none';
-        //                 document.getElementById('profile').style.display = 'block';
-        //                 document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-        //                 document.getElementById('profileLink').classList.add('active');
-        //             } else {
-        //                 alert("Error saving language data.");
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error('Error:', error);
-        //         });
-        // });
-        // document.getElementById('langaugeOverview').addEventListener('click', function(e) {
-        //     if (e.target.classList.contains('remove-btn')) {
-        //         const previewDiv = e.target.closest('.language-preview');
-        //         const index = parseInt(previewDiv.dataset.index);
-
-        //         // Remove from array
-        //         languageEntries.splice(index, 1);
-
-        //         // Remove from DOM
-        //         previewDiv.remove();
-
-        //         // Reindex remaining entries
-        //         document.querySelectorAll('.language-preview').forEach((preview, newIndex) => {
-        //             preview.dataset.index = newIndex;
-        //         });
-        //     }
-        // });
     });
 </script>
 @endpush

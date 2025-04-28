@@ -59,8 +59,8 @@ class LanguageController extends Controller
               //validate request data
 
               $validator = Validator::make($request->all(), [
-                  'language.*.languageName' => 'required|string|max:255',
-                  'language.*.languageProficiency' => 'required|in:Beginner,Intermediate,Proficient',
+                  'languageName' => 'required|string|max:255',
+                  'languageProficiency' => 'required|in:Beginner,Intermediate,Proficient',
 
               ]);
 
@@ -79,13 +79,12 @@ class LanguageController extends Controller
     }
     //create a new language record
 
-    foreach ($request->input('languages') as $languageData) {
         $language = new Language();
-        $language->languageName = $languageData['languageName'] ?? null;
-        $language->languageProficiency = $languageData['languageProficiency'] ?? null;
+        $language->languageName = $request->input('languageName');
+        $language->languageProficiency = $request->input('languageProficiency');
         $language->jobSeekerId = $jobSeekerId;
         $language->save();
-    }    
+      
     Log::info('Language created successfully');
 
     // return the response based on request type
