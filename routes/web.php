@@ -1,43 +1,63 @@
+
 <?php
 
+use App\Http\Controllers\AboardController;
+use App\Http\Controllers\AchievementController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdsManagerController;
+use App\Http\Controllers\AdvertisementCategoryController;
+use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\AstrologerController;
+use App\Http\Controllers\BlogsAndPodcastController;
+use App\Http\Controllers\DiscussionForumController;
+use App\Http\Controllers\EducationController;
+use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\ForumInteractionController;
+use App\Http\COntrollers\Frontend\FrontendAPIController;
+use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\GiftCartController;
+use App\Http\Controllers\GiftCategoryController;
+use App\Http\Controllers\GiftCouponController;
+use App\Http\Controllers\HoroscopeController;
+use App\Http\Controllers\IndustryCategoryController;
+use App\Http\Controllers\JobApplyController;
+use App\Http\Controllers\JobCategoryController;
+use App\Http\Controllers\JobCompanyController;
+use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\JobSeekerController;
+use App\Http\Controllers\JobSeekerDashboardController;
+use App\Http\Controllers\KundaliController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MyDocumentController;
+use App\Http\Controllers\OrderPlacementController;
+use App\Http\Controllers\PassportRenewalController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ResumeHelpController;
+use App\Http\Controllers\SkillController;
+use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UserCommentController;
+use App\Http\Controllers\VisaApplicationController;
+use App\Http\Controllers\VisaController;
+use App\Http\Controllers\VisaCountryListController;
+use App\Http\Controllers\VisaDetailsController;
+use App\Http\Controllers\VisaTypeController;
 use App\Models\IndustryCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AboardController;
-use App\Http\Controllers\AdsManagerController;
-use App\Http\Controllers\OrderPlacementController;
-use App\Http\Controllers\JobPostController;
-use App\Http\Controllers\GiftCouponController;
-use App\Http\Controllers\KundaliController;
-use App\Http\Controllers\GiftCartController;
-use App\Http\Controllers\JobApplyController;
-use App\Http\Controllers\VisaTypeController;
-use App\Http\Controllers\HoroscopeController;
-use App\Http\Controllers\JobSeekerController;
-use App\Http\Controllers\AstrologerController;
-use App\Http\Controllers\JobCompanyController;
-use App\Http\Controllers\MyDocumentController;
-use App\Http\Controllers\JobCategoryController;
-use App\Http\Controllers\VisaDetailsController;
-use App\Http\Controllers\GiftCategoryController;
-use App\Http\Controllers\AdvertisementController;
-use App\Http\Controllers\BlogsAndPodcastController;
-use App\Http\Controllers\ProductCategoryController;
-use App\Http\Controllers\VisaApplicationController;
-use App\Http\Controllers\VisaCountryListController;
-use App\Http\Controllers\IndustryCategoryController;
-use App\Http\Controllers\Frontend\FrontendController;
-use App\Http\Controllers\JobSeekerDashboardController;
-use App\Http\COntrollers\Frontend\FrontendAPIController;
-use App\Http\Controllers\AdvertisementCategoryController;
-use App\Http\Controllers\DiscussionForumController;
-use App\Http\Controllers\PassportRenewalController;
-use App\Http\Controllers\ResumeHelpController;
-use App\Http\Controllers\MessageController;
-use App\Http\Controllers\ForumInteractionController;
+
+
+
+
+
+
+
+
+
+use Illuminate\Support\Facades\Session;
 
 
 // Authentication Routes
@@ -90,7 +110,9 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::put('/job-post/unpublish/{id}', [JobPostController::class, 'unpublish'])->name('job-post.unpublish');
 
     //Route for advertisement
-  
+    Route::resource('ads', AdvertisementController::class);
+
+
     Route::resource('advertisementcategory', AdvertisementCategoryController::class);
     Route::put('/ads/publish/{id}', [AdvertisementController::class, 'publish'])->name('ads.publish');
     Route::put('/ads/unpublish/{id}', [AdvertisementController::class, 'unpublish'])->name('ads.unpublish');
@@ -98,8 +120,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     // Route for aboard deals
     // Route for aboard deals
-    
-
+    Route::resource('aboards', AboardController::class);
     Route::put('aboards/{id}/publish', [AboardController::class, 'publish'])->name('aboards.publish');
     Route::put('aboards/{id}/unpublish', [AboardController::class, 'unpublish'])->name('aboards.unpublish');
 
@@ -358,10 +379,6 @@ Route::prefix('discussion')->group(function () {
 });
 Route::prefix('advertisements')->group(function () {
     Route::get('/', [FrontendController::class, 'advertisements'])->name('frontend.advertisements');
-    Route::get('/Ads/type/{type?}/category/{categoryId?}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByTypeCategory');
-    Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
-    Route::get('Ads/category/{categoryId}',[AdvertisementController::class,'showByCategory'])->name('Ads.showByCategory');
-    Route::post('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
 });
 
 Route::resource('ads', AdvertisementController::class);

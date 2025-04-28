@@ -56,8 +56,8 @@ class AchievementController extends Controller
 
             // Validate request data
             $validator = Validator::make($request->all(), [
-                'achievement.*.achievementTitle' => 'required|string|max:255',
-                'achievement.*.achievementDescription' => 'max:1000',
+                'achievementTitle' => 'required|string|max:255',
+                'achievementDescription' => 'max:1000',
             ]);
 
             // Handle validation errors
@@ -68,16 +68,14 @@ class AchievementController extends Controller
                     : redirect()->back()->withErrors($validator->errors())->withInput();
             }
 
-            // Create a new achievement record
-            foreach ($request->input('achievement') as $achievementData) {
                 $achievement = new Achievement();
                 $achievement->jobSeekerId = $jobSeekerId;
-                $achievement->achievementTitle = $achievementData['achievementTitle'];
-                $achievement->achievementDescription = $achievementData['achievementDescription'];
+                $achievement->achievementTitle = $request->input('achievementTitle');
+                $achievement->achievementDescription = $request->input('achievementDescription');
                 $achievement->save();
 
                 Log::info('Achievement created successfully with ID: ' . $achievement->id);
-            }
+          
 
             return $isMobile
                 ? $this->responseSuccess('Achievement(s) saved successfully.', $achievement)

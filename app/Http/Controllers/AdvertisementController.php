@@ -24,6 +24,7 @@ class AdvertisementController extends Controller
     {
         //Check if the request is from mobile using request_type
         $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
+        $ad = Advertisement::all();
 
 
 
@@ -63,7 +64,7 @@ class AdvertisementController extends Controller
     }
 
         //Return the view for web application
-        return view('frontend.advertisements.index', compact('ads','category','post','all','categories'));
+        return view('frontend.advertisements.index', compact('ads','category','post','all','categories','ad'));
 
     }
 
@@ -445,6 +446,7 @@ public function showByTypeAndCategory(Request $request, $type, $categoryId = nul
     $ads = Advertisement::where('type', $type)->orderBy('created_at', 'desc')->paginate(10);
     $category = AdvertisementCategory::all();
     $all = AdvertisementCategory::all();
+    $ad = Advertisement::all();
 
     // If no category is selected, return only categories
     if (!$categoryId) {
@@ -457,7 +459,7 @@ public function showByTypeAndCategory(Request $request, $type, $categoryId = nul
                     'ads'=>$ads
                     ]
             ], 200)
-            : view('frontend.advertisements.index', compact('categories', 'type','category','ads','all'))
+            : view('frontend.advertisements.index', compact('categories', 'type','category','ads','all','ad'))
                 ->with('success', 'Categories retrieved successfully!');
     }
 
@@ -513,9 +515,12 @@ public function showByCategory(Request $request, $categoryId)
         $ads = Advertisement::where('adsCategoryId', $categoryId)
                             ->orderBy('created_at', 'desc')
                             ->paginate(10);
+                            $ad = Advertisement::all();
 
         $adTypes = $this->getEnumValues('advertisements', 'type');
+        $categories = AdvertisementCategory::where('id', $categoryId)->get();
 
+$all =AdvertisementCategory::all();
         // If no ads found, return an appropriate response
         if ($ads->isEmpty()) {
             return $isMobile
@@ -540,7 +545,7 @@ public function showByCategory(Request $request, $categoryId)
         }
 
         // Return a view for web users
-        return view('ads.index', compact('ads'));
+        return view('frontend.advertisements.index', compact('ads','ad','categories','all'));
 
     } catch (\Exception $e) {
         Log::error("Error fetching advertisements by category: " . $e->getMessage());
@@ -562,7 +567,9 @@ public function search(Request $request)
 
     // Define allowed types
     $validTypes = ['Buy', 'Sell', 'Rent'];
-
+$ad = Advertisement::all();
+    $categories =AdvertisementCategory::all();
+    $all =AdvertisementCategory::all();
     // Set default type to 'Sell' if not provided or invalid
 $type = $request->has('type') && in_array($request->input('type'), $validTypes)
     ? $request->input('type')
@@ -604,7 +611,7 @@ $type = $request->has('type') && in_array($request->input('type'), $validTypes)
         }
 
         // For web, return the search results in a view
-        return view('ads.index', compact('ads'))->with('success', 'Advertisements fetched successfully!');
+        return view('frontend.advertisements.index', compact('ads','categories','all','ad'))->with('success', 'Advertisements fetched successfully!');
     } catch (\Exception $e) {
         Log::error("Error during advertisement search: " . $e->getMessage());
 

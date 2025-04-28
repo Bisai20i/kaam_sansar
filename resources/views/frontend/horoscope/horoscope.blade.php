@@ -310,7 +310,7 @@
             aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog modal-dialog-centered"> <!-- Centering modal -->
                 <div class="modal-content">
-                    <div class="modal-header position-relative">
+                    <div class="modal-header bg-white position-relative">
                         <div class="d-flex flex-column align-items-start w-100">
                             <div class="d-flex align-items-center">
                                 <div class="img-container me-2">
@@ -341,18 +341,23 @@
             </div>
         </div>
     </section>
-
+        <div class="container-fluid banner-horoscope d-flex align-items-center" style="height:272px;">
+             <div class="container">
+                <div class="overlay">
+                    <h4 class="py-3 text-white">Match your Kundli/horoscope</h4>
+                    <div class="button-container-horoscope-kundali mb-3">
+                        <button class="btn btn-kundali active" id="kundaliBtn">Kundali Matching</button>
+                        <button class="btn btn-horoscope" id="horoscopeBtn">Kundali</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     <section class="Horoscope">
         <div class="container">
             <div class="row">
-                <h4 class="py-3">Match your Kundli/horoscope</h4>
                 <div class="col-lg-8">
-                    <div class="button-container-horoscope-kundali mb-3">
-                        <button class="btn btn-kundali active" id="kundaliBtn">Kundali Matching</button>
-                        <button class="btn btn-horoscope" id="horoscopeBtn">Kundali</button>
-                    </div>
                     <!-- Personal-Section -->
                     <div class="Personal-Section" id="Personal-Section">
                         <h1 class="my-4">Enter Your Personal Details</h1>
@@ -659,7 +664,7 @@
 
                 <div class="col-lg-4 Jyotish mt-5 ">
                     <h3 class="mb-4">Meet our Jyotish</h3>
-                    <img src="Images/sagardai.jpg">
+                    <img src="frontend\assets\Images\profile.jpg">
                     <p class="mt-3">Pokhara</p>
                     <small class="text-bold">9876543210</small>
                 </div>
@@ -673,6 +678,16 @@
 
 
         </div>
+        <style>
+            .banner-horoscope {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.3) 30%, rgba(102, 102, 102, 0.3) 100%),
+    url("frontend/img/ad.png") center/cover no-repeat;
+  color: white;
+  width: 100%;
+  height: 250px;
+            }
+            </style>
 
         <!-- <script>
             document.addEventListener("DOMContentLoaded", function() {

@@ -18,6 +18,8 @@ class Profile extends Authenticatable
         'firstName',
         'lastName',
         'phoneNumber',
+        'address',
+        'email',
         'designation',
         'country',
         'bio',

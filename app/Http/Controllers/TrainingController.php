@@ -53,11 +53,12 @@ class TrainingController extends Controller
     
             // Validation rules
             $validator = Validator::make($request->all(), [
-                'training.*.trainingTitle' => 'required|string|max:255',
-                'training.*.institutionName' => 'required|string|max:255',
-                'training.*.completionDate' => 'required|date',
-                'training.*.certificate' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:2048',
+                'trainingTitle' => 'required|string|max:255',
+                'institutionName' => 'required|string|max:255',
+                'completionDate' => 'required|date',
+                'certificate' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf|max:2048',
             ]);
+           
     
             if ($validator->fails()) {
                 Log::error('Validation errors: ', $validator->errors()->toArray());
@@ -71,38 +72,26 @@ class TrainingController extends Controller
                     ]);
             }
     
-            // Handle input
-            $trainings = $request->input('training');
+            $certificatePath = handleUpload('certificate');
+
+            $training = new Training();
+            $training->jobSeekerId = $jobSeekerId;
+            $training->trainingTitle = $request->input('trainingTitle');
+            $training->institutionName = $request->input('institutionName');
+            $training->completionDate = $request->input('completionDate');
+            $training->certificate=$certificatePath;
     
-            // 🛠 Wrap single training object into array
-            if (isset($trainings['trainingTitle'])) {
-                $trainings = [$trainings];
+            if ($certificatePath) {
+                Log::info('File uploaded successfully: ' . $training->certificatePath);
+            } else {
+                Log::warning('No file uploaded.');
             }
     
-            Log::info('Received trainings data: ', $trainings);
-            $files = $request->file('training');
-    
-            foreach ($trainings as $index => $trainingData) {
-                $training = new Training();
-                $training->jobSeekerId = $jobSeekerId;
-                $training->trainingTitle = $trainingData['trainingTitle'] ?? null;
-                $training->institutionName = $trainingData['institutionName'] ?? null;
-                $training->completionDate = $trainingData['completionDate'] ?? null;
-    
-                if (isset($files[$index]['certificate']) && $files[$index]['certificate'] instanceof \Illuminate\Http\UploadedFile) {
-                    $certificatePath = $files[$index]['certificate']->store('certificates', 'public');
-                    $training->certificate = $certificatePath;
-                    Log::info("Certificate uploaded for training index $index: $certificatePath");
-                } else {
-                    Log::warning("No certificate uploaded for training index $index.");
-                }
-    
-                $training->save();
-                Log::info('Training saved successfully: ' . $training->id);
-            }
+            $training->save();
+            Log::info('training created successfully with ID: ' . $training->id);
     
             return $isMobile
-                ? $this->responseSuccess('Trainings saved successfully.', $trainings)
+                ? $this->responseSuccess('Trainings saved successfully.', $training)
                 : response()->json([
                     'success' => true,
                     'message' => 'Trainings saved successfully.',

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "doctrine/dbal": "^4.2",
         "giggsey/libphonenumber-for-php": "^8.13",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "2.7.*",
@@ -14,6 +15,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.6",
         "pusher/pusher-php-server": "^7.2",
+        "symfony/intl": "^7.2",
         "yajra/laravel-datatables": "^9.0",
         "yajra/laravel-datatables-oracle": "^10.11"
     },

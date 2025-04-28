@@ -1,6 +1,7 @@
 @extends('backend.layouts.main')
 
 @section('title', 'Discussion Forum')
+@section('title', 'Discussion Forum')
 
 @section('content')
     <style>
@@ -50,6 +51,7 @@
 
 
             <!-- Main Content -->
+            <div class="row" >
             <div class="row" >
                 <div class="col-12 ">
                     <div class="card mb-4" >
@@ -105,11 +107,14 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive" style="max-height: 650px; overflow-y: auto;" style="min-height: 30vh;">
+                            <div class="table-responsive" style="max-height: 650px; overflow-y: auto;" style="min-height: 30vh;">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th>SN</th>
                                             <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Images</th>
                                             <th>Description</th>
                                             <th>Images</th>
                                             <th>Action</th>
@@ -186,7 +191,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -252,6 +257,7 @@
         }
     </script>
     {{-- <script>
+    {{-- <script>
         $(document).ready(function() {
             @foreach ($giftNcoupons as $item)
                 $('#companyDescription{{ $item->id }}').summernote({
@@ -279,6 +285,6 @@
             loader.style.display = 'inline-block';
             buttonText.style.display = 'none';
         });
-    </script>
+    </script> --}}
 
 @endsection
