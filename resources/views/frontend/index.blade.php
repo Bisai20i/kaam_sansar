@@ -426,6 +426,15 @@
                 </div>
             </div>
         </section>
+
+        @if($ad_banners['middle'])
+            
+            <a href="{{ $ad_banners['middle']->link }}" class="d-block" style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                <img src="{{$ad_banners['middle']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
+            </a>
+                {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
+        @endif
+
         @if ($podcasts->count() > 0)
             <section class="podcast">
                 <div class="container my-5">

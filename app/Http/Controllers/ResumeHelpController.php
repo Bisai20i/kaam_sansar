@@ -25,6 +25,7 @@ class ResumeHelpController extends Controller
             'short_desc' => 'nullable|string',
             'image_preview' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'normal_price' => 'required|numeric',
+            'publish_not_publish' => 'required|boolean',
             'sell_price' => 'required|numeric',
             'type' => 'required|in:0,1', // Ensure type is either 0 or 1
         ]);
@@ -69,6 +70,7 @@ class ResumeHelpController extends Controller
             'title' => 'required|string|max:255',
             'short_desc' => 'nullable|string',
             'image_preview' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'publish_not_publish' => 'nullable|boolean',
             'normal_price' => 'required|numeric',
             'sell_price' => 'required|numeric',
             'type' => 'required|in:0,1', // Ensure type is either 0 or 1
@@ -95,6 +97,7 @@ class ResumeHelpController extends Controller
             'normal_price' => $request->normal_price,
             'sell_price' => $request->sell_price,
             'type' => $request->type,
+            'publish_not_publish' => $request->publish_not_publish
         ]);
     
         return redirect()->route('resume-help.index')->with('success', 'Resume help updated successfully.');

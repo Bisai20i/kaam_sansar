@@ -5,7 +5,7 @@
 @section('content')
     <section class="main  container-fluid pt-5 pb-2" style="box-sizing: border-box;">
 
-        <!-- Modal -->
+        <!-- Create Post Modal -->
         <div class="modal fade" id="createPost" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createPostLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -92,7 +92,7 @@
             </div>
         </div>
 
-
+        <!-- Delete Modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -108,7 +108,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
                         <button id="deleteCommentButton" data-comment-id="0" onclick="deleteComment(this)"
-                            class="btn btn-danger">Delete</button>
+                            data-forum-id="0" class="btn btn-danger">Delete</button>
                     </div>
                 </div>
             </div>
@@ -160,6 +160,20 @@
                 </div>
             </div>
         </div>
+
+
+
+        @if ($ad_banners['top'])
+                <div class="container my-4">
+                    <a href="{{ $ad_banners['top']->link }}" target="_blank" class="d-block"
+                        style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                        <img src="{{ $ad_banners['top']->image }}" class="w-100" style="aspect-ratio: 4/1;"
+                            alt="img-fluid">
+                    </a>
+                </div>
+                {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
+            @endif
+
         <div class="container position-relative">
             <div class="row mb-3">
                 <div class="col-lg-3 col-12">
@@ -194,21 +208,16 @@
                                             data-bs-target="#createPost">+
                                             Create</button>
                                     @else
-                                        <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="redirect_url" value="{{ url()->current() }}">
-                                        </form>
-
-                                        <a href="#" onclick="document.getElementById('redirectForm').submit(); "
+                                        <button data-bs-toggle="modal" data-bs-target="#loginModal"
                                             class="btn rounded-5 px-4 text-white text-nowrap m-auto"
                                             style="background-color: #0064a7;">
                                             + Create
-                                        </a>
+                                        </button>
                                     @endauth
                                 </div>
                             </div>
                         </form>
-
+ 
 
                     </div>
                 </div>
@@ -218,50 +227,30 @@
                 <div class="col-lg-3 d-lg-block d-none">
                     <div class="card">
                         <div class="card-body">
+
                             <h4 class="card-title mb-3">Hot Topics</h4>
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">News title Lorem ipsum dolor sit amet.</h5>
-                                    <p class="card-text">
-                                        <small class="text-body-secondary">Post by: Sangam Giri</small>
-                                        <small class="text-body-secondary">Last updated 3 mins
-                                            ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <img src="Images/image2.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">News title Lorem ipsum dolor sit amet.</h5>
-                                    <p class="card-text">
-                                        <small class="text-body-secondary">Post by: Sangam Giri</small>
-                                        <small class="text-body-secondary">Last updated 3 mins
-                                            ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <img src="Images/image1.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">News title Lorem ipsum dolor sit amet.</h5>
-                                    <p class="card-text">
-                                        <small class="text-body-secondary">Post by: Sangam Giri</small>
-                                        <small class="text-body-secondary">Last updated 3 mins
-                                            ago</small>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <img src="Images/ads1.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">News title Lorem ipsum dolor sit amet.</h5>
-                                    <p class="card-text">
-                                        <small class="text-body-secondary">Post by: Sangam Giri</small>
-                                        <small class="text-body-secondary">Last updated 3 mins
-                                            ago</small>
-                                    </p>
-                                </div>
-                            </div>
+                            @if ($hot_topics->count() > 0)
+                                @foreach ($hot_topics as $forumPost)
+                                    <div class="card mb-3">
+                                        @if ($forumPost->images)
+                                            <img src="{{ $forumPost->images }}" class="card-img-top" alt="...">
+                                        @endif
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $forumPost->topic }}</h5>
+                                            <p class="card-text">
+                                                <small class="text-body-secondary">Post by:
+                                                    {{ $forumPost->jobSeeker->firstName . ' ' . $forumPost->jobSeeker->lastName }}</small>
+                                                <br>
+                                                <small
+                                                    class="text-body-secondary">{{ $forumPost->updated_at->diffForHumans() }}</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-center my-2 text-secondary">No Hot Topics</p>
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -341,7 +330,7 @@
                                                                     d="M9.59961 15C11.1909 15 12.717 14.3679 13.8423 13.2426C14.9675 12.1174 15.5996 10.5913 15.5996 9C15.5996 7.4087 14.9675 5.88258 13.8423 4.75736C12.717 3.63214 11.1909 3 9.59961 3C8.00831 3 6.48219 3.63214 5.35697 4.75736C4.23175 5.88258 3.59961 7.4087 3.59961 9C3.59961 10.5913 4.23175 12.1174 5.35697 13.2426C6.48219 14.3679 8.00831 15 9.59961 15ZM9.59961 1.5C10.5845 1.5 11.5598 1.69399 12.4697 2.0709C13.3797 2.44781 14.2065 3.00026 14.9029 3.6967C15.5993 4.39314 16.1518 5.21993 16.5287 6.12987C16.9056 7.03982 17.0996 8.01509 17.0996 9C17.0996 10.9891 16.3094 12.8968 14.9029 14.3033C13.4964 15.7098 11.5887 16.5 9.59961 16.5C5.45211 16.5 2.09961 13.125 2.09961 9C2.09961 7.01088 2.88979 5.10322 4.29631 3.6967C5.70283 2.29018 7.61049 1.5 9.59961 1.5ZM9.97461 5.25V9.1875L13.3496 11.19L12.7871 12.1125L8.84961 9.75V5.25H9.97461Z"
                                                                     fill="#9D9999" />
                                                             </svg>
-                                                            {{ $forumPost->created_at->diffForHumans() }}
+                                                            {{ $forumPost->updated_at->diffForHumans() }}
                                                         </span>
                                                     </small>
                                                 </div>
@@ -368,19 +357,19 @@
                                                     <span class="d-none d-md-inline">Chat</span>
                                                 </button>
                                             @else
-                                                <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
+                                                {{-- <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="redirect_url"
                                                         value="{{ url()->current() }}">
-                                                </form>
+                                                </form> --}}
 
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                                     style="background-color: #0064a7;"
-                                                    onclick="document.getElementById('redirectForm').submit(); ">+
+                                                    data-bs-toggle="modal" data-bs-target="#loginModal">+
                                                     <span class="d-none d-md-inline">Follow</span></button>
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                                     style="background-color: #0064a7;"
-                                                    onclick="document.getElementById('redirectForm').submit(); ">
+                                                    data-bs-toggle="modal" data-bs-target="#loginModal">
                                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                                     <span class="d-none d-md-inline">Chat</span>
                                                 </button>
@@ -397,11 +386,11 @@
 
                                 @if (count($forumPost->images) > 0)
                                     <div
-                                        class="mt-2 text-center row {{ count($forumPost->images) === 1 ? 'row-cols-1' : 'row-cols-md-2 row-cols-1' }}">
+                                        class="mt-2 row {{ count($forumPost->images) === 1 ? 'row-cols-1' : 'row-cols-md-2 row-cols-1' }}">
                                         @foreach ($forumPost->images as $image)
                                             <div class="col p-2">
                                                 <img src="{{ $image }}" class="img-fluid w-100"
-                                                    style="max-width:500px;" alt="Post Image">
+                                                    style="max-width:600px;" alt="Post Image">
                                             </div>
                                         @endforeach
 
@@ -434,12 +423,15 @@
                                             {{ $forumPost->dislikes > 999 ? round($forumPost->dislikes / 1000, 1) . ' K' : $forumPost->dislikes }}</span>
                                     </button>
 
-                                    <span class="text-decoration-none text-black" data-bs-toggle="modal"
-                                        data-bs-target="#commentModal" data-forum-id="{{ $forumPost->id }}"
+                                    <span class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                        data-bs-toggle="modal" data-bs-target="#commentModal"
+                                        data-forum-id="{{ $forumPost->id }}"
                                         data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
                                         onclick="loadComments(this)">
-                                        <span class="d-flex align-items-center gap-1" style="cursor: pointer;">
-                                            <i class="fa-solid fa-comment fs-5" style="color: #0064a7;"></i>
+                                        <i class="fa-solid fa-comment fs-5" style="color: #0064a7;"></i>
+                                        <span class="d-flex align-items-center gap-1" style="cursor: pointer;"
+                                            id="commentCount_{{ $forumPost->id }}">
+
                                             {{ $forumPost->comments > 999 ? round($forumPost->comments / 1000, 1) . ' K' : $forumPost->comments }}
                                         </span>
                                     </span>
@@ -525,7 +517,7 @@
         });
 
         var channel = pusher.subscribe('forum-post');
-        
+
         channel.bind('forum-posted', function(data) {
 
             // console.log(data)
@@ -649,14 +641,13 @@
             `
 
             document.getElementById('forumPosts').prepend(newPost);
-            if(broadcastForum.images.length > 0){
+            if (broadcastForum.images.length > 0) {
                 let broadcastImages = document.createElement('div');
                 broadcastImages.classList.add('mt-2', 'text-center', 'row');
 
-                if(broadcastForum.images.length == 1){
+                if (broadcastForum.images.length == 1) {
                     broadcastImages.classList.add('row-cols-1');
-                }
-                else{
+                } else {
                     broadcastImages.classList.add('row-cols-2');
                 }
 
@@ -668,18 +659,19 @@
                             style="max-width:500px;" alt="Post Image">
                             </div>
                     `
-                    
+
                     broadcastImages.appendChild(img);
 
                 })
 
-                newPost.insertBefore(broadcastImages,document.getElementById('broadCastForumPost'+broadcastForum.id).nextSibling)
-                
+                newPost.insertBefore(broadcastImages, document.getElementById('broadCastForumPost' + broadcastForum
+                    .id).nextSibling)
+
                 // broadImages.innerHTML= `
 
-                //             child.parentNode.insertBefore(newElement, child.nextSibling);
+            //             child.parentNode.insertBefore(newElement, child.nextSibling);
 
-                // `
+            // `
             }
 
             let count = parseInt(document.getElementById('newPostsCount').textContent) + 1
@@ -964,9 +956,9 @@
         //handle delete comment for forum post
 
         function handleDelete(e) {
-            let commentId = e.getAttribute('data-comment-id')
 
-            $('#deleteCommentButton').attr('data-comment-id', commentId)
+            $('#deleteCommentButton').attr('data-comment-id', e.getAttribute('data-comment-id'))
+            $('#deleteCommentButton').attr('data-forum-id', e.getAttribute('data-forum-id'))
 
 
         }
@@ -990,6 +982,10 @@
                         $('#deleteModal').modal('hide');
                         $('#commentModal').modal('show');
                         loadComments(document.getElementById('commentModal'))
+                        console.log('commentCount_' + e.getAttribute('data-forum-id'))
+                        document.getElementById('commentCount_' + e.getAttribute('data-forum-id')).textContent =
+                            parseInt(document.getElementById('commentCount_' + e.getAttribute('data-forum-id'))
+                                .textContent) - 1
                     } else {
                         alert('Something went wrong!')
                     }
@@ -1049,7 +1045,7 @@
                                         <p class="mb-1">${comment.comment}</p>
                                         <small class="text-muted">${formatDateWithComma(comment.created_at)}</small>
                                         </div>
-                                        <button class="btn btn-danger rounded-circle" data-bs-toggle="modal" data-comment-id="${comment.id}"
+                                        <button class="btn btn-danger rounded-circle" data-bs-toggle="modal" data-comment-id="${comment.id}" data-forum-id="${comment.forum_id}"
                                             data-bs-target="#deleteModal" onclick="handleDelete(this)">
                                             <i class="bi bi-trash"></i>
                                         </button>
@@ -1130,7 +1126,7 @@
                                 <p class="mb-1">${response.data.comment}</p>
                                 <small class="text-muted">${formatDateWithComma(response.data.created_at)}</small>
                                 </div>
-                                <button class="btn btn-danger rounded-circle" data-bs-toggle="modal" data-comment-id="${response.data.id}"
+                                <button class="btn btn-danger rounded-circle" data-bs-toggle="modal" data-comment-id="${response.data.id}" data-forum-id="${response.data.forum_id}"
                                     data-bs-target="#deleteModal" onclick="handleDelete(this)">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -1139,6 +1135,9 @@
                         $('#commentsList').animate({
                             scrollTop: $('#commentsList')[0].scrollHeight
                         }, 500)
+                        document.getElementById('commentCount_' + postId).textContent = parseInt(document
+                            .getElementById('commentCount_' + postId).textContent) + 1
+
                     } else {
                         alert('Something went wrong!')
                     }

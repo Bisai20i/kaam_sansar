@@ -7,18 +7,18 @@ use App\Models\Advertisement;
 use App\Models\AdvertisementCategory;
 use App\Models\BlogsAndPodcast;
 use App\Models\DiscussionForum;
+use App\Models\Follower;
+use App\Models\ForumInteraction;
 use App\Models\GiftCategory;
 use App\Models\GiftCoupon;
 use App\Models\IndustryCategory;
 use App\Models\JobCategory;
 use App\Models\JobPost;
+use App\Models\JobSeeker;
 use App\Models\ResumeHelp;
 use App\Models\UserComment;
 use App\Models\VisaCountryList;
 use App\Models\VisaType;
-use App\Models\Follower;
-use App\Models\ForumInteraction;
-use App\Models\JobSeeker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -849,7 +849,19 @@ class FrontendAPIController extends Controller
                 ->paginate(8)
                 ->withQueryString();
 
+            $categories     = [];
             $giftcategories = GiftCategory::where('publishStatus', 1)->get();
+            $categories[]   = ['id' => 0, 'giftCategoryTitle' => 'All'];
+            foreach ($giftcategories as $category) {
+                $categories[] = $category;
+            }
+
+            // $giftcategories = ['id'=> 0,'giftCategoryTitle' => 'all'];
+            // $giftcategories['all_categories'] = 'all';
+
+            // foreach ($categories as $category) {
+            //     $giftcategories[$category->id] = $category->giftCategoryTitle;
+            // }
 
             $countries = GiftCoupon::distinct()->pluck('country');
             $cities    = GiftCoupon::distinct()->pluck('city');
@@ -858,7 +870,7 @@ class FrontendAPIController extends Controller
                 'message' => 'Data fetched successfully',
                 'data'    => [
                     'giftNcoupons' => $giftNcoupons,
-                    'categories'   => $giftcategories,
+                    'categories'   => $categories,
                     'countries'    => $countries,
                     'cities'       => $cities,
                 ],
@@ -929,20 +941,26 @@ class FrontendAPIController extends Controller
 
     }
 
-    public function sellerProfile($id)
+    public function sellerProfile($id, $type= null)
     {
         try {
 
-            // $seller = Admin::where('id', $id)
-            //     ->with(['giftCoupons'=> function ($query){
-            //         $query->orderBy('id', 'desc');
-            //         $query->take(8);
+            $seller = Admin::where('id', $id)->first(['id', 'fullName', 'email', 'status', 'profile_image', 'location', 'created_at']);
 
-            //         $query->where('publishStatus',true);
-            //     }])
-            //     ->first(['fullName', 'email', 'status']);
-            $seller      = Admin::where('id', $id)->first(['fullName', 'email', 'status']);
-            $sellerGifts = GiftCoupon::where('adminId', $id)->take(8)->latest()->get();
+            $sellerGifts = GiftCoupon::where('adminId', $id)
+                ->when(
+                    in_array($type, ['1', '0']),
+                    fn($query) => $query->where('type', $type)
+                )
+                ->take(8)->latest()
+                ->paginate(8)
+                ->withQueryString();
+            $seller->profile_image = $seller->profile_image ? asset('storage/' . $seller->profile_image) : asset('frontend/assets/Images/profile-icon.png');
+
+            $sellerGifts->transform(function ($gift) {
+                $gift->thumbnail = $gift->thumbnail ? asset('storage/' . $gift->thumbnail) : null;
+                return $gift;
+            });
 
             return response()->json([
                 'status'  => true,
@@ -1060,7 +1078,7 @@ class FrontendAPIController extends Controller
 
             if ($profile->postCount > 0) {
 
-                $profile->discussionForum->transform(function ($forumPost) use($request) {
+                $profile->discussionForum->transform(function ($forumPost) use ($request) {
                     $imagePaths = $forumPost->images ? $forumPost->images : [];
                     $imageLinks = array_map(function ($path) {
                         return asset('storage/' . $path);
@@ -1068,9 +1086,7 @@ class FrontendAPIController extends Controller
 
                     $forumPost->images = $imageLinks;
 
-
                     $forumPost->interaction = ForumInteraction::where('forum_id', $forumPost->id)->where('jobSeekerId', $request->user()->id)->first();
-
 
                     $forumPost->likes    = $forumPost->forumInteraction->where('type', 'like')->count();
                     $forumPost->dislikes = $forumPost->forumInteraction->where('type', 'dislike')->count();
@@ -1084,7 +1100,7 @@ class FrontendAPIController extends Controller
             return response()->json([
                 'status'  => true,
                 'message' => 'Data fetched successfully!',
-                'data' => $profile
+                'data'    => $profile,
             ]);
         } catch (\Exception $e) {
             return response()->json([

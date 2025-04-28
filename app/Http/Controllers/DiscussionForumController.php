@@ -14,9 +14,30 @@ use Illuminate\Support\Facades\Validator;
 class DiscussionForumController extends Controller
 {
 
-    public function index(Request $request){
+    public function index(Request $request, $category = null){
 
-        return view('backend.discussion_forum.index');
+        $searchstr = $request->query('searchstr') ?? null;
+        // $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $forums = DiscussionForum::when(
+            in_array($category, ['other', 'education', 'investment', 'scammer', 'office']),
+            fn($query) => $query->where('category', $category)
+        )
+        ->when($searchstr, function($query) use($searchstr) {
+            $query->where(function($q) use ($searchstr) {
+                $q->where('topic', 'like', $searchstr . '%')
+                  ->orWhere('description', 'like', $searchstr . '%')
+                  ->orWhereHas('jobSeeker', function ($q2) use ($searchstr) {
+                      $q2->whereRaw("CONCAT(firstName, ' ', lastName) LIKE ?", ["{$searchstr}%"]);
+                  });
+            });
+        })
+        ->latest()
+        ->simplePaginate(5);
+        
+        // return $forums;  ->orWhereHas('user', function ($q2) use ($searchstr) {
+         //     $q2->where('name', 'like', $searchstr . '%')
+        
+        return view('backend.discussion_forum.index', compact('forums', 'category'));
     }
 
     public function loadComment(Request $request, $id)
@@ -433,7 +454,6 @@ class DiscussionForumController extends Controller
 
                 ]);
             }
-            return $e->getMessage();
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -465,7 +485,9 @@ class DiscussionForumController extends Controller
         try {
 
             $forum = DiscussionForum::find($id);
-            if ($forum->jobSeekerId = $user->id) {
+
+            
+            if ($forum->jobSeekerId = $user->id || Auth::guard('admin')->check()) {
 
                 if ($forum->images) {
                     foreach ($forum->images as $imagePath) {
@@ -485,6 +507,14 @@ class DiscussionForumController extends Controller
                 }
                 return redirect()->back()->with('success', "Forum Post Deleted Successfully.");
             }
+
+            return $isMobile? response()->json([
+                'status'  => false,
+                'message' => "You dont have permission to perform this action!",
+
+
+            ]) : redirect()->back()->with('error', "You dont have permission to perform this action!");
+           
         } catch (\Exception $e) {
             if ($isMobile) {
                 return response()->json([
@@ -526,13 +556,13 @@ class DiscussionForumController extends Controller
                 ]) : redirect()->back()->with('error', "Forum Post Not Found");
             }
 
-            if ($forum->jobSeekerId != $user->id) {
-                return $isMobile ?
-                response()->json([
-                    'status'  => false,
-                    'message' => "The requested post belongs to another user.",
-                ], 501) : redirect()->back()->with('error', "The requested post belongs to another user.");
-            }
+            // if ($forum->jobSeekerId != $user->id) {
+            //     return $isMobile ?
+            //     response()->json([
+            //         'status'  => false,
+            //         'message' => "The requested post belongs to another user.",
+            //     ], 501) : redirect()->back()->with('error', "The requested post belongs to another user.");
+            // }
 
             $forum->pinned = ! $forum->pinned;
             $forum->save();

@@ -314,9 +314,7 @@
                                                                 class="fa-solid fa-ellipsis fs-5 text-black text-decoration-none"></i>
                                                         </a>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item"
-                                                                    href="{{ route('discussion.pinpost', ['id' => $forumPost->id]) }}">{{ $forumPost->pinned ? 'Unpin' : 'Pin' }}</a>
-                                                            </li>
+                                                            
                                                             <li><button class="dropdown-item"
                                                                     style="color: #0064A7;font-size: 16px; font-weight: 500;"
                                                                     data-forum-category = "{{ $forumPost->category }}"

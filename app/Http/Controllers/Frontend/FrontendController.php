@@ -2,20 +2,15 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
-use App\Models\Advertisement;
-use App\Models\Language;
-use App\Models\Training;
-use App\Models\Experience;
-use App\Models\Skill;
-use App\Models\Profile;
-use App\Models\Visa;
-use App\Models\Education;
-use App\Models\Project;
-use App\Models\AdvertisementCategory;
 use App\Models\Achievement;
+use App\Models\Admin;
+use App\Models\AdsManager;
+use App\Models\Advertisement;
+use App\Models\AdvertisementCategory;
 use App\Models\BlogsAndPodcast;
 use App\Models\DiscussionForum;
+use App\Models\Education;
+use App\Models\Experience;
 use App\Models\Follower;
 use App\Models\ForumInteraction;
 use App\Models\GiftCategory;
@@ -25,7 +20,14 @@ use App\Models\JobBookmark;
 use App\Models\JobCategory;
 use App\Models\JobPost;
 use App\Models\JobSeeker;
+use App\Models\Language;
+use App\Models\Profile;
+use App\Models\Project;
+use App\Models\ResumeHelp;
+use App\Models\Skill;
+use App\Models\Training;
 use App\Models\UserComment;
+use App\Models\Visa;
 use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
 use App\Models\VisaType;
@@ -56,7 +58,7 @@ class FrontendController extends Controller
         $ads = Advertisement::orderBy('created_at', 'desc')
             ->take(4)->get();
 
-        $post        = Advertisement::all();
+        $post = Advertisement::all();
 
         $giftCoupons = GiftCoupon::orderBy('created_at', 'desc')
             ->where('publishStatus', 1)
@@ -66,9 +68,19 @@ class FrontendController extends Controller
             ->where('publishStatus', 1)
             ->take(12)
             ->get();
+        $ad_banners           = [];
+        $ad_banners['middle'] = AdsManager::where('which_page', 'home')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'middle')
+            ->first();
+
+        if ($ad_banners) {
+            $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
+        }
 
         // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners'));
     }
 
     public function findJobs()
@@ -95,7 +107,23 @@ class FrontendController extends Controller
             ->pluck('jobLocation')
             ->unique();
 
-        return view('frontend.find-jobs', compact('findJobs', 'skills', 'jobLocation', 'categories'));
+        $ad_banners = [];
+        
+        $ad_banners['bottom'] = AdsManager::where('which_page', 'jobs')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'bottom')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($ad_banners) {
+            
+            $ad_banners['bottom'] ? $ad_banners['bottom']->image = asset('storage/' . $ad_banners['bottom']->image) : null;
+        }
+
+        // return $ad_banners;
+
+        return view('frontend.find-jobs', compact('findJobs', 'skills', 'jobLocation', 'categories', 'ad_banners'));
     }
 
     public function jobLists(Request $request, $slug = null)
@@ -239,11 +267,22 @@ class FrontendController extends Controller
         //     ->where('jobSlug', '!=', $slug) // Exclude the current job
         //     ->get();
 
-        $prevquery = $request->input('searchstr') ?? '';
+        $ad_banners = [];
+        
+        $ad_banners ['top'] = AdsManager::where('which_page', 'jobs')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'top')
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        $location = $request->input('location') ?? '';
+        if($ad_banners){
+            
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        }
+
         // return ($prevquery.$location);
-        return view('frontend.job-lists', compact('categories', 'jobLocation', 'skills', 'findJobs', 'prevquery', 'location'));
+        return view('frontend.job-lists', compact('categories', 'jobLocation', 'skills', 'findJobs', 'ad_banners'));
         // return view('frontend.find-jobs', compact('findJobs', 'skills', 'categories','jobLocation'));
 
     }
@@ -475,8 +514,26 @@ class FrontendController extends Controller
 
         $countries = GiftCoupon::distinct()->pluck('country');
         $cities    = GiftCoupon::distinct()->pluck('city');
+
+        $ad_banners = [];
+        // $ad_banners ['middle'] = AdsManager::where('which_page', 'gift')
+        //     ->where('publish_or_not', 1)
+        //     ->where('active', 1)
+        //     ->where('position', 'middle')
+        //     ->first();
+        $ad_banners['top'] = AdsManager::where('which_page', 'gift')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'top')
+            ->first();
+
+        if ($ad_banners) {
+
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
+        }
+
         // dd($giftNcoupons);
-        return view('frontend.giftNcoupon.home', compact(['giftcategories', 'type', 'giftNcoupons', 'giftCategoryId', 'searchstr', 'country', 'city', 'cities', 'countries']));
+        return view('frontend.giftNcoupon.home', compact(['giftcategories', 'type', 'giftNcoupons', 'giftCategoryId', 'cities', 'countries', 'ad_banners']));
     }
 
     public function giftNcouponDescription(Request $request)
@@ -527,14 +584,38 @@ class FrontendController extends Controller
             return $giftComment;
         });
 
-        return view('frontend.giftNcoupon.giftDescription', compact('giftNcoupon', 'similarGifts', 'giftComments'));
+        $ad_banners = [];
+        $ad_banners ['middle'] = AdsManager::where('which_page', 'gift')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'middle')
+            ->first();
+
+        if($ad_banners){
+            $ad_banners['middle'] ? $ad_banners['middle']->image = asset('storage/'.$ad_banners['middle']->image) : null;
+        }
+
+        return view('frontend.giftNcoupon.giftDescription', compact('giftNcoupon', 'similarGifts', 'giftComments', 'ad_banners'));
 
     }
 
-    public function sellerProfile($id)
+    public function sellerProfile($id, $type = null)
     {
-        $seller      = Admin::where('id', $id)->first(['fullName', 'email', 'status']);
-        $sellerGifts = GiftCoupon::where('adminId', $id)->take(8)->latest()->get();
+
+        // return $id;
+        $seller      = Admin::where('id', $id)->first(['id','fullName', 'email', 'status','profile_image', 'location', 'created_at']);
+        
+        
+        $sellerGifts = GiftCoupon::where('adminId', $id)
+            ->when(
+                in_array($type, ['1', '0']),
+                fn($query) => $query->where('type', $type)
+            )
+            ->take(8)->latest()
+            ->paginate(8)
+            ->withQueryString();
+
+        // return $seller;
 
         return view('frontend.giftNcoupon.sellerProfile', compact(['seller', 'sellerGifts']));
 
@@ -542,7 +623,40 @@ class FrontendController extends Controller
 
     public function resumeHelp()
     {
-        return view('frontend.resume.index');
+
+        $freeResumeHelps    = ResumeHelp::where('type', 0)->get();
+        $premiumResumeHelps = ResumeHelp::where('type', 1)->get();
+
+        $freeResumeHelps->transform(function ($resume) {
+            $resume->image_preview = asset('storage/' . $resume->image_preview);
+            return $resume;
+        });
+
+        $premiumResumeHelps->transform(function ($resume) {
+            $resume->image_preview = asset('storage/' . $resume->image_preview);
+            return $resume;
+        });
+
+        $ad_banners           = [];
+        $ad_banners['middle'] = AdsManager::where('which_page', 'resume')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'middle')
+            ->first();
+        $ad_banners['top'] = AdsManager::where('which_page', 'resume')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'top')
+            ->first();
+
+        if ($ad_banners) {
+            $ad_banners['middle'] ? $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) : null;
+            $ad_banners['top'] ? $ad_banners['top']->image       = asset('storage/' . $ad_banners['top']->image) : null;
+        }
+
+        // return $freeResumeHelps;
+
+        return view('frontend.resume.index', compact('freeResumeHelps', 'premiumResumeHelps', 'ad_banners'));
     }
 
     public function resumeMaker()
@@ -639,23 +753,92 @@ class FrontendController extends Controller
             return $forumPost;
         });
 
-        // $hot_topics = DiscussionForum::withCount('forumInteraction as count')
-        //     ->orderBy('count', 'desc')
-        //     ->limit(4)
-        //     ->get();
+        $hot_topics = DiscussionForum::with('jobSeeker:id,firstName,lastName')
+            ->where('pinned', 1)
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
 
-        // return $forumPosts;
+        $hot_topics->transform(function ($forumPost) {
+            if ($forumPost->images) {
+                $forumPost->images = asset('storage/' . $forumPost->images[0]);
+            }
+            return $forumPost;
+        });
 
-        return view('frontend.discussion.index', compact('forumPosts'));
+        $ad_banners = [];
+        
+        $ad_banners ['top'] = AdsManager::where('which_page', 'forum')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'top')
+            ->first();
+
+        if($ad_banners){
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        }
+
+        // return $hot_topics;
+
+        return view('frontend.discussion.index', compact('forumPosts', 'hot_topics', 'ad_banners'));
     }
 
-    public function advertisements(){
-          // Fetch unique categories under the given type
-  $ads =Advertisement::all();
-    $all = AdvertisementCategory::all();
-    $category = AdvertisementCategory::all();
-    $categories = AdvertisementCategory::all();
-    return view('frontend.advertisements.index', compact('all','category','ads','categories'))
-    ->with('success', 'Advertisements retrieved successfully!');    }
+    public function forumProfile($id)
+    {
+
+        $profile = JobSeeker::select('id', 'firstName', 'lastName', 'temporaryLocation', 'userThumbnail')
+            ->where('id', $id)
+            ->with(['discussionForum' => function ($query) {
+                $query->orderBy('pinned', 'desc');
+                $query->orderBy('created_at', 'desc');
+            }])
+
+            ->first();
+
+        $profile->userThumbnail ? $profile->userThumbnail = asset('storage/' . $profile->userThumbnail[0]) : null;
+        $profile->postCount                               = $profile->discussionForum->count();
+        $profile->followers                               = Follower::where('followed_to', $profile->id)->count();
+        $profile->followings                              = Follower::where('followed_by', $profile->id)->count();
+        $profile->followed                                = Follower::where('followed_to', $profile->id)->where('followed_by', Auth::guard('job_seekers')->id())->exists();
+
+        if ($profile->postCount > 0) {
+
+            $profile->discussionForum->transform(function ($forumPost) {
+                $imagePaths = $forumPost->images ? $forumPost->images : [];
+                $imageLinks = array_map(function ($path) {
+                    return asset('storage/' . $path);
+                }, $imagePaths);
+
+                $forumPost->images = $imageLinks;
+
+                if (Auth::guard('job_seekers')->check()) {
+                    $forumPost->interaction = ForumInteraction::where('forum_id', $forumPost->id)->where('jobSeekerId', Auth::guard('job_seekers')->id())->first();
+                }
+
+                $forumPost->likes    = $forumPost->forumInteraction->where('type', 'like')->count();
+                $forumPost->dislikes = $forumPost->forumInteraction->where('type', 'dislike')->count();
+                $forumPost->comments = $forumPost->forumComment->count();
+
+                return $forumPost;
+            });
+
+        }
+
+        // return $profile;
+
+        return view('frontend.discussion.forum-profile', compact('profile'));
+    }
+
+    public function advertisements()
+    {
+        // Fetch unique categories under the given type
+        $ads        = Advertisement::all();
+        $all        = AdvertisementCategory::all();
+        $category   = AdvertisementCategory::all();
+        $categories = AdvertisementCategory::all();
+        return view('frontend.advertisements.index', compact('all', 'category', 'ads', 'categories'))
+            ->with('success', 'Advertisements retrieved successfully!');
+
+    }
 
 }

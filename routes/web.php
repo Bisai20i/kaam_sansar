@@ -61,6 +61,10 @@ Route::middleware(['role:admin'])->prefix('adminuser')->group(function () {
 
 Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
 
+    //delete forum post by admin
+
+    Route::delete('discussioin_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');
+
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
     // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
     Route::get('/{id}/edit', [AdminController::class, 'editadmin'])->name('admin.edit');
@@ -94,8 +98,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     // Route for aboard deals
     // Route for aboard deals
-    Route::resource('aboards', AboardController::class);
-    Route::get('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
+    
 
     Route::put('aboards/{id}/publish', [AboardController::class, 'publish'])->name('aboards.publish');
     Route::put('aboards/{id}/unpublish', [AboardController::class, 'unpublish'])->name('aboards.unpublish');
@@ -104,9 +107,8 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     Route::resource('productcategory', ProductCategoryController::class);
 
-
     //route for discussion forum
-    Route::get('forum-posts', [DiscussionForumController::class, 'index'])->name('forum.index');
+    Route::get('forum-posts/{category?}', [DiscussionForumController::class, 'index'])->name('forum.index');
 
 
 
@@ -331,7 +333,7 @@ Route::post('/set-redirect', function (Request $request) {
 Route::prefix('giftNCoupon')->group(function () {
     Route::get('/home/{type?}/{giftCategoryId?}', [FrontendController::class, 'giftNcoupon'])->name('gift.home');
     Route::get('/description', [FrontendController::class, 'giftNcouponDescription'])->name('gift.details');
-    Route::get('/seller/{id}', [FrontendController::class, 'sellerProfile'])->name('gift.seller');
+    Route::get('/seller/{id}/{type?}', [FrontendController::class, 'sellerProfile'])->name('gift.seller');
     // Route::get('/cart/{couponId}',[GiftCouponController::class, 'couponcart'])->name('giftcart');
     // Route::get('/cart',[GiftCartController::class, 'couponcart'])->name('giftcart');
     // Route::post('/addtocart', [GiftCartController::class, 'addtocart'])->name('addtocart');
@@ -343,11 +345,12 @@ Route::prefix('giftNCoupon')->group(function () {
 
 Route::prefix('discussion')->group(function () {
     Route::resource('discussion_forum',DiscussionForumController::class)->except('index', 'create', 'edit')->middleware('auth:job_seekers');
+    
     Route::get('/index', [FrontendController::class, 'discussionForum'])->name('frontend.discussion');
     Route::get('/profile/{id}', [FrontendController::class, 'forumProfile'])->name('discussion.profile');
     Route::post('/follow-user', [DiscussionForumController::class, 'followToUser'])->name('discussion.followuser')->middleware('auth:job_seekers');
     Route::post('/interact', [ForumInteractionController::class, 'interact'])->name('discussion.interact')->middleware('auth:job_seekers');
-    Route::get('/pin-post/{id}', [DiscussionForumController::class, 'togglePinnedPost'])->name('discussion.pinpost')->middleware('auth:job_seekers');
+    Route::get('/pin-post/{id}', [DiscussionForumController::class, 'togglePinnedPost'])->name('discussion.pinpost')->middleware(['auth:admin', 'role:superAdmin']);
     Route::get('/comments/{id}', [DiscussionForumController::class, 'loadComment']);
     Route::post('/add-comment', [DiscussionForumController::class, 'addComment'])->name('discussion.addcomment')->middleware('auth:job_seekers');
     Route::delete('delete-comment/{id}', [DiscussionForumController::class, 'deleteComment'])->name('discussion.deletecomment')->middleware('auth:job_seekers');
@@ -362,6 +365,9 @@ Route::prefix('advertisements')->group(function () {
 });
 
 Route::resource('ads', AdvertisementController::class);
+//abroad deals
+Route::resource('aboards', AboardController::class);
+Route::get('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
 
 
 
@@ -374,4 +380,4 @@ Route::prefix('mydocuments')->group(function () {
 Route::get('allpodcasts', [FrontendAPIController::class, 'allpodcasts']);
 Route::get('/resume-help', [FrontendController::class, 'resumeHelp'])->name('resume');
 
-Route::get('/fireEvent', [MessageController::class, 'fireEvent']);
+// Route::get('/fireEvent', [MessageController::class, 'fireEvent']);`

@@ -192,7 +192,7 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
         Route::prefix('giftNCoupon')->group(function () {
             Route::get('/home/{type?}/{giftCategoryId?}', [FrontendAPIController::class, 'giftNcoupon']);
             Route::get('/description/{id}', [FrontendAPIController::class, 'giftNcouponDescription']);
-            Route::get('/seller/{id}', [FrontendAPIController::class, 'sellerProfile']);
+            Route::get('/seller/{id}/{type?}', [FrontendAPIController::class, 'sellerProfile']);
             Route::get('/cart', [GiftCartController::class, 'couponcart']);
             Route::post('/addtocart', [GiftCartController::class, 'addtocart']);
             Route::get('/addquantity/{id}', [GiftCartController::class, 'addquantity']);
