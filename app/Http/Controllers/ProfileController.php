@@ -38,96 +38,93 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        // Check if request is from mobile using the request_type parameter
-        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-
-        // Get the authenticated job seeker
-        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-        if (!$user) {
-            return $isMobile
-                ? $this->responseError('Unauthorized', 401)
-                : redirect()->route('login')->with('error', 'Unauthorized access.');
-        }
-
-        Log::info('Authenticated Job Seeker ID: '. $user->id);
-        $jobSeekerId = $user->id;
-
-        // Validate the profile data
-        $validator = Validator::make($request->all(), [
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'phoneNumber' => 'required|string|unique:profiles,phoneNumber,' . $jobSeekerId . ',jobSeekerId',
-            'designation' => 'required|string|max:255',
-            'address'=>'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'bio' => 'required|string|max:1000',
-            'profileImg' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-        ]);
-
-        // Log validation errors if any
-        if ($validator->fails()) {
-            Log::error('Validation errors: ', $validator->errors()->toArray());
-            return $isMobile
-                ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator->errors())->withInput();
-        }
-        $profileImagePath = null;
-
-        if ($request->hasFile('profileImg')) {
-            $profileImagePath = handleUpload('profileImg');
+            try {
+                // Check if request is from mobile using the request_type parameter
+                $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
         
-            if (!$profileImagePath) {
-                Log::error('Profile image upload failed.');
+                // Get the authenticated job seeker
+                $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+                if (!$user) {
+                    return $isMobile
+                        ? $this->responseError('Unauthorized', 401)
+                        : redirect()->route('login')->with('error', 'Unauthorized access.');
+                }
+        
+                Log::info('Authenticated Job Seeker ID: '. $user->id);
+                $jobSeekerId = $user->id;
+        
+                // Validate the profile data
+                $validator = Validator::make($request->all(), [
+                    'firstName' => 'required|string|max:255',
+                    'lastName' => 'required|string|max:255',
+                    'phoneNumber' => 'required|string|unique:profiles,phoneNumber,' . $jobSeekerId . ',jobSeekerId',
+                    'designation' => 'required|string|max:255',
+                    'address' => 'required|string|max:255',
+                    'country' => 'required|string|max:255',
+                    'bio' => 'required|string|max:1000',
+                    'profileImg' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+                ]);
+        
+                // Log validation errors if any
+                if ($validator->fails()) {
+                    Log::error('Validation errors: ', $validator->errors()->toArray());
+                    return $isMobile
+                        ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
+                        : response()->json([
+                            'success' => false,
+                            'message' => "Validation failed. Please check your inputs.",
+                            'error' => $validator->errors()
+                        ]);
+                }
+        
+                $profileImagePath = handleUpload('profileImg');
+        
+                $profileData = [
+                    'firstName' => $request->firstName,
+                    'lastName' => $request->lastName,
+                    'address' => $request->address,
+                    'email'=>$request->email,
+                    'phoneNumber' => $request->phoneNumber,
+                    'designation' => $request->designation,
+                    'country' => $request->country,
+                    'bio' => $request->bio,
+                ];
+        
+                // Only add image if uploaded
+                if ($profileImagePath) {
+                    $profileData['profileImg'] = $profileImagePath;
+                }
+        
+                $profile = Profile::updateOrCreate(
+                    ['jobSeekerId' => $jobSeekerId], // Search condition
+                    $profileData                      // Data to create/update
+                );
+        
+                // Log saved profile data
+                Log::info('Profile saved successfully:', $profile->toArray());
+                session()->flash('step', 2);
+        
+                // Return response based on request type
                 return $isMobile
-                    ? $this->responseError('Error uploading profile image.', 500)
-                    : redirect()->back()->with('error', 'Error uploading profile image.');
+                    ? $this->responseSuccess('Personal Profile saved successfully.', $profile)
+                    : response()->json([
+                        'success' => true,
+                        'message' => 'Personal Profile saved successfully.',
+                    ]);
+        
+            } catch (\Exception $e) {
+                Log::error('Store Profile Exception: ' . $e->getMessage());
+        
+                return $request->has('request_type') && $request->input('request_type') === 'mobile'
+                    ? $this->responseError('Something went wrong.', 500, $e->getMessage())
+                    : response()->json([
+                        'success' => false,
+                        'message' => 'Something went wrong.',
+                        'error' => $e->getMessage(),
+                    ], 500);
             }
         }
-        // Create a new profile record
-        $profileData = [
-            'firstName' => $request->firstName,
-            'lastName' => $request->lastName,
-            'address' => $request->address,
-            'phoneNumber' => $request->phoneNumber,
-            'designation' => $request->designation,
-            'country' => $request->country,
-            'bio' => $request->bio,
-        ];
         
-        // Only add image if uploaded
-        if ($profileImagePath) {
-            $profileData['profileImg'] = $profileImagePath;
-        }
-        
-        $profile = Profile::updateOrCreate(
-            ['jobSeekerId' => $jobSeekerId], // Search condition
-            $profileData                      // Data to create/update
-        );
-
-        // Log saved profile data
-        Log::info('Profile saved successfully:', $profile->toArray());
-        session()->flash('step', 2);
-
-        // Return response based on request type
-        // return $isMobile
-        //     ? $this->responseSuccess(' Personal Profile saved successfully.', $profile)
-        //     :redirect()->back()
-        //     ->with('success', 'Personal Profile saved successfully.')
-        //     ->withInput();
-        // }
-        return $isMobile
-        ? $this->responseSuccess('Personal Profile saved successfully.', $profile)
-        : 
-            response()->json([
-                'success' => true,
-                'message' => 'Personal Profile saved successfully.',
-            ])   ;      
-         
-    }
-
-
-
-
     /**
      * Display the specified resource.
      *

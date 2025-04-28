@@ -14,9 +14,20 @@ use Illuminate\Support\Facades\Validator;
 class DiscussionForumController extends Controller
 {
 
-    public function index(Request $request){
+    public function index(Request $request, $category = null){
 
-        return view('backend.discussion_forum.index');
+        $serachstr = $request->input('searchstr') ?? null;
+        // $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $forums = DiscussionForum::when(
+            in_array($category, ['other', 'education', 'investment', 'scammer', 'office']),
+            fn($query) => $query->where('category', $category)
+        )
+        
+        ->latest()
+        ->simplePaginate(5);
+
+        
+        return view('backend.discussion_forum.index', compact('forums', 'category'));
     }
 
     public function loadComment(Request $request, $id)

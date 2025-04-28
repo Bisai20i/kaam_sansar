@@ -1,0 +1,24 @@
+<div id="overviewProject"></div>
+                        <div class="container mt-4">
+                            <!-- Display additional project entries -->
+                            @if ($projects->count() > 0)
+                            @foreach ($projects as $project)
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    {{ $project->projectTitle ?? 'Project Title' }}
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Project Link:</strong>
+                                        @if ($project->projectLink)
+                                        <a href="{{ $project->projectLink }}" target="_blank">{{ $project->projectLink }}</a>
+                                        @else
+                                        N/A
+                                        @endif
+                                    </p>
+                                    <p><strong>Description:</strong> {{ $project->projectDescription ?? 'No description provided.' }}</p>
+                                </div>
+                            </div>
+                            @endforeach
+                            @endif
+                        </div>
+                    </div>

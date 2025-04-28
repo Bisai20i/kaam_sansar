@@ -56,12 +56,12 @@ class EducationController extends Controller
 
     // Validate each education entry
     $validator = Validator::make($request->all(), [
-        'education.*.schoolName' => 'required|string|max:255',
-        'education.*.degree' => 'required|string|max:255',
-        'education.*.city' => 'required|string|max:255',
-        'education.*.startDate' => 'required',
-        'education.*.graduationDate' => 'required',
-        'education.*.educationDescription' => 'required|string|max:1000',
+        'schoolName' => 'required|string|max:255',
+        'degree' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'startDate' => 'required',
+        'graduationDate' => 'required',
+        'educationDescription' => 'required|string|max:1000',
     ]);
 
     if ($validator->fails()) {
@@ -77,17 +77,18 @@ class EducationController extends Controller
     }
 
     // Process each education entry
-    foreach ($request->input('education') as $educationData) {
-        $education = new Education();
-        $education->schoolName = $educationData['schoolName'];
-        $education->degree = $educationData['degree'];
-        $education->city = $educationData['city'];
-        $education->startDate = Carbon::parse($educationData['startDate'])->format('Y-m-d');
-        $education->graduationDate = Carbon::parse($educationData['graduationDate'])->format('Y-m-d');
-        $education->educationDescription = $educationData['educationDescription'];
-        $education->jobSeekerId = $jobSeekerId; // Associate the education with the user
-        $education->save();
-    }
+    $validated = $validator->validated();
+
+    $education = new Education();
+    $education->schoolName = $validated['schoolName'];  
+    $education->degree = $validated['degree'];     
+    $education->city = $validated['city'];
+    $education->startDate = Carbon::parse($validated['startDate'])->format('Y-m-d');
+    $education->graduationDate = Carbon::parse($validated['graduationDate'])->format('Y-m-d');
+    $education->educationDescription = $validated['educationDescription'];
+    $education->jobSeekerId = auth()->id();
+    
+    $education->save();
 
     Log::info('Education created successfully with ID: ' . $education->id);
 

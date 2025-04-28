@@ -162,7 +162,7 @@ Resume Maker
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        <button type="submit" class="btn next-btn" id="nextProfile">Next</button>
+                                        <button type="submit" class="btn next-btn" id="nextProfile">save & continue</button>
                                     </div>
                                 </form>
                             </div>
@@ -171,7 +171,7 @@ Resume Maker
                         <!-- Visa Section (Initially hidden) -->
                         <div id="visa" class="section-content" style="display:none;">
                             <h4 class="mb-3 your-project-text">Visa</h4>
-                            <div class="card p-3">
+                            <div class="card p-3 card-center">
                                 <form id="visaForm" enctype="multipart/form-data">
                                     @csrf
                                     <h3>Visa Details</h3>
@@ -233,8 +233,10 @@ Resume Maker
                                             }
                                         });
                                     </script>
-                                    <button type="submit" class="btn next-btn float-end"
-                                        id="submitVisa">Next</button>
+                                    <div class="text-end ">
+                                        <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                        <button type="submit" class="btn text-center next-btn">Save & Continue</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -263,6 +265,35 @@ Resume Maker
                                 color: #FAAC24;
                             }
 
+                            .card-center .next-btn {
+                                border: 1px solid #0064a7 !important;
+                                color: #fff;
+                                font-size: 16px;
+                                font-weight: 600;
+                                background-color: #0064A7;
+                                transition: all 0.3s ease-in-out;
+                            }
+
+                            .card-center .skip-btn {
+                                border: 1px solid #0064A7 !important;
+                                color: #0064A7;
+                                font-size: 16px;
+                                font-weight: 600;
+                                background-color: #fff;
+                                transition: all 0.3s ease-in-out;
+                            }
+
+                            .card-center .next-btn:hover {
+                                background-color: #fff;
+                                color: #0064A7;
+                            }
+
+                            .card-center .skip-btn:hover {
+                                background-color: #0064A7;
+                                color: #fff;
+                                border: 1px solid #0064A7 !important;
+                            }
+
                             .custom-orange {
                                 color: #FAAC24 !important;
                             }
@@ -271,7 +302,7 @@ Resume Maker
                         <!--Education Section-->
                         <div id="education" class="section-content" style="display: none;">
                             <h4 class="mb-3 your-project-text">Your Education</h4>
-                            <div class="card p-4">
+                            <div class="card p-4 card-center">
                                 <form id="educationForm">
                                     @csrf
                                     <h3>School/Institution</h3>
@@ -335,34 +366,15 @@ Resume Maker
                                             </textarea>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn add-project float-start" id="addEducation">+
-                                        Add
-                                        Education</button>
-                                    <button type="submit" class="btn next-btn float-end"
-                                        id="submitEducation">Next</button>
-                                </form>
-                            </div>
-                            <div id="overviewEducation" class="mt-4"></div>
-                            <div class="container mt-4">
-                                <!-- Display existing education records (skipping the first one) -->
-                                @if ($educations->count() > 0)
-                                @foreach ($educations as $education)
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        {{ $education->schoolName ?? 'School Name' }}
+                                    <!-- Change button types to prevent default form submission -->
+                                    <button type="button" class="btn add-project float-start" id="addEducation">
+                                        + Add Education
+                                    </button>
+                                    <div class="text-end ">
+                                        <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                        <button type="button" class="btn text-center next-btn" id="submitEducation">Save & Continue</button>
                                     </div>
-                                    <div class="card-body">
-                                        <p><strong>Degree:</strong> {{ $education->degree ?? 'N/A' }}</p>
-                                        <p><strong>City:</strong> {{ $education->city ?? 'N/A' }}</p>
-                                        <p><strong>Start Date:</strong> {{ $education->startDate ?? 'N/A' }}</p>
-                                        <p><strong>Graduation Date:</strong> {{ $education->graduationDate ?? 'N/A' }}</p>
-                                        <p><strong>Summary:</strong> {{ $education->educationDescription ?? 'N/A' }}</p>
-                                    </div>
-                                </div>
-                                @endforeach
-                                @endif
                             </div>
-
                         </div>
 
                         <!-- Project Section (Initially Hidden) -->
@@ -370,12 +382,14 @@ Resume Maker
                             <h4 class="mb-3 your-project-text">Your Projects</h4>
                             <div class="card card-center">
                                 <form id="projectForm">
-                                    @csrf
+
                                     <div class="mb-3">
                                         <h1>Projects</h1>
+                                    </div>
+                                    <div class="mb-3">
                                         <label class="form-label">Project Title</label>
-                                        <input type="text" class="form-control custom-input" name="projectTitle" id="projectTitle"
-                                            placeholder="" required>
+                                        <input type="url" class="form-control custom-input" name="projectTitle" id="projectTitle"
+                                            placeholder="">
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Project Link</label>
@@ -386,34 +400,17 @@ Resume Maker
                                         <label class="form-label">Description</label>
                                         <textarea class="form-control custom-input" rows="4" id="projectDescription" name="projectDescription" placeholder=""></textarea>
                                     </div>
-                                    <button type="button" id="addProject" class="btn add-project">+ Add
-                                        Project</button>
-                                    <button type="submit" id="submitProject"
-                                        class="btn next-btn btn-primary float-end">Next</button>
+
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn add-project float-start" id="addProject">
+                                            + Add Project
+                                        </button>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="button" class="btn text-center next-btn" id="submitProject">Save & Continue</button>
+                                        </div>
+                                    </div>
                                 </form>
-                            </div>
-                            <div id="overviewProject"></div>
-                            <div class="container mt-4">
-                                <!-- Display additional project entries -->
-                                @if ($projects->count() > 0)
-                                @foreach ($projects as $project)
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        {{ $project->projectTitle ?? 'Project Title' }}
-                                    </div>
-                                    <div class="card-body">
-                                        <p><strong>Project Link:</strong>
-                                            @if ($project->projectLink)
-                                            <a href="{{ $project->projectLink }}" target="_blank">{{ $project->projectLink }}</a>
-                                            @else
-                                            N/A
-                                            @endif
-                                        </p>
-                                        <p><strong>Description:</strong> {{ $project->projectDescription ?? 'No description provided.' }}</p>
-                                    </div>
-                                </div>
-                                @endforeach
-                                @endif
                             </div>
                         </div>
 
@@ -438,31 +435,20 @@ Resume Maker
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn add-project float-start" id="addSkill">+ Add
-                                        Skill</button>
-                                    <button type="submit" class="btn next-btn float-end"
-                                        id="submitSkills">Next</button>
+
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn add-project float-start" id="addSkill">
+                                            + Add skill
+                                        </button>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="button" class="btn text-center next-btn" id="submitSkill">Save & Continue</button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
-                            <div>
-                                @if ($skills->count() > 0)
-                                @foreach ($skills as $skill)
-                                <input type="text" class="form-control custom-input border-end-0"
-                                    name="skillName[]" value="{{ $skill->skillName }}" placeholder="Skill" required>
-
-                                <select class="form-select custom-input border-start-0 text-end me-3"
-                                    name="skillProficiency[]" required>
-                                    <option value="Beginner" {{ $skill->proficiency == 'Beginner' ? 'selected' : '' }}>Beginner</option>
-                                    <option value="Intermediate" {{ $skill->proficiency == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
-                                    <option value="Advanced" {{ $skill->proficiency == 'Advanced' ? 'selected' : '' }}>Advanced</option>
-                                </select>
-                                @endforeach
-                                @endif
-                            </div>
-                            <div id="overviewSkill"></div>
-
-
                         </div>
+
                         <!-- Achievements Section (Initially hidden) -->
                         <div id="achievement" class="section-content" style="display:none;">
                             <h4 class="mb-3 your-project-text">Your Achievements</h4>
@@ -486,26 +472,18 @@ Resume Maker
                                         </div>
                                     </div>
 
-                                    <button type="button" class="btn add-project float-start"
-                                        id="addAchievement">+
-                                        Add Achievement</button>
-                                    <button type="submit" class="btn next-btn float-end"
-                                        id="submitAchievement">Next</button>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn add-project float-start" id="addAchievement">
+                                            + AddAchievement
+                                        </button>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="button" class="btn text-center next-btn" id="submitAchievement">Save & Continue</button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
-                            @if ($achievements->count() > 0)
-                            @foreach ($achievements as $achievement)
-                            <div class="mb-3 achievement-entry">
-                                <label class="form-label">Achievement Name</label>
-                                <input type="text" class="form-control custom-input" name="achievementName" value="{{ $achievement->achievementName ?? '' }}" placeholder="Achievement Name" required>
 
-                                <label class="form-label">Achievement Description</label>
-                                <textarea class="form-control custom-input" name="achievementDescription" placeholder="Describe your achievement...">{{ $achievement->achievementDescription }}</textarea>
-                            </div>
-                            @endforeach
-                            @endif
-
-                            <div id="overviewAchievement"></div>
                         </div>
 
                         <!-- Experience Section (Initially hidden) -->
@@ -583,7 +561,6 @@ Resume Maker
                                                         <input type="radio" id="work-3" name="workingEnvironmentRating"><label for="work-3">&#9733;</label>
                                                         <input type="radio" id="work-2" name="workingEnvironmentRating"><label for="work-2">&#9733;</label>
                                                         <input type="radio" id="work-1" name="workingEnvironmentRating"><label for="work-1">&#9733;</label>
-
                                                     </div>
                                                 </div>
                                                 <input type="text" class="form-control" placeholder="work Environment feedback" name="workingEnvironmentFeedback">
@@ -606,85 +583,17 @@ Resume Maker
                                         </div>
 
                                     </div>
-
-                                    <button type="button" class="btn add-project float-start"
-                                        id="addExperienceBtn">+
-                                        Add Experience</button>
-                                    <button type="submit" class="btn next-btn float-end"
-                                        id="submitExperience">Next</button>
+                                        <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn add-project float-start" id="addExperienceBtn">
+                                            + Add Education
+                                        </button>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="button" class="btn text-center next-btn" id="submitExperience">Save & Continue</button>
+                                        </div>
+                                    </div>  
                                 </form>
                             </div>
-                            @if ($experiences->count() > 0)
-                            @foreach ($experiences as $exp)
-                            <div class="card p-3 mt-3">
-                                <h4 class="mb-3 your-project-text">Additional Experience</h4>
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <label for="experience-job-title-{{ $loop->index }}" class="form-label">Job Title</label>
-                                        <input type="text" class="form-control custom-input"
-                                            name="jobTitle[]" placeholder="Software Engineer" value="{{ $exp->jobTitle ?? '' }}" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Company Name</label>
-                                        <input type="text" class="form-control custom-input"
-                                            name="companyName[]" placeholder="Google Inc." value="{{ $exp->companyName ?? '' }}" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Location</label>
-                                        <input type="text" class="form-control custom-input"
-                                            name="location[]" placeholder="San Francisco, CA" value="{{ $exp->location ?? ''}}" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Start Date</label>
-                                        <input type="date" class="form-control custom-input"
-                                            name="startDate[]" value="{{ $exp->startDate ?? '' }}" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">End Date</label>
-                                        <input type="date" class="form-control custom-input"
-                                            name="endDate[]" value="{{ $exp->endDate ?? '' }}" required>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="form-label">Description</label>
-                                        <textarea class="form-control custom-input" name="experienceDescription[]" rows="3"
-                                            required>{{ $exp->experienceDescription ?? '' }}</textarea>
-                                    </div>
-
-                                    <div>
-                                        <p>Optional <span class="custom-orange">(It will not be shown on your resume):</span></p>
-
-                                        <label class="mb-0">Salary Rating</label>
-                                        <div class="rating mb-2">
-                                            @for ($i = 5; $i >= 1; $i--)
-                                            <input type="radio" id="salary-{{ $i }}-{{ $loop->index }}" name="salaryRating[{{ $loop->index }}]" value="{{ $i }}" {{ $exp->salaryRating == $i ? 'checked' : '' }}>
-                                            @endfor
-                                        </div>
-                                        <input type="text" class="form-control" name="salaryFeedback[]" placeholder="Salary feedback" value="{{ $exp->salaryFeedback }}">
-
-                                        <label class="mt-3 mb-0">Working Environment</label>
-                                        <div class="rating mb-2">
-                                            @for ($i = 5; $i >= 1; $i--)
-                                            <input type="radio" id="work-{{ $i }}-{{ $loop->index }}" name="workingEnvironmentRating[{{ $loop->index }}]" value="{{ $i }}" {{ $exp->workingEnvironmentRating == $i ? 'checked' : '' }}>
-                                            <label for="work-{{ $i }}-{{ $loop->index }}">&#9733;</label>
-                                            @endfor
-                                        </div>
-                                        <input type="text" class="form-control" name="workingEnvironmentFeedback[]" placeholder="Work feedback" value="{{ $exp->workingEnvironmentFeedback }}">
-
-                                        <label class="mt-3 mb-0">Benefits Rating</label>
-                                        <div class="rating mb-2">
-                                            @for ($i = 5; $i >= 1; $i--)
-                                            <input type="radio" id="benefits-{{ $i }}-{{ $loop->index }}" name="benefitsRating[{{ $loop->index }}]" value="{{ $i }}" {{ $exp->benefitsRating == $i ? 'checked' : '' }}>
-                                            <label for="benefits-{{ $i }}-{{ $loop->index }}">&#9733;</label>
-                                            @endfor
-                                        </div>
-                                        <input type="text" class="form-control" name="benefitsFeedback[]" placeholder="Benefits feedback" value="{{ $exp->benefitsFeedback ?? '' }}">
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                            @endif
-
-                            <div id="overviewExperience"></div>
                         </div>
 
                         <!-- Trainings Section (Initially hidden) -->
@@ -755,45 +664,6 @@ Resume Maker
                                         id="submitTraining">Next</button>
                                 </form>
                             </div>
-                            <div id="trainingOverview"></div>
-                            @if ($trainings->count() > 0)
-                            @foreach ($trainings as $training)
-                            <div class="training-section border rounded p-3 mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">Training/Certification Title</label>
-                                        <div class="custom-input-wrapper">
-                                            <input type="text" class="form-control custom-input" value="{{ $training->trainingTitle ?? '' }}" disabled>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">Institution/Organization</label>
-                                        <div class="custom-input-wrapper">
-                                            <input type="text" class="form-control custom-input" value="{{ $training->institutionName ?? '' }}" disabled>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">Completion Date</label>
-                                        <div class="custom-input-wrapper">
-                                            <input type="date" class="form-control custom-input" value="{{ $training->completionDate ?? '' }}" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-2">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <p class="flex-grow-1 my-auto text-black-50 mb-0" style="font-size: 0.9rem;">Training Certificate</p>
-                                        <a href="{{ asset('storage/' . $training->certificate ?? '') }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                            View Certificate
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                            @endif
-
                         </div>
 
                         <!--Language-->
@@ -875,6 +745,8 @@ Resume Maker
 @endsection
 
 @push('scripts')
+
+
 <script>
     const educationEntries = [];
     const projectEntries = [];
@@ -885,6 +757,13 @@ Resume Maker
     const languageEntries = [];
     // File upload functionality for Visa section
     document.addEventListener('DOMContentLoaded', function() {
+        function previewProfile(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('profilePreview').src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
         const links = document.querySelectorAll(".profile-link");
 
         links.forEach(link => {
@@ -971,10 +850,9 @@ Resume Maker
                 });
         });
 
-        document.getElementById('addEducation').addEventListener('click', function() {
-
-            // Get all values using name attributes
-            const educationData = {
+        // Simply collects form data without validation
+        function collectEducationData() {
+            return {
                 schoolName: document.getElementsByName('schoolName')[0].value,
                 degree: document.getElementsByName('degree')[0].value,
                 city: document.getElementsByName('city')[0].value,
@@ -982,636 +860,488 @@ Resume Maker
                 graduationDate: document.getElementsByName('graduationDate')[0].value,
                 educationDescription: document.getElementsByName('educationDescription')[0].value
             };
+        }
 
-            // Add to array
-            educationEntries.push(educationData);
+        async function saveEducationData(educationData) {
+            console.log("Sending data:", educationData); // Debug log
+            try {
+                const response = await fetch("{{ route('educations.store') }}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(educationData) // Changed from {education: [educationData]}
+                });
+                const result = await response.json();
+                console.log("Server response:", result); // Debug log
+                return result;
+            } catch (error) {
+                console.error("Error saving data:", error);
+                return {
+                    success: false
+                };
+            }
+        }
 
-            // Show preview
-            const previewHTML = `
-                <div class="border p-2 mb-2 education-preview" data-index="${educationEntries.length - 1}">
-                    <p><strong>School:</strong> ${educationData.schoolName}</p>
-                    <p><strong>Degree:</strong> ${educationData.degree}</p>
-                    <p><strong>Dates:</strong> ${educationData.startDate} to ${educationData.graduationDate}</p>
-                    <button class="btn btn-sm btn-danger remove-btn">Remove</button>
-                </div> `;
-            document.getElementById('overviewEducation').insertAdjacentHTML('beforeend', previewHTML);
-
-            // Clear form
-            const form = document.getElementById('educationForm');
-            form.reset();
-            document.getElementsByName('schoolName')[0].focus();
-        });
-
-
-
-        // Submit All Entries
         document.getElementById('educationForm').addEventListener('submit', function(e) {
             e.preventDefault();
+        });
 
-            // Always check if the form still has unsaved data before submit
-            const currentData = {
-                schoolName: document.getElementsByName('schoolName')[0].value,
-                degree: document.getElementsByName('degree')[0].value,
-                city: document.getElementsByName('city')[0].value,
-                startDate: document.getElementsByName('startDate')[0].value,
-                graduationDate: document.getElementsByName('graduationDate')[0].value,
-                educationDescription: document.getElementsByName('educationDescription')[0].value
-            };
-
-            // Check if this new data is not already in educationEntries
-            const isFormFilled = currentData.schoolName || currentData.degree || currentData.city || currentData.startDate || currentData.graduationDate || currentData.educationDescription;
-
-            if (isFormFilled) {
-                educationEntries.push(currentData);
-            } else {
-                alert("Please fill form to submit");
+        document.getElementById('addEducation').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const educationData = collectEducationData();
+            console.log("Collected data:", educationData); // Debug log
+            const result = await saveEducationData(educationData);
+            if (result.success) {
+                document.getElementById('educationForm').reset();
+                console.log("Education added successfully!");
             }
+        });
 
-            fetch("{{ route('educations.store') }}", {
+        document.getElementById('submitEducation').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const educationData = collectEducationData();
+            console.log("Collected data:", educationData); // Debug log
+            const result = await saveEducationData(educationData);
+            if (result.success) {
+                document.getElementById('education').style.display = 'none';
+                document.getElementById('project').style.display = 'block';
+                document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                document.getElementById('projectLink').classList.add('active');
+                console.log("Saved and moved to next section!");
+            }
+        });
+
+        function collectProjectData() {
+            return {
+                projectTitle: document.getElementsByName('projectTitle')[0].value,
+                projectLink: document.getElementsByName('projectLink')[0].value,
+                projectDescription: document.getElementsByName('projectDescription')[0].value
+            };
+        }
+
+        async function saveProjectData(projectData) {
+            console.log("Sending project data:", projectData); // Debug log
+            try {
+                const response = await fetch("{{ route('projects.store') }}", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify({
-                        education: educationEntries
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.success) {
-                        document.getElementById('education').style.display = 'none';
-                        document.getElementById('project').style.display = 'block';
-                        document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                        document.getElementById('projectLink').classList.add('active');
+                    body: JSON.stringify(projectData)
+                });
+                const result = await response.json();
+                console.log("Server response:", result); // Debug log
+                return result;
+            } catch (error) {
+                console.error("Error saving project data:", error);
+                return {
+                    success: false
+                };
+            }
+        }
+        document.getElementById('submitProject').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const projectData = collectProjectData();
+            console.log("Collected project data:", projectData); // Debug log
+            try {
+                const result = await saveProjectData(projectData);
+                if (result.success) {
+                    document.getElementById('project').style.display = 'none';
+                    document.getElementById('skill').style.display = 'block'; // Assuming next section is 'experience'
+                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                    document.getElementById('skillLink').classList.add('active');
+                    console.log("Project saved and moved to skill section!");
+                } else {
+                    console.log("Error saving project:", result);
+                }
+            } catch (error) {
+                console.error("Error in saving project:", error);
+            }
+        });
+
+        // document.getElementById('projectForm').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+        // });
+
+        document.getElementById('addProject').addEventListener('click', async function(e) {
+            e.preventDefault(); // Always prevent default form submission behavior
+
+            try {
+                const result = await saveProjectData(collectProjectData());
+                console.log(result.success);
+
+                if (result.success) {
+                    const form = document.getElementById('projectForm');
+
+                    // Debugging: Check if form exists
+                    console.log('Form element:', form);
+
+                    if (form) {
+                        // Method 1: Standard reset (preferred)
+                        form.reset();
+
+                        // Method 2: Manual reset (fallback)
+                        // const inputs = form.querySelectorAll('input, textarea');
+                        // inputs.forEach(input => input.value = '');
+
+                        console.log("Project added successfully!");
                     } else {
-                        alert("Error saving education data.");
+                        console.error("Error: Form not found in DOM");
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-
-        document.getElementById('overviewEducation').addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                const previewDiv = e.target.closest('.education-preview');
-                const index = parseInt(previewDiv.dataset.index);
-
-                // Remove from array
-                educationEntries.splice(index, 1);
-
-                // Remove from DOM
-                previewDiv.remove();
-
-                // Reindex remaining entries
-                document.querySelectorAll('.education-preview').forEach((preview, newIndex) => {
-                    preview.dataset.index = newIndex;
-                });
+                } else {
+                    console.log("Error saving project:", result);
+                }
+            } catch (error) {
+                console.error("Error in saving project:", error);
             }
         });
 
 
-
-        document.getElementById('addProject').addEventListener('click', function() {
-            // Get all values using name attributes
-            const projectData = {
-                projectTitle: document.getElementsByName('projectTitle')[0].value,
-                projectLink: document.getElementsByName('projectLink')[0].value,
-                projectDescription: document.getElementsByName('projectDescription')[0].value,
-            };
-
-            // Add to array
-            projectEntries.push(projectData);
-
-            // Show preview
-            const previewHTML = `
-        <div class="border p-2 mb-2 project-preview" data-index="${projectEntries.length - 1}">
-            <p><strong>Project Title:</strong> ${projectData.projectTitle}</p>
-            <p><strong>Project Link:</strong> ${projectData.projectLink}</p>
-            <p><strong>Description:</strong> ${projectData.projectDescription}</p>
-            <button class="btn btn-sm btn-danger remove-btn">Remove</button>
-        </div>
-    `;
-            document.getElementById('overviewProject').insertAdjacentHTML('beforeend', previewHTML); // <-- ID fixed here
-
-            // Clear form
-            const form = document.getElementById('projectForm');
-            form.reset();
-            document.getElementsByName('projectTitle')[0].focus();
-        });
-
-        document.getElementById('projectForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
-
-            const currentData = {
-                projectTitle: document.getElementsByName('projectTitle')[0].value,
-                projectLink: document.getElementsByName('projectLink')[0].value,
-                projectDescription: document.getElementsByName('projectDescription')[0].value,
-            };
-
-            const isFormFilled = currentData.projectTitle || currentData.projectLink || currentData.projectDescription;
-
-            if (isFormFilled) {
-                projectEntries.push(currentData);
-            }
-
-            fetch("{{ route('projects.store') }}", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        project: projectEntries
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.success) {
-                        document.getElementById('project').style.display = 'none';
-                        document.getElementById('skill').style.display = 'block';
-                        document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                        document.getElementById('skillLink').classList.add('active');
-                    } else {
-                        alert("Error saving project data.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-
-        document.getElementById('overviewProject').addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                const previewDiv = e.target.closest('.project-preview');
-                const index = parseInt(previewDiv.dataset.index);
-
-                // Remove from array
-                projectEntries.splice(index, 1);
-
-                // Remove from DOM
-                previewDiv.remove();
-
-                // Reindex remaining entries
-                document.querySelectorAll('.project-preview').forEach((preview, newIndex) => {
-                    preview.dataset.index = newIndex;
-                });
-            }
-        });
-
-        document.getElementById('addSkill').addEventListener('click', function() {
-            const skillData = {
+        // Collect skill data from the form
+        function collectSkillData() {
+            return {
                 skillName: document.getElementsByName('skillName')[0].value,
-                skillProficiency: document.getElementsByName('skillProficiency')[0].value,
+                skillProficiency: document.getElementsByName('skillProficiency')[0].value
             };
+        }
 
-            skillEntries.push(skillData);
+        // Save skill data to the server
+        async function saveSkillData(skillData) {
+            console.log("Sending skill data:", skillData); // Debug log
+            try {
+                const response = await fetch("{{ route('skills.store') }}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(skillData)
+                });
+                const result = await response.json();
+                console.log("Server response:", result); // Debug log
+                return result;
+            } catch (error) {
+                console.error("Error saving skill data:", error);
+                return {
+                    success: false
+                };
+            }
+        }
 
-            const previewHTML = `
-                <div class="border p-2 mb-2 skill-preview" data-index="${skillEntries.length - 1}">
-                    <p><strong>Skill Name:</strong> ${skillData.skillName}</p>
-                    <p><strong>Skill Proficiency:</strong> ${skillData.skillProficiency}</p>
-                    <button class="btn btn-sm btn-danger remove-btn">Remove</button>
-                </div>
-                    `;
-            document.getElementById('overviewSkill').insertAdjacentHTML('beforeend', previewHTML);
-
-            const form = document.getElementById('skillForm');
-            form.reset();
-            document.getElementsByName('skillName')[0].focus();
-        });
-
+        // Prevent default form submission
         document.getElementById('skillForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
+        });
 
-            const currentData = {
-                skillName: document.getElementsByName('skillName')[0].value,
-                skillProficiency: document.getElementsByName('skillProficiency')[0].value,
-            };
-
-            const isFormFilled = currentData.skillName || currentData.skillProficiency
-            if (isFormFilled) {
-                skillEntries.push(currentData);
+        // Add Skill button handler
+        document.getElementById('addSkill').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const skillData = collectSkillData();
+            console.log("Collected skill data:", skillData); // Debug log
+            try {
+                const result = await saveSkillData(skillData);
+                if (result.success) {
+                    // Reset the form after saving
+                    const form = document.getElementById('skillForm');
+                    const formData = new FormData(form);
+                    for (let [name, _] of formData) {
+                        const input = form.querySelector(`[name="${name}"]`);
+                        if (input) input.value = '';
+                    }
+                    console.log("Skill added successfully!");
+                } else {
+                    console.log("Error saving skill:", result);
+                }
+            } catch (error) {
+                console.error("Error saving skill:", error);
             }
+        });
+        document.getElementById('submitSkill').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const skillData = collectSkillData();
+            console.log("Collected skill data:", skillData); // Debug log
+            try {
+                const result = await saveSkillData(skillData);
+                if (result.success) {
+                    document.getElementById('skill').style.display = 'none';
+                    document.getElementById('achievement').style.display = 'block'; // Assuming next section is 'experience'
+                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                    document.getElementById('achievementLink').classList.add('active');
+                    console.log("Skill saved and moved to experience section!");
+                } else {
+                    console.log("Error saving skill:", result);
+                }
+            } catch (error) {
+                console.error("Error in saving skill:", error);
+            }
+        });
 
-            fetch("{{ route('skills.store') }}", {
+        // Save and Continue (Next) button handler
+        // Collect Achievement Data
+        function collectAchievementData() {
+            return {
+                achievementTitle: document.getElementsByName('achievementTitle')[0].value,
+                achievementDescription: document.getElementsByName('achievementDescription')[0].value
+            };
+        }
+
+        // Save Achievement Data to the server
+        async function saveAchievementData(achievementData) {
+            console.log("Sending achievement data:", achievementData); // Debug log
+            try {
+                const response = await fetch("{{ route('achievements.store') }}", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify({
-                        skill: skillEntries
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.success) {
-                        document.getElementById('skill').style.display = 'none';
-                        document.getElementById('achievement').style.display = 'block';
-                        document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                        document.getElementById('achievementLink').classList.add('active');
-                    } else {
-                        alert("Error saving skill data.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+                    body: JSON.stringify(achievementData)
                 });
-        });
-        document.getElementById('overviewSkill').addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                const previewDiv = e.target.closest('.skill-preview');
-                const index = parseInt(previewDiv.dataset.index);
-
-                // Remove from array
-                skillEntries.splice(index, 1);
-
-                // Remove from DOM
-                previewDiv.remove();
-
-                // Reindex remaining entries
-                document.querySelectorAll('.skill-preview').forEach((preview, newIndex) => {
-                    preview.dataset.index = newIndex;
-                });
+                const result = await response.json();
+                console.log("Server response:", result); // Debug log
+                return result;
+            } catch (error) {
+                console.error("Error saving achievement data:", error);
+                return {
+                    success: false
+                };
             }
-        });
-        document.getElementById('addAchievement').addEventListener('click', function() {
-            const achievementdata = {
-                achievementTitle: document.getElementsByName('achievementTitle')[0].value,
-                achievementDescription: document.getElementsByName('achievementDescription')[0].value,
-            };
+        }
 
-            achievementEntries.push(achievementdata);
-
-            const previewHTML = `
-                <div class="border p-2 mb-2 achievement-preview" data-index="${achievementEntries.length - 1}">
-                    <p><strong>AchievementsName:</strong> ${achievementEntries.achievementTitle}</p>
-                    <p><strong>Achievement Description:</strong> ${achievementEntries.achievementDescription}</p>
-                    <button class="btn btn-sm btn-danger remove-btn">Remove</button>
-                </div>
-                    `;
-            document.getElementById('overviewAchievement').insertAdjacentHTML('beforeend', previewHTML);
-
-            const form = document.getElementById('achievementForm');
-            form.reset();
-            document.getElementsByName('achievementTitle')[0].focus();
-        });
-
+        // Prevent default form submission
         document.getElementById('achievementForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
+        });
 
-            const currentData = {
-                achievementTitle: document.getElementsByName('achievementTitle')[0].value,
-                achievementDescription: document.getElementsByName('achievementDescription')[0].value,
-            };
-
-            const isFormFilled = currentData.achievementTitle || currentData.achievementDescription;
-            if (isFormFilled) {
-                achievementEntries.push(currentData);
-            }
-
-            fetch("{{ route('achievements.store') }}", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        achievement: achievementEntries
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.success) {
-                        document.getElementById('achievement').style.display = 'none';
-                        document.getElementById('experience').style.display = 'block';
-                        document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                        document.getElementById('experienceLink').classList.add('active');
-                    } else {
-                        alert("Error saving skill data.");
+        // Add Achievement button handler
+        document.getElementById('addAchievement').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const achievementData = collectAchievementData();
+            console.log("Collected achievement data:", achievementData); // Debug log
+            try {
+                const result = await saveAchievementData(achievementData);
+                if (result.success) {
+                    // Reset the form after saving
+                    const form = document.getElementById('achievementForm');
+                    const formData = new FormData(form);
+                    for (let [name, _] of formData) {
+                        const input = form.querySelector(`[name="${name}"]`);
+                        if (input) input.value = '';
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-
-        document.getElementById('overviewAchievement').addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                const previewDiv = e.target.closest('.achievement-preview');
-                const index = parseInt(previewDiv.dataset.index);
-
-                // Remove from array
-                achievementEntries.splice(index, 1);
-
-                // Remove from DOM
-                previewDiv.remove();
-
-                // Reindex remaining entries
-                document.querySelectorAll('.achievement-preview').forEach((preview, newIndex) => {
-                    preview.dataset.index = newIndex;
-                });
+                    console.log("Achievement added successfully!");
+                } else {
+                    console.log("Error saving achievement:", result);
+                }
+            } catch (error) {
+                console.error("Error saving achievement:", error);
             }
         });
-        document.getElementById('addExperienceBtn').addEventListener('click', function() {
-            const experienceData = {
+
+        // Save and Continue (Next) button handler
+        document.getElementById('submitAchievement').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const achievementData = collectAchievementData();
+            console.log("Collected achievement data:", achievementData); // Debug log
+            try {
+                const result = await saveAchievementData(achievementData);
+                if (result.success) {
+                    document.getElementById('achievement').style.display = 'none';
+                    document.getElementById('experience').style.display = 'block'; // Assuming next section is 'experience'
+                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                    document.getElementById('experienceLink').classList.add('active');
+                    console.log("Achievement saved and moved to experience section!");
+                } else {
+                    console.log("Error saving achievement:", result);
+                }
+            } catch (error) {
+                console.error("Error in saving achievement:", error);
+            }
+        });
+
+        function collectExperienceData() {
+            return {
                 jobTitle: document.getElementsByName('jobTitle')[0].value,
                 companyName: document.getElementsByName('companyName')[0].value,
                 location: document.getElementsByName('location')[0].value,
                 startDate: document.getElementsByName('startDate')[0].value,
                 endDate: document.getElementsByName('endDate')[0].value,
                 experienceDescription: document.getElementsByName('experienceDescription')[0].value,
-                salaryRating: document.querySelector('input[name="salaryRating"]:checked')?.value || '',
+                salaryRating: document.querySelector('input[name="salaryRating"]:checked') ? document.querySelector('input[name="salaryRating"]:checked').id : '',
                 salaryFeedback: document.getElementsByName('salaryFeedback')[0].value,
-                workingEnvironmentRating: document.querySelector('input[name="workingEnvironmentRating"]:checked')?.value || '',
+                workingEnvironmentRating: document.querySelector('input[name="workingEnvironmentRating"]:checked') ? document.querySelector('input[name="workingEnvironmentRating"]:checked').id : '',
                 workingEnvironmentFeedback: document.getElementsByName('workingEnvironmentFeedback')[0].value,
-                benefitsRating: document.querySelector('input[name="benefitsRating"]:checked')?.value || '',
-                benefitsFeedback: document.getElementsByName('benefitsFeedback')[0].value,
+                benefitsRating: document.querySelector('input[name="benefitsRating"]:checked') ? document.querySelector('input[name="benefitsRating"]:checked').id : '',
+                benefitsFeedback: document.getElementsByName('benefitsFeedback')[0].value
             };
+        }
 
-            experienceEntries.push(experienceData);
+        async function saveExperienceData(experienceData) {
+            console.log("Sending experience data:", experienceData); // Debug log
+            try {
+                const response = await fetch("{{ route('experiences.store') }}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(experienceData)
+                });
+                const result = await response.json();
+                console.log("Server response:", result); // Debug log
+                return result;
+            } catch (error) {
+                console.error("Error saving experience data:", error);
+                return {
+                    success: false
+                };
+            }
+        }
 
-            const previewHTML = `
-        <div class="border p-2 mb-2 experience-preview" data-index="${experienceEntries.length - 1}">
-            <p><strong>Job Title:</strong> ${experienceData.jobTitle}</p>
-            <p><strong>Company:</strong> ${experienceData.companyName}</p>
-            <p><strong>Location:</strong> ${experienceData.location}</p>
-            <p><strong>Period:</strong> ${experienceData.startDate} to ${experienceData.endDate}</p>
-            <p><strong>Description:</strong> ${experienceData.experienceDescription}</p>
-            <button class="btn btn-sm btn-danger remove-btn">Remove</button>
-        </div>
-    `;
-            document.getElementById('overviewExperience').insertAdjacentHTML('beforeend', previewHTML);
-
-            document.getElementById('experienceForm').reset();
-            document.getElementsByName('jobTitle')[0].focus();
-        });
-
+        // Prevent default form submission
         document.getElementById('experienceForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            const currentData = {
-                jobTitle: document.getElementsByName('jobTitle')[0].value,
-                companyName: document.getElementsByName('companyName')[0].value,
-                location: document.getElementsByName('location')[0].value,
-                startDate: document.getElementsByName('startDate')[0].value,
-                endDate: document.getElementsByName('endDate')[0].value,
-                experienceDescription: document.getElementsByName('experienceDescription')[0].value,
-                salaryRating: document.querySelector('input[name="salaryRating"]:checked')?.value || '',
-                salaryFeedback: document.getElementsByName('salaryFeedback')[0].value,
-                workingEnvironmentRating: document.querySelector('input[name="workingEnvironmentRating"]:checked')?.value || '',
-                workingEnvironmentFeedback: document.getElementsByName('workingEnvironmentFeedback')[0].value,
-                benefitsRating: document.querySelector('input[name="benefitsRating"]:checked')?.value || '',
-                benefitsFeedback: document.getElementsByName('benefitsFeedback')[0].value,
-            };
-
-            const isFormFilled = currentData.jobTitle || currentData.companyName || currentData.experienceDescription;
-            if (isFormFilled) {
-                experienceEntries.push(currentData);
-            }
-
-            fetch("{{ route('experiences.store') }}", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        experience: experienceEntries
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.success) {
-                        document.getElementById('experience').style.display = 'none';
-                        document.getElementById('training').style.display = 'block';
-                        document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                        document.getElementById('trainingLink').classList.add('active');
-                    } else {
-                        alert("Error saving experience data.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-        document.getElementById('overviewExperience').addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                const previewDiv = e.target.closest('.experience-preview');
-                const index = parseInt(previewDiv.dataset.index);
-
-                // Remove from array
-                experienceEntries.splice(index, 1);
-
-                // Remove from DOM
-                previewDiv.remove();
-
-                // Reindex remaining entries
-                document.querySelectorAll('.experience-preview').forEach((preview, newIndex) => {
-                    preview.dataset.index = newIndex;
-                });
-            }
-        });
-        document.getElementById('addTraining').addEventListener('click', function() {
-            const trainingTitle = document.getElementsByName('trainingTitle')[0].value;
-            const institutionName = document.getElementsByName('institutionName')[0].value;
-            const completionDate = document.getElementsByName('completionDate')[0].value;
-            const certificateFile = document.getElementsByName('certificate')[0].files[0];
-
-            // Validate input fields
-            if (!trainingTitle || !institutionName || !completionDate || !certificateFile) {
-                alert('Please fill in all the fields and upload a certificate.');
-                return;
-            }
-
-            trainingEntries.push({
-                trainingTitle,
-                institutionName,
-                completionDate,
-                certificateFile
-            });
-
-            const previewDiv = document.createElement('div');
-            previewDiv.classList.add('training-preview');
-            previewDiv.setAttribute('data-index', trainingEntries.length - 1);
-
-            previewDiv.innerHTML = `
-                <p>Title: ${trainingTitle}</p>
-                <p>Institution: ${institutionName}</p>
-                <p>Completion Date: ${completionDate}</p>
-                <p>Certificate: ${certificateFile.name}</p>
-                <button class="remove-btn">Remove</button>
-            `;
-
-            document.getElementById('trainingOverview').appendChild(previewDiv);
-            document.getElementById('trainingForm').reset();
-            document.getElementsByName('trainingTitle')[0].focus();
         });
 
-        document.getElementById('trainingForm').addEventListener('submit', function(e) {
+        // Add Experience button handler
+        document.getElementById('addExperienceBtn').addEventListener('click', async function(e) {
             e.preventDefault();
-            const formData = new FormData();
-
-            if (trainingEntries.length === 0) {
-                // Manually build a single-entry array from form values
-                formData.append(`training[0][trainingTitle]`, document.getElementById('trainingTitle').value);
-                formData.append(`training[0][institutionName]`, document.getElementById('institutionName').value);
-                formData.append(`training[0][completionDate]`, document.getElementById('completionDate').value);
-                formData.append(`training[0][certificate]`, document.getElementById('certificate').files[0]);
-            } else {
-                // Existing logic for multiple entries
-                trainingEntries.forEach((entry, index) => {
-                    formData.append(`training[${index}][trainingTitle]`, entry.trainingTitle);
-                    formData.append(`training[${index}][institutionName]`, entry.institutionName);
-                    formData.append(`training[${index}][completionDate]`, entry.completionDate);
-                    formData.append(`training[${index}][certificate]`, entry.certificateFile);
-                });
-            }
-
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
-
-            fetch("{{ route('trainings.store') }}", {
-                    method: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('training').style.display = 'none';
-                        document.getElementById('language').style.display = 'block';
-                        document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                        document.getElementById('languageLink').classList.add('active');
-                    } else {
-                        alert("Error saving training data.");
+            const experienceData = collectExperienceData();
+            console.log("Collected experience data:", experienceData); // Debug log
+            try {
+                const result = await saveExperienceData(experienceData);
+                if (result.success) {
+                    // Reset the form after saving
+                    const form = document.getElementById('experienceForm');
+                    const formData = new FormData(form);
+                    for (let [name, _] of formData) {
+                        const input = form.querySelector(`[name="${name}"]`);
+                        if (input) input.value = '';
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-
-        // Remove training entry from preview
-        document.getElementById('trainingOverview').addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                const previewDiv = e.target.closest('.training-preview');
-                const index = parseInt(previewDiv.dataset.index);
-
-                // Remove from array
-                trainingEntries.splice(index, 1);
-
-                // Remove from DOM
-                previewDiv.remove();
-
-                // Reindex remaining entries
-                document.querySelectorAll('.training-preview').forEach((preview, newIndex) => {
-                    preview.dataset.index = newIndex;
-                });
+                    console.log("Experience added successfully!");
+                } else {
+                    console.log("Error saving experience:", result);
+                }
+            } catch (error) {
+                console.error("Error saving experience:", error);
             }
         });
 
-
-
-        document.getElementById('addLanguage').addEventListener('click', function() {
-            const languageName = document.getElementsByName('languageName')[0].value;
-            const languageProficiency = document.getElementsByName('languageProficiency')[0].value;
-
-            if (!languageName.trim()) {
-                alert("Please enter a language name.");
-                return;
-            }
-
-            const languageData = {
-                languageName: languageName,
-                languageProficiency: languageProficiency
-            };
-
-            languageEntries.push(languageData);
-
-            const previewHTML = `
-                <div class="border p-2 mb-2 language-preview" data-index="${languageEntries.length - 1}">
-                    <p><strong>Language Name:</strong> ${languageData.languageName}</p>
-                    <p><strong>Proficiency:</strong> ${languageData.languageProficiency}</p>
-                    <button class="btn btn-sm btn-danger remove-btn" onclick="this.parentElement.remove()">Remove</button>
-                </div>
-            `;
-
-            document.getElementById('overviewLanguage').insertAdjacentHTML('beforeend', previewHTML);
-
-            // Reset input fields
-            document.getElementById('languageForm').reset();
-            document.getElementsByName('languageName')[0].focus();
-        });
-
-        document.getElementById('languageForm').addEventListener('submit', function(e) {
+        // Save and Continue (Next) button handler
+        document.getElementById('submitExperience').addEventListener('click', async function(e) {
             e.preventDefault();
-
-            // Also add current form data if not already pushed
-            const currentLanguage = {
-                languageName: document.getElementsByName('languageName')[0].value,
-                languageProficiency: document.getElementsByName('languageProficiency')[0].value
-            };
-
-            const isFilled = currentLanguage.languageName.trim();
-            if (isFilled) {
-                languageEntries.push(currentLanguage);
-            }
-
-            fetch("{{ route('languages.store') }}", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        languages: languageEntries
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.success) {
-                        alert("Resume Submitted Successfully.");
-                        document.getElementById('language').style.display = 'none';
-                        document.getElementById('profile').style.display = 'block';
-                        document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                        document.getElementById('profileLink').classList.add('active');
-                    } else {
-                        alert("Error saving language data.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-        document.getElementById('langaugeOverview').addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                const previewDiv = e.target.closest('.language-preview');
-                const index = parseInt(previewDiv.dataset.index);
-
-                // Remove from array
-                languageEntries.splice(index, 1);
-
-                // Remove from DOM
-                previewDiv.remove();
-
-                // Reindex remaining entries
-                document.querySelectorAll('.language-preview').forEach((preview, newIndex) => {
-                    preview.dataset.index = newIndex;
-                });
+            const experienceData = collectExperienceData();
+            console.log("Collected experience data:", experienceData); // Debug log
+            try {
+                const result = await saveExperienceData(experienceData);
+                if (result.success) {
+                    document.getElementById('experience').style.display = 'none';
+                    document.getElementById('training').style.display = 'block';
+                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                    document.getElementById('trainingLink').classList.add('active');
+                    console.log("Experience saved and moved to next section!");
+                } else {
+                    console.log("Error saving experience:", result);
+                }
+            } catch (error) {
+                console.error("Error in saving experience:", error);
             }
         });
+
+
+
+        
+        // document.getElementById('addLanguage').addEventListener('click', function() {
+        //     const languageName = document.getElementsByName('languageName')[0].value;
+        //     const languageProficiency = document.getElementsByName('languageProficiency')[0].value;
+
+        //     if (!languageName.trim()) {
+        //         alert("Please enter a language name.");
+        //         return;
+        //     }
+
+        //     const languageData = {
+        //         languageName: languageName,
+        //         languageProficiency: languageProficiency
+        //     };
+
+        //     languageEntries.push(languageData);
+
+        //     const previewHTML = `
+        //         <div class="border p-2 mb-2 language-preview" data-index="${languageEntries.length - 1}">
+        //             <p><strong>Language Name:</strong> ${languageData.languageName}</p>
+        //             <p><strong>Proficiency:</strong> ${languageData.languageProficiency}</p>
+        //             <button class="btn btn-sm btn-danger remove-btn" onclick="this.parentElement.remove()">Remove</button>
+        //         </div>
+        //     `;
+
+        //     document.getElementById('overviewLanguage').insertAdjacentHTML('beforeend', previewHTML);
+
+        //     // Reset input fields
+        //     document.getElementById('languageForm').reset();
+        //     document.getElementsByName('languageName')[0].focus();
+        // });
+
+        // document.getElementById('languageForm').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+
+        //     // Also add current form data if not already pushed
+        //     const currentLanguage = {
+        //         languageName: document.getElementsByName('languageName')[0].value,
+        //         languageProficiency: document.getElementsByName('languageProficiency')[0].value
+        //     };
+
+        //     const isFilled = currentLanguage.languageName.trim();
+        //     if (isFilled) {
+        //         languageEntries.push(currentLanguage);
+        //     }
+
+        //     fetch("{{ route('languages.store') }}", {
+        //             method: "POST",
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        //             },
+        //             body: JSON.stringify({
+        //                 languages: languageEntries
+        //             })
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log(data);
+        //             if (data.success) {
+        //                 alert("Resume Submitted Successfully.");
+        //                 document.getElementById('language').style.display = 'none';
+        //                 document.getElementById('profile').style.display = 'block';
+        //                 document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+        //                 document.getElementById('profileLink').classList.add('active');
+        //             } else {
+        //                 alert("Error saving language data.");
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error:', error);
+        //         });
+        // });
+        // document.getElementById('langaugeOverview').addEventListener('click', function(e) {
+        //     if (e.target.classList.contains('remove-btn')) {
+        //         const previewDiv = e.target.closest('.language-preview');
+        //         const index = parseInt(previewDiv.dataset.index);
+
+        //         // Remove from array
+        //         languageEntries.splice(index, 1);
+
+        //         // Remove from DOM
+        //         previewDiv.remove();
+
+        //         // Reindex remaining entries
+        //         document.querySelectorAll('.language-preview').forEach((preview, newIndex) => {
+        //             preview.dataset.index = newIndex;
+        //         });
+        //     }
+        // });
     });
 </script>
 @endpush
