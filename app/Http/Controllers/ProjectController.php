@@ -45,21 +45,23 @@ class ProjectController extends Controller
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         if (!$user) {
             return $isMobile
-             ? $this->responseError('Unauthorized', 401)
-             : redirect()->route('login')->with('error','Unauthorized access.');
+                ? $this->responseError('Unauthorized', 401)
+                : redirect()->route('login')->with('error', 'Unauthorized access.');
         }
 
         Log::info('Authenticated Job Seeker ID :' . $user->id);
-        $jobSeekerId = $user ->id;
+        $jobSeekerId = $user->id;
 
         //Validate request data
-        $validator = Validator::make($request->all(),
-        [
-            'project.*.projectTitle' => 'required|string|max:255',
-            'project.*.projectLink' => 'url',
-            'project.*.projectDescription' => 'string',
-        ]);
-        if ($validator->fails()){
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'projectTitle' => 'required|string|max:255',
+                'projectLink' => 'url',
+                'projectDescription' => 'string',
+            ]
+        );
+        if ($validator->fails()) {
             Log::error('Validation errors:', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
@@ -67,29 +69,27 @@ class ProjectController extends Controller
                     'success' => false,
                     'message' => 'Validation failed. Please check your inputs.',
                     'errors' => $validator->errors()->all(),
-                    'request'=>$request->input()
-                ]);   }
+                    'request' => $request->input()
+                ]);
+        }
 
+
+        $project = new Project();
+        $project->jobSeekerId = $jobSeekerId;
+        $project->projectTitle = $request->input('project.projectTitle');
+        $project->projectLink = $request->input('project.projectLink');
+        $project->projectDescription = $request->input('project.projectDescription');
+        $project->save();
         
-                foreach ($request->input('project') as $projectData) {
-                    $project = new Project();
-                    $project->jobSeekerId = $jobSeekerId;
-                    $project->projectTitle = $projectData['projectTitle'];
-                    $project->projectLink = $projectData['projectLink'];
-                    $project->projectDescription = $projectData['projectDescription'];
-                    $project->save();
-                }
-        Log::info('new Project record created :'. $project->id);
+        Log::info('new Project record created :' . $project->id);
         // return the response based on request type
         return $isMobile
-        ? $this->responseSuccess('Personal Profile saved successfully.', $project)
-        : 
+            ? $this->responseSuccess('Personal Profile saved successfully.', $project)
+            :
             response()->json([
                 'success' => true,
                 'message' => 'Project saved successfully.',
-            ])   ;  
-
-
+            ]);
     }
 
 
@@ -108,9 +108,8 @@ class ProjectController extends Controller
         $user = $isMobile ? request()->user() : Auth::guard('job_seekers')->user();
         if (!$user) {
             return $isMobile
-            ?$this->responseError('Unauthorized',401)
-            :redirect()->route('login')->with('error','Unauthorized access.');
-
+                ? $this->responseError('Unauthorized', 401)
+                : redirect()->route('login')->with('error', 'Unauthorized access.');
         }
 
         Log::info('Authenticated Job Seeker ID :' . $user->id);
@@ -119,19 +118,16 @@ class ProjectController extends Controller
         // get the project details for the job seeker user
         $project = Project::where('jobSeekerId', $jobSeekerId)->get();
 
-        if(!$project){
+        if (!$project) {
             return $isMobile
-            ? $this->responseError('Project details not found.',404)
-            :redirect()->back()->with('error','Project  details not  found.');
+                ? $this->responseError('Project details not found.', 404)
+                : redirect()->back()->with('error', 'Project  details not  found.');
         }
 
         //Return the success response for mobile and non-mobile
         return $isMobile
-        ? $this->responseSuccess('Project details found.', 200, $project)
-        :redirect()->back()->with('success', 'Project details retrived successfully.');
-
-
-
+            ? $this->responseSuccess('Project details found.', 200, $project)
+            : redirect()->back()->with('success', 'Project details retrived successfully.');
     }
 
     /**
@@ -156,16 +152,16 @@ class ProjectController extends Controller
     {
         //Check if the request is from mobile
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-    
+
         // Get the authenticated user
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-        
+
         if (!$user) {
             return $isMobile
                 ? $this->responseError('Unauthorized', 401)
                 : redirect()->route('login')->with('error', 'Unauthorized access.');
         }
-    
+
         Log::info('Authenticated Job Seeker ID :' . $user->id);
         $jobSeekerId = $user->id;
 
@@ -173,47 +169,46 @@ class ProjectController extends Controller
 
         $project = Project::where('id', $id)->where('jobSeekerId', $jobSeekerId)->first();
 
-        if (!$project)
-        {
+        if (!$project) {
             return $isMobile
-            ? $this->responseError('Project not found or you are not authorized to update it.', 404)
-            : redirect()->back()->with('error', 'Project not found or you are not authorized to update it.');
-    }
+                ? $this->responseError('Project not found or you are not authorized to update it.', 404)
+                : redirect()->back()->with('error', 'Project not found or you are not authorized to update it.');
+        }
 
-    //Validate request data
-     $validator = Validator::make($request->all(),[
-        'projectTitle' => 'required|string|max:255',
-        'projectLink' =>'required|url',
-        'projectDescription' =>'nullable|string'
-
-      
+        //Validate request data
+        $validator = Validator::make($request->all(), [
+            'projectTitle' => 'required|string|max:255',
+            'projectLink' => 'required|url',
+            'projectDescription' => 'nullable|string'
 
 
-     ]);
-         
-     if ($validator->fails()) {
-        Log::error('Validation errors:', $validator->errors()->toArray());
+
+
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation errors:', $validator->errors()->toArray());
+            return $isMobile
+                ? $this->responseError('Validation failed. Please check your inputs.', $validator->errors())
+                : redirect()->back()->withErrors($validator)->withInput();
+        }
+        //update the filled
+        $project->projectTitle = $request->input('projectTitle');
+        $project->projectLink = $request->input('projectLink');
+        $project->projectDescription = $request->input('projectDescription');
+
+        $project->save();
+
+
+        Log::info('project updated successfully: ' . $project);
+
+        // Return the response based on request type
         return $isMobile
-            ? $this->responseError('Validation failed. Please check your inputs.', $validator->errors())
-            : redirect()->back()->withErrors($validator)->withInput();
+            ? $this->responseSuccess('project updated successfully.',  $project)
+            : redirect()->back()->with('success', 'project updated successfully.');
     }
-//update the filled
-     $project->projectTitle = $request->input('projectTitle');
-     $project->projectLink = $request->input('projectLink');
-     $project->projectDescription = $request->input('projectDescription');
-
-     $project->save();
 
 
-     Log::info('project updated successfully: ' . $project);
-    
-     // Return the response based on request type
-     return $isMobile
-         ? $this->responseSuccess('project updated successfully.',  $project)
-         : redirect()->back()->with('success', 'project updated successfully.');
- }
- 
-    
 
     /**
      * Remove the specified resource from storage.
@@ -222,8 +217,8 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-   
-           /**
+
+    /**
      * Handle error response.
      */
     protected function responseError($message, $statusCode, $errors = [])
@@ -240,14 +235,14 @@ class ProjectController extends Controller
      */
 
 
-     protected function responseSuccess($message, $data = [], $statusCode = 200)
-     {
-       return response()->json([
-           'status' => 'success',
-           'message' => $message,
-           'data' => $data,
-       ], $statusCode);  // Pass the status code correctly
-   }
+    protected function responseSuccess($message, $data = [], $statusCode = 200)
+    {
+        return response()->json([
+            'status' => 'success',
+            'message' => $message,
+            'data' => $data,
+        ], $statusCode);  // Pass the status code correctly
+    }
 
 
     public function destroy(Project $project)

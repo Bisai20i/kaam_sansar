@@ -1,6 +1,6 @@
 @extends('backend.layouts.main')
 
-@section('title', 'Gift and Coupon')
+@section('title', 'Discussion Forum')
 
 @section('content')
     <style>
@@ -50,36 +50,53 @@
 
 
             <!-- Main Content -->
-            <div class="row">
+            <div class="row" >
                 <div class="col-12 ">
-                    <div class="card mb-4">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <h5 class="mb-0 text-capitalize">List of Forum Posts </h5>
-                            <div class="d-flex align-items-center gap-2">
+                    <div class="card mb-4" >
+                        <div class="card-header d-flex align-items-center justify-content-between gap-2 flex-wrap" >
+                            <div class="input-group" style="flex: 1 1 300px;">
+                                <input type="text" class="form-control" id="subTask"
+                                    placeholder="Search Forum Post" style="flex: 1;">
+                                
+                                <button class="btn btn-primary" type="button"
+                                    style="flex: 0 0 auto;">
+                                    <i class="bx bx-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="d-flex ps-0 ps-md-2 align-items-center gap-2 justify-content-center justify-content-lg-end flex-wrap" style="flex: 1 1 450px;">
 
                                 {{-- <a href="{{ route('giftNcoupon.index') }}"
                                     class="btn btn-outline-primary btn-sm text-white">
                                     <i class="bx bx-refresh" aria-hidden="true"></i> <!-- News icon for blogs -->
 
                                 </a> --}}
-
-                                <a href="{{ route('giftNcoupon.index', ['type' => '0']) }}"
-                                    class="btn btn-info btn-sm text-white">
-                                    <i class="bx bx-news" aria-hidden="true"></i> <!-- News icon for blogs -->
-                                    Education
-                                </a>
-
-                                <a href="{{ route('giftNcoupon.index', ['type' => '0']) }}"
-                                    class="btn btn-info btn-sm text-white">
-                                    <i class="bx bx-news" aria-hidden="true"></i> <!-- News icon for blogs -->
-                                    Education
-                                </a>
-                                
-                                <a href="{{ route('giftNcoupon.index', ['type' => '1']) }}"
+                                <a href="#"
                                     class="btn btn-warning btn-sm text-white">
-                                    <i class="bx bx-microphone" aria-hidden="true"></i>
-                                    <!-- Microphone icon for podcasts -->
+                                    All
+                                </a>
+                                <a href="#"
+                                    class="btn btn-info btn-sm text-white">
+                                    Education
+                                </a>
+
+                                <a href="#"
+                                    class="btn btn-info btn-sm text-white">
+                                    Investment
+                                </a>
+
+                                <a href="#"
+                                    class="btn btn-info btn-sm text-white">
+                                    Office
+                                </a>
+
+                                <a href="#"
+                                    class="btn btn-info btn-sm text-white">
                                     Scammer
+                                </a>
+
+                                <a href="#"
+                                    class="btn btn-info btn-sm text-white">
+                                    Others
                                 </a>
 
                                 
@@ -87,32 +104,37 @@
 
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive" style="max-height: 650px; overflow-y: auto;">
+                            <div class="table-responsive" style="max-height: 650px; overflow-y: auto;" style="min-height: 30vh;">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th>SN</th>
-                                            <th>Gift or Coupon</th>
                                             <th>Title</th>
-                                            <th>Image</th>
+                                            <th>Description</th>
+                                            <th>Images</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($giftNcoupons as $item)
+                                        {{-- @foreach ($giftNcoupons as $item) --}}
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                {{-- <td>{{ $loop->iteration }}</td>
                                                 <td class="text-capitalize">{{ $item->type == '1'?'Coupon':'Gift' }}</td>
-                                                <td>{{ $item->title }}</td>
+                                                <td>{{ $item->title }}</td> --}}
 
-                                                <td>
+                                                <td>1</td>
+                                                <td class="text-capitalize">Title</td>
+                                                <td>Description</td>
+                                                <td>Images</td>
+
+                                                {{-- <td>
                                                     @if ($item->thumbnail)
                                                         <img src="{{ asset('storage/' . $item->thumbnail) }}" width="100"
                                                             height="auto" alt="GiftCoupon Image">
                                                     @else
                                                         No image
                                                     @endif
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     <div class="dropdown">
                                                         <button type="button" class="btn p-0  dropdown-toggle hide-arrow"
@@ -121,7 +143,16 @@
                                                         </button>
                                                         <div class="dropdown-menu">
 
-                                                            <a class="dropdown-item text-{{ $item->publishStatus == '1' ? 'danger' : 'success' }}"
+                                                            <a class="dropdown-item text-danger"
+                                                                href="javascript:void(0);" data-bs-toggle="modal"
+                                                                data-bs-target="#publishUnpublishModal"
+                                                                >
+                                                                <i
+                                                                    class="bx bx-check}} me-1"></i>
+                                                                Publish
+                                                            </a>
+
+                                                            {{-- <a class="dropdown-item text-{{ $item->publishStatus == '1' ? 'danger' : 'success' }}"
                                                                 href="javascript:void(0);" data-bs-toggle="modal"
                                                                 data-bs-target="#publishUnpublishModal"
                                                                 onclick="setPublishUnpublishFormAction({{ $item->id }}, '{{ $item->publishStatus }}', '{{ $item->itemName }}')">
@@ -145,12 +176,12 @@
                                                                 data-bs-toggle="modal" data-bs-target="#deleteModal"
                                                                 onclick="setDeleteFormAction({{ $item->id }})">
                                                                 <i class="bx bx-trash me-1"></i> Delete
-                                                            </a>
+                                                            </a> --}}
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <div class="modal fade" id="viewJobCategoryModal{{ $item->id }}"
+                                            {{-- <div class="modal fade" id="viewJobCategoryModal"
                                                 tabindex="-1" aria-labelledby="viewJobCategoryModalLabel"
                                                 aria-hidden="true">
                                                 <div class="modal-dialog">
@@ -177,12 +208,12 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            </div> --}}
+                                
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="pagination m-3 mx-0" style="float: right;">
+                            {{-- <div class="pagination m-3 mx-0" style="float: right;">
                                 @if ($type === '0')
                                     {{ $giftNcoupons->appends(['type' => '0'])->links() }}
                                 @elseif($type === '1')
@@ -190,7 +221,7 @@
                                 @else
                                     {{ $giftNcoupons->links() }}
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
 
                     </div>
@@ -198,7 +229,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -219,8 +250,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="publishUnpublishModal" tabindex="-1" aria-labelledby="publishUnpublishModalLabel"
+    </div> --}}
+    {{-- <div class="modal fade" id="publishUnpublishModal" tabindex="-1" aria-labelledby="publishUnpublishModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -247,18 +278,18 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function setDeleteFormAction(id) {
             // Use Laravel's resource route helper to generate the correct URL for deletion
-            document.getElementById('deleteForm').action = "{{ route('giftNcoupon.destroy', ':id') }}".replace(':id',
-                id);
+            // document.getElementById('deleteForm').action = "{{ route('giftNcoupon.destroy', ':id') }}".replace(':id',
+            //     id);
         }
     </script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             @foreach ($giftNcoupons as $item)
                 $('#companyDescription{{ $item->id }}').summernote({
@@ -272,8 +303,8 @@
                 $('#companyDescription{{ $item->id }}').summernote('disable');
             @endforeach
         });
-    </script>
-    <script>
+    </script> --}}
+    {{-- <script>
         // URLs for publish and unpublish routes
         const publishUrl = @json(route('giftNcoupon.publish', ['id' => '__ID__']));
         const unpublishUrl = @json(route('giftNcoupon.unpublish', ['id' => '__ID__']));
@@ -314,6 +345,6 @@
             loader.style.display = 'inline-block';
             buttonText.style.display = 'none';
         });
-    </script>
+    </script> --}}
 
 @endsection

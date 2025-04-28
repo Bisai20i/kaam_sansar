@@ -56,33 +56,33 @@
             </ul>
 
             @auth('job_seekers')
-                @if (Auth::guard('job_seekers')->user()->isOtpVerified())
-                    <!-- Show Profile Button for Authenticated Users with Verified OTP -->
-                    <button id="main-profile" class="profile-button" data-bs-toggle="modal" data-bs-target="#profileModal">
-                        <img
-                            src="{{ Auth::guard('job_seekers')->user()->userThumbnail
+            @if (Auth::guard('job_seekers')->user()->isOtpVerified())
+            <!-- Show Profile Button for Authenticated Users with Verified OTP -->
+            <button id="main-profile" class="profile-button" data-bs-toggle="modal" data-bs-target="#profileModal">
+                <img
+                    src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                                 ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
                                 : asset('frontend/assets/Images/profile.jpg') }}">
-                    </button>
+            </button>
 
-                    <button class="btn-register" data-bs-toggle="modal" data-bs-target="#completeModal">Create
-                    </button>
-                @else
-                    <!-- If user is logged in but OTP is not verified, show Login/Register buttons -->
-                    <a href="{{ route('jobseeker.otp_page') }}"> <button class="profile-button">
-                            <img
-                                src="{{ Auth::guard('job_seekers')->user()->userThumbnail
+            <button class="btn-register" data-bs-toggle="modal" data-bs-target="#completeModal">Create
+            </button>
+            @else
+            <!-- If user is logged in but OTP is not verified, show Login/Register buttons -->
+            <a href="{{ route('jobseeker.otp_page') }}"> <button class="profile-button">
+                    <img
+                        src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                                     ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
                                     : asset('frontend/assets/Images/profile.jpg') }}">
-                        </button>
-                    </a>
-                @endif
+                </button>
+            </a>
+            @endif
             @else
-                <!-- If user is completely unauthenticated, show Login/Register buttons -->
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                    <button class="btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
-                </div>
+            <!-- If user is completely unauthenticated, show Login/Register buttons -->
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn-login mt-0" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                <button class="btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+            </div>
             @endauth
 
 
@@ -93,75 +93,75 @@
 {{-- <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
         <a class="navbar-brand" href="{{ route('index') }}">
-            <span>
-                <img src="{{ asset('frontend/assets/Images/logo.png') }}" img="img-fluid" alt="">
-            </span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav m-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('frontend.finds-jobs') }}">Find jobs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="{{ route('resume') }}">Resume help</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('aboarddeals') }}">abroad deals</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('visaHQ') }}">visa hq</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">insurance</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('forex_calculator') }}">forex
-                        calculator</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('horoscope') }}">horoscope</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('gift.home', ['type' => 'all']) }}">gifts &
-                        coupon</a>
-                </li>
+<span>
+    <img src="{{ asset('frontend/assets/Images/logo.png') }}" img="img-fluid" alt="">
+</span>
+</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ route('frontend.finds-jobs') }}">Find jobs</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="{{ route('resume') }}">Resume help</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ route('aboarddeals') }}">abroad deals</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ route('visaHQ') }}">visa hq</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">insurance</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ route('forex_calculator') }}">forex
+                calculator</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ route('horoscope') }}">horoscope</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ route('gift.home', ['type' => 'all']) }}">gifts &
+                coupon</a>
+        </li>
 
-            </ul>
+    </ul>
 
-            @auth('job_seekers')
-                @if (Auth::guard('job_seekers')->user()->isOtpVerified())
-                    <!-- Show Profile Button for Authenticated Users with Verified OTP -->
-                    <button id="main-profile" class="profile-button" data-bs-toggle="modal" data-bs-target="#profileModal">
-                        <img
-                            src="{{ Auth::guard('job_seekers')->user()->userThumbnail
+    @auth('job_seekers')
+    @if (Auth::guard('job_seekers')->user()->isOtpVerified())
+    <!-- Show Profile Button for Authenticated Users with Verified OTP -->
+    <button id="main-profile" class="profile-button" data-bs-toggle="modal" data-bs-target="#profileModal">
+        <img
+            src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                                 ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
                                 : asset('frontend/assets/Images/profile.jpg') }}">
-                    </button>
-                @else
-                    <!-- If user is logged in but OTP is not verified, show Login/Register buttons -->
-                    <a href="{{ route('jobseeker.otp_page') }}"> <button class="profile-button">
-                            <img
-                                src="{{ Auth::guard('job_seekers')->user()->userThumbnail
+    </button>
+    @else
+    <!-- If user is logged in but OTP is not verified, show Login/Register buttons -->
+    <a href="{{ route('jobseeker.otp_page') }}"> <button class="profile-button">
+            <img
+                src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                                     ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
                                     : asset('frontend/assets/Images/profile.jpg') }}">
-                        </button>
-                    </a>
-                @endif
-            @else
-                <!-- If user is completely unauthenticated, show Login/Register buttons -->
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                    <button class="btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
-                </div>
-            @endauth
-
-
-        </div>
+        </button>
+    </a>
+    @endif
+    @else
+    <!-- If user is completely unauthenticated, show Login/Register buttons -->
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+        <button class="btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
     </div>
+    @endauth
+
+
+</div>
+</div>
 
 </nav> --}}
 
@@ -570,6 +570,10 @@
         z-index: 9999;
 
     }
+
+    i{
+        color: #999999 !important
+    }
 </style>
 <!-- Login Modal -->
 <!-- Login Modal -->
@@ -577,11 +581,11 @@
     data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
-            <h5 class="modal-title text-center" id="loginModalLabel">Login to your Account</h5>
+            <h5 class="modal-title text-center" id="loginModalLabel" style="font-weight: 600px; font-size: 40px;">Login to your Account</h5>
             <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
                 aria-label="Close"></button>
 
-            <div class="modal-body">
+            <div class="modal-body p-0">
                 <!-- Social Login Buttons -->
                 <div class="text-center">
                     <p class="text-muted">Welcome back! Select a method to login:</p>
@@ -590,10 +594,10 @@
                 <div class="d-flex justify-content-center mb-3">
                     <button type="button" class="btn-outline-secondary rounded-end-0 border-email active"
                         id="email-btn">
-                        <i class="fa fa-envelope"></i> Email
+                        <i class="fa fa-envelope text-white"></i> Email
                     </button>
                     <button type="button" class="btn-outline-secondary rounded-start-0 border-phone" id="phone-btn">
-                        <i class="fas fa-phone"></i> Phone
+                        <i class="fas fa-phone text-white"></i> <span style="color: #555555;">Phone Number</span>
                     </button>
                 </div>
 
@@ -619,7 +623,7 @@
                                     class="form-control @error('login_email') is-invalid @enderror"
                                     placeholder="Enter Your Email" autocomplete="off">
                                 @error('login_email')
-                                    <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -631,70 +635,72 @@
                               <input type="hidden" name="country_code" id="country_code">
                               @error('login_phone_number')
                                   <div class="invalid-feedback" style="display: block;" style="display: block">
-                                      {{ $message }}</div>
-                              @enderror --}}
+                                      {{ $message }}
                     </div>
+                    @enderror --}}
+            </div>
 
-                    <div class="d-none" id="phone-form">
-                        <div class="mb-3 col-12" class="d-none">
-                            <input type="text" name="login_phone_number" id="loginPhone"
-                                class="form-control @error('login_phone_number') is-invalid @enderror"
-                                placeholder="Enter Your Phone" minlength="10" maxlength="10" inputmode="numeric"
-                                pattern="[0-9]*" title="Phone number should be 10 digits" autocomplete="off">
-                            <input type="hidden" name="country_code" id="country_code">
-                            @error('login_phone_number')
-                                <div class="invalid-feedback" style="display: block;" style="display: block">
-                                    {{ $message }}</div>
-                            @enderror
-                        </div>
+            <div class="d-none" id="phone-form">
+                <div class="mb-3 col-12" class="d-none">
+                    <input type="text" name="login_phone_number" id="loginPhone"
+                        class="form-control @error('login_phone_number') is-invalid @enderror"
+                        placeholder="Enter Your Phone" minlength="10" maxlength="10" inputmode="numeric"
+                        pattern="[0-9]*" title="Phone number should be 10 digits" autocomplete="off">
+                    <input type="hidden" name="country_code" id="country_code">
+                    @error('login_phone_number')
+                    <div class="invalid-feedback" style="display: block;" style="display: block">
+                        {{ $message }}
                     </div>
-                    <!-- Password Input -->
-                    <div class="mb-3 input-group">
-                        <span class="input-group-text" style="background-color: #fff!important"><i
-                                class="fa fa-lock"></i></span>
-                        <input type="password" name="login_password"
-                            class="form-control @error('login_password') is-invalid @enderror" id="loginPassword"
-                            placeholder="Enter Your Password" minlength="6" autocomplete="current-password">
-                        <span class="position-absolute"
-                            style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"
-                            onclick="togglePasswordVisibility('loginPassword')">
-                            <i id="eyeIcon" class="fa fa-eye"></i>
-                        </span>
-                        @error('login_password')
-                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- Remember Me & Forgot Password -->
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe" name="remember"
-                                {{ old('remember') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="rememberMe">Remember me</label>
-                        </div>
-                        <a href="{{ route('jobseeker.verify-phone-page') }}" class="text-decoration-none">Forgot
-                            Password?</a>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="  btn-create w-100" id="loginBtn">Login</button>
-                </form>
-
-                <!-- Register Link -->
-                <div class="text-center mt-3">
-                    <p>Don't have an account? <a href="#registerModal" class="text-primary text-decoration-none"
-                            data-bs-toggle="modal" data-bs-target="#registerModal">Create an account</a></p>
+                    @enderror
                 </div>
-                <p class="text-center mt-3">or register with</p>
-                <div class="d-flex gap-2 justify-content-center" id="social-login">
-                    <button type="button" class="btn-outline-secondary w-100">
-                        <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo"
-                            style="width: 20px;"> Google
-                    </button>
+            </div>
+            <!-- Password Input -->
+            <div class="mb-3 input-group">
+                <span class="input-group-text" style="background-color: #fff!important"><i
+                        class="fa fa-lock"></i></span>
+                <input type="password" name="login_password"
+                    class="form-control @error('login_password') is-invalid @enderror" id="loginPassword"
+                    placeholder="Enter Your Password" minlength="6" autocomplete="current-password">
+                <span class="position-absolute"
+                    style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"
+                    onclick="togglePasswordVisibility('loginPassword')">
+                    <i id="eyeIcon" class="fa fa-eye"></i>
+                </span>
+                @error('login_password')
+                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="remember"
+                        {{ old('remember') ? 'checked' : '' }}>
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
+                <a href="{{ route('jobseeker.verify-phone-page') }}" class="text-decoration-none">Forgot
+                    Password?</a>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="  btn-create w-100" id="loginBtn">Login</button>
+            </form>
+
+            <!-- Register Link -->
+            <div class="text-center mt-3">
+                <p>Don't have an account? <a href="#registerModal" class="text-primary text-decoration-none"
+                        data-bs-toggle="modal" data-bs-target="#registerModal">Create an account</a></p>
+            </div>
+            <p class="text-center mt-3">or register with</p>
+            <div class="d-flex gap-2 justify-content-center" id="social-login">
+                <button type="button" class="btn-outline-secondary w-100">
+                    <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo"
+                        style="width: 20px;"> Google
+                </button>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Register Modal -->
@@ -703,25 +709,25 @@
     data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
-            <h5 class="modal-title text-center" id="registerModalLabel">Create an account</h5>
+            <h5 class="modal-title text-center" id="registerModalLabel" style="font-weight: 600; font-size: 40px;">Create an account</h5>
             <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
                 aria-label="Close"></button>
 
-            <div class="modal-body">
+            <div class="modal-body p-0">
                 <!-- Login Link -->
                 <div class="text-center">
-                    <p>Already have an account? <a href="#loginModal" class="text-primary text-decoration-none"
-                            data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></p>
+                    <p style="font-weight: 600px;font-size:16px; color: #9c9c9c;">Welcome back! Select method to login: <a href="#loginModal" class="text-primary text-decoration-none"
+                            data-bs-toggle="modal" data-bs-target="#loginModal"></a></p>
                 </div>
 
                 <div class="d-flex justify-content-center mb-3">
                     <button type="button" class="btn-outline-secondary border-email rounded-end-0 active"
                         id="email-btn-register">
-                        <i class="fa fa-envelope"></i> Email
+                        <i class="fa fa-envelope text-white"></i> Email
                     </button>
                     <button type="button" class="btn-outline-secondary rounded-start-0 border-phone"
                         id="phone-btn-register">
-                        <i class="fas fa-phone"></i> Phone
+                        <i class="fas fa-phone text-white"></i> <span style="color: #555555;">Phone Number</span>
                     </button>
                 </div>
 
@@ -734,20 +740,28 @@
                     <!-- First Name and Last Name -->
                     <div class="row mb-3">
                         <div class="col-md-6 ">
-                            <input type="text" name="first_name"
-                                class="form-control @error('first_name') is-invalid @enderror"
-                                placeholder="First Name" value="{{ old('first_name') }}">
-                            @error('first_name')
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text" style="background-color: #fff!important"><i
+                                        class="fas fa-user"></i></span>
+                                <input type="text" name="first_name"
+                                    class="form-control @error('first_name') is-invalid @enderror"
+                                    placeholder=" First Name" value="{{ old('first_name') }}">
+                                @error('first_name')
                                 <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
                         <div class="col-md-6 ">
-                            <input type="text" name="last_name"
-                                class="form-control @error('last_name') is-invalid @enderror" placeholder="Last Name"
-                                value="{{ old('last_name') }}">
-                            @error('last_name')
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text " style="background-color: #fff!important"><i
+                                        class="fas fa-user"></i></span>
+                                <input type="text" name="last_name"
+                                    class="form-control @error('last_name') is-invalid @enderror" placeholder="Last Name"
+                                    value="{{ old('last_name') }}">
+                                @error('last_name')
                                 <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
                     </div>
 
@@ -755,7 +769,7 @@
                     <div class="mb-3 col-12">
                         <div class="input-group">
                             <span class="input-group-text " style="background-color: #fff!important"><i
-                                    class="fas fa-globe"></i></span>
+                                    class="fas fa-flag"></i></span>
                             <select name="country" id="registerCountry"
                                 class="form-control @error('country') is-invalid @enderror">
                                 <option value="" selected>Select Country</option>
@@ -766,13 +780,13 @@
                     <div id="email-container">
                         <div class="mb-3 col-12">
                             <div class="input-group">
-                                <span class="input-group-text " style="background-color: #fff!important"><i
+                                <span class="input-group-text" style="background-color: #fff!important"><i
                                         class="fas fa-envelope"></i></span>
                                 <input type="email" name="email" id="signupEmail"
                                     class="form-control @error('email') is-invalid @enderror"
                                     placeholder="Enter Your Email" autocomplete="off" value="{{ old('email') }}">
                                 @error('email')
-                                    <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -791,8 +805,9 @@
                                 pattern="[0-9]*" title="Phone number should be 10 digits" autocomplete="off">
                             <input type="hidden" name="country_code" id="registerCountryCode">
                             @error('phone_number')
-                                <div class="invalid-feedback" style="display: block;" style="display: block">
-                                    {{ $message }}</div>
+                            <div class="invalid-feedback" style="display: block;" style="display: block">
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
 
@@ -802,19 +817,19 @@
                         <div class="input-group">
                             <span class="input-group-text" style="background-color: #fff!important"><i
                                     class="fa fa-person"></i></span>
-                            <span class="input-group-text border-end-0" style="background-color: #fff!important">I
+                            <span class="input-group-text border-end-0" style="background-color: #fff!important;color:#999999">I
                                 am a</span>
                             <select
                                 class="form-select{{ $errors->has('whoAmI') ? ' is-invalid' : '' }} border-start-0"
                                 name="whoAmI" required>
-                                <option selected>Select</option>
+                                <option selected style="color: #999999;">Select</option>
                                 <option value="student">Student</option>
                                 <option value="worker">Worker</option>
                                 <option value="consultant">Consultant</option>
 
                             </select>
                             @error('whoAmI')
-                                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
@@ -831,7 +846,7 @@
                             <i id="registerEyeIcon" class="fa fa-eye"></i>
                         </span>
                         @error('password')
-                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                        <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3 input-group">
@@ -847,7 +862,7 @@
                             <i id="confirmRegisterEyeIcon" class="fa fa-eye"></i>
                         </span>
                         @error('password_confirmation')
-                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                        <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -862,8 +877,9 @@
 
                         </div>
                         @error('acceptedTerms')
-                            <div class="invalid-feedback" style="display: block;" style="display: block">
-                                {{ $message }}</div>
+                        <div class="invalid-feedback" style="display: block;" style="display: block">
+                            {{ $message }}
+                        </div>
                         @enderror
                     </div>
 

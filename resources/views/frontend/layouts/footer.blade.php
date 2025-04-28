@@ -29,7 +29,7 @@
                     </div>
                     <div class="col-lg-3 py-3">
                         <h5 class="pb-3">Download App</h5>
-                        <div class="img">
+                        <div class="img d-flex">
                             <!-- Left Side: QR Code -->
                             <img class="img1" src="{{ asset('frontend/assets/Images/pattern.png') }}" alt="QR Code">
 
