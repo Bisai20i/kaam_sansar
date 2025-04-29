@@ -79,7 +79,7 @@
             <div class="col-md-6 col-lg-3">
                 <select class="form-select py-2 bg-white text-secondary" id="countrySelect" name="country" aria-label="">
                     <option selected>Select Country</option>
-                    @foreach($ad as $a)
+                    @foreach($ads as $a)
                     <option value="{{$a->country}}">{{$a->country}}</option>
                     @endforeach
 
@@ -90,7 +90,7 @@
             <div class="col-md-6 col-lg-3">
                 <select  class="form-select py-2 bg-white text-secondary" id="citySelect" name="location" aria-label="">
                     <option selected>Select City</option>
-                    @foreach($ad as $a)
+                    @foreach($ads as $a)
 
                     <option value="{{$a->location}}">{{$a->location}}</option>
                     @endforeach

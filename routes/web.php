@@ -109,8 +109,6 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::put('/job-post/publish/{id}', [JobPostController::class, 'publish'])->name('job-post.publish');
     Route::put('/job-post/unpublish/{id}', [JobPostController::class, 'unpublish'])->name('job-post.unpublish');
 
-    //Route for advertisement
-    Route::resource('ads', AdvertisementController::class);
 
 
     Route::resource('advertisementcategory', AdvertisementCategoryController::class);
@@ -119,8 +117,6 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
 
     // Route for aboard deals
-    // Route for aboard deals
-    Route::resource('aboards', AboardController::class);
     Route::put('aboards/{id}/publish', [AboardController::class, 'publish'])->name('aboards.publish');
     Route::put('aboards/{id}/unpublish', [AboardController::class, 'unpublish'])->name('aboards.unpublish');
 
@@ -377,8 +373,17 @@ Route::prefix('discussion')->group(function () {
     Route::delete('delete-comment/{id}', [DiscussionForumController::class, 'deleteComment'])->name('discussion.deletecomment')->middleware('auth:job_seekers');
     Route::delete('delete-image',[DiscussionForumController::class, 'deleteImage'])->name('discussion.deleteimage')->middleware('auth:job_seekers');
 });
+
 Route::prefix('advertisements')->group(function () {
     Route::get('/', [FrontendController::class, 'advertisements'])->name('frontend.advertisements');
+    Route::get('/Ads/type/{type?}/category/{categoryId?}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByTypeCategory');
+    Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
+    Route::get('Ads/category/{categoryId}',[AdvertisementController::class,'showByCategory'])->name('Ads.showByCategory');
+    Route::post('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
+// comment
+
+Route::resource('adscomment',CommentController::class);
+
 });
 
 Route::resource('ads', AdvertisementController::class);

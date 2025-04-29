@@ -269,6 +269,8 @@ button.search-button {
   font-family: Inter;
   font-size: 16px;
   font-weight: 500;
+  line-height: auto;
+
 }
 
 .job-card img {
@@ -280,11 +282,8 @@ button.search-button {
   border-radius: 10px;
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
-  border-color: #328FD2;
-  border: 2px solid #328FD2;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 10px;
+  border: 1px solid #328FD2;
+  padding: 6px;
 
 }
 
@@ -293,18 +292,23 @@ button.search-button {
 }
 
 /* View-more button */
-button.view-more {
+.view-more {
+  display: inline-block;
+  text-decoration: none;
+  color: #0064A7;
+  border: 1px solid #0064A7;
+  background-color: white;
+  padding: 10px 25px;
+  font-weight: 600;
+  border: 1px solid #0064A7;
   border-radius: 5px;
-  border: 2px solid #328FD2;
-  border-color: #328FD2;
-  color: #328FD2;
+  transition: 0.3s ease-in-out;
 }
 
-button.view-more:hover {
-  border-radius: 5px;
-  border: 2px solid #328FD2;
-  border-color: #328FD2;
-  color: #328FD2;
+.view-more:hover {
+  color: white;
+  border: 1px solid #0064A7;
+  background-color: #0064A7;
 }
 
 
@@ -335,6 +339,7 @@ button.view-more:hover {
 }
 
 
+
 /* Banner */
 .bn {
   background: linear-gradient(90deg, #0064A7 16.5%, #FFFFFF 100%);
@@ -343,50 +348,60 @@ button.view-more:hover {
 
 .banner-content {
   color: white;
-  background-image: url(../Images/planehimal.png);
+  /* background-image: url(../Images/planehimal.png); */
   background-repeat: no-repeat;
-  background-position: right bottom;
+  background-position: right center;
 
 }
 
 @media (max-width: 1024px) {
   .banner-content {
-    background-position: right bottom;
+    background-position: center ;
     background-size: cover;
+    object-fit: cover;
   }
+  
 }
 
 /* For devices with max-width 768px (Tablets and smaller screens) */
 @media (max-width: 768px) {
   .banner-content {
-    background-position: right bottom;
+    background-position: center bottom;
     background-size: contain;
+  }
+  .bn{
+    background: linear-gradient(90deg, #0064A7 16.5%);
+
   }
 }
 
 /* For devices with max-width 480px (Mobile devices) */
 @media (max-width: 480px) {
   .banner-content {
-    background-position: center center;
+    background-position: center bottom;
     background-size: contain;
   }
 }
 
-
-.banner-content h2 {
-  font-size: 2rem;
+.banner-content .book-flight h2 {
+  font-size: 38px;
   margin-bottom: 20px;
+  font-weight: 700;
 }
+
 
 .banner-content ul {
   list-style-type: none;
   padding: 0;
 }
 
-.banner-content ul li {
+.banner-content .book-flight ul li {
   display: flex;
+  font-size: 17px;
+  font-weight: 500;
   align-items: center;
   margin-bottom: 10px;
+
 }
 
 .banner-content ul li i {
@@ -400,35 +415,50 @@ button.view-more:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: -60px;
+  margin-top: -120px;
+  margin-right: 60px;
   height: auto;
 }
 
 .btn.btn-book-now {
   background-color: #0064A7;
   border: 1px solid #0064A7;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 2rem;
-  color: white;
+  padding: 7px 35px;
+  border-radius: 10px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
+  box-shadow: 2px 6px 10px 0px #00000033;
 }
 
 @media (max-width: 931px) {
   .btn.btn-book-now {
-    font-size: 1.2rem;
-    padding: 6px 12px;
+    margin-left: 400px;
+    padding: 2x 10px;
     height: auto;
     width: auto;
-    margin-top: 10%;
+    /* Make button full width on small screens */
+  }
+}
+@media (max-width: 682px) {
+  .btn.btn-book-now {
+    margin-left: 0px;
+    margin-top: 120px;
+    margin-bottom: 0px;
+    padding: 2x 10px!important;
+    height: auto;
+    width: auto;
     /* Make button full width on small screens */
   }
 }
 
+
 .btn.btn-book-now:hover {
   background-color: #0064A7;
 }
+
 
 /* PW Section */
 /* General Card Styling */

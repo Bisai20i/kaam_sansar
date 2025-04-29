@@ -17,6 +17,7 @@ use App\Models\JobPost;
 use App\Models\JobSeeker;
 use App\Models\ResumeHelp;
 use App\Models\UserComment;
+use App\Models\GiftCart;
 use App\Models\VisaCountryList;
 use App\Models\VisaType;
 use Illuminate\Http\Request;
@@ -856,6 +857,12 @@ class FrontendAPIController extends Controller
                 $categories[] = $category;
             }
 
+            $giftNcoupons->transform(function ($giftNcoupon) use($request) {
+                $giftNcoupon->thumbnail = $giftNcoupon->thumbnail ? asset('storage/' . $giftNcoupon->imageUrl) : null;
+                $giftNcoupon->in_cart = GiftCart::where('coupon_id', $giftNcoupon->id)->where('jobSeekerId', $request->user()->id)->exists() ;
+                return $giftNcoupon;
+            });
+
             // $giftcategories = ['id'=> 0,'giftCategoryTitle' => 'all'];
             // $giftcategories['all_categories'] = 'all';
 
@@ -884,6 +891,44 @@ class FrontendAPIController extends Controller
         }
     }
 
+    public function giftComments($id)
+    {
+        try {
+            $giftComments = UserComment::with('jobSeeker:id,firstName,lastName,userThumbnail')
+                ->where('giftCouponId', $id)
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            $giftComments->transform(function ($giftComment) {
+                if ($giftComment->jobSeeker && is_array($giftComment->jobSeeker->userThumbnail)) {
+                    $thumbnails = $giftComment->jobSeeker->userThumbnail;
+
+                    if (count($thumbnails) > 0) {
+                        // Remove slashes if somehow they're still escaped (optional)
+                        $path = str_replace('\\/', '/', $thumbnails[0]);
+
+                        $giftComment->jobSeeker->userThumbnail = asset('storage/' . $path);
+                    } else {
+                        $giftComment->jobSeeker->userThumbnail = null;
+                    }
+                }
+
+                return $giftComment;
+            });
+            return response()->json([
+                'status'  => true,
+                'message' => 'Data fetched successfully',
+                'data'    => $giftComments,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Failed to fetch data',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function giftNcouponDescription($id)
     {
 
@@ -900,7 +945,6 @@ class FrontendAPIController extends Controller
             $giftComments = UserComment::with('jobSeeker:id,firstName,lastName,userThumbnail')
                 ->where('giftCouponId', $id)
                 ->latest()
-                ->take(4)
                 ->get();
 
             $giftComments->transform(function ($giftComment) {
@@ -941,7 +985,7 @@ class FrontendAPIController extends Controller
 
     }
 
-    public function sellerProfile($id, $type= null)
+    public function sellerProfile($id, $type = null)
     {
         try {
 
@@ -952,9 +996,9 @@ class FrontendAPIController extends Controller
                     in_array($type, ['1', '0']),
                     fn($query) => $query->where('type', $type)
                 )
-                ->take(8)->latest()
-                ->paginate(8)
-                ->withQueryString();
+                ->orderBy('created_at', 'desc')
+                ->take(8)->get();
+            
             $seller->profile_image = $seller->profile_image ? asset('storage/' . $seller->profile_image) : asset('frontend/assets/Images/profile-icon.png');
 
             $sellerGifts->transform(function ($gift) {

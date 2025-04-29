@@ -398,7 +398,7 @@
                                 @endif
 
 
-                                <div class="d-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3">
+                                <div class="d-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3 align-items-center">
 
                                     <button style="all:unset; cursor: pointer;" onclick="interact(this)"
                                         class="text-decoration-none text-black d-flex align-items-center gap-1"
@@ -425,14 +425,25 @@
 
                                     <span class="text-decoration-none text-black d-flex align-items-center gap-1"
                                         data-bs-toggle="modal" data-bs-target="#commentModal"
-                                        data-forum-id="{{ $forumPost->id }}"
+                                        data-forum-id="{{ $forumPost->id }}" 
                                         data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
-                                        onclick="loadComments(this)">
-                                        <i class="fa-solid fa-comment fs-5" style="color: #0064a7;"></i>
-                                        <span class="d-flex align-items-center gap-1" style="cursor: pointer;"
+                                        onclick="loadComments(this)" style="cursor: pointer;"> 
+                                        <i class="fa-regular fa-comment fs-5" style="color: #0064a7;"></i>
+                                        <span class="d-flex align-items-center gap-1" 
                                             id="commentCount_{{ $forumPost->id }}">
 
                                             {{ $forumPost->comments > 999 ? round($forumPost->comments / 1000, 1) . ' K' : $forumPost->comments }}
+                                        </span>
+                                    </span>
+
+                                    <span class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                        data-bs-toggle="modal" data-bs-target="#commentModal"
+                                        data-forum-id="{{ $forumPost->id }}" 
+                                        data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
+                                        onclick="loadComments(this)" style="cursor: pointer;"> 
+                                        <i class="fa fa-share fs-5" style="color: #0064a7;"></i>
+                                        <span class="d-flex align-items-center gap-1" >
+                                            1
                                         </span>
                                     </span>
                                 </div>

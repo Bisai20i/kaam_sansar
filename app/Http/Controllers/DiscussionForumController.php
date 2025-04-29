@@ -15,7 +15,7 @@ class DiscussionForumController extends Controller
 {
 
     public function index(Request $request, $category = null){
-    public function index(Request $request, $category = null){
+
 
         $searchstr = $request->query('searchstr') ?? null;
         // $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';

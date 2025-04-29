@@ -611,7 +611,7 @@ class FrontendController extends Controller
                 in_array($type, ['1', '0']),
                 fn($query) => $query->where('type', $type)
             )
-            ->take(8)->latest()
+            ->orderBy('created_at', 'desc')
             ->paginate(8)
             ->withQueryString();
 
@@ -624,7 +624,7 @@ class FrontendController extends Controller
     public function resumeHelp()
     {
 
-        $freeResumeHelps    = ResumeHelp::where('type', 0)->get();
+        $freeResumeHelps    = ResumeHelp::where('type', 0)->orderBy('created_at', 'desc')->get();
         $premiumResumeHelps = ResumeHelp::where('type', 1)->get();
 
         $freeResumeHelps->transform(function ($resume) {
@@ -832,7 +832,7 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads        = Advertisement::all();
+        $ads       = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();

@@ -3,12 +3,12 @@ namespace App\Http\Controllers;
 
 use App\Mail\OTPMail;
 use App\Models\Aboard;
+use App\Models\Advertisement;
+use App\Models\AdvertisementCategory;
 use App\Models\JobBookmark;
 use App\Models\JobPost;
 use App\Models\JobSeeker;
 use App\Models\ProductCategory;
-use App\Models\Advertisement;
-use App\Models\AdvertisementCategory;
 use App\Rules\ValidPhoneNumber;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -1465,8 +1465,8 @@ class JobSeekerController extends Controller
                 // Modify according to your image storage path
                 return $ad;
             });
-            
-            $adsCategory = AdvertisementCategory::all();    
+
+            $adsCategory = AdvertisementCategory::all();
             // return $adsCategory;
             // return $ads;
 
@@ -1474,7 +1474,7 @@ class JobSeekerController extends Controller
             response()->json([
                 'status'  => true,
                 'message' => 'Advertisements fetched successfully.',
-                'data'    => $ads
+                'data'    => $ads,
             ]) : view('frontend.profile.partials.advertisement', compact('ads'));
 
         } catch (\Exception $e) {
@@ -1527,7 +1527,24 @@ class JobSeekerController extends Controller
         // dd($request->all());
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
-        // dd($request->all(), $request->file('images'));
+        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+        
+
+        if (! $user) {
+
+            Log::alert("User is un authentic");
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed. Please check your inputs.',
+                ]);
+            }
+
+            return $isMobile
+            ? $this->responseError('Unauthorized access.', 403)
+            : redirect()->back()->with('error', 'Unauthorized access.');
+        }
 
         // Define validation rules
         $validator = Validator::make($request->all(), [
@@ -1539,13 +1556,26 @@ class JobSeekerController extends Controller
             'permanentLocation' => 'nullable|string|max:255',
             'gender'            => 'nullable|in:male,female,other',
             'luckyNumber'       => 'nullable|numeric',
+            'type'              => 'nullable|in:trainee,parttime,fultime,user',
             'whoAmI'            => 'nullable|in:student,worker,consultant',
             'profession'        => 'nullable|string',
+            'country'           => 'nullable|string',
         ]);
 
         // return $request->all();
         // Handle validation errors
         if ($validator->fails()) {
+
+            Log::alert("Someting went wrong:", $validator->errors());
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed. Please check your inputs.',
+                    'errors'  => $validator->errors(),
+                ]);
+            }
+
             if ($isMobile) {
                 return $this->responseError(
                     'Validation failed. Please check your inputs.',
@@ -1558,93 +1588,125 @@ class JobSeekerController extends Controller
         }
 
         // Fetch the user record to update
-        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
 
-        if (! $user) {
-            return $isMobile
-            ? $this->responseError('Unauthorized access.', 403)
-            : redirect()->back()->with('error', 'Unauthorized access.');
-        }
+        try {
 
-        //handle files
-        if ($request->hasFile('images')) {
-            $files = $request->file('images');
+            // return $request->all();
+            Log::info("Request data: ", $request->all());
 
-            // Limit to 5 images
+            //handle files
+            if ($request->hasFile('images')) {
+                $files = $request->file('images');
 
-            if ($user->userThumbnail) {
-                if (count($user->userThumbnail) === 5) {
-                    $files = [];
+                Log::info("Files: ", $files);
+
+                // Limit to 5 images
+
+                if ($user->userThumbnail) {
+                    if (count($user->userThumbnail) === 5) {
+                        $files = [];
+                    } else {
+                        $files = array_slice($files, 0, 5 - count($user->userThumbnail));
+                    }
                 } else {
-                    $files = array_slice($files, 0, 5 - count($user->userThumbnail));
+                    $files = array_slice($files, 0, 5);
                 }
-            } else {
-                $files = array_slice($files, 0, 5);
+                $imagePaths = [];
+                foreach ($files as $file) {
+                    $path         = $file->store('jobSeekerImage', 'public');
+                    $imagePaths[] = $path;
+                }
+                // $user->userThumbnail[] = array_merge($user->userThumbnail, $imagePaths);
+                if ($user->userThumbnail) {
+                    $newArr              = array_merge($user->userThumbnail, $imagePaths);
+                    $user->userThumbnail = $newArr;
+                } else {
+                    $user->userThumbnail = $imagePaths;
+                }
             }
-            $imagePaths = [];
-            foreach ($files as $file) {
-                $path         = $file->store('jobSeekerImage', 'public');
-                $imagePaths[] = $path;
+            // dd($request->all());
+            $fullName = trim($request->input('fullName'));
+
+            $parts = preg_split('/\s+/', $fullName, 2); // Split by first space
+
+            $firstName = $parts[0] ?? null;
+            $lastName  = $parts[1] ?? null;
+            // Update fields
+            if ($firstName && $lastName) {
+                $user->firstName = $firstName;
+                $user->lastName  = $lastName;
             }
-            // $user->userThumbnail[] = array_merge($user->userThumbnail, $imagePaths);
-            if ($user->userThumbnail) {
-                $newArr              = array_merge($user->userThumbnail, $imagePaths);
-                $user->userThumbnail = $newArr;
-            } else {
-                $user->userThumbnail = $imagePaths;
+
+            if ($request->input('dob')) {
+                $user->dateOfBirth = $request->input('dob');
             }
+
+            if ($request->input('temporaryLocation')) {
+                $user->temporaryLocation = $request->input('temporaryLocation');
+            }
+
+            if ($request->input('permanentLocation')) {
+                $user->permanentLocation = $request->input('permanentLocation');
+            }
+
+            if ($request->input('gender')) {
+                $user->gender = $request->input('gender');
+            }
+
+            if ($request->input('luckyNumber')) {
+                $user->luckyNumber = $request->input('luckyNumber');
+            }
+
+            if ($request->input('whoAmI')) {
+                $user->whoAmI = $request->input('whoAmI');
+            }
+
+            if ($request->input('profession')) {
+                $user->profession = $request->input('profession');
+            }
+
+            if ($request->input('type')) {
+                $user->type = $request->input('type');
+            }
+
+            if ($request->input('country')) {
+                $user->country = $request->input('country');
+            }
+
+            // Save updates
+            $user->save();
+
+            Log::info("User updated successfully: $user");
+
+            if ($isMobile) {
+                return $this->responseSuccess('Profile updated successfully.', $request->all());
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'Profile updated successfully.',
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Profile updated successfully.');
+
+        } catch (\Exception $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed. Please check your inputs.',
+                ]);
+            }
+
+            return $isMobile ? $this->responseError(
+                'Validation failed. Please check your inputs.',
+                422,
+                $validator->errors()
+            ) : redirect()->back()->withErrors($validator->errors())->withInput();
+
         }
-        // dd($request->all());
-        $fullName = trim($request->input('fullName'));
 
-        $parts = preg_split('/\s+/', $fullName, 2); // Split by first space
-
-        $firstName = $parts[0] ?? null;
-        $lastName  = $parts[1] ?? null;
-        // Update fields
-        if ($firstName && $lastName) {
-            $user->firstName = $firstName;
-            $user->lastName  = $lastName;
-        }
-
-        if ($request->input('dob')) {
-            $user->dateOfBirth = $request->input('dob');
-        }
-
-        if ($request->input('temporaryLocation')) {
-            $user->temporaryLocation = $request->input('temporaryLocation');
-        }
-
-        if ($request->input('permanentLocation')) {
-            $user->permanentLocation = $request->input('permanentLocation');
-        }
-
-        if ($request->input('gender')) {
-            $user->gender = $request->input('gender');
-        }
-
-        if ($request->input('luckyNumber')) {
-            $user->luckyNumber = $request->input('luckyNumber');
-        }
-
-        if ($request->input('whoAmI')) {
-            $user->whoAmI = $request->input('whoAmI');
-        }
-
-        if ($request->input('profession')) {
-            $user->profession = $request->input('profession');
-        }
-
-        // Save updates
-        $user->save();
-
-        // return $user;
-
-        if ($isMobile) {
-            return $this->responseSuccess('Profile updated successfully.', $request->all());
-        }
-
-        return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
     // public function updateProfile(Request $request, $id)

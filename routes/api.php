@@ -128,6 +128,7 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
         Route::post('experience/storeexperience', [ExperienceController::class, 'storeexperience']);
         Route::post('training/storetraining', [TrainingController::class, 'storetraining']);
         Route::post('language/storelanguage', [LanguageController::class, 'storelan']);
+        
         //Gift coupons related route
         Route::post('giftCategory/storegiftcoupon', [GiftCategoryController::class, 'storegift']);
 
@@ -194,6 +195,7 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
         Route::prefix('giftNCoupon')->group(function () {
             Route::get('/home/{type?}/{giftCategoryId?}', [FrontendAPIController::class, 'giftNcoupon']);
             Route::get('/description/{id}', [FrontendAPIController::class, 'giftNcouponDescription']);
+            Route::get('/comments/{id}', [FrontendAPIController::class, 'giftComments']);
             Route::get('/seller/{id}/{type?}', [FrontendAPIController::class, 'sellerProfile']);
             Route::get('/cart', [GiftCartController::class, 'couponcart']);
             Route::post('/addtocart', [GiftCartController::class, 'addtocart']);
