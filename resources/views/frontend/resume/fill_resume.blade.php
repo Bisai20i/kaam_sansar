@@ -382,8 +382,52 @@ Resume Maker
                                         <button type="button" class="btn text-center next-btn" id="submitEducation">Save & Continue</button>
                                     </div>
                             </div>
-                        </div>
+                            <div class="container mt-4 p-0">
+                                @if($educations->isNotEmpty())
+                                <h3>Education</h3>
 
+                                @foreach($educations as $education)
+                                <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5>{{ $education->degree }}</h5>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('educations.edit', $education->id) }}"
+                                                class="btn fw-semibold"
+                                                style="color: #0064A7;">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('educations.destroy', $education->id) }}"
+                                                method="POST"
+                                                style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="btn text-danger fw-semibold">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="text-black-50">
+                                        <p class="m-0">
+                                            {{ $education->schoolName }} – {{ $education->city }}
+                                        </p>
+                                        <p class="m-0">
+                                            {{ \Carbon\Carbon::parse($education->startDate)->format('M Y') }}
+                                            –
+                                            {{ \Carbon\Carbon::parse($education->graduationDate)->format('M Y') }}
+                                        </p>
+                                        <p class="m-0">
+                                            {{ $education->educationDescription }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+                        </div>
                         <!-- Project Section (Initially Hidden) -->
                         <div id="project" class="section-content" style="display:none;">
                             <h4 class="mb-3 your-project-text">Your Projects</h4>
@@ -419,7 +463,45 @@ Resume Maker
                                     </div>
                                 </form>
                             </div>
+                            <div class="container mt-4 p-0">
+                                @if($projects->isNotEmpty())
+                                <h3>Projects</h3>
+
+                                @foreach($projects as $project)
+                                <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5>{{ $project->projectTitle }}</h5>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('projects.edit', $project->id) }}" class="btn fw-semibold" style="color: #0064A7;">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn text-danger fw-semibold">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="text-black-50">
+                                        @if($project->projectLink)
+                                        <p class="m-0">
+                                            <a href="{{ $project->projectLink }}" target="_blank" style="color: #0064A7;">
+                                                {{ $project->projectLink }}
+                                            </a>
+                                        </p>
+                                        @endif
+                                        <p class="m-0">{{ $project->projectDescription }}</p>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
                         </div>
+
 
                         <!-- Skills Section (Initially hidden) -->
                         <div id="skill" class="section-content" style="display: none;">
@@ -454,6 +536,37 @@ Resume Maker
                                     </div>
                                 </form>
                             </div>
+                            <div class="container mt-4 p-0">
+                                @if($skills->isNotEmpty())
+                                <h3>Skills</h3>
+
+                                @foreach($skills as $skill)
+                                <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5>{{ $skill->skillName }}</h5>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('skills.edit', $skill->id) }}" class="btn fw-semibold" style="color: #0064A7;">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('skills.destroy', $skill->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn text-danger fw-semibold">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="text-black-50">
+                                        <p class="m-0">Proficiency: {{ $skill->skillProficiency }}</p>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+
                         </div>
 
                         <!-- Achievements Section (Initially hidden) -->
@@ -490,7 +603,36 @@ Resume Maker
                                     </div>
                                 </form>
                             </div>
+                            <div class="container mt-4 p-0">
+                                @if($achievements->isNotEmpty())
+                                <h3>Achievements</h3>
 
+                                @foreach($achievements as $achievement)
+                                <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5>{{ $achievement->achievementTitle }}</h5>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('achievements.edit', $achievement->id) }}" class="btn fw-semibold" style="color: #0064A7;">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('achievements.destroy', $achievement->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn text-danger fw-semibold">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="text-black-50">
+                                        <p class="m-0">{{ $achievement->achievementDescription }}</p>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
                         </div>
 
                         <!-- Experience Section (Initially hidden) -->
@@ -601,6 +743,49 @@ Resume Maker
                                     </div>
                                 </form>
                             </div>
+                            <div class="container mt-4 p-0">
+                                @if($experiences->isNotEmpty())
+                                <h3>Experience</h3>
+
+                                @foreach($experiences as $experience)
+                                <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5>{{ $experience->jobTitle }}</h5>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('experiences.edit', $experience->id) }}" class="btn fw-semibold" style="color: #0064A7;">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('experiences.destroy', $experience->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn text-danger fw-semibold">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="text-black-50">
+                                        <p class="m-0"><strong>{{ $experience->companyName }}</strong> – {{ $experience->location }}</p>
+                                        <p class="m-0">
+                                            {{ \Carbon\Carbon::parse($experience->startDate)->format('M Y') }} –
+                                            {{ \Carbon\Carbon::parse($experience->endDate)->format('M Y') }}
+                                        </p>
+                                        <p class="m-0">{{ $experience->experienceDescription }}</p>
+                                        <hr class="my-2">
+                                        <p class="m-0"><strong>Salary Rating:</strong> {{ $experience->salaryRating }}/5</p>
+                                        <p class="m-0">{{ $experience->salaryFeedback }}</p>
+                                        <p class="m-0"><strong>Environment Rating:</strong> {{ $experience->workingEnvironmentRating }}/5</p>
+                                        <p class="m-0">{{ $experience->workingEnvironmentFeedback }}</p>
+                                        <p class="m-0"><strong>Benefits Rating:</strong> {{ $experience->benefitsRating }}/5</p>
+                                        <p class="m-0">{{ $experience->benefitsFeedback }}</p>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+
                         </div>
 
                         <!-- Trainings Section (Initially hidden) -->
@@ -749,7 +934,7 @@ Resume Maker
 
 
 <script>
-       function previewProfile(event) {
+    function previewProfile(event) {
         const reader = new FileReader();
         reader.onload = function() {
             document.getElementById('profilePreview').src = reader.result;
