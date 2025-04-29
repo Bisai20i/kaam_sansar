@@ -27,33 +27,61 @@
                             </div>
                         @endif
                     </div>
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Title <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="title" placeholder="Title">
+
+                    <div class="d-flex flex-wrap mb-2">
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Title <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="title" placeholder="Title">
+                        </div>
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Type <span class="text-danger">*</span></label>
+                            <select class="form-control" name="type">
+                                <option value="0">Free</option>
+                                <option value="1">Premium</option>
+                            </select>
+                        </div>
+
                     </div>
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Type <span class="text-danger">*</span></label>
-                        <select class="form-control" name="type">
-                            <option value="0">Free</option>
-                            <option value="1">Premium</option>
-                        </select>
+
+                    <div class="d-flex flex-wrap mb-2">
+
+                        
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Image</label>
+                            <input type="file" class="form-control" name="image_preview" accept="image/*">
+                        </div>
+
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Sell Price <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="sell_price">
+                        </div>
+
                     </div>
-                    <div class="mb-3 col-md-6">
+                    
+                    <div class="d-flex flex-wrap mb-2">
+
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Normal Price <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="normal_price">
+                        </div>
+                        
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Type <span class="text-danger">*</span></label>
+                            <select class="form-control" name="publish_not_publish">
+                                <option value="1">Publish</option>
+                                <option value="0">Unpublish</option>
+                            </select>
+                        </div>
+
+                        
+
+                    </div>
+
+                    <div class="col-md-6 col-12 px-2 mb-3">
                         <label class="form-label">Short Description <span class="text-danger">*</span></label>
                         <textarea class="form-control" name="short_desc"></textarea>
                     </div>
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Image</label>
-                        <input type="file" class="form-control" name="image_preview">
-                    </div>
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Normal Price <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="normal_price">
-                    </div>
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Sell Price <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="sell_price">
-                    </div>
+
                     <button type="submit" class="btn btn-success">Save</button>
                 </form>
             </div>

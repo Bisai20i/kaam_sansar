@@ -229,6 +229,17 @@
 
         </div>
 
+        @if ($ad_banners['bottom'])
+            <div class="container mb-2">
+                <a href="{{ $ad_banners['bottom']->link }}" class="d-block"
+                    style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                    <img src="{{ $ad_banners['bottom']->image }}" class="w-100" style="aspect-ratio: 4/1;"
+                        alt="img-fluid">
+                </a>
+            </div>
+            {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
+        @endif
+
 
 
     </section>

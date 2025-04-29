@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('firstName'); // camelCase
             $table->string('lastName'); // camelCase
             $table->string('phoneNumber')->unique();
+            $table->string('email');
+            $table->string('address');
             $table->string('designation');
             $table->string('country');
             $table->longText('bio');

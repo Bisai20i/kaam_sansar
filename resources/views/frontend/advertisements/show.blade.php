@@ -17,7 +17,7 @@
                 <!-- Profile & Price Section -->
                 <div class="profile-price d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <img src="{{asset($ads->jobSeeker->userThumbnail)}}"
+                        <img src="#"
                             class="rounded-circle abroad-chat" alt="Profile picture of Ram Baral">
                         <div class="ms-2">
                             <p class="fw-semibold mb-0">{{$ads->jobSeeker->firstName}} {{$ads->jobSeeker->lastName}}</p>

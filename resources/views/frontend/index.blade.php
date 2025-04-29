@@ -45,7 +45,7 @@
 
                     <div class="row popular-search ">
                         <div class="col-lg-12 ">
-                            <h4 class="mt-5">Popular Search</h4>
+                            <h4 class="mt-3">Popular Search</h4>
                             <div class="row text-center">
                                 @foreach ($categories as $jobCategory)
                                     <div class="col g-2 ">
@@ -72,13 +72,13 @@
         @if ($findJobs->count() > 0)
             <section class="jobs">
                 <div class="container my-5">
-                    <h3 class="mb-4">Top Jobs</h3>
-                    <div class="row g-3">
+                    <h3 class="mb-3">Top Jobs</h3>
+                    <div class="row g-3 mb-4">
                         @foreach ($findJobs as $item)
                             <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card position-relative">
                                 @auth('job_seekers')
                                     <form action="{{ route('job.bookmark') }}" method="post"
-                                        class="position-absolute end-0 me-4 mt-5" style="top:40%; z-index:15;">
+                                        class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
                                         @csrf
                                         <input type="hidden" name="jobSeekerId"
                                             value="{{ Auth::guard('job_seekers')->user()->id }}">
@@ -88,6 +88,16 @@
                                             <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                         </button>
                                     </form>
+                                @else
+
+                                    <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
+                                        <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
+                                        </button>
+                                    </div>
+
+                                    
+                                
                                 @endauth
 
 
@@ -98,10 +108,10 @@
                                             class="card-img-top" alt="BMW">
                                         <div class="card-body">
 
-                                            <h5 class="card-title mb-2">{{ $item->jobTitle }}</h5>
+                                            <h5 class="card-title text-truncate mb-1 me-3">{{ $item->jobTitle }}</h5>
 
-                                            <p class="card-text text-muted mb-1">{{ $item->jobLevel }}</p>
-                                            <p class="card-text text-muted">{{ $item->jobLocation }}</p>
+                                            <p class="card-text text-muted mb-0">{{ $item->jobLevel }}</p>
+                                            <p class="card-text text-muted mb-1">{{ $item->jobLocation }}</p>
                                             <p class="card-text text-muted ">
                                                 <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
                                                 </small>
@@ -113,8 +123,9 @@
                         @endforeach
                     </div>
                     <!-- View More Button -->
-                    <div class="text-center mt-4">
-                        <a href="{{ route('frontend.finds-jobs') }}" class="btn view-more">View More</a>
+                    <div class="text-center my-4">
+                        <a href="{{ route('frontend.finds-jobs') }}" class="view-more" >
+                           View More</a>
                     </div>
                 </div>
 
@@ -123,25 +134,26 @@
 
         <section class="bn">
             <div class="container">
-                <div class="banner">
-                    <div class="banner-content py-3">
-                        <h2>Book Flight Tickets</h2>
-
-                        <ul>
-                            <li><i class="fas fa-check-circle"></i> Buy both Domestic and International flight tickets</li>
-                            <li><i class="fas fa-check-circle"></i> Get many offers on every purchase</li>
-                            <li><i class="fas fa-check-circle"></i> Safe and well-maintained planes</li>
-                        </ul>
-                        <div class="button-container">
-                            <button class="btn btn-book-now">Book Now</button>
-                        </div>
-                    </div>
+              <div class="banner">
+                <div class="banner-content pt-3 pb-5 " style="background-image:url('{{ asset('frontend/assets/Images/planehimal.png') }}');">
+                  <div class="book-flight">
+                    <h2 class="">Book Flight Tickets</h2>
+                  <ul>
+                    <li><i class="fa-solid fa-check border border-2 p-1 "></i> Buy both Domestic and International flight tickets</li>
+                    <li><i class="fa-solid fa-check border border-2 p-1 "></i> Get many offers on every purchase</li>
+                    <li><i class="fa-solid fa-check border border-2 p-1 "></i> Safe and well-maintained planes</li>
+                  </ul>
+                  </div>
+                  <div class="button-container mb-3">
+                    <button class="btn btn-book-now">Book Now</button>
+                  </div>
                 </div>
+              </div>
             </div>
-        </section>
+          </section>
 
 
-        <section>
+        <section class="my-5">
             <div class="container my-4">
                 <div class="row g-4 card-container">
                     <!-- First Card -->
@@ -185,7 +197,7 @@
                     <div>
                         <div>
                             <a href="https://play.google.com/store/apps/details?id=com.example.yourapp" href="#"
-                                class="btn "target="_blank" class="ml-3"><img
+                                class="btn ml-3"target="_blank" class=""><img
                                     src="{{ asset('frontend/assets/Images/google.png') }}" alt="Google Play"></a>
 
                             <a href="https://apps.apple.com/us/app/yourapp/id123456789" href="#" class="btn "
@@ -212,7 +224,7 @@
                                             class="card-img-top" alt="{{ $item->title }}">
                                         <div class="card-body">
                                             <!-- Display Title -->
-                                            <h5 class="card-title">{{ $item->title }}</h5>
+                                            <h5 class="card-title text-truncate" style="">{{ $item->title }}</h5>
                                             <!-- Display Date (or any other date you have in the database) -->
                                             <p class="card-text text-muted">
                                                 <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
@@ -225,8 +237,7 @@
                     </div>
                 </div>
                 <div class="text-center mt-4">
-                    <a href="{{ route('frontend.news-and-blogs') }}"><button class="btn view-more">View
-                            More</button></a>
+                    <a href="{{ route('frontend.news-and-blogs') }}" class="view-more">View More</a>
                 </div>
             </section>
 
@@ -266,9 +277,9 @@
                                 <div class="card">
                                     <img style="height: 175px; object-fit:cover;" src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}"
                                         class="card-img-top img-fluid" alt="giftNcoupon">
-                                    <div class="card-body">
+                                    <div class="card-body text-start">
 
-                                        <h5 class="card-title mb-2 text-truncate">{{ $item->title }}</h5>
+                                        <h5 class="card-title mb-1 text-truncate">{{ $item->title }}</h5>
 
                                         <p class="card-text text-muted mb-1">NPR. {{ $item->price }}</p>
                                         <p class="card-text text-muted ">
@@ -392,7 +403,7 @@
                 </div> --}}
 
                 <div class="text-center mt-4">
-                    <a href="{{ route('gift.home', ['type' => 'all']) }}" class="btn view-more">View More</a>
+                    <a href="{{ route('gift.home', ['type' => 'all']) }}" class="view-more">View More</a>
                 </div>
             </div>
         </section>
@@ -408,7 +419,7 @@
                             <a href="{{ route('frontend.advertisements') }}"
                             class="text-decoration-none">
                                 <img src="{{ asset($ad->adsThumbnail) }}" class="card-img-top" alt="adsThumbnail">
-                                <div class="card-body">
+                                <div class="card-body p-2">
                                     <h5 class="card-title">{{ $ad->adsTitle }} </h5>
                                     <p class="card-text text-muted mb-1">{{ $ad->location }}</p>
                                     <p class="card-text text-muted"><small>{{ $ad->postedDuration }}</small></p>
@@ -422,10 +433,22 @@
                 </div>
                 <!-- View More Button -->
                 <div class="text-center mt-4">
-                    <button class="btn view-more">View More</button>
+                    <a href="{{ route('frontend.advertisements') }}" class="view-more">View More</a>
                 </div>
             </div>
         </section>
+
+        @if($ad_banners['middle'])
+
+
+                <a href="{{ $ad_banners['middle']->link }}" class="d-block" style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                    <img src="{{$ad_banners['middle']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
+                </a>
+
+            
+                {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
+        @endif
+
         @if ($podcasts->count() > 0)
             <section class="podcast">
                 <div class="container my-5">
@@ -445,9 +468,9 @@
                                                 <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
                                             </div>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="card-body p-2">
                                             <!-- Display Podcast Title -->
-                                            <h5 class="card-title">{{ $item->title }}</h5>
+                                            <h5 class="card-title text-truncate">{{ $item->title }}</h5>
                                             <!-- Display Podcast Duration -->
                                             <p class="card-text text-muted mb-1">
                                                 @php
@@ -469,7 +492,7 @@
                     </div>
                     <!-- View More Button -->
                     <div class="text-center mt-4">
-                        <a href="{{ route('frontend.podcasts') }}"><button class="btn view-more">View More</button></a>
+                        <a href="{{ route('frontend.podcasts') }}" class="view-more">View More</a>
                     </div>
                 </div>
             </section>

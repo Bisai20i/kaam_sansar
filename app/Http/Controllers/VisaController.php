@@ -70,14 +70,11 @@ class VisaController extends Controller
         }
 
         $visaImagePath = handleUpload('visaImage');
-
         $visa = new Visa();
         $visa->jobSeekerId = $jobSeekerId;
         $visa->country = $request->input('country');
         $visa->visaDetails = $request->input('visaDetails');
-        $visa->visaExpire = $request->filled('visaExpire')
-            ? date('Y-m-d H:i:s', strtotime($request->input('visaExpire')))
-            : null;
+        $visa->visaExpire = $request->filled('visaExpire');
         $visa->visaImage = $visaImagePath;
 
         if ($visaImagePath) {

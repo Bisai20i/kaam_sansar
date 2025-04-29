@@ -57,8 +57,8 @@ class SkillController extends Controller
 
             // Validate request data
             $validator = Validator::make($request->all(), [
-                'skill.*.skillName' => 'required|string|max:255',
-                'skill.*.skillProficiency' => 'required|in:Beginner,Intermediate,Advanced',
+                'skillName' => 'required|string|max:255',
+                'skillProficiency' => 'required|in:Beginner,Intermediate,Advanced',
             ]);
 
             if ($validator->fails()) {
@@ -73,15 +73,13 @@ class SkillController extends Controller
             }
 
             // Create new skill records
-            foreach ($request->input('skill') as $skillData) {
-                $skill = new Skill();
-                $skill->jobSeekerId = $jobSeekerId;
-                $skill->skillName = $skillData['skillName'];
-                $skill->skillProficiency = $skillData['skillProficiency'];
-                $skill->save();
-
-                Log::info('Skill created successfully: ' . $skill->id);
-            }
+            $skill = new Skill();
+            $skill->jobSeekerId = $jobSeekerId;
+            $skill->skillName = $request->skillName; // Direct access
+            $skill->skillProficiency = $request->skillProficiency;
+            $skill->save();
+            
+            Log::info('Skill created successfully: ' . $skill->id);
 
             return $isMobile
                 ? $this->responseSuccess('Skill saved successfully.', $skill)
