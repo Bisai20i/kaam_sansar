@@ -427,18 +427,22 @@ class AdvertisementController extends Controller
 public function showByTypeAndCategory(Request $request, $type, $categoryId = null)
 {
     $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-
+// Fetch categories and ads
+$categoryIds = Advertisement::where('type', $type)->pluck('adsCategoryId')->unique();
+$categories = AdvertisementCategory::whereIn('id', $categoryIds)->get();
+$ads = Advertisement::where('type', $type)->orderBy('created_at', 'desc')->paginate(10);
+$category = AdvertisementCategory::all();
+$all = AdvertisementCategory::all();
+$ad = Advertisement::all();
     // Validate the type
     $validTypes = Advertisement::distinct()->pluck('type')->toArray();
     if (!in_array($type, $validTypes)) {
         return $isMobile
             ? response()->json(['status' => false, 'message' => 'This type of ads not found'], 400)
-            : view('frontend.advertisements.index', compact('type'))->with('error', 'This type of ads not found.');
+            : view('frontend.advertisements.index', compact('type','ad','categories','all','category','ads'))->with('error', 'This type of ads not found.');
     }
 
-    // Fetch categories and ads
-    $categoryIds = Advertisement::where('type', $type)->pluck('adsCategoryId')->unique();
-    $categories = AdvertisementCategory::whereIn('id', $categoryIds)->get();
+    
     $allCategories = collect([(object)['id' => 0, 'adsCategoryTitle' => 'All']])->merge($categories);
 
     $categoryId = (int) $categoryId;
@@ -458,7 +462,7 @@ public function showByTypeAndCategory(Request $request, $type, $categoryId = nul
             ], 200);
         }
 
-        return view('frontend.advertisements.index', compact('ads', 'allCategories', 'type'))
+        return view('frontend.advertisements.index', compact('ads', 'allCategories', 'type','ad','all','categories','category'))
             ->with('success', 'Advertisements retrieved successfully!');
     }
 
@@ -486,7 +490,7 @@ public function showByTypeAndCategory(Request $request, $type, $categoryId = nul
         ], 200);
     }
 
-    return view('frontend.advertisements.index', compact('ads', 'allCategories', 'type', 'selectedCategory'))
+    return view('frontend.advertisements.index', compact('ads', 'allCategories', 'type', 'selectedCategory','ad','all','category','categories'))
         ->with('success', 'Advertisements retrieved successfully!');
 }
 
