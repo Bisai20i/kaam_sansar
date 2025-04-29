@@ -83,8 +83,8 @@
                 <button class="btn-login mt-0" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
                 <button class="btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
             </div>
-                <!-- If user is completely unauthenticated, show Login/Register buttons -->
-                
+            <!-- If user is completely unauthenticated, show Login/Register buttons -->
+
             @endauth
 
 
@@ -238,8 +238,8 @@
 </div>
 <script>
     @if(session('showLoginModal'))
-        var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-        loginModal.show();
+    var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
     @endif
 </script>
 
@@ -514,7 +514,7 @@
             <!-- Close Button Fixed to Top Right -->
             <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
                 aria-label="Close"></button>
-            <div class="modal-body">
+            <div class="modal-body icon">
                 <div class="text-center">
 
                     <img src="{{ @Auth::guard('job_seekers')->user()->userThumbnail
@@ -576,11 +576,6 @@
         max-width: 420px;
         overflow-x: hidden;
         z-index: 9999;
-
-    }
-
-    i{
-        color: #999999 !important
     }
 </style>
 <!-- Login Modal -->
@@ -593,7 +588,7 @@
             <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
                 aria-label="Close"></button>
 
-            <div class="modal-body p-0">
+            <div class="modal-body p-0 icon-gray">
                 <!-- Social Login Buttons -->
                 <div class="text-center">
                     <p class="text-muted">Welcome back! Select a method to login:</p>
@@ -700,6 +695,11 @@
                         data-bs-toggle="modal" data-bs-target="#registerModal">Create an account</a></p>
             </div>
             <p class="text-center mt-3">or register with</p>
+            <div style="display: flex; align-items: center; width: 100%;">
+                    <hr style="flex: 1; color: #A6A6A6;">
+                    <div style="color: #A6A6A6; padding: 0 10px;">or continue with</div>
+                    <hr style="flex: 1; color: #A6A6A6;">
+                </div>
             <div class="d-flex gap-2 justify-content-center" id="social-login">
                 <button type="button" class="btn-outline-secondary w-100">
                     <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo"
@@ -721,21 +721,31 @@
             <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
                 aria-label="Close"></button>
 
-            <div class="modal-body p-0">
+
+            <style>
+                .icon-gray i {
+                    color: #999999;
+                }
+            </style>
+            <div class="modal-body p-0 icon-gray">
                 <!-- Login Link -->
+
                 <div class="text-center">
                     <p style="font-weight: 600px;font-size:16px; color: #9c9c9c;">Welcome back! Select method to login: <a href="#loginModal" class="text-primary text-decoration-none"
                             data-bs-toggle="modal" data-bs-target="#loginModal"></a></p>
                 </div>
 
+
+                </style>
                 <div class="d-flex justify-content-center mb-3">
                     <button type="button" class="btn-outline-secondary border-email rounded-end-0 active"
                         id="email-btn-register">
                         <i class="fa fa-envelope text-white"></i> Email
                     </button>
+
                     <button type="button" class="btn-outline-secondary rounded-start-0 border-phone"
                         id="phone-btn-register">
-                        <i class="fas fa-phone text-white"></i> <span style="color: #555555;">Phone Number</span>
+                        <i class="fas fa-phone text-black"></i> <span style="color: #555555;">Phone Number</span>
                     </button>
                 </div>
 
@@ -892,11 +902,16 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn-create w-100">Create account</button>
+                    <button type="submit" class="btn-create w-100">Sign Up</button>
                 </form>
 
                 <!-- Social Media Login Options -->
-                <p class="text-center mt-3">or register with</p>
+                <p class="text-center mt-3">Already Have a account? <a href="#loginModal">Login</a></p>
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <hr style="flex: 1; color: #A6A6A6;">
+                    <div style="color: #A6A6A6; padding: 0 10px;">or continue with</div>
+                    <hr style="flex: 1; color: #A6A6A6;">
+                </div>
                 <div class="d-flex gap-2 justify-content-center">
                     <button type="button" class=" btn-outline-secondary w-100">
                         <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo">

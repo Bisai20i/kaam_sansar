@@ -76,15 +76,15 @@ Resume Maker
 
                                     <div class="d-flex align-items-center mb-3">
                                         <!-- Profile Picture -->
-                                        <img id="profilePreview" class="profile-picture border border-secondary" alt="Profile Picture">
+                                        <img id="profilePreview" src="https://via.placeholder.com/100"
+                                            class="profile-picture border border-secondary" alt="Profile Picture">
 
                                         <!-- Upload Button -->
                                         <label for="profileUpload" class="btn btn-primary border-0 bg-transparent"
                                             style="color:#0064A7;">
                                             <i class="fas fa-upload"></i> Upload Your Image
                                         </label>
-                                        <input type="file" class="file-input" id="profileUpload" name="profileImg" accept="image/*"
-
+                                        <input type="file" class="file-input" id="profileUpload" accept="image/*"
                                             onchange="previewProfile(event)">
                                     </div>
                                     <div class="row mb-3">
@@ -234,7 +234,7 @@ Resume Maker
                                         });
                                     </script>
                                     <div class="text-end ">
-                                        <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                        <button type="submit" class="btn text-center skip-btn mx-2" data-current="visa" data-next="education" data-link="educationLink">Skip</button>
                                         <button type="submit" class="btn text-center next-btn">Save & Continue</button>
                                     </div>
                                 </form>
@@ -243,6 +243,13 @@ Resume Maker
 
 
                         <style>
+                            .profile-picture {
+                                width: 80px;
+                                height: 80px;
+                                border-radius: 50%;
+                                object-fit: cover;
+                            }
+
                             .rating {
                                 direction: rtl;
                                 display: flex;
@@ -371,7 +378,7 @@ Resume Maker
                                         + Add Education
                                     </button>
                                     <div class="text-end ">
-                                        <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                        <button type="submit" class="btn text-center skip-btn mx-2" data-current="education" data-next="project" data-link="projectLink">Skip</button>
                                         <button type="button" class="btn text-center next-btn" id="submitEducation">Save & Continue</button>
                                     </div>
                             </div>
@@ -406,7 +413,7 @@ Resume Maker
                                             + Add Project
                                         </button>
                                         <div class="text-end">
-                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="submit" class="btn text-center skip-btn mx-2" data-current="project" data-next="skill" data-link="skillLink">Skip</button>
                                             <button type="button" class="btn text-center next-btn" id="submitProject">Save & Continue</button>
                                         </div>
                                     </div>
@@ -441,7 +448,7 @@ Resume Maker
                                             + Add skill
                                         </button>
                                         <div class="text-end">
-                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="submit" class="btn text-center skip-btn mx-2" data-current="skill" data-next="achievement" data-link="achievementLink">Skip</button>
                                             <button type="button" class="btn text-center next-btn" id="submitSkill">Save & Continue</button>
                                         </div>
                                     </div>
@@ -477,7 +484,7 @@ Resume Maker
                                             + AddAchievement
                                         </button>
                                         <div class="text-end">
-                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="submit" class="btn text-center skip-btn mx-2" data-current="achievement" data-next="experience" data-link="experienceLink">Skip</button>
                                             <button type="button" class="btn text-center next-btn" id="submitAchievement">Save & Continue</button>
                                         </div>
                                     </div>
@@ -588,7 +595,7 @@ Resume Maker
                                             + Add Education
                                         </button>
                                         <div class="text-end">
-                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="submit" class="btn text-center skip-btn mx-2" data-current="experience" data-next="training" data-link="trainingLink">Skip</button>
                                             <button type="button" class="btn text-center next-btn" id="submitExperience">Save & Continue</button>
                                         </div>
                                     </div>
@@ -664,7 +671,7 @@ Resume Maker
                                             + Add Training
                                         </button>
                                         <div class="text-end">
-                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                            <button type="submit" class="btn text-center skip-btn mx-2" data-current="training" data-next="language" data-link="languageLink">Skip</button>
                                             <button type="button" class="btn text-center next-btn" id="submitTraining">Save & Continue</button>
                                         </div>
                                     </div>
@@ -690,29 +697,29 @@ Resume Maker
                                                     id="languageLevel" name="languageProficiency">
                                                     <option>Beginner</option>
                                                     <option>Intermediate</option>
-                                                    <option>Advanced</option>
+                                                    <option>Proficient</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                        <button type="button" class="btn add-project float-start" id="addLanguage">
-                                            + Add Language
-                                        </button>
-                                        <div class="text-end">
-                                            <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
-                                            <button type="button" class="btn text-center next-btn" id="submitLangauge">Save & Continue</button>
-                                        </div>
+                                    <button type="button" class="btn add-project float-start" id="addLanguage">
+                                        + Add Language
+                                    </button>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
+                                        <button type="button" class="btn text-center next-btn" id="submitLanguage">Save & Continue</button>
                                     </div>
-                                </form>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Overview Section -->
-            <div class="col-md-3 col-lg-3 col-sm-12 col-12">
+        </div>
+        <!-- Overview Section -->
+        <div class="col-md-3 col-lg-3 col-sm-12 col-12">
 
-            </div>
+        </div>
 
         </div>
 
@@ -742,16 +749,19 @@ Resume Maker
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function previewProfile(event) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                document.getElementById('profilePreview').src = reader.result;
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
-        const links = document.querySelectorAll(".profile-link");
+       function previewProfile(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('profilePreview').src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        // If needed, you can still do additional setup here
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll(".profile-link");
         links.forEach(link => {
             link.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -772,8 +782,24 @@ Resume Maker
             });
         });
 
+        function skipSection(currentSectionId, nextSectionId, linkId) {
+            document.getElementById(currentSectionId).style.display = 'none'; // Hide current section
+            document.getElementById(nextSectionId).style.display = 'block'; // Show next section
+            document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+            document.getElementById(linkId).classList.add('active');
+            console.log(`Skipped ${currentSectionId} and moved to ${nextSectionId}!`);
+        }
+
+        document.body.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('skip-btn')) {
+                const currentSection = e.target.getAttribute('data-current');
+                const nextSection = e.target.getAttribute('data-next');
+                const linkId = e.target.getAttribute('data-link');
+                skipSection(currentSection, nextSection, linkId);
+            }
+        });
         document.getElementById('profileForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
             const form = this;
             const formData = new FormData(form);
             fetch("{{ route('profiles.store') }}", {
@@ -1385,7 +1411,7 @@ Resume Maker
         });
 
         // Submit button (Save and continue)
-        document.querySelector('submitLangauge').addEventListener('click', async function(e) {
+        document.querySelector('#submitLanguage').addEventListener('click', async function(e) {
             e.preventDefault();
             const languageData = collectLanguageData();
             console.log("Collected language data:", languageData); // Debug log
