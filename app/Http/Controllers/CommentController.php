@@ -60,8 +60,6 @@ class CommentController extends Controller
 
         // Validate request data
         $validator = Validator::make($request->all(), [
-            'commentPersonName' => 'nullable|string|max:255',
-            'commentPersonImg' => 'nullable|Image|mimes:jpeg,png,jpg,gif|max:2048',
             'comment' => 'required|string|max:1000',
         ]);
 
@@ -72,8 +70,6 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->adsId = $request->input('adsId');
         $comment->jobSeekerId = $jobSeekerId;
-        $comment->commentPersonName = $fullName;
-        $comment->commentPersonImg = $commentPersonImg;
         $comment->comment = $request->input('comment');
         $comment->save();
 
@@ -81,8 +77,11 @@ class CommentController extends Controller
 
         return $isMobile
             ? $this->responseSuccess('Comment created successfully', $comment)
-            : redirect()->back()->with('success', 'Comment created successfully');
-    }
+             :redirect()->to(url()->previous())->with([
+                'success' => 'Comment created successfully!',
+                'open_tab' => 'comment'    
+            ]);
+         }
 
     /**
      * Display the specified resource.
@@ -94,7 +93,7 @@ class CommentController extends Controller
     {
         //check if the request type is mobile
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-        $comments = Comment::where('adsId', $id)->with('jobSeeker')->get();
+        $adscomment = Comment::where('adsId', $id)->with('jobSeeker')->get();
 
         if (!$comments) {
             return $isMobile
@@ -103,7 +102,7 @@ class CommentController extends Controller
         }
         return $isMobile
             ? $this->responseSuccess('Comment details', $comments)
-            : redirect()->back()->with('success', 'Comment details');
+            : view('frontend.advertisements.show',compact('comments'));
     }
 
     /**

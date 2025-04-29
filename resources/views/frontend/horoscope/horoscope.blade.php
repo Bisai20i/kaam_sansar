@@ -368,7 +368,7 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Name<span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
 
@@ -376,13 +376,13 @@
                                         <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Day" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day" required>
                                             </div>
                                             <div class="col">
-                                                <input type="text" class="form-control" placeholder="Month" required>
+                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Year" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year" required>
                                             </div>
                                         </div>
                                     </div>
@@ -391,13 +391,13 @@
                                         <label class="form-label">Time of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Hour" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Minute" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Second" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second" required>
                                             </div>
                                         </div>
                                     </div>
@@ -405,7 +405,7 @@
                                     <div class="mb-3">
                                         <label for="place" class="form-label">Place of Birth<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select" id="place" required>
+                                        <select class="form-select abroad-deal-1" id="place" required>
                                             <option selected disabled>Pokhara, Gandaki Zone</option>
                                         </select>
                                     </div>
@@ -428,17 +428,17 @@
                                 <form>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 1</label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 2</label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 3</label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
 
@@ -463,7 +463,7 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Name<span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
 
@@ -471,13 +471,13 @@
                                         <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Day" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day" required>
                                             </div>
                                             <div class="col">
-                                                <input type="text" class="form-control" placeholder="Month" required>
+                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Year" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year" required>
                                             </div>
                                         </div>
                                     </div>
@@ -486,13 +486,13 @@
                                         <label class="form-label">Time of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Hour" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Minute" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Second" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second" required>
                                             </div>
                                         </div>
                                     </div>
@@ -500,7 +500,7 @@
                                     <div class="mb-3">
                                         <label for="place" class="form-label">Place of Birth<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select" id="place" required>
+                                        <select class="form-select abroad-deal-1" id="place" required>
                                             <option selected disabled>Pokhara, Gandaki Zone</option>
                                         </select>
                                     </div>
@@ -522,7 +522,7 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Name<span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
 
@@ -530,14 +530,14 @@
                                         <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Day" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day" required>
                                             </div>
                                             <div class="col">
-                                                <input type="text" class="form-control" placeholder="Month"
+                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month"
                                                     required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Year"
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year"
                                                     required>
                                             </div>
                                         </div>
@@ -548,15 +548,15 @@
                                                 class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Hour"
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour"
                                                     required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Minute"
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute"
                                                     required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control" placeholder="Second"
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second"
                                                     required>
                                             </div>
                                         </div>
@@ -565,7 +565,7 @@
                                     <div class="mb-3">
                                         <label for="place" class="form-label">Place of Birth<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select" id="place" required>
+                                        <select class="form-select abroad-deal-1" id="place" required>
                                             <option selected disabled>Pokhara, Gandaki Zone</option>
                                         </select>
                                     </div>
@@ -586,17 +586,17 @@
                                 <form>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 1</label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 2</label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 3</label>
-                                        <input type="text" class="form-control" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name"
                                             placeholder="Enter name" required>
                                     </div>
                                     <button type="button" class="btn next-match-btn float-end"
@@ -662,12 +662,17 @@
 
                 </div>
 
-                <div class="col-lg-4 Jyotish mt-5 ">
-                    <h3 class="mb-4">Meet our Jyotish</h3>
-                    <img src="frontend\assets\Images\profile.jpg">
+                <div class="col-lg-4 Jyotish mt-5">
+                    <h3 class="mb-4 mt-5">Our Jyotish</h3>
+
+                    <!-- Embedded YouTube Video -->
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/vmNjc_EzQx8" frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+
+
                     <p class="mt-3">Pokhara</p>
-                    <small class="text-bold">9876543210</small>
-                </div>
+                </div>
             </div>
         </div>
         </div>

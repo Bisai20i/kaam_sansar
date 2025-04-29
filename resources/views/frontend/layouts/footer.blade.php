@@ -1,4 +1,4 @@
-<section class="footer">
+<section class="footer pb-3">
     <div class="container">
         <div class="row pt-5 "> <!-- Centered content -->
             <div class="col-lg-12"> <!-- Restricting width for better alignment -->

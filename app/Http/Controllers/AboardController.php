@@ -37,7 +37,12 @@ class AboardController extends Controller
         $aboards = Aboard::with('jobSeeker')->orderBy('created_at', 'desc')->simplePaginate(10);
         $categories = ProductCategory::all();
         $jobseek = Aboard::with('jobSeeker');
+        $aboards->transform(function ($aboards) {
 
+            $aboards->productThumbnail = $aboards->productThumbnail ? asset( $aboards->productThumbnail) : null;
+
+            return $aboards;
+        });
         if ($isMobile) {
             return response()->json([
                 'status'  => true,

@@ -50,7 +50,7 @@
 </button>
 </div>
                 <div class="row mt-3 mb-3" id="description">
-                    <p>sdfghjkl</p>
+                    <p>{{$ads->adsDescription}}</p>
                 </div>
 
                 <!-- Comment Section -->
@@ -61,42 +61,72 @@
                             style="max-height: 200px;">
 
                             <!-- Comments List -->
-                            <div id="commentsList" class="d-flex flex-column">
+                            <div id="commentsList me-4" class="d-flex flex-column">
                                 <!-- Comment 1 -->
-                                <div class="d-flex align-items-start p-1 bg-white rounded mb-2 comment-box">
+                                 @foreach($comments as $cmt)
+                                <div class="d-flex align-items-start p-1 bg-white rounded mb-2 comment-box w-100">
                                     <img alt="Profile picture of Carrie Bradshaw" class="rounded-circle me-3"
                                         height="50" width="50"
                                         src="https://storage.googleapis.com/a1aa/image/ThNp8APQMIPaFZUmVLK-cOT1kYH9Ca9IxDVxpTDWa78.jpg" />
                                     <div class="comment-text">
-                                        <h6 class="fw-semibold mb-0 mb-0">Carrie Bradshaw</h6>
-                                        <p class="mb-0">How much reliable this product is??</p>
+                                        <h6 class="fw-semibold mb-0 mb-0">{{$cmt->jobSeeker->firstName}}{{$cmt->jobSeeker->lastName}}</h6>
+                                        <p class="mb-0">{{$cmt->comment}}</p>
                                     </div>
-                                </div>
-                                <!-- Comment 2 -->
-                                <div class="d-flex align-items-start p-1 bg-white rounded mb-2 comment-box">
-                                    <img alt="Profile picture of Carrie Bradshaw" class="rounded-circle me-3"
-                                        height="50" width="50"
-                                        src="https://storage.googleapis.com/a1aa/image/ThNp8APQMIPaFZUmVLK-cOT1kYH9Ca9IxDVxpTDWa78.jpg" />
-                                    <div class="comment-text">
-                                        <h6 class="fw-semibold mb-0">Carrie Bradshaw</h6>
-                                        <p class="mb-0">How much reliable this product is??</p>
-                                    </div>
-                                </div>
-                                <!-- Comment 3 -->
-                                <div class="d-flex align-items-start p-1 bg-white rounded mb-2 comment-box">
-                                    <img alt="Profile picture of Carrie Bradshaw" class="rounded-circle me-3"
-                                        height="50" width="50"
-                                        src="https://storage.googleapis.com/a1aa/image/ThNp8APQMIPaFZUmVLK-cOT1kYH9Ca9IxDVxpTDWa78.jpg" />
-                                    <div class="comment-text">
-                                        <h6 class="fw-semibold mb-0">Carrie Bradshaw</h6>
-                                        <p class="mb-0">How much reliable this product is??</p>
-                                    </div>
-                                </div>
+                                    @if (Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->id === $cmt->jobSeekerId)
+                                                        <button class="btn" data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal{{ $cmt->id }}">
+                                                            <i class="bi bi-trash text-danger"></i>
+                                                        </button>
+                                                                              <!-- Bootstrap Delete Confirmation Modal -->
+                                                            <div class="modal fade" id="deleteModal{{ $cmt->id }}"
+                                                            tabindex="-1"
+                                                            aria-labelledby="deleteModalLabel{{ $cmt->id }}"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="deleteModalLabel{{ $cmt->id }}">Confirm
+                                                                            Delete</h5>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Are you sure you want to delete this comment?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Cancel</button>
+                                                                        <form action="{{route('adscomment.destroy',$cmt->id)}}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <button type="submit"
+                                                                                class="btn btn-danger">Delete</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+
+
+
+                                                </div>
+                                            @endforeach
+                              
+                         
                             </div>
                         </div>
                     </div>
 
                     <!-- Fixed Comment Input Section -->
+                    @if (Auth::guard('job_seekers')->check())
+                    <form action="{{ route('adscomment.store') }}" method="post">
+                    @csrf
+                    <input type="hidden" value="{{$ads->id}}" name="adsId">
+
                     <div
                         class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2">
                         <!-- Image on the left side of the input field -->
@@ -105,13 +135,15 @@
 
                         <!-- Input Box with full width -->
                         <input class="form-control w-100 p-1" id="commentInput"
-                            placeholder="Write a comment...." type="text" />
+                            placeholder="Write a comment...." name="comment" type="text" />
 
                         <!-- Send Button -->
-                        <button class="btn btn-outline-primary border border-0 w-10 ms-2" id="sendButton">
+                        <button class="btn btn-outline-primary border border-0 w-10 ms-2" type="submit">
                             <i class="bi bi-send"></i>
                         </button>
                     </div>
+                    </form>
+                    @endif
                 </div>
 
 
@@ -121,15 +153,17 @@
 
     <div class="row mt-4">
         <h3>Similar product</h3>
-        <div class="row g-2 justify-content-center mt-0" id="product-list">
+        <div class="row g-2 mt-0" id="product-list">
          @foreach($similarAds as $product )
             <div class="col-lg-3 col-md-3 col-sm-6 col-12 product" data-category="electronics">
                 <div class="card-bdy-packages">
                     <img src="{{asset($product->adsThumbnail)}}" class="bdy-packages-img"
                     style="width: 100%; height: 180px; object-fit:auto;">
                     <div class="card-body">
-                        <p class="mt-3 mb-0">{{$product->adsTitle }}</p>
-                        <p class="price">{{$product->pricing}}</p>
+                        <h6 class="card-title text-black mb-0">{{$product->adsTitle }}</h6>
+                        <p class="card-text text-muted mb-0">{{$product->location}}</p>
+                        <p class="card-text text-muted">{{$product->postedDuration}}</p>
+
                     </div>
                 </div>
             </div>
@@ -157,12 +191,13 @@
 </section>
 </div>
 
+
 <style>
         .chat-box {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 400px;
+            width: 100%;
             height: 450px;
             border: 1px solid #ccc;
             background: white;
@@ -260,6 +295,9 @@
             const chatBox = document.getElementById("chatBox");
             chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
         }
+  
+
+
     </script>
 <!-- ✅ Place script here, before closing body tag -->
 <script>
@@ -294,9 +332,13 @@
     }
     
 // Initialize by showing the description section (active by default)
-window.onload = function () {
-    setActive(0);  // This ensures Description is displayed initially
-}
+document.addEventListener("DOMContentLoaded", function () {
+        @if(session('open_tab') == 'comment')
+            setActive(1);
+        @else
+            setActive(0);
+        @endif
+    });
 
 // Add event listener to the send button
 document.getElementById('sendButton').addEventListener('click', function () {

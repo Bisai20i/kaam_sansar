@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserCommentController;
+use App\Http\Controllers\CommentController;
 use App\Models\IndustryCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,7 @@ use App\Http\Controllers\ResumeHelpController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ForumInteractionController;
 use Illuminate\Support\Facades\Session;
+
 
 
 // Authentication Routes
@@ -364,12 +366,17 @@ Route::prefix('discussion')->group(function () {
     Route::delete('delete-comment/{id}', [DiscussionForumController::class, 'deleteComment'])->name('discussion.deletecomment')->middleware('auth:job_seekers');
     Route::delete('delete-image',[DiscussionForumController::class, 'deleteImage'])->name('discussion.deleteimage')->middleware('auth:job_seekers');
 });
+
 Route::prefix('advertisements')->group(function () {
     Route::get('/', [FrontendController::class, 'advertisements'])->name('frontend.advertisements');
     Route::get('/Ads/type/{type?}/category/{categoryId?}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByTypeCategory');
     Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
     Route::get('Ads/category/{categoryId}',[AdvertisementController::class,'showByCategory'])->name('Ads.showByCategory');
     Route::post('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
+// comment
+
+Route::resource('adscomment',CommentController::class);
+
 });
 
 Route::resource('ads', AdvertisementController::class);

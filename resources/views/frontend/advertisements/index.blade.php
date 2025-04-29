@@ -3,6 +3,7 @@
     Advertisements
 @endsection
 @section('content')
+
 <section class="ads_title container-fluid border border-2 border-dark-subtle mt-5 p-5">
     <div class="container text-center">
         <h3>Ad banner</h3>
@@ -61,7 +62,7 @@
 
     <div>
         <h5>Find what you are looking for ?</h5>
-        <div class="row g-3 mb-3">
+        <div class=" g-3 mb-3">
         <form action="{{ route('ads.search') }}" method="POST" class="row mt-4 align-items-center">
             @csrf
             <!-- Search Input -->
@@ -78,8 +79,8 @@
             <!-- Country Select -->
             <div class="col-md-6 col-lg-3">
                 <select class="form-select py-2 bg-white text-secondary" id="countrySelect" name="country" aria-label="">
-                    <option selected>Select Country</option>
-                    @foreach($ad as $a)
+                <option value="" selected>Select Country</option>
+                @foreach($ad as $a)
                     <option value="{{$a->country}}">{{$a->country}}</option>
                     @endforeach
 
@@ -89,8 +90,8 @@
             <!-- City Select -->
             <div class="col-md-6 col-lg-3">
                 <select  class="form-select py-2 bg-white text-secondary" id="citySelect" name="location" aria-label="">
-                    <option selected>Select City</option>
-                    @foreach($ad as $a)
+                <option value="" selected>Select City</option>
+                @foreach($ad as $a)
 
                     <option value="{{$a->location}}">{{$a->location}}</option>
                     @endforeach
@@ -98,7 +99,7 @@
             </div>
 
             <!-- Search Button -->
-            <div class="col-4 col-lg-1 mx-auto">
+            <div class="col-4 col-lg-2 mx-auto">
                 <button class="btn text-white w-100 py-2" type="submit" style="background-color: #0064a7;">
                     Search
                 </button>
@@ -106,7 +107,7 @@
 </form>
         </div>
     </div>
-    <div class="nav nav-pills gap-3 justify-content-center justify-content-md-start">
+    <div class="nav nav-pills gap-1 justify-content-center justify-content-md-start">
     {{-- Show All --}}
 <a class="nav-link-ads active rounded-pill px-3 d-flex align-items-center" 
    href="{{ route('ads.index') }}"
@@ -132,15 +133,16 @@
 
         
     <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 ">
-        @foreach($ads as $ads)
+    @if($ads->count())
+    @foreach($ads as $ads)
         <div class="col">
             <div class="card p-0 "><a href="{{route('ads.show',$ads->id)}}" class="text-decoration-none text-black">
             <img src="{{asset($ads->adsThumbnail)}}" class="card-img-top" alt="Ad Image"
-     style="height: 200px; width: 100%; object-fit:cover; border-radius: 8px;">
+     style="height: 200px; width: 100%; object-fit:cover;">
                     <div class="card-body p-2">
                         <h6 class="card-title mb-0">{{$ads->adsTitle}}</h6>
-                        <p class="card-text mb-0">{{$ads->location}}</p>
-                        <p class="card-text"><small class="text-body-secondary">{{$ads->postedDuration}}</small></p>
+                        <p class="card-text text-muted mb-0">{{$ads->location}}</p>
+                        <p class="card-text text-muted"><small class="text-body-secondary">{{$ads->postedDuration}}</small></p>
                     </div>
                 </a>
             </div>
@@ -149,9 +151,31 @@
     
     </div>
 
-    <div class="row justify-content-center m-3">
-        <button class="btn view-more">View More</button>
-    </div>
+    <div class="d-flex justify-content-center mt-3">
+</div>
+
+ @else
+ <!-- error shown -->
+ <main class="d-flex flex-column flex-grow-1 justify-content-center align-items-center bg-white text-center py-5" >
+        <div class="text-primary display-3 mb-4 mt-5">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h1 class="fs-2 fw-semibold mb-3">Result Not Found</h1>
+        <p class="text-secondary">We couldn’t find the result you are searching.</p>
+        <p class="text-secondary mb-4">Please try navigating using the options below.</p>
+        <div class="d-flex gap-3">
+            <a href="{{ route('ads.index') }}" class="btn-create d-flex align-items-center justify-content-center gap-3" style="text-decoration: none;">
+    <i class="fas fa-arrow-left ms-2"></i>
+    <span class="me-1 fw-semibold">Go Back</span>
+</a>
+
+            <a href="{{route('index')}}" class="btn-create d-flex align-items-center justify-content-center gap-2" style="text-decoration: none;">
+                <i class="fas fa-home ms-2"></i>
+                <span class="me-1 fw-semibold">Homepage</span>
+</a>
+        </div>
+    </main>
+    @endif
     </div>
 
 </div>
@@ -169,7 +193,7 @@
                 @csrf
             <!-- Type Dropdown -->
                     <div class="">
-                        <select class="form-select bg-dark-subtle text-black-50 py-3" id="type" name="type" aria-label="">
+                        <select class="form-select abroad-deal-1 py-2" id="type" name="type" aria-label="">
                             <option selected>Type</option>
                             
                             <option value="Buy">Buy</option>
@@ -178,7 +202,7 @@
                         </select>
                     </div>
                     <div class="mt-3">
-                        <select class="form-select bg-dark-subtle text-black-50 py-3" id="cat" name="adsCategoryId" aria-label="">
+                        <select class="form-select abroad-deal-1 py-2" id="cat" name="adsCategoryId" aria-label="">
                             
                             <option selected> Select Category</option>
                             @foreach($all as $al)
@@ -188,43 +212,43 @@
                     </div>
 
                     <div class="form-floating text-black-50 mt-3">
-                        <input type="text" class="form-control bg-dark-subtle text-black-50" name="country" id="countryInput"
+                        <input type="text" class="form-control abroad-deal-1" name="country" id="countryInput"
                             placeholder="Country">
                         <label for="countryInput">Country</label>
                     </div>
                     <div class="form-floating text-black-50 mt-3">
-                        <input type="text" class="form-control bg-dark-subtle text-black-50" name="location" id="cityInput"
+                        <input type="text" class="form-control abroad-deal-1" name="location" id="cityInput"
                             placeholder="City">
                         <label for="cityInput">City</label>
                     </div>
 
                     
                     <div class="form-floating text-black-50 mt-3">
-                        <input type="text" class="form-control bg-dark-subtle text-black-50"  name ="adsTitle" id="titleInput"
+                        <input type="text" class="form-control abroad-deal-1"  name ="adsTitle" id="titleInput"
                             placeholder="Title">
                         <label for="titleInput">Title</label>
                     </div>
                     <!-- Price Input -->
                     <div class="form-floating text-black-50 mb-3">
 
-                        <input type="text" class="form-control bg-dark-subtle text-black-50" id="price"
+                        <input type="text" class="form-control abroad-deal-1" id="price"
                              name ="pricing"placeholder="Enter price" required>
                         <label for="price">Price</label>
 
                     </div>
                     <div class="form-floating text-black-50 mb-3">
 
-                        <input type="tel" class="form-control bg-dark-subtle text-black-50" id="contact"
+                        <input type="tel" class="form-control abroad-deal-1" id="contact"
                              name ="contactNumber"placeholder="Enter Contact Number" required>
                         <label for="contact">Contact No</label>
 
                     </div>
                     <div class="form-floating text-black-50">
-                        <textarea class="form-control bg-dark-subtle text-black-50" name="adsDescription" placeholder="Post Details"
+                        <textarea class="form-control abroad-deal-1" name="adsDescription" placeholder="Post Details"
                             id="floatingTextarea" style="height: 100px"></textarea>
                         <label for="floatingTextarea">Describe...</label>
                     </div>
-                    <div class="d-flex flex-column bg-dark-subtle p-2 gap-2 rounded" style="max-width: 100%;">
+                    <div class="d-flex flex-column abroad-deal-1 p-2 gap-2 rounded" style="max-width: 100%;">
   <!-- Top row -->
   <div class="d-flex align-items-center gap-3">
     <p class="flex-grow-1 my-auto text-black-5 mb-0" style="font-size: 0.9rem;">Add to your post</p>
@@ -239,8 +263,9 @@
   </div>
 
   <!-- Image Preview (small) -->
-  <div id="imagePreview" class="d-flex mt-1" style="height: 60px;"></div>
 </div>
+<div id="imagePreview" class="d-flex mt-1" style="height: 60px;"></div>
+
 
 <script>
   const fileInput = document.getElementById('fileInput');
@@ -263,7 +288,7 @@
 </script>
 
                     </div>
-                    <div class="d-flex justify-content-center mt-3">
+                    <div class="d-flex justify-content-center mb-3">
                         <button type="submit" class="btn btn-primary "
                             style="background-color: #0064a7;">Submit</button>
                     </div>
