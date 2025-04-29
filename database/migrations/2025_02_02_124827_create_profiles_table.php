@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('designation');
             $table->string('country');
             $table->longText('bio');
-            $table->string('profileImg');
+            $table->string('profileImg')->nullable();
 
             $table->timestamps();
         });
