@@ -383,9 +383,8 @@ Resume Maker
                                     </div>
                             </div>
                             <div class="container mt-4 p-0">
+                                <div id="educationList"></div>
                                 @if($educations->isNotEmpty())
-                                <h3>Education</h3>
-
                                 @foreach($educations as $education)
                                 <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
                                     <div class="d-flex justify-content-between">
@@ -464,14 +463,14 @@ Resume Maker
                                 </form>
                             </div>
                             <div class="container mt-4 p-0">
-                                @if($projects->isNotEmpty())
-                                <h3>Projects</h3>
 
+                                <div id="projectList"></div>
+                                @if($projects->isNotEmpty())
                                 @foreach($projects as $project)
                                 <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <h5>{{ $project->projectTitle }}</h5>
+                                            <h5>{{ $project->projectTitle ?? ''}}</h5>
                                         </div>
                                         <div>
                                             <a href="{{ route('projects.edit', $project->id) }}" class="btn fw-semibold" style="color: #0064A7;">
@@ -489,8 +488,8 @@ Resume Maker
                                     <div class="text-black-50">
                                         @if($project->projectLink)
                                         <p class="m-0">
-                                            <a href="{{ $project->projectLink }}" target="_blank" style="color: #0064A7;">
-                                                {{ $project->projectLink }}
+                                            <a href="{{ $project->projectLink ?? ''}}" target="_blank" style="color: #0064A7;">
+                                                {{ $project->projectLink ?? ''}}
                                             </a>
                                         </p>
                                         @endif
@@ -537,9 +536,8 @@ Resume Maker
                                 </form>
                             </div>
                             <div class="container mt-4 p-0">
+                                <div id="skillList"></div>
                                 @if($skills->isNotEmpty())
-                                <h3>Skills</h3>
-
                                 @foreach($skills as $skill)
                                 <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
                                     <div class="d-flex justify-content-between">
@@ -566,7 +564,6 @@ Resume Maker
                                 @endforeach
                                 @endif
                             </div>
-
                         </div>
 
                         <!-- Achievements Section (Initially hidden) -->
@@ -604,9 +601,8 @@ Resume Maker
                                 </form>
                             </div>
                             <div class="container mt-4 p-0">
+                                <div id="achievementList"></div>
                                 @if($achievements->isNotEmpty())
-                                <h3>Achievements</h3>
-
                                 @foreach($achievements as $achievement)
                                 <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
                                     <div class="d-flex justify-content-between">
@@ -663,7 +659,7 @@ Resume Maker
                                                 id="experience-location" placeholder="San Francisco, CA" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="experience-start-date" class="form-label">Start Date</label>
+                                            <label for="experience-start-date" class="form-label">startDate</label>
                                             <input type="date" class="form-control custom-input" name="startDate"
                                                 id="experience-start-date" required>
                                         </div>
@@ -687,12 +683,18 @@ Resume Maker
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <label class="mb-0">How do you rate the salary pay?</label>
                                                     <div class="rating">
-                                                        <input type="radio" id="salary-5" name="salaryRating">
-                                                        <input type="radio" id="salary-4" name="salaryRating">
-                                                        <input type="radio" id="salary-3" name="salaryRating">
-                                                        <input type="radio" id="salary-2" name="salaryRating">
-                                                        <input type="radio" id="salary-1" name="salaryRating">
+                                                        <input type="radio" id="salary-5" name="salaryRating" value="5"><label
+                                                            for="salary-5">&#9733;</label>
+                                                        <input type="radio" id="salary-4" name="salaryRating" value="4"><label
+                                                            for="salary-4">&#9733;</label>
+                                                        <input type="radio" id="salary-3" name="salaryRating" value="3"><label
+                                                            for="salary-3">&#9733;</label>
+                                                        <input type="radio" id="salary-2" name="salaryRating" value="2"><label
+                                                            for="salary-2">&#9733;</label>
+                                                        <input type="radio" id="salary-1" name="salaryRating" value="1"
+                                                            checked><label for="salary-1">&#9733;</label>
                                                     </div>
+
                                                 </div>
 
                                                 <input type="text" class="form-control" placeholder="salary feedback" name="salaryFeedback">
@@ -705,11 +707,16 @@ Resume Maker
                                                     <label class="mb-0">How do you rate the working
                                                         environment?</label>
                                                     <div class="rating">
-                                                        <input type="radio" id="work-5" name="workingEnvironmentRating"><label for="work-5">&#9733;</label>
-                                                        <input type="radio" id="work-4" name="workingEnvironmentRating"><label for="work-4">&#9733;</label>
-                                                        <input type="radio" id="work-3" name="workingEnvironmentRating"><label for="work-3">&#9733;</label>
-                                                        <input type="radio" id="work-2" name="workingEnvironmentRating"><label for="work-2">&#9733;</label>
-                                                        <input type="radio" id="work-1" name="workingEnvironmentRating"><label for="work-1">&#9733;</label>
+                                                        <input type="radio" id="work-5" name="workingEnvironmentRating" value="5"><label
+                                                            for="work-5">&#9733;</label>
+                                                        <input type="radio" id="work-4" name="workingEnvironmentRating" value="4"><label
+                                                            for="work-4">&#9733;</label>
+                                                        <input type="radio" id="work-3" name="workingEnvironmentRating" value="3"><label
+                                                            for="work-3">&#9733;</label>
+                                                        <input type="radio" id="work-2" name="workingEnvironmentRating" value="2"><label
+                                                            for="work-2">&#9733;</label>
+                                                        <input type="radio" id="work-1" name="workingEnvironmentRating" value="1"
+                                                            checked><label for="work-1">&#9733;</label>
                                                     </div>
                                                 </div>
                                                 <input type="text" class="form-control" placeholder="work Environment feedback" name="workingEnvironmentFeedback">
@@ -720,11 +727,16 @@ Resume Maker
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <label class="mb-0">Extra benefits/allowances rating?</label>
                                                     <div class="rating">
-                                                        <input type="radio" id="benefits-5" name="benefitsRating"><label for="benefits-5">&#9733;</label>
-                                                        <input type="radio" id="benefits-4" name="benefitsRating"><label for="benefits-4">&#9733;</label>
-                                                        <input type="radio" id="benefits-3" name="benefitsRating"><label for="benefits-3">&#9733;</label>
-                                                        <input type="radio" id="benefits-2" name="benefitsRating"><label for="benefits-2">&#9733;</label>
-                                                        <input type="radio" id="benefits-1" name="benefitsRating"><label for="benefits-1">&#9733;</label>
+                                                        <input type="radio" id="benefits-5" name="benefitsRating"
+                                                            value="5"><label for="benefits-5">&#9733;</label>
+                                                        <input type="radio" id="benefits-4" name="benefitsRating"
+                                                            value="4"><label for="benefits-4">&#9733;</label>
+                                                        <input type="radio" id="benefits-3" name="benefitsRating"
+                                                            value="3"><label for="benefits-3">&#9733;</label>
+                                                        <input type="radio" id="benefits-2" name="benefitsRating"
+                                                            value="2"><label for="benefits-2">&#9733;</label>
+                                                        <input type="radio" id="benefits-1" name="benefitsRating" value="1"
+                                                            checked><label for="benefits-1">&#9733;</label>
                                                     </div>
                                                 </div>
                                                 <input type="text" class="form-control" placeholder="benefits Rating feedback" name="benefitsFeedback">
@@ -734,7 +746,7 @@ Resume Maker
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <button type="button" class="btn add-project float-start" id="addExperienceBtn">
-                                            + Add Education
+                                            + Add Experience
                                         </button>
                                         <div class="text-end">
                                             <button type="submit" class="btn text-center skip-btn mx-2" data-current="experience" data-next="training" data-link="trainingLink">Skip</button>
@@ -744,6 +756,7 @@ Resume Maker
                                 </form>
                             </div>
                             <div class="container mt-4 p-0">
+                                <div id="experienceList"></div>
                                 @if($experiences->isNotEmpty())
                                 <h3>Experience</h3>
 
@@ -785,7 +798,6 @@ Resume Maker
                                 @endforeach
                                 @endif
                             </div>
-
                         </div>
 
                         <!-- Trainings Section (Initially hidden) -->
@@ -863,6 +875,47 @@ Resume Maker
 
                                 </form>
                             </div>
+                            <div class="container mt-4 p-0">
+                                <div id="trainingList"></div>
+                                @if($trainings->isNotEmpty())
+                                @foreach($trainings as $training)
+                                <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5>{{ $training->trainingTitle }}</h5>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('trainings.edit', $training->id) }}" class="btn fw-semibold" style="color: #0064A7;">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('trainings.destroy', $training->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn text-danger fw-semibold">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="text-black-50">
+                                        <p class="m-0">
+                                            {{ $training->institutionName }}
+                                        </p>
+                                        <p class="m-0">
+                                            {{ \Carbon\Carbon::parse($training->completionDate)->format('M Y') }}
+                                        </p>
+                                        @if($training->certificate)
+                                        <p class="m-0">
+                                            <a href="{{ asset($training->certificate) }}" target="_blank">
+                                                View certificate </a>
+                                        </p>
+                                        @endif
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+
                         </div>
 
                         <!--Language-->
@@ -894,20 +947,77 @@ Resume Maker
                                         <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
                                         <button type="button" class="btn text-center next-btn" id="submitLanguage">Save & Continue</button>
                                     </div>
+                                </form>
                             </div>
-                            </form>
+                            <div class="container mt-4 p-0">
+                                <div class="languageList"></div>
+                                @if($languages->isNotEmpty())
+                                @foreach($languages as $language)
+                                <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5>{{ $language->languageName }}</h5>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('languages.edit', $language->id) }}" class="btn fw-semibold" style="color: #0064A7;">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('languages.destroy', $language->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn text-danger fw-semibold">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="text-black-50">
+                                        <p class="m-0">
+                                            Proficiency: {{ $language->languageProficiency }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+         
+
+               <div class="col-md-12 col-lg-3 col-sm-12 col-12">
+                    <div class="card card-last">
+                        <div class="card card-in" id="overviewCard">
+                            <div class="overview-profile" id="overviewProfile" style="overflow-y: auto;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="left-section">
+                                        <h6 id="overviewName"></h6>
+                                        <p id="overviewRole"></p>
+                                    </div>
+                                    <div class="right-section">
+                                        <img id="overviewImage" class="profile-picture rounded-circle">
+                                    </div>
+                                </div>
+                                <div id="overviewContent">
+                                </div>
+                                <div id="overviewEducation"></div>
+
+                                <div id="overviewProjects"></div>
+
+                                <div id="overviewSkills"></div>
+
+                                <div id="overviewAchievements"></div>
+
+                                <div id="overviewExperiences"></div>
+
+                                <div id="overviewTrainings"></div>
+
+                                <div id="overviewLanguages"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Overview Section -->
-        <div class="col-md-3 col-lg-3 col-sm-12 col-12">
-
-        </div>
-
-        </div>
-
         </div>
     </section>
 
@@ -941,10 +1051,6 @@ Resume Maker
         };
         reader.readAsDataURL(event.target.files[0]);
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // If needed, you can still do additional setup here
-    });
     document.addEventListener('DOMContentLoaded', function() {
         const links = document.querySelectorAll(".profile-link");
         links.forEach(link => {
@@ -1047,7 +1153,6 @@ Resume Maker
                 });
         });
 
-        // Simply collects form data without validation
         function collectEducationData() {
             return {
                 schoolName: document.getElementsByName('schoolName')[0].value,
@@ -1060,7 +1165,6 @@ Resume Maker
         }
 
         async function saveEducationData(educationData) {
-            console.log("Sending data:", educationData); // Debug log
             try {
                 const response = await fetch("{{ route('educations.store') }}", {
                     method: "POST",
@@ -1068,17 +1172,50 @@ Resume Maker
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify(educationData) // Changed from {education: [educationData]}
+                    body: JSON.stringify(educationData)
                 });
-                const result = await response.json();
-                console.log("Server response:", result); // Debug log
-                return result;
+                return await response.json();
             } catch (error) {
                 console.error("Error saving data:", error);
                 return {
                     success: false
                 };
             }
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = {
+                year: 'numeric',
+                month: 'short'
+            };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function appendEducationCard(education) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.innerHTML = `
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5>${education.degree}</h5>
+                                </div>
+                                <div>
+                                    <a href="/educations/${education.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
+                                    <form action="/educations/${education.id}" method="POST" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="btn text-danger fw-semibold">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="text-black-50">
+                                <p class="m-0">${education.schoolName} – ${education.city}</p>
+                                <p class="m-0">${formatDate(education.startDate)} – ${formatDate(education.graduationDate)}</p>
+                                <p class="m-0">${education.educationDescription}</p>
+                            </div>
+                        `;
+            document.getElementById('educationList').appendChild(card);
         }
 
         document.getElementById('educationForm').addEventListener('submit', function(e) {
@@ -1088,27 +1225,26 @@ Resume Maker
         document.getElementById('addEducation').addEventListener('click', async function(e) {
             e.preventDefault();
             const educationData = collectEducationData();
-            console.log("Collected data:", educationData); // Debug log
             const result = await saveEducationData(educationData);
             if (result.success) {
                 document.getElementById('educationForm').reset();
-                console.log("Education added successfully!");
+                appendEducationCard(result.education);
             }
         });
 
         document.getElementById('submitEducation').addEventListener('click', async function(e) {
             e.preventDefault();
             const educationData = collectEducationData();
-            console.log("Collected data:", educationData); // Debug log
             const result = await saveEducationData(educationData);
             if (result.success) {
+                appendEducationCard(result.education);
                 document.getElementById('education').style.display = 'none';
                 document.getElementById('project').style.display = 'block';
                 document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
                 document.getElementById('projectLink').classList.add('active');
-                console.log("Saved and moved to next section!");
             }
         });
+
 
         function collectProjectData() {
             return {
@@ -1119,7 +1255,6 @@ Resume Maker
         }
 
         async function saveProjectData(projectData) {
-            console.log("Sending project data:", projectData); // Debug log
             try {
                 const response = await fetch("{{ route('projects.store') }}", {
                     method: "POST",
@@ -1129,9 +1264,7 @@ Resume Maker
                     },
                     body: JSON.stringify(projectData)
                 });
-                const result = await response.json();
-                console.log("Server response:", result); // Debug log
-                return result;
+                return await response.json();
             } catch (error) {
                 console.error("Error saving project data:", error);
                 return {
@@ -1139,65 +1272,52 @@ Resume Maker
                 };
             }
         }
+
+        function appendProjectCard(project) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <div><h5>${project.projectTitle}</h5></div>
+                        <div>
+                            <a href="${project.projectLink}" target="_blank" class="btn fw-semibold" style="color: #0064A7;">View</a>
+                        </div>
+                    </div>
+                    <div class="text-black-50">
+                        <p class="m-0">${project.projectDescription}</p>
+                    </div>
+                `;
+            document.getElementById('projectList').appendChild(card);
+        }
+
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+
+        document.getElementById('addProject').addEventListener('click', async function(e) {
+            e.preventDefault();
+            console.log(collectProjectData());
+            const projectData = collectProjectData();
+            const result = await saveProjectData(projectData);
+            if (result.success) {
+                document.getElementById('projectForm').reset();
+                appendProjectCard(result.project); // Assuming `result.project` is returned
+            }
+        });
+
         document.getElementById('submitProject').addEventListener('click', async function(e) {
             e.preventDefault();
             const projectData = collectProjectData();
-            console.log("Collected project data:", projectData); // Debug log
-            try {
-                const result = await saveProjectData(projectData);
-                if (result.success) {
-                    document.getElementById('project').style.display = 'none';
-                    document.getElementById('skill').style.display = 'block'; // Assuming next section is 'experience'
-                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                    document.getElementById('skillLink').classList.add('active');
-                    console.log("Project saved and moved to skill section!");
-                } else {
-                    console.log("Error saving project:", result);
-                }
-            } catch (error) {
-                console.error("Error in saving project:", error);
+            const result = await saveProjectData(projectData);
+            if (result.success) {
+                appendProjectCard(result.project); // Assuming `result.project` is returned
+                document.getElementById('project').style.display = 'none';
+                document.getElementById('skill').style.display = 'block';
+                document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                document.getElementById('skillLink').classList.add('active');
             }
         });
 
-        // document.getElementById('projectForm').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-        // });
-
-        document.getElementById('addProject').addEventListener('click', async function(e) {
-            e.preventDefault(); // Always prevent default form submission behavior
-
-            try {
-                const result = await saveProjectData(collectProjectData());
-                console.log(result.success);
-
-                if (result.success) {
-                    const form = document.getElementById('projectForm');
-
-                    // Debugging: Check if form exists
-                    console.log('Form element:', form);
-
-                    if (form) {
-                        // Method 1: Standard reset (preferred)
-                        form.reset();
-
-                        // Method 2: Manual reset (fallback)
-                        // const inputs = form.querySelectorAll('input, textarea');
-                        // inputs.forEach(input => input.value = '');
-
-                        console.log("Project added successfully!");
-                    } else {
-                        console.error("Error: Form not found in DOM");
-                    }
-                } else {
-                    console.log("Error saving project:", result);
-                }
-            } catch (error) {
-                console.error("Error in saving project:", error);
-            }
-        });
-
-
-        // Collect skill data from the form
         function collectSkillData() {
             return {
                 skillName: document.getElementsByName('skillName')[0].value,
@@ -1205,9 +1325,7 @@ Resume Maker
             };
         }
 
-        // Save skill data to the server
         async function saveSkillData(skillData) {
-            console.log("Sending skill data:", skillData); // Debug log
             try {
                 const response = await fetch("{{ route('skills.store') }}", {
                     method: "POST",
@@ -1217,62 +1335,139 @@ Resume Maker
                     },
                     body: JSON.stringify(skillData)
                 });
-                const result = await response.json();
-                console.log("Server response:", result); // Debug log
-                return result;
+                return await response.json();
             } catch (error) {
-                console.error("Error saving skill data:", error);
+                console.error("Error saving skill:", error);
                 return {
                     success: false
                 };
             }
         }
 
-        // Prevent default form submission
+        function appendSkillCard(skill) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5>${skill.skillName}</h5>
+                                <p class="text-muted m-0">${skill.skillProficiency}</p>
+                            </div>
+                            <div>
+                                <a href="/skills/${skill.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
+                                <form action="/skills/${skill.id}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn text-danger fw-semibold">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+            document.getElementById('skillList')?.appendChild(card); // optional chaining for safety
+        }
+
         document.getElementById('skillForm').addEventListener('submit', function(e) {
             e.preventDefault();
         });
 
-        // Add Skill button handler
         document.getElementById('addSkill').addEventListener('click', async function(e) {
             e.preventDefault();
             const skillData = collectSkillData();
-            console.log("Collected skill data:", skillData); // Debug log
-            try {
-                const result = await saveSkillData(skillData);
-                if (result.success) {
-                    // Reset the form after saving
-                    const form = document.getElementById('skillForm');
-                    const formData = new FormData(form);
-                    for (let [name, _] of formData) {
-                        const input = form.querySelector(`[name="${name}"]`);
-                        if (input) input.value = '';
-                    }
-                    console.log("Skill added successfully!");
-                } else {
-                    console.log("Error saving skill:", result);
-                }
-            } catch (error) {
-                console.error("Error saving skill:", error);
+            const result = await saveSkillData(skillData);
+            if (result.success) {
+                document.getElementById('skillForm').reset();
+                appendSkillCard(result.skill);
             }
         });
+
         document.getElementById('submitSkill').addEventListener('click', async function(e) {
             e.preventDefault();
             const skillData = collectSkillData();
-            console.log("Collected skill data:", skillData); // Debug log
+            const result = await saveSkillData(skillData);
+            if (result.success) {
+                appendSkillCard(result.skill);
+                document.getElementById('skill').style.display = 'none';
+                document.getElementById('achievement').style.display = 'block';
+                document.querySelectorAll(".profile-link").forEach(link => link.classList.remove("active"));
+                document.getElementById('achievementLink').classList.add('active');
+            }
+        });
+
+
+        function collectAchievementData() {
+            return {
+                achievementTitle: document.getElementsByName('achievementTitle')[0].value,
+                achievementDescription: document.getElementsByName('achievementDescription')[0].value
+            };
+        }
+
+        async function saveAchievementData(achievementData) {
             try {
-                const result = await saveSkillData(skillData);
-                if (result.success) {
-                    document.getElementById('skill').style.display = 'none';
-                    document.getElementById('achievement').style.display = 'block'; // Assuming next section is 'experience'
-                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                    document.getElementById('achievementLink').classList.add('active');
-                    console.log("Skill saved and moved to experience section!");
-                } else {
-                    console.log("Error saving skill:", result);
-                }
+                const response = await fetch("{{ route('achievements.store') }}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(achievementData)
+                });
+                return await response.json();
             } catch (error) {
-                console.error("Error in saving skill:", error);
+                console.error("Error saving data:", error);
+                return {
+                    success: false
+                };
+            }
+        }
+
+        function appendAchievementCard(achievement) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5>${achievement.achievementTitle}</h5>
+                        </div>
+                        <div>
+                            <a href="/achievements/${achievement.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
+                            <form action="/achievements/${achievement.id}" method="POST" style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn text-danger fw-semibold">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="text-black-50">
+                        <p class="m-0">${achievement.achievementDescription}</p>
+                    </div>
+                `;
+            document.getElementById('achievementList').appendChild(card);
+        }
+
+        document.getElementById('achievementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+
+        document.getElementById('addAchievement').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const achievementData = collectAchievementData();
+            const result = await saveAchievementData(achievementData);
+            if (result.success) {
+                document.getElementById('achievementForm').reset();
+                appendAchievementCard(result.achievement);
+            }
+        });
+
+        document.getElementById('submitAchievement').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const achievementData = collectAchievementData();
+            const result = await saveAchievementData(achievementData);
+            if (result.success) {
+                appendAchievementCard(result.achievement);
+                document.getElementById('achievement').style.display = 'none';
+                document.getElementById('language').style.display = 'block';
+                document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                document.getElementById('languageLink').classList.add('active');
             }
         });
 
@@ -1357,7 +1552,13 @@ Resume Maker
                 console.error("Error in saving achievement:", error);
             }
         });
+        // Get selected radio value by name
+        function getSelectedRatingValue(name) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            return selected ? selected.value : null;
+        }
 
+        // Collect all experience data from form inputs
         function collectExperienceData() {
             return {
                 jobTitle: document.getElementsByName('jobTitle')[0].value,
@@ -1366,35 +1567,64 @@ Resume Maker
                 startDate: document.getElementsByName('startDate')[0].value,
                 endDate: document.getElementsByName('endDate')[0].value,
                 experienceDescription: document.getElementsByName('experienceDescription')[0].value,
-                salaryRating: document.querySelector('input[name="salaryRating"]:checked') ? document.querySelector('input[name="salaryRating"]:checked').id : '',
+                salaryRating: getSelectedRatingValue('salaryRating'),
                 salaryFeedback: document.getElementsByName('salaryFeedback')[0].value,
-                workingEnvironmentRating: document.querySelector('input[name="workingEnvironmentRating"]:checked') ? document.querySelector('input[name="workingEnvironmentRating"]:checked').id : '',
+                workingEnvironmentRating: getSelectedRatingValue('workingEnvironmentRating'),
                 workingEnvironmentFeedback: document.getElementsByName('workingEnvironmentFeedback')[0].value,
-                benefitsRating: document.querySelector('input[name="benefitsRating"]:checked') ? document.querySelector('input[name="benefitsRating"]:checked').id : '',
+                benefitsRating: getSelectedRatingValue('benefitsRating'),
                 benefitsFeedback: document.getElementsByName('benefitsFeedback')[0].value
             };
         }
 
+        // Save experience data to server
         async function saveExperienceData(experienceData) {
-            console.log("Sending experience data:", experienceData); // Debug log
             try {
                 const response = await fetch("{{ route('experiences.store') }}", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                     },
                     body: JSON.stringify(experienceData)
                 });
-                const result = await response.json();
-                console.log("Server response:", result); // Debug log
-                return result;
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                return await response.json();
             } catch (error) {
                 console.error("Error saving experience data:", error);
+                alert('Error saving experience. Please check console for details.');
                 return {
                     success: false
                 };
             }
+        }
+
+        // Append the newly added experience to the DOM
+        function appendExperienceCard(experience) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5>${experience.jobTitle}</h5>
+                            <p class="m-0 text-muted">${experience.companyName} – ${experience.location}</p>
+                            <p class="m-0 text-muted">${experience.startDate} – ${experience.endDate}</p>
+                            <p>${experience.experienceDescription}</p>
+                        </div>
+                        <div>
+                            <a href="/experiences/${experience.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
+                            <form action="/experiences/${experience.id}" method="POST" style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn text-danger fw-semibold">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            document.getElementById('experienceList')?.appendChild(card);
         }
 
         // Prevent default form submission
@@ -1402,83 +1632,56 @@ Resume Maker
             e.preventDefault();
         });
 
-        // Add Experience button handler
+        // "Add Experience" button click
         document.getElementById('addExperienceBtn').addEventListener('click', async function(e) {
             e.preventDefault();
             const experienceData = collectExperienceData();
-            console.log("Collected experience data:", experienceData); // Debug log
-            try {
-                const result = await saveExperienceData(experienceData);
-                if (result.success) {
-                    // Reset the form after saving
-                    const form = document.getElementById('experienceForm');
-                    const formData = new FormData(form);
-                    for (let [name, _] of formData) {
-                        const input = form.querySelector(`[name="${name}"]`);
-                        if (input) input.value = '';
-                    }
-                    console.log("Experience added successfully!");
-                } else {
-                    console.log("Error saving experience:", result);
-                }
-            } catch (error) {
-                console.error("Error saving experience:", error);
+            const result = await saveExperienceData(experienceData);
+            if (result.success) {
+                document.getElementById('experienceForm').reset(); // Reset inputs
+                document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false); // Reset radios
+                appendExperienceCard(result.experience);
+                console.log("Experience added successfully!");
             }
         });
 
-        // Save and Continue (Next) button handler
+        // "Save & Continue" button click
         document.getElementById('submitExperience').addEventListener('click', async function(e) {
             e.preventDefault();
             const experienceData = collectExperienceData();
-            console.log("Collected experience data:", experienceData); // Debug log
-            try {
-                const result = await saveExperienceData(experienceData);
-                if (result.success) {
-                    document.getElementById('experience').style.display = 'none';
-                    document.getElementById('training').style.display = 'block';
-                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                    document.getElementById('trainingLink').classList.add('active');
-                    console.log("Experience saved and moved to next section!");
-                } else {
-                    console.log("Error saving experience:", result);
-                }
-            } catch (error) {
-                console.error("Error in saving experience:", error);
+            const result = await saveExperienceData(experienceData);
+            if (result.success) {
+                appendExperienceCard(result.experience);
+                document.getElementById('experience').style.display = 'none';
+                document.getElementById('training').style.display = 'block';
+                document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                document.getElementById('trainingLink').classList.add('active');
+                console.log("Experience saved and moved to next section!");
             }
         });
-        // Collecting Training Form Data
+
         function collectTrainingData() {
-            return {
-                trainingTitle: document.getElementById('training-title').value,
-                institutionName: document.getElementById('training-organization').value,
-                completionDate: document.getElementById('training-date').value,
-                certificate: document.getElementById('certificate').files[0], // Handle file upload
-            };
+            const formData = new FormData();
+            formData.append('trainingTitle', document.getElementsByName('trainingTitle')[0].value);
+            formData.append('institutionName', document.getElementsByName('institutionName')[0].value);
+            formData.append('completionDate', document.getElementsByName('completionDate')[0].value);
+            const certificateFile = document.getElementsByName('certificate')[0].files[0];
+            if (certificateFile) {
+                formData.append('certificate', certificateFile);
+            }
+            return formData;
         }
 
-        // Save Training Data to the Server
         async function saveTrainingData(trainingData) {
-            console.log("Sending training data:", trainingData); // Debug log
-            const formData = new FormData();
-            formData.append('trainingTitle', trainingData.trainingTitle);
-            formData.append('institutionName', trainingData.institutionName);
-            formData.append('completionDate', trainingData.completionDate);
-            if (trainingData.certificate) {
-                formData.append('certificate', trainingData.certificate);
-            }
-
             try {
                 const response = await fetch("{{ route('trainings.store') }}", {
                     method: "POST",
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: formData,
+                    body: trainingData
                 });
-
-                const result = await response.json();
-                console.log("Server response:", result); // Debug log
-                return result;
+                return await response.json();
             } catch (error) {
                 console.error("Error saving training data:", error);
                 return {
@@ -1487,55 +1690,70 @@ Resume Maker
             }
         }
 
-        // Prevent Default Form Submission
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = {
+                year: 'numeric',
+                month: 'short'
+            };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function appendTrainingCard(training) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5>${training.trainingTitle}</h5>
+                        </div>
+                        <div>
+                            <a href="/trainings/${training.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
+                            <form action="/trainings/${training.id}" method="POST" style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn text-danger fw-semibold">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="text-black-50">
+                        <p class="m-0">${training.institutionName}</p>
+                        <p class="m-0">Completed on: ${formatDate(training.completionDate)}</p>
+                        ${training.certificate ? `<img src="${training.certificate}" ...>` : ''}
+                    </div>
+                `;
+            document.getElementById('trainingList').appendChild(card); // Make sure this element exists in your HTML
+        }
+
+        // Prevent form submission
         document.getElementById('trainingForm').addEventListener('submit', function(e) {
             e.preventDefault();
         });
 
-        // Add Training Button Handler
         document.getElementById('addTraining').addEventListener('click', async function(e) {
             e.preventDefault();
             const trainingData = collectTrainingData();
-            console.log("Collected training data:", trainingData); // Debug log
-            try {
-                const result = await saveTrainingData(trainingData);
-                if (result.success) {
-                    // Reset the form after saving
-                    const form = document.getElementById('trainingForm');
-                    form.reset();
-                    imgPreview.innerHTML = ''; // Clear image preview
-                    console.log("Training added successfully!");
-                } else {
-                    console.log("Error saving training:", result);
-                }
-            } catch (error) {
-                console.error("Error saving training:", error);
+            const result = await saveTrainingData(trainingData);
+            if (result.success) {
+                document.getElementById('trainingForm').reset();
+                document.getElementById('imgPreview').innerHTML = '';
+                appendTrainingCard(result.training);
             }
         });
 
-        // Save and Continue (Next) Button Handler
         document.getElementById('submitTraining').addEventListener('click', async function(e) {
             e.preventDefault();
             const trainingData = collectTrainingData();
-            console.log("Collected training data:", trainingData); // Debug log
-            try {
-                const result = await saveTrainingData(trainingData);
-                if (result.success) {
-                    document.getElementById('training').style.display = 'none';
-                    document.getElementById('language').style.display = 'block'; // Assuming next section is 'nextSection'
-                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                    document.getElementById('languageLink').classList.add('active');
-                    console.log("Training saved and moved to next section!");
-                } else {
-                    console.log("Error saving training:", result);
-                }
-            } catch (error) {
-                console.error("Error in saving training:", error);
+            const result = await saveTrainingData(trainingData);
+            if (result.success) {
+                appendTrainingCard(result.training);
+                document.getElementById('training').style.display = 'none';
+                document.getElementById('language').style.display = 'block';
+                document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                document.getElementById('languageLink').classList.add('active');
             }
         });
 
-
-        // Collect language data from form
         function collectLanguageData() {
             return {
                 languageName: document.getElementsByName('languageName')[0].value,
@@ -1543,9 +1761,7 @@ Resume Maker
             };
         }
 
-        // Save language data to the server
         async function saveLanguageData(languageData) {
-            console.log("Sending language data:", languageData); // Debug log
             try {
                 const response = await fetch("{{ route('languages.store') }}", {
                     method: "POST",
@@ -1555,9 +1771,7 @@ Resume Maker
                     },
                     body: JSON.stringify(languageData)
                 });
-                const result = await response.json();
-                console.log("Server response:", result); // Debug log
-                return result;
+                return await response.json();
             } catch (error) {
                 console.error("Error saving language data:", error);
                 return {
@@ -1566,53 +1780,57 @@ Resume Maker
             }
         }
 
-        // Prevent default form submission
+        function appendLanguageCard(language) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h5>${language.languageName}</h5>
+                </div>
+                <div>
+                    <a href="/languages/${language.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
+                    <form action="/languages/${language.id}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn text-danger fw-semibold">Delete</button>
+                    </form>
+                </div>
+            </div>
+            <div class="text-black-50">
+                <p class="m-0">Proficiency: ${language.languageProficiency}</p>
+            </div>
+        `;
+            document.querySelector('.languageList').appendChild(card);
+        }
+
+        // Prevent default form submit
         document.getElementById('languageForm').addEventListener('submit', function(e) {
             e.preventDefault();
         });
 
-        // Add Language button handler
+        // "+ Add Language" button
         document.getElementById('addLanguage').addEventListener('click', async function(e) {
             e.preventDefault();
             const languageData = collectLanguageData();
-            console.log("Collected language data:", languageData); // Debug log
-            try {
-                const result = await saveLanguageData(languageData);
-                if (result.success) {
-                    // Reset the form after saving
-                    const form = document.getElementById('languageForm');
-                    const formData = new FormData(form);
-                    for (let [name, _] of formData) {
-                        const input = form.querySelector(`[name="${name}"]`);
-                        if (input) input.value = '';
-                    }
-                    console.log("Language added successfully!");
-                } else {
-                    console.log("Error saving language:", result);
-                }
-            } catch (error) {
-                console.error("Error saving language:", error);
+            const result = await saveLanguageData(languageData);
+            if (result.success) {
+                document.getElementById('languageForm').reset();
+                appendLanguageCard(result.language);
             }
         });
 
-        // Submit button (Save and continue)
-        document.querySelector('#submitLanguage').addEventListener('click', async function(e) {
+        // "Save & Continue" button
+        document.getElementById('submitLanguage').addEventListener('click', async function(e) {
             e.preventDefault();
             const languageData = collectLanguageData();
-            console.log("Collected language data:", languageData); // Debug log
-            try {
-                const result = await saveLanguageData(languageData);
-                if (result.success) {
-                    document.getElementById('language').style.display = 'none';
-                    document.getElementById('profile').style.display = 'block'; // change 'nextSectionId' to your next form id
-                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                    document.getElementById('profileLink').classList.add('active'); // change 'nextSectionLinkId' accordingly
-                    console.log("Language saved and moved to next section!");
-                } else {
-                    console.log("Error saving language:", result);
-                }
-            } catch (error) {
-                console.error("Error in saving language:", error);
+            const result = await saveLanguageData(languageData);
+            if (result.success) {
+                appendLanguageCard(result.language);
+                document.getElementById('language').style.display = 'none';
+                document.getElementById('training').style.display = 'block'; // 👈 update this if next section is different
+                document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                document.getElementById('trainingLink').classList.add('active'); // 👈 update ID as per your nav
             }
         });
 

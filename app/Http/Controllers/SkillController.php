@@ -86,6 +86,7 @@ class SkillController extends Controller
                 : response()->json([
                     'success' => true,
                     'message' => 'Skill saved successfully.',
+                    'skill'=>$skill
                 ]);
         } catch (\Exception $e) {
             Log::error('Error while saving skills: ' . $e->getMessage());

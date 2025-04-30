@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Experience;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -58,8 +59,8 @@ class ExperienceController extends Controller
             'jobTitle' => 'required|string|max:255',  // Job title is required and must be a string with max length of 255
             'companyName' => 'required|string|max:255',  // Company name is required and must be a string with max length of 255
             'location' => 'required|string|max:255',  // Location is required and must be a string with max length of 255
-            'startDate' => 'required|date|before_or_equal:endDate',  // Start date must be a valid date and cannot be after the end date
-            'endDate' => 'nullable|date|after_or_equal:startDate',  // End date is optional, but if provided, it must be a valid date and after or equal to start date
+            'startDate' => 'nullable|date',  // Start date must be a valid date and cannot be after the end date
+            'endDate' => 'nullable|date',  // End date is optional, but if provided, it must be a valid date and after or equal to start date
             'experienceDescription' => 'required|string|max:1000',  // Required experience description with max length of 1000 characters
             'salaryRating' => 'nullable|integer|min:1|max:5',  // Salary rating between 1 and 5
             'salaryFeedback' => 'nullable|string|max:500',  // Optional salary feedback, max 500 characters
@@ -76,36 +77,57 @@ class ExperienceController extends Controller
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
                 :
                 response()->json([
-                    'success' => true,
-                    'message' => 'experience saved successfully.',
+                    'success' => false,
+                    'message' => 'something wents to wrong.',
                 ]);
         }
-
-        //Create a new experience record
-        $experience = new Experience();
-        $experience->jobSeekerId = $jobSeekerId;
-        $experience->jobTitle = $request->jobTitle;
-        $experience->companyName = $request->companyName;
-        $experience->location = $request->location;
-        $experience->startDate = $request->startDate;
-        $experience->endDate = $request->endDate;
-        $experience->experienceDescription = $request->experienceDescription;
-        $experience->salaryRating = $request->salaryRating;
-        $experience->salaryFeedback = $request->salaryFeedback;
-        $experience->workingEnvironmentRating = $request->workingEnvironmentRating;
-        $experience->workingEnvironmentFeedback = $request->workingEnvironmentFeedback;
-        $experience->benefitsRating = $request->benefitsRating;
-        $experience->benefitsFeedback = $request->benefitsFeedback;
-        $experience->save();
-        Log::info('Experience created successfully with ID: ' . $experience->id);
-
-        return $isMobile
-        ? $this->responseSuccess('experience saved successfully.', $experience)
-        : 
-            response()->json([
-                'success' => true,
-                'message' => 'experience saved successfully.',
+        try{
+            $experience = new Experience();
+            $experience->jobSeekerId = $jobSeekerId;
+            $experience->jobTitle = $request->jobTitle;
+            $experience->companyName = $request->companyName;
+            $experience->location = $request->location;
+            $experience->startDate = $request->startDate;
+            $experience->endDate = $request->endDate;
+            $experience->experienceDescription = $request->experienceDescription;
+            $experience->salaryRating = $request->salaryRating;
+            $experience->salaryFeedback = $request->salaryFeedback;
+            $experience->workingEnvironmentRating = $request->workingEnvironmentRating;
+            $experience->workingEnvironmentFeedback = $request->workingEnvironmentFeedback;
+            $experience->benefitsRating = $request->benefitsRating;
+            $experience->benefitsFeedback = $request->benefitsFeedback;
+            $experience->save();
+            Log::info('Experience created successfully with ID: ' . $experience->id);
+            if($experience){
+                return $isMobile
+                ? $this->responseSuccess('experience saved successfully.', $experience)
+                : 
+                    response()->json([
+                        'success' => true,
+                        'message' => 'experience saved successfully.',
+                        'experience'=>$experience
+                    ]);
+            }
+    
+            return response()->json([
+                'success' => false,
+                'message' => "Some thing went wrong"
+                
             ]);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => "SOme thing went wrong",
+                'errors' => $e->getMessage()
+                
+            ]);
+        }
+        
+
+        
+
+        
 }
     /**
      * Display the specified resource.

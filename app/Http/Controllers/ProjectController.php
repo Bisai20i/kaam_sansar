@@ -76,11 +76,11 @@ class ProjectController extends Controller
 
         $project = new Project();
         $project->jobSeekerId = $jobSeekerId;
-        $project->projectTitle = $request->input('project.projectTitle');
-        $project->projectLink = $request->input('project.projectLink');
-        $project->projectDescription = $request->input('project.projectDescription');
+        $project->projectTitle = $request->input('projectTitle');
+        $project->projectLink = $request->input('projectLink');
+        $project->projectDescription = $request->input('projectDescription');
         $project->save();
-        
+
         Log::info('new Project record created :' . $project->id);
         // return the response based on request type
         return $isMobile
@@ -89,6 +89,7 @@ class ProjectController extends Controller
             response()->json([
                 'success' => true,
                 'message' => 'Project saved successfully.',
+                'project' => $project
             ]);
     }
 

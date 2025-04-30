@@ -95,6 +95,7 @@ class TrainingController extends Controller
                 : response()->json([
                     'success' => true,
                     'message' => 'Trainings saved successfully.',
+                    'training'=>$training
                 ]);
     
         } catch (\Exception $e) {

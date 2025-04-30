@@ -68,20 +68,21 @@ class AchievementController extends Controller
                     : redirect()->back()->withErrors($validator->errors())->withInput();
             }
 
-                $achievement = new Achievement();
-                $achievement->jobSeekerId = $jobSeekerId;
-                $achievement->achievementTitle = $request->input('achievementTitle');
-                $achievement->achievementDescription = $request->input('achievementDescription');
-                $achievement->save();
+            $achievement = new Achievement();
+            $achievement->jobSeekerId = $jobSeekerId;
+            $achievement->achievementTitle = $request->input('achievementTitle');
+            $achievement->achievementDescription = $request->input('achievementDescription');
+            $achievement->save();
 
-                Log::info('Achievement created successfully with ID: ' . $achievement->id);
-          
+            Log::info('Achievement created successfully with ID: ' . $achievement->id);
+
 
             return $isMobile
                 ? $this->responseSuccess('Achievement(s) saved successfully.', $achievement)
                 : response()->json([
                     'success' => true,
                     'message' => 'Achievement(s) saved successfully.',
+                    'achievement'=>$achievement
                 ]);
         } catch (\Exception $e) {
             Log::error('Exception occurred while saving achievement(s): ' . $e->getMessage());
