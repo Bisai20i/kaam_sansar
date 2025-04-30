@@ -157,6 +157,7 @@
          @foreach($similarAds as $product )
             <div class="col-lg-3 col-md-3 col-sm-6 col-12 product" data-category="electronics">
                 <div class="card-bdy-packages">
+                <a href="{{route('ads.show',$product->id)}}" class="text-decoration-none text-black">
                     <img src="{{asset($product->adsThumbnail)}}" class="bdy-packages-img"
                     style="width: 100%; height: 180px; object-fit:auto;">
                     <div class="card-body">
@@ -165,6 +166,7 @@
                         <p class="card-text text-muted">{{$product->postedDuration}}</p>
 
                     </div>
+</a>
                 </div>
             </div>
             @endforeach

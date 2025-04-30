@@ -832,11 +832,13 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads       = Advertisement::all();
+        $ads = Advertisement::simplePaginate(8); 
         $ad       = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();
+
+
         return view('frontend.advertisements.index', compact('all', 'category', 'ads','ad', 'categories'))
             ->with('success', 'Advertisements retrieved successfully!');
 

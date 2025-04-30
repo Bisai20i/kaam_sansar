@@ -334,11 +334,10 @@ Route::post('/set-redirect', function (Request $request) {
     // ✅ Store redirect URL in session
     session(['redirect_url' => $request->input('redirect_url')]);
 
-    // ✅ Set a flag to open the login modal
-    session(['show_login_modal' => true]);
+    
 
     // ✅ Redirect to index
-    return redirect()->route('index')->with('showLoginModal', true);
+    return redirect()->back()->with('showLoginModal', true);
 })->name('set.redirect');
 
 Route::prefix('giftNCoupon')->group(function () {

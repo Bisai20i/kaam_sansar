@@ -19,9 +19,9 @@
 @endphp
 
     <div class="d-flex justify-content-center justify-content-md-between flex-wrap-reverse row-gap-3 ">
-        <div class="btn-group mb-3 gap-lg-1 ads_type" role="group" aria-label="Basic radio toggle button group">
+        <div class="btn-group  mb-3 gap-lg-1 ads_type" role="group" aria-label="Basic radio toggle button group">
         <a href="{{ route('ads.index')}}"
-           class="btn btn-outline-custom rounded-2 mx-1 px-4 border border-2">
+           class="btn btn-outline-custom  rounded-2 mx-1 px-4 border border-2">
             All
         </a>
 
@@ -41,9 +41,40 @@
         </a>
         </div>
         <div>
-            <button type="button" class="btn post-ad-btn text-white py-2 px-4 fs-5" style="background-color: #0064a7;" data-bs-toggle="modal"  data-bs-target="#postAdModal">
-                <i class="fas fa-plus me-2" ></i>Add Post
-            </button>
+       @if (Auth::guard('job_seekers')->check()  )  <!-- If user is logged in, show the Post Ad button -->
+    <button type="button" 
+            class="btn post-ad-btn text-white py-2 px-4 fs-5" 
+            data-bs-toggle="modal" 
+            data-bs-target="#postAdModal" 
+            style="background-color: #0064a7;">
+        <i class="fas fa-plus me-2"></i>Add Post
+    </button>
+@else
+    <!-- If user is not logged in, show the Login button -->
+    <button type="button" 
+            class="btn post-ad-btn text-white py-2 px-4 fs-5" 
+            data-bs-toggle="modal" 
+            data-bs-target="#loginModal" 
+            style="background-color: #0064a7;"
+            onclick="setRedirectUrl()">
+        <i class="fas fa-plus me-2"></i>Add Post
+    </button>
+    <script>
+        // Function to store the current URL before showing the login modal
+        function setRedirectUrl() {
+            fetch('/set-redirect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ redirect_url: window.location.href })
+            });
+        }
+    </script>
+@endif
+
+
         </div>
     </div>
     <!-- <script>
@@ -134,25 +165,30 @@
         
     <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 ">
     @if($ads->count())
-    @foreach($ads as $ads)
+    @foreach($ads as $ad)
         <div class="col">
-            <div class="card p-0 "><a href="{{route('ads.show',$ads->id)}}" class="text-decoration-none text-black">
-            <img src="{{asset($ads->adsThumbnail)}}" class="card-img-top" alt="Ad Image"
-     style="height: 200px; width: 100%; object-fit:cover;">
-                    <div class="card-body p-2">
-                        <h6 class="card-title mb-0">{{$ads->adsTitle}}</h6>
-                        <p class="card-text text-muted mb-0">{{$ads->location}}</p>
-                        <p class="card-text text-muted"><small class="text-body-secondary">{{$ads->postedDuration}}</small></p>
+            <div class="card p-1" style="border-color:#0694BF;"><a href="{{route('ads.show',$ad->id)}}" class="text-decoration-none text-black">
+            <img src="{{asset($ad->adsThumbnail)}}" class="card-img-top rounded" alt="Ad Image"
+     style="height: 131px; width: 100%; object-fit:cover;">
+                    <div class="card-body p-1 " >
+                        <h6 class="card-title text-black mb-0">{{$ad->adsTitle}}</h6>
+                        <p class="card-text text-muted mb-0">{{$ad->location}}</p>
+                        <p class="card-text text-muted"><small class="text-body-secondary">{{$ad->postedDuration}}</small></p>
                     </div>
                 </a>
             </div>
         </div>
         @endforeach
-    
+         
+
     </div>
 
     <div class="d-flex justify-content-center mt-3">
+    {{$ads->links()}}
+
 </div>
+
+
 
  @else
  <!-- error shown -->
