@@ -1,4 +1,3 @@
-
 <?php
 
     use App\Http\Controllers\AboardController;
@@ -371,4 +370,4 @@
     Route::get('allpodcasts', [FrontendAPIController::class, 'allpodcasts']);
     Route::get('/resume-help', [FrontendController::class, 'resumeHelp'])->name('resume');
 
-// Route::get('/fireEvent', [MessageController::class, 'fireEvent']);`
+Route::get('/fireEvent', [MessageController::class, 'fireEvent']);

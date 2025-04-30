@@ -15,24 +15,32 @@ class AdvertisementCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //Retrive all Advertisement category
-        $advertisementCategory= AdvertisementCategory::all();
-    //    $advertisementCategory= AdvertisementCategory::orderBy('created_at', 'desc')->simplePaginate(5);
-     //Retrive all Advertisement category from database using over
+   public function index()
+{
+    // Retrieve all Advertisement categories
+    $advertisementCategory = AdvertisementCategory::all();
+    $All = AdvertisementCategory::all(); // Optional if needed elsewhere
 
+    $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
 
-        $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
+    if ($isMobile) {
+        // Add "All" as the first option manually
+        $defaultCategory = [
+            'id' => 0,
+            'adsCategoryTitle' => 'All',
+            'adsCategorySlug' => 'all',
+            'created_at' => null,
+            'updated_at' => null
+        ];
 
-        if ($isMobile) {
-            return response()->json($advertisementCategory);
-        } else {
-            return view('backend.adscategory.lists', compact('advertisementCategory'));
-        }
+        // Prepend "All" to the collection
+        $categoriesWithAll = collect([$defaultCategory])->merge($advertisementCategory);
 
-
+        return response()->json($categoriesWithAll);
+    } else {
+        return view('backend.adscategory.lists', compact('advertisementCategory'));
     }
+}
 
     /**
      * Show the form for creating a new resource.

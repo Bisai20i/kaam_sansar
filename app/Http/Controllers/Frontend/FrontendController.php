@@ -75,9 +75,9 @@ class FrontendController extends Controller
             ->where('position', 'middle')
             ->first();
 
-        if ($ad_banners) {
-            $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
-        }
+        // if ($ad_banners) {
+        //     $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
+        // }
 
         // dd($giftCoupons);
         return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners'));
@@ -859,11 +859,14 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads        = Advertisement::all();
+        $ads = Advertisement::simplePaginate(8); 
+        $ad       = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();
-        return view('frontend.advertisements.index', compact('all', 'category', 'ads', 'categories'))
+
+
+        return view('frontend.advertisements.index', compact('all', 'category', 'ads','ad', 'categories'))
             ->with('success', 'Advertisements retrieved successfully!');
 
     }

@@ -30,8 +30,34 @@
                 <div class="mt-3 mb-3 d-flex flex-wrap justify-content-center gap-2">
                     <button class="btn custom-outline-btn flex-grow-1" onclick="toggleChat()"><i
                             class="fas fa-comment-alt me-2"></i>Chat</button>
-                    <button class="btn custom-outline-btn flex-grow-1"><i
-                            class="fas fa-share me-2"></i>Share</button>
+                 <!-- Your Share Button -->
+<button class="btn custom-outline-btn flex-grow-1" id="shareButton">
+    <i class="fas fa-share me-2"></i>Share
+</button>
+
+<!-- Optional: Confirmation Message -->
+<div id="copyMessage" style="display: none;">Link copied to clipboard!</div>
+
+<script>
+    document.getElementById('shareButton').addEventListener('click', function () {
+        var productUrl = window.location.href; // Gets the current page URL
+
+        var tempInput = document.createElement('input');
+        tempInput.value = productUrl; // Set value to the URL
+        document.body.appendChild(tempInput); // Add to DOM
+        tempInput.select(); // Select text
+        document.execCommand('copy'); // Copy text to clipboard
+        document.body.removeChild(tempInput); // Clean up
+
+        // Show confirmation (optional)
+        var copyMessage = document.getElementById('copyMessage');
+        copyMessage.style.display = 'block'; // Show success message
+        setTimeout(function() {
+            copyMessage.style.display = 'none'; // Hide after 2 seconds
+        }, 2000);
+    });
+</script>
+
                 </div>
             </div>
 

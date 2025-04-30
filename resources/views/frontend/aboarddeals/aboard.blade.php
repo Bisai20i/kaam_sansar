@@ -446,12 +446,20 @@ if (type === 'Buy') {
                                 </div>
 
                                            <!-- Input Group for "Add to your Post" with Image Icon -->
-                    <div class="mb-3 input-group">
-                        
-                      
-                        <!-- File Input (hidden) -->
-                        <input type="file" id="imageInput" name="productThumbnail" >
-                    </div>
+                                           <div class="input-group abroad-deal-1 w-100">
+                                    <input type="text" class="form-control abroad-deal-1 fw-semibold border-0"
+                                        placeholder="Add to your Post" id="newAddToPostInput" disabled
+                                        style="box-shadow: none;">
+                                    <span class="input-group-text abroad-deal-1 border-0 rounded-end">
+                                        <button class="btn fw-semibold border-0 h-100" type="button"
+                                            id="newUploadImageButton-1">
+                                            <i class="fas fa-image abroad-deal-1"></i>
+                                        </button>
+                                    </span>
+
+                                    <!-- Hidden File Input -->
+                                    <input type="file" id="newImageInput" class="d-none" accept="image/*">
+                                </div>
                     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const uploadImageButton = document.getElementById('uploadImageButton');
