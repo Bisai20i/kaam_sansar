@@ -84,14 +84,14 @@
                                             value="{{ Auth::guard('job_seekers')->user()->id }}">
                                         <input type="hidden" name="jobPostId" value="{{ $item->id }}" />
 
-                                        <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;">
+                                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;">
                                             <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                         </button>
                                     </form>
                                 @else
 
                                     <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
-                                        <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
                                             <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                         </button>
                                     </div>
@@ -105,13 +105,13 @@
                                     class="text-decoration-none">
                                     <div class="card">
                                         <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
-                                            class="card-img-top" alt="BMW">
-                                        <div class="card-body">
+                                            class="card-img-top rounded-1" alt="BMW">
+                                        <div class="card-body p-2">
 
-                                            <h5 class="card-title text-truncate mb-1 me-3">{{ $item->jobTitle }}</h5>
+                                            <h5 class="card-title text-truncate me-3 fw-bold my-1" >{{ $item->jobTitle }}</h5>
 
-                                            <p class="card-text text-muted mb-0">{{ $item->jobLevel }}</p>
-                                            <p class="card-text text-muted mb-1">{{ $item->jobLocation }}</p>
+                                            <p class="card-text text-muted mb-0 fw-semibold">{{ $item->jobLevel }}</p>
+                                            <p class="card-text text-muted mb-1 fw-semibold">{{ $item->jobLocation }}</p>
                                             <p class="card-text text-muted ">
                                                 <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
                                                 </small>
@@ -221,7 +221,7 @@
                                     <div class="card">
                                         <!-- Display Image -->
                                         <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                            class="card-img-top" alt="{{ $item->title }}">
+                                            class="card-img-top rounded-1" alt="{{ $item->title }}">
                                         <div class="card-body">
                                             <!-- Display Title -->
                                             <h5 class="card-title text-truncate" style="">{{ $item->title }}</h5>
@@ -418,7 +418,7 @@
                             <div class="card">
                             <a href="{{ route('frontend.advertisements') }}"
                             class="text-decoration-none">
-                                <img src="{{ asset($ad->adsThumbnail) }}" class="card-img-top" alt="adsThumbnail">
+                                <img src="{{ asset($ad->adsThumbnail) }}" class="card-img-top rounded-1" alt="adsThumbnail">
                                 <div class="card-body p-2">
                                     <h5 class="card-title">{{ $ad->adsTitle }} </h5>
                                     <p class="card-text text-muted mb-1">{{ $ad->location }}</p>
@@ -462,7 +462,7 @@
                                         <!-- Display Podcast Image -->
                                         <div class="pi" style="height:150px;">
                                             <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                                class=" h-100 w-100 card-img-top " alt="..."
+                                                class=" h-100 w-100 card-img-top rounded-1" alt="..."
                                                 style="object-fit:cover;">
                                             <div class="pio">
                                                 <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>

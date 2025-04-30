@@ -96,6 +96,13 @@
                                                     </button>
                                                 </form>
 
+                                                <button class="dropdown-item" id="viewJobApplicatoins"
+                                                    data-job-id="{{ $post->id }}" data-bs-toggle="modal"
+                                                    data-bs-target="#jobApplicationsModal"
+                                                    data-job-title="{{ $post->jobTitle }}">
+                                                    <i class='bx bx-briefcase me-1'></i>Job Applications
+                                                </button>
+
 
                                             </div>
                                         </div>
@@ -104,10 +111,76 @@
                             @endforeach
                         </tbody>
                     </table>
+
+
+                </div>
+
+
+                <div class="pagination my-3 mx-0" style="float: right;">
+
+                    {{ $jobpost->links() }}
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="jobApplicationsModal" tabindex="-1" aria-labelledby="jobApplicationsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="jobApplicationsModalLabel">
+                        Job Applications for <span id="jobTitle"></span>:
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="border-right: 1px solid #dee2e6;">S.N</th>
+                                    <th style="border-right: 1px solid #dee2e6;">Jobseeker Name</th>
+                                    <th style="border-right: 1px solid #dee2e6;">Applied Date</th>
+                                    <th style="border-right: 1px solid #dee2e6;">Email</th>
+                                    <th style="border-right: 1px solid #dee2e6;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0" id="jobApplicationsTable">
+                                <tr>
+                                    <td style="border-right: 1px solid #dee2e6;">1</td>
+                                    <td style="border-right: 1px solid #dee2e6;">Hello something</td>
+                                    <td style="border-right: 1px solid #dee2e6;">date</td>
+                                    <td style="border-right: 1px solid #dee2e6;">example@emxil.com</td>
+
+                                    <td style="border-right: 1px solid #dee2e6;">
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                data-bs-toggle="dropdown">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+
     <!-- Publish/Unpublish Modal -->
     <div class="modal fade" id="publishUnpublishModal" tabindex="-1" aria-labelledby="publishUnpublishModalLabel"
         aria-hidden="true">
@@ -128,8 +201,8 @@
                         @csrf
                         @method('PUT')
                         <button type="submit" id="modalActionButton" class="btn">
-                            <span id="loader" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                style="display: none;"></span>
+                            <span id="loader" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true" style="display: none;"></span>
                             <span id="buttonText">Submit</span>
                         </button>
                     </form>
@@ -210,6 +283,94 @@
             // Show loader and hide button text
             loader.style.display = 'inline-block';
             buttonText.style.display = 'none';
+        });
+
+
+        document.getElementById('viewJobApplicatoins').addEventListener('click', function(e) {
+
+            document.getElementById('jobTitle').textContent = e.target.getAttribute('data-job-title');
+            loader.style.display = 'inline-block';
+
+            let jobId = e.target.getAttribute('data-job-id');
+            let jobApplicationsTable = document.getElementById('jobApplicationsTable')
+
+            try {
+                jobApplicationsTable.innerHTML = '<tr><td colspan="5" class="text-center">Loading...</td></tr>';
+                const response = await fetch(getBaseUrl() + '/superadmin/job-post/applications', {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': {{ csrf_token() }},
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                });
+
+                // Check for HTTP error response (like 401, 422, 500)
+                if (!response.ok) {
+                    // Try to parse JSON error response
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+
+                    // Laravel validation errors (422 Unprocessable Entity)
+                    if (response.status === 422) {
+                        alert('Validation failed: ' + Object.values(errorData.errors).join('\n'));
+                    } else {
+                        alert('Something went wrong. Please try again.');
+                    }
+
+                    // Stop further execution
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.status) {
+                    jobApplicationsTable.innerHTML = '';
+
+                    data.data.forEach((application, index) => {
+                        let applicationRow = document.createElement('tr');
+                        applicationRow.innerHTML = `
+                           <td style="border-right: 1px solid #dee2e6;">${index + 1}</td>
+                            <td style="border-right: 1px solid #dee2e6;"${application.job_seeker.firstName} ${application.job_seeker.lastName}</td>
+                            <td style="border-right: 1px solid #dee2e6;">${application.created_at.toLocaleString()}</td>
+                            <td style="border-right: 1px solid #dee2e6;">${application.job_seeker.emailAddress}</td>
+
+                            <td style="border-right: 1px solid #dee2e6;">
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                        data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        `;
+                        jobApplicationsTable.appendChild(applicationRow);
+                    })
+
+                    let application = document.createElement('tr');
+                    jobApplicationsTable.innerHTML = data.html;
+
+                }
+
+                $('#sendMessageButton').html(
+                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
+                );
+
+                if (data.status) {
+                    $('#chatBox [name="message"]').val('');
+                    console.log('Message sent:', data);
+                } else {
+                    console.warn('Server responded with unexpected status:', data);
+                }
+
+            } catch (error) {
+                // Network error or unexpected failure
+                console.error('Fetch failed:', error);
+                alert('Network error. Please check your connection.');
+                $('#sendMessageButton').html(
+                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
+                );
+            }
         });
     </script>
 

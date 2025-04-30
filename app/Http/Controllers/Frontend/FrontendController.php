@@ -108,7 +108,7 @@ class FrontendController extends Controller
             ->unique();
 
         $ad_banners = [];
-        
+
         $ad_banners['bottom'] = AdsManager::where('which_page', 'jobs')
             ->where('publish_or_not', 1)
             ->where('active', 1)
@@ -117,7 +117,7 @@ class FrontendController extends Controller
             ->first();
 
         if ($ad_banners) {
-            
+
             $ad_banners['bottom'] ? $ad_banners['bottom']->image = asset('storage/' . $ad_banners['bottom']->image) : null;
         }
 
@@ -163,6 +163,8 @@ class FrontendController extends Controller
             ->where('jobSlug', '!=', $slug)        // Exclude the current job
             ->get();
 
+        $ad_banners = [];
+
         return view('frontend.job-lists', compact('slug', 'categories', 'skills', 'jobs', 'relatedJobs', 'industries'));
     }
     public function jobDetail($slug)
@@ -171,6 +173,7 @@ class FrontendController extends Controller
             ->where('jobStatus', 'published')
             ->where('jobSlug', $slug)
             ->first();
+        // return $jobDetail;
 
         $jobDetail->increment('jobViewerCount');
 
@@ -192,7 +195,19 @@ class FrontendController extends Controller
             ->pluck('jobLocation')
             ->unique();
 
-        return view('frontend.job-details', compact('jobDetail', 'slug', 'categories', 'skills', 'jobLocation'));
+        $ad_banners['right'] = AdsManager::where('which_page', 'jobs')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'right')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($ad_banners) {
+
+            $ad_banners['right'] ? $ad_banners['right']->image = asset('storage/' . $ad_banners['right']->image) : null;
+        }
+
+        return view('frontend.job-details', compact('jobDetail', 'slug', 'categories', 'skills', 'jobLocation', 'ad_banners'));
     }
 
     public function jobSearch(Request $request)
@@ -268,17 +283,17 @@ class FrontendController extends Controller
         //     ->get();
 
         $ad_banners = [];
-        
-        $ad_banners ['top'] = AdsManager::where('which_page', 'jobs')
+
+        $ad_banners['top'] = AdsManager::where('which_page', 'jobs')
             ->where('publish_or_not', 1)
             ->where('active', 1)
             ->where('position', 'top')
             ->orderBy('created_at', 'desc')
             ->first();
 
-        if($ad_banners){
-            
-            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        if ($ad_banners) {
+
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
         }
 
         // return ($prevquery.$location);
@@ -319,7 +334,20 @@ class FrontendController extends Controller
             ->unique()  // Remove duplicate skills
             ->values(); // Reindex collection
                     // dd($similar_jobs);
-        return view('frontend.apply', compact('job_detail', 'similar_jobs', 'categories', 'skills', 'jobLocation'));
+        $ad_banners = [];
+
+        $ad_banners['bottom'] = AdsManager::where('which_page', 'jobs')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'bottom')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($ad_banners) {
+
+            $ad_banners['bottom'] ? $ad_banners['bottom']->image = asset('storage/' . $ad_banners['bottom']->image) : null;
+        }
+        return view('frontend.apply', compact('job_detail', 'similar_jobs', 'categories', 'skills', 'jobLocation','ad_banners'));
     }
 
     public function bookmarkjob(Request $request)
@@ -584,15 +612,15 @@ class FrontendController extends Controller
             return $giftComment;
         });
 
-        $ad_banners = [];
-        $ad_banners ['middle'] = AdsManager::where('which_page', 'gift')
+        $ad_banners           = [];
+        $ad_banners['middle'] = AdsManager::where('which_page', 'gift')
             ->where('publish_or_not', 1)
             ->where('active', 1)
             ->where('position', 'middle')
             ->first();
 
-        if($ad_banners){
-            $ad_banners['middle'] ? $ad_banners['middle']->image = asset('storage/'.$ad_banners['middle']->image) : null;
+        if ($ad_banners) {
+            $ad_banners['middle'] ? $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) : null;
         }
 
         return view('frontend.giftNcoupon.giftDescription', compact('giftNcoupon', 'similarGifts', 'giftComments', 'ad_banners'));
@@ -603,9 +631,8 @@ class FrontendController extends Controller
     {
 
         // return $id;
-        $seller      = Admin::where('id', $id)->first(['id','fullName', 'email', 'status','profile_image', 'location', 'created_at']);
-        
-        
+        $seller = Admin::where('id', $id)->first(['id', 'fullName', 'email', 'status', 'profile_image', 'location', 'created_at']);
+
         $sellerGifts = GiftCoupon::where('adminId', $id)
             ->when(
                 in_array($type, ['1', '0']),
@@ -767,15 +794,15 @@ class FrontendController extends Controller
         });
 
         $ad_banners = [];
-        
-        $ad_banners ['top'] = AdsManager::where('which_page', 'forum')
+
+        $ad_banners['top'] = AdsManager::where('which_page', 'forum')
             ->where('publish_or_not', 1)
             ->where('active', 1)
             ->where('position', 'top')
             ->first();
 
-        if($ad_banners){
-            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        if ($ad_banners) {
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
         }
 
         // return $hot_topics;
@@ -832,7 +859,7 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads       = Advertisement::all();
+        $ads        = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();

@@ -19,7 +19,8 @@
                                 class="col-lg-5 col-md-6 col-sm-12 col-12 mb-2 d-flex justify-content-center align-items-center input-container">
                                 <i class="fa fa-user"></i>
 
-                                <input type="text" class="form-control" name="searchstr" placeholder="Key words" value="{{ request('searchstr') }}">
+                                <input type="text" class="form-control" name="searchstr" placeholder="Key words"
+                                    value="{{ request('searchstr') }}">
                             </div>
                             <!-- Input for Location -->
                             <div
@@ -89,68 +90,77 @@
 
                 <div class="col-md-8 job-job">
                     <h2>Search Results</h2>
-                    <div class="container mt-4">
+                    <div class="px-0 container mt-4">
                         @if ($findJobs->count() > 0)
                             @foreach ($findJobs as $job)
-                                <div class="position-relative">
+                                <div class="position-relative mx-0 px-0 mb-3">
                                     @auth('job_seekers')
                                         <form action="{{ route('job.bookmark') }}" method="post"
-                                            class="position-absolute end-0 me-1" style="top:0%; z-index:99;">
+                                            class="position-absolute end-0 m-1" style="top:0%; z-index:99;">
                                             @csrf
                                             @method('post')
                                             <input type="hidden" name="jobSeekerId"
                                                 value="{{ Auth::guard('job_seekers')->user()->id }}">
                                             <input type="hidden" name="jobPostId" value="{{ $job->id }}" />
 
-                                            <button type="submit" class="favourite-btn m-2" style="all:unset; cursor:pointer;">
-                                                <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
+                                            <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;">
+                                                <img src="{{ asset('frontend/assets/Images/Vector.png') }}" class="p-2" alt="Favorite">
                                             </button>
                                         </form>
                                     @endauth
+
                                     <a href="{{ route('frontend.job-details', ['slug' => $job->jobSlug]) }}"
-                                        class="text-dark d-block text-decoration-none mb-2">
-                                        <div class="job-card-1">
+                                        class="text-dark d-block text-decoration-none ">
 
-                                            <img src="{{ $job->jobBanner ? asset('storage/' . $job->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
-                                                alt="Company Image">
+                                        <div class="job-card-1 p-0 border border-secondary border-1 mb-3">
 
-
-                                            <div class="job-card-body">
-
-                                                <h5 class="card-title">{{ $job->jobTitle }}</h5>
-                                                <p>Company Name: {{ $job->jobCompany->companyName }}</p>
-                                                <p>Location: {{ $job->jobLocation }}</p>
-                                                <p>Experience: {{ $job->experience }}</p>
+                                            <div class="d-flex p-2 p-md-3">
+                                                <img src="{{ $job->jobBanner ? asset('storage/' . $job->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
+                                                    alt="Company Image" class="rounded">
 
 
-                                                <p class="d-flex flex-wrap">
-                                                    Source:
-                                                    @if (empty($job->jobCompany->link1) && empty($job->jobCompany->link2) && empty($job->jobCompany->link3))
-                                                        <span class="text-muted ms-2">N/A</span>
-                                                    @else
-                                                        &nbsp;
-                                                        <a href="{{ $job->jobCompany->link1 }}"
-                                                            target="_blank">{{ $job->jobCompany->link1 }}</a>
-                                                        &nbsp;
-                                                        <a href="{{ $job->jobCompany->link2 }}"
-                                                            target="_blank">{{ $job->jobCompany->link2 ? ', ' . $job->jobCompany->link2 : '' }}
-                                                        </a>
-                                                        <a href="{{ $job->jobCompany->link3 }}"
-                                                            target="_blank">{{ $job->jobCompany->link3 ? ', ' . $job->jobCompany->link3 : '' }}</a>
-                                                    @endif
+                                                <div class="job-card-body">
 
-                                                </p>
+                                                    <h5 class="card-title" style="max-width: 95%;">{{ $job->jobTitle }}</h5>
+                                                    <p>Company Name: {{ $job->jobCompany->companyName }}</p>
+                                                    <p>Location: {{ $job->jobLocation }}</p>
+                                                    <p>Experience: {{ $job->experience }}</p>
+
+
+                                                    <p class="d-flex flex-wrap">
+                                                        Source:
+                                                        @if (empty($job->jobCompany->link1) && empty($job->jobCompany->link2) && empty($job->jobCompany->link3))
+                                                            <span class="text-muted ms-2">N/A</span>
+                                                        @else
+                                                            &nbsp;
+                                                            <a href="{{ $job->jobCompany->link1 }}"
+                                                                target="_blank">{{ $job->jobCompany->link1 }}</a>
+                                                            &nbsp;
+                                                            <a href="{{ $job->jobCompany->link2 }}"
+                                                                target="_blank">{{ $job->jobCompany->link2 ? ', ' . $job->jobCompany->link2 : '' }}
+                                                            </a>
+                                                            <a href="{{ $job->jobCompany->link3 }}"
+                                                                target="_blank">{{ $job->jobCompany->link3 ? ', ' . $job->jobCompany->link3 : '' }}</a>
+                                                        @endif
+
+                                                    </p>
+
+                                                </div>
+
 
                                             </div>
+
                                             <div class="full-width-border"></div>
-                                            <div class="job-card-footer">
+                                            <div class="job-card-footer p-2 p-md-3 mt-0">
                                                 <small>Apply before:
                                                     {{ \Carbon\Carbon::parse($job->jobDeadline)->format('F d, Y') }}</small>
                                                 <small>Views: {{ $job->jobViewerCount }}</small>
                                             </div>
 
                                         </div>
+
                                     </a>
+
                                 </div>
                             @endforeach
                             <div class="row mt-3">
@@ -239,7 +249,7 @@
                     @endforeach --}}
                 </div>
 
-                <div class="col-md-4 px-4 mt-4">
+                {{-- <div class="col-md-4 px-2 mt-4">
                     <div class="job-categories">
                         <h3 class="sidebar-title">Jobs by Category</h3>
                         <ul class="category-list">
@@ -289,6 +299,68 @@
                         </ul>
                     </div>
 
+                </div> --}}
+
+                <div class="col-md-4 my-3">
+                    <div class="job-categories p-0">
+                        <h3 class="sidebar-title p-3">Jobs by Category</h3>
+                        <ul class="category-list px-3 overflow-auto" style="max-height: 400px;">
+                            @foreach ($categories as $item)
+                                <li style="color: #0064A7">
+                                    <form action="{{ route('frontend.job-search') }}">
+
+                                        <input type="hidden" name="jobsby" value="category">
+                                        <input type="hidden" name="searchcategoryid" value="{{ $item->id }}">
+                                        <button type="submit"
+                                            style="all: unset; cursor: pointer;">{{ $item->jobCategoryName }}</button>
+                                    </form>
+                                </li>
+                            @endforeach
+
+                        </ul>
+                    </div>
+                    <div class="job-categories mt-3 p-0">
+                        <h3 class="sidebar-title p-3">Jobs by Skill</h3>
+                        <ul class="category-list px-3 overflow-auto" style="max-height: 400px;">
+                            @foreach ($skills as $item)
+                                <li style="color: #0064A7">
+                                    <form action="{{ route('frontend.job-search') }}">
+
+                                        <input type="hidden" name="jobsby" value="skill">
+                                        <input type="hidden" name="searchstr" value="{{ $item }}">
+                                        <button type="submit"
+                                            style="all: unset; cursor: pointer;">{{ $item }}</button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="job-categories mt-4 p-0">
+                        <h3 class="sidebar-title p-3  ">Jobs by Location</h3>
+                        <ul class="category-list  px-3 overflow-auto" style="max-height: 400px;">
+                            @foreach ($jobLocation as $item)
+                                <li style="color: #0064A7">
+                                    <form action="{{ route('frontend.job-search') }}">
+
+
+                                        <input type="hidden" name="location" value="{{ $item }}">
+                                        <button type="submit"
+                                            style="all: unset; cursor: pointer;">{{ $item }}</button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    {{-- @if ($ad_banners['right'])
+                        <a href="{{ isset($ad_banners['right']) ? $ad_banners['right']->link : '#' }}" target="_blank" href="{{ $ad_banners['right']->link }}" class="d-block mt-3"
+                            style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                            <img src="{{ isset($ad_banners['right']) ? $ad_banners['right']->image : '#' }}" class="w-100 rounded-2" style="aspect-ratio: 1/3;"
+                                alt="img-fluid">
+                        </a>
+    
+    
+                        
+                    @endif --}}
                 </div>
             </div>
         </div>

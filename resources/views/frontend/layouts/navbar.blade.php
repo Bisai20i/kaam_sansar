@@ -598,7 +598,7 @@
                                 class="fa-solid fa-folder ms-2" style="cursor:pointer;"></i></a><br>272.38</p>
                 </div>
                 <ul class="list-unstyled text-start">
-                    <li><a href="{{ route('jobseeker.getProfile', @Auth::guard('job_seekers')->user()->id) }}"
+                    <li><a href="{{ route('jobseeker.getFProfile', @Auth::guard('job_seekers')->user()->id) }}"
                             class="d-block"><i class="fas fa-user p-1"></i> Profile</a>
                     </li>
                     <hr>

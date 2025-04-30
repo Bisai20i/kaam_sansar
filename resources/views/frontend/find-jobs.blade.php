@@ -73,19 +73,20 @@
             </div>
         </div>
     </section>
-    
+
 
     <section class="jobs">
         @if (@$findJobs->count() > 0)
             <div class="container my-5">
-                <h3 class="mb-4">Top Jobs</h3>
+                <h3 class="mb-4">Recommended Jobs for You</h3>
                 <div class="row g-3 justify-content-center">
                     <!-- Job 1 -->
+
                     @foreach ($findJobs as $item)
                         <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card position-relative">
                             @auth('job_seekers')
                                 <form action="{{ route('job.bookmark') }}" method="post"
-                                    class="position-absolute end-0 me-4 mt-5" style="top:40%; z-index:15;">
+                                    class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
                                     @csrf
                                     <input type="hidden" name="jobSeekerId"
                                         value="{{ Auth::guard('job_seekers')->user()->id }}">
@@ -95,21 +96,28 @@
                                         <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                     </button>
                                 </form>
+                            @else
+                                <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
+                                    <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#loginModal">
+                                        <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
+                                    </button>
+                                </div>
                             @endauth
+
+
                             <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"
                                 class="text-decoration-none">
                                 <div class="card">
                                     <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
-                                        class="card-img-top" alt="JobBanner">
+                                        class="card-img-top rounded-1" alt="BMW">
                                     <div class="card-body">
-                                        {{-- <button class="favourite-btn">
-                                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
-                                        </button> --}}
-                                        <h5 class="card-title">{{ $item->jobTitle }}</h5>
 
-                                        <p class="card-text text-muted mb-1">{{ $item->jobLevel }}</p>
-                                        <p class="card-text text-muted">{{ $item->jobLocation }}</p>
-                                        <p class="card-text text-muted">
+                                        <h5 class="card-title text-truncate mb-1 me-3">{{ $item->jobTitle }}</h5>
+
+                                        <p class="card-text text-muted mb-0">{{ $item->jobLevel }}</p>
+                                        <p class="card-text text-muted mb-1">{{ $item->jobLocation }}</p>
+                                        <p class="card-text text-muted ">
                                             <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
                                             </small>
                                         </p>
@@ -118,50 +126,94 @@
                             </a>
                         </div>
                     @endforeach
+                    
                 </div>
-                <div class="row mt-3">
-                    <nav>
-                        <ul class="pagination justify-content-end converter">
-                            @if ($findJobs->onFirstPage())
-                                <li class="page-item disabled d-none">
-                                    <a class="page-link primary_color_text">Previous</a>
-                                </li>
-                            @else
-                                <li class="page-item">
-                                    <a class="page-link primary_color_text"
-                                        href="{{ $findJobs->previousPageUrl() }}">Previous</a>
-                                </li>
-                            @endif
 
-                            @foreach ($findJobs->getUrlRange(1, $findJobs->lastPage()) as $page => $url)
-                                @if ($page == $findJobs->currentPage())
-                                    <li class="page-item page-item active"><a class="page-link primary_color_text"
-                                            href="#">{{ $page }}</a></li>
+
+                @if ($findJobs->hasMorePages() || $findJobs->currentPage() != 1)
+
+                    <div class="row mt-3">
+                        <nav>
+                            <ul class="pagination justify-content-end converter">
+                                {{-- Previous Button --}}
+                                @if ($findJobs->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <a class="page-link primary_color_text">&lt;</a>
+                                    </li>
                                 @else
-                                    <li class="page-item"><a class="page-link primary_color_text"
-                                            href="{{ $url }}">{{ $page }}</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link primary_color_text"
+                                            href="{{ $findJobs->previousPageUrl() }}">&lt;</a>
+                                    </li>
                                 @endif
-                            @endforeach
 
-                            @if ($findJobs->currentPage() < $findJobs->lastPage() - 2)
-                                <li class="page-item"><a class="page-link primary_color_text">...</a></li>
-                                <li class="page-item"><a class="page-link primary_color_text"
-                                        href="{{ $findJobs->url($findJobs->lastPage()) }}">{{ $findJobs->lastPage() }}</a>
-                                </li>
-                            @endif
+                                {{-- Pagination Numbers --}}
+                                @php
+                                    $currentPage = $findJobs->currentPage();
+                                    $lastPage = $findJobs->lastPage();
+                                    $pageRange = 2; // Number of pages to display before and after the current page
+                                @endphp
 
-                            @if ($findJobs->hasMorePages())
-                                <li class="page-item">
-                                    <a class="page-link primary_color_text" href="{{ $findJobs->nextPageUrl() }}">Next</a>
+                                {{-- Show First Page --}}
+                                @if ($currentPage > $pageRange + 1)
+                                    <li class="page-item">
+                                        <a class="page-link primary_color_text" href="{{ $findJobs->url(1) }}">1</a>
+                                    </li>
+                                    @if ($currentPage > $pageRange + 2)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+                                @endif
+
+                                {{-- Show Pages Before Current Page --}}
+                                @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                                    <li class="page-item">
+                                        <a class="page-link primary_color_text"
+                                            href="{{ $findJobs->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                {{-- Current Page --}}
+                                <li class="page-item active">
+                                    <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
                                 </li>
-                            @else
-                                <li class="page-item disabled">
-                                    <a class="page-link primary_color_text">Next</a>
-                                </li>
-                            @endif
-                        </ul>
-                    </nav>
-                </div>
+
+                                {{-- Show Pages After Current Page --}}
+                                @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                                    <li class="page-item">
+                                        <a class="page-link primary_color_text"
+                                            href="{{ $findJobs->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                {{-- Show Last Page --}}
+                                @if ($currentPage < $lastPage - $pageRange)
+                                    @if ($currentPage < $lastPage - $pageRange - 1)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link primary_color_text"
+                                            href="{{ $findJobs->url($lastPage) }}">{{ $lastPage }}</a>
+                                    </li>
+                                @endif
+
+                                {{-- Next Button --}}
+                                @if ($findJobs->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link primary_color_text"
+                                            href="{{ $findJobs->nextPageUrl() }}">&gt;</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled">
+                                        <a class="page-link primary_color_text">&gt;</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
+                    </div>
+
+
+                @endif
+
             </div>
         @else
             <div class="container my-5">
@@ -175,10 +227,10 @@
 
         <div class="container my-5">
 
-            <div class="d-flex flex-wrap gap-4">
-                <div class="col col-md-6 col-lg-3 job-categories flex-grow-1">
-                    <h3 class="sidebar-title">Jobs by Category</h3>
-                    <ul class="category-list">
+            <div class="row flex-wrap gap-3 justify-content-center align-items-start">
+                <div class="col col-md-6 col-lg-3 job-categories flex-grow-1 px-0" style="background: #F3F3F3;">
+                    <h3 class="sidebar-title px-3">Jobs by Category</h3>
+                    <ul class="category-list mb-0 overflow-auto px-3" style="max-height: 500px;">
                         @foreach ($categories as $item)
                             <li>
                                 <form action="{{ route('frontend.job-search') }}">
@@ -193,9 +245,9 @@
 
                     </ul>
                 </div>
-                <div class="col col-md-6 col-lg-3 job-categories flex-grow-1">
-                    <h3 class="sidebar-title">Jobs by Skill</h3>
-                    <ul class="category-list">
+                <div class="col col-md-6 col-lg-3 job-categories flex-grow-1 px-0" style="background: #F3F3F3;">
+                    <h3 class="sidebar-title px-3">Jobs by Skill</h3>
+                    <ul class="category-list mb-0 px-3 overflow-auto" style="max-height: 500px;">
                         @foreach ($skills as $item)
                             <li>
                                 <form action="{{ route('frontend.job-search') }}">
@@ -209,9 +261,9 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="col col-md-6 col-lg-3 job-categories flex-grow-1">
-                    <h3 class="sidebar-title">Jobs by Location</h3>
-                    <ul class="category-list">
+                <div class="col col-md-6 col-lg-3 job-categories px-0 flex-grow-1" style="background: #F3F3F3;">
+                    <h3 class="sidebar-title px-3">Jobs by Location</h3>
+                    <ul class="category-list mb-0 overflow-auto px-3" style="max-height: 500px;">
                         @foreach ($jobLocation as $item)
                             <li>
                                 <form action="{{ route('frontend.job-search') }}">

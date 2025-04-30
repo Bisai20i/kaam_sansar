@@ -1156,8 +1156,30 @@ class FrontendAPIController extends Controller
 
     }
 
-    // public function resumeHelp(){
-    //     return view('frontend.resume.index');
-    // }
+    public function getResumeHelp(){
+        try {
+            $freeResume = ResumeHelp::where('type', 0)
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+            $freeResume->transform(function ($resume) {
+                $resume->image_preview = asset('storage/' . $resume->image_preview);
+                return $resume;
+            });
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Data fetched successfully!',
+                'data'    => $freeResume,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Failed to fetch data',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
 
 }

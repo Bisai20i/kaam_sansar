@@ -24,9 +24,9 @@ class JobPostController extends Controller
 
 
 /*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Display a listing of the resource.
-     *
+
+    //  * Display a listing of the resource.
+    //  *
 
 /******  32fb2f38-306f-471f-9819-160eeb709f7d  *******/
     public function index()
