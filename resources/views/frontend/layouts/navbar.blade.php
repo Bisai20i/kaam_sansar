@@ -584,7 +584,7 @@
     data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
-            <h5 class="modal-title text-center" id="loginModalLabel" style="font-weight: 600px; font-size: 40px;">Login to your Account</h5>
+            <h5 class="modal-title text-center" id="loginModalLabel" style="font-weight: 500px; font-size: 35px;">Login to your Account</h5>
             <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
                 aria-label="Close"></button>
 
@@ -717,7 +717,7 @@
     data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
-            <h5 class="modal-title text-center" id="registerModalLabel" style="font-weight: 600; font-size: 40px;">Create an account</h5>
+            <h5 class="modal-title text-center" id="registerModalLabel" style="font-weight: 500; font-size: 35px;">Create an account</h5>
             <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
                 aria-label="Close"></button>
 
