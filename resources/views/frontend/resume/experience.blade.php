@@ -254,6 +254,22 @@
             const experienceData = collectExperienceData();
             const result = await saveExperienceData(experienceData);
             if (result.success) {
+                const experience = result.experience;
+                document.getElementById('overviewExperiences').innerHTML = `
+                    <p><strong>Job Title:</strong> ${experience.jobTitle ?? ''}</p>
+                    <p><strong>Company Name:</strong> ${experience.companyName ?? ''}</p>
+                    <p><strong>Location:</strong> ${experience.location ?? ''}</p>
+                    <p><strong>Start Date:</strong> ${experience.startDate ?? ''}</p>
+                    <p><strong>End Date:</strong> ${experience.endDate ?? ''}</p>
+                    <p><strong>Description:</strong> ${experience.experienceDescription ?? ''}</p>
+                    <p><strong>Salary Rating:</strong> ${experience.salaryRating ?? ''}</p>
+                    <p><strong>Salary Feedback:</strong> ${experience.salaryFeedback ?? ''}</p>
+                    <p><strong>Working Environment Rating:</strong> ${experience.workingEnvironmentRating ?? ''}</p>
+                    <p><strong>Working Environment Feedback:</strong> ${experience.workingEnvironmentFeedback ?? ''}</p>
+                    <p><strong>Benefits Rating:</strong> ${experience.benefitsRating ?? ''}</p>
+                    <p><strong>Benefits Feedback:</strong> ${experience.benefitsFeedback ?? ''}</p>
+                    <hr>
+                `;
                 document.getElementById('experienceForm').reset(); // Reset inputs
                 document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false); // Reset radios
                 appendExperienceCard(result.experience);
@@ -267,6 +283,22 @@
             const experienceData = collectExperienceData();
             const result = await saveExperienceData(experienceData);
             if (result.success) {
+                const experience = result.experience;
+                document.getElementById('overviewExperience').innerHTML = `
+                    <p><strong>Job Title:</strong> ${experience.jobTitle ?? ''}</p>
+                    <p><strong>Company Name:</strong> ${experience.companyName ?? ''}</p>
+                    <p><strong>Location:</strong> ${experience.location ?? ''}</p>
+                    <p><strong>Start Date:</strong> ${experience.startDate ?? ''}</p>
+                    <p><strong>End Date:</strong> ${experience.endDate ?? ''}</p>
+                    <p><strong>Description:</strong> ${experience.experienceDescription ?? ''}</p>
+                    <p><strong>Salary Rating:</strong> ${experience.salaryRating ?? ''}</p>
+                    <p><strong>Salary Feedback:</strong> ${experience.salaryFeedback ?? ''}</p>
+                    <p><strong>Working Environment Rating:</strong> ${experience.workingEnvironmentRating ?? ''}</p>
+                    <p><strong>Working Environment Feedback:</strong> ${experience.workingEnvironmentFeedback ?? ''}</p>
+                    <p><strong>Benefits Rating:</strong> ${experience.benefitsRating ?? ''}</p>
+                    <p><strong>Benefits Feedback:</strong> ${experience.benefitsFeedback ?? ''}</p>
+                    <hr>
+                `;
                 appendExperienceCard(result.experience);
                 document.getElementById('experience').style.display = 'none';
                 document.getElementById('training').style.display = 'block';
@@ -276,5 +308,5 @@
             }
         });
     })
-</script>  
+</script>
 @endpush

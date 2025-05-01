@@ -60,7 +60,7 @@
             @endif
         </div>
     </div>
-@push('scripts')
+    @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -70,7 +70,6 @@
                     skillProficiency: document.getElementsByName('skillProficiency')[0].value
                 };
             }
-
             async function saveSkillData(skillData) {
                 try {
                     const response = await fetch("{{ route('skills.store') }}", {
@@ -89,7 +88,6 @@
                     };
                 }
             }
-
             function appendSkillCard(skill) {
                 const card = document.createElement('div');
                 card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
@@ -121,6 +119,11 @@
                 const skillData = collectSkillData();
                 const result = await saveSkillData(skillData);
                 if (result.success) {
+                    const skill = result.skill;
+                    document.getElementById('overviewSkills').innerHTML = `
+                        <p><strong>Skill:</strong> ${skill.skillName}</p>
+                        <p><strong>Proficiency:</strong> ${skill.skillProficiency}</p>
+                    `;
                     document.getElementById('skillForm').reset();
                     appendSkillCard(result.skill);
                 }
@@ -131,6 +134,11 @@
                 const skillData = collectSkillData();
                 const result = await saveSkillData(skillData);
                 if (result.success) {
+                    const skill = result.skill;
+                    document.getElementById('overviewSkill').innerHTML = `
+                        <p><strong>Skill:</strong> ${skill.skillName}</p>
+                        <p><strong>Proficiency:</strong> ${skill.skillProficiency}</p>
+                    `;
                     appendSkillCard(result.skill);
                     document.getElementById('skill').style.display = 'none';
                     document.getElementById('achievement').style.display = 'block';
@@ -140,5 +148,5 @@
             });
 
         })
-    </script>      
-@endpush
+    </script>
+    @endpush

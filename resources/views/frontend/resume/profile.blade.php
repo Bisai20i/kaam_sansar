@@ -14,7 +14,7 @@
                     style="color:#0064A7;">
                     <i class="fas fa-upload"></i> Upload Your Image
                 </label>
-                <input type="file" class="file-input" id="profileUpload" accept="image/*"
+                <input type="file" class="file-input" id="profileUpload" accept="image/*" name="profileImg"
                     onchange="previewProfile(event)">
             </div>
             <div class="row mb-3">
@@ -92,6 +92,7 @@
                 </div>
             </div>
             <div class="text-end">
+            <button type="submit" class="btn text-center skip-btn mx-2" data-current="profile" data-next="visa" data-link="visaLink">Skip</button>
                 <button type="submit" class="btn next-btn" id="nextProfile">save & continue</button>
             </div>
         </form>
@@ -129,7 +130,7 @@
                         const p = data.profile;
                         document.getElementById('overviewName').textContent = `${p.firstName} ${p.lastName}`;
                         document.getElementById('overviewRole').textContent = p.designation;
-                        document.getElementById('overviewImage').src = p.imageUrl;
+                        document.getElementById('overviewImage').src = p.profileImg ? `/${p.profileImg}` : 'images/default-profile.png';
                         document.getElementById('overviewContent').innerHTML = `
                             <p><strong>Address:</strong> ${p.address}</p>
                             <p><strong>Country:</strong> ${p.country}</p>

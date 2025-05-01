@@ -83,125 +83,210 @@ Resume Maker
             }
         </style>
         <section>
-        <!-- Profile Header -->
-        <div class="profile-header">
-            <div class="container">
-                <h5>Hi, Utsav Dhungana</h5>
-                <img class="resume-img">
-                <p class="d-flex">
-                    <i class="fas fa-envelope  pt-1"></i> utsavdhungana2@gmail.com
-                    <i class="fas fa-phone-alt ps-4  pt-1"></i> 9856015044
-                </p>
-                <h4>Create Your Resume Today and Find The Perfect Job for You</h4>
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="container">
+                    <h5>Hi, Utsav Dhungana</h5>
+                    <img class="resume-img">
+                    <p class="d-flex">
+                        <i class="fas fa-envelope  pt-1"></i> utsavdhungana2@gmail.com
+                        <i class="fas fa-phone-alt ps-4  pt-1"></i> 9856015044
+                    </p>
+                    <h4>Create Your Resume Today and Find The Perfect Job for You</h4>
 
-                <!-- Add d-flex to align buttons in a row -->
-                <div class="d-flex gap-2">
-                    <button class="btn btn-edit">Edit <i class="fas fa-edit text-light ps-2"></i></button>
-                    <button class="btn btn-share">Share <i class="fas fa-share text-light ps-2"></i></button>
+                    <!-- Add d-flex to align buttons in a row -->
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-edit">Edit <i class="fas fa-edit text-light ps-2"></i></button>
+                        <button class="btn btn-share">Share <i class="fas fa-share text-light ps-2"></i></button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="container mt-4">
-            <div class="row d-flex flex-wrap align-items-start">
-                <!-- Sidebar -->
-                <div class="col-md-4 col-lg-3 col-sm-12 col-12">
-                    <div class="card card-first border border-0">
-                        <div class="sidebox">
-                            <ul class="nav flex-column">
-                                <li><a href="#" class="profile-link active" id="profileLink" data-sectionId="profile">
-                                        <i class="bi bi-person"></i> Profile Information
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                                <li><a href="#" class="profile-link" id="visaLink" data-sectionId="visa">
-                                        <i class="bi bi-credit-card"></i> Visa
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                                <li><a href="#" class="profile-link" id="educationLink" data-sectionId="education">
-                                        <i class="bi bi-mortarboard"></i> Education
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                                <li><a href="#" class="profile-link" id="projectLink" data-sectionId="project">
-                                        <i class="bi bi-clipboard-check"></i> Project
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                                <li><a href="#" class="profile-link" id="skillLink" data-sectionId="skill">
-                                        <i class="bi bi-tools"></i> Skills
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                                <li><a href="#" class="profile-link" id="achievementLink" data-sectionId="achievement">
-                                        <i class="bi bi-trophy"></i> Achievements
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                                <li><a href="#" class="profile-link" id="experienceLink" data-sectionId="experience">
-                                        <i class="bi bi-briefcase"></i> Experience
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                                <li><a href="#" class="profile-link" id="trainingLink" data-sectionId="training">
-                                        <i class="bi bi-journal"></i> Trainings
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                                <li><a href="#" class="profile-link" id="languageLink" data-sectionId="language">
-                                        <i class="bi bi-globe"></i> Language
-                                        <i class="fas fa-angle-right arrow"></i></a></li>
-                            </ul>
+            <div class="container mt-4">
+                <div class="row d-flex flex-wrap align-items-start">
+                    <!-- Sidebar -->
+                    <div class="col-md-4 col-lg-3 col-sm-12 col-12">
+                        <div class="card card-first border border-0">
+                            <div class="sidebox">
+                                <ul class="nav flex-column">
+                                    <li><a href="#" class="profile-link active" id="profileLink" data-sectionId="profile">
+                                            <i class="bi bi-person"></i> Profile Information
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link" id="visaLink" data-sectionId="visa">
+                                            <i class="bi bi-credit-card"></i> Visa
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link" id="educationLink" data-sectionId="education">
+                                            <i class="bi bi-mortarboard"></i> Education
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link" id="projectLink" data-sectionId="project">
+                                            <i class="bi bi-clipboard-check"></i> Project
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link" id="skillLink" data-sectionId="skill">
+                                            <i class="bi bi-tools"></i> Skills
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link" id="achievementLink" data-sectionId="achievement">
+                                            <i class="bi bi-trophy"></i> Achievements
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link" id="experienceLink" data-sectionId="experience">
+                                            <i class="bi bi-briefcase"></i> Experience
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link" id="trainingLink" data-sectionId="training">
+                                            <i class="bi bi-journal"></i> Trainings
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link" id="languageLink" data-sectionId="language">
+                                            <i class="bi bi-globe"></i> Language
+                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                </ul>
 
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Forms -->
-                <div class="col-md-8 col-lg-6 col-sm-12 col-12">
-                    <div id="contentArea">
-                        <!-- Profile Section (Initially hidden) -->
-                        @include('frontend.resume.profile')
-                        <!-- Visa Section (Initially hidden) -->
-                        @include('frontend.resume.visa')
-                        <!--Education Section-->
-                        @include('frontend.resume.education')
-                        <!--Project Section-->
-                        @include('frontend.resume.project')
-                        <!-- Skills Section (Initially hidden) -->
-                        @include('frontend.resume.skill')
-                        <!-- Achievements Section (Initially hidden) -->
-                        @include('frontend.resume.achievement')
-                        <!-- Experience Section (Initially hidden) -->
-                        @include('frontend.resume.experience')
-                        <!-- Trainings Section (Initially hidden) -->
-                        @include('frontend.resume.training')
-                        <!--Language section -->
-                        @include('frontend.resume.language')
+                    <!-- Forms -->
+                    <div class="col-md-8 col-lg-6 col-sm-12 col-12">
+                        <div id="contentArea">
+                            <!-- Profile Section (Initially hidden) -->
+                            @include('frontend.resume.profile')
+                            <!-- Visa Section (Initially hidden) -->
+                            @include('frontend.resume.visa')
+                            <!--Education Section-->
+                            @include('frontend.resume.education')
+                            <!--Project Section-->
+                            @include('frontend.resume.project')
+                            <!-- Skills Section (Initially hidden) -->
+                            @include('frontend.resume.skill')
+                            <!-- Achievements Section (Initially hidden) -->
+                            @include('frontend.resume.achievement')
+                            <!-- Experience Section (Initially hidden) -->
+                            @include('frontend.resume.experience')
+                            <!-- Trainings Section (Initially hidden) -->
+                            @include('frontend.resume.training')
+                            <!--Language section -->
+                            @include('frontend.resume.language')
+                        </div>
                     </div>
-                </div>
 
-                <!-- Overview-->
-                <div class="col-md-12 col-lg-3 col-sm-12 col-12">
-                    <div class="card card-last">
-                        <div class="card card-in" id="overviewCard">
-                            <div class="overview-profile" id="overviewProfile" style="overflow-y: auto;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="left-section">
-                                        <h6 id="overviewName"></h6>
-                                        <p id="overviewRole"></p>
+                    <!-- Overview-->
+                    <div class="col-md-12 col-lg-3 col-sm-12 col-12">
+                        <div class="card card-last">
+                            <div class="card card-in" id="overviewCard">
+                                <div class="overview-profile" id="overviewProfile" style="overflow-y: auto;">
+                                    <div class="d-flex justify-content-between align-items-center" id="profileDisplay">
+                                        <div class="left-section">
+                                            <h6>{{ $profile->firstName ?? '' }} {{ $profile->lastName ?? ''}}</h6>
+                                            <p>{{ $profile->designation ?? '' }}</p>
+                                        </div>
+                                        <div class="right-section">
+                                            @if(isset($profile) && $profile->profileImg)
+                                            <img src="{{ asset($profile->profileImg) }}" class="profile-picture rounded-circle">
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="right-section">
-                                        <img id="overviewImage" class="profile-picture rounded-circle">
+                                    <div class="d-flex justify-content-between align-items-center">
+
+                                        <div class="left-section">
+                                            <h6 id="overviewName"></h6>
+                                            <p id="overviewRole"></p>
+                                        </div>
+                                        <div class="right-section">
+                                        <img id="overviewImage" class="profile-picture rounded-circle img-fluid" style="width: 100px; height: 100px; object-fit: cover;">
+                                        </div>
+                                    </div>
+                                    <div id="overviewContent">
+                                    </div>
+                                    <div>
+                                        <div>
+                                            @foreach ( $educations as $education )
+                                            <p><strong>School:</strong>{{ $education->schoolName ?? '' }}</p>
+                                            <p><strong>Degree:</strong>{{ $education->degree ?? '' }}</p>
+                                            <p><strong>City:</strong>{{ $education->city ?? '' }}</p>
+                                            <p><strong>Dates:</strong> {{ $education->startDate ?? '' }}- {{ $education->graduationDate ?? '' }}</p>
+                                            <p><strong>Summary:</strong> {{ $education->educationDescription ?? '' }}</p>
+                                            @endforeach
+                                        </div>
+                                        <div id="overviewEducations"></div>
+                                        <div id="overviewEducation"></div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            @foreach ( $projects as $project )
+                                            <p><strong>projectTitle:</strong>{{ $project->projectTitle ?? '' }}</p>
+                                            <p><strong>projectLink:</strong>{{ $project->projectLink ?? '' }}</p>
+                                            <p><strong>projectDescription:</strong>{{ $project->projectDescription ?? '' }}</p>
+                                            @endforeach
+                                        </div>
+                                        <div id="overviewProjects"></div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            @foreach ( $skills as $skill )
+                                            <p><strong>Skill Name:</strong>{{ $skill->skillName ?? '' }}</p>
+                                            <p><strong>Skill Proficiency:</strong>{{ $skill->skillProficiency ?? '' }}</p>
+                                            @endforeach
+                                        </div>
+                                        <div id="overviewSkills"></div>
+                                        <div id="overviewSkill"></div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            @foreach ( $achievements as $achievement)
+                                            <p><strong>achievement Title:</strong>{{ $achievement->achievementTitle ?? '' }}</p>
+                                            <p><strong>Skill Proficiency:</strong>{{ $achievement->achievementDescription ?? '' }}</p>
+                                            @endforeach
+                                        </div>
+                                        <div id="overviewAchievements"></div>
+                                        <div id="overviewAchievement"></div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            @foreach ($experiences as $experience)
+                                            <p><strong>Job Title:</strong> {{ $experience->jobTitle ?? '' }}</p>
+                                            <p><strong>Company Name:</strong> {{ $experience->companyName ?? '' }}</p>
+                                            <p><strong>Location:</strong> {{ $experience->location ?? '' }}</p>
+                                            <p><strong>Start Date:</strong> {{ $experience->startDate ?? '' }}</p>
+                                            <p><strong>End Date:</strong> {{ $experience->endDate ?? '' }}</p>
+                                            <p><strong>Description:</strong> {{ $experience->experienceDescription ?? '' }}</p>
+                                            <p><strong>Salary Rating:</strong> {{ $experience->salaryRating ?? '' }}</p>
+                                            <p><strong>Salary Feedback:</strong> {{ $experience->salaryFeedback ?? '' }}</p>
+                                            <p><strong>Working Environment Rating:</strong> {{ $experience->workingEnvironmentRating ?? '' }}</p>
+                                            <p><strong>Working Environment Feedback:</strong> {{ $experience->workingEnvironmentFeedback ?? '' }}</p>
+                                            <p><strong>Benefits Rating:</strong> {{ $experience->benefitsRating ?? '' }}</p>
+                                            <p><strong>Benefits Feedback:</strong> {{ $experience->benefitsFeedback ?? '' }}</p>
+                                            <hr>
+                                            @endforeach
+
+                                        </div>
+                                        <div id="overviewExperiences"></div>
+                                        <div id="overviewExperience"></div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            @foreach ($trainings as $training)
+                                            <p><strong>Training Title:</strong> {{ $training->trainingTitle ?? '' }}</p>
+                                            <p><strong>Institution Name:</strong> {{ $training->institutionName ?? '' }}</p>
+                                            <p><strong>Completion Date:</strong> {{ $training->completionDate ?? '' }}</p>
+                                            @endforeach
+
+                                        </div>
+                                        <div id="overviewTrainings"></div>
+                                        <div id="overviewTraining"></div>
+                                    </div>
+                                    <div>
+                                        @foreach ($languages as $language)
+                                        <p><strong>Language Name:</strong> {{ $language->languageName ?? '' }}</p>
+                                        <p><strong>Language Proficiency:</strong> {{ $language->languageProficiency ?? '' }}</p>
+                                        <hr>
+                                        @endforeach
+                                        <div id="overviewLanguages"></div>
+                                        <div id="overviewLanguage"></div>
                                     </div>
                                 </div>
-                                <div id="overviewContent">
-                                </div>
-                                <div id="overviewEducation"></div>
-
-                                <div id="overviewProjects"></div>
-
-                                <div id="overviewSkills"></div>
-
-                                <div id="overviewAchievements"></div>
-
-                                <div id="overviewExperiences"></div>
-
-                                <div id="overviewTrainings"></div>
-
-                                <div id="overviewLanguages"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 </main>
 @push('scripts')
 <script>

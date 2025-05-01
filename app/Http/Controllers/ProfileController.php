@@ -89,8 +89,7 @@ class ProfileController extends Controller
                     'country' => $request->country,
                     'bio' => $request->bio,
                 ];
-        
-                // Only add image if uploaded
+                        // Only add image if uploaded
                 if ($profileImagePath) {
                     $profileData['profileImg'] = $profileImagePath;
                 }
@@ -110,6 +109,7 @@ class ProfileController extends Controller
                     : response()->json([
                         'success' => true,
                         'message' => 'Personal Profile saved successfully.',
+                        'profile'=>$profile
                     ]);
         
             } catch (\Exception $e) {

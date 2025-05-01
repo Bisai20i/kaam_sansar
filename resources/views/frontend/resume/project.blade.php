@@ -101,21 +101,45 @@
          }
 
          function appendProjectCard(project) {
+             // grab CSRF once
+             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
              const card = document.createElement('div');
              card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+
              card.innerHTML = `
-                    <div class="d-flex justify-content-between">
-                        <div><h5>${project.projectTitle}</h5></div>
-                        <div>
-                            <a href="${project.projectLink}" target="_blank" class="btn fw-semibold" style="color: #0064A7;">View</a>
-                        </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                    <h5>${project.projectTitle}</h5>
                     </div>
-                    <div class="text-black-50">
-                        <p class="m-0">${project.projectDescription}</p>
+                    <div>
+                    <a href="/projects/${project.id}/edit" class="btn fw-semibold" style="color: #0064A7;">
+                        Edit
+                    </a>
+                    <form action="/projects/${project.id}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn text-danger fw-semibold">
+                        Delete
+                        </button>
+                    </form>
                     </div>
+                </div>
+                <div class="text-black-50">
+                    ${project.projectLink ? `
+                    <p class="m-0">
+                        <a href="${project.projectLink}" target="_blank" style="color: #0064A7;">
+                        ${project.projectLink} 
+                        </a>
+                    </p>
+                    ` : ''}
+                    <p class="m-0">${project.projectDescription || ''}</p>
+                </div>
                 `;
+
              document.getElementById('projectList').appendChild(card);
          }
+
 
          document.getElementById('projectForm').addEventListener('submit', function(e) {
              e.preventDefault();
@@ -127,17 +151,30 @@
              const projectData = collectProjectData();
              const result = await saveProjectData(projectData);
              if (result.success) {
+                 const project = result.project;
+                 document.getElementById('overviewProjects').innerHTML = `
+                        <p><strong>Project Title:</strong> ${project.projectTitle}</p>
+                        <p><strong>Project Link:</strong> <a href="${project.projectLink}" target="_blank">${project.projectLink}</a></p>
+                        <p><strong>Project Description:</strong> ${project.projectDescription}</p>
+                    `;
                  document.getElementById('projectForm').reset();
-                 appendProjectCard(result.project); // Assuming `result.project` is returned
+                 appendProjectCard(result.project); 
              }
          });
 
          document.getElementById('submitProject').addEventListener('click', async function(e) {
              e.preventDefault();
+             console.log(collectProjectData());
              const projectData = collectProjectData();
              const result = await saveProjectData(projectData);
              if (result.success) {
-                 appendProjectCard(result.project); // Assuming `result.project` is returned
+                const project = result.project;
+                 document.getElementById('overviewProject').innerHTML = `
+                        <p><strong>Project Title:</strong> ${project.projectTitle}</p>
+                        <p><strong>Project Link:</strong> <a href="${project.projectLink}" target="_blank">${project.projectLink}</a></p>
+                        <p><strong>Project Description:</strong> ${project.projectDescription}</p>
+                    `;
+                 appendProjectCard(result.project); 
                  document.getElementById('project').style.display = 'none';
                  document.getElementById('skill').style.display = 'block';
                  document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));

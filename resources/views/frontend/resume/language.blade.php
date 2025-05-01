@@ -60,40 +60,40 @@
         @endif
     </div>
 </div>
-    @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
 
-            function collectLanguageData() {
+        function collectLanguageData() {
+            return {
+                languageName: document.getElementsByName('languageName')[0].value,
+                languageProficiency: document.getElementsByName('languageProficiency')[0].value
+            };
+        }
+
+        async function saveLanguageData(languageData) {
+            try {
+                const response = await fetch("{{ route('languages.store') }}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(languageData)
+                });
+                return await response.json();
+            } catch (error) {
+                console.error("Error saving language data:", error);
                 return {
-                    languageName: document.getElementsByName('languageName')[0].value,
-                    languageProficiency: document.getElementsByName('languageProficiency')[0].value
+                    success: false
                 };
             }
+        }
 
-            async function saveLanguageData(languageData) {
-                try {
-                    const response = await fetch("{{ route('languages.store') }}", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify(languageData)
-                    });
-                    return await response.json();
-                } catch (error) {
-                    console.error("Error saving language data:", error);
-                    return {
-                        success: false
-                    };
-                }
-            }
-
-            function appendLanguageCard(language) {
-                const card = document.createElement('div');
-                card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
-                card.innerHTML = `
+        function appendLanguageCard(language) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.innerHTML = `
             <div class="d-flex justify-content-between">
                 <div>
                     <h5>${language.languageName}</h5>
@@ -111,39 +111,52 @@
                 <p class="m-0">Proficiency: ${language.languageProficiency}</p>
             </div>
         `;
-                document.querySelector('.languageList').appendChild(card);
+            document.querySelector('.languageList').appendChild(card);
+        }
+
+        // Prevent default form submit
+        document.getElementById('languageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+
+        // "+ Add Language" button
+        document.getElementById('addLanguage').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const languageData = collectLanguageData();
+            const result = await saveLanguageData(languageData);
+            if (result.success) {
+                const language = result.language;
+                let languageHTML = `
+                    <p><strong>Language:</strong> ${language.languageName ?? ''}</p>
+                    <p><strong>Proficiency Level:</strong> ${language.languageProficiency ?? ''}</p>
+                    <hr>
+                `;
+                document.getElementById('overviewLanguages').innerHTML = languageHTML;
+                document.getElementById('languageForm').reset();
+                appendLanguageCard(result.language);
             }
+        });
 
-            // Prevent default form submit
-            document.getElementById('languageForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-            });
-
-            // "+ Add Language" button
-            document.getElementById('addLanguage').addEventListener('click', async function(e) {
-                e.preventDefault();
-                const languageData = collectLanguageData();
-                const result = await saveLanguageData(languageData);
-                if (result.success) {
-                    document.getElementById('languageForm').reset();
-                    appendLanguageCard(result.language);
-                }
-            });
-
-            // "Save & Continue" button
-            document.getElementById('submitLanguage').addEventListener('click', async function(e) {
-                e.preventDefault();
-                const languageData = collectLanguageData();
-                const result = await saveLanguageData(languageData);
-                if (result.success) {
-                    appendLanguageCard(result.language);
-                    document.getElementById('language').style.display = 'none';
-                    document.getElementById('training').style.display = 'block'; // 👈 update this if next section is different
-                    document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                    document.getElementById('trainingLink').classList.add('active'); // 👈 update ID as per your nav
-                }
-            });
-        })
-    </script>  
-    @endpush
-   
+        // "Save & Continue" button
+        document.getElementById('submitLanguage').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const languageData = collectLanguageData();
+            const result = await saveLanguageData(languageData);
+            if (result.success) {
+                const language = result.language;
+                let languageHTML = `
+                    <p><strong>Language:</strong> ${language.languageName ?? ''}</p>
+                    <p><strong>Proficiency Level:</strong> ${language.languageProficiency ?? ''}</p>
+                    <hr>
+                `;
+                document.getElementById('overviewLanguage').innerHTML = languageHTML;
+                appendLanguageCard(result.language);
+                document.getElementById('language').style.display = 'none';
+                document.getElementById('training').style.display = 'block'; // 👈 update this if next section is different
+                document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
+                document.getElementById('trainingLink').classList.add('active'); // 👈 update ID as per your nav
+            }
+        });
+    })
+</script>
+@endpush

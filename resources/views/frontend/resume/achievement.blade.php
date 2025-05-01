@@ -123,6 +123,15 @@
             const achievementData = collectAchievementData();
             const result = await saveAchievementData(achievementData);
             if (result.success) {
+                // Assuming result.achievement is a single achievement object
+                const achievement = result.achievement;
+                let achievementHTML = `
+                    <p><strong>Achievement Title:</strong> ${achievement.achievementTitle ?? ''}</p>
+                    <p><strong>Achievement Description:</strong> ${achievement.achievementDescription ?? ''}</p>
+                    <hr>
+                `;
+                document.getElementById('overviewAchievements').innerHTML = achievementHTML;
+
                 document.getElementById('achievementForm').reset();
                 appendAchievementCard(result.achievement);
             }
@@ -133,14 +142,21 @@
             const achievementData = collectAchievementData();
             const result = await saveAchievementData(achievementData);
             if (result.success) {
+                const achievement = result.achievement;
+                let achievementHTML = `
+                    <p><strong>Achievement Title:</strong> ${achievement.achievementTitle ?? ''}</p>
+                    <p><strong>Achievement Description:</strong> ${achievement.achievementDescription ?? ''}</p>
+                    <hr>
+                `;
+                document.getElementById('overviewAchievement').innerHTML = achievementHTML;
                 appendAchievementCard(result.achievement);
                 document.getElementById('achievement').style.display = 'none';
-                document.getElementById('language').style.display = 'block';
+                document.getElementById('experience').style.display = 'block';
                 document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                document.getElementById('languageLink').classList.add('active');
+                document.getElementById('experienceLink').classList.add('active');
             }
         });
 
     })
-</script>  
+</script>
 @endpush

@@ -177,7 +177,6 @@
                     <div class="text-black-50">
                         <p class="m-0">${training.institutionName}</p>
                         <p class="m-0">Completed on: ${formatDate(training.completionDate)}</p>
-                        ${training.certificate ? `<img src="${training.certificate}" ...>` : ''}
                     </div>
                 `;
             document.getElementById('trainingList').appendChild(card); // Make sure this element exists in your HTML
@@ -193,17 +192,29 @@
             const trainingData = collectTrainingData();
             const result = await saveTrainingData(trainingData);
             if (result.success) {
+                // Assuming result.training is a single training object
+                const training = result.training;
+                let trainingHTML = `
+                    <p><strong>Institution Name:</strong> ${training.institutionName ?? ''}</p>
+                    <p><strong>Completion Date:</strong> ${new Date(training.completionDate).toLocaleDateString() ?? ''}</p>
+                `;
+                document.getElementById('overviewTrainings').innerHTML = trainingHTML;
                 document.getElementById('trainingForm').reset();
-                document.getElementById('imgPreview').innerHTML = '';
                 appendTrainingCard(result.training);
             }
         });
-
         document.getElementById('submitTraining').addEventListener('click', async function(e) {
             e.preventDefault();
             const trainingData = collectTrainingData();
             const result = await saveTrainingData(trainingData);
             if (result.success) {
+                const training = result.training;
+                let trainingHTML = `
+                    <p><strong>Institution Name:</strong> ${training.institutionName ?? ''}</p>
+                    <p><strong>Completion Date:</strong> ${new Date(training.completionDate).toLocaleDateString() ?? ''}</p>
+                    <hr>
+                `;
+                document.getElementById('overviewTraining').innerHTML = trainingHTML;
                 appendTrainingCard(result.training);
                 document.getElementById('training').style.display = 'none';
                 document.getElementById('language').style.display = 'block';
