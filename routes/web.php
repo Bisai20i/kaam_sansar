@@ -67,6 +67,10 @@
 
     Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
 
+        //get job applicants of the particular post
+
+        Route::get('/job-post/applications/{id}', [JobApplyController::class, 'index']);
+
         //delete forum post by admin
 
         Route::delete('discussioin_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');

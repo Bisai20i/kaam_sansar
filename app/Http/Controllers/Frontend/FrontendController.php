@@ -75,9 +75,10 @@ class FrontendController extends Controller
             ->where('position', 'middle')
             ->first();
 
-        // if ($ad_banners) {
-        //     $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
-        // }
+        if ($ad_banners) {
+            if($ad_banners['middle'])
+                $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
+        }
 
         // dd($giftCoupons);
         return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners'));

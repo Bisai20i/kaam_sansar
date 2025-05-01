@@ -14,9 +14,25 @@ class JobApplyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        if(request()->ajax()) {
+
+            $jobApplicants = JobApply::where('jobPostId', $id)->with('jobSeeker')->get();
+
+            if($jobApplicants) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Job Applicants.',
+                    'data' => $jobApplicants
+                ]);
+            }
+            
+            return response()->json([
+                'status' => false,
+                'message' => 'No Applicants.',
+            ]);
+        }
     }
 
     /**

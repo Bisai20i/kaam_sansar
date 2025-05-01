@@ -440,11 +440,11 @@
 
         @if($ad_banners['middle'])
 
-
+            <div class="container">
                 <a href="{{ $ad_banners['middle']->link }}" class="d-block" style="text-decoration: none; cursor: pointer; object-fit: contain;">
-                    <img src="{{$ad_banners['middle']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
+                    <img src="{{ $ad_banners['middle']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
                 </a>
-
+            </div>
             
                 {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
         @endif

@@ -96,9 +96,9 @@
                                                     </button>
                                                 </form>
 
-                                                <button class="dropdown-item" id="viewJobApplicatoins"
-                                                    data-job-id="{{ $post->id }}" data-bs-toggle="modal"
+                                                <button class="dropdown-item viewJobApplicatoins" data-bs-toggle="modal"
                                                     data-bs-target="#jobApplicationsModal"
+                                                    data-job-id="{{ $post->id }}"
                                                     data-job-title="{{ $post->jobTitle }}">
                                                     <i class='bx bx-briefcase me-1'></i>Job Applications
                                                 </button>
@@ -242,7 +242,7 @@
 
     <!-- Add this in the <head> section for Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // URLs for publish and unpublish routes
         const publishUrl = @json(route('job-post.publish', ['id' => '__ID__']));
@@ -285,21 +285,30 @@
             buttonText.style.display = 'none';
         });
 
+        function getBaseUrl() {
+            return window.location.protocol + "//" + window.location.host;
+        }
 
-        document.getElementById('viewJobApplicatoins').addEventListener('click', function(e) {
+        async function showApplications(e) {
 
-            document.getElementById('jobTitle').textContent = e.target.getAttribute('data-job-title');
+            console.log(e.getAttribute('data-job-title'))
+
+
+
+            document.getElementById('jobTitle').innerHTML = e.getAttribute('data-job-title');
             loader.style.display = 'inline-block';
 
-            let jobId = e.target.getAttribute('data-job-id');
+            let jobId = e.getAttribute('data-job-id');
             let jobApplicationsTable = document.getElementById('jobApplicationsTable')
 
             try {
+                console.log(jobId)
                 jobApplicationsTable.innerHTML = '<tr><td colspan="5" class="text-center">Loading...</td></tr>';
-                const response = await fetch(getBaseUrl() + '/superadmin/job-post/applications', {
+
+                const response = await fetch(getBaseUrl() + '/superadmin/job-post/applications/' + jobId, {
                     method: 'GET',
                     headers: {
-                        'X-CSRF-TOKEN': {{ csrf_token() }},
+                        // 'X-CSRF-TOKEN': {{ csrf_token() }},
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                 });
@@ -323,55 +332,68 @@
 
                 const data = await response.json();
 
+                console.log(data);
+
+
                 if (data.status) {
                     jobApplicationsTable.innerHTML = '';
 
+                    if (data.data.length == 0) {
+                        jobApplicationsTable.innerHTML =
+                            '<tr><td colspan="5" class="text-center">No applications found</td></tr>';
+
+                        return false;
+                    }
+
                     data.data.forEach((application, index) => {
                         let applicationRow = document.createElement('tr');
+                        let date = new Date(application.created_at);
+                        let fullname = application.job_seeker.firstName.toUpperCase()+' '+application.job_seeker.lastName.toUpperCase();
+                        console.log(application.job_seeker)
                         applicationRow.innerHTML = `
-                           <td style="border-right: 1px solid #dee2e6;">${index + 1}</td>
-                            <td style="border-right: 1px solid #dee2e6;"${application.job_seeker.firstName} ${application.job_seeker.lastName}</td>
-                            <td style="border-right: 1px solid #dee2e6;">${application.created_at.toLocaleString()}</td>
-                            <td style="border-right: 1px solid #dee2e6;">${application.job_seeker.emailAddress}</td>
+                            <td style="border-right: 1px solid #dee2e6;">${index + 1}</td>
+                                <td style="border-right: 1px solid #dee2e6;">${fullname}</td>
+                                <td style="border-right: 1px solid #dee2e6;">${date.toLocaleString()}</td>
+                                <td style="border-right: 1px solid #dee2e6;">${application.job_seeker.emailAddress}</td>
 
-                            <td style="border-right: 1px solid #dee2e6;">
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
+                                <td style="border-right: 1px solid #dee2e6;">
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
 
-                                </div>
-                            </td>
-                        `;
+                                    </div>
+                                </td>
+                            `;
                         jobApplicationsTable.appendChild(applicationRow);
                     })
 
-                    let application = document.createElement('tr');
-                    jobApplicationsTable.innerHTML = data.html;
+                    // let application = document.createElement('tr');
+                    // jobApplicationsTable.innerHTML = data.html;
 
-                }
-
-                $('#sendMessageButton').html(
-                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
-                );
-
-                if (data.status) {
-                    $('#chatBox [name="message"]').val('');
-                    console.log('Message sent:', data);
                 } else {
-                    console.warn('Server responded with unexpected status:', data);
+                    jobApplicationsTable.innerHTML =
+                    '<tr><td colspan="5" class="text-center">No Applications</td></tr>';
                 }
+
+                // $("#jobApplicationsModal").modal('show');
 
             } catch (error) {
                 // Network error or unexpected failure
                 console.error('Fetch failed:', error);
                 alert('Network error. Please check your connection.');
-                $('#sendMessageButton').html(
-                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
-                );
             }
-        });
+        }
+
+        document.querySelectorAll('.viewJobApplicatoins').forEach(button => {
+
+            button.addEventListener('click', function () {
+                console.log('click')
+                console.log(button)
+                showApplications(button);
+            });
+        })
     </script>
 
 @endsection

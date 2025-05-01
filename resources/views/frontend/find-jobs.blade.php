@@ -92,13 +92,13 @@
                                         value="{{ Auth::guard('job_seekers')->user()->id }}">
                                     <input type="hidden" name="jobPostId" value="{{ $item->id }}" />
 
-                                    <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;">
+                                    <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;">
                                         <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                     </button>
                                 </form>
                             @else
                                 <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
-                                    <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;"
+                                    <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;"
                                         data-bs-toggle="modal" data-bs-target="#loginModal">
                                         <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                     </button>
@@ -111,12 +111,12 @@
                                 <div class="card">
                                     <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
                                         class="card-img-top rounded-1" alt="BMW">
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
 
-                                        <h5 class="card-title text-truncate mb-1 me-3">{{ $item->jobTitle }}</h5>
+                                        <h5 class="card-title text-truncate me-3 fw-bold my-1" >{{ $item->jobTitle }}</h5>
 
-                                        <p class="card-text text-muted mb-0">{{ $item->jobLevel }}</p>
-                                        <p class="card-text text-muted mb-1">{{ $item->jobLocation }}</p>
+                                        <p class="card-text text-muted mb-0 fw-semibold">{{ $item->jobLevel }}</p>
+                                        <p class="card-text text-muted mb-1 fw-semibold">{{ $item->jobLocation }}</p>
                                         <p class="card-text text-muted ">
                                             <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
                                             </small>

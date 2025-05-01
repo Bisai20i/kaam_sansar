@@ -148,7 +148,7 @@
                         class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2 mt-2">
 
                         <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail"
-                            src="{{ Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : 'https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg' }}"
+                            src="{{Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : 'https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg' }}"
                             style="width: 50px; height:50px;" />
                         <input class="form-control w-100 p-2" name="comment" id="commentInput"
                             placeholder="Write a comment...." type="text" required />
@@ -863,11 +863,11 @@
                         $('#commentsList').append(`
                             <div class="mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
                                 <div>
-                                <strong> {!! Auth::guard('job_seekers')->user()->userThumbnail
+                                <strong> {!! Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail
                                     ? '<img class="rounded-circle me-1" src="' .
                                         asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) .
                                         '" width="30" height="30"/>'
-                                    : '' !!} {{ Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName }}</strong>
+                                    : '' !!} {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName }}</strong>
                                 <p class="mb-1">${response.data.comment}</p>
                                 <small class="text-muted">${formatDateWithComma(response.data.created_at)}</small>
                                 </div>

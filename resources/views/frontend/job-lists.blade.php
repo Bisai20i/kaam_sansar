@@ -104,7 +104,8 @@
                                             <input type="hidden" name="jobPostId" value="{{ $job->id }}" />
 
                                             <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;">
-                                                <img src="{{ asset('frontend/assets/Images/Vector.png') }}" class="p-2" alt="Favorite">
+                                                <img src="{{ asset('frontend/assets/Images/Vector.png') }}" class="p-2"
+                                                    alt="Favorite">
                                             </button>
                                         </form>
                                     @endauth
@@ -121,7 +122,8 @@
 
                                                 <div class="job-card-body">
 
-                                                    <h5 class="card-title" style="max-width: 95%;">{{ $job->jobTitle }}</h5>
+                                                    <h5 class="card-title" style="max-width: 95%;">{{ $job->jobTitle }}
+                                                    </h5>
                                                     <p>Company Name: {{ $job->jobCompany->companyName }}</p>
                                                     <p>Location: {{ $job->jobLocation }}</p>
                                                     <p>Experience: {{ $job->experience }}</p>
@@ -163,51 +165,94 @@
 
                                 </div>
                             @endforeach
-                            <div class="row mt-3">
-                                <nav>
-                                    <ul class="pagination justify-content-end converter">
-                                        @if ($findJobs->onFirstPage())
-                                            <li class="page-item disabled d-none">
-                                                <a class="page-link primary_color_text">Previous</a>
-                                            </li>
-                                        @else
-                                            <li class="page-item">
-                                                <a class="page-link primary_color_text"
-                                                    href="{{ $findJobs->previousPageUrl() }}">Previous</a>
-                                            </li>
-                                        @endif
 
-                                        @foreach ($findJobs->getUrlRange(1, $findJobs->lastPage()) as $page => $url)
-                                            @if ($page == $findJobs->currentPage())
-                                                <li class="page-item page-item active"><a
-                                                        class="page-link primary_color_text"
-                                                        href="#">{{ $page }}</a></li>
+                            @if ($findJobs->hasMorePages() || $findJobs->currentPage() != 1)
+
+                                <div class="row mt-3">
+                                    <nav>
+                                        <ul class="pagination justify-content-end converter">
+                                            {{-- Previous Button --}}
+                                            @if ($findJobs->onFirstPage())
+                                                <li class="page-item disabled">
+                                                    <a class="page-link primary_color_text">&lt;</a>
+                                                </li>
                                             @else
-                                                <li class="page-item"><a class="page-link primary_color_text"
-                                                        href="{{ $url }}">{{ $page }}</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link primary_color_text"
+                                                        href="{{ $findJobs->previousPageUrl() }}">&lt;</a>
+                                                </li>
                                             @endif
-                                        @endforeach
 
-                                        @if ($findJobs->currentPage() < $findJobs->lastPage() - 2)
-                                            <li class="page-item"><a class="page-link primary_color_text">...</a></li>
-                                            <li class="page-item"><a class="page-link primary_color_text"
-                                                    href="{{ $findJobs->url($findJobs->lastPage()) }}">{{ $findJobs->lastPage() }}</a>
-                                            </li>
-                                        @endif
+                                            {{-- Pagination Numbers --}}
+                                            @php
+                                                $currentPage = $findJobs->currentPage();
+                                                $lastPage = $findJobs->lastPage();
+                                                $pageRange = 2; // Number of pages to display before and after the current page
+                                            @endphp
 
-                                        @if ($findJobs->hasMorePages())
-                                            <li class="page-item">
-                                                <a class="page-link primary_color_text"
-                                                    href="{{ $findJobs->nextPageUrl() }}">Next</a>
+                                            {{-- Show First Page --}}
+                                            @if ($currentPage > $pageRange + 1)
+                                                <li class="page-item">
+                                                    <a class="page-link primary_color_text"
+                                                        href="{{ $findJobs->url(1) }}">1</a>
+                                                </li>
+                                                @if ($currentPage > $pageRange + 2)
+                                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                                @endif
+                                            @endif
+
+                                            {{-- Show Pages Before Current Page --}}
+                                            @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                                                <li class="page-item">
+                                                    <a class="page-link primary_color_text"
+                                                        href="{{ $findJobs->url($i) }}">{{ $i }}</a>
+                                                </li>
+                                            @endfor
+
+                                            {{-- Current Page --}}
+                                            <li class="page-item active">
+                                                <span class="page-link"
+                                                    style="background: #196BA6;">{{ $currentPage }}</span>
                                             </li>
-                                        @else
-                                            <li class="page-item disabled">
-                                                <a class="page-link primary_color_text">Next</a>
-                                            </li>
-                                        @endif
-                                    </ul>
-                                </nav>
-                            </div>
+
+                                            {{-- Show Pages After Current Page --}}
+                                            @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                                                <li class="page-item">
+                                                    <a class="page-link primary_color_text"
+                                                        href="{{ $findJobs->url($i) }}">{{ $i }}</a>
+                                                </li>
+                                            @endfor
+
+                                            {{-- Show Last Page --}}
+                                            @if ($currentPage < $lastPage - $pageRange)
+                                                @if ($currentPage < $lastPage - $pageRange - 1)
+                                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                                @endif
+                                                <li class="page-item">
+                                                    <a class="page-link primary_color_text"
+                                                        href="{{ $findJobs->url($lastPage) }}">{{ $lastPage }}</a>
+                                                </li>
+                                            @endif
+
+                                            {{-- Next Button --}}
+                                            @if ($findJobs->hasMorePages())
+                                                <li class="page-item">
+                                                    <a class="page-link primary_color_text"
+                                                        href="{{ $findJobs->nextPageUrl() }}">&gt;</a>
+                                                </li>
+                                            @else
+                                                <li class="page-item disabled">
+                                                    <a class="page-link primary_color_text">&gt;</a>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </nav>
+                                </div>
+
+
+                            @endif
+
+                            
                         @else
                             <div class="container my-5">
                                 <div class="alert alert-warning" role="alert">
