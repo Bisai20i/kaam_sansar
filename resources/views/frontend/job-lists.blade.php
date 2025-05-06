@@ -13,7 +13,13 @@
 
                         {{-- <div class="row mt-4 "> --}}
                         <!-- Input for Keywords -->
-                        <form action="{{ route('frontend.job-search') }}" class="row mt-4 align-items-center">
+                        <form action="{{ route('frontend.job-search', request()->all()) }}"
+                            class="row mt-4 align-items-center">
+
+                            @foreach (request()->except(['searchstr', 'location']) as $key => $value)
+                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                            @endforeach
+
 
                             <div
                                 class="col-lg-5 col-md-6 col-sm-12 col-12 mb-2 d-flex justify-content-center align-items-center input-container">
@@ -84,16 +90,187 @@
     <section>
         <div class="container mt-2">
 
+            <style>
+                .active7 {
+                    background-color: #0064A7 !important;
+                    color: #fff;
+                    border: #0064A7 !important;
+                }
+            </style>
+            <div class="d-flex gap-3 align-items-center flex-wrap my-4">
+                <h5 class="fw-semibold text-black mb-0">Filter by:</h5>
+
+                <!-- Job Site Filter -->
+                <div class="dropdown">
+                    <button
+                        class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 {{ request()->has('filtersite') ? 'active7' : '' }}"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        {{ request()->has('filtersite') ? ucfirst(request('filtersite')) : 'Job Site' }}
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                                href="{{ url()->current() . '?' . http_build_query(request()->except('filtersite','page')) }}">
+                                Job Site
+                            </a>
+                        </li>
+                        @foreach (['remote', 'onsite', 'hybrid'] as $site)
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ url()->current() . '?' . http_build_query(array_merge(request()->except('filtersite','page'), ['filtersite' => $site])) }}">
+                                    {{ ucfirst($site) }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Job Type Filter -->
+                <div class="dropdown">
+                    <button
+                        class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 {{ request()->has('filtertype') ? 'active7' : '' }}"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        {{ request()->has('filtertype') ? (request('filtertype') == 'trainee' ? 'Internship' : ucfirst(request('filtertype'))) : 'Job Type' }}
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                                href="{{ url()->current() . '?' . http_build_query(request()->except('filtertype','page')) }}">
+                                All Types
+                            </a>
+                        </li>
+                        @php $types = ['trainee' => 'Internship', 'parttime' => 'Part Time', 'fulltime' => 'Full Time', 'casual' => 'Casual']; @endphp
+                        @foreach ($types as $key => $label)
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ url()->current() . '?' . http_build_query(array_merge(request()->except('filtertype','page'), ['filtertype' => $key])) }}">
+                                    {{ $label }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Job Feature Filter -->
+                <div class="dropdown">
+                    <button
+                        class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 {{ request()->has('filterfeature') ? 'active7' : '' }}"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        {{ request()->has('filterfeature') ? ucfirst(request('filterfeature')) : 'All Jobs' }}
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                                href="{{ url()->current() . '?' . http_build_query(request()->except('filterfeature','page')) }}">
+                                All Jobs
+                            </a>
+                        </li>
+                        @foreach (['normal' => 'Normal Jobs', 'premium' => 'Premium Jobs'] as $key => $label)
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ url()->current() . '?' . http_build_query(array_merge(request()->except('filterfeature','page'), ['filterfeature' => $key])) }}">
+                                    {{ $label }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Job Post Time Filter -->
+                <div class="dropdown">
+                    <button
+                        class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 {{ request()->has('filterdate') ? 'active7' : '' }}"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        {{ request()->has('filterdate') ? request('filterdate') . ' Days Ago' : 'Job Post Time' }}
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                                href="{{ url()->current() . '?' . http_build_query(request()->except('filterdate','page')) }}">
+                                All Time
+                            </a>
+                        </li>
+                        @foreach ([1, 5, 15, 30] as $days)
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ url()->current() . '?' . http_build_query(array_merge(request()->except('filterdate','page'), ['filterdate' => $days])) }}">
+                                    {{ $days == 30 ? '1 Month Ago' : $days . ' Day' . ($days > 1 ? 's' : '') . ' Ago' }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Job Level Filter -->
+                <div class="dropdown">
+                    <button
+                        class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 {{ request()->has('filterlevel') ? 'active7' : '' }}"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        {{ request()->has('filterlevel') ? ucfirst(request('filterlevel')) : 'Job Level' }}
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                                href="{{ url()->current() . '?' . http_build_query(request()->except('filterlevel','page')) }}">
+                                All Job Levels
+                            </a>
+                        </li>
+                        @foreach (['entry' => 'Entry Level', 'mid' => 'Mid Level', 'senior' => 'Senior Level'] as $key => $label)
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ url()->current() . '?' . http_build_query(array_merge(request()->except('filterlevel','page'), ['filterlevel' => $key])) }}">
+                                    {{ $label }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+
+
+
+
+
+            {{-- <script>
+                // Add click event to all buttons with class "filter-btn"
+                const buttons = document.querySelectorAll('.filter-btn');
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        buttons.forEach(btn => btn.classList.remove('active7'));
+                        button.classList.add('active7');
+                    });
+                });
+            </script> --}}
 
 
             <div class="row">
 
-                <div class="col-md-8 job-job">
-                    <h2>Search Results</h2>
+                <div class="col-md-8 job-job mb-1">
+                    @if (request('jobsby') && request('searchstr'))
+                        <h2>Search Results for <span style="color: #0064A7">" {{ request('searchstr') }} "</span>
+                            in {{ ucfirst(request('jobsby')) }} <span style="color: #0064A7">"
+                                {{ request('jobsby') == 'category' ? App\Models\JobCategory::find(request('searchcategoryid'))->jobCategoryName : (request('jobsby') == 'skill' ? ucfirst(request('skill')) : ucfirst(request('location'))) }}
+                                "</span></h2>
+                    @elseif(request('jobsby') && !request('searchstr'))
+                        <h2>Jobs by {{ ucfirst(request('jobsby')) }} <span style="color: #0064A7">"
+                                {{ request('jobsby') == 'category' ? App\Models\JobCategory::find(request('searchcategoryid'))->jobCategoryName : (request('jobsby') == 'skill' ? ucfirst(request('skill')) : ucfirst(request('location'))) }}
+                                "</span> </h2>
+                    @elseif(request('searchstr') && !request('jobsby'))
+                        <h2>Search Results for <span style="color: #0064A7">" {{ request('searchstr') }} "</span></h2>
+                    @else
+                        <h2>All Jobs Lists</h2>
+                    @endif
                     <div class="px-0 container mt-4">
                         @if ($findJobs->count() > 0)
                             @foreach ($findJobs as $job)
                                 <div class="position-relative mx-0 px-0 mb-3">
+
                                     @auth('job_seekers')
                                         <form action="{{ route('job.bookmark') }}" method="post"
                                             class="position-absolute end-0 m-1" style="top:0%; z-index:99;">
@@ -113,7 +290,13 @@
                                     <a href="{{ route('frontend.job-details', ['slug' => $job->jobSlug]) }}"
                                         class="text-dark d-block text-decoration-none ">
 
-                                        <div class="job-card-1 p-0 border border-secondary border-1 mb-3">
+                                        <div class="job-card-1 p-0 border border-secondary border-1 mb-3 position-relative"
+                                            style="{{ $job->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
+
+                                            @if ($job->jobFeature == 'premium')
+                                                <span
+                                                    class="position-absolute top-0 left-0 badge rounded-1 bg-warning m-3">Premium</span>
+                                            @endif
 
                                             <div class="d-flex p-2 p-md-3">
                                                 <img src="{{ $job->jobBanner ? asset('storage/' . $job->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
@@ -152,7 +335,9 @@
 
                                             </div>
 
-                                            <div class="full-width-border"></div>
+                                            <div class="full-width-border"
+                                                style="{{ $job->jobFeature == 'premium' ? 'border-top: 0.5px solid #FAAC24!important;' : '' }}">
+                                            </div>
                                             <div class="job-card-footer p-2 p-md-3 mt-0">
                                                 <small>Apply before:
                                                     {{ \Carbon\Carbon::parse($job->jobDeadline)->format('F d, Y') }}</small>
@@ -251,8 +436,6 @@
 
 
                             @endif
-
-                            
                         @else
                             <div class="container my-5">
                                 <div class="alert alert-warning" role="alert">
@@ -372,7 +555,7 @@
                                     <form action="{{ route('frontend.job-search') }}">
 
                                         <input type="hidden" name="jobsby" value="skill">
-                                        <input type="hidden" name="searchstr" value="{{ $item }}">
+                                        <input type="hidden" name="skill" value="{{ $item }}">
                                         <button type="submit"
                                             style="all: unset; cursor: pointer;">{{ $item }}</button>
                                     </form>
@@ -387,7 +570,7 @@
                                 <li style="color: #0064A7">
                                     <form action="{{ route('frontend.job-search') }}">
 
-
+                                        <input type="hidden" name="jobsby" value="location">
                                         <input type="hidden" name="location" value="{{ $item }}">
                                         <button type="submit"
                                             style="all: unset; cursor: pointer;">{{ $item }}</button>

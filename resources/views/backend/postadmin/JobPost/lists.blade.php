@@ -38,7 +38,7 @@
                         </thead>
                         <tbody class="table-border-bottom-0">
                             @foreach ($jobpost as $post)
-                                <tr>
+                                <tr style="{{ $post->jobFeature == 'premium' ? 'background: #fefce5;' : '' }}">
                                     <td style="border-right: 1px solid #dee2e6;">{{ $loop->iteration }}</td>
                                     <td style="border-right: 1px solid #dee2e6;">{{ $post->jobTitle }}</td>
                                     <td style="border-right: 1px solid #dee2e6;">{{ $post->jobLocation }}</td>

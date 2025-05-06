@@ -194,6 +194,8 @@ class DiscussionForumController extends Controller
             'category'    => 'required|in:education,investment,scammer,office,other',
             'topic'       => 'required|string',
             'description' => 'required|string',
+            'person_name' => 'nullable|string',
+            'country'     => 'nullable|string',
             'images'      => 'nullable|array|max:5',
             'images.*'    => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -232,6 +234,8 @@ class DiscussionForumController extends Controller
                 'category'    => $request->input('category'),
                 'images'      => $imagePaths,
                 'jobSeekerId' => $user->id,
+                'person_name' => $request->input('person_name'),
+                'country'     => $request->input('country'),
             ]);
 
             // Web response (view rendering)
@@ -361,6 +365,8 @@ class DiscussionForumController extends Controller
             'category'    => 'nullable|in:education,investment,scammer,office,other',
             'topic'       => 'nullable|string',
             'description' => 'nullable|string',
+            'country'     => 'nullable|string',
+            'person_name' => 'nullable|string',
             'images'      => 'nullable|array',
             'images.*'    => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -422,6 +428,12 @@ class DiscussionForumController extends Controller
 
                 if ($request->category) {
                     $forum->category = $request->category;
+                }
+                if($request->country){
+                    $forum->country = $request->country;
+                }
+                if($request->person_name){
+                    $forum->person_name = $request->person_name;
                 }
 
                 $forum->save();

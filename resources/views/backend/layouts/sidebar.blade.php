@@ -13,7 +13,7 @@
 
     <div class="menu-inner-shadow"></div>
 
-    <ul class="menu-inner py-1">
+    <ul class="menu-inner py-2">
         <!-- Dashboard -->
         <li class="menu-item {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
             <a href="{{ route('superadmin.dashboard') }}" class="menu-link">
@@ -212,6 +212,32 @@
                 <i class="menu-icon tf-icons bx bx-rectangle"></i>
                 <div data-i18n="Ads Manager">Discussion Forum</div>
             </a>
+        </li>
+
+        <!-- Manage Insurance-->
+        <li
+            class="menu-item {{ request()->routeIs('insurance*') || request()->routeIs('insurance*') ? 'open' : '' }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-store"></i>
+                <div data-i18n="Front Pages">Manage Insurance</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('insurance.company') ? 'active' : '' }}">
+                    <a href="{{ route('insurance.company') }}" class="menu-link">
+                        <div data-i18n="Landing">Insurance Company</div>
+                    </a>
+                </li>
+                {{-- <li class="menu-item {{ request()->routeIs('insurance.category') ? 'active' : '' }}">
+                    <a href="{{ route('insurance.category') }}" class="menu-link">
+                        <div data-i18n="Pricing">Insurance Category</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('insurance.details') ? 'active' : '' }}">
+                    <a href="{{ route('insurance.details') }}" class="menu-link">
+                        <div data-i18n="Pricing">Insurance Category Details</div>
+                    </a>
+                </li> --}}
+            </ul>
         </li>
     </ul>
 

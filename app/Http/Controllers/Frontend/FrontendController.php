@@ -31,6 +31,10 @@ use App\Models\Visa;
 use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
 use App\Models\VisaType;
+use App\Models\InsuranceCompany;
+use App\Models\InsuranceCategory;
+use App\Models\InsuranceCategoryDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -76,8 +80,10 @@ class FrontendController extends Controller
             ->first();
 
         if ($ad_banners) {
-            if($ad_banners['middle'])
+            if ($ad_banners['middle']) {
                 $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
+            }
+
         }
 
         // dd($giftCoupons);
@@ -223,41 +229,69 @@ class FrontendController extends Controller
 
         // dd($request->all());
 
-        $jobBy = $request->input('jobsby');
-        if (! empty($jobBy)) {
-            if ($jobBy == 'category') {
-                $findJobs = JobPost::with('jobCompany')
-                    ->orderBy('created_at', 'desc')
-                    ->where('jobCategoryId', $request->input('searchcategoryid'))
-                    ->where('jobStatus', 'published')
-                    ->paginate(8);
-            } elseif ($jobBy == 'skill') {
-                $findJobs = JobPost::with('jobCompany')
-                    ->orderBy('created_at', 'desc')
-                    ->where('jobStatus', 'published')
-                    ->where('skills', 'LIKE', "%{$request->input('searchstr')}%")
-                    ->paginate(8);
-            } else {
-                $findJobs = JobPost::with('jobCompany')
-                    ->orderBy('created_at', 'desc')
-                    ->where('jobStatus', 'published')
-                    ->paginate(8);
-            }
-            // return $request->input('searchcategoryid');
-        } else {
-            $findJobs = JobPost::with('jobCompany')
-                ->orderBy('created_at', 'desc')
-                ->where('jobStatus', 'published')
-                ->where(function ($q) use ($request) {
-                    $q->where('jobDescription', 'LIKE', "{$request->input('searchstr')}%")
-                        ->orWhere('jobTitle', 'LIKE', "%{$request->input('searchstr')}%");
+        // $jobBy = $request->input('jobsby');
+        // if (! empty($jobBy)) {
+        //     if ($jobBy == 'category') {
+        //         $findJobs = JobPost::with('jobCompany')
+        //             ->orderBy('created_at', 'desc')
+        //             ->where('jobCategoryId', $request->input('searchcategoryid'))
+        //             ->where('jobStatus', 'published')
+        //             ->paginate(8);
+        //     } elseif ($jobBy == 'skill') {
+        //         $findJobs = JobPost::with('jobCompany')
+        //             ->orderBy('created_at', 'desc')
+        //             ->where('jobStatus', 'published')
+        //             ->where('skills', 'LIKE', "%{$request->input('searchstr')}%")
+        //             ->paginate(8);
+        //     } else {
+        //         $findJobs = JobPost::with('jobCompany')
+        //             ->orderBy('created_at', 'desc')
+        //             ->where('jobStatus', 'published')
+        //             ->paginate(8);
+        //     }
+        //     // return $request->input('searchcategoryid');
+        // } else {
+        // return $request->query('filterlevel');
+        $findJobs = JobPost::with('jobCompany')
+            ->orderBy('created_at', 'desc')
+            ->where('jobStatus', 'published')
+            ->when(! empty($request->input('searchstr')), function ($q) use ($request) {
+                $q->where('jobDescription', 'LIKE', "{$request->input('searchstr')}%")
+                    ->orWhere('jobTitle', 'LIKE', "%{$request->input('searchstr')}%");
+            })
+            ->when(! empty($request->input('location')), function ($q) use ($request) {
+                return $q->where('jobLocation', 'LIKE', "%{$request->input('location')}%");
+            })
+            ->when(! empty($request->query('filtersite') && in_array($request->query('filtersite'), ['remote', 'onsite', 'hybrid'])),
+                function ($q) use ($request) {
+                    return $q->where('jobSite', $request->query('filtersite'));
                 })
-                ->when(! empty($request->input('location')), function ($q) use ($request) {
-                    return $q->where('jobLocation', 'LIKE', "%{$request->input('location')}%");
+            ->when(! empty($request->query('filtertype') && in_array($request->query('filtertype'), ['trainee', 'parttime', 'fulltime', 'casual'])),
+                function ($q) use ($request) {
+                    return $q->where('jobType', $request->query('filtertype'));
                 })
-                ->paginate(8);
+            ->when(! empty($request->query('filterdate') && in_array($request->query('filterdate'), ['1', '5', '15', '30'])),
+                function ($q) use ($request) {
+                    return $q->where('created_at', '>=', Carbon::now()->subDays($request->query('filterdate')));
+                })
+            ->when(! empty($request->query('filterlevel') && in_array($request->query('filterlevel'), ['entry', 'mid', 'senior'])),
+                function ($q) use ($request) {
+                    return $q->where('jobLevel', 'LIKE', "%{$request->query('filterlevel')}%");
+                })
+            ->when(! empty($request->query('filterfeature') && in_array($request->query('filterfeature'), ['normal', 'premium'])),
+                function ($q) use ($request) {
+                    return $q->where('jobFeature', $request->query('filterfeature'));
+                })
+            ->when(! empty($request->input('jobsby')) && in_array($request->input('jobsby'), ['category', 'skill', 'location']),
+                function ($q) use ($request) {
+                    $q->when($request->input('jobsby') == 'category', fn($query) => $query->where('jobCategoryId', $request->input('searchcategoryid')))
+                        ->when($request->input('jobsby') == 'skill', fn($query) => $query->where('skills', 'LIKE', "%{$request->input('skill')}%"))
+                        ->when($request->input('jobsby') == 'location', fn($query) => $query->where('jobLocation', 'LIKE', "%{$request->input('location')}%"));
+                })
+            ->paginate(8)
+            ->withQueryString();
 
-        }
+        // return $findJobs;
 
         $jobLocation = JobPost::where('jobLocation', '!=', '')
             ->where('jobStatus', 'published')
@@ -348,7 +382,7 @@ class FrontendController extends Controller
 
             $ad_banners['bottom'] ? $ad_banners['bottom']->image = asset('storage/' . $ad_banners['bottom']->image) : null;
         }
-        return view('frontend.apply', compact('job_detail', 'similar_jobs', 'categories', 'skills', 'jobLocation','ad_banners'));
+        return view('frontend.apply', compact('job_detail', 'similar_jobs', 'categories', 'skills', 'jobLocation', 'ad_banners'));
     }
 
     public function bookmarkjob(Request $request)
@@ -860,16 +894,59 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads = Advertisement::simplePaginate(8); 
-        $ad       = Advertisement::all();
+        $ads        = Advertisement::simplePaginate(8);
+        $ad         = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();
 
-
-        return view('frontend.advertisements.index', compact('all', 'category', 'ads','ad', 'categories'))
+        return view('frontend.advertisements.index', compact('all', 'category', 'ads', 'ad', 'categories'))
             ->with('success', 'Advertisements retrieved successfully!');
 
+    }
+
+    public function insurance(){
+        $companies = InsuranceCompany::orderBy('id', 'desc')->where('publishStatus', 1)->get();
+
+        $companies->transform(function ($company) {
+            if($company->thumbnail){
+                $company->thumbnail = asset('storage/' . $company->thumbnail);
+            }
+            return $company;
+        });
+
+        // return $companies;
+        return view('frontend.insurance.home', compact('companies'));
+    }
+
+    public function insurance_category($id){
+        $categories = InsuranceCategory::orderBy('id', 'desc')
+            ->where('insurance_company_id',$id)
+            ->where('publishStatus', 1)->get();
+
+        // return $categories;
+
+        return view('frontend.insurance.categories', compact('categories'));
+    }
+
+    public function insurance_details($id){
+
+        $category = InsuranceCategory::with('insuranceDetail')
+            ->with('subCategory')
+            ->findOrFail($id);
+        // $category = InsuranceCategoryDetail::with('insuranceDetail')->findOrFail($id);
+        $category->insuranceDetail->thumbnail = $category->insuranceDetail->thumbnail ? 
+            asset('storage/' . $category->insuranceDetail->thumbnail) :
+            asset('frontend/assets/Images/job.png');
+
+        // $category->insuranceDetail->transform(function ($detail) {
+        //     if($detail->thumbnail)
+        //         $detail->thumbnail = asset('storage/' . $detail->thumbnail);
+        //     return $detail;
+        // });
+        
+        // return $category;
+        return view('frontend.insurance.category_detail', compact('category'));
     }
 
 }

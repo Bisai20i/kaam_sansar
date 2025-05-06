@@ -103,9 +103,15 @@
 
                                 <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"
                                     class="text-decoration-none">
-                                    <div class="card">
-                                        <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
+                                    <div class="card" style="{{ $item->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
+                                        <div class="position-relative">
+                                            @if($item->jobFeature == 'premium')
+                                                <span class="position-absolute top-0 left-0 badge rounded-1 bg-warning">Premium</span>
+                                            @endif
+                                            <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
                                             class="card-img-top rounded-1" alt="BMW">
+                                        </div>
+                                        
                                         <div class="card-body p-2">
 
                                             <h5 class="card-title text-truncate me-3 fw-bold my-1" >{{ $item->jobTitle }}</h5>

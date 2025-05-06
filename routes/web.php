@@ -43,6 +43,9 @@
     use App\Http\Controllers\VisaCountryListController;
     use App\Http\Controllers\VisaDetailsController;
     use App\Http\Controllers\VisaTypeController;
+    use App\Http\Controllers\InsuranceCompanyController;
+    use App\Http\Controllers\InsuranceCategoryController;
+    use App\Http\Controllers\InsuranceSubCategoryController;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Route;
     use Illuminate\Support\Facades\Session;
@@ -66,6 +69,34 @@
     });
 
     Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
+
+
+        //manage Insurance
+
+        Route::get('/insurance/company',[InsuranceCompanyController::class, 'index'])->name('insurance.company');
+        Route::delete('/insurance/company/destroy/{insuranceCompany}',[InsuranceCompanyController::class, 'destroy'])->name('insuranceCompany.destroy');
+        Route::post('/insurance/company/store',[InsuranceCompanyController::class, 'store'])->name('insuranceCompany.store');
+        Route::put('/insurance/company/update/{insuranceCompany}',[InsuranceCompanyController::class, 'update'])->name('insuranceCompany.update');
+        Route::put('/insurance/company/publish/{id}', [InsuranceCompanyController::class, 'publish'])->name('insuranceCompany.publish');
+        Route::put('/insurance/company/unpublish/{id}', [InsuranceCompanyController::class, 'unpublish'])->name('insuranceCompany.unpublish');
+
+        Route::get('/insurance/{id}/category',[InsuranceCategoryController::class, 'index'])->name('insurance.category');
+        Route::post('/insurace/category/store',[InsuranceCategoryController::class, 'insertDetails'])->name('insuranceDetails.store');
+        Route::delete('/insurance/category/destroy/{insuranceCategory}',[InsuranceCategoryController::class, 'destroy'])->name('insuranceCategory.destroy');
+        Route::post('/insurance/category/store',[InsuranceCategoryController::class, 'store'])->name('insuranceCategory.store');
+        Route::put('/insurance/category/update/{insuranceCategory}',[InsuranceCategoryController::class, 'update'])->name('insuranceCategory.update');
+        Route::put('/insurance/category/publish/{id}', [InsuranceCategoryController::class, 'publish'])->name('insuranceCategory.publish');
+        Route::put('/insurance/category/unpublish/{id}', [InsuranceCategoryController::class, 'unpublish'])->name('insuranceCategory.unpublish');
+
+        Route::get('/insurance/{id}/subcategory',[InsuranceSubCategoryController::class, 'index'])->name('insurance.sub_categories');
+        Route::post('/insurance/{id}/subcategory',[InsuranceSubCategoryController::class, 'store'])->name('insuranceSubCategory.store');
+        Route::put('/insurance/subcategory/{id}',[InsuranceSubCategoryController::class, 'update'])->name('insuranceSubCategory.update');
+        Route::delete('/insurance/subcategory/{id}',[InsuranceSubCategoryController::class, 'destroy'])->name('insuranceSubCategory.destroy');
+        Route::put('/insurance/subcategory/publish/{id}', [InsuranceSubCategoryController::class, 'publish'])->name('insuranceSubCategory.publish');
+        Route::put('/insurance/subcategory/unpublish/{id}', [InsuranceSubCategoryController::class, 'unpublish'])->name('insuranceSubCategory.unpublish');
+
+
+        Route::get('/insurance/{id}/details',[InsuranceCategoryController::class, 'manage'])->name('insurance.manage');
 
         //get job applicants of the particular post
 
@@ -334,6 +365,13 @@
         // Route::get('/categories', [GiftCategoryController::class, 'index'])->name('giftcategories');
     });
 
+    Route::prefix('insurance')->group(function () {
+        Route::get('/', [FrontendController::class, 'insurance'])->name('frontend.insurance');
+        Route::get('/categories/{id}', [FrontendController::class, 'insurance_category'])->name('insurance.categories');
+        Route::get('/details/{id}', [FrontendController::class, 'insurance_details'])->name('insurance.details');
+    });
+    
+
     Route::prefix('discussion')->group(function () {
         Route::resource('discussion_forum', DiscussionForumController::class)->except('index', 'create', 'edit')->middleware('auth:job_seekers');
 
@@ -375,3 +413,4 @@
     Route::get('/resume-help', [FrontendController::class, 'resumeHelp'])->name('resume');
 
 Route::get('/fireEvent', [MessageController::class, 'fireEvent']);
+

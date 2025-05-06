@@ -72,7 +72,7 @@
                             </select>
                         </div>
                         <div class="col-md-3 ">
-                            <select class="form-select form-select-gift" name="country">
+                            <select class="form-select form-select-gift" name="city">
                                 <option value="">Select City</option>
                                 @foreach ($cities as $cty)
                                     <option value="{{ $cty }}"

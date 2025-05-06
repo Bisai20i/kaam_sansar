@@ -76,8 +76,113 @@
 
 
     <section class="jobs">
+
+        <style>
+            .active7 {
+                background-color: #0064A7 !important;
+                color: #fff;
+                border: #0064A7 !important;
+            }
+        </style>
+
+        <div class="container my-4">
+            <div class="d-flex gap-3 align-items-center flex-wrap">
+                <h5 class="fw-semibold text-black mb-0">Filter by:</h5>
+                <!-- Dropdown Button with Icon Trigger -->
+                <div class="dropdown">
+                    <button class="filter-btn px-4 py-2 rounded-pill bg-white border border-1" type="button"
+                        id="remoteDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        Job Site
+                        <!-- The icon you provided triggering the dropdown -->
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <ul class="dropdown-menu" aria-labelledby="remoteDropdown">
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filtersite' => 'remote']) }}">Remote</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filtersite' => 'onsite']) }}">Onsite</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filtersite' => 'hybrid']) }}">Hybrid</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 " type="button"
+                        id="remoteDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        Job Type
+                        <!-- The icon you provided triggering the dropdown -->
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <ul class="dropdown-menu" aria-labelledby="remoteDropdown">
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filtertype' => 'trainee']) }}">Internship</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filtertype' => 'parttime']) }}">Part Time</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filtertype' => 'fulltime']) }}">Full Time</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filtertype' => 'casual']) }}">Casual</a></li>
+                        
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 " type="button"
+                        id="remoteDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        All Jobs
+                        <!-- The icon you provided triggering the dropdown -->
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <ul class="dropdown-menu" aria-labelledby="remoteDropdown">
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterfeature' => 'normal']) }}">Normal Jobs</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterfeature' => 'premium']) }}">Premium Jobs</a></li>
+                        
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 " type="button"
+                        id="remoteDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        All Time
+                        <!-- The icon you provided triggering the dropdown -->
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <ul class="dropdown-menu" aria-labelledby="remoteDropdown">
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterdate' => '1']) }}">1 Day Ago</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterdate' => '5']) }}">5 Days Ago</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterdate' => '15']) }}">15 Days Ago</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterdate' => '30']) }}">1 Month Ago</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="filter-btn px-4 py-2 rounded-pill bg-white border border-1 " type="button"
+                        id="remoteDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">
+                        Job Level
+                        <!-- The icon you provided triggering the dropdown -->
+                        <i class="fa-solid fa-chevron-down ms-2"></i>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <ul class="dropdown-menu" aria-labelledby="remoteDropdown">
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterlevel' => 'entry']) }}">Entry Level</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterlevel' => 'mid']) }}">Mid Level</a></li>
+                        <li><a class="dropdown-item" href="{{ route('frontend.job-search',['filterlevel' => 'senior']) }}">Senior Level</a></li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    
+        <script>
+            // Add click event to all buttons with class "filter-btn"
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    buttons.forEach(btn => btn.classList.remove('active7'));
+                    button.classList.add('active7');
+                });
+            });
+
+            
+        </script>
+
+        
         @if (@$findJobs->count() > 0)
-            <div class="container my-5">
+            <div class="container my-4 ">
                 <h3 class="mb-4">Recommended Jobs for You</h3>
                 <div class="row g-3 justify-content-center">
                     <!-- Job 1 -->
@@ -108,9 +213,14 @@
 
                             <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"
                                 class="text-decoration-none">
-                                <div class="card">
-                                    <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
+                                <div class="card" style="{{ $item->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
+                                    <div class="position-relative">
+                                        @if($item->jobFeature == 'premium')
+                                            <span class="position-absolute top-0 left-0 badge rounded-1 bg-warning">Premium</span>
+                                        @endif
+                                        <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
                                         class="card-img-top rounded-1" alt="BMW">
+                                    </div>
                                     <div class="card-body p-2">
 
                                         <h5 class="card-title text-truncate me-3 fw-bold my-1" >{{ $item->jobTitle }}</h5>

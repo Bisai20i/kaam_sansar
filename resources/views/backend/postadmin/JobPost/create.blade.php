@@ -171,16 +171,41 @@
                                                 <option value="" disabled selected>Select Job Type</option>
                                                 <option value="trainee"
                                                     {{ old('jobType', isset($jobPost) ? $jobPost->jobType : '') == 'trainee' ? 'selected' : '' }}>
-                                                    Trainee</option>
+                                                    Trainee ( Internship )</option>
                                                 <option value="parttime"
                                                     {{ old('jobType', isset($jobPost) ? $jobPost->jobType : '') == 'parttime' ? 'selected' : '' }}>
                                                     Part Time</option>
                                                 <option value="fulltime"
                                                     {{ old('jobType', isset($jobPost) ? $jobPost->jobType : '') == 'fulltime' ? 'selected' : '' }}>
                                                     Full Time</option>
+                                                <option value="casual"
+                                                    {{ old('jobType', isset($jobPost) ? $jobPost->jobType : '') == 'casual' ? 'selected' : '' }}>
+                                                    Casual</option>
                                             </select>
                                             <div class="invalid-feedback">This field is required.</div>
                                         </div>
+
+                                        <div class="mb-3 col-md-6">
+                                            <label for="jobType" class="form-label">Job Site<span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-select {{ $errors->has('jobSite') ? 'is-invalid' : '' }}"
+                                                id="jobSite" name="jobSite" required>
+                                                <option value="" disabled selected>Select Job Site</option>
+                                                <option value="remote"
+                                                    {{ old('jobSite', isset($jobPost) ? $jobPost->jobSite : '') == 'remote' ? 'selected' : '' }}>
+                                                    Remote</option>
+                                                <option value="onsite"
+                                                    {{ old('jobSite', isset($jobPost) ? $jobPost->jobSite : '') == 'onsite' ? 'selected' : '' }}>
+                                                    Onsite</option>
+                                                
+                                                <option value="hybrid"
+                                                    {{ old('jobType', isset($jobPost) ? $jobPost->jobSite : '') == 'hybrid' ? 'selected' : '' }}>
+                                                    Hybrid</option>
+                                            </select>
+                                            <div class="invalid-feedback">This field is required.</div>
+                                        </div>
+
+
                                         <div class="mb-3 col-md-6 ">
                                             <label for="file" class="form-label">Job Banner<span
                                                     class="text-danger">*</span></label>
@@ -313,13 +338,13 @@
                                             <label for="employeeTime" class="form-label">Employee Time <span
                                                     class="text-danger">*</span></label>
                                             <div class="d-flex gap-2">
-                                                <span class="align-self-center">from</span>
+                                                <span class="align-self-center">From</span>
                                                 <input type="time"
                                                     class="form-control{{ $errors->has('employeeStartTime') ? ' is-invalid' : '' }}"
                                                     id="employeeStartTime" name="employeeStartTime"
                                                     value="{{ old('employeeStartTime', isset($jobPost) ? explode(' - ', $jobPost->employeeTime)[0] : '') }}"
                                                     required />
-                                                <span class="align-self-center">to</span>
+                                                <span class="align-self-center">To</span>
                                                 <input type="time"
                                                     class="form-control{{ $errors->has('employeeEndTime') ? ' is-invalid' : '' }}"
                                                     id="employeeEndTime"
@@ -335,6 +360,26 @@
                                             @endif
 
                                         </div>
+
+                                        <div class="mb-3 col-md-6">
+                                            <label for="jobList" class="form-label">Job Feature <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-select {{ $errors->has('jobError') ? 'is-invalid' : '' }}"
+                                                id="jobFeature" name="jobFeature" required>
+                                                <option value="" disabled selected>Select Job feature</option>
+                                                <option value="normal"
+                                                    {{ old('jobFeature', isset($jobPost) ? $jobPost->jobFeature : '') == 'normal' ? 'selected' : '' }}>
+                                                    Normal</option>
+                                                <option value="premium"
+                                                    {{ old('jobFeature', isset($jobPost) ? $jobPost->jobFeature : '') == 'premium' ? 'selected' : '' }}>
+                                                    Premium</option>
+                                                
+                                            </select>
+                                            <div class="invalid-feedback">This field is required.</div>
+                                        </div>
+
+                                        
+
                                     </div>
                                     <div class="mb-3 col-md-12">
                                         <label for="jobDescription" class="form-label">Job Description

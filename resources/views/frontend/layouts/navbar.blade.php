@@ -30,7 +30,7 @@
                     <a class="nav-link" aria-current="page" href="{{ route('visaHQ') }}">Visa HQ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">Insurance</a>
+                    <a class="nav-link" aria-current="page" href="{{ route('frontend.insurance') }}">Insurance</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="{{ route('forex_calculator') }}">Forex
@@ -1209,20 +1209,24 @@
                         `<option value="country" selected>Select Country</option>`;
                     dropdown2.innerHTML =
                         `<option value="country" selected>Select Country</option>`; // Default option
+
                     countries.forEach((country) => {
                         const option = document.createElement("option");
                         option.value = country.name;
                         option.textContent = `${country.name}`;
                         dropdown.appendChild(option);
-                        dropdown2.appendChild(option);
+                        // dropdown2.appendChild(option);
+                        dropdown2.appendChild(option.cloneNode(true));
                     });
+
+                    
                     // Restore old value (if exists)
                     const oldCountry = "{{ old('country') }}";
-
-                    const userCountry = "{{  Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->country : '' }}";
                     if (oldCountry) {
                         dropdown.value = oldCountry;
                     }
+
+                    const userCountry = "{{  Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->country : '' }}";
                     if (userCountry) {
                         dropdown2.value = userCountry;
                     }

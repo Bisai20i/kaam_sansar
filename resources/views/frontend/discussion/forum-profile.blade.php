@@ -89,6 +89,18 @@
                                 id="floatingTextarea" style="height: 100px"></textarea>
                             <label for="floatingTextarea">Describe...</label>
                         </div>
+                        <div class="form text-black-50 mt-2">
+                            <select name="country" id="forumCountry" class="form-control bg-dark-subtle text-black-50">
+                                <option value="" selected>Select Country</option>
+                                <!-- Country options will be dynamically populated by JavaScript -->
+                            </select>
+
+                        </div>
+                        <div class="form-floating text-black-50 mt-3">
+                            <input name="person_name" type="text" class="form-control bg-dark-subtle text-black-50"
+                                id="person_name" placeholder="Person Name">
+                            <label for="person Name">Person Name</label>
+                        </div>
                         <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
                             <p class="flex-grow-1 my-auto text-black-50">Add to your post</p>
                             <div class="d-flex gap-3 align-items-center">
@@ -116,6 +128,63 @@
             </div>
         </div>
     </div>
+
+    <!-- fetch country api -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Fetch country data from REST Countries API
+            fetch("https://restcountries.com/v3.1/all")
+                .then((response) => response.json())
+                .then((data) => {
+                    // Extract country names and their calling codes
+                    const countries = data.map((country) => ({
+                        name: country.name.common,
+                        shortCode: country.cca2, // Short code (e.g., NP for Nepal)
+
+                        code: country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] :
+                            '')
+                    }));
+
+                    // Sort countries alphabetically by name
+                    countries.sort((a, b) => a.name.localeCompare(b.name));
+
+                    // Function to populate the country code dropdown
+                    function populateCountry() {
+                        const dropdown = document.getElementById('forumCountry');
+
+                        dropdown.innerHTML =
+                            `<option value="country" selected>Select Country</option>`;
+
+
+                        countries.forEach((country) => {
+                            const option = document.createElement("option");
+                            option.value = country.name;
+                            option.textContent = `${country.name}`;
+                            dropdown.appendChild(option);
+
+                        });
+
+
+                        // Restore old value (if exists)
+                        // const oldCountry = "{{ old('country') }}";
+                        // if (oldCountry) {
+                        //     dropdown.value = oldCountry;
+                        // }
+                    }
+
+                    // Populate the dropdown
+                    populateCountry();
+                })
+                .catch((error) => {
+                    console.error("Error fetching country data:", error);
+                    // Display an error message if fetching fails
+                    const dropdown = document.getElementById('registerCountry');
+                    dropdown.innerHTML =
+                        `<option selected>Failed to load countries. Please try again later.</option>`;
+                });
+        });
+    </script>
 
 
     <!-- Comment Modal -->
@@ -148,7 +217,7 @@
                         class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2 mt-2">
 
                         <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail"
-                            src="{{Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : 'https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg' }}"
+                            src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : 'https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg' }}"
                             style="width: 50px; height:50px;" />
                         <input class="form-control w-100 p-2" name="comment" id="commentInput"
                             placeholder="Write a comment...." type="text" required />
@@ -178,8 +247,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-                    <button id="deleteCommentButton" data-comment-id="0"
-                        onclick="deleteComment(this)"
+                    <button id="deleteCommentButton" data-comment-id="0" onclick="deleteComment(this)"
                         class="btn btn-danger">Delete</button>
                 </div>
             </div>
@@ -206,7 +274,7 @@
                                 alt="">
                         </div>
                         <div class="col-auto flex-fill ps-2 order-md-1 order-2">
-                            <h4 class="m-0 text-black">{{ $profile->firstName . ' ' . $profile->lastName }}</h4>
+                            <h4 class="m-0 text-black">{{ ucfirst($profile->firstName) . ' ' . $profile->lastName }}</h4>
                             <div class="d-inline-flex gap-4 fw-medium">
                                 <span>{{ $profile->postCount }} Posts</span>
                                 <span>{{ $profile->followers }} Followers</span>
@@ -216,19 +284,21 @@
                         <div class="col-auto p-0 order-md-2 order-1">
 
                             @auth('job_seekers')
-                                <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2"
-                                    style="background-color: #0064a7;"
-                                    {{ $profile->id == Auth::guard('job_seekers')->id() ? 'disabled' : '' }}
-                                    data-user-id="{{ $profile->id }}" onclick="follow(this)">
-                                    {!! $profile->followed
-                                        ? '<span class="d-none d-md-inline">Unfollow</span>'
-                                        : '+ <span class="d-none d-md-inline">Follow</span>' !!}
+                                @if (Auth::guard('job_seekers')->user()->id !== $profile->id)
+                                    <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2"
+                                        style="background-color: #0064a7;" data-user-id="{{ $profile->id }}"
+                                        onclick="follow(this)">
+                                        {!! $profile->followed
+                                            ? '- <span class="d-none d-md-inline">Unfollow</span>'
+                                            : '+ <span class="d-none d-md-inline">Follow</span>' !!}
 
-                                </button>
+                                    </button>
+                                @endif
+
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
                                     style="background-color: #0064a7;" data-user-id="{{ $profile->id }}"
                                     onclick="openChat(this)"
-                                    data-user-name="{{ $profile->firstName . ' ' . $profile->lastName }}">
+                                    data-user-name="{{ ucfirst($profile->firstName) . ' ' . $profile->lastName }}">
                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                     <span class="d-none d-md-inline">Chat</span>
                                 </button>
@@ -279,29 +349,35 @@
                                         <div class="col-auto flex-fill ps-2 ">
 
                                             <h5 class="m-0 text-black">
-                                                {{ $profile->firstName . ' ' . $profile->lastName }}
+                                                {{ ucfirst($profile->firstName) . ' ' . ucfirst($profile->lastName) }}
                                             </h5>
                                             <div class="d-inline-flex gap-4 ">
-                                                <small class="text-black-50"><span>
-                                                        <svg width="14" height="18" viewBox="0 0 14 18"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M6.8 9.725C8.00122 9.725 8.975 8.75122 8.975 7.55C8.975 6.34878 8.00122 5.375 6.8 5.375C5.59878 5.375 4.625 6.34878 4.625 7.55C4.625 8.75122 5.59878 9.725 6.8 9.725Z"
-                                                                stroke="#9D9999" stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                            <path
-                                                                d="M6.8 1.75C5.26174 1.75 3.78649 2.36107 2.69878 3.44878C1.61107 4.53649 1 6.01174 1 7.55C1 8.9217 1.29145 9.81925 2.0875 10.8125L6.8 16.25L11.5125 10.8125C12.3086 9.81925 12.6 8.9217 12.6 7.55C12.6 6.01174 11.9889 4.53649 10.9012 3.44878C9.81351 2.36107 8.33826 1.75 6.8 1.75Z"
-                                                                stroke="#9D9999" stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                        </svg> {{ $profile->temporaryLocation }}</span>
-                                                    <span>
+                                                <small class="text-black-50 d-flex flex-wrap align-items-center gap-2">
+                                                    @if($profile->temporaryLocation)
+                                                        <span class="d-flex align-items-center gap-1">
+                                                            <svg width="14" height="18" viewBox="0 0 14 18"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M6.8 9.725C8.00122 9.725 8.975 8.75122 8.975 7.55C8.975 6.34878 8.00122 5.375 6.8 5.375C5.59878 5.375 4.625 6.34878 4.625 7.55C4.625 8.75122 5.59878 9.725 6.8 9.725Z"
+                                                                    stroke="#9D9999" stroke-width="2" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path
+                                                                    d="M6.8 1.75C5.26174 1.75 3.78649 2.36107 2.69878 3.44878C1.61107 4.53649 1 6.01174 1 7.55C1 8.9217 1.29145 9.81925 2.0875 10.8125L6.8 16.25L11.5125 10.8125C12.3086 9.81925 12.6 8.9217 12.6 7.55C12.6 6.01174 11.9889 4.53649 10.9012 3.44878C9.81351 2.36107 8.33826 1.75 6.8 1.75Z"
+                                                                    stroke="#9D9999" stroke-width="2" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                            </svg> {{ $profile->temporaryLocation }}
+                                                        </span>
+                                                    @endif
+                                                    <span class="d-flex align-items-center gap-1">
                                                         <svg width="19" height="18" viewBox="0 0 19 18"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path
                                                                 d="M9.59961 15C11.1909 15 12.717 14.3679 13.8423 13.2426C14.9675 12.1174 15.5996 10.5913 15.5996 9C15.5996 7.4087 14.9675 5.88258 13.8423 4.75736C12.717 3.63214 11.1909 3 9.59961 3C8.00831 3 6.48219 3.63214 5.35697 4.75736C4.23175 5.88258 3.59961 7.4087 3.59961 9C3.59961 10.5913 4.23175 12.1174 5.35697 13.2426C6.48219 14.3679 8.00831 15 9.59961 15ZM9.59961 1.5C10.5845 1.5 11.5598 1.69399 12.4697 2.0709C13.3797 2.44781 14.2065 3.00026 14.9029 3.6967C15.5993 4.39314 16.1518 5.21993 16.5287 6.12987C16.9056 7.03982 17.0996 8.01509 17.0996 9C17.0996 10.9891 16.3094 12.8968 14.9029 14.3033C13.4964 15.7098 11.5887 16.5 9.59961 16.5C5.45211 16.5 2.09961 13.125 2.09961 9C2.09961 7.01088 2.88979 5.10322 4.29631 3.6967C5.70283 2.29018 7.61049 1.5 9.59961 1.5ZM9.97461 5.25V9.1875L13.3496 11.19L12.7871 12.1125L8.84961 9.75V5.25H9.97461Z"
                                                                 fill="#9D9999" />
                                                         </svg>
-                                                        {{ $forumPost->created_at->diffForHumans() }}</span></small>
+                                                        {{ $forumPost->created_at->diffForHumans() }}
+                                                    </span>
+                                                </small>
                                             </div>
                                         </div>
                                         @auth('job_seekers')
@@ -314,7 +390,7 @@
                                                                 class="fa-solid fa-ellipsis fs-5 text-black text-decoration-none"></i>
                                                         </a>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            
+
                                                             <li><button class="dropdown-item"
                                                                     style="color: #0064A7;font-size: 16px; font-weight: 500;"
                                                                     data-forum-category = "{{ $forumPost->category }}"
@@ -322,6 +398,8 @@
                                                                     data-forum-topic = "{{ $forumPost->topic }}"
                                                                     data-forum-description = "{{ $forumPost->description }}"
                                                                     data-images-count = "{{ count($forumPost->images) }}"
+                                                                    data-person-name = "{{ $forumPost->person_name }}"
+                                                                    data-country = "{{ $forumPost->country }}"
                                                                     onclick="handleEdit(this)">Edit</button>
                                                             </li>
                                                             <li>
@@ -352,10 +430,10 @@
                                 </div>
                                 @if (count($forumPost->images) > 0)
                                     <div
-                                        class="mt-2 text-center g-2 row justify-content-center {{ count($forumPost->images) === 1 ? 'row-cols-1' : 'row-cols-md-2 row-cols-1' }}">
+                                        class="mt-2 text-center g-2 row {{ count($forumPost->images) === 1 ? 'row-cols-1' : 'row-cols-md-2 row-cols-1' }}">
 
                                         @for ($i = 0; $i < count($forumPost->images); $i++)
-                                            <div class="col position-relative" style="max-width:500px;">
+                                            <div class="col position-relative" style="max-width:600px;">
                                                 <span
                                                     class="position-absolute top-0 end-0 text-danger py-1 px-2 m-2 rounded-circle bg-white"
                                                     data-forum-id="{{ $forumPost->id }}"
@@ -364,7 +442,7 @@
                                                     <i class="bi bi-trash text-danger"></i>
                                                 </span>
                                                 <img src="{{ $forumPost->images[$i] }}" class="img-fluid w-100"
-                                                    alt="Post Image">
+                                                    style="max-width:600px;" alt="Post Image">
                                             </div>
                                         @endfor
                                         {{-- @foreach ($forumPost->images as $image)
@@ -405,12 +483,14 @@
                                             {{ $forumPost->dislikes > 999 ? round($forumPost->dislikes / 1000, 1) . ' K' : $forumPost->dislikes }}</span>
                                     </button>
 
-                                    <span class="text-decoration-none text-black" data-bs-toggle="modal"
-                                        data-bs-target="#commentModal" data-forum-id="{{ $forumPost->id }}"
+                                    <span class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                        data-bs-toggle="modal" style="cursor: pointer;" data-bs-target="#commentModal"
+                                        data-forum-id="{{ $forumPost->id }}"
                                         data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
                                         onclick="loadComments(this)">
-                                        <span class="d-flex align-items-center gap-1" style="cursor: pointer;">
-                                            <i class="fa-solid fa-comment fs-5" style="color: #0064a7;"></i>
+                                        <i class="fa-solid fa-comment fs-5" style="color: #0064a7;"></i>
+                                        <span id="commentCount_{{ $forumPost->id }}">
+
                                             {{ $forumPost->comments > 999 ? round($forumPost->comments / 1000, 1) . ' K' : $forumPost->comments }}
                                         </span>
                                     </span>
@@ -729,6 +809,9 @@
                         $('#deleteModal').modal('hide');
                         $('#commentModal').modal('show');
                         loadComments(document.getElementById('commentModal'))
+                        document.getElementById('commentCount_' + e.getAttribute('data-forum-id')).textContent =
+                            parseInt(document.getElementById('commentCount_' + e.getAttribute('data-forum-id'))
+                                .textContent) - 1
                     } else {
                         alert('Something went wrong!')
                     }
@@ -881,6 +964,18 @@
                         $('#commentsList').animate({
                             scrollTop: $('#commentsList')[0].scrollHeight
                         }, 500)
+
+                        //$forumPost->comments > 999 ? round($forumPost->comments / 1000, 1) . ' K' : $forumPost->comments
+
+                        if (parseInt(document.getElementById('commentCount_' + postId).textContent) <= 999) {
+                            document.getElementById('commentCount_' + postId).textContent = parseInt(document
+                                .getElementById('commentCount_' + postId).textContent) + 1
+                        } else {
+                            document.getElementById('commentCount_' + postId).textContent = ((parseInt(document
+                                .getElementById('commentCount_' + postId).textContent) + 1) / 1000).toFixed(
+                                1) + 'K'
+                        }
+
                     } else {
                         alert('Something went wrong!')
                     }
@@ -1000,6 +1095,8 @@
             let postDescription = e.getAttribute('data-forum-description')
             let postCategory = e.getAttribute('data-forum-category')
             let imageCount = e.getAttribute('data-images-count')
+            let country = e.getAttribute('data-country')
+            let personName = e.getAttribute('data-person-name')
 
             console.log("Images: ", imageCount)
 
@@ -1008,6 +1105,11 @@
             $('#titleInput').val(postTopic)
             $('#floatingTextarea').val(postDescription)
             $('#category').val(postCategory)
+            if (country) {
+                $('#forumCountry').val(country)
+            }
+
+            $('#person_name').val(personName)
 
             $("#editPostForm").attr('action', getBaseUrl() + '/discussion/discussion_forum/' + postId)
 
