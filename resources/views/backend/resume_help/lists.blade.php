@@ -37,7 +37,7 @@
                     <a href="{{ route('resume-help.create') }}" class="btn btn-primary mb-3">Add Resume</a>
                     <table class="table table-bordered">
                         <thead>
-                            <tr>
+                            <tr style="color:rgb(244, 254, 242)">
                                 <th>Title</th>
                                 <th>Short Description</th>
                                 <th>Price</th>
@@ -48,7 +48,7 @@
                         </thead>
                         <tbody>
                             @foreach ($resumeHelps as $resume)
-                                <tr>
+                                <tr style="background: {{ $resume->publish_not_publish ?'rgb(244, 254, 242)' :' rgb(254, 242, 242)' }};">
                                     <td>{{ $resume->title }}</td>
                                     <td>{{ $resume->short_desc }}</td>
                                     <td>${{ $resume->normal_price }}</td>

@@ -7,18 +7,19 @@ use App\Models\Advertisement;
 use App\Models\AdvertisementCategory;
 use App\Models\BlogsAndPodcast;
 use App\Models\DiscussionForum;
+use App\Models\Follower;
+use App\Models\ForumInteraction;
 use App\Models\GiftCategory;
 use App\Models\GiftCoupon;
 use App\Models\IndustryCategory;
 use App\Models\JobCategory;
 use App\Models\JobPost;
+use App\Models\JobSeeker;
 use App\Models\ResumeHelp;
 use App\Models\UserComment;
+use App\Models\GiftCart;
 use App\Models\VisaCountryList;
 use App\Models\VisaType;
-use App\Models\Follower;
-use App\Models\ForumInteraction;
-use App\Models\JobSeeker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -849,7 +850,25 @@ class FrontendAPIController extends Controller
                 ->paginate(8)
                 ->withQueryString();
 
+            $categories     = [];
             $giftcategories = GiftCategory::where('publishStatus', 1)->get();
+            $categories[]   = ['id' => 0, 'giftCategoryTitle' => 'All'];
+            foreach ($giftcategories as $category) {
+                $categories[] = $category;
+            }
+
+            $giftNcoupons->transform(function ($giftNcoupon) use($request) {
+                $giftNcoupon->thumbnail = $giftNcoupon->thumbnail ? asset('storage/' . $giftNcoupon->imageUrl) : null;
+                $giftNcoupon->in_cart = GiftCart::where('coupon_id', $giftNcoupon->id)->where('jobSeekerId', $request->user()->id)->exists() ;
+                return $giftNcoupon;
+            });
+
+            // $giftcategories = ['id'=> 0,'giftCategoryTitle' => 'all'];
+            // $giftcategories['all_categories'] = 'all';
+
+            // foreach ($categories as $category) {
+            //     $giftcategories[$category->id] = $category->giftCategoryTitle;
+            // }
 
             $countries = GiftCoupon::distinct()->pluck('country');
             $cities    = GiftCoupon::distinct()->pluck('city');
@@ -858,10 +877,48 @@ class FrontendAPIController extends Controller
                 'message' => 'Data fetched successfully',
                 'data'    => [
                     'giftNcoupons' => $giftNcoupons,
-                    'categories'   => $giftcategories,
+                    'categories'   => $categories,
                     'countries'    => $countries,
                     'cities'       => $cities,
                 ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Failed to fetch data',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function giftComments($id)
+    {
+        try {
+            $giftComments = UserComment::with('jobSeeker:id,firstName,lastName,userThumbnail')
+                ->where('giftCouponId', $id)
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            $giftComments->transform(function ($giftComment) {
+                if ($giftComment->jobSeeker && is_array($giftComment->jobSeeker->userThumbnail)) {
+                    $thumbnails = $giftComment->jobSeeker->userThumbnail;
+
+                    if (count($thumbnails) > 0) {
+                        // Remove slashes if somehow they're still escaped (optional)
+                        $path = str_replace('\\/', '/', $thumbnails[0]);
+
+                        $giftComment->jobSeeker->userThumbnail = asset('storage/' . $path);
+                    } else {
+                        $giftComment->jobSeeker->userThumbnail = null;
+                    }
+                }
+
+                return $giftComment;
+            });
+            return response()->json([
+                'status'  => true,
+                'message' => 'Data fetched successfully',
+                'data'    => $giftComments,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -888,7 +945,6 @@ class FrontendAPIController extends Controller
             $giftComments = UserComment::with('jobSeeker:id,firstName,lastName,userThumbnail')
                 ->where('giftCouponId', $id)
                 ->latest()
-                ->take(4)
                 ->get();
 
             $giftComments->transform(function ($giftComment) {
@@ -929,20 +985,26 @@ class FrontendAPIController extends Controller
 
     }
 
-    public function sellerProfile($id)
+    public function sellerProfile($id, $type = null)
     {
         try {
 
-            // $seller = Admin::where('id', $id)
-            //     ->with(['giftCoupons'=> function ($query){
-            //         $query->orderBy('id', 'desc');
-            //         $query->take(8);
+            $seller = Admin::where('id', $id)->first(['id', 'fullName', 'email', 'status', 'profile_image', 'location', 'created_at']);
 
-            //         $query->where('publishStatus',true);
-            //     }])
-            //     ->first(['fullName', 'email', 'status']);
-            $seller      = Admin::where('id', $id)->first(['fullName', 'email', 'status']);
-            $sellerGifts = GiftCoupon::where('adminId', $id)->take(8)->latest()->get();
+            $sellerGifts = GiftCoupon::where('adminId', $id)
+                ->when(
+                    in_array($type, ['1', '0']),
+                    fn($query) => $query->where('type', $type)
+                )
+                ->orderBy('created_at', 'desc')
+                ->take(8)->get();
+            
+            $seller->profile_image = $seller->profile_image ? asset('storage/' . $seller->profile_image) : asset('frontend/assets/Images/profile-icon.png');
+
+            $sellerGifts->transform(function ($gift) {
+                $gift->thumbnail = $gift->thumbnail ? asset('storage/' . $gift->thumbnail) : null;
+                return $gift;
+            });
 
             return response()->json([
                 'status'  => true,
@@ -1060,7 +1122,7 @@ class FrontendAPIController extends Controller
 
             if ($profile->postCount > 0) {
 
-                $profile->discussionForum->transform(function ($forumPost) use($request) {
+                $profile->discussionForum->transform(function ($forumPost) use ($request) {
                     $imagePaths = $forumPost->images ? $forumPost->images : [];
                     $imageLinks = array_map(function ($path) {
                         return asset('storage/' . $path);
@@ -1068,9 +1130,7 @@ class FrontendAPIController extends Controller
 
                     $forumPost->images = $imageLinks;
 
-
                     $forumPost->interaction = ForumInteraction::where('forum_id', $forumPost->id)->where('jobSeekerId', $request->user()->id)->first();
-
 
                     $forumPost->likes    = $forumPost->forumInteraction->where('type', 'like')->count();
                     $forumPost->dislikes = $forumPost->forumInteraction->where('type', 'dislike')->count();
@@ -1084,7 +1144,7 @@ class FrontendAPIController extends Controller
             return response()->json([
                 'status'  => true,
                 'message' => 'Data fetched successfully!',
-                'data' => $profile
+                'data'    => $profile,
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -1096,8 +1156,30 @@ class FrontendAPIController extends Controller
 
     }
 
-    // public function resumeHelp(){
-    //     return view('frontend.resume.index');
-    // }
+    public function getResumeHelp(){
+        try {
+            $freeResume = ResumeHelp::where('type', 0)
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+            $freeResume->transform(function ($resume) {
+                $resume->image_preview = asset('storage/' . $resume->image_preview);
+                return $resume;
+            });
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Data fetched successfully!',
+                'data'    => $freeResume,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Failed to fetch data',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
 
 }

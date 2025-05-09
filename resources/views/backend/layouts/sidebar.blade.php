@@ -13,7 +13,7 @@
 
     <div class="menu-inner-shadow"></div>
 
-    <ul class="menu-inner py-1">
+    <ul class="menu-inner py-2">
         <!-- Dashboard -->
         <li class="menu-item {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
             <a href="{{ route('superadmin.dashboard') }}" class="menu-link">
@@ -147,7 +147,7 @@
         <!--Manage Gift and Coupon-->
         <li class="menu-item {{ request()->routeIs('giftNcoupon*') ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-star"></i>
+                <i class="menu-icon tf-icons bx bx-gift"></i>
                 <div data-i18n="Manage Horoscope">Manage Gift and Coupons</div>
             </a>
             <ul class="menu-sub">
@@ -199,6 +199,13 @@
                     </a>
                 </li>
             </ul>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('kundalimatching*') ? 'active' : '' }}">
+                    <a href="{{ route('kundalimatching.index') }}" class="menu-link">
+                        <div data-i18n="KundaliMatching">Kundali Matching</div>
+                    </a>
+                </li>
+            </ul>
 
         </li>
 
@@ -235,10 +242,29 @@
 
         <li class="menu-item {{ request()->routeIs('forum-posts*') ? 'active' : '' }}">
             <a href="{{ route('forum.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <i class='menu-icon tf-icons bx bx-conversation'></i>
                 <div data-i18n="Ads Manager">Discussion Forum</div>
             </a>
         </li>
+
+        <!-- Manage Insurance-->
+
+        <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
+            <a href="{{ route('insurance.company') }}" class="menu-link">
+                
+                <i class="menu-icon tf-icons bx bx-heart"></i>
+                <div data-i18n="Insurance">Insurance Company</div>
+            </a>
+        </li>
+        
+        <li class="menu-item {{ request()->routeIs('passport*') ? 'active' : '' }}">
+            <a href="{{ route('passport.renewal') }}" class="menu-link">
+                
+                <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
+                <div data-i18n="Passport Renewal">Passport Renewal</div>
+            </a>
+        </li>
+
     </ul>
 
 

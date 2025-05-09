@@ -96,7 +96,11 @@ class GiftCartController extends Controller
                 $giftcart->quantity = $giftcart->quantity + 1;
                 $giftcart->save();
                 return $isMobile
-                ? $this->responseSuccess('Quantity of the item Added successfully.', $giftcart)
+                ? response()->json([
+                    'message' => 'Quantity of the item Added successfully.',
+                    'data' => $giftcart,
+                    
+                ])
                 : redirect()->back()->with('success', 'Quantity of the item Added successfully.');
             }
             else{
@@ -128,10 +132,18 @@ class GiftCartController extends Controller
 
             $giftcart = GiftCart::find($id);
             if ($giftcart && $giftcart->jobSeekerId === $user->id) {
+                if($giftcart->quantity <= 1){
+                    return $isMobile
+                    ? $this->responseError('Quantity cannot be less than 1', 400)
+                    : redirect()->back()->with('error','Quantity cannot be less than 1');
+                }
                 $giftcart->quantity = $giftcart->quantity - 1;
                 $giftcart->save();
                 return $isMobile
-                ? $this->responseSuccess('Quantity of the item Subtracted successfully.', $giftcart)
+                ?response()->json([
+                    'message' => 'Quantity of the item Added successfully.',
+                    'data' => $giftcart,
+                ])
                 : redirect()->back()->with('success', 'Quantity of the item Subtracted successfully.');
             }
             else{

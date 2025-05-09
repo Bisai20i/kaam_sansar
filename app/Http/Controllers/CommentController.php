@@ -54,14 +54,11 @@ class CommentController extends Controller
 
         Log::info('Authenticated Job Seeker ID: ' . $user->id);
         $jobSeekerId = $user->id;
-        $commentPersonImg = $user->userThumbnail;
          // Get the job seeker's first and last name
         $fullName = $user->firstName . ' ' . $user->lastName;
 
         // Validate request data
         $validator = Validator::make($request->all(), [
-            'commentPersonName' => 'nullable|string|max:255',
-            'commentPersonImg' => 'nullable|Image|mimes:jpeg,png,jpg,gif|max:2048',
             'comment' => 'required|string|max:1000',
         ]);
 
@@ -72,8 +69,6 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->adsId = $request->input('adsId');
         $comment->jobSeekerId = $jobSeekerId;
-        $comment->commentPersonName = $fullName;
-        $comment->commentPersonImg = $commentPersonImg;
         $comment->comment = $request->input('comment');
         $comment->save();
 
@@ -81,8 +76,11 @@ class CommentController extends Controller
 
         return $isMobile
             ? $this->responseSuccess('Comment created successfully', $comment)
-            : redirect()->back()->with('success', 'Comment created successfully');
-    }
+             :redirect()->to(url()->previous())->with([
+                'success' => 'Comment created successfully!',
+                'open_tab' => 'comment'    
+            ]);
+         }
 
     /**
      * Display the specified resource.
@@ -103,7 +101,7 @@ class CommentController extends Controller
         }
         return $isMobile
             ? $this->responseSuccess('Comment details', $comments)
-            : redirect()->back()->with('success', 'Comment details');
+            : view('frontend.advertisements.show',compact('comments'));
     }
 
     /**

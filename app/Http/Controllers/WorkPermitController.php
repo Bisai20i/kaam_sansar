@@ -2,6 +2,15 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
+use Illuminate\Http\Request;
+use App\Models\WorkPermit;
+
+class WorkPermitController extends Controller
+{
+    public function index(){
+        
+=======
 use App\Models\WorkPermit;
 use Illuminate\Http\Request;
 
@@ -81,5 +90,6 @@ class WorkPermitController extends Controller
     public function destroy(WorkPermit $workPermit)
     {
         //
+>>>>>>> 061daffb7c0a3988e40be5aa1e1f3087267cbedc
     }
 }

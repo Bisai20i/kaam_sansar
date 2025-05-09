@@ -3,19 +3,32 @@
     Resume Help
 @endsection
 @section('content')
+
     <div class="container-fluid text-white mt-5" style="background-color: #0064A7">
-        <div class="container py-4">
-            <h3>"Land Your Dream Job with a Standout Resume!"</h3>
-            <p>"Your resume is your first impression—make it count! Discover expert tips, customizable templates,
-                and career-boosting advice to create a standout resume tailored to your goals. Whether you're just
-                starting out or advancing your career, we've got you covered. Let’s turn your dream job into
-                reality. Get started today!"</p>
-        </div>
+        @if($ad_banners['top'])
+
+        <a href="{{ $ad_banners['top']->link }}" class="d-block" style="text-decoration: none; cursor: pointer; object-fit: contain;">
+            <img src="{{$ad_banners['top']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
+        </a>
+
+        @else
+
+            <div class="container py-4">
+                <h3>"Land Your Dream Job with a Standout Resume!"</h3>
+                <p>"Your resume is your first impression—make it count! Discover expert tips, customizable templates,
+                    and career-boosting advice to create a standout resume tailored to your goals. Whether you're just
+                    starting out or advancing your career, we've got you covered. Let’s turn your dream job into
+                    reality. Get started today!"</p>
+            </div>
+
+        @endif
+        
     </div>
     <section class="resume-Subscribe mb-4" id="resume-Subscribe" style="display: none;">
 
         <div class="container">
-            <h2 class="my-4 "><i class="bi bi-chevron-left p-2" onclick="toggleContent(0)" style="cursor: pointer;"></i> Subscribe Plan</h2>
+            <h2 class="my-4 "><i class="bi bi-chevron-left p-2" onclick="toggleContent(0)" style="cursor: pointer;"></i>
+                Subscribe Plan</h2>
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
                 <div class="col">
                     <div class=" border border-1 border-dark rounded-3 px-3 py-4 text-center">
@@ -97,31 +110,27 @@
 
         <div class="container mt-3">
             <h4>Free Template</h4>
+
+
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card p-2 position-relative text-dark rounded-2 p-3 overflow-hidden resume-card shadow-sm">
-                        <p class="fw-bold fs-5 mb-1 text-dark">Title</p>
-                        <p>Sint illum quibusdam est. Ducimus incidunt praesentium natus autem ad veniam.</p>
-                        <img src="{{ asset('frontend/assets/Images/img' . '/cv-1.png') }}" class="img-fluid rounded mb-4"
-                            alt="Free Template 1">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card p-2 position-relative text-dark rounded-2 p-3 overflow-hidden resume-card shadow-sm">
-                        <p class="fw-bold fs-5 mb-1 text-dark">Title</p>
-                        <p>Sint illum quibusdam est. Ducimus incidunt praesentium natus autem ad veniam.</p>
-                        <img src="{{ asset('frontend/assets/Images/img' . '/cv-2.png') }}" class="img-fluid rounded mb-4"
-                            alt="Free Template 2">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card p-2 position-relative text-dark rounded-2 p-3 overflow-hidden resume-card shadow-sm">
-                        <p class="fw-bold fs-5 mb-1 text-dark">Title</p>
-                        <p>Sint illum quibusdam est. Ducimus incidunt praesentium natus autem ad veniam.</p>
-                        <img src="{{ asset('frontend/assets/Images/img' . '/cv-3.png') }}" class="img-fluid rounded mb-4"
-                            alt="Free Template 3">
-                    </div>
-                </div>
+
+
+                @if ($freeResumeHelps->count() > 0)
+                    @foreach ($freeResumeHelps as $resume)
+                        <div class="col-md-4">
+                            <div
+                                class="card p-2 position-relative text-dark rounded-2 p-3 overflow-hidden resume-card shadow-sm">
+                                <p class="fw-bold fs-5 mb-1 text-dark">{{ $resume->title }}</p>
+                                <p>{{ $resume->short_desc }}</p>
+                                <img src="{{ $resume->image_preview }}" class="img-fluid rounded mb-4"
+                                    alt="Free Template 1">
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-center text-secondary">No Resume Helps Found.</p>
+                @endif
+
             </div>
 
             <style>
@@ -184,44 +193,54 @@
             <div class="container mt-5">
                 <h4 class="mt-5">Premium Template</h4>
                 <div class="row g-4">
-                    <div class="col-md-4">
-                        <div
-                            class="card position-relative text-dark rounded-2 p-3 overflow-hidden position-relative text-dark rounded-2 p-3 overflow-hidden resume-card shadow-sm">
-                            <p class="fw-bold fs-5 mb-1 text-dark">Title </p>
-                            <p>Sint illum quibusdam est. Ducimus incidunt praesentium natus autem ad veniam.</p>
-                            <img src="{{ asset('frontend/assets/Images/img' . '/cv-p.png') }}" class="img-fluid rounded mb-4"
-                                alt="Premium Template 1">
-                            <div class="cv-overlay">
-                                <div class="lock-icon d-flex justify-content-center mb-3">
-                                    <i class="fas fa-lock fa-2x"></i>
-                                </div>
-                                <div class="text-center">
-                                    <h3>Rs 999</h3>
-                                    <p>One-time purchase</p>
-                                </div>
-                                <p class="d-flex align-items-center ms-4">
-                                    <i class="bi bi-check-circle text-success me-2"></i> Instant Download
-                                </p>
-                                <p class="d-flex align-items-center ms-4">
-                                    <i class="bi bi-check-circle text-success me-2"></i> ATS-Friendly Format
-                                </p>
-                                <p class="d-flex align-items-center ms-4">
-                                    <i class="bi bi-check-circle text-success me-2"></i> Easy to Customize
-                                </p>
-                                <div class="d-flex justify-content-center">
-                                    <button class="btn-create px-4 py-2 w-auto h-auto">Purchase
-                                        Template</button>
+
+
+                    @if ($premiumResumeHelps->count() > 0)
+                        @foreach ($premiumResumeHelps as $resume)
+                            <div class="col-md-4">
+                                <div
+                                    class="card position-relative text-dark rounded-2 p-3 overflow-hidden position-relative text-dark rounded-2 p-3 overflow-hidden resume-card shadow-sm">
+                                    <p class="fw-bold fs-5 mb-1 text-dark">{{ $resume->title }}</p>
+                                    <p>{{ $resume->short_desc }}</p>
+                                    <img src="{{ $resume->image_preview }}"
+                                        class="img-fluid rounded mb-4" alt="Premium Template 1">
+                                    <div class="cv-overlay">
+                                        <div class="lock-icon d-flex justify-content-center mb-3">
+                                            <i class="fas fa-lock fa-2x"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <h3>Rs {{ $resume->normal_price }}</h3>
+                                            <p>One-time purchase</p>
+                                        </div>
+                                        <p class="d-flex align-items-center ms-4">
+                                            <i class="bi bi-check-circle text-success me-2"></i> Instant Download
+                                        </p>
+                                        <p class="d-flex align-items-center ms-4">
+                                            <i class="bi bi-check-circle text-success me-2"></i> ATS-Friendly Format
+                                        </p>
+                                        <p class="d-flex align-items-center ms-4">
+                                            <i class="bi bi-check-circle text-success me-2"></i> Easy to Customize
+                                        </p>
+                                        <div class="d-flex justify-content-center">
+                                            <button class="btn-create px-4 py-2 w-auto h-auto">Purchase
+                                                Template</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        @endforeach
+                    @else
+                        <p class="text-center text-secondary">No Resume Helps Found.</p>
+                    @endif
 
-                    <div class="col-md-4">
+
+
+                    {{-- <div class="col-md-4">
                         <div class="card position-relative text-dark rounded-2 p-3 overflow-hidden resume-card shadow-sm">
                             <p class="fw-bold fs-5 mb-1 text-dark">Title</p>
                             <p>Sint illum quibusdam est. Ducimus incidunt praesentium natus autem ad veniam.</p>
-                            <img src="{{ asset('frontend/assets/Images/img' . '/cv-p.png') }}" class="img-fluid rounded mb-4"
-                                alt="Premium Template 2">
+                            <img src="{{ asset('frontend/assets/Images/img' . '/cv-p.png') }}"
+                                class="img-fluid rounded mb-4" alt="Premium Template 2">
                             <div class="cv-overlay">
                                 <div class="lock-icon d-flex justify-content-center mb-3">
                                     <i class="fas fa-lock fa-2x"></i>
@@ -370,7 +389,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

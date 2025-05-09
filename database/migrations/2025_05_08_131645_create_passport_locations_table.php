@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('money_exchanges', function (Blueprint $table) {
+        Schema::create('passport_locations', function (Blueprint $table) {
             $table->id();
-            
+            $table->foreignId('district_id')->constrained('passport_districts')->onDelete('cascade');
+            $table->string('locationName');
+            $table->string('slug')->unique();
+            $table->boolean('publishStatus')->default(false);
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('money_exchanges');
+        Schema::dropIfExists('passport_locations');
     }
 };

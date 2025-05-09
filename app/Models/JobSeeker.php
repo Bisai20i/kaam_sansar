@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Http;
+
 
 
 class JobSeeker extends Authenticatable implements MustVerifyEmail
@@ -66,20 +68,39 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
 
 
 
-
-
-    public function getCountryFlagAttribute()
-    {
-        // Make sure countryCode is in uppercase and not null
-        $code = strtolower($this->countryCode ?? $this->countryShortCode);
     
-        // Check if the code has exactly two characters (valid country code)
-        if (strlen($code) === 2) {
-            // Generate the URL for the flag image using the country code
-            return 'https://flagsapi.com/' . strtolower($code) . '/flat/24.png'; // Use flat style and 24px size
+
+    public function getCountryCodeAttribute()
+    {
+        // Check if the country name exists
+        if (empty($this->country)) {
+            return null;
         }
     
-        return ''; // Return empty if code is invalid or not two characters
+        // Call RestCountries API to get country data by name
+        $response = Http::get('https://restcountries.com/v3.1/name/' . urlencode($this->country));
+    
+        // Decode the JSON response
+        $countries = $response->json(); // Convert response to an array
+    
+        // Check if the response contains countries data and count the results
+        if (!empty($countries) && count($countries) > 0) {
+            // Extract the country code (cca2) from the response
+            return $countries[0]['cca2']; // Return the 2-letter country code
+        }
+    
+        return null; // Return null if no valid response
+    }
+    
+    public function getCountryFlagAttribute()
+    {
+        $code = strtoupper($this->country_code); // Always use your dynamic country_code
+    
+        if (strlen($code) === 2) {
+            return "https://flagsapi.com/{$code}/flat/24.png"; // Generate flag URL
+        }
+    
+        return ''; // Return empty if invalid
     }
     
     

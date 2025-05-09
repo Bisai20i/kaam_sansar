@@ -28,44 +28,64 @@
                             </div>
                         @endif
                     </div>
-            
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Title <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="title" value="{{ old('title', $resumeHelp->title) }}" placeholder="Title">
+
+
+                    <div class="d-flex flex-wrap mb-2">
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Title <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="title" placeholder="Title" value="{{ old('title', $resumeHelp->title) }}">
+                        </div>
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Type <span class="text-danger">*</span></label>
+                            <select class="form-control" name="type" >
+                                <option value="0" {{ old('type', $resumeHelp->type) == 0 ? 'selected' : '' }}>Free</option>
+                                <option value="1" {{ old('type', $resumeHelp->type) == 1 ? 'selected' : '' }}>Premium</option>
+                            </select>
+                        </div>
+
                     </div>
-            
-                    <div class="mb-3 col-md-6">
+
+                    <div class="d-flex flex-wrap mb-2">
+
+                        
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Image</label>
+                            <input type="file" class="form-control" name="image_preview" accept="image/*">
+
+                            <img src="{{ asset('storage/' . $resumeHelp->image_preview) }}" class="img img-fluid mt-2" style="max-width:200px;"/>
+                        </div>
+
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Sell Price <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="sell_price" value = "{{ old('sell_price', $resumeHelp->sell_price) }}">
+                        </div>
+
+                    </div>
+                    
+                    <div class="d-flex flex-wrap mb-2">
+
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Normal Price <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="normal_price" value = "{{ old('normal_price', $resumeHelp->normal_price) }}">
+                        </div>
+                        
+                        <div class="col-md-6 col-12 px-2">
+                            <label class="form-label">Type <span class="text-danger">*</span></label>
+                            <select class="form-control" name="publish_not_publish">
+                                <option value="1" {{ old('publish_not_publish', $resumeHelp->publish_not_publish) == 1 ? 'selected' : '' }}>Publish</option>
+                                <option value="0" {{ old('publish_not_publish', $resumeHelp->publish_not_publish) == 0 ? 'selected' : '' }}>Unpublish</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 col-12 px-2 mb-3">
                         <label class="form-label">Short Description <span class="text-danger">*</span></label>
                         <textarea class="form-control" name="short_desc">{{ old('short_desc', $resumeHelp->short_desc) }}</textarea>
                     </div>
+
             
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Image</label>
-                        <input type="file" class="form-control" name="image_preview">
-                        @if($resumeHelp->image_preview)
-                            <img src="{{ asset('storage/' . $resumeHelp->image_preview) }}" class="img-thumbnail mt-2" width="100">
-                        @endif
-                    </div>
-            
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Normal Price <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="normal_price" value="{{ old('normal_price', $resumeHelp->normal_price) }}">
-                    </div>
-            
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Sell Price <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="sell_price" value="{{ old('sell_price', $resumeHelp->sell_price) }}">
-                    </div>
-            
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">Type <span class="text-danger">*</span></label>
-                        <select class="form-control" name="type">
-                            <option value="0" {{ old('type', $resumeHelp->type) == 0 ? 'selected' : '' }}>Free</option>
-                            <option value="1" {{ old('type', $resumeHelp->type) == 1 ? 'selected' : '' }}>Premium</option>
-                        </select>
-                    </div>
-            
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary mx-2">Update</button>
                 </form>
             </div>
         </div>

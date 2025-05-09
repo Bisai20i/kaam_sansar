@@ -65,15 +65,14 @@
                                 <!-- Gift Button -->
                                 <a href="{{ route('giftNcoupon.index', ['type' => '0']) }}"
                                     class="btn btn-info btn-sm text-white">
-                                    <i class="bx bx-news" aria-hidden="true"></i> <!-- News icon for blogs -->
+                                   
                                     Gift
                                 </a>
 
                                 <!-- Coupon Button -->
                                 <a href="{{ route('giftNcoupon.index', ['type' => '1']) }}"
                                     class="btn btn-warning btn-sm text-white">
-                                    <i class="bx bx-microphone" aria-hidden="true"></i>
-                                    <!-- Microphone icon for podcasts -->
+                                    
                                     Coupon
                                 </a>
 

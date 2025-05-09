@@ -16,16 +16,27 @@ class DiscussionForumController extends Controller
 
     public function index(Request $request, $category = null){
 
-        $serachstr = $request->input('searchstr') ?? null;
+
+        $searchstr = $request->query('searchstr') ?? null;
         // $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
         $forums = DiscussionForum::when(
             in_array($category, ['other', 'education', 'investment', 'scammer', 'office']),
             fn($query) => $query->where('category', $category)
         )
-        
+        ->when($searchstr, function($query) use($searchstr) {
+            $query->where(function($q) use ($searchstr) {
+                $q->where('topic', 'like', $searchstr . '%')
+                  ->orWhere('description', 'like', $searchstr . '%')
+                  ->orWhereHas('jobSeeker', function ($q2) use ($searchstr) {
+                      $q2->whereRaw("CONCAT(firstName, ' ', lastName) LIKE ?", ["{$searchstr}%"]);
+                  });
+            });
+        })
         ->latest()
         ->simplePaginate(5);
-
+        
+        // return $forums;  ->orWhereHas('user', function ($q2) use ($searchstr) {
+         //     $q2->where('name', 'like', $searchstr . '%')
         
         return view('backend.discussion_forum.index', compact('forums', 'category'));
     }
@@ -183,6 +194,8 @@ class DiscussionForumController extends Controller
             'category'    => 'required|in:education,investment,scammer,office,other',
             'topic'       => 'required|string',
             'description' => 'required|string',
+            'person_name' => 'nullable|string',
+            'country'     => 'nullable|string',
             'images'      => 'nullable|array|max:5',
             'images.*'    => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -221,6 +234,8 @@ class DiscussionForumController extends Controller
                 'category'    => $request->input('category'),
                 'images'      => $imagePaths,
                 'jobSeekerId' => $user->id,
+                'person_name' => $request->input('person_name'),
+                'country'     => $request->input('country'),
             ]);
 
             // Web response (view rendering)
@@ -350,6 +365,8 @@ class DiscussionForumController extends Controller
             'category'    => 'nullable|in:education,investment,scammer,office,other',
             'topic'       => 'nullable|string',
             'description' => 'nullable|string',
+            'country'     => 'nullable|string',
+            'person_name' => 'nullable|string',
             'images'      => 'nullable|array',
             'images.*'    => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -412,6 +429,12 @@ class DiscussionForumController extends Controller
                 if ($request->category) {
                     $forum->category = $request->category;
                 }
+                if($request->country){
+                    $forum->country = $request->country;
+                }
+                if($request->person_name){
+                    $forum->person_name = $request->person_name;
+                }
 
                 $forum->save();
 
@@ -444,7 +467,6 @@ class DiscussionForumController extends Controller
 
                 ]);
             }
-            return $e->getMessage();
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -476,7 +498,9 @@ class DiscussionForumController extends Controller
         try {
 
             $forum = DiscussionForum::find($id);
-            if ($forum->jobSeekerId = $user->id) {
+
+            
+            if ($forum->jobSeekerId = $user->id || Auth::guard('admin')->check()) {
 
                 if ($forum->images) {
                     foreach ($forum->images as $imagePath) {
@@ -496,6 +520,14 @@ class DiscussionForumController extends Controller
                 }
                 return redirect()->back()->with('success', "Forum Post Deleted Successfully.");
             }
+
+            return $isMobile? response()->json([
+                'status'  => false,
+                'message' => "You dont have permission to perform this action!",
+
+
+            ]) : redirect()->back()->with('error', "You dont have permission to perform this action!");
+           
         } catch (\Exception $e) {
             if ($isMobile) {
                 return response()->json([
@@ -537,13 +569,13 @@ class DiscussionForumController extends Controller
                 ]) : redirect()->back()->with('error', "Forum Post Not Found");
             }
 
-            if ($forum->jobSeekerId != $user->id) {
-                return $isMobile ?
-                response()->json([
-                    'status'  => false,
-                    'message' => "The requested post belongs to another user.",
-                ], 501) : redirect()->back()->with('error', "The requested post belongs to another user.");
-            }
+            // if ($forum->jobSeekerId != $user->id) {
+            //     return $isMobile ?
+            //     response()->json([
+            //         'status'  => false,
+            //         'message' => "The requested post belongs to another user.",
+            //     ], 501) : redirect()->back()->with('error', "The requested post belongs to another user.");
+            // }
 
             $forum->pinned = ! $forum->pinned;
             $forum->save();

@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Horoscope')
+@section('title', 'Passport Renewal')
 
 @section('content')
 <style>

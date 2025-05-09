@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Advertisement;
+use App\Models\Comment;
 use App\Models\AdvertisementCategory;
+use App\Models\AdsManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -21,25 +23,21 @@ class AdvertisementController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //Check if the request is from mobile using request_type
-        $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
-        $ad = Advertisement::all();
+{
+    $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
 
+    // Simple Pagination for Ads
+    $ads = Advertisement::orderBy('created_at', 'desc')->paginate(8);
 
-
-//get all the ads details
-
-        $ads = Advertisement::orderBy('created_at','desc')->simplePaginate(10);
-          // Add image URLs to ads data for mobile requests
+    // Transform only the collection part without breaking pagination
     if ($isMobile) {
-        $ads = $ads->transform(function ($ad) {
-            // Assuming 'image' is the field where the image filename is stored
-            $ad->image_url = $ad->adsThumbnail ? asset( $ad->adsThumbnail) : null;
-    
-            // Modify according to your image storage path
+        $ads->getCollection()->transform(function ($ad) {
+            $ad->image_url = $ad->adsThumbnail ? asset($ad->adsThumbnail) : null;
             return $ad;
         });
+<<<<<<< HEAD
+
+=======
     }
 
         $category = AdvertisementCategory::all();
@@ -49,20 +47,51 @@ class AdvertisementController extends Controller
         $post = Advertisement::all();
         $adTypes = $this->getEnumValues('advertisements', 'type');
     if ($isMobile) {
+>>>>>>> 061daffb7c0a3988e40be5aa1e1f3087267cbedc
         return response()->json([
             'status' => true,
             'message' => 'Advertisements fetched successfully.',
             'data' => [
-                    'ads' => $ads,
-                    'categories' => $category,
-                    'adsTypes'=>$adTypes
-        ]
-     ], 200);
+                'ads' => $ads,
+                'categories' => AdvertisementCategory::all(),
+                'adsTypes' => $this->getEnumValues('advertisements', 'type')
+            ],
+            'pagination' => [
+                'current_page' => $ads->currentPage(),
+                'next_page_url' => $ads->nextPageUrl(),
+                'prev_page_url' => $ads->previousPageUrl(),
+                'per_page' => $ads->perPage()
+            ]
+        ]);
     }
 
+<<<<<<< HEAD
+    // For web, load everything needed
+    $category = AdvertisementCategory::all();
+    $categories = AdvertisementCategory::all();
+    $all = AdvertisementCategory::all();
+    $post = Advertisement::all();
+    $ad = Advertisement::all();
+    $adTypes = $this->getEnumValues('advertisements', 'type');
+    $ad_banners = [];
+    $ad_banners ['top'] = AdsManager::where('which_page', 'advertisement')
+        ->where('publish_or_not', 1)
+        ->where('active', 1)
+        ->where('position', 'top')
+        ->first();
+
+    if($ad_banners){
+        $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+=======
         return view('frontend.advertisements.index', compact('ads','category','post','all','categories','ad'));
 
+>>>>>>> 061daffb7c0a3988e40be5aa1e1f3087267cbedc
     }
+
+
+    return view('frontend.advertisements.index', compact('ads', 'category', 'post', 'all', 'categories', 'ad','ad_banners'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -182,6 +211,7 @@ class AdvertisementController extends Controller
     $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
 
     $ads = Advertisement::findOrFail($id); // This will throw an exception if not found
+    $comments = Comment::where('adsId', $id)->with('jobSeeker')->get();
 
   
     try {
@@ -190,8 +220,8 @@ class AdvertisementController extends Controller
 
         $similarAds = Advertisement::where('adsCategoryId', $ads->adsCategoryId)
         ->where('id', '!=', $id) // Exclude the current item
-        ->limit(6) // Limit results
-        ->get();
+        ->paginate(4);
+         // Limit results
 
         // Return JSON if it's a mobile request
         if ($isMobile) {
@@ -222,7 +252,7 @@ class AdvertisementController extends Controller
 
 
         //Return the view for web application
-        return view('frontend.advertisements.show',compact('similarAds','ads'));
+        return view('frontend.advertisements.show',compact('similarAds','ads','comments'));
 
     }
 
@@ -420,84 +450,90 @@ class AdvertisementController extends Controller
                     'categories' => $adsCategory
         ]  
       ], 200)
-    : view('ads.index', compact('ads','adsCategory'))->with('success', 'Advertisement retrieved successfully!');
+    : view('frontend.advertisements.index', compact('ads','adsCategory'))->with('success', 'Advertisement retrieved successfully!');
 
 }
 public function showByTypeAndCategory(Request $request, $type, $categoryId = null)
 {
-    // Check if the request is from mobile
     $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+// Fetch categories and ads
+$categoryIds = Advertisement::where('type', $type)->pluck('adsCategoryId')->unique();
+$categories = AdvertisementCategory::whereIn('id', $categoryIds)->get();
+$ads = Advertisement::where('type', $type)->orderBy('created_at', 'desc')->paginate(8);
+$category = AdvertisementCategory::all();
+$all = AdvertisementCategory::all();
+$ad = Advertisement::all();
+$ad_banners = [];
+$ad_banners ['top'] = AdsManager::where('which_page', 'advertisement')
+    ->where('publish_or_not', 1)
+    ->where('active', 1)
+    ->where('position', 'top')
+    ->first();
+
+if($ad_banners){
+    $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+}
 
     // Validate the type
     $validTypes = Advertisement::distinct()->pluck('type')->toArray();
     if (!in_array($type, $validTypes)) {
         return $isMobile
             ? response()->json(['status' => false, 'message' => 'This type of ads not found'], 400)
-            : redirect()->back()->with('error', 'This type of ads not found.');
+            : view('frontend.advertisements.index', compact('type','ad','categories','all','category','ads','ad_banners'))->with('error', 'This type of ads not found.');
     }
 
-    // Fetch unique categories under the given type
-    $categoryIds = Advertisement::where('type', $type)->pluck('adsCategoryId')->unique();
-    $categories = AdvertisementCategory::whereIn('id', $categoryIds)->get();
-    $ads = Advertisement::where('type', $type)->orderBy('created_at', 'desc')->paginate(10);
-    $category = AdvertisementCategory::all();
-    $all = AdvertisementCategory::all();
-    $ad = Advertisement::all();
+    
+    $allCategories = collect([(object)['id' => 0, 'adsCategoryTitle' => 'All']])->merge($categories);
 
-    // If no category is selected, return only categories
-    if (!$categoryId) {
-        return $isMobile
-            ? response()->json([
+    $categoryId = (int) $categoryId;
+
+    if ($categoryId === 0) {
+        // Fetch all ads of the given type
+        $ads = Advertisement::where('type', $type)->orderBy('created_at', 'desc')->paginate(10);
+
+        if ($isMobile) {
+            return response()->json([
                 'status' => true,
-                'message' => 'Categories retrieved successfully.',
+                'message' => 'Advertisements retrieved successfully.',
                 'data' => [
-                    'categories' => $categories,
-                    'ads'=>$ads
-                    ]
-            ], 200)
-            : view('frontend.advertisements.index', compact('categories', 'type','category','ads','all','ad'))
-                ->with('success', 'Categories retrieved successfully!');
+                    'category_name' => 'All',
+                    'ads' => $ads
+                ]
+            ], 200);
+        }
+
+        return view('frontend.advertisements.index', compact('ads', 'allCategories', 'type','ad','all','categories','category','ad_banners'))
+            ->with('success', 'Advertisements retrieved successfully!');
     }
 
-    // Validate the category
-    $category = AdvertisementCategory::find($categoryId);
-    if (!$category) {
+    // For specific category
+    $selectedCategory = AdvertisementCategory::find($categoryId);
+    if (!$selectedCategory) {
         return $isMobile
             ? response()->json(['status' => false, 'message' => 'Invalid category'], 400)
             : redirect()->back()->with('error', 'Invalid category.');
     }
 
-    // Fetch ads for the given type and category
     $ads = Advertisement::where('type', $type)
         ->where('adsCategoryId', $categoryId)
         ->orderBy('created_at', 'desc')
-        ->get();
-        $selectedCategory = AdvertisementCategory::find($categoryId);
+        ->paginate(10);
 
-    // API Response (For Mobile)
     if ($isMobile) {
-
-        if ($ads->isEmpty()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No advertisements found.',
-                'data' => null
-            ], 404);
-        }
         return response()->json([
             'status' => true,
             'message' => 'Advertisements retrieved successfully.',
             'data' => [
-                'category_name' => $category->adsCategoryTitle,
+                'category_name' => $selectedCategory->adsCategoryTitle,
                 'ads' => $ads
             ]
         ], 200);
     }
 
-    // Web Response (For Blade View)
-    return view('frontend.advertisements.index', compact('ads', 'categories', 'type','category','all','selectedCategory'))
+    return view('frontend.advertisements.index', compact('ads', 'allCategories', 'type', 'selectedCategory','ad','all','category','categories','ad_banners'))
         ->with('success', 'Advertisements retrieved successfully!');
 }
+
 
 
 
@@ -511,10 +547,20 @@ public function showByCategory(Request $request, $categoryId)
         $ads = Advertisement::where('adsCategoryId', $categoryId)
                             ->orderBy('created_at', 'desc')
                             ->paginate(10);
-                            $ad = Advertisement::all();
+        $ad = Advertisement::all();
 
         $adTypes = $this->getEnumValues('advertisements', 'type');
         $categories = AdvertisementCategory::where('id', $categoryId)->get();
+        $ad_banners = [];
+$ad_banners ['top'] = AdsManager::where('which_page', 'advertisement')
+    ->where('publish_or_not', 1)
+    ->where('active', 1)
+    ->where('position', 'top')
+    ->first();
+
+if($ad_banners){
+    $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+}
 
 $all =AdvertisementCategory::all();
         // If no ads found, return an appropriate response
@@ -525,7 +571,9 @@ $all =AdvertisementCategory::all();
                     'message' => 'No advertisements found in this category.',
                     'data' => null
                 ], 404)
-                : redirect()->back()->with('error', 'No advertisements found in this category.');
+                
+                : view('frontend.advertisements.index', compact('ads', 'categories', 'all','ad','ad_banners'))
+                ->with('error', 'No advertisements found in this category.');
         }
 
         // Return JSON response for mobile users
@@ -541,7 +589,7 @@ $all =AdvertisementCategory::all();
         }
 
         // Return a view for web users
-        return view('frontend.advertisements.index', compact('ads','ad','categories','all'));
+        return view('frontend.advertisements.index', compact('ads','ad','categories','all','ad_banners'));
 
     } catch (\Exception $e) {
         Log::error("Error fetching advertisements by category: " . $e->getMessage());
@@ -552,7 +600,7 @@ $all =AdvertisementCategory::all();
                 'message' => 'Something went wrong while fetching advertisements.',
                 'data' => null
             ], 500)
-            : redirect()->back()->with('error', 'Something went wrong while fetching advertisements.');
+            : view('frontend.advertisements.index', compact('ads','ad','categories','all'))->with('error', 'Something went wrong while fetching advertisements.');
     }
 }
 
@@ -584,6 +632,9 @@ $type = $request->has('type') && in_array($request->input('type'), $validTypes)
             })
             ->when($request->filled('adsCategoryId'), function ($query) use ($request) {
                 $query->where('adsCategoryId', $request->adsCategoryId);
+            })
+            ->when(!empty($type), function ($query) use ($type) {
+                $query->where('type', $type); 
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10);

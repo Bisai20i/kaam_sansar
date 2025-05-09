@@ -64,7 +64,7 @@ class KundaliController extends Controller
         // Validate request data
         $validator = Validator::make($request->all(), [
             'personName' => 'required|string|max:255',
-            'personDateOfBirth' => 'required|date',
+            'personDateOfBirth' => 'required',
             'personPlaceOfBirth' => 'required|string|max:255',
             'personTimeOfBirth' => 'required|string|max:255',
         ]);
@@ -89,7 +89,6 @@ class KundaliController extends Controller
            $kundali->Query1 = $request->input('Query1');
            $kundali->Query2 = $request->input('Query2');
            $kundali->Query3 = $request->input('Query3');
-           
            // Save the record to the database
            $kundali->save();
            return $isMobile

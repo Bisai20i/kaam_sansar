@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('jobSeekerId');
             $table->foreign('jobSeekerId')->references('id')->on('job_seekers')->onDelete('cascade');
-           
+            $table->string('girlName');
+
             $table->string('girlDateOfBirth');
             $table->string('girlPlaceOfBirth');
             $table->string('girlTimeOfBirth');

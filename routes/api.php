@@ -21,6 +21,7 @@ use App\Http\Controllers\JobCompanyController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\KundaliController;
+use App\Http\Controllers\KundaliMatchingController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MyDocumentController;
@@ -128,6 +129,7 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
         Route::post('experience/storeexperience', [ExperienceController::class, 'storeexperience']);
         Route::post('training/storetraining', [TrainingController::class, 'storetraining']);
         Route::post('language/storelanguage', [LanguageController::class, 'storelan']);
+        
         //Gift coupons related route
         Route::post('giftCategory/storegiftcoupon', [GiftCategoryController::class, 'storegift']);
 
@@ -194,7 +196,8 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
         Route::prefix('giftNCoupon')->group(function () {
             Route::get('/home/{type?}/{giftCategoryId?}', [FrontendAPIController::class, 'giftNcoupon']);
             Route::get('/description/{id}', [FrontendAPIController::class, 'giftNcouponDescription']);
-            Route::get('/seller/{id}', [FrontendAPIController::class, 'sellerProfile']);
+            Route::get('/comments/{id}', [FrontendAPIController::class, 'giftComments']);
+            Route::get('/seller/{id}/{type?}', [FrontendAPIController::class, 'sellerProfile']);
             Route::get('/cart', [GiftCartController::class, 'couponcart']);
             Route::post('/addtocart', [GiftCartController::class, 'addtocart']);
             Route::get('/addquantity/{id}', [GiftCartController::class, 'addquantity']);
@@ -206,6 +209,11 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
             // Route::get('/categories', [GiftCateryController::class, 'index'])->name('giftcategories');
         });
 
+        Route::prefix('resume')->group(function () {
+            Route::get('templates', [FrontendAPIController::class, 'getResumeHelp']);
+        });
+
+        Route::apiResource('kundaliMatching', KundaliMatchingController::class);
 
 
         // Route::prefix('profile')->group(function (){

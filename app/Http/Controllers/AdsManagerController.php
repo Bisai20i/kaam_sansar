@@ -28,15 +28,39 @@ class AdsManagerController extends Controller
             'position' => 'required|in:left,right,top,bottom,middle',
             'publish_or_not' => 'required|boolean',
             'active' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|string',
         ]);
 
         $ad = new AdsManager($request->except('image'));
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('ads', 'public');
-            $ad->image = $path;
-        }
+        if ($request->filled('image')) {
+            $croppedImage = $request->input('image');
+            list(, $imageData) = explode(',', $croppedImage); // Extract base64 content
+            $decodedImage = base64_decode($imageData);
+
+            $imageName = time() . '_cropped.jpg';
+            $imagePath = "ads/$imageName";
+
+            Storage::disk('public')->put($imagePath, $decodedImage);
+            $ad->image = $imagePath;
+        } 
+        // elseif ($request->hasFile('imageUrl')) {
+        //     $image = $request->file('imageUrl');
+        //     $imageName = time() . '.' . $image->getClientOriginalExtension();
+        //     $imagePath = "$folderPath/$imageName";
+
+        //     $resizedImage = Image::make($image);
+        //     $resizedImage->resize(500, 400, function ($constraint) {
+        //         $constraint->aspectRatio();
+        //     });
+
+        //     Storage::disk('public')->put($imagePath, $resizedImage->encode('jpg', 90));
+        // }
+
+        // if ($request->hasFile('image')) {
+        //     $path = $request->file('image')->store('ads', 'public');
+        //     $ad->image = $path;
+        // }
 
         $ad->save();
 
@@ -57,18 +81,35 @@ class AdsManagerController extends Controller
             'position' => 'required|in:left,right,top,bottom,middle',
             'publish_or_not' => 'required|boolean',
             'active' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|string',
         ]);
 
         $adsManager->fill($request->except('image'));
 
-        if ($request->hasFile('image')) {
-            if ($adsManager->image) {
+        if ($request->filled('image')) {
+            $croppedImage = $request->input('image');
+            list(, $imageData) = explode(',', $croppedImage); // Extract base64 content
+            $decodedImage = base64_decode($imageData);
+
+            $imageName = time() . '_cropped.jpg';
+            $imagePath = "ads/$imageName";
+
+            Storage::disk('public')->put($imagePath, $decodedImage);
+            if ($adsManager->image && Storage::disk('public')->exists($adsManager->image)) {
                 Storage::disk('public')->delete($adsManager->image);
             }
-            $path = $request->file('image')->store('ads', 'public');
-            $adsManager->image = $path;
+
+            $adsManager->image = $imagePath;
+
         }
+
+        // if ($request->hasFile('image')) {
+        //     if ($adsManager->image) {
+        //         Storage::disk('public')->delete($adsManager->image);
+        //     }
+        //     $path = $request->file('image')->store('ads', 'public');
+        //     $adsManager->image = $path;
+        // }
 
         $adsManager->save();
 

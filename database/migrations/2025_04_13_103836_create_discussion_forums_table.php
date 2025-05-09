@@ -21,6 +21,8 @@ return new class extends Migration
             $table->json('images')->nullable();
             $table->boolean('pinned')->default(false);
             $table->enum('category',["education","investment","scammer","office","other"])->default("other");
+            $table->string('person_name')->nullable();
+            $table->string('country')->nullable();
             $table->timestamps();
         });
     }

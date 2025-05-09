@@ -11,8 +11,6 @@ class Comment extends Model  // Change this to Model instead of Authenticatable
     protected $fillable = [
         'adsId',
         'jobSeekerId',
-        'commentPersonName',
-        'commentPersonImg',
         'comment',
     ];
 

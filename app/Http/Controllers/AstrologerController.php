@@ -95,6 +95,23 @@ class AstrologerController extends Controller
         return view('backend.kundali.show', compact('astrologer','kundali'));
     }
 
+    public function view($type, $id)
+    {
+        if ($type === 'kundali') {
+            $kundali = Kundali::findOrFail($id);
+            $astrologer = Astrologer::where('kundaliId', $id)->first();
+            return view('backend.kundali.show', compact('kundali', 'astrologer'));
+        }
+    
+        if ($type === 'matching') {
+            $kundaliMatching = KundaliMatching::findOrFail($id);
+            $astrologer = Astrologer::where('kundaliMatchingId', $id)->first();
+            return view('backend.kundalimatching.show', compact('kundaliMatching', 'astrologer'));
+        }
+    
+        abort(404);
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *
