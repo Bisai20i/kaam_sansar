@@ -86,6 +86,7 @@ class SkillController extends Controller
                 : response()->json([
                     'success' => true,
                     'message' => 'Skill saved successfully.',
+                    'skill'=>$skill
                 ]);
         } catch (\Exception $e) {
             Log::error('Error while saving skills: ' . $e->getMessage());
@@ -142,7 +143,7 @@ class SkillController extends Controller
      */
     public function edit(Skill $skill)
     {
-        //
+        return response()->json($skill);
     }
 
     /**
@@ -188,8 +189,10 @@ class SkillController extends Controller
             Log::error('Validation errors:', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator)->withInput();
-        }
+                : response()->json([
+                    'success' => false,
+                    'message' => 'Input validation Successfully.',
+                ]);        }
         //update the filled
         $skill->skillName = $request->input('skillName');
         $skill->skillProficiency = $request->input('skillProficiency');
@@ -200,7 +203,11 @@ class SkillController extends Controller
         // Return the response based on request type
         return $isMobile
             ? $this->responseSuccess('Skill updated successfully.',  $skill)
-            : redirect()->back()->with('success', 'Skill updated successfully.');
+            : response()->json([
+                'success' => true,
+                'message' => 'skill update Successfully.',
+                'skill'=>$skill,
+            ]);
     }
 
 
@@ -238,8 +245,26 @@ class SkillController extends Controller
      * @param  \App\Models\Skill  $skill
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Skill $skill)
+    public function destroy(Request $request ,$id)
     {
-        //
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $skill = Skill::find($id);
+
+        if (!$skill) {
+            return $isMobile
+                ? $this->responseError('skill not found', 404)
+                :response()->json([
+                    'success' => false,
+                    'message' => 'skill not found.',
+                ]);
+        }
+        $skill->delete();
+
+        return $isMobile
+        ? $this->responseSuccess('skill deleted successfully')
+        :response()->json([
+            'success' => true,
+            'message' => 'skill delete Successfully.',
+        ]);
     }
 }

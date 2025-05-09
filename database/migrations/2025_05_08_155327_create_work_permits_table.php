@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('renewal_management', function (Blueprint $table) {
+        Schema::create('work_permits', function (Blueprint $table) {
             $table->id();
+            
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('renewal_management');
+        Schema::dropIfExists('work_permits');
     }
 };

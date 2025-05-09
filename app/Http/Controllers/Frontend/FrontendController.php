@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -14,6 +15,7 @@ use App\Models\Education;
 use App\Models\Experience;
 use App\Models\Follower;
 use App\Models\ForumInteraction;
+use App\Models\FrequentlyAskedQuestion;
 use App\Models\GiftCategory;
 use App\Models\GiftCoupon;
 use App\Models\IndustryCategory;
@@ -164,7 +166,7 @@ class FrontendController extends Controller
             ->where('jobStatus', 'published')
             ->get();
 
-                                             // Get the category_id of the job
+        // Get the category_id of the job
         $category_id = $jobs->jobCategoryId; // Assuming `category_id` is the field
 
         // Fetch jobs in the same category
@@ -642,7 +644,8 @@ class FrontendController extends Controller
             fn($query) => $query->where('type', $type)
         )
             ->latest()
-            ->when($giftCategoryId,
+            ->when(
+                $giftCategoryId,
                 fn($query) => $query->where('giftCategoryId', $giftCategoryId)
             )
             ->when(! empty($country), fn($query) => $query->where('country', 'LIKE', $country . '%'))
@@ -760,7 +763,6 @@ class FrontendController extends Controller
         // return $seller;
 
         return view('frontend.giftNcoupon.sellerProfile', compact(['seller', 'sellerGifts']));
-
     }
 
     public function resumeHelp()
@@ -806,7 +808,7 @@ class FrontendController extends Controller
 
         $jobSeekerId  = Auth::guard('job_seekers')->id();
         $profile      = Profile::where('jobSeekerId', $jobSeekerId)->first();
-        $visa         = Visa::where('jobSeekerId', $jobSeekerId)->first();
+        $visas        = Visa::where('jobSeekerId', $jobSeekerId)->get();
         $educations   = Education::where('jobSeekerId', $jobSeekerId)->get();
         $projects     = Project::where('jobSeekerId', $jobSeekerId)->get();
         $achievements = Achievement::where('jobSeekerId', $jobSeekerId)->get();
@@ -816,8 +818,15 @@ class FrontendController extends Controller
         $languages    = Language::where('jobSeekerId', $jobSeekerId)->get();
 
         return view('frontend.resume.fill_resume', compact(
-            'profile', 'visa', 'educations', 'projects', 'achievements',
-            'skills', 'experiences', 'trainings', 'languages'
+            'profile',
+            'visas',
+            'educations',
+            'projects',
+            'achievements',
+            'skills',
+            'experiences',
+            'trainings',
+            'languages'
         ));
     }
 
@@ -883,7 +892,6 @@ class FrontendController extends Controller
             if (Auth::guard('job_seekers')->check()) {
 
                 $forumPost->followed = Follower::where('followed_to', $forumPost->jobSeeker->id)->where('followed_by', Auth::guard('job_seekers')->id())->exists();
-
             } else {
                 $forumPost->followed = false;
             }

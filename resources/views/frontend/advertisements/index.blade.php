@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 @section('title')
-    Advertisements
+Advertisements
 @endsection
 @section('content')
 
@@ -20,7 +20,7 @@
     <div class="row">
         <h3 class="primary_color_text py-2">Advertisement</h3>
     </div>
-@php
+    @php
     $type = isset($type) ? $type : '';
 @endphp 
 
@@ -31,20 +31,20 @@
             All
         </a>
 
-        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Buy']) }}"
-   class="btn btn-outline-custom {{ $type == 'Buy' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
-            Buy
-        </a>
+            <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Buy']) }}"
+                class="btn btn-outline-custom {{ $type == 'Buy' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+                Buy
+            </a>
 
-        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Sell']) }}"
-   class="btn btn-outline-custom {{ $type == 'Sell' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
-            Sell
-        </a>
+            <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Sell']) }}"
+                class="btn btn-outline-custom {{ $type == 'Sell' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+                Sell
+            </a>
 
-        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Rent']) }}"
-   class="btn btn-outline-custom {{ $type == 'Rent' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
-            Rent
-        </a>
+            <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Rent']) }}"
+                class="btn btn-outline-custom {{ $type == 'Rent' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+                Rent
+            </a>
         </div>
         <div>
        @if (Auth::guard('job_seekers')->check()  )  <!-- If user is logged in, show the Post Ad button -->
@@ -120,8 +120,8 @@
                     <option value="{{$a->country}}">{{$a->country}}</option>
                     @endforeach
 
-                </select>
-            </div>
+                    </select>
+                </div>
 
             <!-- City Select -->
             <div class="col-md-6 col-lg-3">
@@ -129,10 +129,10 @@
                 <option value="" selected>Select City</option>
                 @foreach($ad as $a)
 
-                    <option value="{{$a->location}}">{{$a->location}}</option>
-                    @endforeach
-                </select>
-            </div>
+                        <option value="{{$a->location}}">{{$a->location}}</option>
+                        @endforeach
+                    </select>
+                </div>
 
             <!-- Search Button -->
             <div class="col-4 col-lg-2 mx-auto">
@@ -149,25 +149,25 @@
    href="{{ route('ads.index') }}"
    >All</a>
 
-   @foreach($categories as $categoryItem)
-    @if($type)
+        @foreach($categories as $categoryItem)
+        @if($type)
         <a href="{{ route('Ads.showByTypeCategory', ['type' => $type, 'categoryId' => $categoryItem->id]) }}"
-           class="btn btn-outline-custom {{ isset($selectedCategory) && $selectedCategory->id == $categoryItem->id ? 'active' : '' }} rounded-pill mx-1 px-4 border border-2">
+            class="btn btn-outline-custom {{ isset($selectedCategory) && $selectedCategory->id == $categoryItem->id ? 'active' : '' }} rounded-pill mx-1 px-4 border border-2">
             {{ $categoryItem->adsCategoryTitle }}
         </a>
-    @else
+        @else
         <a href="{{ route('Ads.showByCategory', ['categoryId' => $categoryItem->id]) }}"
-           class="btn btn-outline-custom rounded-pill mx-1 px-4 border border-2">
+            class="btn btn-outline-custom rounded-pill mx-1 px-4 border border-2">
             {{ $categoryItem->adsCategoryTitle }}
         </a>
-    @endif
-@endforeach
+        @endif
+        @endforeach
 
 
 
-</div>
+    </div>
 
-        
+
     <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 ">
     @if($ads->count())
     @foreach($ads as $ad)
@@ -307,13 +307,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            <form id="addItemForm" action="{{route('ads.store')}}" method="POST" enctype="multipart/form-data">
-                @csrf
-            <!-- Type Dropdown -->
+                <form id="addItemForm" action="{{route('ads.store')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <!-- Type Dropdown -->
                     <div class="">
                         <select class="form-select abroad-deal-1 py-2" id="type" name="type" aria-label="">
                             <option selected>Type</option>
-                            
+
                             <option value="Buy">Buy</option>
                             <option value="Sell">Sell</option>
                             <option value="Rent">Rent</option>
@@ -340,19 +340,17 @@
                         <label for="cityInput">City</label>
                     </div>
 
-                    
+
                     <div class="form-floating text-black-50 mt-3">
                         <input type="text" class="form-control abroad-deal-1"  name ="adsTitle" id="titleInput"
                             placeholder="Title">
                         <label for="titleInput">Title</label>
                     </div>
-                    <!-- Price Input -->
                     <div class="form-floating text-black-50 mb-3">
 
                         <input type="text" class="form-control abroad-deal-1" id="price"
                              name ="pricing"placeholder="Enter price" required>
                         <label for="price">Price</label>
-
                     </div>
                     <div class="form-floating text-black-50 mb-3">
 
@@ -371,23 +369,22 @@
   <div class="d-flex align-items-center gap-3">
     <p class="flex-grow-1 my-auto text-black-5 mb-0" style="font-size: 0.9rem;">Add to your post</p>
 
-    <!-- Image upload trigger -->
-    <div class="d-flex align-items-center gap-2">
-      <label for="fileInput" class="primary_color_text m-0" style="cursor: pointer;">
-        <i class="fa-solid fa-image fa-lg"></i>
-      </label>
-      <input type="file" id="fileInput" name="adsThumbnail" accept="image/*" class="d-none">
-    </div>
-  </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="fileInput" class="primary_color_text m-0" style="cursor: pointer;">
+                                    <i class="fa-solid fa-image fa-lg"></i>
+                                </label>
+                                <input type="file" id="fileInput" name="adsThumbnail" accept="image/*" class="d-none">
+                            </div>
+                        </div>
 
   <!-- Image Preview (small) -->
 </div>
 <div id="imagePreview" class="d-flex mt-1" style="height: 60px;"></div>
 
 
-<script>
-  const fileInput = document.getElementById('fileInput');
-  const imagePreview = document.getElementById('imagePreview');
+                    <script>
+                        const fileInput = document.getElementById('fileInput');
+                        const imagePreview = document.getElementById('imagePreview');
 
   fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
@@ -424,7 +421,4 @@
         </div>
     </div>
 </div>
-
-
 @endsection
-

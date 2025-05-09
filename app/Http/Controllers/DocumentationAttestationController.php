@@ -1,0 +1,196 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\DocumentationAttestation;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+
+class DocumentationAttestationController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $documentAttestations=DocumentationAttestation::get();
+        return view('backend.documentAttestations.index',compact('documentAttestations'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('frontend.documentAttestations.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+    
+        // 1) Authenticate user
+        $user = $isMobile
+            ? $request->user()
+            : Auth::guard('job_seekers')->user();
+    
+        if (! $user) {
+            return $isMobile
+                ? $this->responseError('Unauthorized', 401)
+                : response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized'
+                ], 401);
+        }
+    
+        $userId = $user->id;
+        Log::info("Authenticated Job-Seeker ID: {$userId}");
+    
+        // 2) Validate
+        $validator = Validator::make($request->all(), [
+            'documentType'       => 'required|string|max:255',
+            'subType'            => 'required|string|max:255',
+            'applicantCountry'   => 'required|string|max:255',
+            'attestationCountry' => 'required|string|max:255',
+            'applicantName'      => 'required|string|max:255',
+            'countryAttestation' => 'required|string|max:255',
+            'purpose'            => 'required|string|max:255',
+            'deliveryCountry'    => 'required|string|max:255',
+            'deliveryCity'       => 'required|string|max:255',
+            'deliveryStreet'     => 'required|string|max:255',
+            'deliveryApartment'  => 'nullable|string|max:255',
+            'deliveryLandmark'   => 'nullable|string|max:255',
+            'primaryContact'     => 'required|string|max:20',
+            'secondaryContact'   => 'nullable|string|max:20',
+            'email'              => 'required|email|max:255',
+            'workCountry'        => 'nullable|string|max:255',
+            'workCity'           => 'nullable|string|max:255',
+            'workStreet'         => 'nullable|string|max:255',
+            'workApartment'      => 'nullable|string|max:255',
+            'workLandmark'       => 'nullable|string|max:255',
+            'identification'     => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'visa'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'citizenshipFront'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'citizenshipBack'    => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'passport'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'photo'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'document1'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'document2'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'document3'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'document4'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'paymentStatus'      => 'in:unpaid,paid',
+        ]);
+    
+        if ($validator->fails()) {
+            Log::error('Validation errors:', $validator->errors()->toArray());
+            return $isMobile
+                ? $this->responseError('Validation failed.', 422, $validator->errors())
+                : response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed.',
+                    'errors'  => $validator->errors()
+                ], 422);
+        }
+    
+        // 3) Handle file uploads
+        $fileUploads = handleMultipleUploads([
+            'identification',
+            'visa',
+            'citizenshipFront',
+            'citizenshipBack',
+            'passport',
+            'photo',
+            'document1',
+            'document2',
+            'document3',
+            'document4',
+        ]);
+    
+        // 4) Merge data for creation
+        $data = array_merge(
+            $validator->validated(),
+            $fileUploads,
+            [
+                'jobSeekerId'   => $userId,
+                'paymentStatus' => 'pending',
+            ]
+        );
+    
+        // 5) Create the record
+        $attestation = DocumentationAttestation::create($data);
+        Log::info("DocumentationAttestation created: ID {$attestation->id}");
+    
+        // 6) Return response
+        return $isMobile
+            ? $this->responseSuccess('Attestation request submitted.', 200, $attestation)
+            : response()->json([
+                'success'     => true,
+                'message'     => 'Attestation request submitted successfully.',
+                'attestation' => $attestation
+            ], 200);
+    }
+    
+
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\DocumentationAttestation  $documentationAttestation
+     * @return \Illuminate\Http\Response
+     */
+    public function show(DocumentationAttestation $documentationAttestation)
+    {
+        return $documentationAttestation->id;
+
+        dd($documentationAttestation);
+        return view('backend.documentAttestations.show', compact('documentationAttestation'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\DocumentationAttestation  $documentationAttestation
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(DocumentationAttestation $documentationAttestation)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\DocumentationAttestation  $documentationAttestation
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, DocumentationAttestation $documentationAttestation)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\DocumentationAttestation  $documentationAttestation
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(DocumentationAttestation $documentationAttestation)
+    {
+        //
+    }
+}

@@ -95,6 +95,7 @@ class TrainingController extends Controller
                 : response()->json([
                     'success' => true,
                     'message' => 'Trainings saved successfully.',
+                    'training'=>$training
                 ]);
     
         } catch (\Exception $e) {
@@ -156,7 +157,7 @@ class TrainingController extends Controller
      */
     public function edit(Training $training)
     {
-        //
+        return response()->json($training);
     }
 
     /**
@@ -205,7 +206,11 @@ class TrainingController extends Controller
 
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator->errors())->withInput();
+                : response()->json([
+                    'success' => false,
+                    'message' => 'Input Validation Error.',
+                ]);
+            
         }
 
         //handle the image
@@ -230,8 +235,12 @@ class TrainingController extends Controller
         Log::info('training detail update successfully:'.$training);
         return $isMobile
             ? $this->responseSuccess('Training updated successfully:', $training)
-            : redirect()->route('profile')->with('success', 'Training updated successfully');
-    }
+            : response()->json([
+                'success' => true,
+                'message' => 'training update Successfully.',
+                'training'=>$training
+            ]);    }
+
 
 
     /**
@@ -264,8 +273,24 @@ class TrainingController extends Controller
      * @param  \App\Models\Training  $training
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Training $training)
+    public function destroy(Request $request ,$id)
     {
-        //
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $training = Training::find($id);
+        if (!$training) {
+            return $isMobile
+                ? $this->responseError('training not found', 404)
+                :response()->json([
+                    'success' => false,
+                    'message' => 'training not found.',
+                ]);
+            }
+        $training->delete();
+        return $isMobile
+        ? $this->responseSuccess('training deleted successfully')
+        :response()->json([
+            'success' => true,
+            'message' => 'training delete Successfully.',
+        ]);
     }
 }
