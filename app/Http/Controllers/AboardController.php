@@ -62,6 +62,9 @@ class AboardController extends Controller
         $ads    = Aboard::where('publishStatus', 'publish')
             ->where('status', 'Available')
             ->get();
+        $cmt    = Aboard::where('publishStatus', 'publish')
+            ->where('status', 'Available')
+            ->get();
             $all = Aboard::all();
             $uniqueAboards = Aboard::select('country')->distinct()->get();
             $uniqueCity = Aboard::select('location')->distinct()->get();
@@ -71,7 +74,7 @@ class AboardController extends Controller
         $type = $request->has('type') && in_array($request->input('type'), $validTypes)
         ? $request->input('type')
         : 'Item';
-        return view('frontend.aboarddeals.aboard',compact('categories','ads','type','uniqueAboards','uniqueCity','items','comments'));
+        return view('frontend.aboarddeals.aboard',compact('categories','ads','type','uniqueAboards','uniqueCity','items','comments','cmt'));
 
     }
     public function create()

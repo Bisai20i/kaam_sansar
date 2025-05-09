@@ -44,6 +44,15 @@ use App\Http\Controllers\ResumeHelpController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ForumInteractionController;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\PassportCountryListController;
+use App\Http\Controllers\PassportProvienceController;
+use App\Http\Controllers\PassportDistrictController;
+use App\Http\Controllers\PassportLocationController;
+use App\Http\Controllers\PassportDateTimeController;
+use App\Http\Controllers\InsuranceCompanyController;
+use App\Http\Controllers\InsuranceCategoryController;
+use App\Http\Controllers\InsuranceSubCategoryController;
+
 
 
 

@@ -23,17 +23,43 @@
             <div class="mb-4 d-flex justify-content-between align-items-center ">
                 <!-- Left Side Buttons -->
                 <div class="d-flex gap-2">
+
                 <button id="wantToItem" class="btn btn-toggle type-btn active-btn" onclick="filterType('Item', this)"> Item</button>
                 <button id="wantToBuy" class="btn btn-toggle type-btn" data-url="{{ url()->current() }}" onclick="filterType('Buy', this)">Want to buy</button>
+        
 
                 </div>
                     <!-- Type Filter Section -->
          
 
                 <!-- Right Side Add Item / Add Post Button -->
+                @if (Auth::guard('job_seekers')->check()  )  <!-- If user is logged in, show the Post Ad button -->
+
                 <button class="btn  bg-primary text-white" id="addItemBtn" data-bs-toggle="modal" data-bs-target="#addItemModal">
                     + Add Item
                 </button>
+                @else
+
+                <button class="btn  bg-primary text-white"   data-bs-toggle="modal" id="addItemBtn" onclick="setRedirectUrl()"  data-bs-target="#loginModal">
+                    + Add Item
+                </button>
+       
+    
+                <script>
+        // Function to store the current URL before showing the login modal
+        function setRedirectUrl() {
+            fetch('/set-redirect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ redirect_url: window.location.href })
+            });
+        }
+    </script>
+    @endif
+
 <!-- <script>
     document.getElementById('addItemBtn').addEventListener('click', function() {
         @if (Auth::check())
@@ -158,12 +184,22 @@
                     @csrf
 
                     <div class="mb-3 form-floating">
-    <select class="form-select abroad-deal-1 fw-semibold" id="countrySelect" name="country" aria-label="Country" required>
-        <option value="" disabled selected>Choose a Country</option>
-        <!-- Countries will be populated by JS -->
-    </select>
-    <label for="countrySelect">Country</label>
+    <!-- <select class="form-select abroad-deal-1 fw-semibold" id="countrySelect" name="country" aria-label="Country" >
+        <option value="Nepal" disabled selected>Choose a Country</option>
+         Countries will be populated by JS -->
+    <!-- </select> -->
+    <!-- <label for="countrySelect">Country</label>  -->
 </div>
+<select class="form-select abroad-deal-1 fw-semibold" id="newCountrySelect"
+                                    aria-label="Country" name="country" required>
+
+                                        <option value="" disabled selected>Choose a Country</option>
+                                        <option value="usa">USA</option>
+                                        <option value="canada">Canada</option>
+                                        <option value="uk">UK</option>
+                                    </select>
+                                    <label for="newCountrySelect">Country</label>
+                                </div>
 
                     <!-- Category Select with Floating Label -->
                     <div class="mb-3 form-floating">
@@ -412,8 +448,8 @@
                         <div class="modal-body">
                             <div class="d-flex align-items-center mb-3">
                                 <img src="img/Nirmal.png" width="60" height="60" class="rounded-circle me-2" alt="User">
-                                <span class="ms-2 fw-semibold" style="font-size: 22px; color: #282828;">Nirmal
-                                    G.C.</span>
+                                <span class="ms-2 fw-semibold" style="font-size: 22px; color: #282828;">
+                                    John doe</span>
                             </div>
                             <form id="newPostForm" action="{{ route('aboards.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -752,9 +788,11 @@ function loadComments(productId) {
                 comments.forEach(cmt => {
                     html += `
                         <div class="d-flex align-items-start mb-3" id="comment-${cmt.id}">
-                            <img src="{{ asset('storage/' . $cmt->jobSeeker->userThumbnail[0]) }}"
+                        @foreach($ads as  $ads)
+                            <img src="{{ asset('storage/' . $ads->jobSeeker->userThumbnail) }}"
                                  class="rounded-circle me-2"
                                  style="width: 40px; height: 40px; object-fit: cover;" alt="User">
+                                 @endforeach
                             <div class="flex-grow-1">
                                 <div class="bg-light border rounded-3 px-3 py-2">
                                     <h6 class="fw-semibold mb-1">${cmt.job_seeker?.firstName || ''} ${cmt.job_seeker?.lastName || ''}</h6>
