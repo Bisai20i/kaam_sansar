@@ -526,7 +526,7 @@ button.search-button {
 }
 
 .cta-section {
-  background-image: url(../Images/qrwala.png);
+  background-image: url('/frontend/assets/Images/qrwala.png');
   background-repeat: no-repeat;
   background-position: right bottom;
   color: white;

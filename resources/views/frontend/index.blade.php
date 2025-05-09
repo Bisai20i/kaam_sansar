@@ -203,7 +203,7 @@
                     <h3>Fuel Your Ambition, <br>Find Your Next Big Opportunity</h3>
                     <p>Your Dream Career Awaits - Download Our Job <br>Portal App and Start Your Journey to Success!</p>
                     <div class="qr">
-                        <img src="{{ asset('frontend/assets/Images/qr1.png') }}" alt="Centered Image" class="qr me-5">
+                        <img src="{{ asset('frontend/assets/Images/qr1.png') }}" alt="Centered Image" class="qr me-5 rounded-2 border border-4">
                     </div>
                     <div>
                         <div>
