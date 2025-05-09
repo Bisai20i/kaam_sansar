@@ -164,6 +164,12 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
 
+
+
+        //faq
+        Route::resource('faqs', FrequentlyAskedQuestionController::class);
+
+
         //passport renewal
 
         Route::resource('passportCountryList', PassportCountryListController::class)->except('edit', 'create');
@@ -487,3 +493,8 @@ Route::prefix('advertisements')->group(function () {
 
 Route::get('/fireEvent', [MessageController::class, 'fireEvent']);
 
+Route::resource('bankAccounts',BankAccountController::class);
+Route::resource('brokerAccounts',BrokerAccountController::class);
+Route::resource('documentAttestations',DocumentationAttestationController::class);
+Route::resource('moneyExchanges',MoneyExchangeController::class);
+Route::resource('workPermits',WorkPermitController::class);
