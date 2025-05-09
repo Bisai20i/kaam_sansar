@@ -78,6 +78,7 @@ class FrontendController extends Controller
             ->where('publishStatus', 1)
             ->take(12)
             ->get();
+            $faqs = FrequentlyAskedQuestion::all();
         $ad_banners           = [];
         $ad_banners['middle'] = AdsManager::where('which_page', 'home')
             ->where('publish_or_not', 1)
@@ -93,7 +94,7 @@ class FrontendController extends Controller
         }
 
         // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
     }
 
     public function findJobs()

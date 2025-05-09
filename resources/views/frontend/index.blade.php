@@ -46,7 +46,7 @@
                     <div class="row popular-search ">
                         <div class="col-lg-12 ">
                             <h4 class="mt-3">Popular Search</h4>
-                            <div class="row text-center">
+                            <div class="row text-center justify-content-center">
                                 @foreach ($categories as $jobCategory)
                                     <div class="col g-2 ">
                                         <form action="{{ route('frontend.job-search') }}">
@@ -54,7 +54,7 @@
                                     <input type="hidden" name="jobsby" value="category">
                                     <input type="hidden" name="searchcategoryid" value="{{ $jobCategory->id }}">
                                     <button type="submit" class="btn text-truncate"
-                                        style="width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipse;">{{ $jobCategory->jobCategoryName }}</button>
+                                        style="width:153px; white-space:nowrap; overflow:hidden; text-overflow:ellipse;">{{ $jobCategory->jobCategoryName }}</button>
                                 </form>
                             </div>
                             @endforeach
@@ -509,6 +509,50 @@
                 </div>
             </section>
         @endif
+
+        <section class="FAQ">
+        <div class="container mb-4">
+            <h3 class="mb-4 text-primary">FAQ Dynamic Ads</h3>
+
+            <!-- Accordion Wrapper -->
+            <div id="accordionFAQ">
+
+                @foreach($faqs as $index => $faq)
+                <!-- FAQ Item Dynamic -->
+                <div class="border w-100 p-3 rounded bg-light-subtle mb-2">
+                    <a class="d-flex justify-content-between align-items-center text-dark text-decoration-none"
+                        data-bs-toggle="collapse" href="#faqItem{{ $index }}" role="button"
+                        aria-expanded="false" aria-controls="faqItem{{ $index }}">
+                        <h5 class="fs-6 mb-0">
+                            {{ $faq->question }}
+                        </h5>
+                        <i class="fa fa-chevron-down rotate-icon"></i>
+                    </a>
+
+                    <div class="collapse" id="faqItem{{ $index }}" data-bs-parent="#accordionFAQ">
+                        <div class="mb-0 mt-2">
+                            {!! $faq->answer !!}
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
+            </div>
+        </div>
+    </section>
+    <style>
+        .rotate-icon {
+            transition: transform 0.3s ease;
+        }
+
+        a[aria-expanded="true"] .rotate-icon {
+            transform: rotate(180deg);
+        }
+
+        a[aria-expanded="false"] .rotate-icon {
+            transform: rotate(0deg);
+        }
+    </style>
     </main>
 @endsection
 
