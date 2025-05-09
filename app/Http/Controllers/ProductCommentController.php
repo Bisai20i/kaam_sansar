@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProductCommentController extends Controller
 {
@@ -52,14 +54,11 @@ class ProductCommentController extends Controller
 
         Log::info('Authenticated Job Seeker ID: ' . $user->id);
         $jobSeekerId = $user->id;
-        $commentPersonImg = $user->userThumbnail;
          // Get the job seeker's first and last name
     $fullName = $user->firstName . ' ' . $user->lastName;
 
         // Validate request data
         $validator = Validator::make($request->all(), [
-            'commentPersonName' => 'nullable|string|max:255',
-            'commentPersonImg' => 'nullable|Image|mimes:jpeg,png,jpg,gif|max:2048',
             'comment' => 'required|string|max:1000',
         ]);
 
@@ -70,17 +69,19 @@ class ProductCommentController extends Controller
         $comment = new ProductComment();
         $comment->productId = $request->input('productId');
         $comment->jobSeekerId = $jobSeekerId;
-        $comment->commentPersonName = $fullName;
-        $comment->commentPersonImg = $commentPersonImg;
         $comment->comment = $request->input('comment');
         $comment->save();
 
         Log::info('Comment created successfully.');
 
-        return $isMobile
-            ? $this->responseSuccess('Comment created successfully', $comment)
-            : redirect()->back()->with('success', 'Comment created successfully');
+        // Return JSON response for mobile API or AJAX
+    if ($isMobile || $request->ajax() || $request->wantsJson()) {
+        return response()->json([
+            'message' => 'Comment created successfully',
+            'data' => $comment
+        ], 200);
     }
+}
 
     /**
      * Display the specified resource.
@@ -89,20 +90,36 @@ class ProductCommentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $id)
-    {
-        //check if the request type is mobile
-        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-        $comments = ProductComment::where('productId', $id)->with('jobSeeker')->get();
+{
+    $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
-        if (!$comments) {
-            return $isMobile
-                ? $this->responseError('Comment details not found', 404)
-                : redirect()->back()->with('error', 'Comment details not found');
-        }
+    $comments = ProductComment::where('productId', $id)
+        ->with('jobSeeker:id,firstName,lastName')
+        ->latest()
+        ->get();
+
+    if (!$comments) {
         return $isMobile
-            ? $this->responseSuccess('Comment details', $comments)
-            : redirect()->back()->with('success', 'Comment details');
+            ? $this->responseError('Comment details not found', 404)
+            : redirect()->back()->with('error', 'Comment details not found');
     }
+
+    if ($isMobile) {
+        return $this->responseSuccess('Comment details', $comments);
+    }
+
+    // 🧩 Add this part to support AJAX call from web
+    if ($request->ajax()) {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Comment details',
+            'data' => $comments
+        ]);
+    }
+
+    return view('frontend.aboarddeals.show', compact('comments'))
+        ->with('commentsView', view('frontend.aboarddeals.abaord', compact('comments')));
+}
 
     /**
      * Show the form for editing the specified resource.

@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\UserCommentController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProductCommentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VisaController;
 use App\Models\IndustryCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +16,7 @@ use App\Http\Controllers\OrderPlacementController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\GiftCouponController;
 use App\Http\Controllers\KundaliController;
+use App\Http\Controllers\KundaliMatchingController;
 use App\Http\Controllers\GiftCartController;
 use App\Http\Controllers\JobApplyController;
 use App\Http\Controllers\VisaTypeController;
@@ -63,6 +67,7 @@ Route::middleware(['role:admin'])->prefix('adminuser')->group(function () {
 });
 
 Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
+
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
     // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
@@ -139,10 +144,10 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     //Route for horoscope
     Route::resource('horoscope', HoroscopeController::class);
 
-    //Route for kundali
-    Route::resource('kundalidetail', KundaliController::class);
-    //Route fro astrolger
     Route::resource('astrologer', AstrologerController::class);
+
+    Route::resource('kundalimatching', KundaliMatchingController::class)->except('store');
+    Route::get('/astrologer/show/{type}/{id}', [AstrologerController::class, 'view'])->name('astrologer.view');
 
 
     Route::resource('visaCountryList', VisaCountryListController::class);
@@ -319,7 +324,25 @@ Route::get('visa-HQ/details', [FrontendController::class, 'visaDetails'])->name(
 Route::get('aboardsdeals', [AboardController::class, 'aboard'])->name('aboarddeals');
 
 Route::resource('aboards', AboardController::class);
-Route::post('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
+Route::get('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
+
+
+// commnet for aboard deals
+
+
+
+Route::resource('aboardcomment',ProductCommentController::class);
+
+
+
+
+
+//route related  to frontend horoscope and kundali
+
+ //Route for kundali
+ Route::resource('kundalidetail', KundaliController::class);
+ Route::post('kundalimatching', [KundaliMatchingController::class,'store'])->name('kundalimatching.store');
+ //Route fro astrolger
 
 // Route::post('/set-redirect', function (Request $request) {
 //     // ✅ Store redirect URL in session
@@ -334,9 +357,7 @@ Route::post('/set-redirect', function (Request $request) {
     // ✅ Store redirect URL in session
     session(['redirect_url' => $request->input('redirect_url')]);
 
-    
-
-    // ✅ Redirect to index
+ // ✅ Redirect to index
     return redirect()->back()->with('showLoginModal', true);
 })->name('set.redirect');
 
@@ -371,7 +392,7 @@ Route::prefix('advertisements')->group(function () {
     Route::get('/Ads/type/{type?}/category/{categoryId?}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByTypeCategory');
     Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
     Route::get('Ads/category/{categoryId}',[AdvertisementController::class,'showByCategory'])->name('Ads.showByCategory');
-    Route::post('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
+    Route::get('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
 // comment
 
 Route::resource('adscomment',CommentController::class);

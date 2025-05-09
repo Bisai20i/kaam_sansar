@@ -54,7 +54,6 @@ class CommentController extends Controller
 
         Log::info('Authenticated Job Seeker ID: ' . $user->id);
         $jobSeekerId = $user->id;
-        $commentPersonImg = $user->userThumbnail;
          // Get the job seeker's first and last name
         $fullName = $user->firstName . ' ' . $user->lastName;
 
@@ -93,7 +92,7 @@ class CommentController extends Controller
     {
         //check if the request type is mobile
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-        $adscomment = Comment::where('adsId', $id)->with('jobSeeker')->get();
+        $comments = Comment::where('adsId', $id)->with('jobSeeker')->get();
 
         if (!$comments) {
             return $isMobile

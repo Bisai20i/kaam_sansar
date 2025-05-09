@@ -173,6 +173,13 @@
                     </a>
                 </li>
             </ul>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('kundalimatching*') ? 'active' : '' }}">
+                    <a href="{{ route('kundalimatching.index') }}" class="menu-link">
+                        <div data-i18n="KundaliMatching">Kundali Matching</div>
+                    </a>
+                </li>
+            </ul>
 
         </li>
 

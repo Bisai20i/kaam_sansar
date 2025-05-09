@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\ProductComment;
 use App\Models\Aboard;
 use App\Models\ProductCategory;
 use Carbon\Carbon;
@@ -34,7 +35,7 @@ class AboardController extends Controller
     public function index()
     {
         $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
-        $aboards = Aboard::with('jobSeeker')->orderBy('created_at', 'desc')->simplePaginate(10);
+        $aboards = Aboard::with('jobSeeker')->orderBy('created_at', 'desc')->paginate(10);
         $categories = ProductCategory::all();
         $jobseek = Aboard::with('jobSeeker');
         $aboards->transform(function ($aboards) {
@@ -64,11 +65,13 @@ class AboardController extends Controller
             $all = Aboard::all();
             $uniqueAboards = Aboard::select('country')->distinct()->get();
             $uniqueCity = Aboard::select('location')->distinct()->get();
+            $comments = ProductComment::all();
+
         $items = Aboard::all();
         $type = $request->has('type') && in_array($request->input('type'), $validTypes)
         ? $request->input('type')
         : 'Item';
-        return view('frontend.aboarddeals.aboard',compact('categories','ads','type','uniqueAboards','uniqueCity','items'));
+        return view('frontend.aboarddeals.aboard',compact('categories','ads','type','uniqueAboards','uniqueCity','items','comments'));
 
     }
     public function create()
@@ -173,15 +176,18 @@ class AboardController extends Controller
 
         // Get the authenticated user
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+        $comments = ProductComment::where('productId', $id)->with('jobSeeker')->get();
 
              
         try {
                                                         // Get the Aboard details
             $aboard          = Aboard::findOrFail($id); // This will throw an exception if not found
             $similarProducts = Aboard::where('productCategoryId', $aboard->productCategoryId)
-                ->where('id', '!=', $aboard->id) // Exclude the current item
-                ->limit(6)                       // Limit results
-                ->get();
+                ->where('id', '!=', $aboard->id)
+                ->paginate(4);
+                // Exclude the current item
+                // ->limit(6)                       // Limit results
+                // ->get();
 
             // Return JSON if it's a mobile request
             if ($isMobile) {
@@ -211,7 +217,7 @@ class AboardController extends Controller
         }
 
         // Return the view for web application if not a mobile request
-        return view('frontend.aboarddeals.show', compact('aboard', 'similarProducts'));
+        return view('frontend.aboarddeals.show', compact('aboard', 'similarProducts','comments'));
     }
 
     public function edit($id)
@@ -444,9 +450,7 @@ class AboardController extends Controller
         $uniqueAboards = $all->unique('country');
         $uniqueCity = $all->unique('location');
                 // Set default type to 'Sell' if not provided or invalid
-        $type = $request->has('type') && in_array($request->input('type'), $validTypes)
-        ? $request->input('type')
-        : 'Item';
+                $type = in_array($request->input('type'), ['Item', 'Buy']) ? $request->input('type') : 'Item';
 
         // Build the query for ads search
         try {

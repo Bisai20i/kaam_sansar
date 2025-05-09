@@ -1214,7 +1214,7 @@
                         option.value = country.name;
                         option.textContent = `${country.name}`;
                         dropdown.appendChild(option);
-                        dropdown2.appendChild(option);
+                        dropdown2.appendChild(option.cloneNode(true));
                     });
                     // Restore old value (if exists)
                     const oldCountry = "{{ old('country') }}";

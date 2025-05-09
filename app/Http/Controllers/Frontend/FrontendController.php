@@ -6,6 +6,7 @@ use App\Models\Achievement;
 use App\Models\Admin;
 use App\Models\AdsManager;
 use App\Models\Advertisement;
+use App\Models\Astrologer;
 use App\Models\AdvertisementCategory;
 use App\Models\BlogsAndPodcast;
 use App\Models\DiscussionForum;
@@ -30,9 +31,13 @@ use App\Models\UserComment;
 use App\Models\Visa;
 use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
+use App\Models\Horoscope;
 use App\Models\VisaType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
 
 class FrontendController extends Controller
 {
@@ -482,12 +487,88 @@ class FrontendController extends Controller
     }
 
     //for horoscope
-
-    public function horoscope()
+    public function horoscope(Request $request)
     {
-        return view('frontend.horoscope.horoscope');
-    }
+        Log::info('Horoscope request received', ['request_data' => $request->all()]);
+    
+        $astrologer = Astrologer::with('kundali', 'kundaliMatching')->get();
+        Log::info('Fetched astrologers', ['astrologers_count' => $astrologer->count()]);
+    
+        $type = $request->input('type', 'daily');
+        Log::info('Horoscope type', ['type' => $type]);
+    
+        $date = Carbon::today();
+    
+        $horoscopes = Horoscope::where('type', $type);
+        $startDate = null;
+        $endDate = null;
+    
+        switch ($type) {
+            case 'daily':
+                $horoscopes->whereDate('publishDate', $date);
+                $startDate = $endDate = $date;
+                break;
 
+                case 'weekly':
+                    $startDate = $date->startOfWeek(); // Sunday as default start
+                    $endDate = $startDate->copy()->addDays(6); // Next 6 days
+                    break;
+
+                case 'monthly':
+                    $startDate = $date->startOfMonth();
+                    $endDate = $date->endOfMonth();
+                    break;
+
+                case 'yearly':
+                    $startDate = $date->startOfYear();
+                    $endDate = $date->endOfYear();
+                    break;
+
+        }
+        Log::info('Weekly range', ['startDate' => $startDate, 'endDate' => $endDate]);
+
+    
+        $horoscopes = $horoscopes->get();
+    
+        if ($startDate && $endDate) {
+            Log::info('Fetching horoscope from-to', [
+                'startDate' => $startDate->toDateString(),
+                'endDate' => $endDate->toDateString()
+            ]);
+        }
+    
+        $zodiacOrder = [
+            'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
+            'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'
+        ];
+        Log::info('Zodiac order', ['zodiac_order' => $zodiacOrder]);
+    
+        Log::info('Fetched horoscopes', ['horoscopes_count' => $horoscopes->count()]);
+        Log::info('Horoscopes data', ['horoscopes' => $horoscopes]);
+    
+        $horoscopeMap = $horoscopes->keyBy(function ($item) {
+            return strtolower($item->zodiacSignEnglish);
+        });
+    
+        Log::info('Horoscope map', ['horoscope_map' => $horoscopeMap]);
+    
+        $orderedHoroscopes = collect($zodiacOrder)
+            ->map(fn($zodiac) => $horoscopeMap->get($zodiac))
+            ->filter();
+    
+        Log::info('Ordered horoscopes', ['ordered_horoscopes' => $orderedHoroscopes]);
+    
+        if ($orderedHoroscopes->isEmpty()) {
+            Log::warning('No horoscopes found for the specified date and type');
+        }
+    
+        return view('frontend.horoscope.horoscope', compact('astrologer', 'orderedHoroscopes', 'type'));
+    }
+    
+    
+    
+    
+    
     public function giftNcoupon(Request $request, $type = null, $giftCategoryId = null)
     {
         // return $giftCategoryId;
@@ -832,14 +913,25 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads = Advertisement::simplePaginate(8); 
+        $ads = Advertisement::paginate(8); 
         $ad       = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();
 
+        $ad_banners = [];
+        $ad_banners ['top'] = AdsManager::where('which_page', 'advertisement')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'top')
+            ->first();
 
-        return view('frontend.advertisements.index', compact('all', 'category', 'ads','ad', 'categories'))
+        if($ad_banners){
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        }
+
+
+        return view('frontend.advertisements.index', compact('all', 'category', 'ads','ad', 'categories','ad_banners'))
             ->with('success', 'Advertisements retrieved successfully!');
 
     }

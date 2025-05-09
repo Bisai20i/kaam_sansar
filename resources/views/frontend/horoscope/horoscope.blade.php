@@ -6,297 +6,474 @@
 
 
     <section>
-        <!-- Profile Header -->
-        <div class="profile-header">
+     <!-- Profile Header -->
+     <div class="profile-header pb-1">
             <div class="container">
-                <h5 style="font-size: 30px;font-weight: 600;">२५ पुष २०८१, विहिबार</h5>
-                <p>पुष शुक्ल दशमी<br>पक्ष्य: साध्य गर भरणी</p>
-                <p class="mt-2">9th Jan, 2025<br>Evening 05:15</p>
-            </div>
-        </div>
+                <div class="row g-4 align-items-start">
+                    <!-- Date Section -->
+                    <div class="col-12 col-md-8 col-lg-9 mb-3">
+                        <h5 style="font-size: 24px; font-weight: 600;">२५ पुष २०८१, विहिबार</h5>
+                        <p class="mb-1">पुष शुक्ल दशमी<br>पक्ष्य: साध्य गर भरणी</p>
+                        <p class="mt-2 mb-0">9th Jan, 2025<br>Evening 05:15</p>
+                    </div>
 
+
+               <!-- Calendar Section -->
+               <div class="col-10 col-md-4 col-lg-3 mt-0">
+                        <div class="calendar-container bg-white rounded-4 border p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h1 id="monthYear" class="h5 fw-bold text-dark mb-0 user-select-none fs-5">२०८२
+                                    वैशाख
+                                </h1>
+                                <div class="d-flex gap-2 text-dark fs-5 user-select-none">
+                                    <button id="prevMonth" class="btn btn-link p-0 text-dark"
+                                        aria-label="Previous month">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <button id="nextMonth" class="btn btn-link p-0 text-dark" aria-label="Next month">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="engMonthYear" class="text-muted small mb-2 fw-semibold" style="font-size: 10px;">
+                                Apr/May 2025
+                            </div>
+
+                            <style>
+                                .table-responsive table {
+                                    font-size: 8px;
+                                }
+
+                                .table-responsive td,
+                                .table-responsive th {
+                                    padding: 3px;
+                                    vertical-align: middle;
+                                }
+
+                                .table-responsive strong {
+                                    font-size: 10px;
+                                }
+
+                                .table-responsive small {
+                                    font-size: 7px;
+                                }
+
+                                th.holiday,
+                                td:nth-child(7) {
+                                    color: red;
+                                }
+
+                                td:nth-child(7) small {
+                                    color: red;
+                                }
+
+                                td:nth-child(7) strong {
+                                    color: red;
+                                }
+
+                                .today {
+                                    background-color: #0064A7 !important;
+                                    color: #fff;
+                                }
+                            </style>
+
+
+
+                            <div class="table-responsive">
+                                <!-- Baishakh Calendar -->
+                                <table id="calendarBaishakh" class="table table-bordered text-center mb-0">
+                                    <thead class="small fw-normal">
+                                        <tr>
+                                            <th>आइत</th>
+                                            <th>सोम</th>
+                                            <th>मङ्गल</th>
+                                            <th>बुध</th>
+                                            <th>बिही</th>
+                                            <th>शुक्र</th>
+                                            <th class="holiday">शनि</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-normal">
+                                        <tr>
+                                            <td class="text-secondary bg-light"><strong>३०</strong><br><small
+                                                    class="d-block text-end">13</small></td>
+                                            <td><strong>१</strong><br><small class="d-block text-end">14</small>
+                                            </td>
+                                            <td><strong>२</strong><br><small class="d-block text-end">15</small>
+                                            </td>
+                                            <td><strong>३</strong><br><small class="d-block text-end">16</small>
+                                            </td>
+                                            <td><strong>४</strong><br><small class="d-block text-end">17</small>
+                                            </td>
+                                            <td><strong>५</strong><br><small class="d-block text-end">18</small>
+                                            </td>
+                                            <td><strong>६</strong><br><small class="d-block text-end">19</small>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>७</strong><br><small class="d-block text-end">20</small>
+                                            </td>
+                                            <td><strong>८</strong><br><small class="d-block text-end">21</small>
+                                            </td>
+                                            <td><strong>९</strong><br><small class="d-block text-end">22</small>
+                                            </td>
+                                            <td><strong>१०</strong><br><small class="d-block text-end">23</small>
+                                            </td>
+                                            <td><strong>११</strong><br><small class="d-block text-end">24</small>
+                                            </td>
+                                            <td class="text-danger"><strong>१२</strong><br><small class="d-block text-end">25</small>
+                                            </td>
+                                            <td><strong>१३</strong><br><small class="d-block text-end">26</small>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>१४</strong><br><small class="d-block text-end">27</small>
+                                            </td>
+                                            <td class="today"><strong>१५</strong><br><small
+                                                    class="d-block text-end">28</small>
+                                            </td>
+                                            <td><strong>१६</strong><br><small class="d-block text-end">29</small>
+                                            </td>
+                                            <td><strong>१७</strong><br><small class="d-block text-end">30</small>
+                                            </td>
+                                            <td><strong>१८</strong><br><small class="d-block text-end">1</small>
+                                            </td>
+                                            <td><strong>१९</strong><br><small class="d-block text-end">2</small>
+                                            </td>
+                                            <td><strong>२०</strong><br><small class="d-block text-end">3</small>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>२१</strong><br><small class="d-block text-end">4</small>
+                                            </td>
+                                            <td><strong>२२</strong><br><small class="d-block text-end">5</small>
+                                            </td>
+                                            <td><strong>२३</strong><br><small class="d-block text-end">6</small>
+                                            </td>
+                                            <td><strong>२४</strong><br><small class="d-block text-end">7</small>
+                                            </td>
+                                            <td><strong>२५</strong><br><small class="d-block text-end">8</small>
+                                            </td>
+                                            <td><strong>२६</strong><br><small class="d-block text-end">9</small>
+                                            </td>
+                                            <td><strong>२७</strong><br><small class="d-block text-end">10</small>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>२८</strong><br><small class="d-block text-end">11</small>
+                                            </td>
+                                            <td><strong>२९</strong><br><small class="d-block text-end">12</small>
+                                            </td>
+                                            <td><strong>३०</strong><br><small class="d-block text-end">13</small>
+                                            </td>
+                                            <td><strong>३१</strong><br><small class="d-block text-end">14</small>
+                                            </td>
+                                            <td class="text-secondary bg-light"><strong>१</strong><br><small
+                                                    class="d-block text-end">15</small></td>
+                                            <td class="text-secondary bg-light"><strong>२</strong><br><small
+                                                    class="d-block text-end">16</small></td>
+                                            <td class="text-secondary bg-light"><strong>३</strong><br><small
+                                                    class="d-block text-end">17</small></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table id="calendarJestha" class="table table-bordered text-center mb-0">
+                                    <thead class="small fw-normal">
+                                        <tr>
+                                            <th>आइत</th>
+                                            <th>सोम</th>
+                                            <th>मङ्गल</th>
+                                            <th>बुध</th>
+                                            <th>बिही</th>
+                                            <th>शुक्र</th>
+                                            <th class="holiday">शनि</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-normal">
+                                        <tr>
+                                            <td class="text-secondary bg-light"><strong>२८</strong><br><small class="d-block text-end">11</small></td>
+                                            <td class="text-secondary bg-light"><strong>२९</strong><br><small class="d-block text-end">12</small></td>
+                                            <td class="text-secondary bg-light"><strong>३०</strong><br><small class="d-block text-end">13</small></td>
+                                            <td><strong>१</strong><br><small class="d-block text-end">14</small></td>
+                                            <td><strong>२</strong><br><small class="d-block text-end">15</small></td>
+                                            <td><strong>३</strong><br><small class="d-block text-end">16</small></td>
+                                            <td><strong>४</strong><br><small class="d-block text-end">17</small></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>५</strong><br><small class="d-block text-end">18</small></td>
+                                            <td><strong>६</strong><br><small class="d-block text-end">19</small></td>
+                                            <td><strong>७</strong><br><small class="d-block text-end">20</small></td>
+                                            <td><strong>८</strong><br><small class="d-block text-end">21</small></td>
+                                            <td><strong>९</strong><br><small class="d-block text-end">22</small></td>
+                                            <td><strong>१०</strong><br><small class="d-block text-end">23</small></td>
+                                            <td><strong>११</strong><br><small class="d-block text-end">24</small></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>१२</strong><br><small class="d-block text-end">25</small></td>
+                                            <td><strong>१३</strong><br><small class="d-block text-end">26</small></td>
+                                            <td><strong>१४</strong><br><small class="d-block text-end">27</small></td>
+                                            <td ><strong>१५</strong><br><small class="d-block text-end">28</small></td>
+                                            <td><strong>१६</strong><br><small class="d-block text-end">29</small></td>
+                                            <td><strong>१७</strong><br><small class="d-block text-end">30</small></td>
+                                            <td><strong>१८</strong><br><small class="d-block text-end">31</small></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>१९</strong><br><small class="d-block text-end">1</small></td>
+                                            <td><strong>२०</strong><br><small class="d-block text-end">2</small></td>
+                                            <td><strong>२१</strong><br><small class="d-block text-end">3</small></td>
+                                            <td><strong>२२</strong><br><small class="d-block text-end">4</small></td>
+                                            <td><strong>२३</strong><br><small class="d-block text-end">5</small></td>
+                                            <td><strong>२४</strong><br><small class="d-block text-end">6</small></td>
+                                            <td><strong>२५</strong><br><small class="d-block text-end">7</small></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>२६</strong><br><small class="d-block text-end">8</small></td>
+                                            <td><strong>२७</strong><br><small class="d-block text-end">9</small></td>
+                                            <td><strong>२८</strong><br><small class="d-block text-end">10</small></td>
+                                            <td><strong>२९</strong><br><small class="d-block text-end">11</small></td>
+                                            <td><strong>३०</strong><br><small class="d-block text-end">12</small></td>
+                                            <td><strong>३१</strong><br><small class="d-block text-end">13</small></td>
+                                            <td class="text-secondary bg-light"><strong>१</strong><br><small class="d-block text-end">14</small></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        let currentMonth = 0;
+
+                        function showCalendar() {
+                            const monthName = ["बैशाख २०८२", "जेठ २०८२"];
+                            const engMonthName = ["Apr/May 2025","May/June 2025"]; // <-- Added English months
+
+                            document.getElementById('monthYear').innerText = monthName[currentMonth];
+                            document.getElementById('engMonthYear').innerText = engMonthName[currentMonth]; // <-- Update English month
+
+                            if (currentMonth === 0) {
+                                document.getElementById('calendarBaishakh').classList.remove('d-none');
+                                document.getElementById('calendarJestha').classList.add('d-none');
+                            } else {
+                                document.getElementById('calendarBaishakh').classList.add('d-none');
+                                document.getElementById('calendarJestha').classList.remove('d-none');
+                            }
+                        }
+
+                        document.getElementById('prevMonth').addEventListener('click', () => {
+                            currentMonth = (currentMonth - 1 + 2) % 2;
+                            showCalendar();
+                        });
+
+                        document.getElementById('nextMonth').addEventListener('click', () => {
+                            currentMonth = (currentMonth + 1) % 2;
+                            showCalendar();
+                        });
+
+                        showCalendar();
+
+                    </script>
+        </div>
+                    </div>
+                    </div>
+                    
+
+        
+
+        {{-- Horoscope Type Switcher --}}
         <div class="container bg-white mt-3">
             <div class="horoscope-header d-flex justify-content-between align-items-center">
                 <h2 class="horoscope-title">Here's the horoscope for today</h2>
-                <div class="button-container-horoscope mb-2">
-                    <button class="btn btn-outline-primary active" id="dailyBtn">Daily</button>
-                    <button class="btn btn-outline-primary" id="weeklyBtn">Weekly</button>
-                    <button class="btn btn-outline-primary" id="monthlyBtn">Monthly</button>
-                    <button class="btn btn-outline-primary" id="yearlyBtn">Yearly</button>
+<div class="button-container-horoscope">
+    <form id="horoscopeTypeForm" method="GET" action="{{ route('horoscope') }}">
+        <input type="hidden" name="type" id="horoscopeTypeInput" value="{{ request('type', 'daily') }}">
+
+        <button type="button" id="dailyBtn"
+            class="btn {{ request('type', 'daily') == 'daily' ? 'btn-primary active' : 'btn-outline-primary' }}">Daily</button>
+
+        <button type="button" id="weeklyBtn"
+            class="btn {{ request('type') == 'weekly' ? 'btn-primary active' : 'btn-outline-primary' }}">Weekly</button>
+
+        <button type="button" id="monthlyBtn"
+            class="btn {{ request('type') == 'monthly' ? 'btn-primary active' : 'btn-outline-primary' }}">Monthly</button>
+
+        <button type="button" id="yearlyBtn"
+            class="btn {{ request('type') == 'yearly' ? 'btn-primary active' : 'btn-outline-primary' }}">Yearly</button>
+    </form>
+</div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('horoscopeTypeForm');
+    const typeInput = document.getElementById('horoscopeTypeInput');
+    
+    // Select all buttons
+const buttons = document.querySelectorAll('.button-container-horoscope .btn');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            // Remove active class from all buttons
+            buttons.forEach(btn => btn.classList.remove('btn-primary', 'active'));
+
+            // Add active class to clicked button
+            button.classList.add('btn-primary', 'active');
+            
+            // Set the hidden input value to the clicked button's type
+            typeInput.value = button.textContent.trim().toLowerCase();
+
+            // Submit the form to reload with the selected type
+            form.submit();
+        });
+    });
+});
+
+    </script>
+
+
+
+     <!-- Horoscope Grid -->
+<div id="daily" class="horoscope-section">
+    <!-- English Section -->
+    <div class="row g-3 mt-3">
+        @foreach($orderedHoroscopes as $sign)
+            <div class="col-lg-1 col-md-2 col-sm-2 col-4">
+                <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal" data-bs-target="#horoscopeModal" 
+                     data-zodiac="{{ $sign->zodiacSignEnglish }}" 
+                     data-symbol="{{ asset($sign->zodiacImgEnglish) }}" 
+                     data-description="{{ strip_tags($sign->contentEn) }}" 
+                     data-zodiac-nepali="{{ $sign->zodiacSignNepali }}" 
+                     data-symbol-nepali="{{ asset($sign->zodiacImgNepali) }}"
+                     data-birth-month="{{ $sign->birthMonth }}"
+                     data-start-letter="{{ $sign->nameStartLetter }}">
+                    <div class="horoscope-card">
+                        <img src="{{ asset($sign->zodiacImgEnglish) }}" alt="{{ $sign->zodiacSignEnglish }}" class="img-fluid">
+                    </div>
+                    <h1>{{ $sign->zodiacSignEnglish }}</h1>
+                    <p>{{ $sign->birthMonth }}</p>
                 </div>
             </div>
+        @endforeach
+    </div>
 
-            <!-- Horoscope Grid -->
-            <div id="daily" class="horoscope-section">
-                <!-- English -->
-                <div class="row g-3 mt-3">
-                    <!-- Horoscope Items (6 per row on large screens) -->
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic1.png" alt="Taurus" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
+    <!-- Nepali Section -->
+    <div class="row g-3 mt-3">
+        @foreach($orderedHoroscopes as $sign)
+            <div class="col-lg-1 col-md-2 col-sm-2 col-4">
+                <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal" data-bs-target="#horoscopeModal" 
+                     data-zodiac="{{ $sign->zodiacSignNepali }}" 
+                     data-symbol="{{ asset($sign->zodiacImgNepali) }}" 
+                     data-description="{{ strip_tags($sign->contentNp) }}"  
+                     data-zodiac-english="{{ $sign->zodiacSignEnglish }}" 
+                     data-symbol-english="{{ asset($sign->zodiacImgEnglish) }}"
+                     data-birth-month="{{ $sign->birthMonth }}"
+                     data-start-letter="{{ $sign->nameStartLetter }}">
+                    <div class="horoscope-card">
+                        <img src="{{ asset($sign->zodiacImgNepali) }}" alt="{{ $sign->zodiacSignNepali }}" class="img-fluid">
                     </div>
+                    <h1>{{ $sign->zodiacSignNepali }}</h1>
+                    <p>{{ $sign->nameStartLetter }}</p>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic2.png" alt="Aries" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
+<!-- Modal Structure -->
+<div class="modal fade" id="horoscopeModal" tabindex="-1" aria-labelledby="horoscopeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-white position-relative">
+                <div class="d-flex flex-column align-items-start w-100">
+                    <div class="d-flex align-items-center">
+                        <div class="img-container me-2">
+                            <img alt="Zodiac symbol" class="img-fluid" id="horoscopeSymbol" src="img/pic1.png" />
                         </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic3.png" alt="Gemini" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic4.png" alt="Cancer" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic5.png" alt="Leo" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic6.png" alt="Virgo" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic7.png" alt="Taurus" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic8.png" alt="Aries" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic9.png" alt="Gemini" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic10.png" alt="Cancer" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic11.png" alt="Leo" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic12.png" alt="Virgo" class="img-fluid">
-                            </div>
-                            <h1>Aries</h1>
-                            <p>Mar 19 - Sep 12</p>
+                        <div>
+                            <h5 class="modal-title mb-0" id="horoscopeModalLabel">वृष - Taurus</h5>
+                            <p class="mb-0" id="horoscopeZodiacSigns">इ, उ, ए, ओ, बा, बि, बु, बे, बो</p>
                         </div>
                     </div>
                 </div>
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted-horoscope px-4" id="horoscopeDescription">
+                    <!-- Zodiac description will be injected here -->
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <!-- Nepali -->
-                <div class="row g-3 mt-3">
-                    <!-- Horoscope Items (6 per row on large screens) -->
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic1.png" alt="Taurus" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
 
-                        </div>
-                    </div>
+                <script>
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic2.png" alt="Aries" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+document.addEventListener('DOMContentLoaded', function () {
+    const horoscopeCards = document.querySelectorAll('.horoscope-card-wrapper');
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic3.png" alt="Gemini" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+    horoscopeCards.forEach(card => {
+        card.addEventListener('click', function () {
+            // Retrieve the zodiac data from the clicked card's data attributes
+            const zodiacEnglish = card.getAttribute('data-zodiac');
+            const zodiacNepali = card.getAttribute('data-zodiac-nepali');
+            const symbolEnglish = card.getAttribute('data-symbol');
+            const symbolNepali = card.getAttribute('data-symbol-nepali');
+            const description = card.getAttribute('data-description');
+            const birthMonth = card.getAttribute('data-birth-month');
+            const startLetter = card.getAttribute('data-start-letter');
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic4.png" alt="Cancer" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+            // Update modal content
+            const modalTitle = document.getElementById('horoscopeModalLabel');
+            const modalImage = document.getElementById('horoscopeSymbol');
+            const modalDescription = document.getElementById('horoscopeDescription');
+            const modalZodiacSigns = document.getElementById('horoscopeZodiacSigns');
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic5.png" alt="Leo" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+            // Check if it's English or Nepali and set the appropriate content
+            if (zodiacEnglish) {
+                modalTitle.textContent = `${zodiacEnglish} - ${zodiacNepali}`;
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic6.png" alt="Virgo" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic7.png" alt="Taurus" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+                modalImage.src = symbolEnglish;
+                modalZodiacSigns.textContent = startLetter;
+            }
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic8.png" alt="Aries" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+            if (zodiacNepali) {
+                modalTitle.textContent = `${zodiacEnglish} - ${zodiacNepali}`;
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic9.png" alt="Gemini" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+                modalImage.src = symbolNepali;
+                modalZodiacSigns.textContent = birthMonth;
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic10.png" alt="Cancer" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+            }
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic11.png" alt="Leo" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+            // Update description
+            modalDescription.textContent = description;
+            modalTitle.textContent = 
+    zodiacNepali && zodiacEnglish
+        ? ` ${zodiacEnglish}`
+        : (zodiacNepali || zodiacEnglish); // Show whichever is available
 
-                    <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                        <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
-                            data-bs-target="#horoscopeModal">
-                            <div class="horoscope-card">
-                                <img src="img/pic12.png" alt="Virgo" class="img-fluid">
-                            </div>
-                            <h1>वृष</h1>
-                            <p>(इ, उ, ए, ओ, बा)</p>
-                        </div>
-                    </div>
+        });
+    });
+});
+
+
+                </script>  
+                
+
+                
+              
+
+                   
+
+                
+
+                
+
+               
+
                 </div>
             </div>
 
@@ -306,40 +483,7 @@
 
 
         <!-- Modal for displaying description -->
-        <div class="modal fade" id="horoscopeModal" tabindex="-1" aria-labelledby="horoscopeModalLabel"
-            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog modal-dialog-centered"> <!-- Centering modal -->
-                <div class="modal-content">
-                    <div class="modal-header bg-white position-relative">
-                        <div class="d-flex flex-column align-items-start w-100">
-                            <div class="d-flex align-items-center">
-                                <div class="img-container me-2">
-                                    <img alt="Taurus symbol" class="img-fluid" src="img/pic1.png" />
-                                </div>
-                                <div>
-                                    <h5 class="modal-title mb-0" id="horoscopeModalLabel">वृष - Taurus</h5>
-                                    <p class="mb-0">इ, उ, ए, ओ, बा, बि, बु, बे, बो</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Close button in the top-right corner -->
-                        <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
-                            data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="text-muted-horoscope px-4">
-                            बेलामा होस नपुर्याउँदा केही अच्यारा चुनौती आउन सक्छन्
-                            फाइदाका पछि लाग्दा आफ्नै धनमाल गुम्न सक्छथ साथीभाइसँग
-                            पनि असमझदारी बढ्न सक्छ खर्च बढ्नुकासाथै आर्थिक अभाव
-                            देख्न पर्ने समय छ। आयथ लगानीहरु सक्रिय हुनेछन् भने
-                            सहयोगी गर्नेहरु कमै भेटिन्छन्। अवसरको खोजिमा केही दौडधुप
-                            गर्नुपर्ला धेरै लगानी गर्दा थोरै फाइदा हुनेछ। लगनशीलताले
-                            कोटिमानि दिलाउन सक्छ।
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </section>
         <div class="container-fluid banner-horoscope d-flex align-items-center" style="height:272px;">
              <div class="container">
@@ -369,20 +513,20 @@
                                         <label for="name" class="form-label">Name<span
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control abroad-deal-1" id="name"
-                                            placeholder="Enter name" required>
+                                            placeholder="Enter name" name="personName" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day"  name="day" required>
                                             </div>
                                             <div class="col">
-                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month" required>
+                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month" name="month" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year" name="year" required>
                                             </div>
                                         </div>
                                     </div>
@@ -391,13 +535,13 @@
                                         <label class="form-label">Time of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour" name="hour" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute" name="minute" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second" name="second" required>
                                             </div>
                                         </div>
                                     </div>
@@ -405,7 +549,7 @@
                                     <div class="mb-3">
                                         <label for="place" class="form-label">Place of Birth<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select abroad-deal-1" id="place" required>
+                                        <select class="form-select abroad-deal-1" id="place" name="personPlaceOfBirth" required>
                                             <option selected disabled>Pokhara, Gandaki Zone</option>
                                         </select>
                                     </div>
@@ -423,22 +567,22 @@
                         <h1 class="pb-3">Enter a Questions to ask</h1>
                         <div class="card mb-5">
                             <div class="card-body">
-                                <h5 class="card-title mb-3"><i class="bi bi-chevron-left"
+                                <h5 class="card-title mb-3"><i class="bi bi-chevron-left" 
                                         id="backButtonqen1"></i>Question you want to ask out Jyotish</h5>
                                 <form>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 1</label>
-                                        <input type="text" class="form-control abroad-deal-1" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name" name="Query1"
                                             placeholder="Enter name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 2</label>
-                                        <input type="text" class="form-control abroad-deal-1" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name" name="Query2"
                                             placeholder="Enter name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 3</label>
-                                        <input type="text" class="form-control abroad-deal-1" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name" name="Query3"
                                             placeholder="Enter name" required>
                                     </div>
 
@@ -463,7 +607,7 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Name<span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" class="form-control abroad-deal-1" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name" name="girlName"
                                             placeholder="Enter name" required>
                                     </div>
 
@@ -471,13 +615,13 @@
                                         <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day"name="gday" required>
                                             </div>
                                             <div class="col">
-                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month" required>
+                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month" name="gmonth" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year" name="gyear" required>
                                             </div>
                                         </div>
                                     </div>
@@ -486,13 +630,13 @@
                                         <label class="form-label">Time of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour" name="ghour" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute" name="gminute" required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second" name="gsecond" required>
                                             </div>
                                         </div>
                                     </div>
@@ -500,7 +644,7 @@
                                     <div class="mb-3">
                                         <label for="place" class="form-label">Place of Birth<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select abroad-deal-1" id="place" required>
+                                        <select class="form-select abroad-deal-1" id="place" name="girlPlaceOfBirth" required>
                                             <option selected disabled>Pokhara, Gandaki Zone</option>
                                         </select>
                                     </div>
@@ -511,6 +655,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Boy-Section -->
                     <div class="Boys-Section" id="Boys-Section">
                         <h1 class="pb-3">Enter Boy’s Birth Details</h1>
@@ -522,7 +667,7 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Name<span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" class="form-control abroad-deal-1" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name" name="boyName"
                                             placeholder="Enter name" required>
                                     </div>
 
@@ -530,14 +675,14 @@
                                         <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day" required>
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Day" name="bday" required>
                                             </div>
                                             <div class="col">
-                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month"
+                                                <input type="text" class="form-control abroad-deal-1" placeholder="Month" name="bmonth"
                                                     required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year"
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Year" name="byear"
                                                     required>
                                             </div>
                                         </div>
@@ -548,15 +693,15 @@
                                                 class="text-danger">*</span></label>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour"
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Hour" name="bhour"
                                                     required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute"
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Minute" name="bminute"
                                                     required>
                                             </div>
                                             <div class="col">
-                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second"
+                                                <input type="number" class="form-control abroad-deal-1" placeholder="Second" name="bsecond"
                                                     required>
                                             </div>
                                         </div>
@@ -565,7 +710,7 @@
                                     <div class="mb-3">
                                         <label for="place" class="form-label">Place of Birth<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select abroad-deal-1" id="place" required>
+                                        <select class="form-select abroad-deal-1" id="place" name="boyPlaceOfBirth" required>
                                             <option selected disabled>Pokhara, Gandaki Zone</option>
                                         </select>
                                     </div>
@@ -586,17 +731,17 @@
                                 <form>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 1</label>
-                                        <input type="text" class="form-control abroad-deal-1" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name" name="Query1"
                                             placeholder="Enter name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 2</label>
-                                        <input type="text" class="form-control abroad-deal-1" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name" name="Query2"
                                             placeholder="Enter name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Question 3</label>
-                                        <input type="text" class="form-control abroad-deal-1" id="name"
+                                        <input type="text" class="form-control abroad-deal-1" id="name" name="Query3"
                                             placeholder="Enter name" required>
                                     </div>
                                     <button type="button" class="btn next-match-btn float-end"
@@ -664,14 +809,18 @@
 
                 <div class="col-lg-4 Jyotish mt-5">
                     <h3 class="mb-4 mt-5">Our Jyotish</h3>
+                    @foreach($astrologer as $as)
+   
+        <!-- Show authenticated user's video -->
+        <iframe width="100%" height="315" src="{{ $as->astroVideoLink }}" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
 
-                    <!-- Embedded YouTube Video -->
-                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/vmNjc_EzQx8" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
+    <p class="mt-3">{{ $as->astrologerLocation ?? 'Unknown Location' }}</p>
+@endforeach
 
 
-                    <p class="mt-3">Pokhara</p>
+
                 </div>
             </div>
         </div>
@@ -693,6 +842,75 @@
   height: 250px;
             }
             </style>
+
+
+
+
+
+
+
+  
+
+
+<!-- 
+<script>
+    $('#payButton').on('click', function () {
+        let formData = new FormData();
+
+        // Girl Info
+        formData.append('girlName', $('input[name="girlName"]').val());
+        formData.append('girlPlaceOfBirth', $('select[name="girlPlaceOfBirth"]').val());
+
+        let gday = $('input[name="gday"]').val();
+        let gmonth = $('input[name="gmonth"]').val();
+        let gyear = $('input[name="gyear"]').val();
+        formData.append('girlDateOfBirth', `${gyear}-${gmonth}-${gday}`); // YYYY-MM-DD
+
+        let ghour = $('input[name="hour"]').eq(0).val();
+        let gminute = $('input[name="minute"]').eq(0).val();
+        let gsecond = $('input[name="second"]').eq(0).val();
+        formData.append('girlTimeOfBirth', `${ghour}:${gminute}:${gsecond}`); // HH:MM:SS
+
+        // Boy Info
+        formData.append('boyName', $('input[name="boyName"]').val());
+        formData.append('boyPlaceOfBirth', $('select[name="boyPlaceOfBirth"]').val());
+
+        let bday = $('input[name="bday"]').val();
+        let bmonth = $('input[name="bmonth"]').val();
+        let byear = $('input[name="byear"]').val();
+        formData.append('boyDateOfBirth', `${byear}-${bmonth}-${bday}`);
+
+        let bhour = $('input[name="hour"]').eq(1).val();
+        let bminute = $('input[name="minute"]').eq(1).val();
+        let bsecond = $('input[name="second"]').eq(1).val();
+        formData.append('boyTimeOfBirth', `${bhour}:${bminute}:${bsecond}`);
+
+        // Questions
+        formData.append('Query1', $('input[name="Query1"]').val());
+        formData.append('Query2', $('input[name="Query2"]').val());
+        formData.append('Query3', $('input[name="Query3"]').val());
+
+        $.ajax({
+            url: "{{ route('kundalimatching.store') }}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            success: function (response) {
+                alert("Kundali details saved successfully!");
+                // Optional: redirect or reset
+            },
+            error: function (xhr) {
+                alert("Something went wrong!");
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script> -->
+
 
         <!-- <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -890,6 +1108,24 @@
                 });
             });
         </script> -->
+        <!-- <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".button-container-horoscope button");
+        const typeInput = document.getElementById("horoscopeTypeInput");
+        const form = document.getElementById("horoscopeTypeForm");
+
+        // Function to update form and submit it
+        function submitType(type) {
+            typeInput.value = type;
+            form.submit();
+        }
+
+        buttons.forEach(button => {
+            const type = button.id.replace("Btn", ""); // Get 'daily', 'weekly', etc.
+            button.addEventListener("click", () => submitType(type));
+        });
+    });
+</script> -->
 
 
         <script>
@@ -915,14 +1151,14 @@
                     document.getElementById(sectionId + "Btn").classList.add("btn-primary", "active");
                 }
 
-                // Attach event listeners to all buttons
-                document.getElementById("dailyBtn").addEventListener("click", () => showSection("daily"));
-                document.getElementById("weeklyBtn").addEventListener("click", () => showSection("weekly"));
-                document.getElementById("monthlyBtn").addEventListener("click", () => showSection("monthly"));
-                document.getElementById("yearlyBtn").addEventListener("click", () => showSection("yearly"));
+                // // Attach event listeners to all buttons
+                // document.getElementById("dailyBtn").addEventListener("click", () => showSection("daily"));
+                // document.getElementById("weeklyBtn").addEventListener("click", () => showSection("weekly"));
+                // document.getElementById("monthlyBtn").addEventListener("click", () => showSection("monthly"));
+                // document.getElementById("yearlyBtn").addEventListener("click", () => showSection("yearly"));
 
-                // Set default active section
-                showSection("daily");
+                // // Set default active section
+                // showSection("daily");
             });
 
             // Function to show horoscope details in the modal
@@ -973,43 +1209,97 @@
 
             // Kundali & Horoscope Buttons
             document.addEventListener("DOMContentLoaded", function() {
-                const kundaliBtn = document.getElementById("kundaliBtn");
-                const horoscopeBtn = document.getElementById("horoscopeBtn");
-                const girlsSection = document.getElementById("Girls-Section");
-                const boysSection = document.getElementById("Boys-Section");
-                const personalDetailsSection = document.getElementById("Personal-Section");
-                const paymentSection = document.getElementById("payment-section");
-                const questionSection = document.getElementById("Question-Section");
+    const kundaliBtn = document.getElementById("kundaliBtn");
+    const horoscopeBtn = document.getElementById("horoscopeBtn");
+    const girlsSection = document.getElementById("Girls-Section");
+    const boysSection = document.getElementById("Boys-Section");
+    const personalDetailsSection = document.getElementById("Personal-Section");
+    const paymentSection = document.getElementById("payment-section");
+    const questionSection = document.getElementById("Question-Section");
 
-                function showSection(activeSection) {
-                    girlsSection.style.display = activeSection === girlsSection ? "block" : "none";
-                    boysSection.style.display = activeSection === boysSection ? "block" : "none";
-                    personalDetailsSection.style.display = activeSection === personalDetailsSection ? "block" : "none";
-                    paymentSection.style.display = activeSection === paymentSection ? "block" : "none";
-                    questionSection.style.display = activeSection === questionSection ? "block" : "none";
-                }
+    function showSection(activeSection) {
+        girlsSection.style.display = activeSection === girlsSection ? "block" : "none";
+        boysSection.style.display = activeSection === boysSection ? "block" : "none";
+        personalDetailsSection.style.display = activeSection === personalDetailsSection ? "block" : "none";
+        paymentSection.style.display = activeSection === paymentSection ? "block" : "none";
+        questionSection.style.display = activeSection === questionSection ? "block" : "none";
+    }
 
-                function toggleActiveButton(activeBtn, inactiveBtn) {
-                    activeBtn.classList.add("active");
-                    inactiveBtn.classList.remove("active");
-                }
+    function toggleActiveButton(activeBtn, inactiveBtn) {
+        activeBtn.classList.add("active");
+        inactiveBtn.classList.remove("active");
+    }
 
-                kundaliBtn.addEventListener("click", function() {
-                    toggleActiveButton(kundaliBtn, horoscopeBtn);
-                    showSection(girlsSection);
-                });
+    kundaliBtn.addEventListener("click", function() {
+        toggleActiveButton(kundaliBtn, horoscopeBtn);
+        showSection(girlsSection);
+    });
 
-                horoscopeBtn.addEventListener("click", function() {
-                    toggleActiveButton(horoscopeBtn, kundaliBtn);
-                    showSection(personalDetailsSection);
-                    personalDetailsSection.scrollIntoView({
-                        behavior: "smooth"
-                    });
-                });
+    horoscopeBtn.addEventListener("click", function() {
+        toggleActiveButton(horoscopeBtn, kundaliBtn);
+        showSection(personalDetailsSection);
+        personalDetailsSection.scrollIntoView({
+            behavior: "smooth"
+        });
+    });
 
-                // Show only the initial section on load
-                showSection(girlsSection);
-            });
+    // Show only the initial section on load
+    showSection(girlsSection);
+
+    // Next button click event to submit data using AJAX
+    const nextButton = document.getElementById("nextButton"); // You might have this button in the Girl's section
+    nextButton.addEventListener("click", function() {
+        const girlName = document.querySelector('input[name="girlName"]').value;
+        const girlDateOfBirth = `${document.querySelector('input[name="gday"]').value}-${document.querySelector('input[name="gmonth"]').value}-${document.querySelector('input[name="gyear"]').value}`;
+        const girlTimeOfBirth = `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
+        const girlPlaceOfBirth = document.querySelector('select[name="girlPlaceOfBirth"]').value;
+
+        const boyName = document.querySelector('input[name="boyName"]').value;
+        const boyDateOfBirth = `${document.querySelector('input[name="bday"]').value}-${document.querySelector('input[name="bmonth"]').value}-${document.querySelector('input[name="byear"]').value}`;
+        const boyTimeOfBirth = `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
+        const boyPlaceOfBirth = document.querySelector('select[name="boyPlaceOfBirth"]').value;
+
+        const query1 = document.querySelector('input[name="Query1"]').value;
+        const query2 = document.querySelector('input[name="Query2"]').value;
+        const query3 = document.querySelector('input[name="Query3"]').value;
+
+        // Collect data in an object
+        const formData = {
+            girlName,
+            girlDateOfBirth,
+            girlTimeOfBirth,
+            girlPlaceOfBirth,
+            boyName,
+            boyDateOfBirth,
+            boyTimeOfBirth,
+            boyPlaceOfBirth,
+            query1,
+            query2,
+            query3
+        };
+
+        // Send the data to the server using AJAX
+        $.ajax({
+    url: "{{ route('kundalimatching.store') }}",
+    type: "POST",
+    data: formData,
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function(response) {
+        console.log(response);
+        alert('Data saved successfully');
+        showSection(questionSection); // Optionally, switch to another section after successful submission
+    },
+    error: function(xhr, status, error) {
+        console.error('Error:', error);
+        alert('There was an error saving the data');
+        console.log(xhr.responseText);
+    }
+});
+
+    });
+});
 
             // Navigate to Question Section
             document.getElementById("nextButton1").addEventListener("click", function(event) {
@@ -1031,6 +1321,7 @@
                 });
             });
 
+
             // Back to Boys Section from Question Section
             document.getElementById("backButtonqen2").addEventListener("click", function(event) {
                 event.preventDefault();
@@ -1040,6 +1331,7 @@
                     behavior: "smooth"
                 });
             });
+
 
             // Show Payment Section when Pay Button is Clicked
             document.getElementById("payButton").addEventListener("click", function(event) {
@@ -1053,6 +1345,8 @@
                 });
             });
 
+
+
             // Back to Question Section from Payment Section
             document.getElementById("back-btn").addEventListener("click", function(event) {
                 event.preventDefault();
@@ -1062,5 +1356,65 @@
                     behavior: "smooth"
                 });
             });
+
+
         </script>
+
+
+
+
+        <!-- <script>
+    document.getElementById("payButton").addEventListener("click", function (event) {
+        event.preventDefault();
+
+        // Get form data from both forms
+        const personalForm = new FormData(document.getElementById("personalForm"));
+        const questionForm = new FormData(document.getElementById("questionForm"));
+
+        // Merge both
+        for (let [key, value] of questionForm.entries()) {
+            personalForm.append(key, value);
+        }
+
+        // Add additional info if needed
+        personalForm.append('personDateOfBirth', 
+            personalForm.get('birthDay') + '-' + 
+            personalForm.get('birthMonth') + '-' + 
+            personalForm.get('birthYear')
+        );
+
+        personalForm.append('personTimeOfBirth', 
+            personalForm.get('birthHour') + ':' + 
+            personalForm.get('birthMinute') + ':' + 
+            personalForm.get('birthSecond')
+        );
+
+        // Optionally add static data
+        personalForm.append('jobSeekerId', 123); // Replace with dynamic value
+        personalForm.append('emailAddress', 'test@example.com');
+        personalForm.append('phoneNumber', '9800000000');
+
+        fetch("{{ route('kundalidetail.store') }}", {
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: personalForm
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Form submitted successfully!');
+            console.log(data);
+            // Optionally redirect or show payment section
+            document.getElementById("Question-Section").style.display = "none";
+            document.getElementById("payment-section").style.display = "block";
+            document.getElementById("payment-section").scrollIntoView({ behavior: "smooth" });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error submitting the form.');
+        });
+    });
+</script> -->
+
     @endsection

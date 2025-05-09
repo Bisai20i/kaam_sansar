@@ -576,13 +576,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                 
                 @if (Auth::guard('job_seekers')->check())
     <!-- If user is logged in, open chat -->
-    <button class="btn custom-outline-btn ms-auto"
+    <button class="btn btn-search ms-auto"
             data-user-id="{{ $ad->jobSeekerId }}"
             onclick="openChat(this)"
             data-user-name="{{ $ad->jobSeeker->firstName . ' ' . $ad->jobSeeker->lastName }}">
         <!-- <i class="fas fa-comment-alt me-2"></i> -->
-        <!-- <span class="d-none d-md-inline"></span> -->
-        Message
+        <span class="d-none d-md-inline">Message</span>
     </button>
 @else
     <!-- If user is not logged in, open login modal -->
@@ -625,249 +624,159 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="d-flex gap-4 ms-2">
                                 <!-- <div><i class="bi bi-chat"></i>0</div> -->
 <!-- Button to open modal and load comments -->
-<button type="button" class="btn text-primary"
+<button type="button" class="btn btn-info"
         data-bs-toggle="modal"
         data-bs-target="#commentModal"
         onclick="loadComments({{ $ad->id }})">
-    <i class="bi bi-chat"></i> 
+    <i class="bi bi-chat"></i> 0 Comments
 </button>
 <!-- Example: post ID = 42 -->
-<button class="btn text-primary" style="cursor: pointer;" id="shareIcon" data-post-id="{{ $ad->id }}">
+<div style="cursor: pointer;" id="shareIcon" data-post-id="{{ $ad->id }}">
     <i class="bi bi-share"></i> <span id="shareCount">0</span>
-    </button>
+</div>
 
 <!-- Flash Message -->
 <div id="copyMessage" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #d4edda; color: #155724; padding: 10px 20px; border-radius: 5px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 9999;">
     🔗 Link copied to clipboard!
 </div>
-<!--  ///////////////////////////// -->
+<!-- /////////////////////////////
  
 
 
 
-<!-- Comment Modal -->
+
+-->
+
+<!-- Modal for Comments -->
 <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content border-0 shadow-sm rounded-4">
-
-      <!-- Modal Header -->
-      <div class="modal-header bg-white border-bottom">
-        <h5 class="modal-title" id="commentModalLabel">
-          <i class="bi bi-chat-left-text"></i> Comments
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="modal-body bg-light">
-
-        <!-- Comments Display Section -->
-        <div id="commentsSection" class="mb-3" style="max-height: 350px; overflow-y: auto;">
-          <!-- Comments will be loaded here dynamically -->
-          @foreach ($comments as $cmt)
-            <div class="d-flex align-items-start mb-3">
-            <img src="{{ asset('storage/' . $cmt->jobSeeker->userThumbnail[0]) }}"  ?? 'https://via.placeholder.com/40' }}"
-            class="rounded-circle me-2"
-                   style="width: 40px; height: 40px; object-fit: cover;" alt="User">
-
-              <div class="flex-grow-1">
-                <div class="bg-light border rounded-3 px-3 py-2">
-                  <h6 class="fw-semibold mb-1">{{ $cmt->jobSeeker->firstName }} {{ $cmt->jobSeeker->lastName }}</h6>
-                  <p class="mb-1">{{ $cmt->comment }}</p>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentModalLabel">Comments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <small class="text-muted">{{ $cmt->created_at->diffForHumans() }}</small>
-              </div>
-
-              <!-- Show delete button if the logged-in user is the author of the comment -->
-              @if (Auth::guard('job_seekers')->user()->id === $cmt->jobSeekerId)
-                <button class="btn ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $cmt->id }}">
-                  <i class="bi bi-trash text-danger"></i>
-                </button>
-
-         
-              @endif
-            </div>
-          @endforeach
+            <div class="modal-body">
+                <!-- Comments List (Loaded via AJAX) -->
+                <div id="commentsList" style="max-height: 300px; overflow-y: auto;">
+                @foreach($comments as $cmt)
+    <div class="d-flex align-items-start p-1 bg-white rounded mb-2 comment-box w-100">
+        <img alt="Profile picture" class="rounded-circle me-3" height="50" width="50"
+             src="https://storage.googleapis.com/a1aa/image/ThNp8APQMIPaFZUmVLK-cOT1kYH9Ca9IxDVxpTDWa78.jpg" />
+        <div class="comment-text">
+            <h6 class="fw-semibold mb-0">
+                {{ $cmt->jobSeeker->firstName }} {{ $cmt->jobSeeker->lastName }}
+            </h6>
+            <p class="mb-0">{{ $cmt->comment }}</p>
         </div>
 
-        <!-- Divider -->
-        <hr>
+        @if (Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->id === $cmt->jobSeekerId)
+            <button  type="submit" class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $cmt->id }}">
+                <i class="bi bi-trash text-danger"></i>
+            </button>
 
-        <!-- Comment Form -->
-        <form id="commentForm" class="d-flex align-items-start gap-2">
-          @csrf
-          <input type="hidden" name="productId" id="productId" value="{{ $ad->id }}">
-
-          <textarea name="comment" class="form-control rounded-3 " placeholder="Write a comment..." rows="2" required></textarea>
-          <button type="submit" class="btn btn-send rounded mb-0 text-primary" id="sendMessageButton">
-  <i class="fas fa-paper-plane" ></i>
-</button>
-
-        </form>
-
-      </div>
-
+            <!-- Delete Confirmation Modal -->
+            <div class="modal fade" id="deleteModal{{ $cmt->id }}" tabindex="-1"
+                 aria-labelledby="deleteModalLabel{{ $cmt->id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel{{ $cmt->id }}">Confirm Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this comment?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancel</button>
+                            <form action="{{ route('aboardcomment.destroy', $cmt->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
-  </div>
+@endforeach
+
+                <div class="">
+                <!-- Form for Adding a Comment -->
+                @if (Auth::guard('job_seekers')->check())
+                    <form action="{{ route('aboardcomment.store') }}" method="post">
+                    @csrf
+                    <input type="hidden" value="{{$ad->id}}" name="productId">
+
+                    <div
+                        class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2">
+                        <!-- Image on the left side of the input field -->
+                        <img alt="Profile picture of user" class="rounded-circle abroad-chat me-2"
+                            src="https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg" />
+
+                        <!-- Input Box with full width -->
+                        <input class="form-control w-100 p-1" id="commentInput"
+                            placeholder="Write a comment...." name="comment" type="text" />
+
+                        <!-- Send Button -->
+                        <button class="btn btn-outline-primary border border-0 w-10 ms-2" type="submit">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </div>
+                    </form>
+                    @endif
+              
+            </div>
+          
+              
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- OUTSIDE the comment modal -->
-@foreach ($comments as $cmt)
-  <!-- Delete Modal outside -->
-  <div class="modal fade" id="deleteModal{{ $cmt->id }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirm Delete</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">Are you sure you want to delete this comment?</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <form action="{{ route('aboardcomment.destroy', $cmt->id) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
-        </div>
-      </div>
+
+
+
+     <script>
+
+        // Add event listener to the send button
+document.getElementById('sendButton').addEventListener('click', function () {
+    var commentInput = document.getElementById('commentInput');
+    var commentText = commentInput.value.trim();
+
+    // Only add a comment if the input is not empty
+    if (commentText !== '') {
+        var commentsList = document.getElementById('commentsList');
+        var newComment = document.createElement('div');
+
+        // Set comment box class and add HTML content
+        newComment.className = 'd-flex align-items-start p-1 bg-white rounded shadow-sm mb-2 comment-box';
+        newComment.innerHTML = `
+    <img alt="Profile picture of user" class="rounded-circle me-3" src="https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg"/>
+    <div class="comment-text">
+        <h6 class="fw-semibold mb-0 mb-0"></h6>
+        <p class="mb-0">${commentText}</p>
     </div>
-  </div>
-@endforeach
-<script>
-function loadComments(productId) {
-    $('#productId').val(productId); // set productId for form
+`;
 
-    $.ajax({
-        url: `/aboardcomment/${productId}`, // hit the show() route
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest' // triggers $request->ajax()
-        },
-        success: function (response) {
-            if (response.status === 'success') {
-                const comments = response.data;
-                let html = '';
+        // Insert the new comment at the top of the list
+        commentsList.insertBefore(newComment, commentsList.firstChild);
 
-                comments.forEach(cmt => {
-                    html += `
-                        <div class="d-flex align-items-start mb-3" id="comment-${cmt.id}">
-                            <img src="{{ asset('storage/' . $cmt->jobSeeker->userThumbnail[0]) }}"
-                                 class="rounded-circle me-2"
-                                 style="width: 40px; height: 40px; object-fit: cover;" alt="User">
-                            <div class="flex-grow-1">
-                                <div class="bg-light border rounded-3 px-3 py-2">
-                                    <h6 class="fw-semibold mb-1">${cmt.job_seeker?.firstName || ''} ${cmt.job_seeker?.lastName || ''}</h6>
-                                    <p class="mb-1">${cmt.comment}</p>
-                                </div>
-                                <small class="text-muted">${new Date(cmt.created_at).toLocaleString()}</small>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                $('#commentsSection').html(html);
-                $('#commentCount-' + productId).text(comments.length);
-            }
-        },
-        error: function () {
-            alert('Failed to load comments.');
-        }
-    });
-}
-</script>
-
-<!-- AJAX Scripts -->
-<script>
-// Load comments dynamically when the modal is shown
-$('#commentModal').on('show.bs.modal', function (e) {
-    var productId = $('#productId').val();  // Get product ID dynamically
-
-    $.ajax({
-        url: '/aboardsdeals/' + productId + '/comments',  // Adjust this route if needed
-        method: 'GET',
-        success: function (response) {
-            if (response.data) {
-                var commentsHTML = '';
-                response.data.forEach(function(cmt) {
-                    commentsHTML += `
-                        <div class="d-flex align-items-start mb-3">
-                            <img src="${cmt.jobSeeker.profileImage || 'https://via.placeholder.com/40'}"
-                                 class="rounded-circle me-2"
-                                 style="width: 40px; height: 40px; object-fit: cover;" alt="User">
-                            <div class="flex-grow-1">
-                                <div class="bg-light border rounded-3 px-3 py-2">
-                                    <h6 class="fw-semibold mb-1">${cmt.jobSeeker.firstName} ${cmt.jobSeeker.lastName}</h6>
-                                    <p class="mb-1">${cmt.comment}</p>
-                                </div>
-                                <small class="text-muted">${new Date(cmt.created_at).toLocaleString()}</small>
-                            </div>
-                            <!-- Show delete button if the logged-in user is the author -->
-                            ${cmt.canDelete ? `
-                                <button class="btn ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal${cmt.id}">
-                                    <i class="bi bi-trash text-danger"></i>
-                                </button>
-                            ` : ''}
-                        </div>`;
-                });
-                $('#commentsSection').html(commentsHTML);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error loading comments:', error);
-            alert('An error occurred while loading comments.');
-        }
-    });
+        // Clear the comment input field
+        commentInput.value = '';
+    }
 });
 
-$(document).ready(function () {
-    // Unbind previous submit handler and bind a new one
-    $(document).off('submit', '#commentForm').on('submit', '#commentForm', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{ route('aboardcomment.store') }}",
-            method: 'POST',
-            data: $(this).serialize(),
-            success: function (response) {
-                console.log('Response:', response);
-
-                if (response && response.message) {
-                    alert(response.message);
-                    $('#commentForm')[0].reset();
-
-                    // Prepend the new comment in the UI
-                    $('#commentsSection').prepend(`
-                        <div class="comment">
-                            <p><strong>${response.data.jobSeeker.firstName} ${response.data.jobSeeker.lastName}</strong>: ${response.data.comment}</p>
-                        </div>
-                    `);
-                    let productId = $('#productId').val(); // from hidden input
-let countElement = $('#commentCount-' + productId);
-let currentCount = parseInt(countElement.text());
-countElement.text(currentCount + 1);
-let productId = $('#productId').val();
-let countElement = $('#commentCount-' + productId);
-let currentCount = parseInt(countElement.text());
-countElement.text(Math.max(currentCount - 1, 0));
-
-
-                } else {
-                    alert('Failed to add comment. Please try again.');
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('AJAX Error:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
+    // ✅ Ensure script runs when page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        setActive(0); // Default active tab
     });
-});
-
-</script>
-
+     </script> 
      
-     <!-- /////////////////////////////////////////// --> 
+     
+     <!-- /////////////////////////////////////////// -->
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -900,7 +809,6 @@ countElement.text(Math.max(currentCount - 1, 0));
             });
         });
     });
-    
 </script>
 
 
@@ -931,476 +839,6 @@ countElement.text(Math.max(currentCount - 1, 0));
     </section>
 
   
-
-    <div class="chat-box rounded shadow-lg" id="chatBox"
-            style="max-width: 400px; width: 90vw; max-height:auto; height:auto; position: fixed; bottom: 10px; right: 10px; background: white; z-index: 1000;">
-
-            <!-- Chat Header -->
-            <div class="d-flex justify-content-between align-items-center text-white p-2 rounded-top"
-                style="background-color: #0064A7;" id=chatHeader>
-                <span class="fw-semibold" name="receiver_name"></span>
-                <button class="btn-close btn-close-white" onclick="toggleChat()"></button>
-            </div>
-
-            <div id="messageContainer" class="p-2 mb-5 overflow-auto" style="max-height:400px; overflow: hidden;">
-                <p class="text-center text-secondary my-2 "><small>Conversation Not Stated Yet!</small></p>
-                <div class="d-flex my-2 w-100 justify-content-end">
-                    <span style="background-color: #0064A7; max-width: 90%;"
-                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">Hello, how are you</span>
-                </div>
-                <div class="d-flex my-2 w-100 justify-content-start">
-                    <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">Lorem
-                        ipsum dolor, sit amet consectetur adipisicing elit. Recusandae nemo beatae vero eius. Perferendis
-                        ipsum rem repudiandae exercitationem, corporis officia.</span>
-                </div>
-                <div class="d-flex my-2 w-100 justify-content-end">
-                    <span style="background-color: #0064A7; max-width: 90%;"
-                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">Hello, how are you</span>
-                </div>
-                <div class="d-flex my-2 w-100 justify-content-start">
-                    <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">Lorem
-                        ipsum dolor, sit amet consectetur adipisicing elit. Recusandae nemo beatae vero eius. Perferendis
-                        ipsum rem repudiandae exercitationem, corporis officia.</span>
-                </div>
-
-
-
-
-
-            </div>
-
-            <!-- Chat Input -->
-
-            <div class="chat-input gap-1 d-flex p-2">
-
-                <input type="hidden" name="receiver_id" value="">
-                <input type="text" class="form-control rounded border flex-grow-1"
-                    placeholder="Type your message here..." name="message">
-                <button class="btn btn-send rounded mb-0" id="sendMessageButton" onclick="sendMessage()">
-                    <i class="fas fa-paper-plane" style="color:#0064A7"></i>
-                </button>
-            </div>
-
-        </div>
-
-</section>
-</div>
-
-
-<style>
-        .chat-box {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            height: 450px;
-            border: 1px solid #ccc;
-            background: white;
-            border-radius: 8px;
-            display: none;
-        }
-
-        .chat-input {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            padding: 10px;
-        }
-
-        .btn-send {
-            color: white;
-            border-color: #0064A7;
-        }
-
-        .btn-send:hover {
-            background-color: white;
-            color: #0064A7;
-            border-color: #0064A7;
-        }
-
-        .custom-outline-btn {
-            border: 1px solid #0064a7 !important;
-            color: black;
-            font-size: 16px;
-            font-weight: 600;
-            background-color: transparent;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .custom-outline-btn:hover {
-            background-color: #0064A7 !important;
-            color: #fff !important;
-        }
-
-        .custom-outline-btn i {
-            color: #0064A7;
-        }
-
-        .custom-outline-btn:hover i {
-            color: #ffffff;
-        }
-        
-.step-container {
-  justify-content: flex-start !important;
-  border-bottom: 2px solid gray;
-}
-
-.step-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.3s ease-in-out;
-  color: #A4A4A4;
-  white-space: nowrap;
-  position: relative;
-}
-
-.step-button span {
-  font-size: 20px;
-  font-weight: 500;
-  display: inline-block;
-}
-
-    /* Style for the active button */
-    .step-button-gifts.active1 {
-    text-decoration: underline;
-  color: #0064A7;
-
-}
-
-/* Active border directly under text */
-.step-button.active1 span::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 3px;
-  background-color: #0064A7;
-  z-index: 2;
-}
-
-
-    </style>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
-    <script>
-        // Enable pusher logging - don't include this in production
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('b08e227bde29e3142eb1', {
-            cluster: 'ap2'
-        });
-
-        var chatchannel = pusher.subscribe('chat.' + "{{ Auth::guard('job_seekers')->id() }}");
-        chatchannel.bind('new-message', function(data) {
-            let message = data.message
-            if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
-                $('#messageContainer').append(`
-                    <div class="d-flex my-2 w-100 justify-content-start">
-                        <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">
-                            ${message.message}
-                        </span>
-                    </div>
-                `)
-                $('#messageContainer').animate({
-                    scrollTop: $('#messageContainer')[0].scrollHeight
-                }, 500)
-
-            }
-
-            console.log(message);
-            // alert(JSON.stringify(data));
-        });
-
-
-
-    </script>
-    <script>
-        async function openChat(e) {
-            const chatBox = document.getElementById("chatBox");
-            chatBox.querySelector('input[name="receiver_id"]').value = e.getAttribute('data-user-id')
-            chatBox.querySelector('[name="receiver_name"]').innerHTML = e.getAttribute('data-user-name')
-            e.parentElement.parentElement.parentElement.style.background = 'transparent'
-
-            // console.log(e.parentElement.parentElement.parentElement)
-            // alert(e.getAttribute('data-user-id'))
-
-            chatBox.style.display = "block";
-            // alert(chatBox.querySelector('input[name="receiver_id"]').value)
-            $('#sendMessageButton').html(
-                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
-            );
-
-
-            try {
-                $('#messageContainer').html(
-                    '<p class="text-center text-secondary my-2 "><small>Loading Messages ....</small></p>')
-                const response = await fetch(getBaseUrl() + '/jobseeker/sender-messages', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        sender_id: $('#chatBox [name="receiver_id"]').val(),
-                    })
-                });
-
-                // Check for HTTP error response (like 401, 422, 500)
-                if (!response.ok) {
-                    // Try to parse JSON error response
-                    const errorData = await response.json();
-                    console.error('Server error:', errorData);
-
-                    // Laravel validation errors (422 Unprocessable Entity)
-                    if (response.status === 422) {
-                        alert('Validation failed: ' + Object.values(errorData.errors).join('\n'));
-                    }
-                    // Laravel unauthenticated (401)
-                    else if (response.status === 401) {
-                        window.location.href = getBaseUrl() + '/login';
-                    } else {
-                        alert('Something went wrong. Please try again.');
-                    }
-
-                    // Stop further execution
-                    return;
-                }
-
-                const data = await response.json();
-
-                $('#sendMessageButton').html(
-                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
-                );
-
-                if (data.status) {
-
-                    //update response in the message box
-                    if (!data.messages.length > 0) {
-                        $('#messageContainer').html(
-                            '<p class="text-center text-secondary my-2 "><small>Conversation Not Stated Yet!</small></p>'
-                            )
-                    } else {
-                        $('#messageContainer').html('')
-                    }
-
-
-
-
-
-                    data.messages.forEach(message => {
-
-                        if (message.receiver_id == e.getAttribute('data-user-id')) {
-
-
-                            $('#messageContainer').append(`
-                                <div class="d-flex my-2 w-100 justify-content-end">
-                                    <span style="background-color: #0064A7; max-width: 90%;"
-                                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">${message.message}</span>
-                                </div>
-                            `)
-
-                        } else {
-
-                            $('#messageContainer').append(`
-                                <div class="d-flex my-2 w-100 justify-content-start">
-                                    <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">
-                                        ${message.message}
-                                    </span>
-                                </div>
-                            `)
-
-                        }
-
-                    })
-                    $('#messageContainer').animate({
-                        scrollTop: $('#messageContainer')[0].scrollHeight
-                    }, 500)
-                } else {
-                    console.warn('Server responded with unexpected status:', data);
-                }
-
-            } catch (error) {
-                // Network error or unexpected failure
-                console.error('Fetch failed:', error);
-                alert('Network error. Please check your connection.');
-                $('#sendMessageButton').html(
-                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
-                );
-            }
-
-        }
-
-        function toggleChat() {
-            const chatBox = document.getElementById("chatBox");
-            chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
-        }
-    </script>
-    <script>
-        let forumPostImages = [];
-
-        function handleFiles(files) {
-            for (let i = 0; i < files.length; i++) {
-                if (forumPostImages.length >= 5)
-                    break; // Limit to 5 images
-                forumPostImages.push(files[i]);
-            }
-            updatePhotoDisplay();
-        }
-
-        function updatePhotoDisplay() {
-
-            const forumPreviewImages = document.getElementById('forumPreviewImages');
-            forumPreviewImages.innerHTML = '';
-
-            if (forumPostImages.length > 0) {
-
-
-                for (let i = 0; i < forumPostImages.length; i++) {
-                    const container = document.createElement("div");
-                    container.classList.add("uploaded-photo-container", "col-6", "col-md-4", "col-lg-4",
-                        "position-relative", "mb-2");
-
-                    const img = document.createElement('img');
-                    img.className = 'profile-photo w-100 h-auto ';
-                    img.src = URL.createObjectURL(forumPostImages[i]);
-                    img.alt = `Additional photo ${i}`;
-
-                    const options = document.createElement("div");
-                    options.classList.add("photo-options");
-
-
-                    const deleteBtn = document.createElement("button");
-                    deleteBtn.classList.add("btn", "btn-delete", "position-absolute", "top-0", "text-danger");
-                    deleteBtn.innerHTML = '<i class="bi bi-trash"></i>';
-                    deleteBtn.onclick = () => deletePhoto(i);
-
-
-
-                    // options.appendChild(selectBtn);
-                    options.appendChild(deleteBtn);
-                    container.appendChild(img);
-                    container.appendChild(options);
-                    forumPreviewImages.appendChild(container);
-                }
-
-                forumPreviewImages.classList.toggle('hidden', forumPostImages.length <= 0);
-            } else {
-                // primaryPhoto.src = 'https://placehold.co/100x100';
-                forumPreviewImages.classList.add('hidden');
-            }
-        }
-
-        function deletePhoto(index) {
-            forumPostImages.splice(index, 1);
-            updatePhotoDisplay();
-        }
-    </script>
-
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        // Function to get the base URL of your application
-        function getBaseUrl() {
-            return window.location.protocol + "//" + window.location.host;
-        }
-
-        async function sendMessage() {
-
-let receiverId = $('#chatBox [name="receiver_id"]').val()
-let message = $('#chatBox [name="message"]').val()
-if (!message.trim()) {
-    alert('Message cannot be empty');
-    return;
-}
-// console.log('Sending Message', message);
-// console.log('Receiver ID', receiverId);
-$('#sendMessageButton').html(
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
-);
-
-try {
-    const response = await fetch(getBaseUrl() + '/jobseeker/send-message', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: JSON.stringify({
-            receiver_id: receiverId,
-            message: message
-        })
-    });
-
-    // Check for HTTP error response (like 401, 422, 500)
-    if (!response.ok) {
-        // Try to parse JSON error response
-        const errorData = await response.json();
-        console.error('Server error:', errorData);
-
-        // Laravel validation errors (422 Unprocessable Entity)
-        if (response.status === 422) {
-            alert('Validation failed: ' + Object.values(errorData.errors).join('\n'));
-        }
-        // Laravel unauthenticated (401)
-        else if (response.status === 401) {
-            window.location.href = getBaseUrl() + '/login';
-        } else {
-            alert('Something went wrong. Please try again.');
-        }
-
-        // Stop further execution
-        return;
-    }
-
-    const data = await response.json();
-
-    $('#sendMessageButton').html(
-        '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
-    );
-
-    if (data.status) {
-        $('#chatBox [name="message"]').val('');
-
-        $('#messageContainer').append(`
-                    <div class="d-flex my-2 w-100 justify-content-end">
-                        <span style="background-color: #0064A7; max-width: 90%;"
-                            class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">${message}</span>
-                    </div>
-                `)
-
-        $('#messageContainer').animate({
-            scrollTop: $('#messageContainer')[0].scrollHeight
-        }, 500)
-        console.log('Message sent:', data);
-    } else {
-        console.warn('Server responded with unexpected status:', data);
-    }
-
-} catch (error) {
-    // Network error or unexpected failure
-    console.error('Fetch failed:', error);
-    alert('Network error. Please check your connection.');
-    $('#sendMessageButton').html(
-        '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
-    );
-}
-
-}
-    </script>
-
-
-
-
-
 
     <script>
         // Image Upload and Preview
@@ -1483,7 +921,7 @@ try {
     //         return;
     //     }
 
-    //     if (button.textContent.trim() === "Want to buy") {
+    //     if (button.textContent.trim() === "Want to buy") { 
     //         itemForm.style.display = 'none';
     //         wantToBuyForm.style.display = 'block';
     //         addItemBtn.textContent = "+ Add Post";

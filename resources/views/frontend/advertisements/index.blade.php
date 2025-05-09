@@ -4,10 +4,16 @@
 @endsection
 @section('content')
 
-<section class="ads_title container-fluid border border-2 border-dark-subtle mt-5 p-5">
-    <div class="container text-center">
-        <h3>Ad banner</h3>
-    </div>
+<section class="ads_title container-fluid  mt-5 ">
+@if ($ad_banners['top'])
+
+        <!-- <h3>Ad banner</h3> -->
+        <a href="{{ $ad_banners['top']->link }}" target="_blank" class="d-block"
+                        style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                        <img src="{{ $ad_banners['top']->image }}" class="w-100" style="aspect-ratio: 5/1;"
+                            alt="img-fluid">
+                    </a>
+    @endif
 </section>
 
 <div class="container">
@@ -16,12 +22,12 @@
     </div>
 @php
     $type = isset($type) ? $type : '';
-@endphp
+@endphp 
 
     <div class="d-flex justify-content-center justify-content-md-between flex-wrap-reverse row-gap-3 ">
         <div class="btn-group  mb-3 gap-lg-1 ads_type" role="group" aria-label="Basic radio toggle button group">
         <a href="{{ route('ads.index')}}"
-           class="btn btn-outline-custom  rounded-2 mx-1 px-4 border border-2">
+           class="btn btn-outline-custom  active rounded-2 mx-1 px-4 border border-2 ">
             All
         </a>
 
@@ -51,7 +57,7 @@
     </button>
 @else
     <!-- If user is not logged in, show the Login button -->
-    <button type="button" 
+    <button type="button"
             class="btn post-ad-btn text-white py-2 px-4 fs-5" 
             data-bs-toggle="modal" 
             data-bs-target="#loginModal" 
@@ -94,8 +100,7 @@
     <div>
         <h5>Find what you are looking for ?</h5>
         <div class=" g-3 mb-3">
-        <form action="{{ route('ads.search') }}" method="POST" class="row mt-4 align-items-center">
-            @csrf
+        <form action="{{ route('ads.search') }}" method="GET" class="row mt-4 align-items-center">
             <!-- Search Input -->
             <div class="col-lg">
                 <div class="input-group">
@@ -183,10 +188,87 @@
 
     </div>
 
-    <div class="d-flex justify-content-center mt-3">
-    {{$ads->links()}}
+    @if ($ads->hasMorePages() || $ads->currentPage() !=1)
 
-</div>
+                <div class="row mt-3">
+                    <nav>
+                        <ul class="pagination justify-content-end converter">
+                            {{-- Previous Button --}}
+                            @if ($ads->onFirstPage())
+                                <li class="page-item disabled">
+                                    <a class="page-link primary_color_text">&lt;</a>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->previousPageUrl() }}">&lt;</a>
+                                </li>
+                            @endif
+
+                            {{-- Pagination Numbers --}}
+                            @php
+                                $currentPage = $ads->currentPage();
+                                $lastPage = $ads->lastPage();
+                                $pageRange = 2; // Number of pages to display before and after the current page
+                            @endphp
+
+                            {{-- Show First Page --}}
+                            @if ($currentPage > $pageRange + 1)
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text" href="{{ $ads->url(1) }}">1</a>
+                                </li>
+                                @if ($currentPage > $pageRange + 2)
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                @endif
+                            @endif
+
+                            {{-- Show Pages Before Current Page --}}
+                            @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+
+                            {{-- Current Page --}}
+                            <li class="page-item active">
+                                <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+                            </li>
+
+                            {{-- Show Pages After Current Page --}}
+                            @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+
+                            {{-- Show Last Page --}}
+                            @if ($currentPage < $lastPage - $pageRange)
+                                @if ($currentPage < $lastPage - $pageRange - 1)
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                @endif
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->url($lastPage) }}">{{ $lastPage }}</a>
+                                </li>
+                            @endif
+
+                            {{-- Next Button --}}
+                            @if ($ads->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->nextPageUrl() }}">&gt;</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <a class="page-link primary_color_text">&gt;</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                </div>
+@endif
 
 
 
