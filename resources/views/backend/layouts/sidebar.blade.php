@@ -121,7 +121,7 @@
         <!--Manage Gift and Coupon-->
         <li class="menu-item {{ request()->routeIs('giftNcoupon*') ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-star"></i>
+                <i class="menu-icon tf-icons bx bx-gift"></i>
                 <div data-i18n="Manage Horoscope">Manage Gift and Coupons</div>
             </a>
             <ul class="menu-sub">
@@ -209,36 +209,29 @@
 
         <li class="menu-item {{ request()->routeIs('forum-posts*') ? 'active' : '' }}">
             <a href="{{ route('forum.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <i class='menu-icon tf-icons bx bx-conversation'></i>
                 <div data-i18n="Ads Manager">Discussion Forum</div>
             </a>
         </li>
 
         <!-- Manage Insurance-->
-        <li
-            class="menu-item {{ request()->routeIs('insurance*') || request()->routeIs('insurance*') ? 'open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-store"></i>
-                <div data-i18n="Front Pages">Manage Insurance</div>
+
+        <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
+            <a href="{{ route('insurance.company') }}" class="menu-link">
+                
+                <i class="menu-icon tf-icons bx bx-heart"></i>
+                <div data-i18n="Insurance">Insurance Company</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('insurance.company') ? 'active' : '' }}">
-                    <a href="{{ route('insurance.company') }}" class="menu-link">
-                        <div data-i18n="Landing">Insurance Company</div>
-                    </a>
-                </li>
-                {{-- <li class="menu-item {{ request()->routeIs('insurance.category') ? 'active' : '' }}">
-                    <a href="{{ route('insurance.category') }}" class="menu-link">
-                        <div data-i18n="Pricing">Insurance Category</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ request()->routeIs('insurance.details') ? 'active' : '' }}">
-                    <a href="{{ route('insurance.details') }}" class="menu-link">
-                        <div data-i18n="Pricing">Insurance Category Details</div>
-                    </a>
-                </li> --}}
-            </ul>
         </li>
+        
+        <li class="menu-item {{ request()->routeIs('passport*') ? 'active' : '' }}">
+            <a href="{{ route('passport.renewal') }}" class="menu-link">
+                
+                <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
+                <div data-i18n="Passport Renewal">Passport Renewal</div>
+            </a>
+        </li>
+
     </ul>
 
 

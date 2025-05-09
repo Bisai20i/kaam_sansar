@@ -169,7 +169,12 @@
                             <div class="card-content">
                                 <h4>Get Your Passport Renewed Today</h4>
                                 <p>Renew Your Passport Easily and Hassle-Free</p>
-                                <a href="{{url('jobseeker/passport/renew')}}" class="btn ">Start Renewal Now</a>
+                                @if(Auth::guard('job_seekers')->check())
+                                    <a href="{{route('passport.partial')}}" class="btn ">Start Renewal Now</a>
+                                @else
+                                <button  class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">Start Renewal Now</a>
+                                @endif
+                                
                             </div>
                         </div>
                     </div>

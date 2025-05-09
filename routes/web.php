@@ -41,11 +41,16 @@
     use App\Http\Controllers\VisaApplicationController;
     use App\Http\Controllers\VisaController;
     use App\Http\Controllers\VisaCountryListController;
+    use App\Http\Controllers\PassportCountryListController;
     use App\Http\Controllers\VisaDetailsController;
     use App\Http\Controllers\VisaTypeController;
     use App\Http\Controllers\InsuranceCompanyController;
     use App\Http\Controllers\InsuranceCategoryController;
     use App\Http\Controllers\InsuranceSubCategoryController;
+    use App\Http\Controllers\PassportProvienceController;
+    use App\Http\Controllers\PassportDistrictController;
+    use App\Http\Controllers\PassportLocationController;
+    use App\Http\Controllers\PassportDateTimeController;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Route;
     use Illuminate\Support\Facades\Session;
@@ -70,6 +75,35 @@
 
     Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
 
+        //passport renewal
+
+        Route::resource('passportCountryList', PassportCountryListController::class)->except('edit', 'create');
+
+        Route::resource('passportProvienceList', PassportProvienceController::class)->except('index', 'edit', 'create');
+        Route::get('passportProvience/{country_id}', [PassportProvienceController::class, 'index'])->name('passportProvienceList.index');
+        Route::put('/passportProvienceList/publish/{id}', [PassportProvienceController::class, 'publish'])->name('passportProvienceList.publish');
+        Route::put('/passportProvienceList/unpublish/{id}', [PassportProvienceController::class, 'unpublish'])->name('passportProvienceList.unpublish');
+
+        Route::put('/passportCountryList/publish/{id}', [PassportCountryListController::class, 'publish'])->name('passportCountryList.publish');
+        Route::put('/passportCountryList/unpublish/{id}', [PassportCountryListController::class, 'unpublish'])->name('passportCountryList.unpublish');
+
+        Route::get('/passport/renewal',[PassportRenewalController::class, 'index'])->name('passport.renewal');
+        Route::delete('/passport/renewal/{id}',[PassportRenewalController::class, 'destroy'])->name('passport.renewal.destroy');
+
+        Route::resource('passportDistrictList', PassportDistrictController::class)->except('index', 'edit', 'create');
+        Route::get('passportDistrict/{provience_id}', [PassportDistrictController::class, 'index'])->name('passportDistrictList.index');
+        Route::put('/passportDistrictList/publish/{id}', [PassportDistrictController::class, 'publish'])->name('passportDistrictList.publish');
+        Route::put('/passportDistrictList/unpublish/{id}', [PassportDistrictController::class, 'unpublish'])->name('passportDistrictList.unpublish');
+
+        Route::resource('passportLocationList', PassportLocationController::class)->except('index', 'edit', 'create');
+        Route::get('passportLocation/{district_id}', [PassportLocationController::class, 'index'])->name('passportLocationList.index');
+        Route::put('/passportLocationList/publish/{id}', [PassportLocationController::class, 'publish'])->name('passportLocationList.publish');
+        Route::put('/passportLocationList/unpublish/{id}', [PassportLocationController::class, 'unpublish'])->name('passportLocationList.unpublish');
+        Route::get('passportDateTime/{location_id}', [PassportDateTimeController::class, 'index'])->name('passportDateTime.index');
+        Route::post('passportDateTime', [PassportDateTimeController::class, 'store'])->name('passportDateTime.store');
+        Route::delete('passportDateTime/{passportDateTime}', [PassportDateTimeController::class, 'destroy'])->name('passportDateTime.destroy');
+
+        
 
         //manage Insurance
 
@@ -309,13 +343,15 @@
 
         Route::post('visa/payment/process', [VisaApplicationController::class, 'processPayment'])->name('visaDetails.payment.process');
         Route::post('/visa-details/apply/cleanup', [VisaApplicationController::class, 'cleanupApplication'])->name('visaDetails.apply.cleanup');
+
         // passport renewal route collection
         Route::get('/passport/renew', [PassportRenewalController::class, 'create'])->name('passport.renew');
+        Route::get('/passport/renew/partial', [PassportRenewalController::class, 'partial'])->name('passport.partial');
         Route::post('/passport/renew', [PassportRenewalController::class, 'store'])->name('passport.renew.store');
         Route::get('/passport/renew/{id}/edit', [PassportRenewalController::class, 'edit'])->name('passport.renew.edit');
         Route::put('/passport/renew/{id}', [PassportRenewalController::class, 'update'])->name('passport.renew.update');
+        Route::post('/passport/renew/partial', [PassportRenewalController::class, 'store_partial'])->name('passport.renew.partial');
 
-        //
 
     });
 
@@ -394,7 +430,7 @@
         Route::post('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
     // comment
 
-        Route::resource('adscomment', CommentController::class);
+        // Route::resource('adscomment', CommentController::class);
 
     });
 
