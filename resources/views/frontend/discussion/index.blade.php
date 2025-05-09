@@ -64,12 +64,23 @@
                                     id="floatingTextarea" style="height: 100px"></textarea>
                                 <label for="floatingTextarea">Describe...</label>
                             </div>
+                            <div class="form text-black-50 mt-2">
+                                <select name="country" id="forumCountry" class="form-control bg-dark-subtle text-black-50">
+                                    <option value="" selected>Select Country</option>
+                                    <!-- Country options will be dynamically populated by JavaScript -->
+                                </select>
+
+                            </div>
+                            <div class="form-floating text-black-50 mt-3">
+                                <input name="person_name" type="text" class="form-control bg-dark-subtle text-black-50"
+                                    id="person_name_input" placeholder="Person Name">
+                                <label for="person Name">Person Name</label>
+                            </div>
                             <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
                                 <p class="flex-grow-1 my-auto text-black-50">Add to your post
                                 </p>
                                 <div class="d-flex gap-3 align-items-center">
-                                    <a href="#" class="primary_color_text">
-                                        <i class="fa-solid fa-location-dot"></i></a>
+
                                     <a href="#" class="primary_color_text"
                                         onclick=" document.getElementById('forumImages').click()">
                                         <i class="fa-solid fa-image"></i></a>
@@ -91,6 +102,63 @@
                 </div>
             </div>
         </div>
+
+        <!-- fetch country api -->
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Fetch country data from REST Countries API
+                fetch("https://restcountries.com/v3.1/all")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Extract country names and their calling codes
+                        const countries = data.map((country) => ({
+                            name: country.name.common,
+                            shortCode: country.cca2, // Short code (e.g., NP for Nepal)
+
+                            code: country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] :
+                                '')
+                        }));
+
+                        // Sort countries alphabetically by name
+                        countries.sort((a, b) => a.name.localeCompare(b.name));
+
+                        // Function to populate the country code dropdown
+                        function populateCountry() {
+                            const dropdown = document.getElementById('forumCountry');
+
+                            dropdown.innerHTML =
+                                `<option value="country" selected>Select Country</option>`;
+
+
+                            countries.forEach((country) => {
+                                const option = document.createElement("option");
+                                option.value = country.name;
+                                option.textContent = `${country.name}`;
+                                dropdown.appendChild(option);
+
+                            });
+
+
+                            // Restore old value (if exists)
+                            // const oldCountry = "{{ old('country') }}";
+                            // if (oldCountry) {
+                            //     dropdown.value = oldCountry;
+                            // }
+                        }
+
+                        // Populate the dropdown
+                        populateCountry();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching country data:", error);
+                        // Display an error message if fetching fails
+                        const dropdown = document.getElementById('registerCountry');
+                        dropdown.innerHTML =
+                            `<option selected>Failed to load countries. Please try again later.</option>`;
+                    });
+            });
+        </script>
 
         <!-- Delete Modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -164,15 +232,15 @@
 
 
         @if ($ad_banners['top'])
-                <div class="container my-4">
-                    <a href="{{ $ad_banners['top']->link }}" target="_blank" class="d-block"
-                        style="text-decoration: none; cursor: pointer; object-fit: contain;">
-                        <img src="{{ $ad_banners['top']->image }}" class="w-100" style="aspect-ratio: 4/1;"
-                            alt="img-fluid">
-                    </a>
-                </div>
-                {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
-            @endif
+            <div class="container my-4">
+                <a href="{{ $ad_banners['top']->link }}" target="_blank" class="d-block"
+                    style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                    <img src="{{ $ad_banners['top']->image }}" class="w-100" style="aspect-ratio: 4/1;"
+                        alt="img-fluid">
+                </a>
+            </div>
+            {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
+        @endif
 
         <div class="container position-relative">
             <div class="row mb-3">
@@ -217,7 +285,7 @@
                                 </div>
                             </div>
                         </form>
- 
+
 
                     </div>
                 </div>
@@ -305,24 +373,27 @@
                                                 <a href="{{ route('discussion.profile', ['id' => $forumPost->jobSeeker->id]) }}"
                                                     class="text-decoration-none">
                                                     <h5 class="m-0 text-black">
-                                                        {{ $forumPost->jobSeeker->firstName . ' ' . $forumPost->jobSeeker->lastName }}
+                                                        {{ ucfirst($forumPost->jobSeeker->firstName)  . ' ' . $forumPost->jobSeeker->lastName }}
                                                     </h5>
                                                 </a>
                                                 <div class="d-inline-flex gap-4">
-                                                    <small class="text-black-50 d-flex flex-wrap">
-                                                        <span class='text-no-wrap'>
-                                                            <svg width="14" height="18" viewBox="0 0 14 18"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M6.8 9.725C8.00122 9.725 8.975 8.75122 8.975 7.55C8.975 6.34878 8.00122 5.375 6.8 5.375C5.59878 5.375 4.625 6.34878 4.625 7.55C4.625 8.75122 5.59878 9.725 6.8 9.725Z"
-                                                                    stroke="#9D9999" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                                <path
-                                                                    d="M6.8 1.75C5.26174 1.75 3.78649 2.36107 2.69878 3.44878C1.61107 4.53649 1 6.01174 1 7.55C1 8.9217 1.29145 9.81925 2.0875 10.8125L6.8 16.25L11.5125 10.8125C12.3086 9.81925 12.6 8.9217 12.6 7.55C12.6 6.01174 11.9889 4.53649 10.9012 3.44878C9.81351 2.36107 8.33826 1.75 6.8 1.75Z"
-                                                                    stroke="#9D9999" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                            </svg> {{ $forumPost->jobSeeker->temporaryLocation }}
-                                                        </span>
+                                                    <small class="text-black-50 d-flex flex-wrap align-items-center gap-2">
+                                                        @if ($forumPost->jobSeeker->temporaryLocation)
+                                                            <span class='text-no-wrap'>
+                                                                <svg width="14" height="18" viewBox="0 0 14 18"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M6.8 9.725C8.00122 9.725 8.975 8.75122 8.975 7.55C8.975 6.34878 8.00122 5.375 6.8 5.375C5.59878 5.375 4.625 6.34878 4.625 7.55C4.625 8.75122 5.59878 9.725 6.8 9.725Z"
+                                                                        stroke="#9D9999" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path
+                                                                        d="M6.8 1.75C5.26174 1.75 3.78649 2.36107 2.69878 3.44878C1.61107 4.53649 1 6.01174 1 7.55C1 8.9217 1.29145 9.81925 2.0875 10.8125L6.8 16.25L11.5125 10.8125C12.3086 9.81925 12.6 8.9217 12.6 7.55C12.6 6.01174 11.9889 4.53649 10.9012 3.44878C9.81351 2.36107 8.33826 1.75 6.8 1.75Z"
+                                                                        stroke="#9D9999" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                                </svg> {{ $forumPost->jobSeeker->temporaryLocation }}
+                                                            </span>
+                                                        @endif
+
                                                         <span class='text-no-wrap'>
                                                             <svg width="19" height="18" viewBox="0 0 19 18"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -339,16 +410,19 @@
 
                                         <div class="d-flex flex-wrap align-items-center justify-content-center gap-2">
                                             @auth('job_seekers')
-                                                <button
-                                                    class="{{ 'buttons' . $forumPost->jobSeeker->id }} btn rounded-5 px-4 text-white text-nowrap"
-                                                    style="background-color: #0064a7;"
-                                                    {{ $forumPost->jobSeeker->id == Auth::guard('job_seekers')->id() ? 'disabled' : '' }}
-                                                    data-user-id="{{ $forumPost->jobSeeker->id }}" onclick="follow(this)">
-                                                    {!! $forumPost->followed
-                                                        ? '- <span class="d-none d-md-inline">Unfollow</span>'
-                                                        : '+ <span class="d-none d-md-inline">Follow</span>' !!}
+                                                @if (Auth::guard('job_seekers')->user()->id !== $forumPost->jobSeeker->id)
+                                                    <button
+                                                        class="{{ 'buttons' . $forumPost->jobSeeker->id }} btn rounded-5 px-4 text-white text-nowrap"
+                                                        style="background-color: #0064a7;"
+                                                        data-user-id="{{ $forumPost->jobSeeker->id }}"
+                                                        onclick="follow(this)">
+                                                        {!! $forumPost->followed
+                                                            ? '- <span class="d-none d-md-inline">Unfollow</span>'
+                                                            : '+ <span class="d-none d-md-inline">Follow</span>' !!}
 
-                                                </button>
+                                                    </button>
+                                                @endif
+
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                                     style="background-color: #0064a7;"
                                                     data-user-id="{{ $forumPost->jobSeeker->id }}" onclick="openChat(this)"
@@ -364,12 +438,12 @@
                                                 </form> --}}
 
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
-                                                    style="background-color: #0064a7;"
-                                                    data-bs-toggle="modal" data-bs-target="#loginModal">+
+                                                    style="background-color: #0064a7;" data-bs-toggle="modal"
+                                                    data-bs-target="#loginModal">+
                                                     <span class="d-none d-md-inline">Follow</span></button>
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
-                                                    style="background-color: #0064a7;"
-                                                    data-bs-toggle="modal" data-bs-target="#loginModal">
+                                                    style="background-color: #0064a7;" data-bs-toggle="modal"
+                                                    data-bs-target="#loginModal">
                                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                                     <span class="d-none d-md-inline">Chat</span>
                                                 </button>
@@ -398,7 +472,8 @@
                                 @endif
 
 
-                                <div class="d-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3 align-items-center">
+                                <div
+                                    class="d-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3 align-items-center">
 
                                     <button style="all:unset; cursor: pointer;" onclick="interact(this)"
                                         class="text-decoration-none text-black d-flex align-items-center gap-1"
@@ -424,25 +499,23 @@
                                     </button>
 
                                     <span class="text-decoration-none text-black d-flex align-items-center gap-1"
-                                        data-bs-toggle="modal" data-bs-target="#commentModal"
-                                        data-forum-id="{{ $forumPost->id }}" 
+                                        style = "cursor: pointer;" data-bs-toggle="modal" data-bs-target="#commentModal"
+                                        data-forum-id="{{ $forumPost->id }}"
                                         data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
-                                        onclick="loadComments(this)" style="cursor: pointer;"> 
+                                        onclick="loadComments(this)" style="cursor: pointer;">
                                         <i class="fa-regular fa-comment fs-5" style="color: #0064a7;"></i>
-                                        <span class="d-flex align-items-center gap-1" 
-                                            id="commentCount_{{ $forumPost->id }}">
+                                        <span id="commentCount_{{ $forumPost->id }}">
 
                                             {{ $forumPost->comments > 999 ? round($forumPost->comments / 1000, 1) . ' K' : $forumPost->comments }}
                                         </span>
                                     </span>
 
                                     <span class="text-decoration-none text-black d-flex align-items-center gap-1"
-                                        data-bs-toggle="modal" data-bs-target="#commentModal"
-                                        data-forum-id="{{ $forumPost->id }}" 
+                                        data-forum-id="{{ $forumPost->id }}"
                                         data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
-                                        onclick="loadComments(this)" style="cursor: pointer;"> 
+                                        style="cursor: pointer;">
                                         <i class="fa fa-share fs-5" style="color: #0064a7;"></i>
-                                        <span class="d-flex align-items-center gap-1" >
+                                        <span class="d-flex align-items-center gap-1">
                                             1
                                         </span>
                                     </span>
@@ -688,18 +761,177 @@
             let count = parseInt(document.getElementById('newPostsCount').textContent) + 1
             document.getElementById('newPostsCount').textContent = count
             document.getElementById('newPostsAlert').classList.remove('d-none');
+
+
+            // alert(JSON.stringify(data));
+        });
+
+        var chatchannel = pusher.subscribe('chat.' + "{{ Auth::guard('job_seekers')->id() }}");
+        chatchannel.bind('new-message', function(data) {
+            let message = data.message
+            if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
+                $('#messageContainer').append(`
+                    <div class="d-flex my-2 w-100 justify-content-start">
+                        <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">
+                            ${message.message}
+                        </span>
+                    </div>
+                `)
+                $('#messageContainer').animate({
+                    scrollTop: $('#messageContainer')[0].scrollHeight
+                }, 500)
+
+            }
+
+            document.querySelectorAll('.list-group .list-group-item').forEach(item => {
+                if (item.getAttribute('data-receiver-id') == message.sender_id) {
+                    item.style.background = 'rgba(0, 100, 167, 0.1)'
+                    item.querySelector('.message-content').innerHTML = message.message
+                }
+            })
+
+            //     // $('.list-group-item').each(function() {
+            //     //     let userId = $(this).data('user-id'); // safer than attr()
+            //     //     if (userId == message.sender_id) {
+            //     //         console.log($(this))
+            //     //         $(this).css('background', 'rgba(0, 100, 167, 0.1)');
+            //     //     }
+            //     // });
+
+            // }
+            // else {
+
+            //     // $('.list-group-item').each(function() {
+            //     //     let userId = $(this).data('user-id'); // safer than attr()
+            //     //     if (userId == message.sender_id) {
+            //     //         console.log($(this))
+            //     //         $(this).css('background', 'rgba(0, 100, 167, 0.1)');
+            //     //     }
+            //     // });
+
+            // }
+            console.log(message);
             // alert(JSON.stringify(data));
         });
     </script>
     <script>
-        function openChat(e) {
+        // document.querySelectorAll('.list-group .list-group-item').forEach(item => {
+        //     console.log(item.getAttribute('data-receiver-id'))
+        // })
+        async function openChat(e) {
             const chatBox = document.getElementById("chatBox");
             chatBox.querySelector('input[name="receiver_id"]').value = e.getAttribute('data-user-id')
             chatBox.querySelector('[name="receiver_name"]').innerHTML = e.getAttribute('data-user-name')
+            e.parentElement.parentElement.parentElement.style.background = 'transparent'
+
+            // console.log(e.parentElement.parentElement.parentElement)
             // alert(e.getAttribute('data-user-id'))
 
             chatBox.style.display = "block";
             // alert(chatBox.querySelector('input[name="receiver_id"]').value)
+            $('#sendMessageButton').html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+            );
+
+
+            try {
+                $('#messageContainer').html(
+                    '<p class="text-center text-secondary my-2 "><small>Loading Messages ....</small></p>')
+                const response = await fetch(getBaseUrl() + '/jobseeker/sender-messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        sender_id: $('#chatBox [name="receiver_id"]').val(),
+                    })
+                });
+
+                // Check for HTTP error response (like 401, 422, 500)
+                if (!response.ok) {
+                    // Try to parse JSON error response
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+
+                    // Laravel validation errors (422 Unprocessable Entity)
+                    if (response.status === 422) {
+                        alert('Validation failed: ' + Object.values(errorData.errors).join('\n'));
+                    }
+                    // Laravel unauthenticated (401)
+                    else if (response.status === 401) {
+                        window.location.href = getBaseUrl() + '/login';
+                    } else {
+                        alert('Something went wrong. Please try again.');
+                    }
+
+                    // Stop further execution
+                    return;
+                }
+
+                const data = await response.json();
+
+                $('#sendMessageButton').html(
+                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
+                );
+
+                if (data.status) {
+
+                    //update response in the message box
+                    if (!data.messages.length > 0) {
+                        $('#messageContainer').html(
+                            '<p class="text-center text-secondary my-2 "><small>Conversation Not Stated Yet!</small></p>'
+                        )
+                    } else {
+                        $('#messageContainer').html('')
+                    }
+
+
+
+
+
+                    data.messages.forEach(message => {
+
+                        if (message.receiver_id == e.getAttribute('data-user-id')) {
+
+
+                            $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-end">
+                                    <span style="background-color: #0064A7; max-width: 90%;"
+                                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">${message.message}</span>
+                                </div>
+                            `)
+
+                        } else {
+
+                            $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-start">
+                                    <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">
+                                        ${message.message}
+                                    </span>
+                                </div>
+                            `)
+
+                        }
+
+                    })
+                    $('#messageContainer').animate({
+                        scrollTop: $('#messageContainer')[0].scrollHeight
+                    }, 500)
+                } else {
+                    console.warn('Server responded with unexpected status:', data);
+                }
+
+            } catch (error) {
+                // Network error or unexpected failure
+                console.error('Fetch failed:', error);
+                alert('Network error. Please check your connection.');
+                $('#sendMessageButton').html(
+                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
+                );
+            }
+
         }
 
         function toggleChat() {
@@ -707,6 +939,8 @@
             chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
         }
     </script>
+
+
     <script>
         let forumPostImages = [];
 
@@ -835,6 +1069,17 @@
 
                 if (data.status) {
                     $('#chatBox [name="message"]').val('');
+
+                    $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-end">
+                                    <span style="background-color: #0064A7; max-width: 90%;"
+                                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">${message}</span>
+                                </div>
+                            `)
+
+                    $('#messageContainer').animate({
+                        scrollTop: $('#messageContainer')[0].scrollHeight
+                    }, 500)
                     console.log('Message sent:', data);
                 } else {
                     console.warn('Server responded with unexpected status:', data);
@@ -848,33 +1093,6 @@
                     '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
                 );
             }
-
-
-            // $.ajax({
-            //     url: getBaseUrl() + '/send-message',
-            //     method: 'POST', 
-
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), //  CSRF for Laravel
-            //         'X-Requested-With': 'XMLHttpRequest' //  Tell Laravel it's AJAX
-            //     },
-            //     beforeSend: function() {
-            //         $('#sendMessageButton').html(
-            //             '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
-            //         );
-            //     },
-            //     success: function(response) {
-            //         // ✅ What to do on success
-            //         console.log('Success:', response);
-            //     },
-            //     error: function(xhr, status, error) {
-            //         // ❌ Handle errors
-            //         console.error('Error:', error);
-            //         if (xhr.status === 401) {
-            //             window.location.href = '/login'; 
-            //         }
-            //     }
-            // });
 
         }
     </script>

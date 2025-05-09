@@ -1556,7 +1556,7 @@ class JobSeekerController extends Controller
             'permanentLocation' => 'nullable|string|max:255',
             'gender'            => 'nullable|in:male,female,other',
             'luckyNumber'       => 'nullable|numeric',
-            'type'              => 'nullable|in:trainee,parttime,fultime,user',
+            'type'              => 'nullable|in:trainee,parttime,fulltime,user',
             'whoAmI'            => 'nullable|in:student,worker,consultant',
             'profession'        => 'nullable|string',
             'country'           => 'nullable|string',

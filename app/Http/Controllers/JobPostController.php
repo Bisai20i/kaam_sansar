@@ -24,9 +24,9 @@ class JobPostController extends Controller
 
 
 /*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Display a listing of the resource.
-     *
+
+    //  * Display a listing of the resource.
+    //  *
 
 /******  32fb2f38-306f-471f-9819-160eeb709f7d  *******/
     public function index()
@@ -165,8 +165,9 @@ class JobPostController extends Controller
             $jobPost->offeredSalary = $request->offeredSalary;
             $jobPost->jobLocation = $request->jobLocation;
             // $jobPost->qualification = $request->qualification;
+            $jobPost->jobSite = $request->jobSite;
             $jobPost->experience = $request->experience;
-
+            $jobPost->jobFeature = $request->jobFeature;
             $jobPost->jobDeadline = $request->jobdeadline;
             $jobPost->jobBanner = $thumbnailPath;
             $jobPost->skills = $request->skills;
@@ -254,6 +255,8 @@ class JobPostController extends Controller
             'vacancynumber' => ['required', 'integer', 'min:1', 'max:500'],
             'skill' => ['nullable'],
             'status'=>['string', 'max:255'],
+            'jobFeature' => ['in:normal,premium'],
+            'jobSite' => ['in:remote,onsite,hybrid'],
             'jobThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         $employeeTime = $request->employeeStartTime . ' - ' . $request->employeeEndTime;
@@ -331,12 +334,12 @@ class JobPostController extends Controller
             $jobPost->jobLocation = $request->jobLocation;
             // $jobPost->qualification = $request->qualification;
             $jobPost->experience = $request->experience;
-
+            $jobPost->jobSite = $request->jobSite;
             $jobPost->jobDeadline = $request->jobdeadline;
             $jobPost->jobBanner = $thumbnailPath;
             $jobPost->skills = $request->skills;
             $jobPost->noOfVacancy = $request->vacancynumber;
-
+            $jobPost->jobFeature = $request->jobFeature;
 
 
             // Save the updated job post

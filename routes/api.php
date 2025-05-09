@@ -209,6 +209,10 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
             // Route::get('/categories', [GiftCateryController::class, 'index'])->name('giftcategories');
         });
 
+        Route::prefix('resume')->group(function () {
+            Route::get('templates', [FrontendAPIController::class, 'getResumeHelp']);
+        });
+
         Route::apiResource('kundaliMatching', KundaliMatchingController::class);
 
 

@@ -33,6 +33,10 @@ use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
 use App\Models\Horoscope;
 use App\Models\VisaType;
+use App\Models\InsuranceCompany;
+use App\Models\InsuranceCategory;
+use App\Models\InsuranceCategoryDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -80,9 +84,12 @@ class FrontendController extends Controller
             ->where('position', 'middle')
             ->first();
 
-        // if ($ad_banners) {
-        //     $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
-        // }
+        if ($ad_banners) {
+            if ($ad_banners['middle']) {
+                $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
+            }
+
+        }
 
         // dd($giftCoupons);
         return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners'));
@@ -113,7 +120,7 @@ class FrontendController extends Controller
             ->unique();
 
         $ad_banners = [];
-        
+
         $ad_banners['bottom'] = AdsManager::where('which_page', 'jobs')
             ->where('publish_or_not', 1)
             ->where('active', 1)
@@ -122,7 +129,7 @@ class FrontendController extends Controller
             ->first();
 
         if ($ad_banners) {
-            
+
             $ad_banners['bottom'] ? $ad_banners['bottom']->image = asset('storage/' . $ad_banners['bottom']->image) : null;
         }
 
@@ -168,6 +175,8 @@ class FrontendController extends Controller
             ->where('jobSlug', '!=', $slug)        // Exclude the current job
             ->get();
 
+        $ad_banners = [];
+
         return view('frontend.job-lists', compact('slug', 'categories', 'skills', 'jobs', 'relatedJobs', 'industries'));
     }
     public function jobDetail($slug)
@@ -176,6 +185,7 @@ class FrontendController extends Controller
             ->where('jobStatus', 'published')
             ->where('jobSlug', $slug)
             ->first();
+        // return $jobDetail;
 
         $jobDetail->increment('jobViewerCount');
 
@@ -197,7 +207,19 @@ class FrontendController extends Controller
             ->pluck('jobLocation')
             ->unique();
 
-        return view('frontend.job-details', compact('jobDetail', 'slug', 'categories', 'skills', 'jobLocation'));
+        $ad_banners['right'] = AdsManager::where('which_page', 'jobs')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'right')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($ad_banners) {
+
+            $ad_banners['right'] ? $ad_banners['right']->image = asset('storage/' . $ad_banners['right']->image) : null;
+        }
+
+        return view('frontend.job-details', compact('jobDetail', 'slug', 'categories', 'skills', 'jobLocation', 'ad_banners'));
     }
 
     public function jobSearch(Request $request)
@@ -212,41 +234,69 @@ class FrontendController extends Controller
 
         // dd($request->all());
 
-        $jobBy = $request->input('jobsby');
-        if (! empty($jobBy)) {
-            if ($jobBy == 'category') {
-                $findJobs = JobPost::with('jobCompany')
-                    ->orderBy('created_at', 'desc')
-                    ->where('jobCategoryId', $request->input('searchcategoryid'))
-                    ->where('jobStatus', 'published')
-                    ->paginate(8);
-            } elseif ($jobBy == 'skill') {
-                $findJobs = JobPost::with('jobCompany')
-                    ->orderBy('created_at', 'desc')
-                    ->where('jobStatus', 'published')
-                    ->where('skills', 'LIKE', "%{$request->input('searchstr')}%")
-                    ->paginate(8);
-            } else {
-                $findJobs = JobPost::with('jobCompany')
-                    ->orderBy('created_at', 'desc')
-                    ->where('jobStatus', 'published')
-                    ->paginate(8);
-            }
-            // return $request->input('searchcategoryid');
-        } else {
-            $findJobs = JobPost::with('jobCompany')
-                ->orderBy('created_at', 'desc')
-                ->where('jobStatus', 'published')
-                ->where(function ($q) use ($request) {
-                    $q->where('jobDescription', 'LIKE', "{$request->input('searchstr')}%")
-                        ->orWhere('jobTitle', 'LIKE', "%{$request->input('searchstr')}%");
+        // $jobBy = $request->input('jobsby');
+        // if (! empty($jobBy)) {
+        //     if ($jobBy == 'category') {
+        //         $findJobs = JobPost::with('jobCompany')
+        //             ->orderBy('created_at', 'desc')
+        //             ->where('jobCategoryId', $request->input('searchcategoryid'))
+        //             ->where('jobStatus', 'published')
+        //             ->paginate(8);
+        //     } elseif ($jobBy == 'skill') {
+        //         $findJobs = JobPost::with('jobCompany')
+        //             ->orderBy('created_at', 'desc')
+        //             ->where('jobStatus', 'published')
+        //             ->where('skills', 'LIKE', "%{$request->input('searchstr')}%")
+        //             ->paginate(8);
+        //     } else {
+        //         $findJobs = JobPost::with('jobCompany')
+        //             ->orderBy('created_at', 'desc')
+        //             ->where('jobStatus', 'published')
+        //             ->paginate(8);
+        //     }
+        //     // return $request->input('searchcategoryid');
+        // } else {
+        // return $request->query('filterlevel');
+        $findJobs = JobPost::with('jobCompany')
+            ->orderBy('created_at', 'desc')
+            ->where('jobStatus', 'published')
+            ->when(! empty($request->input('searchstr')), function ($q) use ($request) {
+                $q->where('jobDescription', 'LIKE', "{$request->input('searchstr')}%")
+                    ->orWhere('jobTitle', 'LIKE', "%{$request->input('searchstr')}%");
+            })
+            ->when(! empty($request->input('location')), function ($q) use ($request) {
+                return $q->where('jobLocation', 'LIKE', "%{$request->input('location')}%");
+            })
+            ->when(! empty($request->query('filtersite') && in_array($request->query('filtersite'), ['remote', 'onsite', 'hybrid'])),
+                function ($q) use ($request) {
+                    return $q->where('jobSite', $request->query('filtersite'));
                 })
-                ->when(! empty($request->input('location')), function ($q) use ($request) {
-                    return $q->where('jobLocation', 'LIKE', "%{$request->input('location')}%");
+            ->when(! empty($request->query('filtertype') && in_array($request->query('filtertype'), ['trainee', 'parttime', 'fulltime', 'casual'])),
+                function ($q) use ($request) {
+                    return $q->where('jobType', $request->query('filtertype'));
                 })
-                ->paginate(8);
+            ->when(! empty($request->query('filterdate') && in_array($request->query('filterdate'), ['1', '5', '15', '30'])),
+                function ($q) use ($request) {
+                    return $q->where('created_at', '>=', Carbon::now()->subDays($request->query('filterdate')));
+                })
+            ->when(! empty($request->query('filterlevel') && in_array($request->query('filterlevel'), ['entry', 'mid', 'senior'])),
+                function ($q) use ($request) {
+                    return $q->where('jobLevel', 'LIKE', "%{$request->query('filterlevel')}%");
+                })
+            ->when(! empty($request->query('filterfeature') && in_array($request->query('filterfeature'), ['normal', 'premium'])),
+                function ($q) use ($request) {
+                    return $q->where('jobFeature', $request->query('filterfeature'));
+                })
+            ->when(! empty($request->input('jobsby')) && in_array($request->input('jobsby'), ['category', 'skill', 'location']),
+                function ($q) use ($request) {
+                    $q->when($request->input('jobsby') == 'category', fn($query) => $query->where('jobCategoryId', $request->input('searchcategoryid')))
+                        ->when($request->input('jobsby') == 'skill', fn($query) => $query->where('skills', 'LIKE', "%{$request->input('skill')}%"))
+                        ->when($request->input('jobsby') == 'location', fn($query) => $query->where('jobLocation', 'LIKE', "%{$request->input('location')}%"));
+                })
+            ->paginate(8)
+            ->withQueryString();
 
-        }
+        // return $findJobs;
 
         $jobLocation = JobPost::where('jobLocation', '!=', '')
             ->where('jobStatus', 'published')
@@ -273,17 +323,17 @@ class FrontendController extends Controller
         //     ->get();
 
         $ad_banners = [];
-        
-        $ad_banners ['top'] = AdsManager::where('which_page', 'jobs')
+
+        $ad_banners['top'] = AdsManager::where('which_page', 'jobs')
             ->where('publish_or_not', 1)
             ->where('active', 1)
             ->where('position', 'top')
             ->orderBy('created_at', 'desc')
             ->first();
 
-        if($ad_banners){
-            
-            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        if ($ad_banners) {
+
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
         }
 
         // return ($prevquery.$location);
@@ -324,7 +374,20 @@ class FrontendController extends Controller
             ->unique()  // Remove duplicate skills
             ->values(); // Reindex collection
                     // dd($similar_jobs);
-        return view('frontend.apply', compact('job_detail', 'similar_jobs', 'categories', 'skills', 'jobLocation'));
+        $ad_banners = [];
+
+        $ad_banners['bottom'] = AdsManager::where('which_page', 'jobs')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'bottom')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($ad_banners) {
+
+            $ad_banners['bottom'] ? $ad_banners['bottom']->image = asset('storage/' . $ad_banners['bottom']->image) : null;
+        }
+        return view('frontend.apply', compact('job_detail', 'similar_jobs', 'categories', 'skills', 'jobLocation', 'ad_banners'));
     }
 
     public function bookmarkjob(Request $request)
@@ -665,15 +728,15 @@ class FrontendController extends Controller
             return $giftComment;
         });
 
-        $ad_banners = [];
-        $ad_banners ['middle'] = AdsManager::where('which_page', 'gift')
+        $ad_banners           = [];
+        $ad_banners['middle'] = AdsManager::where('which_page', 'gift')
             ->where('publish_or_not', 1)
             ->where('active', 1)
             ->where('position', 'middle')
             ->first();
 
-        if($ad_banners){
-            $ad_banners['middle'] ? $ad_banners['middle']->image = asset('storage/'.$ad_banners['middle']->image) : null;
+        if ($ad_banners) {
+            $ad_banners['middle'] ? $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) : null;
         }
 
         return view('frontend.giftNcoupon.giftDescription', compact('giftNcoupon', 'similarGifts', 'giftComments', 'ad_banners'));
@@ -684,9 +747,8 @@ class FrontendController extends Controller
     {
 
         // return $id;
-        $seller      = Admin::where('id', $id)->first(['id','fullName', 'email', 'status','profile_image', 'location', 'created_at']);
-        
-        
+        $seller = Admin::where('id', $id)->first(['id', 'fullName', 'email', 'status', 'profile_image', 'location', 'created_at']);
+
         $sellerGifts = GiftCoupon::where('adminId', $id)
             ->when(
                 in_array($type, ['1', '0']),
@@ -848,15 +910,15 @@ class FrontendController extends Controller
         });
 
         $ad_banners = [];
-        
-        $ad_banners ['top'] = AdsManager::where('which_page', 'forum')
+
+        $ad_banners['top'] = AdsManager::where('which_page', 'forum')
             ->where('publish_or_not', 1)
             ->where('active', 1)
             ->where('position', 'top')
             ->first();
 
-        if($ad_banners){
-            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        if ($ad_banners) {
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
         }
 
         // return $hot_topics;
@@ -934,6 +996,50 @@ class FrontendController extends Controller
         return view('frontend.advertisements.index', compact('all', 'category', 'ads','ad', 'categories','ad_banners'))
             ->with('success', 'Advertisements retrieved successfully!');
 
+    }
+
+    public function insurance(){
+        $companies = InsuranceCompany::orderBy('id', 'desc')->where('publishStatus', 1)->get();
+
+        $companies->transform(function ($company) {
+            if($company->thumbnail){
+                $company->thumbnail = asset('storage/' . $company->thumbnail);
+            }
+            return $company;
+        });
+
+        // return $companies;
+        return view('frontend.insurance.home', compact('companies'));
+    }
+
+    public function insurance_category($id){
+        $categories = InsuranceCategory::orderBy('id', 'desc')
+            ->where('insurance_company_id',$id)
+            ->where('publishStatus', 1)->get();
+
+        // return $categories;
+
+        return view('frontend.insurance.categories', compact('categories'));
+    }
+
+    public function insurance_details($id){
+
+        $category = InsuranceCategory::with('insuranceDetail')
+            ->with('subCategory')
+            ->findOrFail($id);
+        // $category = InsuranceCategoryDetail::with('insuranceDetail')->findOrFail($id);
+        $category->insuranceDetail->thumbnail = $category->insuranceDetail->thumbnail ? 
+            asset('storage/' . $category->insuranceDetail->thumbnail) :
+            asset('frontend/assets/Images/job.png');
+
+        // $category->insuranceDetail->transform(function ($detail) {
+        //     if($detail->thumbnail)
+        //         $detail->thumbnail = asset('storage/' . $detail->thumbnail);
+        //     return $detail;
+        // });
+        
+        // return $category;
+        return view('frontend.insurance.category_detail', compact('category'));
     }
 
 }

@@ -41,14 +41,14 @@
                     </div>
 
                     <div class="d-flex gap-3 mb-4 mt-4 ">
-                        <a href="{{ route('gift.home', ['type' => 'all','searchstr' => request('searchstr'), 'country' => request('country'), 'city' => request('city')]) }}"
+                        <a href="{{ route('gift.home', ['type' => 'all']) }}"
                             class="btn btn-toggle btn-all-categories {{ request('type') == 'all' ? 'active' : '' }}"
                             onclick="toggleActive(this)">All</a>
 
-                        <a href="{{ route('gift.home', ['type' => '0', 'searchstr' => request('searchstr'), 'country' => request('country'), 'city' => request('city')]) }}"
+                        <a href="{{ route('gift.home', ['type' => '0']) }}"
                             class="btn btn-toggle {{ request('type') == '0' ? 'active' : '' }}"
                             onclick="toggleActive(this)">Gifts</a>
-                        <a href="{{ route('gift.home', ['type' => '1', 'searchstr' => request('searchstr'), 'country' => request('country'), 'city' => request('city')]) }}"
+                        <a href="{{ route('gift.home', ['type' => '1']) }}"
                             class="btn btn-toggle {{ request('type') == '1' ? 'active' : '' }}">Coupons</a>
                     </div>
                     <h1>Find what you're looking for</h1>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-md-3 px-2">
                             <select class="form-select form-select-gift" name="country">
-                                <option selected value="">Select Country</option>
+                                <option value="">Select Country</option>
                                 @foreach ($countries as $cty)
                                     <option value="{{ $cty }}"
                                         {{ $cty == request('country') ? 'selected' : '' }}>
@@ -72,8 +72,17 @@
                             </select>
                         </div>
                         <div class="col-md-3 ">
-                            <input type="text" class="form-control form-control-gift px-2" name="city"
-                                placeholder="Search City" value="{{ request('city') }}">
+                            <select class="form-select form-select-gift" name="city">
+                                <option value="">Select City</option>
+                                @foreach ($cities as $cty)
+                                    <option value="{{ $cty }}"
+                                        {{ $cty == request('city') ? 'selected' : '' }}>
+                                        {{ $cty }}</option>
+                                @endforeach
+
+                            </select>
+                            {{-- <input type="text" class="form-control form-control-gift px-2" name="city"
+                                placeholder="Search City" value="{{ request('city') }}"> --}}
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-search-gift py-2" style="height: 100%;">Search</button>
@@ -85,7 +94,7 @@
 
                     <div class="d-flex flex-wrap gap-2 pt-3 mb-3">
                         <a href="{{ route('gift.home', ['type' => $type]) }}"
-                            class="btn btn-outline-secondary btn-sm rounded-pill category-btn flex-grow-1 flex-md-grow-0 {{ request('giftCategoryId') ? '' : 'active-btn' }}">
+                            class="btn btn-outline-secondary btn-sm rounded-pill category-btn flex-grow-1 flex-md-grow-0 {{ in_array(request('giftCategoryId'), [null, '', 'all']) ? 'active-btn' : '' }}">
                             All</a>
 
                         @if ($giftcategories)
@@ -258,13 +267,6 @@
 
 
             @endif
-
-
-
-
-
-
-
 
 
         </div>

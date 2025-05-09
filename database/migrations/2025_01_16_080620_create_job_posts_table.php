@@ -35,6 +35,8 @@ return new class extends Migration
             $table->longText('experience')->nullable();
             $table->longText('skills')->nullable();
             $table->longText('jobDescription');
+            $table->enum('jobFeature',['normal','premium'])->default('normal')->nullable();
+            $table->enum('jobSite',['remote','onsite','hybrid'])->nullable();
             // $table->longText('jobResponsibilities')->nullable();
             $table->string('jobBanner')->nullable();
             $table->date('jobDeadline');

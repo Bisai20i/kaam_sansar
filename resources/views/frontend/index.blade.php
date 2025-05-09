@@ -84,14 +84,14 @@
                                             value="{{ Auth::guard('job_seekers')->user()->id }}">
                                         <input type="hidden" name="jobPostId" value="{{ $item->id }}" />
 
-                                        <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;">
+                                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;">
                                             <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                         </button>
                                     </form>
                                 @else
 
                                     <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
-                                        <button type="submit" class="favourite-btn" style="all:unset; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
                                             <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                         </button>
                                     </div>
@@ -103,15 +103,21 @@
 
                                 <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"
                                     class="text-decoration-none">
-                                    <div class="card">
-                                        <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
-                                            class="card-img-top" alt="BMW">
-                                        <div class="card-body">
+                                    <div class="card" style="{{ $item->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
+                                        <div class="position-relative">
+                                            @if($item->jobFeature == 'premium')
+                                                <span class="position-absolute top-0 left-0 badge rounded-1 bg-warning">Premium</span>
+                                            @endif
+                                            <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
+                                            class="card-img-top rounded-1" alt="BMW">
+                                        </div>
+                                        
+                                        <div class="card-body p-2">
 
-                                            <h5 class="card-title text-truncate mb-1 me-3">{{ $item->jobTitle }}</h5>
+                                            <h5 class="card-title text-truncate me-3 fw-bold my-1" >{{ $item->jobTitle }}</h5>
 
-                                            <p class="card-text text-muted mb-0">{{ $item->jobLevel }}</p>
-                                            <p class="card-text text-muted mb-1">{{ $item->jobLocation }}</p>
+                                            <p class="card-text text-muted mb-0 fw-semibold">{{ $item->jobLevel }}</p>
+                                            <p class="card-text text-muted mb-1 fw-semibold">{{ $item->jobLocation }}</p>
                                             <p class="card-text text-muted ">
                                                 <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
                                                 </small>
@@ -163,7 +169,12 @@
                             <div class="card-content">
                                 <h4>Get Your Passport Renewed Today</h4>
                                 <p>Renew Your Passport Easily and Hassle-Free</p>
-                                <a href="{{url('jobseeker/passport/renew')}}" class="btn ">Start Renewal Now</a>
+                                @if(Auth::guard('job_seekers')->check())
+                                    <a href="{{route('passport.partial')}}" class="btn ">Start Renewal Now</a>
+                                @else
+                                <button  class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">Start Renewal Now</a>
+                                @endif
+                                
                             </div>
                         </div>
                     </div>
@@ -221,7 +232,7 @@
                                     <div class="card">
                                         <!-- Display Image -->
                                         <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                            class="card-img-top" alt="{{ $item->title }}">
+                                            class="card-img-top rounded-1" alt="{{ $item->title }}">
                                         <div class="card-body">
                                             <!-- Display Title -->
                                             <h5 class="card-title text-truncate" style="">{{ $item->title }}</h5>
@@ -418,7 +429,7 @@
                             <div class="card">
                             <a href="{{ route('frontend.advertisements') }}"
                             class="text-decoration-none">
-                                <img src="{{ asset($ad->adsThumbnail) }}" class="card-img-top" alt="adsThumbnail">
+                                <img src="{{ asset($ad->adsThumbnail) }}" class="card-img-top rounded-1" alt="adsThumbnail">
                                 <div class="card-body p-2">
                                     <h5 class="card-title">{{ $ad->adsTitle }} </h5>
                                     <p class="card-text text-muted mb-1">{{ $ad->location }}</p>
@@ -440,11 +451,11 @@
 
         @if($ad_banners['middle'])
 
-
+            <div class="container">
                 <a href="{{ $ad_banners['middle']->link }}" class="d-block" style="text-decoration: none; cursor: pointer; object-fit: contain;">
-                    <img src="{{$ad_banners['middle']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
+                    <img src="{{ $ad_banners['middle']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
                 </a>
-
+            </div>
             
                 {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
         @endif
@@ -462,7 +473,7 @@
                                         <!-- Display Podcast Image -->
                                         <div class="pi" style="height:150px;">
                                             <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                                class=" h-100 w-100 card-img-top " alt="..."
+                                                class=" h-100 w-100 card-img-top rounded-1" alt="..."
                                                 style="object-fit:cover;">
                                             <div class="pio">
                                                 <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>

@@ -173,7 +173,7 @@
             margin-top: 20px;
         }
     </style>
-    <div class="container-apply-profile">
+    <div class="container mt-5 pt-2">
         <div class="grid">
             <!-- Profile Section -->
             <div class="section p-4">
@@ -201,7 +201,6 @@
                                 <p>Age:
                                     {{ Auth::guard('job_seekers')->user()->dateOfBirth ? \Carbon\Carbon::parse(Auth::guard('job_seekers')->user()->dateOfBirth)->age . ' years' : 'N/A' }}
                                 </p>
-
                             @else
                                 <p>Please log in to see your details.</p>
                             @endauth
@@ -225,10 +224,10 @@
                 </div>
                 <div class="section-footer">
                     <p>Improve your profile to get hired!!</p>
-                    <div class="btn-group">
+                    <div class="btn-group gap-2">
                         <a href="{{ route('jobseeker.getProfile', @Auth::guard('job_seekers')->user()->id) }}"><button
                                 class="button">View Profile</button></a>
-                        <a href="{{ route('profile.editProfile', @Auth::guard('job_seekers')->user()->id) }}"><button
+                        <a href="{{ route('jobseeker.editProfile', @Auth::guard('job_seekers')->user()->id) }}"><button
                                 class="button">Edit Profile</button></a>
                     </div>
                 </div>
@@ -269,26 +268,29 @@
             </div>
         </div>
     </div>
-    <div class="section-apply">
-        <button class="button">Apply Now</button>
-    </div>
-    <div class="row mb-5">
-        <div class="container-similar-job ">
+     
+    <div class="container pt-2 mb-2">
+        <div class="section-apply">
+            <a href="{{ route('jobApply.store', ['id' => $job_detail->id]) }}" class="button">Apply Now</a>
+        </div> 
+
+        <div class="container-similar-job mt-4">
+            <h2 class=" px-3 pt-4 font-semibold mb-0 " style="color:#0064A7;">Similar Jobs</h2>
             <div class="row">
-                <div class="col-md-8 job-job">
-                    <h2 class=" px-4 pt-4 font-semibold " style="color:#0064A7;">Similar Jobs</h2>
+                <div class="col-md-8 job-job px-0">
+
                     @if ($similar_jobs->isEmpty())
                         <p class="fw-bold text-dark fs-3 px-4">No similar jobs found.</p>
                     @else
                         @foreach ($similar_jobs as $job)
-                            <div class="container mt-4 px-4">
+                            <div class="container mt-3">
                                 <a href="{{ route('frontend.job-details', ['slug' => $job->jobSlug]) }}"
                                     class="text-dark d-block text-decoration-none mb-2">
                                     <div class="job-card-1">
                                         <img src="{{ $job->jobBanner ? asset('storage/' . $job->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
                                             alt="Company Image">
                                         <div class="job-card-body">
-                                            <h5 class="card-title">{{ $job->jobTitle }}</h5>
+                                            <h5 class="card-title fw-semibold">{{ $job->jobTitle }}</h5>
                                             <p>Company Name: {{ $job->jobCompany->companyName }}</p>
                                             <p>Location: {{ $job->jobLocation }}</p>
                                             <p>Experience: {{ $job->experience }}</p>
@@ -360,13 +362,14 @@
                 </div>
                 <!-- Job Categories Sidebar -->
 
-                <div class="col-md-4 px-4 mt-4">
-                    <div class="job-categories">
-                        <h3 class="sidebar-title">Jobs by Category</h3>
-                        <ul class="category-list">
+                <div class="col-md-4 my-3">
+                    <div class="job-categories p-0">
+                        <h3 class="sidebar-title p-3">Jobs by Category</h3>
+                        <ul class="category-list px-3 overflow-auto" style="max-height: 400px;">
                             @foreach ($categories as $item)
-                                <li>
-                                    <form action="{{ route('frontend.job-search') }}" method="GET">
+                                <li style="color: #0064A7">
+                                    <form action="{{ route('frontend.job-search') }}">
+
                                         <input type="hidden" name="jobsby" value="category">
                                         <input type="hidden" name="searchcategoryid" value="{{ $item->id }}">
                                         <button type="submit"
@@ -374,15 +377,16 @@
                                     </form>
                                 </li>
                             @endforeach
+
                         </ul>
                     </div>
-
-                    <div class="job-categories mt-4">
-                        <h3 class="sidebar-title">Jobs by Skill</h3>
-                        <ul class="category-list">
+                    <div class="job-categories mt-3 p-0">
+                        <h3 class="sidebar-title p-3">Jobs by Skill</h3>
+                        <ul class="category-list px-3 overflow-auto" style="max-height: 400px;">
                             @foreach ($skills as $item)
-                                <li>
-                                    <form action="{{ route('frontend.job-search') }}" method="GET">
+                                <li style="color: #0064A7">
+                                    <form action="{{ route('frontend.job-search') }}">
+
                                         <input type="hidden" name="jobsby" value="skill">
                                         <input type="hidden" name="searchstr" value="{{ $item }}">
                                         <button type="submit"
@@ -392,13 +396,14 @@
                             @endforeach
                         </ul>
                     </div>
-
-                    <div class="job-categories mt-4">
-                        <h3 class="sidebar-title">Jobs by Location</h3>
-                        <ul class="category-list">
+                    <div class="job-categories mt-4 p-0">
+                        <h3 class="sidebar-title p-3  ">Jobs by Location</h3>
+                        <ul class="category-list  px-3 overflow-auto" style="max-height: 400px;">
                             @foreach ($jobLocation as $item)
-                                <li>
-                                    <form action="{{ route('frontend.job-search') }}" method="GET">
+                                <li style="color: #0064A7">
+                                    <form action="{{ route('frontend.job-search') }}">
+
+
                                         <input type="hidden" name="location" value="{{ $item }}">
                                         <button type="submit"
                                             style="all: unset; cursor: pointer;">{{ $item }}</button>
@@ -407,11 +412,32 @@
                             @endforeach
                         </ul>
                     </div>
-
-
+                    {{-- @if ($ad_banners['right'])
+                        <a href="{{ isset($ad_banners['right']) ? $ad_banners['right']->link : '#' }}" target="_blank" href="{{ $ad_banners['right']->link }}" class="d-block mt-3"
+                            style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                            <img src="{{ isset($ad_banners['right']) ? $ad_banners['right']->image : '#' }}" class="w-100 rounded-2" style="aspect-ratio: 1/3;"
+                                alt="img-fluid">
+                        </a>
+    
+    
+                        
+                    @endif --}}
                 </div>
+
             </div>
+
+            @if (isset($ad_banners['bottom']))
+            <div class="mb-2">
+                <a href="{{ isset($ad_banners['bottom']) ? $ad_banners['bottom']->link : '#' }}" class="d-block"
+                    style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                    <img src="{{ isset($ad_banners['bottom']) ? $ad_banners['bottom']->image : '#' }}" class="w-100 rounded-2" style="aspect-ratio: 4/1;" alt="{{ $ad_banners['bottom']->image }}" class="w-100" style="aspect-ratio: 4/1;"
+                        alt="img-fluid">
+                </a>
+            </div>
+            {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
+        @endif
         </div>
+    </div>
     </div>
 
 @endsection
