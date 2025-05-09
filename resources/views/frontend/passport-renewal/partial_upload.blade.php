@@ -18,10 +18,30 @@
             </div>
             <div class="col text-center">
                 <h2 style="color:#0064a7;">Passport Renewal Form</h2>
-                <p class="fs-3">Complete the form below to start your passport renewal process</p>
+                <p class="fs-3 mb-2">Complete the form below to start your passport renewal process</p>
             </div>
 
 
+        </div>
+
+        <style>
+            .activeTitle{
+                background-color: #0064a7 !important;
+                color: #fff;
+            }
+        </style>
+
+        <div class="text-center my-4">
+            <div class="d-md-inline-flex justify-content-center align-items-center gap-3 bg-light fs-6">
+                <p class="title p-lg-2 rounded-2 m-0 activeTitle" id="firstFormTitle">Select Service
+                    &
+                    Read
+                    Instructions
+                </p>
+                <p class="title p-2 bg-light rounded-2 m-0" id="secondFormTitle">Book Appointment</p>
+                <p class="title p-2 bg-light rounded-2 m-0" id="mainFormTitle">Fill Application</p>
+                <p class="title p-2 bg-light rounded-2 m-0" id="fourthFormTitle">Payment</p>
+            </div>
         </div>
 
 
@@ -29,6 +49,8 @@
 
             <form id="passportRenewalForm" action="{{ route('passport.renew.partial') }}" enctype="multipart/form-data"
                 method="POST" class="accordion">
+
+                @csrf
 
                 <style>
                     .nav-link {
@@ -58,26 +80,26 @@
                     </div>
                     <div class="mb-3">
                         <div class="nav nav-pills mb-3 row" id="pills-tab" role="tablist">
-                            <input type="hidden" name="service_type" id="service_type" required>
+                            <input type="hidden" name="service_type" id="service_type" value="apply" required>
                             <div class="col-auto nav-item" role="presentation">
-                                <button class="nav-link border border-1 border-dark-subtle fs-6"
-                                    data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab"
-                                    aria-controls="pills-home" aria-selected="true"
+                                <button class="nav-link border border-1 border-dark-subtle fs-6 active" data-bs-toggle="pill"
+                                    data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                                    aria-selected="true"
                                     onclick="document.getElementById('service_type').value = 'apply'">First
                                     Issuance</button>
                             </div>
                             <div class="col-auto nav-item" role="presentation">
-                                <button class="nav-link border border-1 border-dark-subtle fs-6"
-                                    data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab"
-                                    aria-controls="pills-home" aria-selected="true"
+                                <button class="nav-link border border-1 border-dark-subtle fs-6" data-bs-toggle="pill"
+                                    data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                                    aria-selected="true"
                                     onclick="document.getElementById('service_type').value = 'renewal'">Renewal
                                     Issuance</button>
                             </div>
 
                             <div class="col-auto nav-item" role="presentation">
-                                <button class="nav-link border border-1 border-dark-subtle fs-6"
-                                    data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab"
-                                    aria-controls="pills-home" aria-selected="true"
+                                <button class="nav-link border border-1 border-dark-subtle fs-6" data-bs-toggle="pill"
+                                    data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                                    aria-selected="true"
                                     onclick="document.getElementById('service_type').value = 'replacement'">Replacement</button>
                             </div>
                         </div>
@@ -120,7 +142,7 @@
                         <h5 style="color:#0064a7;">Please choose from the following available Passport Types</h5>
                         <div class="d-flex flex-column flex-md-row m-3">
                             <div class="col form-check">
-                                <input class="form-check-input fs-6" type="radio" name="passport_pages" id="option1"
+                                <input class="form-check-input fs-6" type="radio" name="passport_pages" id="option1" 
                                     value="34_pages" checked>
                                 <label class="form-check-label fs-6" for="option1">
                                     Ordinary 34 Pages
@@ -147,123 +169,136 @@
                 <div id="secondForm" class="d-none">
 
                     <div>
-                        <h4 style="color:#0064a7;">Book Appointment</h4>
+                        <h4 class="fs-4 text-semibold d-flex align-items-center" style="color:#0064a7;">
+                            <button style="all:unset;cursor: pointer; margin-right:10px;"
+                            onclick="goToForm('secondForm','firstForm')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
+                                <path fill="#000" fill-rule="evenodd"
+                                    d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
+                            </svg>
+                        </button>
+                            Book Appointment</h4>
 
                     </div>
                     <div>
 
-                            <div class="row row-cols-1 row-cols-md-2">
-                                <div class="col">
-                                    <label for="app_country">Appointment Country:</label>
-                                    <select class="form-select my-2" aria-label="Default select example">
-                                        <option selected>Nepal</option>
-                                        <option value="1">Other</option>
+                        <div class="row row-cols-1 row-cols-md-2">
+                            <div class="col">
+                                <label for="app_country" class="required">Appointment Country:</label>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_country" required>
+                                    <option value="">Select Country</option>
+                                    <option value="nepal">Nepal</option>
+                                    <option value="1">Other</option>
 
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <label for="app_province">Appointment Province:</label>
-                                    <select class="form-select my-2" aria-label="Default select example">
-                                        <option selected>Gandaki</option>
-                                        <option value="1">Other</option>
-
-                                    </select>
-                                </div>
-
-                                <div class="col">
-                                    <label for="app_district">Select District:</label>
-                                    <select class="form-select my-2" aria-label="Default select example">
-                                        <option selected>Kaski</option>
-                                        <option value="1">Other</option>
-
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <label for="app_province">Appointment Location:</label>
-                                    <select class="form-select my-2" aria-label="Default select example">
-                                        <option selected>Department of Passports</option>
-                                        <option value="1">Other</option>
-
-                                    </select>
-                                </div>
+                                </select>
                             </div>
-                            <div class="row">
-                                <h4 style="color:#0064a7;" class="my-4">Please choose the nearest enrollment centre
-                                    to
-                                    your location
-                                </h4>
+                            <div class="col">
+                                <label for="app_province" class="required">Appointment Province:</label>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_province" required>
+                                    <option value="">Select Provience</option>
+                                    <option>Gandaki</option>
+                                    <option value="1">Other</option>
+
+                                </select>
                             </div>
-                            <div class="row row-cols-1 row-cols-md-2 row-gap-5">
-                                <div class="col">
-                                    <h4>Select a Date</h4>
-                                    <div class="content border border-1 border-secondary-subtle rounded-4 h-100 pt-2"
-                                        style="margin-bottom: -2rem;">
-                                        <div class="container text-left">
-                                            <div class="row justify-content-center">
-                                                <div class="col-md-12 text-center">
-                                                    <form action="#" class="row align-items-center">
-                                                        <div class="col">
-                                                            <div id="inline_cal"></div>
-                                                        </div>
-                                                    </form>
-                                                </div>
+
+                            <div class="col">
+                                <label for="app_district" class="required">Select District:</label>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_district" required>
+                                    <option value=""></option>
+                                    <option>Kaski</option>
+                                    <option value="1">Other</option>
+
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="app_province" class="required">Appointment Location:</label>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_location" required>
+                                    <option selected>Department of Passports</option>
+                                    <option value="1">Other</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4 style="color:#0064a7;" class="my-4">Please choose the nearest enrollment centre
+                                to
+                                your location
+                            </h4>
+                        </div>
+                        <div class="row row-cols-1 row-cols-md-2 row-gap-5">
+                            <input type="hidden" id="appointment_date" name="appointment_date">
+                            <div class="col">
+                                <h4>Select a Date</h4>
+                                <div class="content border border-1 border-secondary-subtle rounded-4 h-100 pt-2"
+                                    style="margin-bottom: -2rem;">
+                                    <div class="container text-left">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-12 text-center">
+                                                <form action="#" class="row align-items-center">
+                                                    <div class="col">
+                                                        <div id="inline_cal"></div>
+                                                    </div>
+                                                </form>
                                             </div>
+                                        </div>
 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>Select an hour</h4>
+                                <div
+                                    class="border border-1 border-secondary-subtle rounded-4 p-4 h-100">
+
+                                    {{-- <input type="time" class="form-control" id="appointment_time" value="appointment_time"> --}}
+                                    <div class="row row-cols-auto g-4">
+                                        <div class="col">
+                                            <input type="radio" class="btn-check" name="appointment_time" id="btn-check-1"
+                                                autocomplete="off">
+                                            <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
+                                                for="btn-check-1">10:30</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="radio" class="btn-check" name="appointment_time" id="btn-check-2"
+                                                autocomplete="off">
+                                            <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
+                                                for="btn-check-2">11:30</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="radio" class="btn-check" name="appointment_time" id="btn-check-3"
+                                                autocomplete="off">
+                                            <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
+                                                for="btn-check-3">12:30</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="radio" class="btn-check" name="appointment_time" id="btn-check-4"
+                                                autocomplete="off">
+                                            <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
+                                                for="btn-check-4">13:30</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <h4>Select an hour</h4>
-                                    <div
-                                        class="border border-1 border-secondary-subtle
-                                         rounded-4 p-4 h-100">
-                                        <div class="row row-cols-auto g-4">
-                                            <div class="col">
-                                                <input type="radio" class="btn-check" name="options-time"
-                                                    id="btn-check-1" autocomplete="off">
-                                                <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
-                                                    for="btn-check-1">10:30</label>
-                                            </div>
-                                            <div class="col">
-                                                <input type="radio" class="btn-check" name="options-time"
-                                                    id="btn-check-2" autocomplete="off">
-                                                <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
-                                                    for="btn-check-2">11:30</label>
-                                            </div>
-                                            <div class="col">
-                                                <input type="radio" class="btn-check" name="options-time"
-                                                    id="btn-check-3" autocomplete="off">
-                                                <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
-                                                    for="btn-check-3">12:30</label>
-                                            </div>
-                                            <div class="col">
-                                                <input type="radio" class="btn-check" name="options-time"
-                                                    id="btn-check-4" autocomplete="off">
-                                                <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
-                                                    for="btn-check-4">13:30</label>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                </div>
                             </div>
+                        </div>
 
                     </div>
                     <div class="d-flex justify-content-between mt-5">
-                        <button class="btn btn-light" onclick="goToForm('secondForm','firstForm')">Back</button>
-                        <button class="btn text-white border-0" style="background-color: #0064a7;" type="button"
-                            onclick="goToForm('secondForm','mainForm')">Next</button>
+                        <button class="btn btn-light btn-lg py-2 px-4" onclick="goToForm('secondForm','firstForm')">Back</button>
+                        <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0" style="background-color: #0064a7;" type="button"
+                            onclick="if(validateAppointmentForm()) goToForm('secondForm','mainForm')">Next</button>
                     </div>
 
                 </div>
 
 
                 <div id="mainForm" class="d-none">
-                    @csrf
 
-                    <h2 class=" fs-4 text-semibold" style="color:#0064a7;">
+
+                    <h2 class="fs-4 text-semibold d-flex align-items-center" style="color:#0064a7;">
                         <button style="all:unset;cursor: pointer; margin-right:10px;"
-                            onclick="goToNextPhase('secondForm')">
+                            onclick="goToForm('mainForm','secondForm')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
                                 <path fill="#000" fill-rule="evenodd"
                                     d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
@@ -452,7 +487,42 @@
 @endsection
 
 @push('scripts')
+    <script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/rome.js"></script>
+
+    <script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/main.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+        integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+        data-cf-beacon='{"rayId":"91b7e635cdf99888","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.1.0","token":"cd0b4b3a733644fc843ef0b185f98241"}'
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        // datepicker initializer 
+        document.addEventListener("DOMContentLoaded", function() {
+            flatpickr(".date-picker", {
+                dateFormat: "Y-m-d",
+                allowInput: true
+            });
+        });
+
+        
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var calendar = rome(inline_cal, {
+                time: false, // Only date
+                inputFormat: 'YYYY-MM-DD'
+            });
+
+            document.getElementById('appointment_date').value = calendar.getMoment().format('YYYY-MM-DD')
+            // Listen for date change and update hidden input
+            calendar.on('data', function(value) {
+                document.getElementById('appointment_date').value = value;
+                console.log(document.getElementById('appointment_date').value)
+            });
+        });
+
+
+
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('passportRenewalForm').addEventListener('submit', function(e) {
                 console.log("submitting")
@@ -518,6 +588,13 @@
 
         function goToForm(current, next) {
 
+            let titles = document.querySelectorAll('.title')
+            titles.forEach(title => {
+                title.classList.remove('activeTitle');
+            })
+
+            document.getElementById(next+"Title").classList.add('activeTitle');
+
             let sections = document.querySelectorAll('.form-section');
 
             sections.forEach(section => {
@@ -526,25 +603,61 @@
 
             document.getElementById(current).classList.add('d-none');
             document.getElementById(next).classList.remove('d-none');
-            document.getElementById(next).scrollIntoView({
-                behavior: "smooth"
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
-            
+
         }
 
-        // function goToNextForm(id) {
-        //     let sections = document.querySelectorAll('.form-section');
+        function validateAppointmentForm() {
+        let hasError = false;
 
-        //     section.forEach(section => {
-        //         section.classList.add('d-none');
-        //     })
+        // Select the required fields
+        const requiredFields = [
+            document.getElementById('app_country'),
+            document.getElementById('app_province'),
+            document.getElementById('app_district'),
+        ];
 
-        //     let inputs = document.getElementById('service_type').value;
-        //     document.getElementById(current).classList.add('d-none');
-        //     document.getElementById(id).classList.remove('d-none');
-        //     document.getElementById(id).scrollIntoView({
-        //         behavior: "smooth"
-        //     });
-        // }
+        // Validate each required select field
+        requiredFields.forEach(field => {
+            if (!field.value.trim() || field.value === "Other") {
+                field.classList.add('error');
+                hasError = true;
+            } else {
+                field.classList.remove('error');
+            }
+        });
+
+        // Validate appointment date
+        const appointmentDateField = document.getElementById('appointment_date');
+        if (!appointmentDateField.value.trim()) {
+            appointmentDateField.classList.add('error');
+            hasError = true;
+        } else {
+            appointmentDateField.classList.remove('error');
+        }
+
+        // Validate appointment time (radio group)
+        const timeSelected = document.querySelector('input[name="appointment_time"]:checked');
+        if (!timeSelected) {
+            document.querySelectorAll('input[name="appointment_time"]').forEach(el => {
+                el.nextElementSibling.classList.add('error');
+            });
+            hasError = true;
+        } else {
+            document.querySelectorAll('input[name="appointment_time"]').forEach(el => {
+                el.nextElementSibling.classList.remove('error');
+            });
+        }
+
+        if (hasError) {
+            alert("Please fill all required fields.");
+            return false;
+        }
+
+        return true;
+    }
     </script>
 @endpush
