@@ -184,4 +184,12 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
    public function messages(){
     return $this->hasMany(Message::class, 'sender_id');
    }
+   public function brokerAccounts()
+   {
+       return $this->hasMany(BrokerAccount::class, 'jobSeekerId');
+   }
+   public function bankAccounts()
+   {
+       return $this->hasMany(BankAccount::class, 'jobSeekerId');
+   }
 }

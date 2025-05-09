@@ -140,7 +140,7 @@ class AchievementController extends Controller
      */
     public function edit(Achievement $achievement)
     {
-        //
+        return response()->json($achievement);
     }
 
     /**
@@ -196,7 +196,10 @@ class AchievementController extends Controller
 
                 ? $this->responseError('Validation failed. Please check your inputs .', 422, $validator->errors())
 
-                : redirect()->back()->withErrors($validator->errors())->withInput();
+                :response()->json([
+                    "message"=>"validate error",
+                    'sucess'=>false
+                ]);
         }
 
         //Update the achievement record
@@ -212,7 +215,11 @@ class AchievementController extends Controller
 
             ? $this->responseSuccess('Achievement updated successfully', $achievement)
 
-            : redirect()->back()->with('success', 'Achievement updated successfully');
+            : response()->json([
+                "message"=>"Achievement updated successfully",
+                'achievement'=>$achievement,
+                'success'=>true
+            ]);
     }
 
     /**
@@ -245,8 +252,27 @@ class AchievementController extends Controller
      * @param  \App\Models\Achievement  $achievement
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Achievement $achievement)
+    public function destroy(Request $request, $id)
     {
-        //
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $achievement = Achievement::find($id);
+
+        if (!$achievement) {
+            return $isMobile
+                ? $this->responseError('achievement not found', 404)
+                :response()->json([
+                    'success' => false,
+                    'message' => 'achievement not found.',
+                ]);
+        }
+        $achievement->delete();
+
+        return $isMobile
+        ? $this->responseSuccess('achievement deleted successfully')
+        :response()->json([
+            'success' => true,
+            'message' => 'achievement delete Successfully.',
+        ]);
+ 
     }
 }

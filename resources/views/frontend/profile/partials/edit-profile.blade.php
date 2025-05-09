@@ -72,7 +72,7 @@
                     class="rounded-circle my-3 mx-1" id="primary-photo"> --}}
 
                 <div class="photo-grid" id="additional-photos"
-                    data-acceptedImages = "{{ Auth::guard('job_seekers')->user()->userThumbnail ? (5- count(Auth::guard('job_seekers')->user()->userThumbnail)):5; }}"></div>
+                    data-acceptedImages = "{{ Auth::guard('job_seekers')->user()->userThumbnail ? (5- count(Auth::guard('job_seekers')->user()->userThumbnail)):5 }}"></div>
                 <button class="btn edit-profile-upload-btn my-3 mx-1"
                     onclick="document.getElementById('file-input').click()" type="button">
                     <i class="bi bi-camera"></i>

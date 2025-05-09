@@ -141,7 +141,7 @@ class LanguageController extends Controller
      */
     public function edit(Language $language)
     {
-        //
+        return response()->json($language);
     }
 
     /**
@@ -189,8 +189,12 @@ class LanguageController extends Controller
 
         return $isMobile
             ? $this->responseSuccess('Language details updated successfully', $language->toArray())
-            : redirect()->back()->with('success', 'Language details updated successfully');
-    }
+            :response()->json([
+                'message'=>'Language details updated successfully',
+                'success'=>true,
+                'language'=>$language
+            ]);
+        }
 
 
     /**
@@ -226,45 +230,25 @@ class LanguageController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy(Request $request, $id)
-    {
-        // Check if the request type is mobile
-        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-
-        // Find the language by ID
-        $language = Language::find($id);
-
-        if (!$language) {
-            if ($isMobile) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Language not found.',
-                ], 404);
-            }
-            return redirect()->back()->with('error', 'Language not found.');
-        }
-
-        try {
-            $language->delete();
-
-            if ($isMobile) {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Language deleted successfully.',
-                ], 200);
-            }
-
-            return redirect()->route('language.index')->with('success', 'Language deleted successfully.');
-        } catch (\Exception $e) {
-            if ($isMobile) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Failed to delete language.',
-                    'error' => $e->getMessage(),
-                ], 500);
-            }
-
-            return redirect()->back()->with('error', 'Failed to delete language.');
-        }
-    }
+     public function destroy(Request $request ,$id)
+     {
+         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+         $language = Language::find($id);
+         if (!$language) {
+             return $isMobile
+                 ? $this->responseError('language not found', 404)
+                 :response()->json([
+                     'success' => false,
+                     'message' => 'language not found.',
+                 ]);
+         }
+         $language->delete();
+ 
+         return $isMobile
+         ? $this->responseSuccess('language deleted successfully')
+         :response()->json([
+             'success' => true,
+             'message' => 'language delete Successfully.',
+         ]);
+     }
 }

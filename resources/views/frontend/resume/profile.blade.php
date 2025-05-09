@@ -92,8 +92,8 @@
                 </div>
             </div>
             <div class="text-end">
-            <button type="submit" class="btn text-center skip-btn mx-2" data-current="profile" data-next="visa" data-link="visaLink">Skip</button>
-                <button type="submit" class="btn next-btn" id="nextProfile">save & continue</button>
+            <button type="submit" class="btn text-center skip-btn mx-2 next-btn" data-current="profile" data-next="visa" data-link="visaLink"  id="nextProfile">continue</button>
+                <button type="submit" class="btn next-btn">save & continue</button>
             </div>
         </form>
     </div>

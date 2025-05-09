@@ -1,187 +1,199 @@
- <!-- Project Section (Initially Hidden) -->
- <div id="project" class="section-content" style="display:none;">
-     <h4 class="mb-3 your-project-text">Your Projects</h4>
-     <div class="card card-center">
-         <form id="projectForm">
+<div id="project" class="section-content" style="display:none;">
+    <h4 class="mb-3 your-project-text">Your Projects</h4>
+    <div class="card p-4 card-center">
+        <form id="projectForm">
+            @csrf
+            <input type="hidden" id="projectId" name="id" value="">
+            <h3>Project Details</h3>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="projectTitle" class="form-label">Project Title <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control custom-input" name="projectTitle" id="projectTitle" placeholder="" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="projectLink" class="form-label">Project Link <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control custom-input" name="projectLink" id="projectLink" placeholder="" required>
 
-             <div class="mb-3">
-                 <h1>Projects</h1>
-             </div>
-             <div class="mb-3">
-                 <label class="form-label">Project Title</label>
-                 <input type="url" class="form-control custom-input" name="projectTitle" id="projectTitle"
-                     placeholder="">
-             </div>
-             <div class="mb-3">
-                 <label class="form-label">Project Link</label>
-                 <input type="url" class="form-control custom-input" name="projectLink" id="projectLink"
-                     placeholder="">
-             </div>
-             <div class="mb-3">
-                 <label class="form-label">Description</label>
-                 <textarea class="form-control custom-input" rows="4" id="projectDescription" name="projectDescription" placeholder=""></textarea>
-             </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label for="projectDescription" class="form-label">Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control custom-input" rows="4" id="projectDescription" name="projectDescription" placeholder="" required></textarea>
+                </div>
+            </div>
+            <button type="button" class="btn add-project float-start" id="addProject">+ Add Project</button>
+            <div class="text-end">
+                <button type="submit" class="btn text-center skip-btn mx-2" data-current="project" data-next="skill" data-link="skillLink">Continue to Skills</button>
+            </div>
+        </form>
+    </div>
 
-             <div class="d-flex justify-content-between">
-                 <button type="button" class="btn add-project float-start" id="addProject">
-                     + Add Project
-                 </button>
-                 <div class="text-end">
-                     <button type="submit" class="btn text-center skip-btn mx-2" data-current="project" data-next="skill" data-link="skillLink">Skip</button>
-                     <button type="button" class="btn text-center next-btn" id="submitProject">Save & Continue</button>
-                 </div>
-             </div>
-         </form>
-     </div>
-     <div class="container mt-4 p-0">
-         <div id="projectList"></div>
-         @if($projects->isNotEmpty())
-         @foreach($projects as $project)
-         <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
-             <div class="d-flex justify-content-between">
-                 <div>
-                     <h5>{{ $project->projectTitle ?? ''}}</h5>
-                 </div>
-                 <div>
-                     <a href="{{ route('projects.edit', $project->id) }}" class="btn fw-semibold" style="color: #0064A7;">
-                         Edit
-                     </a>
-                     <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
-                         @csrf
-                         @method('DELETE')
-                         <button type="submit" class="btn text-danger fw-semibold">
-                             Delete
-                         </button>
-                     </form>
-                 </div>
-             </div>
-             <div class="text-black-50">
-                 @if($project->projectLink)
-                 <p class="m-0">
-                     <a href="{{ $project->projectLink ?? ''}}" target="_blank" style="color: #0064A7;">
-                         {{ $project->projectLink ?? ''}}
-                     </a>
-                 </p>
-                 @endif
-                 <p class="m-0">{{ $project->projectDescription }}</p>
-             </div>
-         </div>
-         @endforeach
-         @endif
-     </div>
- </div>
- @push('scripts')
- <script>
-     document.addEventListener('DOMContentLoaded', function() {
-         function collectProjectData() {
-             return {
-                 projectTitle: document.getElementsByName('projectTitle')[0].value,
-                 projectLink: document.getElementsByName('projectLink')[0].value,
-                 projectDescription: document.getElementsByName('projectDescription')[0].value
-             };
-         }
-
-         async function saveProjectData(projectData) {
-             try {
-                 const response = await fetch("{{ route('projects.store') }}", {
-                     method: "POST",
-                     headers: {
-                         'Content-Type': 'application/json',
-                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                     },
-                     body: JSON.stringify(projectData)
-                 });
-                 return await response.json();
-             } catch (error) {
-                 console.error("Error saving project data:", error);
-                 return {
-                     success: false
-                 };
-             }
-         }
-
-         function appendProjectCard(project) {
-             // grab CSRF once
-             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-             const card = document.createElement('div');
-             card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
-
-             card.innerHTML = `
+    <!-- Existing Project List -->
+    <div class="container mt-4 p-0">
+        <div id="projectList">
+            @foreach($projects as $project)
+            <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="project_card_{{ $project->id }}">
                 <div class="d-flex justify-content-between">
                     <div>
-                    <h5>${project.projectTitle}</h5>
+                        <h5>{{ $project->projectTitle }}</h5>
                     </div>
                     <div>
-                    <a href="/projects/${project.id}/edit" class="btn fw-semibold" style="color: #0064A7;">
-                        Edit
-                    </a>
-                    <form action="/projects/${project.id}" method="POST" style="display:inline;">
-                        <input type="hidden" name="_token" value="${csrfToken}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit" class="btn text-danger fw-semibold">
-                        Delete
-                        </button>
-                    </form>
+                        <button type="button" class="btn fw-semibold edit-project" style="color: #0064A7;" data-id="{{ $project->id }}">Edit</button>
+                        <button type="button" class="btn text-danger fw-semibold delete-project" data-id="{{ $project->id }}">Delete</button>
                     </div>
                 </div>
                 <div class="text-black-50">
-                    ${project.projectLink ? `
+                    @if($project->projectLink)
                     <p class="m-0">
-                        <a href="${project.projectLink}" target="_blank" style="color: #0064A7;">
-                        ${project.projectLink} 
+                        <a href="{{ $project->projectLink }}" target="_blank" style="color: #0064A7;">
+                            {{ $project->projectLink }}
                         </a>
                     </p>
-                    ` : ''}
-                    <p class="m-0">${project.projectDescription || ''}</p>
+                    @endif
+                    <p class="m-0">{{ $project->projectDescription }}</p>
                 </div>
-                `;
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let isEditing = false;
+    let currentProjectId = null;
 
-             document.getElementById('projectList').appendChild(card);
-         }
+    function collectProjectData() {
+        return {
+            id: document.getElementById('projectId').value,
+            projectTitle: document.getElementById('projectTitle').value,
+            projectLink: document.getElementById('projectLink').value,
+            projectDescription: document.getElementById('projectDescription').value,
+            request_type: 'mobile'    // ← crucial!
+        };
+    }
 
+    async function saveProjectData(data) {
+        const url    = data.id
+            ? `/jobseeker/projects/${data.id}`
+            : "{{ route('projects.store') }}";
+        const method = data.id ? 'PUT' : 'POST';
 
-         document.getElementById('projectForm').addEventListener('submit', function(e) {
-             e.preventDefault();
-         });
+        const res = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+    }
 
-         document.getElementById('addProject').addEventListener('click', async function(e) {
-             e.preventDefault();
-             console.log(collectProjectData());
-             const projectData = collectProjectData();
-             const result = await saveProjectData(projectData);
-             if (result.success) {
-                 const project = result.project;
-                 document.getElementById('overviewProjects').innerHTML = `
-                        <p><strong>Project Title:</strong> ${project.projectTitle}</p>
-                        <p><strong>Project Link:</strong> <a href="${project.projectLink}" target="_blank">${project.projectLink}</a></p>
-                        <p><strong>Project Description:</strong> ${project.projectDescription}</p>
-                    `;
-                 document.getElementById('projectForm').reset();
-                 appendProjectCard(result.project); 
-             }
-         });
+    function appendProjectCard(p) {
+        const card = document.createElement('div');
+        card.id    = `project_card_${p.id}`;
+        card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+        card.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <h5>${p.projectTitle}</h5>
+                <div>
+                  <button class="btn fw-semibold edit-project" data-id="${p.id}" style="color:#0064A7">Edit</button>
+                  <button class="btn text-danger fw-semibold delete-project" data-id="${p.id}">Delete</button>
+                </div>
+            </div>
+            <div class="text-black-50">
+              ${p.projectLink
+                ? `<p class="m-0"><a href="${p.projectLink}" target="_blank">${p.projectLink}</a></p>`
+                : ''}
+              <p class="m-0">${p.projectDescription}</p>
+            </div>
+        `;
+        document.getElementById('projectList').appendChild(card);
+    }
 
-         document.getElementById('submitProject').addEventListener('click', async function(e) {
-             e.preventDefault();
-             console.log(collectProjectData());
-             const projectData = collectProjectData();
-             const result = await saveProjectData(projectData);
-             if (result.success) {
-                const project = result.project;
-                 document.getElementById('overviewProject').innerHTML = `
-                        <p><strong>Project Title:</strong> ${project.projectTitle}</p>
-                        <p><strong>Project Link:</strong> <a href="${project.projectLink}" target="_blank">${project.projectLink}</a></p>
-                        <p><strong>Project Description:</strong> ${project.projectDescription}</p>
-                    `;
-                 appendProjectCard(result.project); 
-                 document.getElementById('project').style.display = 'none';
-                 document.getElementById('skill').style.display = 'block';
-                 document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                 document.getElementById('skillLink').classList.add('active');
-             }
-         });
+    function updateProjectCard(p) {
+        const card = document.getElementById(`project_card_${p.id}`);
+        if (!card) return;
+        card.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <h5>${p.projectTitle}</h5>
+                <div>
+                  <button class="btn fw-semibold edit-project" data-id="${p.id}" style="color:#0064A7">Edit</button>
+                  <button class="btn text-danger fw-semibold delete-project" data-id="${p.id}">Delete</button>
+                </div>
+            </div>
+            <div class="text-black-50">
+              ${p.projectLink
+                ? `<p class="m-0"><a href="${p.projectLink}" target="_blank">${p.projectLink}</a></p>`
+                : ''}
+              <p class="m-0">${p.projectDescription}</p>
+            </div>
+        `;
+    }
 
-     })
- </script>
- @endpush
+    document.getElementById('addProject').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const data = collectProjectData();
+        if (!data.projectTitle || !data.projectDescription) {
+            return alert('Please fill all required fields');
+        }
+        try {
+            const result = await saveProjectData(data);
+            if (result.status === 'success') {
+                const proj = result.data;
+                isEditing ? updateProjectCard(proj) : appendProjectCard(proj);
+                document.getElementById('projectForm').reset();
+                isEditing = false;
+                document.getElementById('addProject').textContent = '+ Add Project';
+            } else {
+                alert('Error: ' + (result.message || 'Unknown'));
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Save failed: ' + err.message);
+        }
+    });
+
+    // Edit & Delete handlers (mirror the Education pattern)
+    document.getElementById('projectList').addEventListener('click', async (e) => {
+        const id = e.target.dataset.id;
+        // EDIT
+        if (e.target.classList.contains('edit-project')) {
+            const res = await fetch(`/jobseeker/projects/${id}/edit`);
+            const proj = await res.json();
+            document.getElementById('projectId').value          = proj.id;
+            document.getElementById('projectTitle').value       = proj.projectTitle;
+            document.getElementById('projectLink').value        = proj.projectLink;
+            document.getElementById('projectDescription').value = proj.projectDescription;
+            isEditing = true;
+            document.getElementById('addProject').textContent = 'Update Project';
+        }
+        // DELETE
+        else if (e.target.classList.contains('delete-project')) {
+            if (!confirm('Delete this project?')) return;
+            const res = await fetch(`/jobseeker/projects/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ request_type: 'mobile' })
+            });
+            const result = await res.json();
+            if (result.status === 'success') {
+                document.getElementById(`project_card_${id}`).remove();
+            } else {
+                alert('Delete failed: ' + (result.message || 'Unknown'));
+            }
+        }
+    });
+});
+</script>
+@endpush

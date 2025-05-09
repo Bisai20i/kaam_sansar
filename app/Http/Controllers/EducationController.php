@@ -86,7 +86,7 @@ class EducationController extends Controller
         $education->startDate = Carbon::parse($validated['startDate'])->format('Y-m-d');
         $education->graduationDate = Carbon::parse($validated['graduationDate'])->format('Y-m-d');
         $education->educationDescription = $validated['educationDescription'];
-        $education->jobSeekerId = auth()->id();
+        $education->jobSeekerId = $jobSeekerId;
 
         $education->save();
 
@@ -277,7 +277,7 @@ class EducationController extends Controller
         $education->delete();
 
         return $isMobile
-        ? $this->responseSuccess('Comment deleted successfully')
+        ? $this->responseSuccess('Education deleted successfully')
         :response()->json([
             'success' => true,
             'message' => 'Education delete Successfully.',

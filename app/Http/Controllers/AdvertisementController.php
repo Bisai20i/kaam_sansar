@@ -48,9 +48,6 @@ class AdvertisementController extends Controller
 
         $post = Advertisement::all();
         $adTypes = $this->getEnumValues('advertisements', 'type');
-
-
-          // Return JSON if it's a mobile request
     if ($isMobile) {
         return response()->json([
             'status' => true,
@@ -63,7 +60,6 @@ class AdvertisementController extends Controller
      ], 200);
     }
 
-        //Return the view for web application
         return view('frontend.advertisements.index', compact('ads','category','post','all','categories','ad'));
 
     }

@@ -1,55 +1,43 @@
-    <div id="skill" class="section-content" style="display: none;">
-        <h4 class="mb-3 your-project-text ">Your Skills</h4>
-        <div class="card p-3">
-            <form id="skillForm">
-                @csrf
-                <h3>Skills</h3>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="input-group">
-                            <input type="text" class="form-control custom-input border-end-0"
-                                id="skillName" name="skillName" placeholder="Skill" required>
-                            <select class="form-select custom-input border-start-0 text-end me-3"
-                                id="skillProficiency" name="skillProficiency" required>
-                                <option>Beginner</option>
-                                <option>Intermediate</option>
-                                <option>Advanced</option>
-                            </select>
-                        </div>
+<div id="skill" class="section-content" style="display: none;">
+    <h4 class="mb-3 your-project-text">Your Skills</h4>
+    <div class="card p-3">
+        <form id="skillForm">
+            @csrf
+            <h3>Skills</h3>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <input type="hidden" id="skillId" name="id" value="">
+                        <input type="text" class="form-control custom-input border-end-0" id="skillName" name="skillName" placeholder="Skill" required>
+                        <select class="form-select custom-input border-start-0 text-end me-3" id="skillProficiency" name="skillProficiency" required>
+                            <option>Beginner</option>
+                            <option>Intermediate</option>
+                            <option>Advanced</option>
+                        </select>
                     </div>
                 </div>
+            </div>
 
-                <div class="d-flex justify-content-between">
-                    <button type="button" class="btn add-project float-start" id="addSkill">
-                        + Add skill
-                    </button>
-                    <div class="text-end">
-                        <button type="submit" class="btn text-center skip-btn mx-2" data-current="skill" data-next="achievement" data-link="achievementLink">Skip</button>
-                        <button type="button" class="btn text-center next-btn" id="submitSkill">Save & Continue</button>
-                    </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn add-project float-start" id="addSkill">+ Add Skill</button>
+                <div class="text-end">
+                    <button type="submit" class="btn text-center skip-btn mx-2" data-current="skill" data-next="achievement" data-link="achievementLink">continue to achievement</button>
                 </div>
-            </form>
-        </div>
-        <div class="container mt-4 p-0">
-            <div id="skillList"></div>
-            @if($skills->isNotEmpty())
+            </div>
+        </form>
+    </div>
+
+    <div class="container mt-4 p-0">
+        <div id="skillList">
             @foreach($skills as $skill)
-            <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
+            <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="card_id_{{ $skill->id }}">
                 <div class="d-flex justify-content-between">
                     <div>
                         <h5>{{ $skill->skillName }}</h5>
                     </div>
                     <div>
-                        <a href="{{ route('skills.edit', $skill->id) }}" class="btn fw-semibold" style="color: #0064A7;">
-                            Edit
-                        </a>
-                        <form action="{{ route('skills.destroy', $skill->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn text-danger fw-semibold">
-                                Delete
-                            </button>
-                        </form>
+                        <button type="button" class="btn fw-semibold edit-skill" style="color: #0064A7;" data-id="{{ $skill->id }}">Edit</button>
+                        <button type="button" class="btn text-danger fw-semibold delete-skill" data-id="{{ $skill->id }}">Delete</button>
                     </div>
                 </div>
                 <div class="text-black-50">
@@ -57,96 +45,180 @@
                 </div>
             </div>
             @endforeach
-            @endif
         </div>
     </div>
-    @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+</div>@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let isEditingSkill = false;
+        let currentSkillId = null;
 
-            function collectSkillData() {
-                return {
-                    skillName: document.getElementsByName('skillName')[0].value,
-                    skillProficiency: document.getElementsByName('skillProficiency')[0].value
-                };
-            }
-            async function saveSkillData(skillData) {
-                try {
-                    const response = await fetch("{{ route('skills.store') }}", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify(skillData)
-                    });
-                    return await response.json();
-                } catch (error) {
-                    console.error("Error saving skill:", error);
-                    return {
-                        success: false
-                    };
+        function collectSkillData() {
+            return {
+                id: document.getElementById('skillId').value,
+                skillName: document.getElementById('skillName').value,
+                skillProficiency: document.getElementById('skillProficiency').value
+            };
+        }
+
+        function resetSkillForm() {
+            document.getElementById('skillForm').reset();
+            document.getElementById('skillId').value = '';
+            isEditingSkill = false;
+            currentSkillId = null;
+            document.getElementById('addSkill').textContent = '+ Add Skill';
+        }
+
+        async function fetchSkillData(id) {
+            try {
+                const response = await fetch(`/jobseeker/skills/${id}/edit`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch skill data');
                 }
+                return await response.json();
+            } catch (error) {
+                console.error('Error:', error)
+                throw error
             }
-            function appendSkillCard(skill) {
-                const card = document.createElement('div');
-                card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+        }
+
+        function populateSkillForm(skill) {
+            document.getElementById('skillId').value = skill.id;
+            document.getElementById('skillName').value = skill.skillName;
+            document.getElementById('skillProficiency').value = skill.skillProficiency;
+
+            isEditingSkill = true;
+            currentSkillId = skill.id;
+            document.getElementById('addSkill').textContent = 'Update Skill';
+        }
+
+        async function saveSkillData(data) {
+            const url = data.id ? `/jobseeker/skills/${data.id}` : "{{ route('skills.store') }}";
+            const method = data.id ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                const text = await response.text();
+                console.error(text);
+                return { success: false };
+            }
+
+            return await response.json();
+        }
+
+        function appendSkillCard(data) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.id = `card_id_${data.id}`;
+            card.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <div><h5>${data.skillName}</h5></div>
+                <div>
+                    <button type="button" class="btn fw-semibold edit-skill" style="color: #0064A7;" data-id="${data.id}">Edit</button>
+                    <button type="button" class="btn text-danger fw-semibold delete-skill" data-id="${data.id}">Delete</button>
+                </div>
+            </div>
+            <div class="text-black-50">
+                <p class="m-0">Proficiency: ${data.skillProficiency}</p>
+            </div>`;
+            document.getElementById('skillList').appendChild(card);
+        }
+
+        function updateSkillCard(data) {
+            const card = document.getElementById(`card_id_${data.id}`);
+            if (card) {
                 card.innerHTML = `
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h5>${skill.skillName}</h5>
-                                <p class="text-muted m-0">${skill.skillProficiency}</p>
-                            </div>
-                            <div>
-                                <a href="/skills/${skill.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
-                                <form action="/skills/${skill.id}" method="POST" style="display:inline;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn text-danger fw-semibold">Delete</button>
-                                </form>
-                            </div>
-                        </div>
-                    `;
-                document.getElementById('skillList')?.appendChild(card); // optional chaining for safety
+                <div class="d-flex justify-content-between">
+                    <div><h5>${data.skillName}</h5></div>
+                    <div>
+                        <button type="button" class="btn fw-semibold edit-skill" style="color: #0064A7;" data-id="${data.id}">Edit</button>
+                        <button type="button" class="btn text-danger fw-semibold delete-skill" data-id="${data.id}">Delete</button>
+                    </div>
+                </div>
+                <div class="text-black-50">
+                    <p class="m-0">Proficiency: ${data.skillProficiency}</p>
+                </div>`;
+            }
+        }
+
+        document.getElementById('addSkill').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const data = collectSkillData();
+
+            if (!data.skillName || !data.skillProficiency) {
+                alert('Please fill all required fields');
+                return;
             }
 
-            document.getElementById('skillForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-            });
-
-            document.getElementById('addSkill').addEventListener('click', async function(e) {
-                e.preventDefault();
-                const skillData = collectSkillData();
-                const result = await saveSkillData(skillData);
+            try {
+                const result = await saveSkillData(data);
                 if (result.success) {
-                    const skill = result.skill;
-                    document.getElementById('overviewSkills').innerHTML = `
-                        <p><strong>Skill:</strong> ${skill.skillName}</p>
-                        <p><strong>Proficiency:</strong> ${skill.skillProficiency}</p>
-                    `;
-                    document.getElementById('skillForm').reset();
-                    appendSkillCard(result.skill);
+                    if (isEditingSkill) {
+                        updateSkillCard(result.skill);
+                        alert('Skill updated successfully!');
+                    } else {
+                        appendSkillCard(result.skill);
+                    }
+                    resetSkillForm();
                 }
-            });
+            } catch (error) {
+                console.error(error);
+                alert('Error saving skill');
+            }
+        });
 
-            document.getElementById('submitSkill').addEventListener('click', async function(e) {
+        document.getElementById('skillList').addEventListener('click', function(e) {
+            if (e.target.classList.contains('edit-skill')) {
                 e.preventDefault();
-                const skillData = collectSkillData();
-                const result = await saveSkillData(skillData);
-                if (result.success) {
-                    const skill = result.skill;
-                    document.getElementById('overviewSkill').innerHTML = `
-                        <p><strong>Skill:</strong> ${skill.skillName}</p>
-                        <p><strong>Proficiency:</strong> ${skill.skillProficiency}</p>
-                    `;
-                    appendSkillCard(result.skill);
-                    document.getElementById('skill').style.display = 'none';
-                    document.getElementById('achievement').style.display = 'block';
-                    document.querySelectorAll(".profile-link").forEach(link => link.classList.remove("active"));
-                    document.getElementById('achievementLink').classList.add('active');
+                const id = e.target.dataset.id;
+                fetchSkillData(id)
+                    .then(data => {
+                        populateSkillForm(data);
+                        document.getElementById('skillForm').scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    })
+                    .catch(err => alert('Error loading data: ' + err.message));
+            } else if (e.target.classList.contains('delete-skill')) {
+                e.preventDefault();
+                const id = e.target.dataset.id;
+                if (confirm('Are you sure you want to delete this skill?')) {
+                    deleteSkillData(id)
+                        .then(result => {
+                            if (result.status) {
+                                document.getElementById(`card_id_${id}`).remove();
+                                if (currentSkillId === parseInt(id)) resetSkillForm();
+                            }
+                        })
+                        .catch(err => alert('Error deleting: ' + err.message));
                 }
+            }
+        });
+
+        async function deleteSkillData(id) {
+            const response = await fetch(`/jobseeker/skills/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    request_type: 'mobile'
+                })
             });
 
-        })
-    </script>
-    @endpush
+            if (!response.ok) throw new Error('Failed to delete skill');
+            return await response.json();
+        }
+    });
+</script>
+@endpush

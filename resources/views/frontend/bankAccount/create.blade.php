@@ -1,0 +1,397 @@
+@extends('frontend.layouts.main')
+
+@section('title', 'Bank Account')
+
+@section('content')
+
+
+<section class="ad_banner p-4 border border-1 border-dark-subtle mt-5 text-center mb-4">
+    <h2 class="py-4">Advertisement Banner</h2>
+</section>
+
+<section class="prform mt-4">
+    <div class="container-fluid container-lg">
+        <div id="form-container"
+            class="container-fluid container-lg border border-1 border-dark-subtle rounded-4 p-md-5 py-5">
+
+            <!-- Form 1 - Personal Information -->
+            <div id="moneyexchangeForm1" class="multi-step-form">
+                <div class="d-flex">
+                    <div class="col text-center">
+                        <h3 style="color:#0064a7;">Account Opening Form</h3>
+                    </div>
+                </div>
+                <div class="pt-5 pb-2">
+                    <h1 style="font-size: 20px; font-weight: 500;">Dear ABZ Bank,</h1>
+                    <p class="fw-normal" style="font-size: 18px;">Quo impedit dolores alias sunt corporis
+                        voluptatibus necessitatibus laudantium. A sit reprehenderit quasi
+                        quis tenetur consequatur accusantium eos. Delectus aperiam aperiam deserunt reprehenderit.
+                        Magnam
+                        cum labore sit inventore nobis doloribus. </p>
+                </div>
+
+                <div class="mt-4">
+                    <!-- Form 1 Content -->
+                    <form id="bankAccount" action="{{ route('bankAccounts.store') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="attestation">
+                            <div class="">
+                                <h4 class="pt-3 pb-1 border-bottom border-2 border-primary d-inline-block" id="headingOne">Applicant Type</h4>
+                            </div>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                    <div class="col">
+                                        <label for="applicantType" class="form-label fs-6">Applicant Type <span class="text-danger">*</span>:</label>
+                                        <select class="form-select form-control-da fs-6" id="applicantType" name="applicantType" required>
+                                            <option value="">-- Select Type --</option>
+                                            <option value="Individual">Individual</option>
+                                            <option value="Business">Business</option>
+                                            <option value="Organization">Organization</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="salutation" class="form-label fs-6">Salutation <span class="text-danger">*</span>:</label>
+                                        <select class="form-select form-control-da fs-6" id="salutation" name="salutation" required>
+                                            <option value="">-- Select --</option>
+                                            <option value="Mr">Mr</option>
+                                            <option value="Mrs">Mrs</option>
+                                            <option value="Miss">Miss</option>
+                                            <option value="Dr">Dr</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label fs-6 d-block">Nepali Citizen <span class="text-danger">*</span>:</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="nepaleseCitizen" id="nepaleseCitizen_yes" value="1" checked required>
+                                            <label class="form-check-label" for="nepaleseCitizen_yes">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="nepaleseCitizen" id="nepaleseCitizen_no" value="0">
+                                            <label class="form-check-label" for="nepaleseCitizen_no">No</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="applicantPurpose" class="form-label fs-6">Applicant Purpose <span class="text-danger">*</span>:</label>
+                                        <select class="form-select form-control-da fs-6" id="applicantPurpose" name="applicantPurpose" required>
+                                            <option value="">-- Select Purpose --</option>
+                                            <option value="Personal">Personal</option>
+                                            <option value="Business">Business</option>
+                                            <option value="Investment">Investment</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="preferredBank" class="form-label fs-6">Preferred Bank <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="preferredBank" name="preferredBank" required maxlength="255" placeholder="Enter preferred bank">
+                                    </div>
+                                    <div class="col">
+                                        <label for="branch" class="form-label fs-6">Branch <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="branch" name="branch" required maxlength="255" placeholder="Enter branch">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="attestation">
+                            <div class="">
+                                <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block" id="headingOne">Personal Details</h4>
+                            </div>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                    <div class="col">
+                                        <label for="firstName" class="form-label fs-6">First Name <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="firstName" name="firstName" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="middleName" class="form-label fs-6">Middle Name:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="middleName" name="middleName" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="lastName" class="form-label fs-6">Last Name <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="lastName" name="lastName" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="mobileNumber" class="form-label fs-6">Mobile Number <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="mobileNumber" name="mobileNumber" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="phoneNumber" class="form-label fs-6">Phone Number:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="phoneNumber" name="phoneNumber" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="email" class="form-label fs-6">Email Address:</label>
+                                        <input type="email" class="form-control form-control-da fs-6" id="email" name="email" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="nepaliDob" class="form-label fs-6">Date of Birth (BS) <span class="text-danger">*</span>:</label>
+                                        <input type="date" class="form-control form-control-da fs-6" id="nepaliDob" name="nepaliDob" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="englishDob" class="form-label fs-6">Date of Birth (AD):</label>
+                                        <input type="date" class="form-control form-control-da fs-6" id="englishDob" name="englishDob">
+                                    </div>
+                                    <div class="col">
+                                        <label for="applyFromCountry" class="form-label fs-6">Apply From Country:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="applyFromCountry" name="applyFromCountry" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="contactMedium" class="form-label fs-6">Contact Medium:</label>
+                                        <select class="form-select form-control-da fs-6" id="contactMedium" name="contactMedium">
+                                            <option value="">-- Select Medium --</option>
+                                            <option value="Email">Email</option>
+                                            <option value="Phone">Phone</option>
+                                            <option value="Mobile">Mobile</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="otherContactDetail" class="form-label fs-6">Other Contact Details:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="otherContactDetail" name="otherContactDetail" maxlength="255">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="attestation">
+                            <div class="">
+                                <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block" id="headingOne">Family Details</h4>
+                            </div>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                    <div class="col">
+                                        <label for="fatherName" class="form-label fs-6">Father's Name <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="fatherName" name="fatherName" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="motherName" class="form-label fs-6">Mother's Name <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="motherName" name="motherName" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="grandfatherName" class="form-label fs-6">Grandfather's Name <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="grandfatherName" name="grandfatherName" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="spouse" class="form-label fs-6">Spouse Name:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="spouse" name="spouse" maxlength="255">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="attestation">
+                            <div class="">
+                                <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block" id="headingOne">Permanent Address</h4>
+                            </div>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                    <div class="col">
+                                        <label for="permanentCountry" class="form-label fs-6">Country <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentCountry" name="permanentCountry" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentProvince" class="form-label fs-6">Province <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentProvince" name="permanentProvince" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentDistrict" class="form-label fs-6">District <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentDistrict" name="permanentDistrict" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentMunicipality" class="form-label fs-6">Municipality <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentMunicipality" name="permanentMunicipality" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentCity" class="form-label fs-6">City <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentCity" name="permanentCity" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentWardNo" class="form-label fs-6">Ward No <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentWardNo" name="permanentWardNo" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentStreet" class="form-label fs-6">Street:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentStreet" name="permanentStreet" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentState" class="form-label fs-6">State:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentState" name="permanentState" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentTole" class="form-label fs-6">Tole <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentTole" name="permanentTole" required maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="permanentHouseNo" class="form-label fs-6">House No:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentHouseNo" name="permanentHouseNo" maxlength="255">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Temporary Address Section -->
+                        <div class="attestation">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block">Temporary Address</h4>
+                                </div>
+                                <div class="form-check mt-4">
+                                    <input class="form-check-input fs-6" type="checkbox" value="1" id="sameAsPermanent" name="sameAsPermanent">
+                                    <label class="form-check-label fs-6" for="sameAsPermanent">Same as Permanent Address</label>
+                                </div>
+                            </div>
+                            <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                <div class="col">
+                                    <label for="temporaryCountry" class="form-label fs-6">Country <span class="text-danger">*</span>:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryCountry" name="temporaryCountry" required maxlength="255">
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryProvince" class="form-label fs-6">Province <span class="text-danger">*</span>:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryProvince" name="temporaryProvince" required maxlength="255">
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryDistrict" class="form-label fs-6">District <span class="text-danger">*</span>:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryDistrict" name="temporaryDistrict" required maxlength="255">
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryMunicipality" class="form-label fs-6">Municipality <span class="text-danger">*</span>:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryMunicipality" name="temporaryMunicipality" required maxlength="255">
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryWardNo" class="form-label fs-6">Ward No <span class="text-danger">*</span>:</label>
+                                    <input type="number" class="form-control form-control-da fs-6" id="temporaryWardNo" name="temporaryWardNo" required>
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryCity" class="form-label fs-6">City <span class="text-danger">*</span>:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryCity" name="temporaryCity" required maxlength="255">
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryTole" class="form-label fs-6">Tole <span class="text-danger">*</span>:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryTole" name="temporaryTole" required maxlength="255">
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryStreet" class="form-label fs-6">Street:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryStreet" name="temporaryStreet" maxlength="255">
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryState" class="form-label fs-6">State:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryState" name="temporaryState" maxlength="255">
+                                </div>
+                                <div class="col">
+                                    <label for="temporaryHouseNo" class="form-label fs-6">House No:</label>
+                                    <input type="text" class="form-control form-control-da fs-6" id="temporaryHouseNo" name="temporaryHouseNo" maxlength="255">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Job Details Section -->
+                        <div class="attestation">
+                            <div class="">
+                                <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block" id="headingOne">Job Details</h4>
+                            </div>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                    <div class="col">
+                                        <label for="jobTitle" class="form-label fs-6">Job Title:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="jobTitle" name="jobTitle" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="jobCity" class="form-label fs-6">Job City:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="jobCity" name="jobCity" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="companyName" class="form-label fs-6">Company Name:</label>
+                                        <input type="text" class="form-control form-control-da fs-6" id="companyName" name="companyName" maxlength="255">
+                                    </div>
+                                    <div class="col">
+                                        <label for="yearlySalary" class="form-label fs-6">Yearly Salary:</label>
+                                        <input type="number" step="0.01" class="form-control form-control-da fs-6" id="yearlySalary" name="yearlySalary">
+                                    </div>
+                                    <div class="col">
+                                        <label for="monthlySalary" class="form-label fs-6">Monthly Salary:</label>
+                                        <input type="number" step="0.01" class="form-control form-control-da fs-6" id="monthlySalary" name="monthlySalary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Required Documents Section -->
+                        <div class="attestation">
+                            <div class="">
+                                <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block" id="headingOne">Required Documents</h4>
+                            </div>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
+                                    <div class="col">
+                                        <label for="signature" class="form-label fs-6">Signature Photo <span class="text-danger">*</span>:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="signature" name="signature" accept=".jpg,.jpeg,.png,.pdf" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="fingerPrint" class="form-label fs-6">Thumb Print Photo <span class="text-danger">*</span>:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="fingerPrint" name="fingerPrint" accept=".jpg,.jpeg,.png,.pdf" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end py-4">
+                            <button type="submit" class="btn btn" style="background-color: #0064a7; color: white;">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+</section>
+</script>
+<script src="{{ asset('JS/home.js') }}"></script>
+<script src="{{ asset('JS/script.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/jquery-3.3.1.min.js"></script>
+<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/popper.min.js"></script>
+<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/bootstrap.min.js"></script>
+<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/rome.js"></script>
+
+<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/main.js"></script>
+<script defer
+    src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+    integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+    data-cf-beacon='{"rayId":"91b7e635cdf99888","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.1.0","token":"cd0b4b3a733644fc843ef0b185f98241"}'
+    crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#sameAsPermanent').on('change', function() {
+            if (this.checked) {
+                // Copy values
+                $('#temporaryCountry').val($('#permanentCountry').val());
+                $('#temporaryProvince').val($('#permanentProvince').val());
+                $('#temporaryDistrict').val($('#permanentDistrict').val());
+                $('#temporaryMunicipality').val($('#permanentMunicipality').val());
+                $('#temporaryWardNo').val($('#permanentWardNo').val());
+                $('#temporaryCity').val($('#permanentCity').val());
+                $('#temporaryTole').val($('#permanentTole').val());
+                $('#temporaryStreet').val($('#permanentStreet').val());
+                $('#temporaryState').val($('#permanentState').val());
+                $('#temporaryHouseNo').val($('#permanentHouseNo').val());
+
+                // Optionally disable them so user can't edit
+                $('#form-container .accordion-body input[id^="temporary"]').prop('readonly', true);
+            } else {
+                // Clear values and re-enable
+                $('#form-container .accordion-body input[id^="temporary"]').val('').prop('readonly', false);
+            }
+        });
+    });
+</script>

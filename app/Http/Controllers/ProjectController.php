@@ -37,63 +37,53 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
-        //Check if the request is from mobile
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-        // Get the authenticated user
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-        if (!$user) {
+
+        if (! $user) {
             return $isMobile
                 ? $this->responseError('Unauthorized', 401)
                 : redirect()->route('login')->with('error', 'Unauthorized access.');
         }
 
-        Log::info('Authenticated Job Seeker ID :' . $user->id);
-        $jobSeekerId = $user->id;
+        $validator = Validator::make($request->all(), [
+            'projectTitle'       => 'required|string|max:255',
+            'projectLink'        => 'nullable',
+            'projectDescription' => 'required|string',
+        ]);
 
-        //Validate request data
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'projectTitle' => 'required|string|max:255',
-                'projectLink' => 'url',
-                'projectDescription' => 'string',
-            ]
-        );
         if ($validator->fails()) {
-            Log::error('Validation errors:', $validator->errors()->toArray());
+            Log::error('Project validation failed', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                :   response()->json([
+                : response()->json([
                     'success' => false,
-                    'message' => 'Validation failed. Please check your inputs.',
-                    'errors' => $validator->errors()->all(),
-                    'request' => $request->input()
+                    'message' => 'Validation failed.',
+                    'errors'  => $validator->errors()->all(),
                 ]);
         }
 
-
-        $project = new Project();
-        $project->jobSeekerId = $jobSeekerId;
-        $project->projectTitle = $request->input('projectTitle');
-        $project->projectLink = $request->input('projectLink');
-        $project->projectDescription = $request->input('projectDescription');
+        $project = new Project([
+            'jobSeekerId'        => $user->id,
+            'projectTitle'       => $request->input('projectTitle'),
+            'projectLink'        => $request->input('projectLink') ?: null,
+            'projectDescription' => $request->input('projectDescription'),
+        ]);
         $project->save();
 
-        Log::info('new Project record created :' . $project->id);
-        // return the response based on request type
+        Log::info('Project created', ['id' => $project->id]);
+
         return $isMobile
-            ? $this->responseSuccess('Personal Profile saved successfully.', $project)
-            :
-            response()->json([
+            ? $this->responseSuccess('Project saved successfully.', 200, $project)
+            : response()->json([
                 'success' => true,
                 'message' => 'Project saved successfully.',
-                'project' => $project
+                'project' => $project,
             ]);
     }
-
-
 
     /**
      * Display the specified resource.
@@ -139,7 +129,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return response()->json($project);
     }
 
     /**
@@ -179,19 +169,18 @@ class ProjectController extends Controller
         //Validate request data
         $validator = Validator::make($request->all(), [
             'projectTitle' => 'required|string|max:255',
-            'projectLink' => 'required|url',
-            'projectDescription' => 'nullable|string'
-
-
-
-
+            'projectLink' => 'nullable',
+            'projectDescription' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
             Log::error('Validation errors:', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', $validator->errors())
-                : redirect()->back()->withErrors($validator)->withInput();
+                : response()->json([
+                    'success' => false,
+                    'message' => 'Input validation wrong',
+                ]);
         }
         //update the filled
         $project->projectTitle = $request->input('projectTitle');
@@ -200,13 +189,16 @@ class ProjectController extends Controller
 
         $project->save();
 
-
-        Log::info('project updated successfully: ' . $project);
+        Log::info('project updated successfully: ' . $project->id);
 
         // Return the response based on request type
         return $isMobile
             ? $this->responseSuccess('project updated successfully.',  $project)
-            : redirect()->back()->with('success', 'project updated successfully.');
+            : response()->json([
+                'success' => true,
+                'project' => $project,
+                'message' => 'project update Successfully.',
+            ]);
     }
 
 
@@ -246,8 +238,26 @@ class ProjectController extends Controller
     }
 
 
-    public function destroy(Project $project)
+    public function destroy(Request $request, $id)
     {
-        //
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $project = Project::find($id);
+
+        if (!$project) {
+            return $isMobile
+                ? $this->responseError('project not found', 404)
+                : response()->json([
+                    'success' => false,
+                    'message' => 'project not found.',
+                ]);
+        }
+        $project->delete();
+
+        return $isMobile
+            ? $this->responseSuccess('project deleted successfully')
+            : response()->json([
+                'success' => true,
+                'message' => 'project delete Successfully.',
+            ]);
     }
 }

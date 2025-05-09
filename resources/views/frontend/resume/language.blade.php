@@ -6,12 +6,13 @@
             <h3>Language</h3>
             <div class="row mb-3">
                 <div class="col-md-12">
+                    <input type="hidden" id="languageId" name="id" value="">
                     <div class="input-group">
                         <input type="text" class="form-control custom-input border-end-0"
-                            id="Language" placeholder="Language" name="languageName" required>
+                            id="languageName" placeholder="Language" name="languageName" required>
 
                         <select class="form-select custom-input border-start-0 text-end me-3"
-                            id="languageLevel" name="languageProficiency">
+                            id="languageProficiency" name="languageProficiency">
                             <option>Beginner</option>
                             <option>Intermediate</option>
                             <option>Proficient</option>
@@ -23,140 +24,198 @@
                 + Add Language
             </button>
             <div class="text-end">
-                <button type="submit" class="btn text-center skip-btn mx-2">Skip</button>
-                <button type="button" class="btn text-center next-btn" id="submitLanguage">Save & Continue</button>
+                <button type="button" class="btn text-center next-btn" id="submitLanguage">Sumbit Resume</button>
             </div>
         </form>
     </div>
     <div class="container mt-4 p-0">
-        <div class="languageList"></div>
-        @if($languages->isNotEmpty())
-        @foreach($languages as $language)
-        <div class="card mb-3 mt-3 p-3 bg-light rounded w-100">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <h5>{{ $language->languageName }}</h5>
-                </div>
-                <div>
-                    <a href="{{ route('languages.edit', $language->id) }}" class="btn fw-semibold" style="color: #0064A7;">
-                        Edit
-                    </a>
-                    <form action="{{ route('languages.destroy', $language->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn text-danger fw-semibold">
-                            Delete
+        <div id="languageList">
+            @if($languages->isNotEmpty())
+            @foreach($languages as $language)
+            <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="card_id_{{ $language->id }}">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>{{ $language->languageName }}</h5>
+                    </div>
+                    <div>
+                        <button type="button"
+                            class="btn fw-semibold edit-language"
+                            style="color: #0064A7;"
+                            data-id="{{ $language->id }}">
+                            Edit
                         </button>
-                    </form>
+                        <button type="button" class="btn text-danger fw-semibold delete-language" data-id="{{ $language->id }}">Delete</button>
+                    </div>
+                </div>
+                <div class="text-black-50">
+                    <p class="m-0">
+                        Proficiency: {{ $language->languageProficiency }}
+                    </p>
                 </div>
             </div>
-            <div class="text-black-50">
-                <p class="m-0">
-                    Proficiency: {{ $language->languageProficiency }}
-                </p>
-            </div>
+            @endforeach
+            @endif
         </div>
-        @endforeach
-        @endif
     </div>
 </div>
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        let isEditing = false;
+        let currentLanguageId = null;
 
         function collectLanguageData() {
             return {
-                languageName: document.getElementsByName('languageName')[0].value,
-                languageProficiency: document.getElementsByName('languageProficiency')[0].value
+                id: document.getElementById('languageId').value,
+                languageName: document.getElementById('languageName').value,
+                languageProficiency: document.getElementById('languageProficiency').value
             };
         }
 
-        async function saveLanguageData(languageData) {
-            try {
-                const response = await fetch("{{ route('languages.store') }}", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify(languageData)
-                });
-                return await response.json();
-            } catch (error) {
-                console.error("Error saving language data:", error);
-                return {
-                    success: false
-                };
-            }
+        function resetForm() {
+            document.getElementById('languageForm').reset();
+            document.getElementById('languageId').value = '';
+            isEditing = false;
+            currentLanguageId = null;
+            document.getElementById('addLanguage').textContent = '+ Add Language';
         }
 
-        function appendLanguageCard(language) {
+        async function fetchLanguageData(id) {
+            const res = await fetch(`/jobseeker/languages/${id}/edit`);
+            if (!res.ok) throw new Error('Failed to fetch language');
+            return await res.json();
+        }
+
+        function populateForm(lang) {
+            document.getElementById('languageId').value = lang.id;
+            document.getElementById('languageName').value = lang.languageName;
+            document.getElementById('languageProficiency').value = lang.languageProficiency;
+            isEditing = true;
+            currentLanguageId = lang.id;
+            document.getElementById('addLanguage').textContent = 'Update Language';
+        }
+
+        async function saveLanguageData(data) {
+            const url = data.id ?
+                `/jobseeker/languages/${data.id}` :
+                `/jobseeker/languages`;
+            const method = data.id ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            return res.ok ? await res.json() : {
+                success: false
+            };
+        }
+
+        async function deleteLanguageData(id) {
+            const res = await fetch(`/jobseeker/languages/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    request_type: 'mobile'
+                })
+            });
+            if (!res.ok) throw new Error('Failed to delete language');
+            return await res.json();
+        }
+
+        function appendLanguageCard(lang) {
             const card = document.createElement('div');
             card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.id = `card_id_${lang.id}`;
             card.innerHTML = `
-            <div class="d-flex justify-content-between">
-                <div>
-                    <h5>${language.languageName}</h5>
-                </div>
-                <div>
-                    <a href="/languages/${language.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
-                    <form action="/languages/${language.id}" method="POST" style="display:inline;">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit" class="btn text-danger fw-semibold">Delete</button>
-                    </form>
-                </div>
-            </div>
-            <div class="text-black-50">
-                <p class="m-0">Proficiency: ${language.languageProficiency}</p>
-            </div>
-        `;
-            document.querySelector('.languageList').appendChild(card);
+                        <div class="d-flex justify-content-between">
+                            <div><h5>${lang.languageName}</h5></div>
+                            <div>
+                            <button type="button" class="btn fw-semibold edit-language" style="color:#0064A7" data-id="${lang.id}">Edit</button>
+                            <button type="button" class="btn text-danger fw-semibold delete-language" data-id="${lang.id}">Delete</button>
+                            </div>
+                        </div>
+                        <div class="text-black-50">
+                            <p class="m-0">Proficiency: ${lang.languageProficiency}</p>
+                        </div>`;
+            document.getElementById('languageList').appendChild(card);
         }
 
-        // Prevent default form submit
-        document.getElementById('languageForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-        });
+        function updateLanguageCard(lang) {
+            const card = document.getElementById(`card_id_${lang.id}`);
+            if (!card) return;
+            card.innerHTML = `
+                <div class="d-flex justify-content-between">
+                    <div><h5>${lang.languageName}</h5></div>
+                    <div>
+                    <button type="button" class="btn fw-semibold edit-language" style="color:#0064A7" data-id="${lang.id}">Edit</button>
+                    <button type="button" class="btn text-danger fw-semibold delete-language" data-id="${lang.id}">Delete</button>
+                    </div>
+                </div>
+                <div class="text-black-50">
+                    <p class="m-0">Proficiency: ${lang.languageProficiency}</p>
+                </div>`;
+        }
 
-        // "+ Add Language" button
+        // Add or Update
         document.getElementById('addLanguage').addEventListener('click', async function(e) {
             e.preventDefault();
-            const languageData = collectLanguageData();
-            const result = await saveLanguageData(languageData);
+            const data = collectLanguageData();
+            if (!data.languageName) {
+                return alert('Please enter a language');
+            }
+            const result = await saveLanguageData(data);
             if (result.success) {
-                const language = result.language;
-                let languageHTML = `
-                    <p><strong>Language:</strong> ${language.languageName ?? ''}</p>
-                    <p><strong>Proficiency Level:</strong> ${language.languageProficiency ?? ''}</p>
-                    <hr>
-                `;
-                document.getElementById('overviewLanguages').innerHTML = languageHTML;
-                document.getElementById('languageForm').reset();
-                appendLanguageCard(result.language);
+                if (isEditing) {
+                    updateLanguageCard(result.language);
+                } else {
+                    appendLanguageCard(result.language);
+                }
+                resetForm();
+            } else {
+                alert('Error saving language');
             }
         });
 
-        // "Save & Continue" button
-        document.getElementById('submitLanguage').addEventListener('click', async function(e) {
-            e.preventDefault();
-            const languageData = collectLanguageData();
-            const result = await saveLanguageData(languageData);
-            if (result.success) {
-                const language = result.language;
-                let languageHTML = `
-                    <p><strong>Language:</strong> ${language.languageName ?? ''}</p>
-                    <p><strong>Proficiency Level:</strong> ${language.languageProficiency ?? ''}</p>
-                    <hr>
-                `;
-                document.getElementById('overviewLanguage').innerHTML = languageHTML;
-                appendLanguageCard(result.language);
-                document.getElementById('language').style.display = 'none';
-                document.getElementById('training').style.display = 'block'; // 👈 update this if next section is different
-                document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                document.getElementById('trainingLink').classList.add('active'); // 👈 update ID as per your nav
+        // Edit & Delete
+        document.getElementById('languageList').addEventListener('click', function(e) {
+            const btn = e.target;
+            const id = btn.dataset.id;
+
+            if (btn.classList.contains('edit-language')) {
+                e.preventDefault();
+                fetchLanguageData(id)
+                    .then(populateForm)
+                    .catch(err => alert('Error fetching language: ' + err.message));
+            }
+
+            if (btn.classList.contains('delete-language')) {
+                e.preventDefault();
+                if (!confirm('Delete this language?')) return;
+
+                deleteLanguageData(id)
+                    .then(result => {
+                        if (result.status) {
+                            document.getElementById(`card_id_${id}`).remove();
+                            if (currentLanguageId === parseInt(id)) {
+                                resetForm();
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error deleting language: ' + error.message);
+                    });
             }
         });
-    })
+    });
 </script>
 @endpush
