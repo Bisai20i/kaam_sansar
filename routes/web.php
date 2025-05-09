@@ -52,6 +52,15 @@ use App\Http\Controllers\PassportDateTimeController;
 use App\Http\Controllers\InsuranceCompanyController;
 use App\Http\Controllers\InsuranceCategoryController;
 use App\Http\Controllers\InsuranceSubCategoryController;
+use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\BrokerAccountController;
+use App\Http\Controllers\DocumentationAttestationController;
+use App\Http\Controllers\MoneyExchangeController;
+use App\Http\Controllers\FrequentlyAskedQuestionController;
+
+
+
+
 
 
 
