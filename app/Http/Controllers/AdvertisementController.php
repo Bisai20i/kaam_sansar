@@ -35,9 +35,6 @@ class AdvertisementController extends Controller
             $ad->image_url = $ad->adsThumbnail ? asset($ad->adsThumbnail) : null;
             return $ad;
         });
-<<<<<<< HEAD
-
-=======
     }
 
         $category = AdvertisementCategory::all();
@@ -47,7 +44,6 @@ class AdvertisementController extends Controller
         $post = Advertisement::all();
         $adTypes = $this->getEnumValues('advertisements', 'type');
     if ($isMobile) {
->>>>>>> 061daffb7c0a3988e40be5aa1e1f3087267cbedc
         return response()->json([
             'status' => true,
             'message' => 'Advertisements fetched successfully.',
@@ -65,7 +61,6 @@ class AdvertisementController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
     // For web, load everything needed
     $category = AdvertisementCategory::all();
     $categories = AdvertisementCategory::all();
@@ -82,10 +77,8 @@ class AdvertisementController extends Controller
 
     if($ad_banners){
         $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
-=======
         return view('frontend.advertisements.index', compact('ads','category','post','all','categories','ad'));
 
->>>>>>> 061daffb7c0a3988e40be5aa1e1f3087267cbedc
     }
 
 
