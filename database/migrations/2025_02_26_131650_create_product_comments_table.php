@@ -22,8 +22,6 @@ return new class extends Migration
                          // Foreign key for Job Seekers
                          $table->unsignedBigInteger('jobSeekerId');
                          $table->foreign('jobSeekerId')->references('id')->on('job_seekers')->onDelete('cascade');
-                        $table->string('commentPersonName')->nullable();
-                        $table->string('commentPersonImg')->nullable();
                         $table->text('comment')->nullable();
             $table->timestamps();
         });

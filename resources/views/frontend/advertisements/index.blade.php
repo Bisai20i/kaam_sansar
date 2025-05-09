@@ -1,44 +1,50 @@
 @extends('frontend.layouts.main')
 @section('title')
-    Advertisements
+Advertisements
 @endsection
 @section('content')
 
-<section class="ads_title container-fluid border border-2 border-dark-subtle mt-5 p-5">
-    <div class="container text-center">
-        <h3>Ad banner</h3>
-    </div>
+<section class="ads_title container-fluid  mt-5 ">
+@if ($ad_banners['top'])
+
+        <!-- <h3>Ad banner</h3> -->
+        <a href="{{ $ad_banners['top']->link }}" target="_blank" class="d-block"
+                        style="text-decoration: none; cursor: pointer; object-fit: contain;">
+                        <img src="{{ $ad_banners['top']->image }}" class="w-100" style="aspect-ratio: 5/1;"
+                            alt="img-fluid">
+                    </a>
+    @endif
 </section>
 
 <div class="container">
     <div class="row">
         <h3 class="primary_color_text py-2">Advertisement</h3>
     </div>
-@php
+    @php
     $type = isset($type) ? $type : '';
-@endphp
+@endphp 
 
     <div class="d-flex justify-content-center justify-content-md-between flex-wrap-reverse row-gap-3 ">
         <div class="btn-group  mb-3 gap-lg-1 ads_type" role="group" aria-label="Basic radio toggle button group">
         <a href="{{ route('ads.index')}}"
-           class="btn btn-outline-custom  rounded-2 mx-1 px-4 border border-2">
+           class="btn btn-outline-custom  active rounded-2 mx-1 px-4 border border-2 ">
             All
         </a>
 
-        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Buy']) }}"
-   class="btn btn-outline-custom {{ $type == 'Buy' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
-            Buy
-        </a>
+            <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Buy']) }}"
+                class="btn btn-outline-custom {{ $type == 'Buy' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+                Buy
+            </a>
 
-        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Sell']) }}"
-   class="btn btn-outline-custom {{ $type == 'Sell' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
-            Sell
-        </a>
+            <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Sell']) }}"
+                class="btn btn-outline-custom {{ $type == 'Sell' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+                Sell
+            </a>
 
-        <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Rent']) }}"
-   class="btn btn-outline-custom {{ $type == 'Rent' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
-            Rent
-        </a>
+            <a href="{{ route('Ads.showByTypeCategory', ['type' => 'Rent']) }}"
+                class="btn btn-outline-custom {{ $type == 'Rent' ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2">
+                Rent
+            </a>
         </div>
         <div>
        @if (Auth::guard('job_seekers')->check()  )  <!-- If user is logged in, show the Post Ad button -->
@@ -51,7 +57,7 @@
     </button>
 @else
     <!-- If user is not logged in, show the Login button -->
-    <button type="button" 
+    <button type="button"
             class="btn post-ad-btn text-white py-2 px-4 fs-5" 
             data-bs-toggle="modal" 
             data-bs-target="#loginModal" 
@@ -94,8 +100,7 @@
     <div>
         <h5>Find what you are looking for ?</h5>
         <div class=" g-3 mb-3">
-        <form action="{{ route('ads.search') }}" method="POST" class="row mt-4 align-items-center">
-            @csrf
+        <form action="{{ route('ads.search') }}" method="GET" class="row mt-4 align-items-center">
             <!-- Search Input -->
             <div class="col-lg">
                 <div class="input-group">
@@ -115,8 +120,8 @@
                     <option value="{{$a->country}}">{{$a->country}}</option>
                     @endforeach
 
-                </select>
-            </div>
+                    </select>
+                </div>
 
             <!-- City Select -->
             <div class="col-md-6 col-lg-3">
@@ -124,10 +129,10 @@
                 <option value="" selected>Select City</option>
                 @foreach($ad as $a)
 
-                    <option value="{{$a->location}}">{{$a->location}}</option>
-                    @endforeach
-                </select>
-            </div>
+                        <option value="{{$a->location}}">{{$a->location}}</option>
+                        @endforeach
+                    </select>
+                </div>
 
             <!-- Search Button -->
             <div class="col-4 col-lg-2 mx-auto">
@@ -144,25 +149,25 @@
    href="{{ route('ads.index') }}"
    >All</a>
 
-   @foreach($categories as $categoryItem)
-    @if($type)
+        @foreach($categories as $categoryItem)
+        @if($type)
         <a href="{{ route('Ads.showByTypeCategory', ['type' => $type, 'categoryId' => $categoryItem->id]) }}"
-           class="btn btn-outline-custom {{ isset($selectedCategory) && $selectedCategory->id == $categoryItem->id ? 'active' : '' }} rounded-pill mx-1 px-4 border border-2">
+            class="btn btn-outline-custom {{ isset($selectedCategory) && $selectedCategory->id == $categoryItem->id ? 'active' : '' }} rounded-pill mx-1 px-4 border border-2">
             {{ $categoryItem->adsCategoryTitle }}
         </a>
-    @else
+        @else
         <a href="{{ route('Ads.showByCategory', ['categoryId' => $categoryItem->id]) }}"
-           class="btn btn-outline-custom rounded-pill mx-1 px-4 border border-2">
+            class="btn btn-outline-custom rounded-pill mx-1 px-4 border border-2">
             {{ $categoryItem->adsCategoryTitle }}
         </a>
-    @endif
-@endforeach
+        @endif
+        @endforeach
 
 
 
-</div>
+    </div>
 
-        
+
     <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 ">
     @if($ads->count())
     @foreach($ads as $ad)
@@ -183,10 +188,87 @@
 
     </div>
 
-    <div class="d-flex justify-content-center mt-3">
-    {{$ads->links()}}
+    @if ($ads->hasMorePages() || $ads->currentPage() !=1)
 
-</div>
+                <div class="row mt-3">
+                    <nav>
+                        <ul class="pagination justify-content-end converter">
+                            {{-- Previous Button --}}
+                            @if ($ads->onFirstPage())
+                                <li class="page-item disabled">
+                                    <a class="page-link primary_color_text">&lt;</a>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->previousPageUrl() }}">&lt;</a>
+                                </li>
+                            @endif
+
+                            {{-- Pagination Numbers --}}
+                            @php
+                                $currentPage = $ads->currentPage();
+                                $lastPage = $ads->lastPage();
+                                $pageRange = 2; // Number of pages to display before and after the current page
+                            @endphp
+
+                            {{-- Show First Page --}}
+                            @if ($currentPage > $pageRange + 1)
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text" href="{{ $ads->url(1) }}">1</a>
+                                </li>
+                                @if ($currentPage > $pageRange + 2)
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                @endif
+                            @endif
+
+                            {{-- Show Pages Before Current Page --}}
+                            @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+
+                            {{-- Current Page --}}
+                            <li class="page-item active">
+                                <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+                            </li>
+
+                            {{-- Show Pages After Current Page --}}
+                            @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+
+                            {{-- Show Last Page --}}
+                            @if ($currentPage < $lastPage - $pageRange)
+                                @if ($currentPage < $lastPage - $pageRange - 1)
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                @endif
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->url($lastPage) }}">{{ $lastPage }}</a>
+                                </li>
+                            @endif
+
+                            {{-- Next Button --}}
+                            @if ($ads->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $ads->nextPageUrl() }}">&gt;</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <a class="page-link primary_color_text">&gt;</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                </div>
+@endif
 
 
 
@@ -225,13 +307,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            <form id="addItemForm" action="{{route('ads.store')}}" method="POST" enctype="multipart/form-data">
-                @csrf
-            <!-- Type Dropdown -->
+                <form id="addItemForm" action="{{route('ads.store')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <!-- Type Dropdown -->
                     <div class="">
                         <select class="form-select abroad-deal-1 py-2" id="type" name="type" aria-label="">
                             <option selected>Type</option>
-                            
+
                             <option value="Buy">Buy</option>
                             <option value="Sell">Sell</option>
                             <option value="Rent">Rent</option>
@@ -258,19 +340,17 @@
                         <label for="cityInput">City</label>
                     </div>
 
-                    
+
                     <div class="form-floating text-black-50 mt-3">
                         <input type="text" class="form-control abroad-deal-1"  name ="adsTitle" id="titleInput"
                             placeholder="Title">
                         <label for="titleInput">Title</label>
                     </div>
-                    <!-- Price Input -->
                     <div class="form-floating text-black-50 mb-3">
 
                         <input type="text" class="form-control abroad-deal-1" id="price"
                              name ="pricing"placeholder="Enter price" required>
                         <label for="price">Price</label>
-
                     </div>
                     <div class="form-floating text-black-50 mb-3">
 
@@ -289,23 +369,22 @@
   <div class="d-flex align-items-center gap-3">
     <p class="flex-grow-1 my-auto text-black-5 mb-0" style="font-size: 0.9rem;">Add to your post</p>
 
-    <!-- Image upload trigger -->
-    <div class="d-flex align-items-center gap-2">
-      <label for="fileInput" class="primary_color_text m-0" style="cursor: pointer;">
-        <i class="fa-solid fa-image fa-lg"></i>
-      </label>
-      <input type="file" id="fileInput" name="adsThumbnail" accept="image/*" class="d-none">
-    </div>
-  </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="fileInput" class="primary_color_text m-0" style="cursor: pointer;">
+                                    <i class="fa-solid fa-image fa-lg"></i>
+                                </label>
+                                <input type="file" id="fileInput" name="adsThumbnail" accept="image/*" class="d-none">
+                            </div>
+                        </div>
 
   <!-- Image Preview (small) -->
 </div>
 <div id="imagePreview" class="d-flex mt-1" style="height: 60px;"></div>
 
 
-<script>
-  const fileInput = document.getElementById('fileInput');
-  const imagePreview = document.getElementById('imagePreview');
+                    <script>
+                        const fileInput = document.getElementById('fileInput');
+                        const imagePreview = document.getElementById('imagePreview');
 
   fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
@@ -342,7 +421,4 @@
         </div>
     </div>
 </div>
-
-
 @endsection
-

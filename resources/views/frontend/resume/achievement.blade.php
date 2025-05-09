@@ -1,0 +1,212 @@
+<div id="achievement" class="section-content" style="display:none;">
+    <h4 class="mb-3 your-project-text">Your Achievements</h4>
+    <div class="card p-4 card-center">
+        <form id="achievementForm">
+            @csrf
+            <input type="hidden" id="achievementId" name="id" value="">
+            <h3>Achievements</h3>
+            <div class="row mb-3">
+                <div class="col-md-12 mb-3">
+                    <label for="achievement-title" class="form-label">Achievement Title</label>
+                    <input type="text" class="form-control custom-input" name="achievementTitle"
+                        id="achievement-title" placeholder="Enter Achievement Title" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="achievement-description" class="form-label">Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control custom-input" id="achievement-description" name="achievementDescription" rows="3"
+                        placeholder="Describe your achievement..." required></textarea>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn add-project float-start" id="addAchievement">+ Add Achievement</button>
+                <div class="text-end">
+                    <button type="submit" class="btn text-center skip-btn mx-2" data-current="achievement" data-next="experience" data-link="experienceLink">Continue to Experience</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container mt-4 p-0">
+        <div id="achievementList">
+            @foreach($achievements as $achievement)
+            <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="achievement_card_{{ $achievement->id }}">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>{{ $achievement->achievementTitle }}</h5>
+                    </div>
+                    <div>
+                        <button type="button" class="btn fw-semibold edit-achievement" style="color: #0064A7;" data-id="{{ $achievement->id }}">Edit</button>
+                        <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="{{ $achievement->id }}">Delete</button>
+                    </div>
+                </div>
+                <div class="text-black-50">
+                    <p class="m-0">{{ $achievement->achievementDescription }}</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let isEditingAchievement = false;
+    let currentAchievementId = null;
+
+    function collectAchievementData() {
+        return {
+            id: document.getElementById('achievementId').value,
+            achievementTitle: document.getElementById('achievement-title').value,
+            achievementDescription: document.getElementById('achievement-description').value
+        };
+    }
+
+    function resetAchievementForm() {
+        document.getElementById('achievementForm').reset();
+        document.getElementById('achievementId').value = '';
+        isEditingAchievement = false;
+        currentAchievementId = null;
+        document.getElementById('addAchievement').textContent = '+ Add Achievement';
+    }
+
+    async function fetchAchievementData(id) {
+        const response = await fetch(`/jobseeker/achievements/${id}/edit`);
+        if (!response.ok) throw new Error('Failed to fetch achievement data');
+        return await response.json();
+    }
+
+    function populateAchievementForm(data) {
+        document.getElementById('achievementId').value = data.id;
+        document.getElementById('achievement-title').value = data.achievementTitle;
+        document.getElementById('achievement-description').value = data.achievementDescription;
+
+        isEditingAchievement = true;
+        currentAchievementId = data.id;
+        document.getElementById('addAchievement').textContent = 'Update Achievement';
+    }
+
+    async function saveAchievementData(data) {
+        const url = data.id ? `/jobseeker/achievements/${data.id}` : "{{ route('achievements.store') }}";
+        const method = data.id ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+        return await response.json();
+    }
+
+    function appendAchievementCard(data) {
+        const card = document.createElement('div');
+        card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+        card.id = `achievement_card_${data.id}`;
+        card.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <div><h5>${data.achievementTitle}</h5></div>
+                <div>
+                    <button type="button" class="btn fw-semibold edit-achievement" style="color: #0064A7;" data-id="${data.id}">Edit</button>
+                    <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="${data.id}">Delete</button>
+                </div>
+            </div>
+            <div class="text-black-50">
+                <p class="m-0">${data.achievementDescription}</p>
+            </div>`;
+        document.getElementById('achievementList').appendChild(card);
+    }
+
+    function updateAchievementCard(data) {
+        const card = document.getElementById(`achievement_card_${data.id}`);
+        if (card) {
+            card.innerHTML = `
+                <div class="d-flex justify-content-between">
+                    <div><h5>${data.achievementTitle}</h5></div>
+                    <div>
+                        <button type="button" class="btn fw-semibold edit-achievement" style="color: #0064A7;" data-id="${data.id}">Edit</button>
+                        <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="${data.id}">Delete</button>
+                    </div>
+                </div>
+                <div class="text-black-50">
+                    <p class="m-0">${data.achievementDescription}</p>
+                </div>`;
+        }
+    }
+
+    document.getElementById('addAchievement').addEventListener('click', async function (e) {
+        e.preventDefault();
+        const data = collectAchievementData();
+
+        if (!data.achievementTitle || !data.achievementDescription) {
+            alert('Please fill all required fields');
+            return;
+        }
+
+        try {
+            const result = await saveAchievementData(data);
+            console.log(result)
+            if (result.success) {
+                if (isEditingAchievement) {
+                    updateAchievementCard(result.achievement);
+                    alert('Achievement updated successfully!');
+                } else {
+                    appendAchievementCard(result.achievement);
+                }
+                resetAchievementForm();
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error saving achievement');
+        }
+    });
+
+    document.getElementById('achievementList').addEventListener('click', function (e) {
+        if (e.target.classList.contains('edit-achievement')) {
+            e.preventDefault();
+            const id = e.target.dataset.id;
+            fetchAchievementData(id)
+                .then(data => {
+                    populateAchievementForm(data);
+                    document.getElementById('achievementForm').scrollIntoView({ behavior: 'smooth' });
+                })
+                .catch(err => alert('Error loading data: ' + err.message));
+        } else if (e.target.classList.contains('delete-achievement')) {
+            e.preventDefault();
+            const id = e.target.dataset.id;
+            if (confirm('Are you sure you want to delete this achievement?')) {
+                deleteAchievementData(id)
+                    .then(result => {
+                        if (result.status) {
+                            document.getElementById(`achievement_card_${id}`).remove();
+                            if (currentAchievementId === parseInt(id)) resetAchievementForm();
+                        }
+                    })
+                    .catch(err => alert('Error deleting: ' + err.message));
+            }
+        }
+    });
+
+    async function deleteAchievementData(id) {
+        const response = await fetch(`/jobseeker/achievements/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ request_type: 'mobile' })
+        });
+
+        if (!response.ok) throw new Error('Failed to delete achievement');
+        return await response.json();
+    }
+});
+</script>
+@endpush

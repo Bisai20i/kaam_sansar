@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -6,6 +7,7 @@ use App\Models\Achievement;
 use App\Models\Admin;
 use App\Models\AdsManager;
 use App\Models\Advertisement;
+use App\Models\Astrologer;
 use App\Models\AdvertisementCategory;
 use App\Models\BlogsAndPodcast;
 use App\Models\DiscussionForum;
@@ -13,6 +15,7 @@ use App\Models\Education;
 use App\Models\Experience;
 use App\Models\Follower;
 use App\Models\ForumInteraction;
+use App\Models\FrequentlyAskedQuestion;
 use App\Models\GiftCategory;
 use App\Models\GiftCoupon;
 use App\Models\IndustryCategory;
@@ -30,13 +33,16 @@ use App\Models\UserComment;
 use App\Models\Visa;
 use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
+use App\Models\Horoscope;
 use App\Models\VisaType;
 use App\Models\InsuranceCompany;
 use App\Models\InsuranceCategory;
 use App\Models\InsuranceCategoryDetail;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
 
 class FrontendController extends Controller
 {
@@ -72,6 +78,7 @@ class FrontendController extends Controller
             ->where('publishStatus', 1)
             ->take(12)
             ->get();
+            $faqs = FrequentlyAskedQuestion::all();
         $ad_banners           = [];
         $ad_banners['middle'] = AdsManager::where('which_page', 'home')
             ->where('publish_or_not', 1)
@@ -87,7 +94,7 @@ class FrontendController extends Controller
         }
 
         // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
     }
 
     public function findJobs()
@@ -160,7 +167,7 @@ class FrontendController extends Controller
             ->where('jobStatus', 'published')
             ->get();
 
-                                             // Get the category_id of the job
+        // Get the category_id of the job
         $category_id = $jobs->jobCategoryId; // Assuming `category_id` is the field
 
         // Fetch jobs in the same category
@@ -545,12 +552,88 @@ class FrontendController extends Controller
     }
 
     //for horoscope
-
-    public function horoscope()
+    public function horoscope(Request $request)
     {
-        return view('frontend.horoscope.horoscope');
-    }
+        Log::info('Horoscope request received', ['request_data' => $request->all()]);
+    
+        $astrologer = Astrologer::with('kundali', 'kundaliMatching')->get();
+        Log::info('Fetched astrologers', ['astrologers_count' => $astrologer->count()]);
+    
+        $type = $request->input('type', 'daily');
+        Log::info('Horoscope type', ['type' => $type]);
+    
+        $date = Carbon::today();
+    
+        $horoscopes = Horoscope::where('type', $type);
+        $startDate = null;
+        $endDate = null;
+    
+        switch ($type) {
+            case 'daily':
+                $horoscopes->whereDate('publishDate', $date);
+                $startDate = $endDate = $date;
+                break;
 
+                case 'weekly':
+                    $startDate = $date->startOfWeek(); // Sunday as default start
+                    $endDate = $startDate->copy()->addDays(6); // Next 6 days
+                    break;
+
+                case 'monthly':
+                    $startDate = $date->startOfMonth();
+                    $endDate = $date->endOfMonth();
+                    break;
+
+                case 'yearly':
+                    $startDate = $date->startOfYear();
+                    $endDate = $date->endOfYear();
+                    break;
+
+        }
+        Log::info('Weekly range', ['startDate' => $startDate, 'endDate' => $endDate]);
+
+    
+        $horoscopes = $horoscopes->get();
+    
+        if ($startDate && $endDate) {
+            Log::info('Fetching horoscope from-to', [
+                'startDate' => $startDate->toDateString(),
+                'endDate' => $endDate->toDateString()
+            ]);
+        }
+    
+        $zodiacOrder = [
+            'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
+            'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'
+        ];
+        Log::info('Zodiac order', ['zodiac_order' => $zodiacOrder]);
+    
+        Log::info('Fetched horoscopes', ['horoscopes_count' => $horoscopes->count()]);
+        Log::info('Horoscopes data', ['horoscopes' => $horoscopes]);
+    
+        $horoscopeMap = $horoscopes->keyBy(function ($item) {
+            return strtolower($item->zodiacSignEnglish);
+        });
+    
+        Log::info('Horoscope map', ['horoscope_map' => $horoscopeMap]);
+    
+        $orderedHoroscopes = collect($zodiacOrder)
+            ->map(fn($zodiac) => $horoscopeMap->get($zodiac))
+            ->filter();
+    
+        Log::info('Ordered horoscopes', ['ordered_horoscopes' => $orderedHoroscopes]);
+    
+        if ($orderedHoroscopes->isEmpty()) {
+            Log::warning('No horoscopes found for the specified date and type');
+        }
+    
+        return view('frontend.horoscope.horoscope', compact('astrologer', 'orderedHoroscopes', 'type'));
+    }
+    
+    
+    
+    
+    
     public function giftNcoupon(Request $request, $type = null, $giftCategoryId = null)
     {
         // return $giftCategoryId;
@@ -562,7 +645,8 @@ class FrontendController extends Controller
             fn($query) => $query->where('type', $type)
         )
             ->latest()
-            ->when($giftCategoryId,
+            ->when(
+                $giftCategoryId,
                 fn($query) => $query->where('giftCategoryId', $giftCategoryId)
             )
             ->when(! empty($country), fn($query) => $query->where('country', 'LIKE', $country . '%'))
@@ -680,7 +764,6 @@ class FrontendController extends Controller
         // return $seller;
 
         return view('frontend.giftNcoupon.sellerProfile', compact(['seller', 'sellerGifts']));
-
     }
 
     public function resumeHelp()
@@ -726,7 +809,7 @@ class FrontendController extends Controller
 
         $jobSeekerId  = Auth::guard('job_seekers')->id();
         $profile      = Profile::where('jobSeekerId', $jobSeekerId)->first();
-        $visa         = Visa::where('jobSeekerId', $jobSeekerId)->first();
+        $visas        = Visa::where('jobSeekerId', $jobSeekerId)->get();
         $educations   = Education::where('jobSeekerId', $jobSeekerId)->get();
         $projects     = Project::where('jobSeekerId', $jobSeekerId)->get();
         $achievements = Achievement::where('jobSeekerId', $jobSeekerId)->get();
@@ -736,8 +819,15 @@ class FrontendController extends Controller
         $languages    = Language::where('jobSeekerId', $jobSeekerId)->get();
 
         return view('frontend.resume.fill_resume', compact(
-            'profile', 'visa', 'educations', 'projects', 'achievements',
-            'skills', 'experiences', 'trainings', 'languages'
+            'profile',
+            'visas',
+            'educations',
+            'projects',
+            'achievements',
+            'skills',
+            'experiences',
+            'trainings',
+            'languages'
         ));
     }
 
@@ -803,7 +893,6 @@ class FrontendController extends Controller
             if (Auth::guard('job_seekers')->check()) {
 
                 $forumPost->followed = Follower::where('followed_to', $forumPost->jobSeeker->id)->where('followed_by', Auth::guard('job_seekers')->id())->exists();
-
             } else {
                 $forumPost->followed = false;
             }
@@ -894,13 +983,25 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads        = Advertisement::simplePaginate(8);
-        $ad         = Advertisement::all();
+        $ads = Advertisement::paginate(8); 
+        $ad       = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();
 
-        return view('frontend.advertisements.index', compact('all', 'category', 'ads', 'ad', 'categories'))
+        $ad_banners = [];
+        $ad_banners ['top'] = AdsManager::where('which_page', 'advertisement')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'top')
+            ->first();
+
+        if($ad_banners){
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        }
+
+
+        return view('frontend.advertisements.index', compact('all', 'category', 'ads','ad', 'categories','ad_banners'))
             ->with('success', 'Advertisements retrieved successfully!');
 
     }

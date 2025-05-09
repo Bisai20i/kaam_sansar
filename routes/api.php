@@ -21,6 +21,7 @@ use App\Http\Controllers\JobCompanyController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\KundaliController;
+use App\Http\Controllers\KundaliMatchingController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MyDocumentController;
@@ -212,6 +213,7 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
             Route::get('templates', [FrontendAPIController::class, 'getResumeHelp']);
         });
 
+        Route::apiResource('kundaliMatching', KundaliMatchingController::class);
 
 
         // Route::prefix('profile')->group(function (){

@@ -42,3 +42,29 @@ function handleUpload($inputName, $model = null)
         return str_replace('public/', 'storage/', $filePath);
     }
 }
+    function handleMultipleUploads(array $inputNames, $model = null)
+{
+    $uploadedFiles = [];
+
+    foreach ($inputNames as $inputName) {
+        if (request()->hasFile($inputName)) {
+
+            // Delete the old file if it exists
+            if ($model && File::exists(storage_path('app/public/' . $model->{$inputName}))) {
+                Storage::delete('public/' . $model->{$inputName});
+            }
+
+            $file = request()->file($inputName);
+            $fileName = rand() . '_' . $file->getClientOriginalName();
+
+            // Store the file in storage/app/public/uploads
+            $filePath = $file->storeAs('public/uploads', $fileName);
+            Log::info("File uploaded for {$inputName}: {$fileName}");
+
+            // Store the new file path (convert to public path)
+            $uploadedFiles[$inputName] = str_replace('public/', 'storage/', $filePath);
+        }
+    }
+
+    return $uploadedFiles;
+}

@@ -312,6 +312,7 @@
                                     style="background-color: #0064a7;"
                                     onclick="document.getElementById('redirectForm').submit(); ">+
                                     <span class="d-none d-md-inline">Follow</span></button>
+                                    
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
                                     style="background-color: #0064a7;"
                                     onclick="document.getElementById('redirectForm').submit(); ">

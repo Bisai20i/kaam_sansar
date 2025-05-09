@@ -70,6 +70,14 @@
             </a>
         </li> 
 
+          <!-- Frequently Asked Questions -->
+          <li class="menu-item {{ request()->routeIs('faqs*') ? 'active' : '' }}">
+            <a href="{{ route('faqs.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-square"></i>
+                <div data-i18n="Manage Ads">Manage FAQs</div>
+            </a>
+        </li> 
+
         <!-- Advertisements -->
         {{-- <li class="menu-item {{ request()->routeIs('ads*') ? 'active' : '' }}">
             <a href="{{ route('ads.index') }}" class="menu-link">
@@ -83,6 +91,24 @@
             <a href="{{ route('resume-help.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-rectangle"></i>
                 <div data-i18n="Manage Resume">Manage Resume</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('bankAccounts*') ? 'active' : '' }}">
+            <a href="{{ route('bankAccounts.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <div data-i18n="Manage Resume">Manage Bank Account</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('brokerAccounts*') ? 'active' : '' }}">
+            <a href="{{ route('brokerAccounts.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <div data-i18n="Manage Resume">Manage Broker Account</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('documentAttestations*') ? 'active' : '' }}">
+            <a href="{{ route('documentAttestations.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <div data-i18n="Manage Resume">Manage Document Attestations</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('ads-manager*') ? 'active' : '' }}">
@@ -170,6 +196,13 @@
                 <li class="menu-item {{ request()->routeIs('kundalidetail*') ? 'active' : '' }}">
                     <a href="{{ route('kundalidetail.index') }}" class="menu-link">
                         <div data-i18n="Kundali">Manage Kundali</div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('kundalimatching*') ? 'active' : '' }}">
+                    <a href="{{ route('kundalimatching.index') }}" class="menu-link">
+                        <div data-i18n="KundaliMatching">Kundali Matching</div>
                     </a>
                 </li>
             </ul>

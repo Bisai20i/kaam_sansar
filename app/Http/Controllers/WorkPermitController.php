@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use Illuminate\Http\Request;
 use App\Models\WorkPermit;
 
@@ -9,5 +10,86 @@ class WorkPermitController extends Controller
 {
     public function index(){
         
+=======
+use App\Models\WorkPermit;
+use Illuminate\Http\Request;
+
+class WorkPermitController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('frontend.workPermit.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\WorkPermit  $workPermit
+     * @return \Illuminate\Http\Response
+     */
+    public function show(WorkPermit $workPermit)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\WorkPermit  $workPermit
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(WorkPermit $workPermit)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\WorkPermit  $workPermit
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, WorkPermit $workPermit)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\WorkPermit  $workPermit
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(WorkPermit $workPermit)
+    {
+        //
+>>>>>>> 061daffb7c0a3988e40be5aa1e1f3087267cbedc
     }
 }

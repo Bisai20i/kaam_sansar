@@ -15,9 +15,12 @@ class MessageController extends Controller
     {
         // if(request()->ajax()){
         //     return response()->json([
-        //         'status' => true
+        //         'status' => true,
+        //         'dat'=>$request->all()
         //     ]);
         // }
+
+        
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
         // Determine authenticated user based on request type
@@ -51,6 +54,7 @@ class MessageController extends Controller
                 'sender_id'   => $user->id,
                 'receiver_id' => $request->receiver_id,
                 'message'     => $request->message,
+                // 'reference_id' => $request->reference_id,
             ]);
 
             broadcast(new NewMessageEvent($message))->toOthers();
@@ -189,6 +193,7 @@ class MessageController extends Controller
             $messages = Message::where(function ($query) use ($sender_id) {
                 $query->where('sender_id', auth()->id())
                     ->where('receiver_id', $sender_id);
+                    // ->where('reference_id',$reference_id);
             })
                 ->orWhere(function ($query) use ($sender_id) {
                     $query->where('sender_id', $sender_id)

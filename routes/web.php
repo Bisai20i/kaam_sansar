@@ -1,59 +1,69 @@
 <?php
 
-    use App\Http\Controllers\AboardController;
-    use App\Http\Controllers\AchievementController;
-    use App\Http\Controllers\AdminController;
-    use App\Http\Controllers\AdsManagerController;
-    use App\Http\Controllers\AdvertisementCategoryController;
-    use App\Http\Controllers\AdvertisementController;
-    use App\Http\Controllers\AstrologerController;
-    use App\Http\Controllers\BlogsAndPodcastController;
-    use App\Http\Controllers\DiscussionForumController;
-    use App\Http\Controllers\EducationController;
-    use App\Http\Controllers\ExperienceController;
-    use App\Http\Controllers\ForumInteractionController;
-    use App\Http\COntrollers\Frontend\FrontendAPIController;
-    use App\Http\Controllers\Frontend\FrontendController;
-    use App\Http\Controllers\GiftCartController;
-    use App\Http\Controllers\GiftCategoryController;
-    use App\Http\Controllers\GiftCouponController;
-    use App\Http\Controllers\HoroscopeController;
-    use App\Http\Controllers\IndustryCategoryController;
-    use App\Http\Controllers\JobApplyController;
-    use App\Http\Controllers\JobCategoryController;
-    use App\Http\Controllers\JobCompanyController;
-    use App\Http\Controllers\JobPostController;
-    use App\Http\Controllers\JobSeekerController;
-    use App\Http\Controllers\JobSeekerDashboardController;
-    use App\Http\Controllers\KundaliController;
-    use App\Http\Controllers\LanguageController;
-    use App\Http\Controllers\MessageController;
-    use App\Http\Controllers\MyDocumentController;
-    use App\Http\Controllers\OrderPlacementController;
-    use App\Http\Controllers\PassportRenewalController;
-    use App\Http\Controllers\ProductCategoryController;
-    use App\Http\Controllers\ProfileController;
-    use App\Http\Controllers\ProjectController;
-    use App\Http\Controllers\ResumeHelpController;
-    use App\Http\Controllers\SkillController;
-    use App\Http\Controllers\TrainingController;
-    use App\Http\Controllers\UserCommentController;
-    use App\Http\Controllers\VisaApplicationController;
-    use App\Http\Controllers\VisaController;
-    use App\Http\Controllers\VisaCountryListController;
-    use App\Http\Controllers\PassportCountryListController;
-    use App\Http\Controllers\VisaDetailsController;
-    use App\Http\Controllers\VisaTypeController;
-    use App\Http\Controllers\InsuranceCompanyController;
-    use App\Http\Controllers\InsuranceCategoryController;
-    use App\Http\Controllers\InsuranceSubCategoryController;
-    use App\Http\Controllers\PassportProvienceController;
-    use App\Http\Controllers\PassportDistrictController;
-    use App\Http\Controllers\PassportLocationController;
-    use App\Http\Controllers\PassportDateTimeController;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Route;
-    use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\UserCommentController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProductCommentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VisaController;
+use App\Models\IndustryCategory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AboardController;
+use App\Http\Controllers\AdsManagerController;
+use App\Http\Controllers\OrderPlacementController;
+use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\GiftCouponController;
+use App\Http\Controllers\KundaliController;
+use App\Http\Controllers\KundaliMatchingController;
+use App\Http\Controllers\GiftCartController;
+use App\Http\Controllers\JobApplyController;
+use App\Http\Controllers\VisaTypeController;
+use App\Http\Controllers\HoroscopeController;
+use App\Http\Controllers\JobSeekerController;
+use App\Http\Controllers\AstrologerController;
+use App\Http\Controllers\JobCompanyController;
+use App\Http\Controllers\MyDocumentController;
+use App\Http\Controllers\JobCategoryController;
+use App\Http\Controllers\VisaDetailsController;
+use App\Http\Controllers\GiftCategoryController;
+use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\BlogsAndPodcastController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\VisaApplicationController;
+use App\Http\Controllers\VisaCountryListController;
+use App\Http\Controllers\IndustryCategoryController;
+use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\JobSeekerDashboardController;
+use App\Http\COntrollers\Frontend\FrontendAPIController;
+use App\Http\Controllers\AdvertisementCategoryController;
+use App\Http\Controllers\DiscussionForumController;
+use App\Http\Controllers\PassportRenewalController;
+use App\Http\Controllers\ResumeHelpController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ForumInteractionController;
+use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\PassportCountryListController;
+use App\Http\Controllers\PassportProvienceController;
+use App\Http\Controllers\PassportDistrictController;
+use App\Http\Controllers\PassportLocationController;
+use App\Http\Controllers\PassportDateTimeController;
+use App\Http\Controllers\InsuranceCompanyController;
+use App\Http\Controllers\InsuranceCategoryController;
+use App\Http\Controllers\InsuranceSubCategoryController;
+use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\BrokerAccountController;
+use App\Http\Controllers\DocumentationAttestationController;
+use App\Http\Controllers\MoneyExchangeController;
+use App\Http\Controllers\FrequentlyAskedQuestionController;
+
+
+
+
+
+
+
 
     // Authentication Routes
     Route::get('master/login', [AdminController::class, 'loginView'])->name('login');
@@ -73,72 +83,8 @@
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('adminuser.dashboard');
     });
 
-    Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
+Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
 
-        //passport renewal
-
-        Route::resource('passportCountryList', PassportCountryListController::class)->except('edit', 'create');
-
-        Route::resource('passportProvienceList', PassportProvienceController::class)->except('index', 'edit', 'create');
-        Route::get('passportProvience/{country_id}', [PassportProvienceController::class, 'index'])->name('passportProvienceList.index');
-        Route::put('/passportProvienceList/publish/{id}', [PassportProvienceController::class, 'publish'])->name('passportProvienceList.publish');
-        Route::put('/passportProvienceList/unpublish/{id}', [PassportProvienceController::class, 'unpublish'])->name('passportProvienceList.unpublish');
-
-        Route::put('/passportCountryList/publish/{id}', [PassportCountryListController::class, 'publish'])->name('passportCountryList.publish');
-        Route::put('/passportCountryList/unpublish/{id}', [PassportCountryListController::class, 'unpublish'])->name('passportCountryList.unpublish');
-
-        Route::get('/passport/renewal',[PassportRenewalController::class, 'index'])->name('passport.renewal');
-        Route::delete('/passport/renewal/{id}',[PassportRenewalController::class, 'destroy'])->name('passport.renewal.destroy');
-
-        Route::resource('passportDistrictList', PassportDistrictController::class)->except('index', 'edit', 'create');
-        Route::get('passportDistrict/{provience_id}', [PassportDistrictController::class, 'index'])->name('passportDistrictList.index');
-        Route::put('/passportDistrictList/publish/{id}', [PassportDistrictController::class, 'publish'])->name('passportDistrictList.publish');
-        Route::put('/passportDistrictList/unpublish/{id}', [PassportDistrictController::class, 'unpublish'])->name('passportDistrictList.unpublish');
-
-        Route::resource('passportLocationList', PassportLocationController::class)->except('index', 'edit', 'create');
-        Route::get('passportLocation/{district_id}', [PassportLocationController::class, 'index'])->name('passportLocationList.index');
-        Route::put('/passportLocationList/publish/{id}', [PassportLocationController::class, 'publish'])->name('passportLocationList.publish');
-        Route::put('/passportLocationList/unpublish/{id}', [PassportLocationController::class, 'unpublish'])->name('passportLocationList.unpublish');
-        Route::get('passportDateTime/{location_id}', [PassportDateTimeController::class, 'index'])->name('passportDateTime.index');
-        Route::post('passportDateTime', [PassportDateTimeController::class, 'store'])->name('passportDateTime.store');
-        Route::delete('passportDateTime/{passportDateTime}', [PassportDateTimeController::class, 'destroy'])->name('passportDateTime.destroy');
-
-        
-
-        //manage Insurance
-
-        Route::get('/insurance/company',[InsuranceCompanyController::class, 'index'])->name('insurance.company');
-        Route::delete('/insurance/company/destroy/{insuranceCompany}',[InsuranceCompanyController::class, 'destroy'])->name('insuranceCompany.destroy');
-        Route::post('/insurance/company/store',[InsuranceCompanyController::class, 'store'])->name('insuranceCompany.store');
-        Route::put('/insurance/company/update/{insuranceCompany}',[InsuranceCompanyController::class, 'update'])->name('insuranceCompany.update');
-        Route::put('/insurance/company/publish/{id}', [InsuranceCompanyController::class, 'publish'])->name('insuranceCompany.publish');
-        Route::put('/insurance/company/unpublish/{id}', [InsuranceCompanyController::class, 'unpublish'])->name('insuranceCompany.unpublish');
-
-        Route::get('/insurance/{id}/category',[InsuranceCategoryController::class, 'index'])->name('insurance.category');
-        Route::post('/insurace/category/store',[InsuranceCategoryController::class, 'insertDetails'])->name('insuranceDetails.store');
-        Route::delete('/insurance/category/destroy/{insuranceCategory}',[InsuranceCategoryController::class, 'destroy'])->name('insuranceCategory.destroy');
-        Route::post('/insurance/category/store',[InsuranceCategoryController::class, 'store'])->name('insuranceCategory.store');
-        Route::put('/insurance/category/update/{insuranceCategory}',[InsuranceCategoryController::class, 'update'])->name('insuranceCategory.update');
-        Route::put('/insurance/category/publish/{id}', [InsuranceCategoryController::class, 'publish'])->name('insuranceCategory.publish');
-        Route::put('/insurance/category/unpublish/{id}', [InsuranceCategoryController::class, 'unpublish'])->name('insuranceCategory.unpublish');
-
-        Route::get('/insurance/{id}/subcategory',[InsuranceSubCategoryController::class, 'index'])->name('insurance.sub_categories');
-        Route::post('/insurance/{id}/subcategory',[InsuranceSubCategoryController::class, 'store'])->name('insuranceSubCategory.store');
-        Route::put('/insurance/subcategory/{id}',[InsuranceSubCategoryController::class, 'update'])->name('insuranceSubCategory.update');
-        Route::delete('/insurance/subcategory/{id}',[InsuranceSubCategoryController::class, 'destroy'])->name('insuranceSubCategory.destroy');
-        Route::put('/insurance/subcategory/publish/{id}', [InsuranceSubCategoryController::class, 'publish'])->name('insuranceSubCategory.publish');
-        Route::put('/insurance/subcategory/unpublish/{id}', [InsuranceSubCategoryController::class, 'unpublish'])->name('insuranceSubCategory.unpublish');
-
-
-        Route::get('/insurance/{id}/details',[InsuranceCategoryController::class, 'manage'])->name('insurance.manage');
-
-        //get job applicants of the particular post
-
-        Route::get('/job-post/applications/{id}', [JobApplyController::class, 'index']);
-
-        //delete forum post by admin
-
-        Route::delete('discussioin_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');
 
         Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
         // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
@@ -200,10 +146,11 @@
         //Route for horoscope
         Route::resource('horoscope', HoroscopeController::class);
 
-        //Route for kundali
-        Route::resource('kundalidetail', KundaliController::class);
-        //Route fro astrolger
-        Route::resource('astrologer', AstrologerController::class);
+    Route::resource('astrologer', AstrologerController::class);
+
+    Route::resource('kundalimatching', KundaliMatchingController::class)->except('store');
+    Route::get('/astrologer/show/{type}/{id}', [AstrologerController::class, 'view'])->name('astrologer.view');
+
 
         Route::resource('visaCountryList', VisaCountryListController::class);
         Route::put('/visaCountryList/publish/{id}', [VisaCountryListController::class, 'publish'])->name('visaCountryList.publish');
@@ -222,6 +169,81 @@
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('postadmin.dashboard');
         // Route::get('/details', [AdminController::class, 'superadminindex'])->name('superadmin.details');
     });
+
+
+    Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
+
+
+
+        //faq
+        Route::resource('faqs', FrequentlyAskedQuestionController::class);
+
+
+        //passport renewal
+
+        Route::resource('passportCountryList', PassportCountryListController::class)->except('edit', 'create');
+
+        Route::resource('passportProvienceList', PassportProvienceController::class)->except('index', 'edit', 'create');
+        Route::get('passportProvience/{country_id}', [PassportProvienceController::class, 'index'])->name('passportProvienceList.index');
+        Route::put('/passportProvienceList/publish/{id}', [PassportProvienceController::class, 'publish'])->name('passportProvienceList.publish');
+        Route::put('/passportProvienceList/unpublish/{id}', [PassportProvienceController::class, 'unpublish'])->name('passportProvienceList.unpublish');
+
+        Route::put('/passportCountryList/publish/{id}', [PassportCountryListController::class, 'publish'])->name('passportCountryList.publish');
+        Route::put('/passportCountryList/unpublish/{id}', [PassportCountryListController::class, 'unpublish'])->name('passportCountryList.unpublish');
+
+        Route::get('/passport/renewal',[PassportRenewalController::class, 'index'])->name('passport.renewal');
+        Route::delete('/passport/renewal/{id}',[PassportRenewalController::class, 'destroy'])->name('passport.renewal.destroy');
+
+        Route::resource('passportDistrictList', PassportDistrictController::class)->except('index', 'edit', 'create');
+        Route::get('passportDistrict/{provience_id}', [PassportDistrictController::class, 'index'])->name('passportDistrictList.index');
+        Route::put('/passportDistrictList/publish/{id}', [PassportDistrictController::class, 'publish'])->name('passportDistrictList.publish');
+        Route::put('/passportDistrictList/unpublish/{id}', [PassportDistrictController::class, 'unpublish'])->name('passportDistrictList.unpublish');
+
+        Route::resource('passportLocationList', PassportLocationController::class)->except('index', 'edit', 'create');
+        Route::get('passportLocation/{district_id}', [PassportLocationController::class, 'index'])->name('passportLocationList.index');
+        Route::put('/passportLocationList/publish/{id}', [PassportLocationController::class, 'publish'])->name('passportLocationList.publish');
+        Route::put('/passportLocationList/unpublish/{id}', [PassportLocationController::class, 'unpublish'])->name('passportLocationList.unpublish');
+        Route::get('passportDateTime/{location_id}', [PassportDateTimeController::class, 'index'])->name('passportDateTime.index');
+        Route::post('passportDateTime', [PassportDateTimeController::class, 'store'])->name('passportDateTime.store');
+        Route::delete('passportDateTime/{passportDateTime}', [PassportDateTimeController::class, 'destroy'])->name('passportDateTime.destroy');
+    });
+
+        
+
+        //manage Insurance
+
+        Route::get('/insurance/company',[InsuranceCompanyController::class, 'index'])->name('insurance.company');
+        Route::delete('/insurance/company/destroy/{insuranceCompany}',[InsuranceCompanyController::class, 'destroy'])->name('insuranceCompany.destroy');
+        Route::post('/insurance/company/store',[InsuranceCompanyController::class, 'store'])->name('insuranceCompany.store');
+        Route::put('/insurance/company/update/{insuranceCompany}',[InsuranceCompanyController::class, 'update'])->name('insuranceCompany.update');
+        Route::put('/insurance/company/publish/{id}', [InsuranceCompanyController::class, 'publish'])->name('insuranceCompany.publish');
+        Route::put('/insurance/company/unpublish/{id}', [InsuranceCompanyController::class, 'unpublish'])->name('insuranceCompany.unpublish');
+
+        Route::get('/insurance/{id}/category',[InsuranceCategoryController::class, 'index'])->name('insurance.category');
+        Route::post('/insurace/category/store',[InsuranceCategoryController::class, 'insertDetails'])->name('insuranceDetails.store');
+        Route::delete('/insurance/category/destroy/{insuranceCategory}',[InsuranceCategoryController::class, 'destroy'])->name('insuranceCategory.destroy');
+        Route::post('/insurance/category/store',[InsuranceCategoryController::class, 'store'])->name('insuranceCategory.store');
+        Route::put('/insurance/category/update/{insuranceCategory}',[InsuranceCategoryController::class, 'update'])->name('insuranceCategory.update');
+        Route::put('/insurance/category/publish/{id}', [InsuranceCategoryController::class, 'publish'])->name('insuranceCategory.publish');
+        Route::put('/insurance/category/unpublish/{id}', [InsuranceCategoryController::class, 'unpublish'])->name('insuranceCategory.unpublish');
+
+        Route::get('/insurance/{id}/subcategory',[InsuranceSubCategoryController::class, 'index'])->name('insurance.sub_categories');
+        Route::post('/insurance/{id}/subcategory',[InsuranceSubCategoryController::class, 'store'])->name('insuranceSubCategory.store');
+        Route::put('/insurance/subcategory/{id}',[InsuranceSubCategoryController::class, 'update'])->name('insuranceSubCategory.update');
+        Route::delete('/insurance/subcategory/{id}',[InsuranceSubCategoryController::class, 'destroy'])->name('insuranceSubCategory.destroy');
+        Route::put('/insurance/subcategory/publish/{id}', [InsuranceSubCategoryController::class, 'publish'])->name('insuranceSubCategory.publish');
+        Route::put('/insurance/subcategory/unpublish/{id}', [InsuranceSubCategoryController::class, 'unpublish'])->name('insuranceSubCategory.unpublish');
+
+
+        Route::get('/insurance/{id}/details',[InsuranceCategoryController::class, 'manage'])->name('insurance.manage');
+
+        //get job applicants of the particular post
+
+        Route::get('/job-post/applications/{id}', [JobApplyController::class, 'index']);
+
+        //delete forum post by admin
+
+        Route::delete('discussioin_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');
     // Route::fallback(function () {
     //     return redirect('/admin');
     // });
@@ -378,15 +400,45 @@
     // Route::match(['get', 'post'],'/job-search', [FrontendController::class, 'jobSearch'])->name('frontend.job-search');
     // Route::get('/search', [FrontendController::class, 'Search'])->name('frontend.search');
 
-    Route::get('aboardsdeals', [AboardController::class, 'aboard'])->name('aboarddeals');
+Route::get('aboardsdeals', [AboardController::class, 'aboard'])->name('aboarddeals');
+
+Route::resource('aboards', AboardController::class);
+Route::get('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
+
+
+// commnet for aboard deals
+
+
+
+Route::resource('aboardcomment',ProductCommentController::class);
+
+
+
+
+
+//route related  to frontend horoscope and kundali
+
+ //Route for kundali
+ Route::resource('kundalidetail', KundaliController::class);
+ Route::post('kundalimatching', [KundaliMatchingController::class,'store'])->name('kundalimatching.store');
+ //Route fro astrolger
+
+// Route::post('/set-redirect', function (Request $request) {
+//     // ✅ Store redirect URL in session
+//     session(['redirect_url' => $request->input('redirect_url')]);
+
+//     // ✅ Redirect to login instead of index
+//     return redirect()->route('index')->with('info', 'You need to login first ');
+// })->name('set.redirect');
+
 
     Route::post('/set-redirect', function (Request $request) {
         // ✅ Store redirect URL in session
         session(['redirect_url' => $request->input('redirect_url')]);
 
-        // ✅ Redirect to login instead of index
-        return redirect()->route('index')->with('info', 'You need to login first ');
-    })->name('set.redirect');
+ // ✅ Redirect to index
+    return redirect()->back()->with('showLoginModal', true);
+})->name('set.redirect');
 
     Route::prefix('giftNCoupon')->group(function () {
         Route::get('/home/{type?}/{giftCategoryId?}', [FrontendController::class, 'giftNcoupon'])->name('gift.home');
@@ -422,13 +474,13 @@
         Route::delete('delete-image', [DiscussionForumController::class, 'deleteImage'])->name('discussion.deleteimage')->middleware('auth:job_seekers');
     });
 
-    Route::prefix('advertisements')->group(function () {
-        Route::get('/', [FrontendController::class, 'advertisements'])->name('frontend.advertisements');
-        Route::get('/Ads/type/{type?}/category/{categoryId?}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByTypeCategory');
-        Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
-        Route::get('Ads/category/{categoryId}', [AdvertisementController::class, 'showByCategory'])->name('Ads.showByCategory');
-        Route::post('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
-    // comment
+Route::prefix('advertisements')->group(function () {
+    Route::get('/', [FrontendController::class, 'advertisements'])->name('frontend.advertisements');
+    Route::get('/Ads/type/{type?}/category/{categoryId?}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByTypeCategory');
+    Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
+    Route::get('Ads/category/{categoryId}',[AdvertisementController::class,'showByCategory'])->name('Ads.showByCategory');
+    Route::get('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
+// comment
 
         // Route::resource('adscomment', CommentController::class);
 
@@ -450,3 +502,8 @@
 
 Route::get('/fireEvent', [MessageController::class, 'fireEvent']);
 
+Route::resource('bankAccounts',BankAccountController::class);
+Route::resource('brokerAccounts',BrokerAccountController::class);
+Route::resource('documentAttestations',DocumentationAttestationController::class);
+Route::resource('moneyExchanges',MoneyExchangeController::class);
+Route::resource('workPermits',WorkPermitController::class);

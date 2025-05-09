@@ -12,7 +12,6 @@ class ProductComment extends Model
     protected $fillable = [
         'productId',
         'jobSeekerId',
-        'commentPersonName',
         'comment',
     ];
     public function jobSeeker()
