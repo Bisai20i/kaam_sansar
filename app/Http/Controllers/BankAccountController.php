@@ -173,6 +173,7 @@ class BankAccountController extends Controller
      */
     public function show(BankAccount $bankAccount)
     {
+        dd($bankAccount);
 
         $pdf = Pdf::loadView('backend.bankAccount.show', compact('bankAccount'));
         return $pdf->download('Bank_Application_' . $bankAccount->id . '.pdf');

@@ -154,7 +154,10 @@ class DocumentationAttestationController extends Controller
      */
     public function show(DocumentationAttestation $documentationAttestation)
     {
-        return view('documentation_attestations.show', compact('documentationAttestation'));
+        return $documentationAttestation->id;
+
+        dd($documentationAttestation);
+        return view('backend.documentAttestations.show', compact('documentationAttestation'));
     }
 
     /**

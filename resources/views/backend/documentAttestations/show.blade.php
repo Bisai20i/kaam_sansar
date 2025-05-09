@@ -1,153 +1,84 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Document Attestation #{{ $documentationAttestation->id }}</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #0064a7; margin-bottom: 5px; }
-        .header .subtitle { color: #666; font-size: 16px; }
-        .section { margin-bottom: 25px; }
-        .section-title { 
-            background-color: #f5f5f5; 
-            padding: 8px 15px;
-            border-left: 4px solid #0064a7;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .info-table { width: 100%; border-collapse: collapse; }
-        .info-table td { padding: 8px 0; border-bottom: 1px solid #eee; }
-        .info-table td:first-child { width: 30%; font-weight: bold; color: #555; }
-        .signature { margin-top: 50px; border-top: 1px solid #000; width: 300px; }
-        .footer { margin-top: 50px; font-size: 12px; color: #666; text-align: center; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>DOCUMENT ATTESTATION APPLICATION</h1>
-        <div class="subtitle">Reference #{{ $documentationAttestation->id }}</div>
-    </div>
+@extends('backend.layouts.main')
 
-    <div class="section">
-        <div class="section-title">Basic Information</div>
-        <table class="info-table">
-            <tr>
-                <td>Applicant Name:</td>
-                <td>{{ $documentationAttestation->applicantName }}</td>
-            </tr>
-            <tr>
-                <td>Document Type:</td>
-                <td>{{ $documentationAttestation->documentType }} ({{ $documentationAttestation->subType }})</td>
-            </tr>
-            <tr>
-                <td>Country for Attestation:</td>
-                <td>{{ $documentationAttestation->countryAttestation }}</td>
-            </tr>
-            <tr>
-                <td>Purpose:</td>
-                <td>{{ $documentationAttestation->purpose }}</td>
-            </tr>
-            <tr>
-                <td>Application Date:</td>
-            </tr>
-        </table>
-    </div>
+@section('title', 'Document Attestation Detail')
 
-    <div class="section">
-        <div class="section-title">Contact Information</div>
-        <table class="info-table">
-            <tr>
-                <td>Email Address:</td>
-                <td>{{ $documentationAttestation->email }}</td>
-            </tr>
-            <tr>
-                <td>Primary Contact:</td>
-                <td>{{ $documentationAttestation->primaryContact }}</td>
-            </tr>
-            <tr>
-                <td>Secondary Contact:</td>
-                <td>{{ $documentationAttestation->secondaryContact ?? 'N/A' }}</td>
-            </tr>
-        </table>
-    </div>
+@section('content')
+<div class="container">
+    <h4 class="fw-bold mb-4"><span class="text-muted fw-light">Document Attestation /</span> Detail</h4>
 
-    <div class="section">
-        <div class="section-title">Delivery Address</div>
-        <table class="info-table">
-            <tr>
-                <td>Country:</td>
-                <td>{{ $documentationAttestation->deliveryCountry }}</td>
-            </tr>
-            <tr>
-                <td>City:</td>
-                <td>{{ $documentationAttestation->deliveryCity }}</td>
-            </tr>
-            <tr>
-                <td>Street:</td>
-                <td>{{ $documentationAttestation->deliveryStreet }}</td>
-            </tr>
-            <tr>
-                <td>Apartment:</td>
-                <td>{{ $documentationAttestation->deliveryApartment ?? 'N/A' }}</td>
-            </tr>
-            <tr>
-                <td>Landmark:</td>
-                <td>{{ $documentationAttestation->deliveryLandmark ?? 'N/A' }}</td>
-            </tr>
-        </table>
-    </div>
+    <div class="card shadow p-4">
+        <h5 class="mb-3">Applicant & Document Info</h5>
+        <div class="row">
+            <div class="col-md-4"><strong>Applicant Name:</strong> {{ $documentationAttestation->applicantName }}</div>
+            <div class="col-md-4"><strong>Job Seeker ID:</strong> {{ $documentationAttestation->jobSeekerId }}</div>
+            <div class="col-md-4"><strong>Document Type:</strong> {{ $documentationAttestation->documentType }} ({{ $documentationAttestation->subType }})</div>
+        </div>
+        <hr>
 
-    @if($documentationAttestation->workCountry)
-    <div class="section">
-        <div class="section-title">Work Address</div>
-        <table class="info-table">
-            <tr>
-                <td>Country:</td>
-                <td>{{ $documentationAttestation->workCountry }}</td>
-            </tr>
-            <tr>
-                <td>City:</td>
-                <td>{{ $documentationAttestation->workCity }}</td>
-            </tr>
-            <tr>
-                <td>Street:</td>
-                <td>{{ $documentationAttestation->workStreet }}</td>
-            </tr>
-            <tr>
-                <td>Apartment:</td>
-                <td>{{ $documentationAttestation->workApartment ?? 'N/A' }}</td>
-            </tr>
-            <tr>
-                <td>Landmark:</td>
-                <td>{{ $documentationAttestation->workLandmark ?? 'N/A' }}</td>
-            </tr>
-        </table>
-    </div>
-    @endif
+        <h5 class="mb-3">Country Details</h5>
+        <div class="row">
+            <div class="col-md-4"><strong>Applicant Country:</strong> {{ $documentationAttestation->applicantCountry }}</div>
+            <div class="col-md-4"><strong>documentationAttestation Country:</strong> {{ $documentationAttestation->documentationAttestationCountry }}</div>
+            <div class="col-md-4"><strong>Country documentationAttestation:</strong> {{ $documentationAttestation->countrydocumentationAttestation }}</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-6"><strong>Purpose:</strong> {{ $documentationAttestation->purpose }}</div>
+        </div>
+        <hr>
 
-    <div class="section">
-        <div class="section-title">Application Status</div>
-        <table class="info-table">
-            <tr>
-                <td>Status:</td>
-                <td>{{ ucfirst($documentationAttestation->status) }}</td>
-            </tr>
-            <tr>
-                <td>Payment Status:</td>
-                <td>{{ ucfirst($documentationAttestation->paymentStatus) }}</td>
-            </tr>
-            <tr>
-            </tr>
-        </table>
-    </div>
+        <h5 class="mb-3">Delivery Address</h5>
+        <div class="row">
+            <div class="col-md-4"><strong>Country:</strong> {{ $documentationAttestation->deliveryCountry }}</div>
+            <div class="col-md-4"><strong>City:</strong> {{ $documentationAttestation->deliveryCity }}</div>
+            <div class="col-md-4"><strong>Street:</strong> {{ $documentationAttestation->deliveryStreet }}</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-4"><strong>Apartment:</strong> {{ $documentationAttestation->deliveryApartment }}</div>
+            <div class="col-md-4"><strong>Landmark:</strong> {{ $documentationAttestation->deliveryLandmark }}</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-4"><strong>Primary Contact:</strong> {{ $documentationAttestation->primaryContact }}</div>
+            <div class="col-md-4"><strong>Secondary Contact:</strong> {{ $documentationAttestation->secondaryContact }}</div>
+            <div class="col-md-4"><strong>Email:</strong> {{ $documentationAttestation->email }}</div>
+        </div>
+        <hr>
 
-    <div class="signature">
-        <p>Authorized Signature</p>
-    </div>
+        <h5 class="mb-3">Work Address</h5>
+        <div class="row">
+            <div class="col-md-4"><strong>Country:</strong> {{ $documentationAttestation->workCountry }}</div>
+            <div class="col-md-4"><strong>City:</strong> {{ $documentationAttestation->workCity }}</div>
+            <div class="col-md-4"><strong>Street:</strong> {{ $documentationAttestation->workStreet }}</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-4"><strong>Apartment:</strong> {{ $documentationAttestation->workApartment }}</div>
+            <div class="col-md-4"><strong>Landmark:</strong> {{ $documentationAttestation->workLandmark }}</div>
+        </div>
+        <hr>
 
-    <div class="footer">
-        <p>Generated on {{ now()->format('F j, Y') }} | Document Attestation Service</p>
+        <h5 class="mb-3">Documents</h5>
+        <div class="row">
+            <div class="col-md-4"><strong>Citizenship Front:</strong> {{ $documentationAttestation->citizenshipFront }}</div>
+            <div class="col-md-4"><strong>Citizenship Back:</strong> {{ $documentationAttestation->citizenshipBack }}</div>
+            <div class="col-md-4"><strong>Passport:</strong> {{ $documentationAttestation->passport }}</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-4"><strong>Identification:</strong> {{ $documentationAttestation->identification }}</div>
+            <div class="col-md-4"><strong>Visa:</strong> {{ $documentationAttestation->visa }}</div>
+            <div class="col-md-4"><strong>Photo:</strong> {{ $documentationAttestation->photo }}</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3"><strong>Document 1:</strong> {{ $documentationAttestation->document1 }}</div>
+            <div class="col-md-3"><strong>Document 2:</strong> {{ $documentationAttestation->document2 }}</div>
+            <div class="col-md-3"><strong>Document 3:</strong> {{ $documentationAttestation->document3 }}</div>
+            <div class="col-md-3"><strong>Document 4:</strong> {{ $documentationAttestation->document4 }}</div>
+        </div>
+        <hr>
+
+        <h5 class="mb-3">Status</h5>
+        <div class="row">
+            <div class="col-md-4"><strong>Payment Status:</strong> {{ ucfirst($documentationAttestation->paymentStatus) }}</div>
+            <div class="col-md-4"><strong>Application Status:</strong> {{ ucfirst($documentationAttestation->status) }}</div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+@endsection
