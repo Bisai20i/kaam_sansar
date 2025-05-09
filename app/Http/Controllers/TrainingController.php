@@ -88,6 +88,7 @@ class TrainingController extends Controller
             }
     
             $training->save();
+            $training->certificate=asset($training->certificate);
             Log::info('training created successfully with ID: ' . $training->id);
     
             return $isMobile
@@ -214,7 +215,10 @@ class TrainingController extends Controller
         }
 
         //handle the image
-        $certificatePath = handleUpload('certificate', $training->certificate);
+        if ($request->hasFile('certificate'))
+             $certificatePath = handleUpload('certificate', $training);
+        else
+        $certificatePath = $training->certificate;
 
         //update the field
 
@@ -232,13 +236,16 @@ class TrainingController extends Controller
 
         //Save training
         $training->save();
+        $training->certificate=asset($training->certificate);
         Log::info('training detail update successfully:'.$training);
         return $isMobile
             ? $this->responseSuccess('Training updated successfully:', $training)
             : response()->json([
                 'success' => true,
                 'message' => 'training update Successfully.',
-                'training'=>$training
+                'training'=>$training,
+                
+
             ]);    }
 
 

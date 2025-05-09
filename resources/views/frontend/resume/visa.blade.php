@@ -182,6 +182,7 @@
         document.getElementById('addVisa').addEventListener('click', async function(e) {
             e.preventDefault();
             const formData = collectVisaData();
+            console.log(collectVisaData());
             if (!formData.get('visaDetails') || !formData.get('visaExpire') || !formData.get('country')) {
                 alert('Please fill all required fields');
                 return;

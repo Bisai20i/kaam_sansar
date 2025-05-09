@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('jobSeekerId');
             $table->foreign('jobSeekerId')->references('id')->on('job_seekers')->onDelete('cascade');
             $table->text('visaDetails');
-            $table->time('visaExpire')->nullable();
+            $table->date('visaExpire')->nullable();
             $table->string('country');
             $table->text('visaImage');
 

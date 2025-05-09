@@ -54,6 +54,7 @@ class VisaController extends Controller
             $validator = Validator::make($request->all(), [
                 'country' => 'required|string|max:255',
                 'visaDetails' => 'required|string|max:1000',
+                'visaExpire'=>'required|date',
                 'visaImage' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
@@ -68,15 +69,12 @@ class VisaController extends Controller
                     ]);
             }
             // Handle date conversion
-            $visaExpire = $request->input('visaExpire')
-                ? \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('visaExpire'))
-                : null;
             $visaImagePath = handleUpload('visaImage');
             $visa = new Visa();
             $visa->jobSeekerId = $jobSeekerId;
             $visa->country = $request->input('country');
             $visa->visaDetails = $request->input('visaDetails');
-            $visa->visaExpire = $visaExpire;
+            $visa->visaExpire = $request->input('visaExpire');
             $visa->visaImage = $visaImagePath;
 
             if ($visaImagePath) {
@@ -86,6 +84,7 @@ class VisaController extends Controller
             }
 
             $visa->save();
+            $visa->visaImage=asset($visa->visaImage);
             Log::info('Visa created successfully with ID: ' . $visa->id);
 
             return $isMobile
@@ -156,9 +155,34 @@ class VisaController extends Controller
      * @param  \App\Models\Visa  $visa
      * @return \Illuminate\Http\Response
      */
-    public function edit(Visa $visa)
+    public function edit(Request $request, $id)
     {
-        return response()->json($visa);
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+    
+        if (!$user) {
+            return $isMobile
+                ? $this->responseError('Unauthorized', 401)
+                : redirect()->route('login')->with('error', 'Unauthorized access.');
+        }
+    
+        $jobSeekerId = $user->id;
+        $visa = Visa::where('id', $id)
+                   ->where('jobSeekerId', $jobSeekerId)
+                   ->first();
+        if (!$visa) {
+            return $isMobile
+                ? $this->responseError('Visa not found', 404) : response()->json([
+                    'message' => "Visa not found",
+                    'success' => false,
+                ]);
+        }
+    
+    
+    
+        return $isMobile
+            ? $this->responseSuccess('Visa retrieved successfully', $visa)
+            : response()->json($visa);
     }
 
     /**
@@ -212,19 +236,16 @@ class VisaController extends Controller
                     '$visa' => $visa
                 ]);
         }
-        $visaImagePath = handleUpload('visaImage', $visa);
-        $visaExpire = $request->input('visaExpire')
-        ? \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('visaExpire'))
-        : null;
-
+        if ($request->hasFile('certificate'))
+            $visaImagePath = handleUpload('visaImage', $visa);
+        else $visaImagePath = $visa->visaImage;
+        $visaExpire = $request->input('visaExpire');
         $visa->country = $request->input('country');
         $visa->visaDetails = $request->input('visaDetails');
         $visa->visaExpire = $visaExpire;
         $visa->visaImage = $visaImagePath;
-
-        // $visa->touch(); // This will update the `updated_at` column
-
         $visa->save();
+        $visa->visaImage=asset($visa->visaImage);
 
         Log::info('visa updated successfully:' . $visa);
 

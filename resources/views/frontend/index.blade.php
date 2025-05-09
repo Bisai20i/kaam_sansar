@@ -478,7 +478,7 @@
 
     <section class="FAQ">
         <div class="container mb-4">
-            <h3 class="mb-4 text-primary">FAQ Dynamic Ads</h3>
+            <h3 class="mb-4 text-primary">FAQ </h3>
 
             <!-- Accordion Wrapper -->
             <div id="accordionFAQ">
