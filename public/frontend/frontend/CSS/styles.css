@@ -555,6 +555,7 @@ button.search-button {
   .cta-section {
     background-position: right bottom;
     background-size: 40%;
+    background: none;
   }
 }
 
@@ -599,12 +600,36 @@ button.search-button {
 /* For Small Mobile Devices (e.g., older iPhones, small Android phones) */
 @media (max-width: 490px) {
   .qr {
-    top: 118px;
-    right: 75px;
+    top: 97px;
+    right: 0px;
     max-width: 90px;
-    background-position: center center;
+    background-position: center bottom;
     height: 60px;
     width: 60px;
+    position: relative;
+  }
+}
+
+@media (max-width: 431px) {
+  .qr {
+    top: 120px;
+    right: 82px;
+    max-width: 90px;
+    background-position: center bottom;
+    height: 55px;
+    width: 55px;
+    position: relative;
+  }
+}
+
+@media (max-width: 394px) {
+  .qr {
+    top: 120px;
+    right: 65px;
+    max-width: 90px;
+    background-position: center bottom;
+    height: 55px;
+    width: 55px;
     position: relative;
   }
 }
@@ -614,7 +639,6 @@ button.search-button {
   margin-bottom: 20px;
   color: white;
 }
-
 
 .cta-section a img {
   height: 50px;

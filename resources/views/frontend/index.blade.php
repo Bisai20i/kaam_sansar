@@ -48,7 +48,7 @@
                             <h4 class="mt-3">Popular Search</h4>
                             <div class="row text-center justify-content-center">
                                 @foreach ($categories as $jobCategory)
-                                    <div class="col g-2 ">
+                                    <div class="col-auto g-2 ">
                                         <form action="{{ route('frontend.job-search') }}">
 
                                     <input type="hidden" name="jobsby" value="category">
