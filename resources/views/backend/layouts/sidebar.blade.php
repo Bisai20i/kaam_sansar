@@ -247,6 +247,26 @@
             </a>
         </li>
 
+
+
+        <!-- Reward -->
+        <li class="menu-item">
+            <a href="{{ route('rewards.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-gift"></i> {{-- You can change the icon --}}
+                <div data-i18n="Rewards">Rewards</div>
+            </a>
+        </li>
+
+
+        <!--becomeSeller -->
+        <li class="menu-item">
+            <a href="{{ route('superadmin.becomeseller.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user-plus"></i> {{-- Arrow-like icon --}}
+                <div data-i18n="Become Seller">Become Seller</div>
+            </a>
+        </li>
+
+
         <!-- Manage Insurance-->
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
