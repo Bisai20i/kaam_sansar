@@ -6,13 +6,15 @@ namespace App\Http\Controllers;
 use App\Models\PassportRenewal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PassportRenewalController extends Controller
 {
 
-    public function index(){
-        $passportRenewals =  PassportRenewal::all();
+    public function index()
+    {
+        $passportRenewals = PassportRenewal::all();
         return view('backend.passport_renewal.index', compact('passportRenewals'));
     }
 
@@ -28,6 +30,8 @@ class PassportRenewalController extends Controller
     public function store_partial(Request $request)
     {
 
+        // return $request->all();
+
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
@@ -36,36 +40,53 @@ class PassportRenewalController extends Controller
             return $isMobile ? response()->json(['error' => 'User not authenticated'], 401) : abort(401);
         }
 
-        $jobSeekerId   = $user->id;
-        $validatedData = $request->validate([
-            'first_name'              => 'required|string|max:255',
-            'middle_name'             => 'nullable|string|max:255',
-            'last_name'               => 'required|string|max:255',
-            'email'                   => 'required|email|max:255',
-            'phone'                   => 'required|string|max:255',
-            'emergency_contact_email' => 'required|email|max:255',
-            'emergency_contact_phone' => 'required|string|max:255',
-            'citizenship_front'       => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'citizenship_back'        => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'other_document'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'previous_passport'       => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        ]);
+        $jobSeekerId = $user->id;
 
-        $input     = $validatedData;
-        $filePaths = [];
+        Log::info("message", ['Authenticated Job Seeker ID' => $jobSeekerId]);
 
-        foreach (['citizenship_front', 'citizenship_back', 'other_document', 'previous_passport'] as $field) {
-            if ($request->hasFile($field)) {
-                $filePaths[$field] = $request->file($field)->store('documents', 'public');
+        try {
+
+            $validatedData = $request->validate([
+
+                'first_name'              => 'required|string|max:255',
+                'middle_name'             => 'nullable|string|max:255',
+                'last_name'               => 'required|string|max:255',
+                'email'                   => 'required|email|max:255',
+                'phone'                   => 'required|string|max:255',
+                'emergency_contact_email' => 'required|email|max:255',
+                'emergency_contact_phone' => 'required|string|max:255',
+                'citizenship_front'       => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'citizenship_back'        => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'other_document'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'previous_passport'       => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'country'                 => 'required|string|max:255',
+                'state'                   => 'required|string|max:255',
+                'location'                    => 'required|string|max:255',
+                'appointment_date'            => 'required|date',
+                'appointment_time'            => 'required|date_format:H:i',
+
+            ]);
+
+            $input = $validatedData;
+
+            Log::info("Gathered Data", ['Request data' => $input]);
+            $filePaths = [];
+
+            foreach (['citizenship_front', 'citizenship_back', 'other_document', 'previous_passport'] as $field) {
+                if ($request->hasFile($field)) {
+                    $filePaths[$field] = $request->file($field)->store('documents', 'public');
+                }
             }
+
+            $reneuwal = PassportRenewal::create(array_merge($input, $filePaths, ['job_seeker_id' => $jobSeekerId]));
+
+            // return $reneuwal;
+
+            return redirect()->back()->with('success', 'Passport renewal application submitted successfully!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        $reneuwal = PassportRenewal::create(array_merge($input, $filePaths, ['job_seeker_id' => $jobSeekerId]));
-
-        // return $reneuwal;
-
-        return redirect()->back()->with('success', 'Passport renewal application submitted successfully!');
-
     }
 
     public function store(Request $request)

@@ -5,7 +5,7 @@ Advertisements
 @section('content')
 
 <section class="ads_title container-fluid  mt-5 ">
-@if ($ad_banners['top'])
+@if (isset($ad_banners['top']))
 
         <!-- <h3>Ad banner</h3> -->
         <a href="{{ $ad_banners['top']->link }}" target="_blank" class="d-block"

@@ -25,7 +25,7 @@
         </div>
 
         <style>
-            .activeTitle{
+            .activeTitle {
                 background-color: #0064a7 !important;
                 color: #fff;
             }
@@ -68,7 +68,6 @@
                         width: 100%;
                         bottom: 1px;
                         left: 0;
-
                         background-color: #0064a7;
                     }
                 </style>
@@ -82,9 +81,9 @@
                         <div class="nav nav-pills mb-3 row" id="pills-tab" role="tablist">
                             <input type="hidden" name="service_type" id="service_type" value="apply" required>
                             <div class="col-auto nav-item" role="presentation">
-                                <button class="nav-link border border-1 border-dark-subtle fs-6 active" data-bs-toggle="pill"
-                                    data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
-                                    aria-selected="true"
+                                <button class="nav-link border border-1 border-dark-subtle fs-6 active"
+                                    data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab"
+                                    aria-controls="pills-home" aria-selected="true"
                                     onclick="document.getElementById('service_type').value = 'apply'">First
                                     Issuance</button>
                             </div>
@@ -142,7 +141,7 @@
                         <h5 style="color:#0064a7;">Please choose from the following available Passport Types</h5>
                         <div class="d-flex flex-column flex-md-row m-3">
                             <div class="col form-check">
-                                <input class="form-check-input fs-6" type="radio" name="passport_pages" id="option1" 
+                                <input class="form-check-input fs-6" type="radio" name="passport_pages" id="option1"
                                     value="34_pages" checked>
                                 <label class="form-check-label fs-6" for="option1">
                                     Ordinary 34 Pages
@@ -157,9 +156,10 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-5">
-                            <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0">Cancel</button>
-                            <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0" style="background-color: #0064a7;"
-                                type="button" onclick="goToForm('firstForm','secondForm')">Next</button>
+                            <a href="{{ route('index') }}" class="btn btn-light btn-lg py-2 px-4" type="button">Cancel</a>
+                            <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0"
+                                style="background-color: #0064a7;" type="button"
+                                onclick="goToForm('firstForm','secondForm')">Next</button>
                         </div>
 
                     </div>
@@ -170,22 +170,25 @@
 
                     <div>
                         <h4 class="fs-4 text-semibold d-flex align-items-center" style="color:#0064a7;">
-                            <button style="all:unset;cursor: pointer; margin-right:10px;"
-                            onclick="goToForm('secondForm','firstForm')">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
-                                <path fill="#000" fill-rule="evenodd"
-                                    d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
-                            </svg>
-                        </button>
-                            Book Appointment</h4>
+                            <button style="all:unset;cursor: pointer; margin-right:10px;" type="button"
+                                onclick="goToForm('secondForm','firstForm')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36"
+                                    viewBox="0 0 12 24">
+                                    <path fill="#000" fill-rule="evenodd"
+                                        d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
+                                </svg>
+                            </button>
+                            Book Appointment
+                        </h4>
 
                     </div>
-                    <div>
+                    <div class="mb-2">
 
                         <div class="row row-cols-1 row-cols-md-2">
                             <div class="col">
                                 <label for="app_country" class="required">Appointment Country:</label>
-                                <select class="form-select my-2" aria-label="Default select example" id="app_country" required>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_country"
+                                    required name="country">
                                     <option value="">Select Country</option>
                                     <option value="nepal">Nepal</option>
                                     <option value="1">Other</option>
@@ -194,7 +197,8 @@
                             </div>
                             <div class="col">
                                 <label for="app_province" class="required">Appointment Province:</label>
-                                <select class="form-select my-2" aria-label="Default select example" id="app_province" required>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_province"
+                                    name="state" required>
                                     <option value="">Select Provience</option>
                                     <option>Gandaki</option>
                                     <option value="1">Other</option>
@@ -204,7 +208,8 @@
 
                             <div class="col">
                                 <label for="app_district" class="required">Select District:</label>
-                                <select class="form-select my-2" aria-label="Default select example" id="app_district" required>
+                                <select class="form-select my-2" aria-label="Default select example" name="district"
+                                    id="app_district" required>
                                     <option value=""></option>
                                     <option>Kaski</option>
                                     <option value="1">Other</option>
@@ -213,7 +218,8 @@
                             </div>
                             <div class="col">
                                 <label for="app_province" class="required">Appointment Location:</label>
-                                <select class="form-select my-2" aria-label="Default select example" id="app_location" required>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_location"
+                                    name="location" required>
                                     <option selected>Department of Passports</option>
                                     <option value="1">Other</option>
 
@@ -230,16 +236,15 @@
                             <input type="hidden" id="appointment_date" name="appointment_date">
                             <div class="col">
                                 <h4>Select a Date</h4>
-                                <div class="content border border-1 border-secondary-subtle rounded-4 h-100 pt-2"
-                                    style="margin-bottom: -2rem;">
+                                <div class="content border border-1 border-secondary-subtle rounded-4 h-100 pt-2 mb-2">
                                     <div class="container text-left">
                                         <div class="row justify-content-center">
                                             <div class="col-md-12 text-center">
-                                                <form action="#" class="row align-items-center">
+                                                <div action="#" class="row align-items-center">
                                                     <div class="col">
                                                         <div id="inline_cal"></div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -248,34 +253,27 @@
                             </div>
                             <div class="col">
                                 <h4>Select an hour</h4>
-                                <div
-                                    class="border border-1 border-secondary-subtle rounded-4 p-4 h-100">
+                                <div class="border border-1 border-secondary-subtle rounded-4 p-4 h-100">
 
                                     {{-- <input type="time" class="form-control" id="appointment_time" value="appointment_time"> --}}
                                     <div class="row row-cols-auto g-4">
                                         <div class="col">
-                                            <input type="radio" class="btn-check" name="appointment_time" id="btn-check-1"
-                                                autocomplete="off">
+                                            <input type="radio" class="btn-check" name="appointment_time"
+                                                id="btn-check-1" autocomplete="off" value="10:30">
                                             <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
                                                 for="btn-check-1">10:30</label>
                                         </div>
                                         <div class="col">
-                                            <input type="radio" class="btn-check" name="appointment_time" id="btn-check-2"
-                                                autocomplete="off">
+                                            <input type="radio" class="btn-check" name="appointment_time"
+                                                id="btn-check-2" autocomplete="off" value="11:30">
                                             <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
                                                 for="btn-check-2">11:30</label>
                                         </div>
                                         <div class="col">
-                                            <input type="radio" class="btn-check" name="appointment_time" id="btn-check-3"
-                                                autocomplete="off">
+                                            <input type="radio" class="btn-check" name="appointment_time"
+                                                id="btn-check-3" autocomplete="off" value="12:30">
                                             <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
                                                 for="btn-check-3">12:30</label>
-                                        </div>
-                                        <div class="col">
-                                            <input type="radio" class="btn-check" name="appointment_time" id="btn-check-4"
-                                                autocomplete="off">
-                                            <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
-                                                for="btn-check-4">13:30</label>
                                         </div>
                                     </div>
                                 </div>
@@ -285,8 +283,10 @@
 
                     </div>
                     <div class="d-flex justify-content-between mt-5">
-                        <button class="btn btn-light btn-lg py-2 px-4" onclick="goToForm('secondForm','firstForm')">Back</button>
-                        <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0" style="background-color: #0064a7;" type="button"
+                        <button class="btn btn-light btn-lg py-2 px-4" type="button"
+                            onclick="goToForm('secondForm','firstForm')">Back</button>
+                        <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0" style="background-color: #0064a7;"
+                            type="button"
                             onclick="if(validateAppointmentForm()) goToForm('secondForm','mainForm')">Next</button>
                     </div>
 
@@ -297,7 +297,7 @@
 
 
                     <h2 class="fs-4 text-semibold d-flex align-items-center" style="color:#0064a7;">
-                        <button style="all:unset;cursor: pointer; margin-right:10px;"
+                        <button style="all:unset;cursor: pointer; margin-right:10px;" type="button"
                             onclick="goToForm('mainForm','secondForm')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
                                 <path fill="#000" fill-rule="evenodd"
@@ -505,7 +505,7 @@
             });
         });
 
-        
+
 
         document.addEventListener("DOMContentLoaded", function() {
             var calendar = rome(inline_cal, {
@@ -593,7 +593,7 @@
                 title.classList.remove('activeTitle');
             })
 
-            document.getElementById(next+"Title").classList.add('activeTitle');
+            document.getElementById(next + "Title").classList.add('activeTitle');
 
             let sections = document.querySelectorAll('.form-section');
 
@@ -611,53 +611,53 @@
         }
 
         function validateAppointmentForm() {
-        let hasError = false;
+            let hasError = false;
 
-        // Select the required fields
-        const requiredFields = [
-            document.getElementById('app_country'),
-            document.getElementById('app_province'),
-            document.getElementById('app_district'),
-        ];
+            // Select the required fields
+            const requiredFields = [
+                document.getElementById('app_country'),
+                document.getElementById('app_province'),
+                document.getElementById('app_district'),
+            ];
 
-        // Validate each required select field
-        requiredFields.forEach(field => {
-            if (!field.value.trim() || field.value === "Other") {
-                field.classList.add('error');
+            // Validate each required select field
+            requiredFields.forEach(field => {
+                if (!field.value.trim() || field.value === "Other") {
+                    field.classList.add('error');
+                    hasError = true;
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+
+            // Validate appointment date
+            const appointmentDateField = document.getElementById('appointment_date');
+            if (!appointmentDateField.value.trim()) {
+                appointmentDateField.classList.add('error');
                 hasError = true;
             } else {
-                field.classList.remove('error');
+                appointmentDateField.classList.remove('error');
             }
-        });
 
-        // Validate appointment date
-        const appointmentDateField = document.getElementById('appointment_date');
-        if (!appointmentDateField.value.trim()) {
-            appointmentDateField.classList.add('error');
-            hasError = true;
-        } else {
-            appointmentDateField.classList.remove('error');
+            // Validate appointment time (radio group)
+            const timeSelected = document.querySelector('input[name="appointment_time"]:checked');
+            if (!timeSelected) {
+                document.querySelectorAll('input[name="appointment_time"]').forEach(el => {
+                    el.nextElementSibling.classList.add('error');
+                });
+                hasError = true;
+            } else {
+                document.querySelectorAll('input[name="appointment_time"]').forEach(el => {
+                    el.nextElementSibling.classList.remove('error');
+                });
+            }
+
+            if (hasError) {
+                alert("Please fill all required fields.");
+                return false;
+            }
+
+            return true;
         }
-
-        // Validate appointment time (radio group)
-        const timeSelected = document.querySelector('input[name="appointment_time"]:checked');
-        if (!timeSelected) {
-            document.querySelectorAll('input[name="appointment_time"]').forEach(el => {
-                el.nextElementSibling.classList.add('error');
-            });
-            hasError = true;
-        } else {
-            document.querySelectorAll('input[name="appointment_time"]').forEach(el => {
-                el.nextElementSibling.classList.remove('error');
-            });
-        }
-
-        if (hasError) {
-            alert("Please fill all required fields.");
-            return false;
-        }
-
-        return true;
-    }
     </script>
 @endpush

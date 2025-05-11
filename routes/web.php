@@ -57,6 +57,13 @@ use App\Http\Controllers\BrokerAccountController;
 use App\Http\Controllers\DocumentationAttestationController;
 use App\Http\Controllers\MoneyExchangeController;
 use App\Http\Controllers\FrequentlyAskedQuestionController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\AchievementController;
+use App\Http\Controllers\SkillController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\EducationController;
 
 
 
@@ -506,4 +513,4 @@ Route::resource('bankAccounts',BankAccountController::class);
 Route::resource('brokerAccounts',BrokerAccountController::class);
 Route::resource('documentAttestations',DocumentationAttestationController::class);
 Route::resource('moneyExchanges',MoneyExchangeController::class);
-Route::resource('workPermits',WorkPermitController::class);
+// Route::resource('workPermits',WorkPermitController::class);
