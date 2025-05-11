@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('work_permits', function (Blueprint $table) {
+        Schema::create('rewards', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_seeker_id')->contrained('job_seekers')->cascadeOnDelete();
-            
+            $table->foreignId('job_seekers_id')->constrained('job_seekers')->cascadeOnDelete();
+            $table->integer('reward_points');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_permits');
+        Schema::dropIfExists('rewards');
     }
 };
