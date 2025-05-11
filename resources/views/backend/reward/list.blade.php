@@ -40,14 +40,31 @@
             @endif
         </td>
         <td>{{ $reward->reward_points }}</td>
-        <td>
-            <a href="{{ route('rewards.edit', $reward->id) }}" class="btn btn-sm btn-primary">Edit</a>
-            <form action="{{ route('rewards.destroy', $reward->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this reward?')">Delete</button>
-            </form>
-        </td>
+       <td>
+    <div class="dropdown">
+        <button type="button" class="btn btn-sm btn-link text-dark p-0" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bx bx-dots-vertical-rounded fs-4"></i>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item" href="{{ route('rewards.edit', $reward->id) }}">
+                    <i class="bx bx-edit-alt me-1"></i> Edit
+                </a>
+            </li>
+            <li>
+                <form action="{{ route('rewards.destroy', $reward->id) }}" method="POST" onsubmit="return confirm('Delete this reward?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="dropdown-item text-danger">
+                        <i class="bx bx-trash me-1"></i> Delete
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</td>
+
+
     </tr>
 @endforeach
 
