@@ -65,7 +65,7 @@
         <!-- Advertisement Category -->
         <li class="menu-item {{ request()->routeIs('advertisementcategory*') ? 'active' : '' }}">
             <a href="{{ route('advertisementcategory.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-square"></i>
+                <i class="menu-icon tf-icons bx bx-category"></i>
                 <div data-i18n="Manage Ads">Manage Ads Category</div>
             </a>
         </li> 
@@ -73,7 +73,7 @@
           <!-- Frequently Asked Questions -->
           <li class="menu-item {{ request()->routeIs('faqs*') ? 'active' : '' }}">
             <a href="{{ route('faqs.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-square"></i>
+                <i class="menu-icon tf-icons bx bx-help-circle"></i>
                 <div data-i18n="Manage Ads">Manage FAQs</div>
             </a>
         </li> 
@@ -89,31 +89,31 @@
 
         <li class="menu-item {{ request()->routeIs('resume-help*') ? 'active' : '' }}">
             <a href="{{ route('resume-help.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <i class="menu-icon tf-icons bx bx-file"></i>
                 <div data-i18n="Manage Resume">Manage Resume</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('bankAccounts*') ? 'active' : '' }}">
             <a href="{{ route('bankAccounts.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <i class="menu-icon tf-icons bx bx-credit-card"></i>
                 <div data-i18n="Manage Resume">Manage Bank Account</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('brokerAccounts*') ? 'active' : '' }}">
             <a href="{{ route('brokerAccounts.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <i class="menu-icon tf-icons bx bx-chart"></i>
                 <div data-i18n="Manage Resume">Manage Broker Account</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('documentAttestations*') ? 'active' : '' }}">
             <a href="{{ route('documentAttestations.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <i class="menu-icon tf-icons bx bx-check-circle"></i>
                 <div data-i18n="Manage Resume">Manage Document Attestations</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('ads-manager*') ? 'active' : '' }}">
             <a href="{{ route('ads-manager.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
+                <i class="menu-icon tf-icons bx bx-news"></i>
                 <div data-i18n="Ads Manager">Ads Manager</div>
             </a>
         </li>
@@ -246,6 +246,26 @@
                 <div data-i18n="Ads Manager">Discussion Forum</div>
             </a>
         </li>
+
+
+
+        <!-- Reward -->
+        <li class="menu-item">
+            <a href="{{ route('rewards.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-gift"></i> {{-- You can change the icon --}}
+                <div data-i18n="Rewards">Rewards</div>
+            </a>
+        </li>
+
+
+        <!--becomeSeller -->
+        <li class="menu-item">
+            <a href="{{ route('superadmin.becomeseller.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user-plus"></i> {{-- Arrow-like icon --}}
+                <div data-i18n="Become Seller">Become Seller</div>
+            </a>
+        </li>
+
 
         <!-- Manage Insurance-->
 

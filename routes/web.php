@@ -64,13 +64,16 @@ use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\RewardController;
+use App\Http\Controllers\BecomeSellerController;
 
 
 
 
 
 
-
+//Reward Routes
+Route::resource('rewards', RewardController::class);
 
     // Authentication Routes
     Route::get('master/login', [AdminController::class, 'loginView'])->name('login');
@@ -514,3 +517,22 @@ Route::resource('brokerAccounts',BrokerAccountController::class);
 Route::resource('documentAttestations',DocumentationAttestationController::class);
 Route::resource('moneyExchanges',MoneyExchangeController::class);
 // Route::resource('workPermits',WorkPermitController::class);
+
+
+// Frontend form route
+Route::get('/become_seller', function () {
+    return view('frontend.giftNcoupon.become_seller');
+})->name('become.seller');
+
+// Handle the form submission from the frontend
+Route::post('/become_seller', [BecomeSellerController::class, 'store'])->name('become.seller.store');
+
+
+// Superadmin routes grouped under /superadmin
+Route::prefix('superadmin')->middleware(['auth:admin', 'role:superAdmin'])->group(function () {
+    Route::get('/becomeseller', [BecomeSellerController::class, 'index'])->name('superadmin.becomeseller.index');
+    Route::post('/becomeseller', [BecomeSellerController::class, 'store'])->name('superadmin.becomeseller.store');
+    Route::get('/becomeseller/{id}', [BecomeSellerController::class, 'show'])->name('superadmin.becomeseller.show');
+    Route::delete('/becomeseller/{id}', [BecomeSellerController::class, 'destroy'])->name('superadmin.becomeseller.destroy');
+    
+});
