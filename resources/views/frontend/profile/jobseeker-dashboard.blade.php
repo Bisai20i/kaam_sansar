@@ -13,7 +13,6 @@
                 color: #0064A7 !important;
                 font-weight: 500;
             }
-
         </style>
         <div class="row g-0">
             <!-- Sidebar -->
@@ -41,6 +40,15 @@
                     <a href="{{ route('jobseeker.getAbroadDeals') }}" data-section="myJobs"
                         class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAbroadDeals') ? 'active-profile' : '' }}">My
                         Abroad Deals</a>
+                    <a href="{{ route('jobseeker.myblogs') }}" data-section="myJobs"
+                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.myblogs') ? 'active-profile' : '' }}">My
+                        Podcast</a>
+                    <a href="{{ route('jobseeker.mynews') }}" data-section="myJobs"
+                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.mynews') ? 'active-profile' : '' }}">My
+                         News and Articles</a>
+                    <a href="{{ route('jobseeker.forms') }}" data-section="myJobs"
+                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.forms') ? 'active-profile' : '' }}">My
+                        Form Submissions</a>
                 </div>
             </div>
 

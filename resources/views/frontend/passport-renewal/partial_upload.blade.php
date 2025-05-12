@@ -33,7 +33,7 @@
 
         <div class="text-center my-4">
             <div class="d-md-inline-flex justify-content-center align-items-center gap-3 bg-light fs-6">
-                <p class="title p-lg-2 rounded-2 m-0 activeTitle" id="firstFormTitle">Select Service
+                <p class="title p-2 rounded-2 m-0 activeTitle" id="firstFormTitle">Select Service
                     &
                     Read
                     Instructions
@@ -220,7 +220,7 @@
                                 <label for="app_province" class="required">Appointment Location:</label>
                                 <select class="form-select my-2" aria-label="Default select example" id="app_location"
                                     name="location" required>
-                                    <option selected>Department of Passports</option>
+                                    <option value="">Department of Passports</option>
                                     <option value="1">Other</option>
 
                                 </select>
@@ -256,7 +256,7 @@
                                 <div class="border border-1 border-secondary-subtle rounded-4 p-4 h-100">
 
                                     {{-- <input type="time" class="form-control" id="appointment_time" value="appointment_time"> --}}
-                                    <div class="row row-cols-auto g-4">
+                                    <div class="row row-cols-auto g-4" id="appointment_time">
                                         <div class="col">
                                             <input type="radio" class="btn-check" name="appointment_time"
                                                 id="btn-check-1" autocomplete="off" value="10:30">
@@ -496,6 +496,100 @@
         crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <script>
+        function getBaseUrl() {
+            return window.location.protocol + "//" + window.location.host;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const countrySelect = document.getElementById('app_country');
+            const provinceSelect = document.getElementById('app_province');
+            const districtSelect = document.getElementById('app_district');
+            const locationSelect = document.getElementById('app_location');
+            const dateInput = document.getElementById('appointment_date');
+
+
+            // Populate dropdown helper
+            function populateSelect(selectElement, items, defaultText, labelKey = 'name') {
+                selectElement.innerHTML = `<option value="">${defaultText}</option>`;
+                items.forEach(item => {
+                    const option = document.createElement('option');
+                    option.setAttribute('data-id', item.id);
+                    option.value = item[labelKey];
+                    option.textContent = item[labelKey];
+                    selectElement.appendChild(option);
+                });
+            }
+
+            // Fetch countries on page load
+            fetch(getBaseUrl() + '/passport/countries')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status && data.countries) {
+                        populateSelect(countrySelect, data.countries, 'Select Country', 'countryName');
+                    }
+                });
+
+            // Fetch provinces on country change
+            countrySelect.addEventListener('change', function() {
+                console.log('country changed')
+                const countryId = this.options[this.selectedIndex].getAttribute('data-id');
+                if (!countryId) return;
+
+                fetch(getBaseUrl() + `/passport/proviences/${countryId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status && data.proviences) {
+                            populateSelect(provinceSelect, data.proviences, 'Select Province',
+                                'provienceName');
+                            populateSelect(districtSelect, [], 'Select District');
+                            populateSelect(locationSelect, [], 'Select Location');
+                        }
+
+                    });
+            });
+
+            // Fetch districts on province change
+            provinceSelect.addEventListener('change', function() {
+                const provinceId = this.options[this.selectedIndex].getAttribute('data-id');
+
+                if (!provinceId) return;
+
+                fetch(getBaseUrl() + `/passport/districts/${provinceId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status && data.districts) {
+                            populateSelect(districtSelect, data.districts, 'Select District',
+                                'districtName');
+                            populateSelect(locationSelect, [], 'Select Location');
+                        }
+
+                    });
+            });
+
+            // Fetch locations on district change
+            districtSelect.addEventListener('change', function() {
+                const districtId = this.options[this.selectedIndex].getAttribute('data-id');
+                if (!districtId) return;
+
+                fetch(getBaseUrl() + `/passport/locations/${districtId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status && data.locations) {
+                            populateSelect(locationSelect, data.locations, 'Select Location',
+                                'locationName');
+                        }
+                    });
+            });
+
+            locationSelect.addEventListener('change', function() {
+                const locationId = this.options[this.selectedIndex].getAttribute('data-id');
+                getTimes(dateInput.value, locationId);
+            })
+        });
+    </script>
+
     <script>
         // datepicker initializer 
         document.addEventListener("DOMContentLoaded", function() {
@@ -505,19 +599,85 @@
             });
         });
 
+        const getTimes = (value, locationId) => {
+            const timeContainer = document.getElementById('appointment_time');
+
+            timeContainer.innerHTML =
+                    `<div class="col"><label class="border border-outline-secondary p-2 fs-6 rounded-2 w-auto h-auto">Loading...</label></div>`;
+
+            // console.log("Fetching Time: " + value);
+
+            if (!locationId) {
+
+                timeContainer.innerHTML =
+                    `<div class="col"><label class="border border-outline-secondary p-2 fs-6 rounded-2 w-auto h-auto">Select Location First</label></div>`;
+                return;
+
+            }
+
+            fetch(getBaseUrl() + `/passport/times/${locationId}/${value}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    if (!data.status) {
+                            timeContainer.innerHTML =
+                                `<div class="col"><label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto">No Available Times</label></div>`;
+                            return;
+                        }
+
+                    if (data.status && data.times) {
+
+                        if (data.times.time.length == 0) {
+                            timeContainer.innerHTML =
+                                `<div class="col"><label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto">No Available Times</label></div>`;
+                            return;
+                        }
+
+                        timeContainer.innerHTML = '';
+                        data.times.time.forEach((t, index) => {
+                            const time = t.time;
+                            const id = `btn-check-${index + 1}`;
+
+                            const col = document.createElement('div');
+                            col.className = 'col';
+
+                            col.innerHTML = `
+                                        <input type="radio" class="btn-check" name="appointment_time" autocomplete="off" id="${id}" value="${time}">
+                                        <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto" for="${id}">${time}</label>
+                                    `;
+                            timeContainer.appendChild(col);
+                        });
+
+                    }
+
+                });
+
+        }
+
 
 
         document.addEventListener("DOMContentLoaded", function() {
+
             var calendar = rome(inline_cal, {
                 time: false, // Only date
                 inputFormat: 'YYYY-MM-DD'
             });
 
             document.getElementById('appointment_date').value = calendar.getMoment().format('YYYY-MM-DD')
+
+            getTimes(document.getElementById('appointment_date').value, document.getElementById('app_location')
+                .options[document.getElementById('app_location').selectedIndex].getAttribute('data-id'));
+
+            //get times of the date selected
+
+
             // Listen for date change and update hidden input
             calendar.on('data', function(value) {
+                console.log(value+"date changed")
                 document.getElementById('appointment_date').value = value;
-                console.log(document.getElementById('appointment_date').value)
+                getTimes(value, document.getElementById('app_location').options[document.getElementById(
+                    'app_location').selectedIndex].getAttribute('data-id'));
+
             });
         });
 
@@ -618,6 +778,7 @@
                 document.getElementById('app_country'),
                 document.getElementById('app_province'),
                 document.getElementById('app_district'),
+                document.getElementById('app_location')
             ];
 
             // Validate each required select field
@@ -653,7 +814,10 @@
             }
 
             if (hasError) {
-                alert("Please fill all required fields.");
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                })
                 return false;
             }
 

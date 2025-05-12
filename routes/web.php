@@ -202,6 +202,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
         Route::put('/passportCountryList/unpublish/{id}', [PassportCountryListController::class, 'unpublish'])->name('passportCountryList.unpublish');
 
         Route::get('/passport/renewal',[PassportRenewalController::class, 'index'])->name('passport.renewal');
+        Route::get('/passport/renewal/{id}',[PassportRenewalController::class, 'show'])->name('passport.renewal.show');
         Route::delete('/passport/renewal/{id}',[PassportRenewalController::class, 'destroy'])->name('passport.renewal.destroy');
 
         Route::resource('passportDistrictList', PassportDistrictController::class)->except('index', 'edit', 'create');
@@ -301,6 +302,9 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
         Route::get('/deleteImage/{index}', [JobSeekerController::class, 'deleteImage'])->name('jobseeker.deleteImage');
         Route::get('getPurchaseHistory/{user_id?}', [JobSeekerController::class, 'getPurchaseHistory'])->name('jobseeker.getPurchaseHistory');
         Route::get('/myjobs/{user_id?}', [JobSeekerController::class, 'myjobs'])->name('jobseeker.myjobs');
+        Route::get('/myblogs', [JobSeekerController::class, 'myblogs'])->name('jobseeker.myblogs');
+        Route::get('/mynews', [JobSeekerController::class, 'mynews'])->name('jobseeker.mynews');
+        Route::get('/myforms', [JobSeekerController::class, 'myforms'])->name('jobseeker.forms');
         Route::get('/bookmark/remove/{jobId}', [JobSeekerController::class, 'removeBookmark'])->name('jobBookmark.remove');
         // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
 
@@ -536,3 +540,9 @@ Route::prefix('superadmin')->middleware(['auth:admin', 'role:superAdmin'])->grou
     Route::delete('/becomeseller/{id}', [BecomeSellerController::class, 'destroy'])->name('superadmin.becomeseller.destroy');
     
 });
+
+Route::get('/passport/countries', [PassportRenewalController::class, 'passport_countries'])->name('passport.countries');
+Route::get('/passport/proviences/{id}', [PassportRenewalController::class, 'passport_proviences'])->name('passport.proviences');
+Route::get('/passport/districts/{id}', [PassportRenewalController::class, 'passport_districts'])->name('passport.districts');
+Route::get('/passport/locations/{id}', [PassportRenewalController::class, 'passport_locations'])->name('passport.locations');
+Route::get('/passport/times/{id}/{date}', [PassportRenewalController::class, 'passport_times'])->name('passport.times');

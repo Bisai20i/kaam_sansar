@@ -631,7 +631,7 @@
 
                                         @if (Auth::guard('job_seekers')->check())
                                             <!-- If user is logged in, open chat -->
-                                            <button class="btn custom-outline-btn ms-auto"
+                                            <button class="btn custom-outline-btn ms-auto" style="color: #0064A7"
                                                 data-user-id="{{ $ad->jobSeekerId }}" onclick="openChat(this)"
                                                 data-user-name="{{ $ad->jobSeeker->firstName . ' ' . $ad->jobSeeker->lastName }}">
                                                 <!-- <i class="fas fa-comment-alt me-2"></i> -->
@@ -640,7 +640,7 @@
                                             </button>
                                         @else
                                             <!-- If user is not logged in, open login modal -->
-                                            <button class="btn custom-outline-btn flex-grow-1" data-bs-toggle="modal"
+                                            <button class="btn custom-outline-btn  ms-auto" data-bs-toggle="modal" style="color: #0064A7"
                                                 data-bs-target="#loginModal" onclick="setRedirectUrl()">
                                                 <span class="d-none d-md-inline">Chat</span>
                                             </button>
@@ -983,8 +983,8 @@
 
 
                     <!-- Right Section: Ad Banner -->
-                    <div class="col-md-3 border d-flex align-items-center justify-content-center">
-                        <div class="ad-banner">Advertisement Banner</div>
+                    <div class="col-md-3 d-flex border align-items-center justify-content-center" style="max-height: 100vh;">
+                        <div class="ad-banner ">Advertisement Banner</div>
                     </div>
 
                 </div>

@@ -1896,4 +1896,16 @@ class JobSeekerController extends Controller
             return ($e);
         }
     }
+
+    public function myforms(){
+        return view('frontend.profile.partials.my-forms');
+    }
+
+    public function mynews(){
+        return view('frontend.profile.partials.my-news');
+    }
+
+    public function myblogs(){
+        return view('frontend.profile.partials.my-podcasts');
+    }
 }

@@ -3,6 +3,11 @@ namespace App\Http\Controllers;
 
 namespace App\Http\Controllers;
 
+use App\Models\PassportCountryList;
+use App\Models\PassportDateTime;
+use App\Models\PassportDistrict;
+use App\Models\PassportLocation;
+use App\Models\PassportProvience;
 use App\Models\PassportRenewal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,11 +66,14 @@ class PassportRenewalController extends Controller
                 'previous_passport'       => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                 'country'                 => 'required|string|max:255',
                 'state'                   => 'required|string|max:255',
-                'location'                    => 'required|string|max:255',
-                'appointment_date'            => 'required|date',
-                'appointment_time'            => 'required|date_format:H:i',
+                'district'                   => 'required|string|max:255',
+                'location'                => 'required|string|max:255',
+                'appointment_date'        => 'required|date',
+                'appointment_time'        => 'required|date_format:H:i',
 
             ]);
+
+            // return $validatedData;
 
             $input = $validatedData;
 
@@ -87,6 +95,11 @@ class PassportRenewalController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    public function show($id){
+        $passportRenewal = PassportRenewal::findOrFail($id);
+        return view('backend.passport_renewal.view', compact('passportRenewal'));
     }
 
     public function store(Request $request)
@@ -311,6 +324,66 @@ class PassportRenewalController extends Controller
         $passportRenewal->delete();
 
         return redirect()->back()->with('success', 'Passport renewal record and associated files deleted.');
+    }
+
+    public function passport_countries()
+    {
+
+        $countries = PassportCountryList::where('publishStatus', 1)->get(['id', 'countryName', 'slug']);
+
+        return response()->json([
+            'status'    => true,
+            'countries' => $countries,
+        ]);
+
+    }
+
+    public function passport_proviences($id)
+    {
+        $proviences = PassportProvience::where('country_id', $id)->where('publishStatus', 1)->get();
+
+        return response()->json([
+            'status'     => true,
+            'proviences' => $proviences,
+        ]);
+
+    }
+
+    public function passport_districts($id)
+    {
+        $districts = PassportDistrict::where('provience_id', $id)->where('publishStatus', 1)->get();
+        return response()->json([
+            'status'    => true,
+            'districts' => $districts,
+        ]);
+    }
+
+    public function passport_locations($id)
+    {
+        $locations = PassportLocation::where('district_id', $id)->where('publishStatus', 1)->get();
+        return response()->json([
+            'status'    => true,
+            'locations' => $locations,
+        ]);
+    }
+
+    public function passport_times($id, $date)
+    {
+
+        $times = PassportDateTime::where('date', $date)->where('location_id', $id)->first();
+
+        if ($times) {
+            return response()->json([
+                'status' => true,
+                'times'  => $times,
+            ]); 
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'No times found',
+            ]);
+        }
+
     }
 
 }

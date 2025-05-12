@@ -10,8 +10,8 @@
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header d-flex">
-                        <h1 class="modal-title fs-5 mx-auto flex-fill" id="createPostLabel">
+                    <div class="modal-header d-flex bg-white">
+                        <h1 class="modal-title fs-5 mx-auto flex-fill d-flex justify-content-center text-black fs-4" id="createPostLabel">
                             Create Post
                         </h1>
                         <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -43,7 +43,7 @@
 
                             <div class="form mt-2">
 
-                                <select name="category" class="form-select bg-dark-subtle text-black-50" id="cat"
+                                <select name="category" class="form-select bg-secondary-subtle text-black-50" id="cat"
                                     aria-label="">
                                     <option selected>Category</option>
                                     <option value="education">Education</option>
@@ -55,35 +55,35 @@
                                 </select>
                             </div>
                             <div class="form-floating text-black-50 mt-3">
-                                <input name="topic" type="text" class="form-control bg-dark-subtle text-black-50"
+                                <input name="topic" type="text" class="form-control bg-secondary-subtle text-black-50"
                                     id="titleInput" placeholder="Post Title">
                                 <label for="titleInput">Title</label>
                             </div>
                             <div class="form-floating text-black-50">
-                                <textarea class="form-control bg-dark-subtle text-black-50" name="description" placeholder="Post Details"
+                                <textarea class="form-control bg-secondary-subtle text-black-50" name="description" placeholder="Post Details"
                                     id="floatingTextarea" style="height: 100px"></textarea>
                                 <label for="floatingTextarea">Describe...</label>
                             </div>
                             <div class="form text-black-50 mt-2">
-                                <select name="country" id="forumCountry" class="form-control bg-dark-subtle text-black-50">
+                                <select name="country" id="forumCountry" class="form-control bg-secondary-subtle text-black-50">
                                     <option value="" selected>Select Country</option>
                                     <!-- Country options will be dynamically populated by JavaScript -->
                                 </select>
 
                             </div>
                             <div class="form-floating text-black-50 mt-3">
-                                <input name="person_name" type="text" class="form-control bg-dark-subtle text-black-50"
+                                <input name="person_name" type="text" class="form-control bg-secondary-subtle text-black-50"
                                     id="person_name_input" placeholder="Person Name">
                                 <label for="person Name">Person Name</label>
                             </div>
-                            <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
+                            <div class="d-flex bg-secondary-subtle p-2 gap-3 align-items-center rounded">
                                 <p class="flex-grow-1 my-auto text-black-50">Add to your post
                                 </p>
                                 <div class="d-flex gap-3 align-items-center">
 
                                     <a href="#" class="primary_color_text"
                                         onclick=" document.getElementById('forumImages').click()">
-                                        <i class="fa-solid fa-image"></i></a>
+                                        <i class="fa-solid fa-image text-secondary"></i></a>
                                     <input id="forumImages" class="d-none" type="file" multiple accept="image/*"
                                         onchange="handleFiles(this.files)" name="images[]">
                                 </div>
@@ -769,6 +769,10 @@
         var chatchannel = pusher.subscribe('chat.' + "{{ Auth::guard('job_seekers')->id() }}");
         chatchannel.bind('new-message', function(data) {
             let message = data.message
+
+            if($('#chatBox [name="receiver_id"]').val() == message.receiver_id){
+                return;
+            }
             if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
                 $('#messageContainer').append(`
                     <div class="d-flex my-2 w-100 justify-content-start">
@@ -783,12 +787,12 @@
 
             }
 
-            document.querySelectorAll('.list-group .list-group-item').forEach(item => {
-                if (item.getAttribute('data-receiver-id') == message.sender_id) {
-                    item.style.background = 'rgba(0, 100, 167, 0.1)'
-                    item.querySelector('.message-content').innerHTML = message.message
-                }
-            })
+            // document.querySelectorAll('.list-group .list-group-item').forEach(item => {
+            //     if (item.getAttribute('data-receiver-id') == message.sender_id) {
+            //         item.style.background = 'rgba(0, 100, 167, 0.1)'
+            //         item.querySelector('.message-content').innerHTML = message.message
+            //     }
+            // })
 
             //     // $('.list-group-item').each(function() {
             //     //     let userId = $(this).data('user-id'); // safer than attr()
