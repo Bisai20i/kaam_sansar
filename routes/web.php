@@ -1,68 +1,70 @@
 <?php
 
-use App\Http\Controllers\UserCommentController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ProductCommentController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\VisaController;
-use App\Models\IndustryCategory;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AboardController;
+use App\Http\Controllers\AchievementController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdsManagerController;
-use App\Http\Controllers\OrderPlacementController;
-use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\AdvertisementCategoryController;
+use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\AstrologerController;
+use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\BlogsAndPodcastController;
+use App\Http\Controllers\BrokerAccountController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DiscussionForumController;
+use App\Http\Controllers\DocumentationAttestationController;
+use App\Http\Controllers\EducationController;
+use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\ForumInteractionController;
+use App\Http\Controllers\FrequentlyAskedQuestionController;
+use App\Http\COntrollers\Frontend\FrontendAPIController;
+use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\GiftCartController;
+use App\Http\Controllers\GiftCategoryController;
 use App\Http\Controllers\GiftCouponController;
+use App\Http\Controllers\HoroscopeController;
+use App\Http\Controllers\IndustryCategoryController;
+use App\Http\Controllers\InsuranceCategoryController;
+use App\Http\Controllers\InsuranceCompanyController;
+use App\Http\Controllers\InsuranceSubCategoryController;
+use App\Http\Controllers\JobApplyController;
+use App\Http\Controllers\JobCategoryController;
+use App\Http\Controllers\JobCompanyController;
+use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\JobSeekerController;
+use App\Http\Controllers\JobSeekerDashboardController;
 use App\Http\Controllers\KundaliController;
 use App\Http\Controllers\KundaliMatchingController;
-use App\Http\Controllers\GiftCartController;
-use App\Http\Controllers\JobApplyController;
-use App\Http\Controllers\VisaTypeController;
-use App\Http\Controllers\HoroscopeController;
-use App\Http\Controllers\JobSeekerController;
-use App\Http\Controllers\AstrologerController;
-use App\Http\Controllers\JobCompanyController;
-use App\Http\Controllers\MyDocumentController;
-use App\Http\Controllers\JobCategoryController;
-use App\Http\Controllers\VisaDetailsController;
-use App\Http\Controllers\GiftCategoryController;
-use App\Http\Controllers\AdvertisementController;
-use App\Http\Controllers\BlogsAndPodcastController;
-use App\Http\Controllers\ProductCategoryController;
-use App\Http\Controllers\VisaApplicationController;
-use App\Http\Controllers\VisaCountryListController;
-use App\Http\Controllers\IndustryCategoryController;
-use App\Http\Controllers\Frontend\FrontendController;
-use App\Http\Controllers\JobSeekerDashboardController;
-use App\Http\COntrollers\Frontend\FrontendAPIController;
-use App\Http\Controllers\AdvertisementCategoryController;
-use App\Http\Controllers\DiscussionForumController;
-use App\Http\Controllers\PassportRenewalController;
-use App\Http\Controllers\ResumeHelpController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\ForumInteractionController;
-use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\MoneyExchangeController;
+use App\Http\Controllers\MyDocumentController;
+use App\Http\Controllers\OrderPlacementController;
 use App\Http\Controllers\PassportCountryListController;
-use App\Http\Controllers\PassportProvienceController;
+use App\Http\Controllers\PassportDateTimeController;
 use App\Http\Controllers\PassportDistrictController;
 use App\Http\Controllers\PassportLocationController;
-use App\Http\Controllers\PassportDateTimeController;
-use App\Http\Controllers\InsuranceCompanyController;
-use App\Http\Controllers\InsuranceCategoryController;
-use App\Http\Controllers\InsuranceSubCategoryController;
-use App\Http\Controllers\BankAccountController;
-use App\Http\Controllers\BrokerAccountController;
-use App\Http\Controllers\DocumentationAttestationController;
-use App\Http\Controllers\MoneyExchangeController;
-use App\Http\Controllers\FrequentlyAskedQuestionController;
-
-
-
-
-
-
+use App\Http\Controllers\PassportProvienceController;
+use App\Http\Controllers\PassportRenewalController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProductCommentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ResumeHelpController;
+use App\Http\Controllers\SkillController;
+use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\UserCommentController;
+use App\Http\Controllers\VisaApplicationController;
+use App\Http\Controllers\VisaController;
+use App\Http\Controllers\VisaCountryListController;
+use App\Http\Controllers\VisaDetailsController;
+use App\Http\Controllers\VisaTypeController;
+use App\Http\Controllers\WorkPermitController;
+use App\Models\IndustryCategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 
     // Authentication Routes

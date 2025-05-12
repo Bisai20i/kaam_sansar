@@ -13,10 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('work_permits', function (Blueprint $table) {
+        Schema::create('visas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_seeker_id')->contrained('job_seekers')->cascadeOnDelete();
-            
+            $table->unsignedBigInteger('jobSeekerId');
+            $table->foreign('jobSeekerId')->references('id')->on('job_seekers')->onDelete('cascade');
+            $table->text('visaDetails');
+            $table->date('visaExpire')->nullable();
+            $table->string('country');
+            $table->string('visaImage');
+
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_permits');
+        Schema::dropIfExists('visas');
     }
 };

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\WorkPermit;
+use App\Models\WorkPermitLocation;
 use Illuminate\Http\Request;
 
-class WorkPermitController extends Controller
+class WorkPermitLocationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,7 +24,7 @@ class WorkPermitController extends Controller
      */
     public function create()
     {
-        return view('frontend.workPermit.create');
+        //
     }
 
     /**
@@ -41,10 +41,10 @@ class WorkPermitController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\WorkPermit  $workPermit
+     * @param  \App\Models\WorkPermitLocation  $workPermitLocation
      * @return \Illuminate\Http\Response
      */
-    public function show(WorkPermit $workPermit)
+    public function show(WorkPermitLocation $workPermitLocation)
     {
         //
     }
@@ -52,10 +52,10 @@ class WorkPermitController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\WorkPermit  $workPermit
+     * @param  \App\Models\WorkPermitLocation  $workPermitLocation
      * @return \Illuminate\Http\Response
      */
-    public function edit(WorkPermit $workPermit)
+    public function edit(WorkPermitLocation $workPermitLocation)
     {
         //
     }
@@ -64,10 +64,10 @@ class WorkPermitController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\WorkPermit  $workPermit
+     * @param  \App\Models\WorkPermitLocation  $workPermitLocation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, WorkPermit $workPermit)
+    public function update(Request $request, WorkPermitLocation $workPermitLocation)
     {
         //
     }
@@ -75,10 +75,10 @@ class WorkPermitController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\WorkPermit  $workPermit
+     * @param  \App\Models\WorkPermitLocation  $workPermitLocation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(WorkPermit $workPermit)
+    public function destroy(WorkPermitLocation $workPermitLocation)
     {
         //
     }

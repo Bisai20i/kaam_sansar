@@ -236,7 +236,7 @@ class VisaController extends Controller
                     '$visa' => $visa
                 ]);
         }
-        if ($request->hasFile('certificate'))
+        if ($request->hasFile('visaImage'))
             $visaImagePath = handleUpload('visaImage', $visa);
         else $visaImagePath = $visa->visaImage;
         $visaExpire = $request->input('visaExpire');
@@ -256,8 +256,8 @@ class VisaController extends Controller
             : response()->json([
                 'message' => "visa update successfully",
                 'success' => true,
-                '$visa' => $visa
-            ]);
+                'visa'   => $visa
+]);
     }
 
 

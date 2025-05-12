@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Broker Account')
+@section('title', 'Work Permit')
 @push('head') <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 @section('content')
