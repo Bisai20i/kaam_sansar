@@ -20,6 +20,30 @@
         </div>
     </div>
 
+    <style>
+        .fill-more-btn {
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .fill-more-btn i {
+            display: inline-block;
+            /* Required for transform to work */
+            transition: transform 0.3s ease;
+        }
+
+        .fill-more-btn:hover {
+            background-color: transparent !important;
+            border: 1px solid #0064A7 !important;
+            color: #0064A7 !important;
+        }
+
+        .fill-more-btn:hover i {
+            transform: translateX(6px);
+            /* Use 6px or 10px as desired */
+        }
+    </style>
+
     <div id="form" class="profile-section bg-white">
         <div class="card-container-jobs border advertisement p-4">
             <h2 class="mb-3 fw-semibold fs-5" style="color: #1A1A1A;">Form Submissions</h2>
@@ -35,19 +59,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-bottom border-secondary-subtle py-1">
-                            <td class="ps-3" style="font-weight: 500;">1</td>
-                            <td class="" style="font-weight: 500;">Work Permit</td>
-                            <td class="" style="font-weight: 500;">05/11/2025</td>
-                            <td>
-                                <span class="badge rounded-1 px-3 py-2 fw-semibold"
-                                    style="font-size: 14px; background-color: #1AB189;">Completed</span>
-                            </td>
-                            <td>
-                                <span class="badge rounded-1 px-3 py-2 bg-primary fw-semibold" style="font-size: 14px;">Fill
-                                    More<i class="bi bi-arrow-right ps-2" style="font-weight: 700;"></i></span>
-                            </td>
-                        </tr>
+                        @if (isset($forms) && $forms->count() > 0)
+                            @foreach ($forms as $key => $form)
+                                <tr class="border-bottom border-secondary-subtle py-1">
+                                    <td class="ps-3" style="font-weight: 500;">{{ $key + 1 }}</td>
+                                    <td class="" style="font-weight: 500;">{{ $form->title }}</td>
+                                    <td class="" style="font-weight: 500;">{{ $form->updated_at->format('Y-m-d') }}
+                                    </td>
+                                    <td>
+                                        <small class="badge rounded-pill px-3  fw-semibold"
+                                            style="font-size: 14px; background-color: {{ $form->status == 'approved' ? '#0D99FF' : ($form->status == 'rejected' ? '#EE2F2F' : '#FEC53D') }};">{{ ucfirst($form->status) }}</small>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('form.complete', $form->id) }}"
+                                            class="btn text-white bg-primary  rounded-1 px-3 py-2 fw-semibold fill-more-btn"
+                                            style="font-size: 14px;">Fill
+                                            More<i class="bi bi-arrow-right ps-2" style="font-weight: 700;"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+
                         <tr class="border-bottom border-secondary-subtle py-1">
                             <td class="ps-3" style="font-weight: 500;">2</td>
                             <td class="" style="font-weight: 500;">Bank Account</td>

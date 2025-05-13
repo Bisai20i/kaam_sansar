@@ -486,6 +486,7 @@
 
 @endsection
 
+
 @push('scripts')
     <script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/rome.js"></script>
 
@@ -530,6 +531,11 @@
                         populateSelect(countrySelect, data.countries, 'Select Country', 'countryName');
                     }
                 });
+
+
+
+
+                
 
             // Fetch provinces on country change
             countrySelect.addEventListener('change', function() {
@@ -823,5 +829,8 @@
 
             return true;
         }
+
+
+        
     </script>
 @endpush

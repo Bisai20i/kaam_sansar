@@ -66,6 +66,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\BecomeSellerController;
+use App\Http\Controllers\FormSubmissionController;
 
 
 
@@ -304,7 +305,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
         Route::get('/myjobs/{user_id?}', [JobSeekerController::class, 'myjobs'])->name('jobseeker.myjobs');
         Route::get('/myblogs', [JobSeekerController::class, 'myblogs'])->name('jobseeker.myblogs');
         Route::get('/mynews', [JobSeekerController::class, 'mynews'])->name('jobseeker.mynews');
-        Route::get('/myforms', [JobSeekerController::class, 'myforms'])->name('jobseeker.forms');
+        Route::get('/myforms', [FormSubmissionController::class, 'index'])->name('jobseeker.forms');
         Route::get('/bookmark/remove/{jobId}', [JobSeekerController::class, 'removeBookmark'])->name('jobBookmark.remove');
         // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
 
@@ -381,12 +382,15 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
         Route::post('/visa-details/apply/cleanup', [VisaApplicationController::class, 'cleanupApplication'])->name('visaDetails.apply.cleanup');
 
         // passport renewal route collection
-        Route::get('/passport/renew', [PassportRenewalController::class, 'create'])->name('passport.renew');
+        Route::get('/passport/form/{id}', [PassportRenewalController::class, 'edit'])->name('passport.edit');
         Route::get('/passport/renew/partial', [PassportRenewalController::class, 'partial'])->name('passport.partial');
         Route::post('/passport/renew', [PassportRenewalController::class, 'store'])->name('passport.renew.store');
         Route::get('/passport/renew/{id}/edit', [PassportRenewalController::class, 'edit'])->name('passport.renew.edit');
         Route::put('/passport/renew/{id}', [PassportRenewalController::class, 'update'])->name('passport.renew.update');
         Route::post('/passport/renew/partial', [PassportRenewalController::class, 'store_partial'])->name('passport.renew.partial');
+
+        //find specific form route
+        Route::get('/form/complete/{id}', [FormSubmissionController::class, 'findForm'])->name('form.complete');
 
 
     });

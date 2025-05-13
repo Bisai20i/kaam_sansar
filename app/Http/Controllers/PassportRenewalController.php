@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 namespace App\Http\Controllers;
 
+use App\Models\FormSubmission;
 use App\Models\PassportCountryList;
 use App\Models\PassportDateTime;
 use App\Models\PassportDistrict;
@@ -25,6 +26,7 @@ class PassportRenewalController extends Controller
 
     public function partial()
     {
+        // return "hello everyone";
         return view('frontend.passport-renewal.partial_upload');
     }
     public function create()
@@ -66,7 +68,7 @@ class PassportRenewalController extends Controller
                 'previous_passport'       => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                 'country'                 => 'required|string|max:255',
                 'state'                   => 'required|string|max:255',
-                'district'                   => 'required|string|max:255',
+                'district'                => 'required|string|max:255',
                 'location'                => 'required|string|max:255',
                 'appointment_date'        => 'required|date',
                 'appointment_time'        => 'required|date_format:H:i',
@@ -88,6 +90,14 @@ class PassportRenewalController extends Controller
 
             $reneuwal = PassportRenewal::create(array_merge($input, $filePaths, ['job_seeker_id' => $jobSeekerId]));
 
+            $formSubmission          = new FormSubmission();
+            $formSubmission->title   = 'Passport Renewal';
+            $formSubmission->form_id = $reneuwal->id;
+            $formSubmission->job_seeker_id = $jobSeekerId;
+            $formSubmission->save();
+
+            Log::info('Passport renewal application submitted successfully!');
+
             // return $reneuwal;
 
             return redirect()->back()->with('success', 'Passport renewal application submitted successfully!');
@@ -97,7 +107,8 @@ class PassportRenewalController extends Controller
         }
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $passportRenewal = PassportRenewal::findOrFail($id);
         return view('backend.passport_renewal.view', compact('passportRenewal'));
     }
@@ -323,6 +334,11 @@ class PassportRenewalController extends Controller
 
         $passportRenewal->delete();
 
+        $formSubmission = FormSubmission::where('form_id', $id)->where('title', 'Passport Renewal')->first();
+        $formSubmission->delete();
+
+        Log::info('Form Submission Record Deleted', ['form_id' => $id, 'title' => 'Passport Renewal']);
+
         return redirect()->back()->with('success', 'Passport renewal record and associated files deleted.');
     }
 
@@ -376,10 +392,10 @@ class PassportRenewalController extends Controller
             return response()->json([
                 'status' => true,
                 'times'  => $times,
-            ]); 
-        }else{
+            ]);
+        } else {
             return response()->json([
-                'status' => false,
+                'status'  => false,
                 'message' => 'No times found',
             ]);
         }
