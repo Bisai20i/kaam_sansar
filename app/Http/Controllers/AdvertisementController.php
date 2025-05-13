@@ -22,67 +22,71 @@ class AdvertisementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+   public function index()
 {
+
+
     $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
 
-    // Simple Pagination for Ads
+    // Use pagination for both mobile and web
     $ads = Advertisement::orderBy('created_at', 'desc')->paginate(8);
 
-    // Transform only the collection part without breaking pagination
+    // Fetch all ad categories once
+    $categories = AdvertisementCategory::all();
+    $adTypes = $this->getEnumValues('advertisements', 'type');
+
+    // Transform ads for mobile only
     if ($isMobile) {
         $ads->getCollection()->transform(function ($ad) {
             $ad->image_url = $ad->adsThumbnail ? asset($ad->adsThumbnail) : null;
             return $ad;
         });
-    }
 
-        $category = AdvertisementCategory::all();
-        $categories = AdvertisementCategory::all();
-        $all = AdvertisementCategory::all();
-
-        $post = Advertisement::all();
-        $adTypes = $this->getEnumValues('advertisements', 'type');
-    if ($isMobile) {
         return response()->json([
             'status' => true,
             'message' => 'Advertisements fetched successfully.',
             'data' => [
                 'ads' => $ads,
-                'categories' => AdvertisementCategory::all(),
-                'adsTypes' => $this->getEnumValues('advertisements', 'type')
+                'categories' => $categories,
+                'adsTypes' => $adTypes,
             ],
             'pagination' => [
                 'current_page' => $ads->currentPage(),
                 'next_page_url' => $ads->nextPageUrl(),
                 'prev_page_url' => $ads->previousPageUrl(),
-                'per_page' => $ads->perPage()
+                'per_page' => $ads->perPage(),
             ]
         ]);
     }
 
-    // For web, load everything needed
-    $category = AdvertisementCategory::all();
-    $categories = AdvertisementCategory::all();
-    $all = AdvertisementCategory::all();
-    $post = Advertisement::all();
-    $ad = Advertisement::all();
-    $adTypes = $this->getEnumValues('advertisements', 'type');
+    // For Web (non-mobile)
+    $post = Advertisement::all(); // May be used separately on the Blade view
+    $ad = $post; // Same as $post
+    $all = $categories; // Already fetched
+    $category = $categories; // Already fetched
+
+    // Fetch top banner ad (if any)
     $ad_banners = [];
-    $ad_banners ['top'] = AdsManager::where('which_page', 'advertisement')
+    $ad_banners['top'] = AdsManager::where('which_page', 'advertisement')
         ->where('publish_or_not', 1)
         ->where('active', 1)
         ->where('position', 'top')
         ->first();
 
-    if($ad_banners){
-        $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
-        return view('frontend.advertisements.index', compact('ads','category','post','all','categories','ad'));
-
+    if ($ad_banners['top']) {
+        $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image);
     }
 
-
-    return view('frontend.advertisements.index', compact('ads', 'category', 'post', 'all', 'categories', 'ad','ad_banners'));
+    return view('frontend.profile.jobseeker-dashboard', compact(
+        'ads',
+        'category',
+        'post',
+        'all',
+        'categories',
+        'ad',
+        'adTypes',
+        'ad_banners'
+    ));
 }
 
 
@@ -274,91 +278,95 @@ class AdvertisementController extends Controller
      * @param  \App\Models\Advertisement  $advertisement
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+  public function update(Request $request, $id)
+{
 
-          // Check if the request is from mobile
-          $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+    //  dd($request->all());
+    // Determine if it's a mobile request
+    $isMobile = $request->input('request_type') === 'mobile';
+    
+    // Get the user based on the request type
+    $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
 
-        // Log all incoming request data
-        Log::info('Incoming request data:', $request->all());
+    // If no user is found, return unauthorized response
+    if (!$user) {
+        return $isMobile
+            ? $this->responseError('Unauthorized', 401)
+            : redirect()->route('login')->with('error', 'Unauthorized access.');
+    }
 
-          // Get the authenticated user
-          $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+    // Find the advertisement that belongs to the user
+    $ads = Advertisement::where('id', $id)->where('jobSeekerId', $user->id)->first();
 
-          if (!$user) {
-              return $isMobile
-                  ? $this->responseError('Unauthorized', 401)
-                  : redirect()->route('login')->with('error', 'Unauthorized access.');
-          }
-          $jobSeekerId = $user->id;
-          $ads =  Advertisement::where('id', $id)->where('jobSeekerId', $jobSeekerId)->first();
+    if (!$ads) {
+        return $isMobile
+            ? $this->responseError('Advertisement not found', 404)
+            : redirect()->back()->with('error', 'Advertisement not found.');
+    }
+     dd($request->all());
 
-
-          if (!$ads) {
-            return $isMobile
-                ? $this->responseError('Ads not found', 404)
-                : redirect()->back()->with('error', 'Ads not found');
-        }
-
-       // Validate the request data
-       $validator = Validator::make($request->all(), [
+    // Validate incoming request data
+    $validated = $request->validate([
         'adsTitle' => 'required|string|max:255',
-        'adsCategoryId' => 'required',
-        'type'=>'nullable',
+        'adsCategoryId' => 'required|exists:ads_categories,id', // Ensure category exists
+        'type' => 'nullable|string|in:Buy,Sell,Rent', // Only accept specific values
         'location' => 'required|string|max:255',
         'country' => 'nullable|string|max:255',
         'adsDescription' => 'required|string|max:100000',
         'adsOwner' => 'nullable|string|max:255',
         'adsThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'adsOwnerImg' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'pricing' => 'required|numeric',
+        'pricing' => 'required|numeric|min:0', // Ensure positive pricing
         'status' => 'nullable|string|max:255',
         'publishStatus' => 'nullable|string|max:255',
         'contactNumber' => 'nullable|string|max:255',
     ]);
 
+    // Update advertisement attributes
+    $ads->fill([
+        'adsTitle' => $request->adsTitle,
+        'type' => $request->type,
+        'adsCategoryId' => $request->adsCategoryId,
+        'location' => $request->location,
+        'country' => $request->country,
+        'adsDescription' => $request->adsDescription,
+        'adsOwner' => $request->adsOwner,
+        'pricing' => $request->pricing,
+        'contactNumber' => $request->contactNumber,
+        'postedDuration' => '0 Days', // Adjust if needed
+    ]);
 
-    if ($validator->fails()) {
-        Log::error('Validation errors: ', $validator->errors()->toArray());
-        return $isMobile
-            ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-            : redirect()->back()->withErrors($validator->errors())->withInput();
+    // Handle image uploads if present
+    if ($request->hasFile('adsThumbnail')) {
+        // Call the helper function to handle the upload and update the image path
+        $ads->adsThumbnail = $this->handleUpload('adsThumbnail');
     }
-        // Handle the ads thumbnail using helper
-        $adsImg = handleUpload('adsThumbnail',$ads);
-        $adsOwnerImg = handleUpload('adsOwnerImg',$ads);
+    if ($request->hasFile('adsOwnerImg')) {
+        $ads->adsOwnerImg = $this->handleUpload('adsOwnerImg');
+    }
 
-        // Log the image upload result
-        Log::info('Uploaded Image Path:', ['adsThumbnail' => $adsImg]);
+    // Save the updated advertisement record
+    $ads->save();
 
-        $ads->adsTitle = $request->input('adsTitle');
-        $ads->type = $request->input('type');
-        $ads->adsCategoryId = $request->input('adsCategoryId');
-        $ads->location = $request->input('location');
-        $ads->country = $request->input('country');
-        $ads->adsDescription = $request->input('adsDescription');
-        $ads->adsOwner = $request->input('adsOwner');
-        $ads->adsThumbnail = $adsImg;
-        $ads->adsOwnerImg = $adsOwnerImg;
-        $ads->pricing = $request->input('pricing');
-        $ads->contactNumber = $request->input('contactNumber');
-    // Automatically set postedDuration based on created_at
-    $ads->created_at = Carbon::now();
-    $ads->postedDuration = Carbon::now()->diffInDays($ads->created_at) . ' Days';
-    Log::info('Advertisement Updated:', $ads->toArray());
+    // Return appropriate response based on the request type
+    return $isMobile
+        ? $this->responseSuccess('Advertisement updated successfully', $ads)
+        : redirect()->back()->with('success', 'Advertisement updated successfully');
+}
 
-        $ads->save();
+/**
+ * Handle file upload and return file path
+ */
+private function handleUpload($inputName)
+{
+    if (request()->hasFile($inputName)) {
+        $file = request()->file($inputName);
+        $filePath = $file->store('ads', 'public'); // Store in the 'ads' directory under 'public' disk
+        return $filePath;
+    }
+    return null; // Return null if no file is uploaded
+}
 
-        // Log the saved advertisement
-        Log::info('Advertisement Updated:', $ads->toArray());
-
-  //Return the response based on request type
-  return $isMobile
-
-  ? $this->responseSuccess('Ads updated successfully', $ads)
-  : redirect()->back()->with('success', 'Ads updated successfully');
- }
 
     /**
      * Remove the specified resource from storage.

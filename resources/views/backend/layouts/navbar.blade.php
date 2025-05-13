@@ -27,7 +27,14 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
+                                    @if(Auth::guard('admin')->check())
                                     <span class="fw-semibold d-block">{{ Auth::guard('admin')->user()->fullName }}</span>
+                                    <small class="text-muted">{{ Auth::guard('admin')->user()->roleType }}</small>
+                                    @else
+                                    <span class="fw-semibold d-block">Guest</span>
+                                    <small class="text-muted">Not logged in</small>
+                                    @endif
+
                                     <small class="text-muted">{{ Auth::guard('admin')->user()->roleType }}</small>
                                 </div>
                             </div>

@@ -95,7 +95,7 @@
         </li>
         <li class="menu-item {{ request()->routeIs('bankAccounts*') ? 'active' : '' }}">
             <a href="{{ route('bankAccounts.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-credit-card"></i>
+                <i class="menu-icon tf-icons bx bx-admincredit-card"></i>
                 <div data-i18n="Manage Resume">Manage Bank Account</div>
             </a>
         </li>
