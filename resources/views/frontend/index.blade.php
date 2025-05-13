@@ -43,13 +43,13 @@
                 </div>
 
 
-                    <div class="row popular-search ">
-                        <div class="col-lg-12 ">
-                            <h4 class="mt-3">Popular Search</h4>
-                            <div class="row text-center justify-content-center">
-                                @foreach ($categories as $jobCategory)
-                                    <div class="col-auto g-2 ">
-                                        <form action="{{ route('frontend.job-search') }}">
+                <div class="row popular-search ">
+                    <div class="col-lg-12 ">
+                        <h4 class="mt-3">Popular Search</h4>
+                        <div class="row text-center justify-content-center">
+                            @foreach ($categories as $jobCategory)
+                            <div class="col-auto g-2 ">
+                                <form action="{{ route('frontend.job-search') }}">
 
                                     <input type="hidden" name="jobsby" value="category">
                                     <input type="hidden" name="searchcategoryid" value="{{ $jobCategory->id }}">
@@ -69,115 +69,115 @@
     </section>
 
 
-        @if ($findJobs->count() > 0)
-            <section class="jobs">
-                <div class="container my-5">
-                    <h3 class="mb-3">Top Jobs</h3>
-                    <div class="row g-3 mb-4">
-                        @foreach ($findJobs as $item)
-                            <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card position-relative">
-                                @auth('job_seekers')
-                                    <form action="{{ route('job.bookmark') }}" method="post"
-                                        class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
-                                        @csrf
-                                        <input type="hidden" name="jobSeekerId"
-                                            value="{{ Auth::guard('job_seekers')->user()->id }}">
-                                        <input type="hidden" name="jobPostId" value="{{ $item->id }}" />
+    @if ($findJobs->count() > 0)
+    <section class="jobs">
+        <div class="container my-5">
+            <h3 class="mb-3">Top Jobs</h3>
+            <div class="row g-3 mb-4">
+                @foreach ($findJobs as $item)
+                <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card position-relative">
+                    @auth('job_seekers')
+                    <form action="{{ route('job.bookmark') }}" method="post"
+                        class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
+                        @csrf
+                        <input type="hidden" name="jobSeekerId"
+                            value="{{ Auth::guard('job_seekers')->user()->id }}">
+                        <input type="hidden" name="jobPostId" value="{{ $item->id }}" />
 
-                                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;">
-                                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
-                                        </button>
-                                    </form>
-                                @else
+                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;">
+                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
+                        </button>
+                    </form>
+                    @else
 
-                                    <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
-                                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
-                                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
-                                        </button>
-                                    </div>
-
-                                    
-                                
-                                @endauth
+                    <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
+                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
+                        </button>
+                    </div>
 
 
-                                <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"
-                                    class="text-decoration-none">
-                                    <div class="card" style="{{ $item->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
-                                        <div class="position-relative">
-                                            @if($item->jobFeature == 'premium')
-                                                <span class="position-absolute top-0 left-0 badge rounded-1 bg-warning">Premium</span>
-                                            @endif
-                                            <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
-                                            class="card-img-top rounded-1" alt="BMW">
-                                        </div>
-                                        
-                                        <div class="card-body p-2">
 
-                                            <h5 class="card-title text-truncate me-3 fw-bold my-1" >{{ $item->jobTitle }}</h5>
+                    @endauth
 
-                                            <p class="card-text text-muted mb-0 fw-semibold">{{ $item->jobLevel }}</p>
-                                            <p class="card-text text-muted mb-1 fw-semibold">{{ $item->jobLocation }}</p>
-                                            <p class="card-text text-muted ">
-                                                <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                                </small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
+
+                    <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"
+                        class="text-decoration-none">
+                        <div class="card" style="{{ $item->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
+                            <div class="position-relative">
+                                @if($item->jobFeature == 'premium')
+                                <span class="position-absolute top-0 left-0 badge rounded-1 bg-warning">Premium</span>
+                                @endif
+                                <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
+                                    class="card-img-top rounded-1" alt="BMW">
                             </div>
-                        @endforeach
-                    </div>
-                    <!-- View More Button -->
-                    <div class="text-center my-4">
-                        <a href="{{ route('frontend.finds-jobs') }}" class="view-more" >
-                           View More</a>
-                    </div>
+
+                            <div class="card-body p-2">
+
+                                <h5 class="card-title text-truncate me-3 fw-bold my-1">{{ $item->jobTitle }}</h5>
+
+                                <p class="card-text text-muted mb-0 fw-semibold">{{ $item->jobLevel }}</p>
+                                <p class="card-text text-muted mb-1 fw-semibold">{{ $item->jobLocation }}</p>
+                                <p class="card-text text-muted ">
+                                    <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
+                @endforeach
+            </div>
+            <!-- View More Button -->
+            <div class="text-center my-4">
+                <a href="{{ route('frontend.finds-jobs') }}" class="view-more">
+                    View More</a>
+            </div>
+        </div>
 
     </section>
     @endif
 
-        <section class="bn">
-            <div class="container">
-              <div class="banner">
+    <section class="bn">
+        <div class="container">
+            <div class="banner">
                 <div class="banner-content pt-3 pb-5 " style="background-image:url('{{ asset('frontend/assets/Images/planehimal.png') }}');">
-                  <div class="book-flight">
-                    <h2 class="">Book Flight Tickets</h2>
-                  <ul>
-                    <li><i class="fa-solid fa-check border border-2 p-1 "></i> Buy both Domestic and International flight tickets</li>
-                    <li><i class="fa-solid fa-check border border-2 p-1 "></i> Get many offers on every purchase</li>
-                    <li><i class="fa-solid fa-check border border-2 p-1 "></i> Safe and well-maintained planes</li>
-                  </ul>
-                  </div>
-                  <div class="button-container mb-3">
-                    <button class="btn btn-book-now">Book Now</button>
-                  </div>
+                    <div class="book-flight">
+                        <h2 class="">Book Flight Tickets</h2>
+                        <ul>
+                            <li><i class="fa-solid fa-check border border-2 p-1 "></i> Buy both Domestic and International flight tickets</li>
+                            <li><i class="fa-solid fa-check border border-2 p-1 "></i> Get many offers on every purchase</li>
+                            <li><i class="fa-solid fa-check border border-2 p-1 "></i> Safe and well-maintained planes</li>
+                        </ul>
+                    </div>
+                    <div class="button-container mb-3">
+                        <button class="btn btn-book-now">Book Now</button>
+                    </div>
                 </div>
-              </div>
             </div>
-          </section>
+        </div>
+    </section>
 
 
-        <section class="my-5">
-            <div class="container my-4">
-                <div class="row g-4 card-container">
-                    <!-- First Card -->
-                    <div class="col-md-6 d-flex">
-                        <div class="card1 w-100" id="first-card">
-                            <img src="{{asset('frontend/assets/Images/passport.png')}}" alt="Passport Renewal">
-                            <div class="card-content">
-                                <h4>Get Your Passport Renewed Today</h4>
-                                <p>Renew Your Passport Easily and Hassle-Free</p>
-                                @if(Auth::guard('job_seekers')->check())
-                                    <a href="{{route('passport.partial')}}" class="btn ">Start Renewal Now</a>
-                                @else
-                                <button  class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">Start Renewal Now</a>
+    <section class="my-5">
+        <div class="container my-4">
+            <div class="row g-4 card-container">
+                <!-- First Card -->
+                <div class="col-md-6 d-flex">
+                    <div class="card1 w-100" id="first-card">
+                        <img src="{{asset('frontend/assets/Images/passport.png')}}" alt="Passport Renewal">
+                        <div class="card-content">
+                            <h4>Get Your Passport Renewed Today</h4>
+                            <p>Renew Your Passport Easily and Hassle-Free</p>
+                            @if(Auth::guard('job_seekers')->check())
+                            <a href="{{route('passport.partial')}}" class="btn ">Start Renewal Now</a>
+                            @else
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">Start Renewal Now</a>
                                 @endif
-                                
-                            </div>
+
                         </div>
                     </div>
+                </div>
 
                 <!-- Second Card (This is the card that will change every few seconds) -->
                 <div class="col-md-6 d-flex">
@@ -186,7 +186,11 @@
                         <div class="card-content">
                             <h4>Get Your Work Permit Renewed Today</h4>
                             <p>Trusted and Reliable Assistance for Securing Your Work Permit.</p>
-                            <a href="#" class="btn ">Start Renewal Now</a>
+                            @if(Auth::guard('job_seekers')->check())
+                            <a href="{{route('workPermits.create')}}" class="btn ">Start Work Permit Now</a>
+                            @else
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">Start Work Permit Now</a>
+                                @endif
                         </div>
                     </div>
                 </div>
@@ -196,61 +200,61 @@
 
 
 
-        <section class="cta">
-            <div class="container">
-                <!-- CTA Section -->
-                <div class="cta-section py-5 mb-5">
-                    <h3>Fuel Your Ambition, <br>Find Your Next Big Opportunity</h3>
-                    <p>Your Dream Career Awaits - Download Our Job <br>Portal App and Start Your Journey to Success!</p>
-                    <div class="qr">
-                        <img src="{{ asset('frontend/assets/Images/qr1.png') }}" alt="Centered Image" class="qr me-5 rounded-2 border border-4">
-                    </div>
+    <section class="cta">
+        <div class="container">
+            <!-- CTA Section -->
+            <div class="cta-section py-5 mb-5">
+                <h3>Fuel Your Ambition, <br>Find Your Next Big Opportunity</h3>
+                <p>Your Dream Career Awaits - Download Our Job <br>Portal App and Start Your Journey to Success!</p>
+                <div class="qr">
+                    <img src="{{ asset('frontend/assets/Images/qr1.png') }}" alt="Centered Image" class="qr me-5 rounded-2 border border-4">
+                </div>
+                <div>
                     <div>
-                        <div>
-                            <a href="https://play.google.com/store/apps/details?id=com.example.yourapp" href="#"
-                                class="btn ml-3"target="_blank" class=""><img
-                                    src="{{ asset('frontend/assets/Images/google.png') }}" alt="Google Play"></a>
+                        <a href="https://play.google.com/store/apps/details?id=com.example.yourapp" href="#"
+                            class="btn ml-3" target="_blank" class=""><img
+                                src="{{ asset('frontend/assets/Images/google.png') }}" alt="Google Play"></a>
 
-                            <a href="https://apps.apple.com/us/app/yourapp/id123456789" href="#" class="btn "
-                                target="_blank" class="ml-3"><img
-                                    src="{{ asset('frontend/assets/Images/appstore.png') }}" alt="App Store"></a>
-                        </div>
+                        <a href="https://apps.apple.com/us/app/yourapp/id123456789" href="#" class="btn "
+                            target="_blank" class="ml-3"><img
+                                src="{{ asset('frontend/assets/Images/appstore.png') }}" alt="App Store"></a>
                     </div>
                 </div>
             </div>
-        </section>
-        @if ($blogs->count() > 0)
-            <section class="news">
-                <!-- News and Articles Section -->
-                <div class="container my-5">
-                    <h3 class="mb-4">News and Articles</h3>
-                    <div class="row g-3">
-                        @foreach ($blogs as $item)
-                            <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
-                                <a href="{{ route('frontend.news-detail', ['slug' => $item->slug]) }}"
-                                    style="text-decoration:none;">
-                                    <div class="card">
-                                        <!-- Display Image -->
-                                        <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                            class="card-img-top rounded-1" alt="{{ $item->title }}">
-                                        <div class="card-body">
-                                            <!-- Display Title -->
-                                            <h5 class="card-title text-truncate" style="">{{ $item->title }}</h5>
-                                            <!-- Display Date (or any other date you have in the database) -->
-                                            <p class="card-text text-muted">
-                                                <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
+        </div>
+    </section>
+    @if ($blogs->count() > 0)
+    <section class="news">
+        <!-- News and Articles Section -->
+        <div class="container my-5">
+            <h3 class="mb-4">News and Articles</h3>
+            <div class="row g-3">
+                @foreach ($blogs as $item)
+                <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+                    <a href="{{ route('frontend.news-detail', ['slug' => $item->slug]) }}"
+                        style="text-decoration:none;">
+                        <div class="card">
+                            <!-- Display Image -->
+                            <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
+                                class="card-img-top rounded-1" alt="{{ $item->title }}">
+                            <div class="card-body">
+                                <!-- Display Title -->
+                                <h5 class="card-title text-truncate" style="">{{ $item->title }}</h5>
+                                <!-- Display Date (or any other date you have in the database) -->
+                                <p class="card-text text-muted">
+                                    <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
+                                </p>
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
+                    </a>
                 </div>
-                <div class="text-center mt-4">
-                    <a href="{{ route('frontend.news-and-blogs') }}" class="view-more">View More</a>
-                </div>
-            </section>
+                @endforeach
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ route('frontend.news-and-blogs') }}" class="view-more">View More</a>
+        </div>
+    </section>
 
     @endif
 
@@ -283,14 +287,14 @@
             <div class="col gift-card h-100">
 
 
-                            <a href="{{ route('gift.details', ['id' => $item->id]) }}"
-                                class="text-decoration-none shadow-sm">
-                                <div class="card">
-                                    <img style="height: 175px; object-fit:cover;" src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}"
-                                        class="card-img-top img-fluid" alt="giftNcoupon">
-                                    <div class="card-body text-start">
+                <a href="{{ route('gift.details', ['id' => $item->id]) }}"
+                    class="text-decoration-none shadow-sm">
+                    <div class="card">
+                        <img style="height: 175px; object-fit:cover;" src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}"
+                            class="card-img-top img-fluid" alt="giftNcoupon">
+                        <div class="card-body text-start">
 
-                                        <h5 class="card-title mb-1 text-truncate">{{ $item->title }}</h5>
+                            <h5 class="card-title mb-1 text-truncate">{{ $item->title }}</h5>
 
                             <p class="card-text text-muted mb-1">NPR. {{ $item->price }}</p>
                             <p class="card-text text-muted ">
@@ -414,11 +418,11 @@
 
         </div> --}}
 
-                <div class="text-center mt-4">
-                    <a href="{{ route('gift.home', ['type' => 'all']) }}" class="view-more">View More</a>
-                </div>
-            </div>
-        </section>
+        <div class="text-center mt-4">
+            <a href="{{ route('gift.home', ['type' => 'all']) }}" class="view-more">View More</a>
+        </div>
+        </div>
+    </section>
 
     <section class="ads">
         <div class="container my-5">
@@ -430,87 +434,87 @@
                     <div class="card">
                         <a href="{{ route('frontend.advertisements') }}"
                             class="text-decoration-none">
-                                <img src="{{ asset($ad->adsThumbnail) }}" class="card-img-top rounded-1" alt="adsThumbnail">
-                                <div class="card-body p-2">
-                                    <h5 class="card-title">{{ $ad->adsTitle }} </h5>
-                                    <p class="card-text text-muted mb-1">{{ $ad->location }}</p>
-                                    <p class="card-text text-muted"><small>{{ $ad->postedDuration }}</small></p>
+                            <img src="{{ asset($ad->adsThumbnail) }}" class="card-img-top rounded-1" alt="adsThumbnail">
+                            <div class="card-body p-2">
+                                <h5 class="card-title">{{ $ad->adsTitle }} </h5>
+                                <p class="card-text text-muted mb-1">{{ $ad->location }}</p>
+                                <p class="card-text text-muted"><small>{{ $ad->postedDuration }}</small></p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                @endforeach
+
+
+            </div>
+            <!-- View More Button -->
+            <div class="text-center mt-4">
+                <a href="{{ route('frontend.advertisements') }}" class="view-more">View More</a>
+            </div>
+        </div>
+    </section>
+
+    @if($ad_banners['middle'])
+
+    <div class="container">
+        <a href="{{ $ad_banners['middle']->link }}" class="d-block" style="text-decoration: none; cursor: pointer; object-fit: contain;">
+            <img src="{{ $ad_banners['middle']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
+        </a>
+    </div>
+
+    {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
+    @endif
+
+    @if ($podcasts->count() > 0)
+    <section class="podcast">
+        <div class="container my-5">
+            <h3 class="mb-4">Podcast</h3>
+            <div class="row g-3">
+                @foreach ($podcasts as $item)
+                <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+                    <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}"
+                        style="text-decoration:none;">
+                        <div class="card">
+                            <!-- Display Podcast Image -->
+                            <div class="pi" style="height:150px;">
+                                <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
+                                    class=" h-100 w-100 card-img-top rounded-1" alt="..."
+                                    style="object-fit:cover;">
+                                <div class="pio">
+                                    <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
                                 </div>
-                                    </a>
+                            </div>
+                            <div class="card-body p-2">
+                                <!-- Display Podcast Title -->
+                                <h5 class="card-title text-truncate">{{ $item->title }}</h5>
+                                <!-- Display Podcast Duration -->
+                                <p class="card-text text-muted mb-1">
+                                    @php
+                                    $podcastDuration = \Carbon\Carbon::parse($item->podcastTime);
+                                    @endphp
+                                    {{ $podcastDuration->hour }} hour {{ $podcastDuration->minute }} minutes
+                                    {{ $podcastDuration->second }} sec
+                                </p>
+
+                                <!-- Display Date -->
+                                <p class="card-text text-muted">
+                                    <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
+                                </p>
                             </div>
                         </div>
-                    @endforeach
-
-
+                    </a>
                 </div>
-                <!-- View More Button -->
-                <div class="text-center mt-4">
-                    <a href="{{ route('frontend.advertisements') }}" class="view-more">View More</a>
-                </div>
+                @endforeach
             </div>
-        </section>
-
-        @if($ad_banners['middle'])
-
-            <div class="container">
-                <a href="{{ $ad_banners['middle']->link }}" class="d-block" style="text-decoration: none; cursor: pointer; object-fit: contain;">
-                    <img src="{{ $ad_banners['middle']->image }}" class="w-100" style="aspect-ratio: 4/1;" alt="img-fluid">
-                </a>
+            <!-- View More Button -->
+            <div class="text-center mt-4">
+                <a href="{{ route('frontend.podcasts') }}" class="view-more">View More</a>
             </div>
-            
-                {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
-        @endif
+        </div>
+    </section>
+    @endif
 
-        @if ($podcasts->count() > 0)
-            <section class="podcast">
-                <div class="container my-5">
-                    <h3 class="mb-4">Podcast</h3>
-                    <div class="row g-3">
-                        @foreach ($podcasts as $item)
-                            <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
-                                <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}"
-                                    style="text-decoration:none;">
-                                    <div class="card">
-                                        <!-- Display Podcast Image -->
-                                        <div class="pi" style="height:150px;">
-                                            <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                                class=" h-100 w-100 card-img-top rounded-1" alt="..."
-                                                style="object-fit:cover;">
-                                            <div class="pio">
-                                                <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
-                                            </div>
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <!-- Display Podcast Title -->
-                                            <h5 class="card-title text-truncate">{{ $item->title }}</h5>
-                                            <!-- Display Podcast Duration -->
-                                            <p class="card-text text-muted mb-1">
-                                                @php
-                                                    $podcastDuration = \Carbon\Carbon::parse($item->podcastTime);
-                                                @endphp
-                                                {{ $podcastDuration->hour }} hour {{ $podcastDuration->minute }} minutes
-                                                {{ $podcastDuration->second }} sec
-                                            </p>
-
-                                            <!-- Display Date -->
-                                            <p class="card-text text-muted">
-                                                <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                    <!-- View More Button -->
-                    <div class="text-center mt-4">
-                        <a href="{{ route('frontend.podcasts') }}" class="view-more">View More</a>
-                    </div>
-                </div>
-            </section>
-        @endif
-
-        <section class="FAQ">
+    <section class="FAQ">
         <div class="container mb-4">
             <h3 class="mb-4 text-primary">FAQ </h3>
 
@@ -553,7 +557,7 @@
             transform: rotate(0deg);
         }
     </style>
-    </main>
+</main>
 @endsection
 
 @push('scripts')

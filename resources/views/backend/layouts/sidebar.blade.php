@@ -263,8 +263,31 @@
                 <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
                 <div data-i18n="Passport Renewal">Passport Renewal</div>
             </a>
+      <!-- Manage VISA HQ -->
+        <li
+            class="menu-item {{ request()->routeIs('workPermits*') || request()->routeIs('workPermitDistricts*') ? 'open' : '' }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-store"></i>
+                <div data-i18n="Front Pages">Manage Work Permit</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('workPermitDistricts*') ? 'active' : '' }}">
+                    <a href="{{ route('workPermitDistricts.index') }}" class="menu-link">
+                        <div data-i18n="Landing">Manage Work Permit Districts</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('workPermitLocations*') ? 'active' : '' }}">
+                    <a href="{{ route('workPermitLocations.index') }}" class="menu-link">
+                        <div data-i18n="Pricing">Manage Work Pemrit Location</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('workPermits*') ? 'active' : '' }}">
+                    <a href="{{ route('workPermits.index') }}" class="menu-link">
+                        <div data-i18n="Pricing">Manage Work Pemrit </div>
+                    </a>
+                </li>
+            </ul>
         </li>
-
     </ul>
 
 

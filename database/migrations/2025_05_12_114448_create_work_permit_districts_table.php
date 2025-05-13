@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('work_permits', function (Blueprint $table) {
+        Schema::create('work_permit_districts', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('provience_id')->constrained('passport_proviences')->onDelete('cascade');
+            $table->string('districtName');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_permits');
+        Schema::dropIfExists('work_permit_districts');
     }
 };

@@ -15,10 +15,8 @@ return new class extends Migration
     {
         Schema::create('work_permit_locations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('district_id')->constrained('passport_districts')->onDelete('cascade');
+             $table->foreignId('district_id')->constrained('work_permit_districts')->onDelete('cascade');
             $table->string('locationName');
-            $table->string('slug')->unique();
-            $table->boolean('publishStatus')->default(false);
             $table->timestamps();
         });
     }
