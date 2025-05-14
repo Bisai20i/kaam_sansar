@@ -17,6 +17,8 @@ class AdvertisementCategoryController extends Controller
      */
    public function index()
 {
+
+    
     // Retrieve all Advertisement categories
     $advertisementCategory = AdvertisementCategory::all();
     $All = AdvertisementCategory::all(); // Optional if needed elsewhere
