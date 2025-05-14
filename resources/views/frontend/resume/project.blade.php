@@ -13,8 +13,8 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <label for="projectLink" class="form-label">Project Link <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" name="projectLink" id="projectLink" placeholder="" required>
+                    <label for="pl" class="form-label">Project Link <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control custom-input" name="pl" id="pl" placeholder="" required>
 
                 </div>
             </div>
@@ -46,10 +46,10 @@
                     </div>
                 </div>
                 <div class="text-black-50">
-                    @if($project->projectLink)
+                    @if($project->pl)
                     <p class="m-0">
-                        <a href="{{ $project->projectLink }}" target="_blank" style="color: #0064A7;">
-                            {{ $project->projectLink }}
+                        <a href="{{ $project->pl }}" target="_blank" style="color: #0064A7;">
+                            {{ $project->pl }}
                         </a>
                     </p>
                     @endif
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return {
             id: document.getElementById('projectId').value,
             projectTitle: document.getElementById('projectTitle').value,
-            projectLink: document.getElementById('projectLink').value,
+            pl: document.getElementById('pl').value,
             projectDescription: document.getElementById('projectDescription').value,
             request_type: 'mobile'    // ← crucial!
         };
@@ -108,8 +108,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="text-black-50">
-              ${p.projectLink
-                ? `<p class="m-0"><a href="${p.projectLink}" target="_blank">${p.projectLink}</a></p>`
+              ${p.pl
+                ? `<p class="m-0"><a href="${p.pl}" target="_blank">${p.pl}</a></p>`
                 : ''}
               <p class="m-0">${p.projectDescription}</p>
             </div>
@@ -129,8 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="text-black-50">
-              ${p.projectLink
-                ? `<p class="m-0"><a href="${p.projectLink}" target="_blank">${p.projectLink}</a></p>`
+              ${p.pl
+                ? `<p class="m-0"><a href="${p.pl}" target="_blank">${p.pl}</a></p>`
                 : ''}
               <p class="m-0">${p.projectDescription}</p>
             </div>
@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addProject').addEventListener('click', async (e) => {
         e.preventDefault();
         const data = collectProjectData();
+        console.log(collectProjectData());
         if (!data.projectTitle || !data.projectDescription) {
             return alert('Please fill all required fields');
         }
@@ -169,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const proj = await res.json();
             document.getElementById('projectId').value          = proj.id;
             document.getElementById('projectTitle').value       = proj.projectTitle;
-            document.getElementById('projectLink').value        = proj.projectLink;
+            document.getElementById('pl').value        = proj.pl;
             document.getElementById('projectDescription').value = proj.projectDescription;
             isEditing = true;
             document.getElementById('addProject').textContent = 'Update Project';

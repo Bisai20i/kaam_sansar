@@ -1,7 +1,7 @@
 <div id="profile" class="section-content">
     <h3 class="mb-3">About Yourself</h3>
     <div class="card p-4">
-        <form id="profileForm" enctype="multipart/form-data">
+        <form id="profilesForm" enctype="multipart/form-data">
             @csrf
 
             <div class="d-flex align-items-center mb-3">
@@ -91,10 +91,9 @@
 
                 </div>
             </div>
-            <div class="text-end">
-            <button type="submit" class="btn text-center skip-btn mx-2 next-btn" data-current="profile" data-next="visa" data-link="visaLink"  id="nextProfile">continue</button>
-                <button type="submit" class="btn next-btn">save & continue</button>
-            </div>
+            <button type="button" class="btn text-center skip-btn mx-2 float-end border-primary text-primary" id="saveProfile" data-current="profile" data-next="visa" data-link="visaLink">
+                Continue to visa
+            </button>
         </form>
     </div>
 </div>
@@ -102,55 +101,38 @@
 <script>
     function previewProfile(event) {
         const reader = new FileReader();
-        reader.onload = function() {
+        reader.onload = function () {
             document.getElementById('profilePreview').src = reader.result;
         };
         reader.readAsDataURL(event.target.files[0]);
     }
-    document.addEventListener('DOMContentLoaded', function() {
 
-        document.getElementById('profileForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const form = this;
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('saveProfile').addEventListener('click', function () {
+            const form = document.getElementById('profilesForm');
             const formData = new FormData(form);
-            fetch("{{ route('profiles.store') }}", {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => {
-                    console.log(response);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                    if (data.success) {
-                        const p = data.profile;
-                        document.getElementById('overviewName').textContent = `${p.firstName} ${p.lastName}`;
-                        document.getElementById('overviewRole').textContent = p.designation;
-                        document.getElementById('overviewImage').src = p.profileImg ? `/${p.profileImg}` : 'images/default-profile.png';
-                        document.getElementById('overviewContent').innerHTML = `
-                            <p><strong>Address:</strong> ${p.address}</p>
-                            <p><strong>Country:</strong> ${p.country}</p>
-                            <p><strong>Email:</strong> ${p.email}</p>
-                            <p><strong>Phone:</strong> ${p.phoneNumber}</p>
-                            <p><strong>Summary:</strong> ${p.bio}</p>
-                        `;
-                        document.getElementById('profile').style.display = 'none';
-                        document.getElementById('visa').style.display = 'block';
-                        document.querySelectorAll(".profile-link").forEach(l => l.classList.remove("active"));
-                        document.getElementById('visaLink').classList.add('active');
-                    } else {
-                        console.log("Error saving profile.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-    })
-</script>
 
+            fetch("{{ route('profiles.store') }}", {
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to save profile');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Something went wrong while saving the profile.");
+            });
+        });
+    });
+</script>
 @endpush

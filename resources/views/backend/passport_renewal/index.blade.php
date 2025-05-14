@@ -102,6 +102,7 @@
                                                                 onclick="setDeleteFormAction({{ $renewal->id }})">
                                                                 <i class="bx bx-trash me-1"></i> Delete
                                                             </a>
+                                                            
                                                         </div>
                                                     </div>
                                                 </td>

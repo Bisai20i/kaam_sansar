@@ -48,10 +48,10 @@ class ProjectController extends Controller
                 ? $this->responseError('Unauthorized', 401)
                 : redirect()->route('login')->with('error', 'Unauthorized access.');
         }
-
+        
         $validator = Validator::make($request->all(), [
             'projectTitle'       => 'required|string|max:255',
-            'projectLink'        => 'nullable',
+            'pl'        => 'nullable',
             'projectDescription' => 'required|string',
         ]);
 
@@ -69,7 +69,7 @@ class ProjectController extends Controller
         $project = new Project([
             'jobSeekerId'        => $user->id,
             'projectTitle'       => $request->input('projectTitle'),
-            'projectLink'        => $request->input('projectLink') ?: null,
+            'projectLink'        => $request->input('pl') ?: null,
             'projectDescription' => $request->input('projectDescription'),
         ]);
         $project->save();

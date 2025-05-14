@@ -19,8 +19,20 @@
         </div>
     </div>
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold mb-4 d-flex justify-content-between align-items-center">Passport Renewal Details
-            <a href="{{ route('passport.renewal') }}" class="btn btn-primary"><i class='bx bx-arrow-back'></i>  Back</a>
+        <h4 class="fw-bold mb-4 d-flex justify-content-between align-items-center">
+            <p class="d-flex gap-2 align-items-center">Passport Renewal Details <small class="badge fs-6 bg-{{ $passportRenewal->status == 'pending' ? 'warning' :  ($passportRenewal->status == 'rejected' ? 'danger' : 'success') }} rounded-pill">{{ $passportRenewal->status }}</small></p>
+            <div class="d-flex gap-2 align-items-center justify-content-end">
+                @if ($passportRenewal->status == 'pending')
+                    <a href="{{ route('passport.renewal.setStatus', [$passportRenewal->id, 'to'=>'approved']) }}" class="btn btn-success ">Approve</a>
+                    <a href="{{ route('passport.renewal.setStatus', [$passportRenewal->id, 'to'=>'rejected']) }}" class="btn btn-danger ">Reject</a>
+                
+                @else
+                    <a href="{{ route('passport.renewal.setStatus', [$passportRenewal->id, 'to'=>'pending']) }}" class="btn btn-info">Set Status to Pending</a>
+                @endif
+                <a href="{{ route('passport.renewal') }}" class="btn btn-primary"><i class='bx bx-arrow-back'></i>  Back</a>
+                
+            </div>
+            
         </h4>
 
         <!-- Personal Information -->
@@ -80,6 +92,10 @@
             <div class="card-body">
                 <p><strong>Email:</strong> {{ $passportRenewal->email }}</p>
                 <p><strong>Phone:</strong> {{ $passportRenewal->phone }}</p>
+                <p><strong>Country:</strong> {{ $passportRenewal->contact_country }}</p>
+                <p><strong>State:</strong> {{ $passportRenewal->contact_state }}</p>
+                <p><strong>District:</strong> {{ $passportRenewal->contact_district }}</p>
+                <p><strong>City:</strong> {{ $passportRenewal->contact_city }}</p>
                 
             </div>
         </div>

@@ -311,12 +311,17 @@
 
                 <h2 class="text-center mb-4">Create Profile</h2>
 
-                <div class="text-center mb-4">
-                    <img src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail
-                        ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
-                        : asset('frontend/Images/profile.png') }}"
-                        class="rounded-circle object-cover border border-secondary"
-                        style="width: 100px; aspect-ratio: 1/1;" alt="Profile Photo">
+                <div class="text-center mb-4 d-flex justify-content-center">
+                    <div
+                            class="border border-secondary rounded rounded-circle d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1" style="width: 150px; height: 150px">
+                            <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                                name="image1" onchange="previewImage(this)" style="z-index: 1; cursor: pointer;" />
+                            <span></span> <i class="fas fa-plus text-muted position-absolute" style="top: 45%; "></i>
+                            <img src="{{ Auth::guard('job_seekers')->check() && isset(Auth::guard('job_seekers')->user()->userThumbnail[0]) ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : '' }}"
+                                class="rounded-circle w-100 h-100 {{ Auth::guard('job_seekers')->check() && isset(Auth::guard('job_seekers')->user()->userThumbnail[0]) ? '' : 'd-none' }}"
+                                alt="Preview Image" id="preview" accept="image/*" />
+                        </div>
+                    
                 </div>
 
                 <p class="text-center text-muted mb-4">Upload up to 5 photos. Click to select primary photo</p>

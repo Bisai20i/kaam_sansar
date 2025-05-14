@@ -152,11 +152,11 @@ class DocumentationAttestationController extends Controller
      * @param  \App\Models\DocumentationAttestation  $documentationAttestation
      * @return \Illuminate\Http\Response
      */
-    public function show(DocumentationAttestation $documentationAttestation)
+    public function show($id) 
     {
-        return $documentationAttestation->id;
+        
 
-        dd($documentationAttestation);
+        $documentationAttestation = DocumentationAttestation::findOrFail($id);
         return view('backend.documentAttestations.show', compact('documentationAttestation'));
     }
 

@@ -68,7 +68,7 @@
                                     </td>
                                     <td>
                                         <small class="badge rounded-pill px-3  fw-semibold"
-                                            style="font-size: 14px; background-color: {{ $form->status == 'approved' ? '#0D99FF' : ($form->status == 'rejected' ? '#EE2F2F' : '#FEC53D') }};">{{ ucfirst($form->status) }}</small>
+                                            style="font-size: 14px; background-color: {{ $form->status == 'approved' ? '#085927' : ($form->status == 'rejected' ? '#EE2F2F' : '#FEC53D') }};">{{ ucfirst($form->status) }}</small>
                                     </td>
                                     <td>
                                         <a href="{{ route('form.complete', $form->id) }}"
@@ -80,45 +80,6 @@
                             @endforeach
                         @endif
 
-                        <tr class="border-bottom border-secondary-subtle py-1">
-                            <td class="ps-3" style="font-weight: 500;">2</td>
-                            <td class="" style="font-weight: 500;">Bank Account</td>
-                            <td class="" style="font-weight: 500;">05/11/2025</td>
-                            <td>
-                                <span class="badge rounded-1 px-3 py-2 fw-semibold"
-                                    style="font-size: 14px; background-color: #0D99FF;">InProgress</span>
-                            </td>
-                            <td>
-                                <span class="badge rounded-1 px-3 py-2 bg-primary fw-semibold" style="font-size: 14px;">Fill
-                                    More<i class="bi bi-arrow-right ps-2" style="font-weight: 700;"></i></span>
-                            </td>
-                        </tr>
-                        <tr class="border-bottom border-secondary-subtle py-1">
-                            <td class="ps-3" style="font-weight: 500;">3</td>
-                            <td class="" style="font-weight: 500;">Broker Account</td>
-                            <td class="" style="font-weight: 500;">05/11/2025</td>
-                            <td>
-                                <span class="badge rounded-1 px-3 py-2 fw-semibold"
-                                    style="font-size: 14px; background-color: #FEC53D;">Pending</span>
-                            </td>
-                            <td>
-                                <span class="badge rounded-1 px-3 py-2 bg-primary fw-semibold" style="font-size: 14px;">Fill
-                                    More<i class="bi bi-arrow-right ps-2" style="font-weight: 700;"></i></span>
-                            </td>
-                        </tr>
-                        <tr class="border-bottom border-secondary-subtle py-1">
-                            <td class="ps-3" style="font-weight: 500;">4</td>
-                            <td class="" style="font-weight: 500;">Renew Password </td>
-                            <td class="" style="font-weight: 500;">05/11/2025</td>
-                            <td>
-                                <span class="badge rounded-1 px-3 py-2 fw-semibold"
-                                    style="font-size: 14px; background-color: #EE2F2F;">Cancelled</span>
-                            </td>
-                            <td>
-                                <span class="badge rounded-1 px-3 py-2 bg-primary fw-semibold" style="font-size: 14px;">Fill
-                                    More<i class="bi bi-arrow-right ps-2" style="font-weight: 700;"></i></span>
-                            </td>
-                        </tr>
 
                     </tbody>
                 </table>

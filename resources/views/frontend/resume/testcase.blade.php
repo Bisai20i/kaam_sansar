@@ -1,248 +1,396 @@
-<!-- resources/views/sections/education.blade.php -->
+  <tbody>
+                                    @foreach ($districts as $district)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $district->provience->provienceName }}</td>
+                                            <td>{{ $district->districtName }}</td>
+                                            <td>
+                                                <p class="text-capitalize badge {{ $district->publishStatus ? 'bg-success' : 'bg-danger' }} m-2">
+                                                    {{ $district->publishStatus ? 'Published' : 'Unpublished' }}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('workPermitLocation.index', ['district_id' => $district->id]) }}" 
+                                                    class="btn btn-info btn-sm text-white">Manage Locations</a>
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" 
+                                                        data-bs-toggle="dropdown">
+                                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item text-{{ $district->publishStatus ? 'danger' : 'success' }}" 
+                                                            href="javascript:void(0);" data-bs-toggle="modal"
+                                                            data-bs-target="#publishUnpublishModal"
+                                                            onclick="setPublishUnpublishFormAction({{ $district->id }}, '{{ $district->publishStatus }}')">
+                                                            <i class="bx bx-{{ $district->publishStatus ? 'x' : 'check' }} me-1"></i>
+                                                            {{ $district->publishStatus ? 'Unpublish' : 'Publish' }}
+                                                        </a>
+                                                        <a class="dropdown-item text-primary" href="#"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editDistrictModal{{ $district->id }}">
+                                                            <i class="bx bx-edit me-1"></i> Edit
+                                                        </a>
+                                                        <a class="dropdown-item text-danger" href="javascript:void(0);"
+                                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                            onclick="setDeleteFormAction({{ $district->id }})">
+                                                            <i class="bx bx-trash me-1"></i> Delete
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Edit Modal for each district -->
+                                        <div class="modal fade" id="editDistrictModal{{ $district->id }}" 
+                                            tabindex="-1" aria-labelledby="editDistrictModalLabel" aria-hidden="true" 
+                                            data-bs-backdrop="static" data-bs-keyboard="false">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form id="editDistrictForm" 
+                                                        action="{{ route('workPermitDistrict.update', $district->id) }}" 
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editDistrictModalLabel">
+                                                                Edit District</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Province</label>
+                                                                <select class="form-select" name="provience_id" required>
+                                                                    @foreach($provinces as $province)
+                                                                        <option value="{{ $province->id }}" {{ $district->provience_id == $province->id ? 'selected' : '' }}>
+                                                                            {{ $province->provienceName }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">District Name</label>
+                                                                <input type="text" class="form-control" name="name"
+                                                                    value="{{ $district->districtName }}" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Publish Status</label>
+                                                                <select class="form-select" name="status" required>
+                                                                    <option value="1" {{ $district->publishStatus ? 'selected' : '' }}>
+                                                                        Published</option>
+                                                                    <option value="0" {{ !$district->publishStatus ? 'selected' : '' }}>
+                                                                        Unpublished</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </tbody>
+                                <script>
+    // URLs for publish and unpublish routes
+    const publishUrl = @json(route('workPermitDistrict.publish', ['id' => '__ID__']));
+    const unpublishUrl = @json(route('workPermitDistrict.unpublish', ['id' => '__ID__']));
 
-<div id="education" class="section-content" style="display: none;">
-    <h4 class="mb-3 your-project-text">Your Education</h4>
-    <div class="card p-4 card-center">
-        <form id="educationForm">
-            @csrf
-            <h3>School/Institution</h3>
-            <div class="row mb-3">
-                <div class="col-md-12">
-                    <label for="schoolName" class="form-label">School Name</label>
-                    <input type="text" class="form-control custom-input" id="schoolName" name="schoolName" placeholder="California University" required />
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="degree" class="form-label">Degree <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="degree" name="degree" placeholder="Bachelor" required />
-                </div>
-                <div class="col-md-6">
-                    <label for="city" class="form-label">City <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="city" name="city" placeholder="Pokhara" required />
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="startDate" class="form-label">Start Date <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control custom-input" id="startDate" name="startDate" required />
-                </div>
-                <div class="col-md-6">
-                    <label for="graduationDate" class="form-label">Graduation Date <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control custom-input" id="graduationDate" name="graduationDate" required />
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-12">
-                    <label for="educationDescription" class="form-label">Summary <span class="text-danger">*</span></label>
-                    <textarea class="form-control custom-input" id="educationDescription" name="educationDescription" rows="3" required placeholder="Give a summary of your education..."></textarea>
-                </div>
-            </div>
-            <button type="button" class="btn add-project float-start" id="addEducation">+ Add Education</button>
-            <div class="text-end">
-                <button type="submit" class="btn text-center skip-btn mx-2" data-current="education" data-next="project" data-link="projectLink">Skip</button>
-                <button type="button" class="btn text-center next-btn" id="submitEducation">Save & Continue</button>
-            </div>
-        </form>
-    </div>
+    // Function to dynamically update modal content
+    function setPublishUnpublishFormAction(districtId, currentStatus) {
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const actionButton = document.getElementById('modalActionButton');
+        const buttonText = document.getElementById('buttonText');
+        const publishUnpublishForm = document.getElementById('publishUnpublishForm');
 
-    <!-- Existing Education List -->
-    <div class="container mt-4 p-0">
-        <div id="educationList">
-            @foreach($educations as $education)
-            <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="card_id_{{  $education->id}}">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5>{{ $education->degree }}</h5>
-                    </div>
-                    <div>
-                        <a href="{{ route('educations.edit', $education->id) }}" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
-                        <button type="button" class="btn text-danger fw-semibold delete-education" data-id="{{$education->id  }}">Delete</button>
-                    </div>
-                </div>
-                <div class="text-black-50">
-                    <p class="m-0">{{ $education->schoolName }} – {{ $education->city }}</p>
-                    <p class="m-0">{{ \Carbon\Carbon::parse($education->startDate)->format('M Y') }} – {{ \Carbon\Carbon::parse($education->graduationDate)->format('M Y') }}</p>
-                    <p class="m-0">{{ $education->educationDescription }}</p>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</div>
+        if (currentStatus === '1') {
+            // Set content for unpublishing
+            modalTitle.textContent = 'Unpublished';
+            modalMessage.textContent = 'Are you sure you want to unpublish this District?';
+            actionButton.classList.remove('btn-success');
+            actionButton.classList.add('btn-warning');
+            buttonText.textContent = 'Unpublish';
+            publishUnpublishForm.action = unpublishUrl.replace('__ID__', districtId);
+        } else {
+            // Set content for publishing
+            modalTitle.textContent = 'Published';
+            modalMessage.textContent = 'Are you sure you want to publish this District?';
+            actionButton.classList.remove('btn-warning');
+            actionButton.classList.add('btn-success');
+            buttonText.textContent = 'Publish';
+            publishUnpublishForm.action = publishUrl.replace('__ID__', districtId);
+        }
+    }
 
-@push('scripts')
+    // Handle loader visibility during form submission
+    document.getElementById('publishUnpublishForm').addEventListener('submit', function() {
+        const loader = document.getElementById('loader');
+        const buttonText = document.getElementById('buttonText');
+
+        // Show loader and hide button text
+        loader.style.display = 'inline-block';
+        buttonText.style.display = 'none';
+    });
+</script> <script>
+    // Function to set the form action for the delete button
+    function setDeleteFormAction(id) {
+        document.getElementById('deleteForm').action = '{{ route('workPermitDistricts.destroy', '') }}/' + id;
+    }
+</script> 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function collectEducationData() {
-            return {
-                schoolName: document.getElementById('schoolName').value,
-                degree: document.getElementById('degree').value,
-                city: document.getElementById('city').value,
-                startDate: document.getElementById('startDate').value,
-                graduationDate: document.getElementById('graduationDate').value,
-                educationDescription: document.getElementById('educationDescription').value
-            };
+    function addDistrict() {
+        const form = document.getElementById('addDistrictForm');
+        const formData = new FormData(form);
+        const errorElement = document.getElementById('inputError');
+
+        // Reset error
+        errorElement.style.display = 'none';
+
+        // Validate
+        if (!formData.get('provience_id') || !formData.get('name') || !formData.get('publishStatus')) {
+            errorElement.style.display = 'block';
+            errorElement.textContent = 'Please fill all required fields';
+            return;
         }
 
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', {
-                month: 'short',
-                year: 'numeric'
-            });
-        }
+        // Add loading state
+        const addButton = document.querySelector('#addDistrictForm button[type="button"]');
+        const originalText = addButton.innerHTML;
+        addButton.innerHTML = '<i class="bx bx-loader bx-spin"></i> Adding...';
+        addButton.disabled = true;
 
-        function appendEducationCard(education) {
-            const card = document.createElement('div');
-            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
-            card.innerHTML = `
-            <div class="d-flex justify-content-between">
-                <div><h5>${education.degree}</h5></div>
-                <div>
-                    <a href="/educations/${education.id}/edit" class="btn fw-semibold" style="color: #0064A7;">Edit</a>
-                    <button type="button" class="btn text-danger fw-semibold delete-education" data-id="${education.id}">Delete</button>
-                </div>
-            </div>
-            <div class="text-black-50">
-                <p class="m-0">${education.schoolName} – ${education.city}</p>
-                <p class="m-0">${formatDate(education.startDate)} – ${formatDate(education.graduationDate)}</p>
-                <p class="m-0">${education.educationDescription}</p>
-            </div>
-        `;
-            document.getElementById('educationList').appendChild(card);
-        }
-
-        async function saveEducationData(data) {
-            const response = await fetch("{{ route('educations.store') }}", {
+        // AJAX request
+        fetch("{{ route('workPermitDistricts.store') }}", {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
                 },
-                body: JSON.stringify(data)
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Add new row to table
+                    const tableBody = document.querySelector('#districtsTable tbody');
+                    const newRow = document.createElement('tr');
+                    newRow.id = 'districtRow' + data.district.id;
+                    newRow.innerHTML = `
+                    <td>${tableBody.children.length + 1}</td>
+                    <td>${data.provienceName}</td>
+                    <td>${data.district.districtName}</td>
+                    <td>
+                        <span class="badge bg-${data.district.publishStatus ? 'success' : 'danger'}">
+                            ${data.district.publishStatus ? 'Published' : 'Unpublished'}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="/admin/work-permit-locations?district_id=${data.district.id}" 
+                            class="btn btn-info btn-sm">Locations</a>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="javascript:void(0);" 
+                                    onclick="toggleDistrictStatus(${data.district.id}, ${data.district.publishStatus})">
+                                    <i class="bx bx-${data.district.publishStatus ? 'x' : 'check'} me-1"></i>
+                                    ${data.district.publishStatus ? 'Unpublish' : 'Publish'}
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0);" 
+                                    onclick="editDistrict(${data.district.id})">
+                                    <i class="bx bx-edit me-1"></i> Edit
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0);" 
+                                    onclick="deleteDistrict(${data.district.id})">
+                                    <i class="bx bx-trash me-1"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                    tableBody.appendChild(newRow);
+
+                    // Reset form
+                    form.reset();
+                } else {
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = data.message || 'Error adding district';
+                }
+            })
+            .catch(error => {
+                errorElement.style.display = 'block';
+                errorElement.textContent = 'An error occurred';
+            })
+            .finally(() => {
+                addButton.innerHTML = originalText;
+                addButton.disabled = false;
             });
+    }
 
-            // Try to parse JSON only if response is OK
-            if (!response.ok) {
-                const text = await response.text();
-                console.error(text);
-                return {
-                    success: false
-                };
-            }
+    function editDistrict(id) {
+        // Fetch district data
+        fetch(`/admin/work-permit-districts/${id}/edit`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Populate modal
+                    document.getElementById('editDistrictId').value = data.district.id;
+                    document.getElementById('editDistrictName').value = data.district.districtName;
+                    document.getElementById('editProvienceId').value = data.district.provience_id;
+                    document.getElementById('editPublishStatus').value = data.district.publishStatus;
 
-            return await response.json();
-        }
-
-        document.getElementById('addEducation').addEventListener('click', async function(e) {
-            e.preventDefault();
-            const data = collectEducationData();
-            const result = await saveEducationData(data);
-            if (result.success) {
-                appendEducationCard(result.education);
-                document.getElementById('educationForm').reset();
-            } else {
-                alert('Error saving education');
-            }
-        });
-
-        document.getElementById('submitEducation').addEventListener('click', async function(e) {
-            e.preventDefault();
-            const data = collectEducationData();
-            const result = await saveEducationData(data);
-            if (result.success) {
-                appendEducationCard(result.education);
-                document.getElementById('educationForm').reset();
-                document.getElementById('education').style.display = 'none';
-                document.getElementById('project').style.display = 'block';
-                document.querySelectorAll('.profile-link').forEach(l => l.classList.remove('active'));
-                document.getElementById('projectLink').classList.add('active');
-            } else {
-                alert('Error saving education');
-            }
-        });
-
-        async function deleteEducationData(id) {
-
-
-            try {
-                const response = await fetch(`/jobseeker/educations/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        request_type: 'mobile' // to get the mobile response
-                    })
-                });
-
-                // Check if the response is JSON
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    throw new Error('Server did not return JSON');
+                    // Show modal
+                    const modal = new bootstrap.Modal(document.getElementById('editDistrictModal'));
+                    modal.show();
                 }
+            });
+    }
 
-                const data = await response.json();
+    // Handle edit form submission
+    document.getElementById('editDistrictForm').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-                if (!response.ok) {
-                    throw new Error(data.message || 'Failed to delete education');
-                }
+        const formData = new FormData(this);
+        const id = formData.get('id');
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
 
-                return data;
-            } catch (error) {
-                console.error('Error:', error);
-                throw error;
-            }
-        }
+        submitButton.innerHTML = '<i class="bx bx-loader bx-spin"></i> Saving...';
+        submitButton.disabled = true;
 
-        // Delete education event delegation
-        // document.getElementById('educationList').addEventListener('click', async function(e) {
-        //     if (e.target.classList.contains('delete-education')) {
-        //         const id = e.target.dataset.id;
+        fetch(`/admin/work-permit-districts/${id}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'X-HTTP-Method-Override': 'PUT'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update row in table
+                    const row = document.getElementById(`districtRow${id}`);
+                    if (row) {
+                        row.cells[1].textContent = data.provienceName;
+                        row.cells[2].textContent = data.district.districtName;
+                        row.cells[3].innerHTML = `
+                        <span class="badge bg-${data.district.publishStatus ? 'success' : 'danger'}">
+                            ${data.district.publishStatus ? 'Published' : 'Unpublished'}
+                        </span>
+                    `;
 
-        //         // alert(id);
-
-        //         if (confirm('Are you sure you want to delete this education entry?')) {
-        //             try {
-        //                 const result = await deleteEducationData(id);
-        //                 if (result.success) {
-        //                     e.target.closest('.card').remove();
-        //                     alert('Education deleted successfully!');
-        //                 }
-        //             } catch (error) {
-        //                 alert('Error deleting education: ' + error.message);
-        //             }
-        //         }
-        //     }
-        // });
-
-
-
-        // Use event delegation on a static parent element
-        document.addEventListener('click', async function(e) {
-            if (e.target.classList.contains('delete-education')) {
-                e.preventDefault();
-                const id = e.target.dataset.id;
-
-                if (confirm('Are you sure you want to delete this education entry?')) {
-                    try {
-                        const result = await deleteEducationData(id);
-
-                        // alert(result.toString());
-                        if (result.status) {
-                            e.target.closest('.card').remove();
-                            alert('Education deleted successfully!');
-                        }
-                    } catch (error) {
-                        alert('Error deleting education: ' + error.message);
+                        // Update dropdown actions
+                        const dropdownMenu = row.querySelector('.dropdown-menu');
+                        dropdownMenu.innerHTML = `
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                            onclick="toggleDistrictStatus(${data.district.id}, ${data.district.publishStatus})">
+                            <i class="bx bx-${data.district.publishStatus ? 'x' : 'check'} me-1"></i>
+                            ${data.district.publishStatus ? 'Unpublish' : 'Publish'}
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                            onclick="editDistrict(${data.district.id})">
+                            <i class="bx bx-edit me-1"></i> Edit
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                            onclick="deleteDistrict(${data.district.id})">
+                            <i class="bx bx-trash me-1"></i> Delete
+                        </a>
+                    `;
                     }
-                }
-            }
-        });
 
+                    // Hide modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editDistrictModal'));
+                    modal.hide();
+                }
+            })
+            .finally(() => {
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            });
     });
+
+    function toggleDistrictStatus(id, currentStatus) {
+        if (confirm(`Are you sure you want to ${currentStatus ? 'unpublish' : 'publish'} this district?`)) {
+            fetch(`/admin/work-permit-districts/${id}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-HTTP-Method-Override': 'PUT'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update status in table
+                        const row = document.getElementById(`districtRow${id}`);
+                        if (row) {
+                            row.cells[3].innerHTML = `
+                            <span class="badge bg-${data.newStatus ? 'success' : 'danger'}">
+                                ${data.newStatus ? 'Published' : 'Unpublished'}
+                            </span>
+                        `;
+
+                            // Update dropdown actions
+                            const dropdownMenu = row.querySelector('.dropdown-menu');
+                            dropdownMenu.innerHTML = `
+                            <a class="dropdown-item" href="javascript:void(0);" 
+                                onclick="toggleDistrictStatus(${id}, ${data.newStatus})">
+                                <i class="bx bx-${data.newStatus ? 'x' : 'check'} me-1"></i>
+                                ${data.newStatus ? 'Unpublish' : 'Publish'}
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);" 
+                                onclick="editDistrict(${id})">
+                                <i class="bx bx-edit me-1"></i> Edit
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);" 
+                                onclick="deleteDistrict(${id})">
+                                <i class="bx bx-trash me-1"></i> Delete
+                            </a>
+                        `;
+                        }
+                    }
+                });
+        }
+    }
+
+    function deleteDistrict(id) {
+        if (confirm('Are you sure you want to delete this district?')) {
+            fetch(`/admin/work-permit-districts/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-HTTP-Method-Override': 'DELETE'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove row from table
+                        const row = document.getElementById(`districtRow${id}`);
+                        if (row) {
+                            row.remove();
+                        }
+
+                        // Renumber the SN column
+                        const rows = document.querySelectorAll('#districtsTable tbody tr');
+                        rows.forEach((row, index) => {
+                            row.cells[0].textContent = index + 1;
+                        });
+                    }
+                });
+        }
+    }
 </script>
-@endpush

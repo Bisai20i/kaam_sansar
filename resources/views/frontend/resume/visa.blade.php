@@ -34,7 +34,7 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addVisa">+ Add Visa</button>
+                <button type="button" class="btn add-project float-start" id="addVisa">+Add Visa</button>
                 <div class="text-end">
                     <button type="button" class="btn text-center skip-btn mx-2" data-current="visa" data-next="education" data-link="educationLink">Continue to Education</button>
                 </div>
@@ -182,6 +182,7 @@
         document.getElementById('addVisa').addEventListener('click', async function(e) {
             e.preventDefault();
             const formData = collectVisaData();
+            console.log(collectVisaData());
             if (!formData.get('visaDetails') || !formData.get('visaExpire') || !formData.get('country')) {
                 alert('Please fill all required fields');
                 return;

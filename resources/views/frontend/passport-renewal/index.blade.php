@@ -47,10 +47,11 @@
 
         <div class="my-3 mb-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
 
-            <form id="passportRenewalForm" action="{{ route('passport.renew.partial') }}" enctype="multipart/form-data"
-                method="POST" class="accordion">
+            <form id="passportRenewalForm" action="{{ route('passport.renew.update', $passportRenewal->id) }}"
+                enctype="multipart/form-data" method="POST" class="accordion">
 
                 @csrf
+                @method('PUT')
 
                 <style>
                     .nav-link {
@@ -238,7 +239,8 @@
                             </h4>
                         </div>
                         <div class="row row-cols-1 row-cols-md-2 row-gap-5">
-                            <input type="hidden" id="appointment_date" name="appointment_date" value="{{ $passportRenewal->appointment_date }}">
+                            <input type="hidden" id="appointment_date" name="appointment_date"
+                                value="{{ $passportRenewal->appointment_date }}">
                             <div class="col">
                                 <h4>Select a Date</h4>
                                 <div class="content border border-1 border-secondary-subtle rounded-4 h-100 pt-2 mb-2">
@@ -329,30 +331,30 @@
                                 <div class="col">
                                     <label for="first_name" class="form-label fs-6 required">First
                                         Name:</label>
-                                    <input type="text" class="form-control" id="first_name" name="first_name"
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $passportRenewal->first_name ?? '' }}"
                                         required maxlength="255" placeholder="John">
                                 </div>
                                 <div class="col">
                                     <label for="middle_name" class="form-label fs-6">Middle
                                         Name:</label>
-                                    <input type="text" class="form-control" id="middle_name" name="middle_name"
+                                    <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{ $passportRenewal->middle_name ?? '' }}"
                                         maxlength="255" placeholder="Bahadur">
                                 </div>
                                 <div class="col">
                                     <label for="last_name" class="form-label fs-6 required">Last
                                         Name:</label>
                                     <input type="text" class="form-control" id="last_name" name="last_name" required
-                                        maxlength="255" placeholder="Doe">
+                                        maxlength="255" placeholder="Doe" value="{{ $passportRenewal->last_name ?? '' }}">
                                 </div>
 
                                 <div class="flatpickr-container flatpickr col d-flex flex-column">
-                                    <label for="date_of_birth_ad" class="fs-6 mb-1 required">Date of
+                                    <label for="date_of_birth_ad" class="fs-6 mb-1">Date of
                                         Birth
                                         (AD):</label>
                                     <div
                                         class=" d-flex border border-1 border-light-subtle justify-content-between align-items-center rounded-2 h-100 p-2 my-1">
                                         <input type="text" placeholder="1990-10-01" id="date_of_birth_ad"
-                                            name="date_of_birth_ad" class="date-picker fs-6" required>
+                                            name="date_of_birth_ad" class="date-picker fs-6" value="{{ $passportRenewal->date_of_birth_ad ?? '' }}" required>
                                         <label for="date_of_birth_ad" class="input-button" title="toggle" data-toggle>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24">
@@ -363,12 +365,12 @@
                                     </div>
                                 </div>
                                 <div class="flatpickr col d-flex flex-column">
-                                    <label for="date_of_bs" class="fs-6 mb-1 required">Date of Birth
+                                    <label for="date_of_bs" class="fs-6 mb-1">Date of Birth
                                         (BS):</label>
                                     <div
                                         class=" d-flex border border-1 border-light-subtle justify-content-between align-items-center rounded-2 h-100 p-2 my-1">
-                                        <input type="text" placeholder="1990-10-01" id="date_of_bs" name="date_of_bs"
-                                            class="date-picker fs-6" required>
+                                        <input type="text" placeholder="1990-10-01" id="date_of_bs" name="date_of_bs" value="{{ $passportRenewal->date_of_bs ?? '' }}"
+                                            class="date-picker fs-6">
                                         <label for="date_of_bs" class="input-button" title="toggle" data-toggle>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24">
@@ -379,87 +381,87 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <label for="birthplace" class="form-label fs-6 required">Birthplace
+                                    <label for="birthplace" class="form-label fs-6">Birthplace
                                         (District/
                                         Country if
                                         abroad):</label>
-                                    <input type="text" class="form-control" id="birthplace" name="birthplace"
-                                        required maxlength="255" placeholder="Kaski">
+                                    <input type="text" class="form-control" id="birthplace" name="birthplace" value="{{ $passportRenewal->birthplace ?? '' }}"
+                                        maxlength="255" placeholder="Kaski">
                                 </div>
 
 
                                 <div class="col">
-                                    <label for="gender" class="form-label fs-6 required">Gender:</label>
-                                    <select class="form-select fs-6" id="gender" name="gender" required>
+                                    <label for="gender" class="form-label fs-6">Gender:</label>
+                                    <select class="form-select fs-6" id="gender" name="gender">
                                         <option value="">Select Gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
+                                        <option value="Male" {{ $passportRenewal->gender == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ $passportRenewal->gender == 'Female' ? 'selected' : '' }}>Female</option>
+                                        <option value="Other" {{ $passportRenewal->gender == 'Other' ? 'selected' : '' }}>Other</option>
                                     </select>
                                 </div>
                                 <div class="col">
                                     <label for="age" class="form-label fs-6">Age:</label>
-                                    <input type="number" class="form-control" id="age" name="age" required
+                                    <input type="number" class="form-control" id="age" name="age" required value="{{ $passportRenewal->age ?? '' }}"
                                         readonly>
                                 </div>
                                 <div class="col">
                                     <label for="nationality" class="form-label fs-6 required">Nationality:</label>
                                     <input type="text" class="form-control" id="nationality" name="nationality"
-                                        required maxlength="255" placeholder="Nepali">
+                                        required maxlength="255" placeholder="Nepali" value="{{ $passportRenewal->nationality ?? '' }}">
                                 </div>
 
                                 <div class="col">
                                     <label for="religion" class="form-label fs-6">Religion:</label>
                                     <input type="text" class="form-control" id="religion" name="religion"
-                                        maxlength="255" placeholder="Hindu">
+                                        maxlength="255" placeholder="Hindu" value="{{ $passportRenewal->religion ?? '' }}">
                                 </div>
                                 <div class="col">
                                     <label for="birth_country" class="form-label fs-6 required">Birth
                                         Country:</label>
                                     <input type="text" class="form-control" id="birth_country" name="birth_country"
-                                        required maxlength="255" placeholder="Nepal">
+                                        required maxlength="255" placeholder="Nepal" value="{{ $passportRenewal->birth_country ?? '' }}">
                                 </div>
                                 <div class="col">
                                     <label for="father_name" class="form-label fs-6 required">Father's
                                         Name:</label>
                                     <input type="text" class="form-control" id="father_name" name="father_name"
-                                        required maxlength="255" placeholder="Elon Doe">
+                                        required maxlength="255" placeholder="Elon Doe" value="{{ $passportRenewal->father_name ?? '' }}">
                                 </div>
 
                                 <div class="col">
                                     <label for="mother_name" class="form-label fs-6 required">Mother's
                                         Name:</label>
                                     <input type="text" class="form-control" id="mother_name" name="mother_name"
-                                        required maxlength="255" placeholder="Joana Doe">
+                                        required maxlength="255" placeholder="Joana Doe" value="{{ $passportRenewal->mother_name ?? '' }}">
                                 </div>
                                 <div class="col">
                                     <label for="marital_status" class="form-label fs-6 required">Marital
                                         Status:</label>
                                     <select class="form-select fs-6" id="marital_status" name="marital_status" required>
                                         <option value="">Select Status</option>
-                                        <option value="Unmarried">Unmarried</option>
-                                        <option value="Married">Married</option>
-                                        <option value="Divorced">Divorced</option>
-                                        <option value="Widowed">Widowed</option>
+                                        <option value="Unmarried" {{ $passportRenewal->marital_status == 'Unmarried' ? 'selected' : '' }}>Unmarried</option>
+                                        <option value="Married" {{ $passportRenewal->marital_status == 'Married' ? 'selected' : '' }}>Married</option>
+                                        <option value="Divorced" {{ $passportRenewal->marital_status == 'Divorced' ? 'selected' : '' }}>Divorced</option>
+                                        <option value="Widowed" {{ $passportRenewal->marital_status == 'Widowed' ? 'selected' : '' }}>Widowed</option>
                                     </select>
                                 </div>
                                 <div class="col">
                                     <label for="spouse_name" class="form-label fs-6">Spouse's
                                         Name:</label>
                                     <input type="text" class="form-control" id="spouse_name" name="spouse_name"
-                                        maxlength="255" placeholder="Jane Doe">
+                                        maxlength="255" placeholder="Jane Doe" value="{{ $passportRenewal->spouse_name ?? '' }}">
                                 </div>
                                 <div class="col">
                                     <label for="no_of_children" class="form-label fs-6">No. of
                                         Children:</label>
                                     <input type="number" class="form-control" id="no_of_children" name="no_of_children"
-                                        placeholder="2">
+                                        placeholder="2" value="{{ $passportRenewal->no_of_children ?? '' }}">
                                 </div>
                                 <div class="col">
                                     <label for="spouse_age" class="form-label fs-6">Spouse's
                                         Age:</label>
                                     <input type="text" class="form-control" id="spouse_age" name="spouse_age"
-                                        maxlength="255" placeholder="20">
+                                        maxlength="255" placeholder="20" value="{{ $passportRenewal->spouse_age ?? '' }}">
                                 </div>
                             </div>
                         </div>
@@ -478,29 +480,29 @@
 
                             <div class=" accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                 <div class="col">
-                                    <label for="national_identify_no" class="form-label fs-6 required">National
+                                    <label for="national_identify_no" class="form-label fs-6">National
                                         Identify No.
                                         (NIN-Only
                                         Digits):</label>
                                     <input type="text" class="form-control" id="national_identify_no"
-                                        name="national_identify_no" required maxlength="255" placeholder="XXXXXXXXX">
+                                        name="national_identify_no"  maxlength="255" placeholder="XXXXXXXXX" value="{{ $passportRenewal->national_identify_no ?? '' }}">
                                 </div>
                                 <div class="col">
-                                    <label for="citizenship_no" class="form-label fs-6 required">Citizenship
+                                    <label for="citizenship_no" class="form-label fs-6 ">Citizenship
                                         or
                                         Permit
                                         Number:</label>
-                                    <input type="text" class="form-control" id="citizenship_no" name="citizenship_no"
-                                        required maxlength="255" placeholder="XXXXXXXX">
+                                    <input type="text" class="form-control" id="citizenship_no" name="citizenship_no" value="{{ $passportRenewal->citizenship_no ?? '' }}"
+                                         maxlength="255" placeholder="XXXXXXXX">
                                 </div>
                                 <div class="flatpickr col d-flex flex-column">
-                                    <label for="citizenship_issue_date" class="fs-6 mb-1 required">Citizenship Date
+                                    <label for="citizenship_issue_date" class="fs-6 mb-1 ">Citizenship Date
                                         of
                                         Issue(AD/BS):</label>
                                     <div
                                         class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
-                                        <input type="text" placeholder="1990-10-01" id="citizenship_issue_date"
-                                            name="citizenship_issue_date" class="date-picker fs-6" required>
+                                        <input type="text" placeholder="1990-10-01" id="citizenship_issue_date" value="{{ $passportRenewal->citizenship_issue_date ?? '' }}"
+                                            name="citizenship_issue_date" class="date-picker fs-6" >
                                         <label for="citizenship_issue_date" class="input-button" title="toggle"
                                             data-toggle>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -513,17 +515,17 @@
                                 </div>
 
                                 <div class="col">
-                                    <label for="citizenship_issue_place" class="form-label fs-6 required">Citizenship
+                                    <label for="citizenship_issue_place" class="form-label fs-6 ">Citizenship
                                         Place of
                                         Issue(District):</label>
-                                    <input type="text" class="form-control" id="citizenship_issue_place"
-                                        name="citizenship_issue_place" required maxlength="255" placeholder="Kaski">
+                                    <input type="text" class="form-control" id="citizenship_issue_place" value="{{ $passportRenewal->citizenship_issue_place ?? '' }}"
+                                        name="citizenship_issue_place"  maxlength="255" placeholder="Kaski">
                                 </div>
                                 <div class="col">
                                     <label for="citizenship_issue_place_abroad" class="form-label fs-6">Citizenship Place
                                         of
                                         Issue(Abroad):</label>
-                                    <input type="text" class="form-control" id="citizenship_issue_place_abroad"
+                                    <input type="text" class="form-control" id="citizenship_issue_place_abroad" value="{{ $passportRenewal->citizenship_issue_place_abroad ?? '' }}"
                                         name="citizenship_issue_place_abroad" maxlength="255" placeholder="Texas">
                                 </div>
 
@@ -543,15 +545,15 @@
                         <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                 <div class="col">
-                                    <label for="passport_no" class="form-label fs-6 required">Passport
+                                    <label for="passport_no" class="form-label fs-6 ">Passport
                                         Number:</label>
-                                    <input type="text" class="form-control" id="passport_no" name="passport_no"
-                                        required maxlength="255" placeholder="XXXXXXXXX">
+                                    <input type="text" class="form-control" id="passport_no" name="passport_no" value="{{ $passportRenewal->passport_no ?? '' }}"
+                                         maxlength="255" placeholder="XXXXXXXXX">
                                 </div>
                                 <div class="col">
-                                    <label for="passport_type" class="form-label fs-6 required">Pasport
+                                    <label for="passport_type" class="form-label fs-6 ">Pasport
                                         Type:</label>
-                                    <select class="form-select fs-6" id="passport_type" name="passport_type" required>
+                                    <select class="form-select fs-6" id="passport_type" name="passport_type" >
                                         <option value="">Select Type</option>
                                         <option value="Type 1">Type 1</option>
                                         <option value="Type 2">Type 2</option>
@@ -559,12 +561,12 @@
                                     </select>
                                 </div>
                                 <div class="flatpickr col d-flex flex-column">
-                                    <label for="passport_issue_date" class="fs-6 mb-1 required">Issue
+                                    <label for="passport_issue_date" class="fs-6 mb-1 ">Issue
                                         Date:</label>
                                     <div
                                         class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
-                                        <input type="text" placeholder="1990-10-01" id="passport_issue_date"
-                                            name="passport_issue_date" class="date-picker fs-6" required>
+                                        <input type="text" placeholder="1990-10-01" id="passport_issue_date" value="{{ $passportRenewal->passport_issue_date ?? '' }}"
+                                            name="passport_issue_date" class="date-picker fs-6" >
                                         <label for="passport_issue_date" class="input-button" title="toggle" data-toggle>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24">
@@ -576,12 +578,12 @@
                                 </div>
 
                                 <div class="flatpickr col d-flex flex-column">
-                                    <label for="passport_expiry_date" class="fs-6 mb-1 required">Expiry
+                                    <label for="passport_expiry_date" class="fs-6 mb-1 ">Expiry
                                         Date:</label>
                                     <div
                                         class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
-                                        <input type="text" placeholder="1990-10-01" id="passport_expiry_date"
-                                            name="passport_expiry_date" class="date-picker fs-6" required>
+                                        <input type="text" placeholder="1990-10-01" id="passport_expiry_date" value="{{ $passportRenewal->passport_expiry_date ?? '' }}"
+                                            name="passport_expiry_date" class="date-picker fs-6" >
                                         <label for="passport_expiry_date" class="input-button" title="toggle"
                                             data-toggle>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -593,17 +595,17 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <label for="passport_issue_place" class="form-label fs-6 required">Place
+                                    <label for="passport_issue_place" class="form-label fs-6 ">Place
                                         of
                                         Issue:</label>
-                                    <input type="text" class="form-control" id="passport_issue_place"
-                                        name="passport_issue_place" required maxlength="255" placeholder="Nepal">
+                                    <input type="text" class="form-control" id="passport_issue_place" value="{{ $passportRenewal->passport_issue_place ?? '' }}"
+                                        name="passport_issue_place"  maxlength="255" placeholder="Nepal">
                                 </div>
                                 <div class="col">
-                                    <label for="issuing_authority" class="form-label fs-6 required">Issuing
+                                    <label for="issuing_authority" class="form-label fs-6 ">Issuing
                                         Authority:</label>
                                     <input type="text" class="form-control" id="issuing_authority"
-                                        name="issuing_authority" required maxlength="255" placeholder="DOP">
+                                        name="issuing_authority"  maxlength="255" placeholder="DOP">
                                 </div>
 
                             </div>
@@ -624,50 +626,36 @@
                                     <label for="email" class="form-label fs-6 required">Email
                                         Address:</label>
                                     <input type="email" class="form-control" id="email" name="email" required
-                                        maxlength="255" placeholder="john.doe@gmail.com">
+                                        maxlength="255" placeholder="john.doe@gmail.com"
+                                        value="{{ $passportRenewal->email }}">
                                 </div>
 
                                 <div class="col">
-                                    <label for="country" class="form-label fs-6 required">Country:</label>
-                                    <select class="form-select fs-6" id="country" name="country" required>
-                                        <option value="">Select Country</option>
-                                        <option value="Nepal">Nepal</option>
-                                        <option value="USA">USA</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                                    <label for="country" class="form-label fs-6 ">Country:</label>
+                                    <input type="text" name="contact_country" class="form-control" value="{{ $passportRenewal->contact_country ?? '' }}" id="country">
                                 </div>
 
                                 <div class="col">
-                                    <label for="state" class="form-label fs-6 required">State/Province:</label>
-                                    <select class="form-select fs-6" id="state" name="state" required>
-                                        <option value="">Select State/Province</option>
-                                        <option value="Gandaki">Gandaki</option>
-                                        <option value="Karnali">Karnali</option>
-                                        <option value="Bagmati">Bagmati</option>
-                                    </select>
+                                    <label for="state" class="form-label fs-6 ">State/Province:</label>
+                                    <input type="text" name="contact_state" class="form-control" value="{{ $passportRenewal->contact_state ?? '' }}" id="state">
                                 </div>
 
                                 <div class="col">
-                                    <label for="district" class="form-label fs-6 required">District:</label>
-                                    <select class="form-select fs-6" id="district" name="district" required>
-                                        <option value="">Select District</option>
-                                        <option value="Kaski">Kaski</option>
-                                        <option value="Etc">Etc</option>
-                                        <option value="Bagmati">Bagmati</option>
-                                    </select>
+                                    <label for="district" class="form-label fs-6 ">District:</label>
+                                    <input type="text" name="contact_district" class="form-control" value="{{ $passportRenewal->contact_district ?? '' }}" id="district">
                                 </div>
 
                                 <div class="col">
-                                    <label for="city" class="form-label fs-6 required">City:</label>
-                                    <input type="text" class="form-control" id="city" name="city" required
-                                        maxlength="255" placeholder="Pokhara">
+                                    <label for="city" class="form-label fs-6 ">City:</label>
+                                    <input type="text" class="form-control" id="city" name="contact_city" value="{{ $passportRenewal->contact_city ?? '' }}"
+                                         maxlength="255" placeholder="Pokhara">
                                 </div>
 
                                 <div class="col">
                                     <label for="phone" class="form-label fs-6 required">Phone
                                         Number:</label>
                                     <input type="tel" class="form-control" id="phone" name="phone" required
-                                        maxlength="255" placeholder="98XXXXXXXX">
+                                        maxlength="255" placeholder="98XXXXXXXX" value="{{ $passportRenewal->phone }}">
                                 </div>
                             </div>
                         </div>
@@ -684,72 +672,58 @@
                         <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                 <div class="col">
-                                    <label for="emergency_contact_name" class="form-label fs-6 required">Full
+                                    <label for="emergency_contact_name" class="form-label fs-6 ">Full
                                         Name:</label>
                                     <input type="text" class="form-control" id="emergency_contact_name"
-                                        name="emergency_contact_name" required maxlength="255" placeholder="Jane Doe">
+                                        name="emergency_contact_name"  maxlength="255" placeholder="Jane Doe"
+                                        value="{{ $passportRenewal->emergency_contact_name }}">
                                 </div>
 
                                 <div class="col">
                                     <label for="emergency_contact_relation"
-                                        class="form-label fs-6 required">Relationship:</label>
+                                        class="form-label fs-6 ">Relationship:</label>
                                     <input type="text" class="form-control" id="emergency_contact_relation"
-                                        name="emergency_contact_relation" required maxlength="255" placeholder="Cousin">
+                                        value="{{ $passportRenewal->emergency_contact_relation }}"
+                                        name="emergency_contact_relation"  maxlength="255" placeholder="Cousin">
                                 </div>
 
                                 <div class="col">
                                     <label for="emergency_contact_country"
-                                        class="form-label fs-6 required">Country:</label>
-                                    <select class="form-select fs-6" id="emergency_contact_country"
-                                        name="emergency_contact_country" required>
-                                        <option value="">Select Country</option>
-                                        <option value="Nepal">Nepal</option>
-                                        <option value="Other">Other</option>
-                                        <option value="USA">USA</option>
-                                    </select>
+                                        class="form-label fs-6 ">Country:</label>
+                                    <input type="text" name="emergency_contact_country" class="form-control" value="{{ $passportRenewal->emergency_contact_country ?? '' }}" id="">
                                 </div>
 
                                 <div class="col">
                                     <label for="emergency_contact_state"
-                                        class="form-label fs-6 required">State/Province:</label>
-                                    <select class="form-select fs-6" id="emergency_contact_state"
-                                        name="emergency_contact_state" required>
-                                        <option value="">Select State/Province</option>
-                                        <option value="Gandaki">Gandaki</option>
-                                        <option value="Karnali">Karnali</option>
-                                        <option value="Bagmati">Bagmati</option>
-                                    </select>
+                                        class="form-label fs-6 ">State/Province:</label>
+                                    <input type="text" name="emergency_contact_state" class="form-control" value="{{ $passportRenewal->emergency_contact_state ?? '' }}" id="">
                                 </div>
 
                                 <div class="col">
                                     <label for="emergency_contact_district"
-                                        class="form-label fs-6 required">District:</label>
-                                    <select class="form-select fs-6" id="emergency_contact_district"
-                                        name="emergency_contact_district" required>
-                                        <option value="">Select District</option>
-                                        <option value="Kaski">Kaski</option>
-                                        <option value="Etc">Etc</option>
-                                        <option value="Bagmati">Bagmati</option>
-                                    </select>
+                                        class="form-label fs-6 ">District:</label>
+                                    <input type="text" name="emergency_contact_district" class="form-control" value="{{ $passportRenewal->emergency_contact_district ?? '' }}" id="">
                                 </div>
 
                                 <div class="col">
-                                    <label for="emergency_contact_city" class="form-label fs-6 required">City:</label>
-                                    <input type="text" class="form-control" id="emergency_contact_city"
-                                        name="emergency_contact_city" required maxlength="255" placeholder="Pokhara">
+                                    <label for="emergency_contact_city" class="form-label fs-6 ">City:</label>
+                                    <input type="text" class="form-control" id="emergency_contact_city" value="{{ $passportRenewal->emergency_contact_city ?? '' }}"
+                                        name="emergency_contact_city"  maxlength="255" placeholder="Pokhara">
                                 </div>
 
                                 <div class="col">
                                     <label for="emergency_contact_email" class="form-label fs-6 required">Email:</label>
                                     <input type="email" class="form-control" id="emergency_contact_email"
-                                        name="emergency_contact_email" required maxlength="255"
+                                        value="{{ $passportRenewal->emergency_contact_email }}"
+                                        name="emergency_contact_email" required  maxlength="255"
                                         placeholder="contact@gmail.com">
                                 </div>
 
                                 <div class="col">
-                                    <label for="emergency_contact_phone" class="form-label fs-6 required">Phone
+                                    <label for="emergency_contact_phone" class="form-label fs-6 ">Phone
                                         Number:</label>
                                     <input type="tel" class="form-control" id="emergency_contact_phone"
+                                        value="{{ $passportRenewal->emergency_contact_phone }}"
                                         name="emergency_contact_phone" required maxlength="255" placeholder="98XXXXXXXX">
                                 </div>
                             </div>
@@ -768,25 +742,31 @@
                             <div class="accordion-body">
                                 <div class="row py-3 row-cols-1 row-cols-lg-2 row-gap-4 gx-5">
                                     <div class="col">
-                                        <label for="citizenship_front" class="form-label fs-6 required">Citizenship
+                                        <label for="citizenship_front" class="form-label fs-6">Citizenship
                                             Front:</label>
                                         <br>
                                         <label class="form-label fs-6 mb-3">(Should be in jpg, png
                                             or pdf
                                             format)</label>
                                         <input type="file" class="form-control" id="citizenship_front"
-                                            name="citizenship_front" required accept=".jpg,.jpeg,.png,.pdf">
+                                            onchange="handleImagePreview(this)" name="citizenship_front"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->citizenship_front) }}"
+                                            alt="" class="img-fluid img mt-2 rounded w-100">
                                     </div>
 
                                     <div class="col">
-                                        <label for="citizenship_back" class="form-label fs-6 required">Citizenship
+                                        <label for="citizenship_back" class="form-label fs-6">Citizenship
                                             Back:</label>
                                         <br>
                                         <label class="form-label fs-6 mb-3">(Should be in jpg, png
                                             or pdf
                                             format)</label>
                                         <input type="file" class="form-control" id="citizenship_back"
-                                            name="citizenship_back" required accept=".jpg,.jpeg,.png,.pdf">
+                                            onchange="handleImagePreview(this)" name="citizenship_back"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->citizenship_back) }}"
+                                            alt="" class="img-fluid img mt-2 rounded w-100">
                                     </div>
 
                                     <div class="col">
@@ -797,7 +777,10 @@
                                             or pdf
                                             format)</label>
                                         <input type="file" class="form-control" id="academic_certificate"
-                                            name="academic_certificate" accept=".jpg,.jpeg,.png,.pdf">
+                                            onchange="handleImagePreview(this)" name="academic_certificate"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->academic_certificate) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
                                     </div>
 
                                     <div class="col">
@@ -808,7 +791,10 @@
                                             or pdf
                                             format)</label>
                                         <input type="file" class="form-control" id="marriage_registration"
-                                            name="marriage_registration" accept=".jpg,.jpeg,.png,.pdf">
+                                            onchange="handleImagePreview(this)" name="marriage_registration"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->marriage_registration) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
                                     </div>
 
                                     <div class="col">
@@ -819,7 +805,10 @@
                                             or pdf
                                             format)</label>
                                         <input type="file" class="form-control" id="divorce_certificate"
-                                            name="divorce_certificate" accept=".jpg,.jpeg,.png,.pdf">
+                                            onchange="handleImagePreview(this)" name="divorce_certificate"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->divorce_certificate) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
                                     </div>
 
                                     <div class="col">
@@ -830,7 +819,9 @@
                                             or pdf
                                             format)</label>
                                         <input type="file" class="form-control" id="national_eid" name="national_eid"
-                                            accept=".jpg,.jpeg,.png,.pdf">
+                                            onchange="handleImagePreview(this)" accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->national_eid) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
                                     </div>
 
                                     <div class="col">
@@ -843,7 +834,10 @@
                                             or pdf
                                             format)</label>
                                         <input type="file" class="form-control" id="other_document"
-                                            name="other_document" accept=".jpg,.jpeg,.png,.pdf">
+                                            onchange="handleImagePreview(this)" name="other_document"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->other_document) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
                                     </div>
 
                                     <div class="col">
@@ -854,7 +848,10 @@
                                             or pdf
                                             format)</label>
                                         <input type="file" class="form-control" id="previous_passport"
-                                            name="previous_passport" accept=".jpg,.jpeg,.png,.pdf">
+                                            onchange="handleImagePreview(this)" name="previous_passport"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->previous_passport) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -870,8 +867,7 @@
                     <div class="d-flex flex-column mx-3 mb-5">
 
                         <div class="form-check">
-                            <input class="form-check-input fs-5" type="checkbox" value="" id="checkCorrect"
-                                required>
+                            <input class="form-check-input fs-5" type="checkbox" checked id="checkCorrect" required>
                             <label class="form-check-label fs-5" for="checkCorrect">
                                 <span class="required"></span> I confirm that all information
                                 provided is accurate and complete. I
@@ -884,8 +880,7 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input fs-5" type="checkbox" value="" id="checkTerms"
-                                required>
+                            <input class="form-check-input fs-5" type="checkbox" checked id="checkTerms" required>
                             <label class="form-check-label fs-5" for="checkTerms">
                                 <span class="required"></span> I agree to the Terms and Conditions
                                 and Privacy Policy of
@@ -904,8 +899,7 @@
                             onclick="goToForm('mainForm','secondForm')">Back</button>
                         <div class="d-block">
                             <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0"
-                                style="background-color: #0064a7;" type="submit" id="form3NextBtn"
-                                disabled>Update</button>
+                                style="background-color: #0064a7;" type="submit" id="form3NextBtn">Update</button>
                         </div>
                     </div>
                 </div>
@@ -984,7 +978,8 @@
 
                     })
                     .then(() => {
-                        getRelatedDistricts(provinceSelect[provinceSelect.selectedIndex].getAttribute('data-id'))
+                        getRelatedDistricts(provinceSelect[provinceSelect.selectedIndex].getAttribute(
+                            'data-id'))
                     })
             }
 
@@ -994,7 +989,7 @@
                 .then(data => {
                     if (data.status && data.countries) {
                         populateSelect(countrySelect, data.countries, 'Select Country', 'countryName');
-                        
+
                     }
                 })
                 .then(() => {
@@ -1009,10 +1004,10 @@
                 const countryId = this.options[this.selectedIndex].getAttribute('data-id');
                 if (!countryId) return;
                 getRelatedProviences(countryId);
-                
+
             });
 
-            function getRelatedDistricts(provinceId){
+            function getRelatedDistricts(provinceId) {
                 fetch(getBaseUrl() + `/passport/districts/${provinceId}`)
                     .then(res => res.json())
                     .then(data => {
@@ -1024,7 +1019,8 @@
 
                     })
                     .then(() => {
-                        getRelatedLocations(districtSelect[districtSelect.selectedIndex].getAttribute('data-id'))
+                        getRelatedLocations(districtSelect[districtSelect.selectedIndex].getAttribute(
+                            'data-id'))
                     })
             }
 
@@ -1034,10 +1030,10 @@
 
                 if (!provinceId) return;
                 getRelatedDistricts(provinceId);
-                
+
             });
 
-            function getRelatedLocations(districtId){
+            function getRelatedLocations(districtId) {
                 fetch(getBaseUrl() + `/passport/locations/${districtId}`)
                     .then(res => res.json())
                     .then(data => {
@@ -1049,7 +1045,8 @@
                     .then(() => {
                         console.log(dateInput.value)
                         console.log(locationSelect[locationSelect.selectedIndex].getAttribute('data-id'))
-                        getTimes(dateInput.value, locationSelect[locationSelect.selectedIndex].getAttribute('data-id'))
+                        getTimes(dateInput.value, locationSelect[locationSelect.selectedIndex].getAttribute(
+                            'data-id'))
                     })
             }
 
@@ -1058,7 +1055,7 @@
                 const districtId = this.options[this.selectedIndex].getAttribute('data-id');
                 if (!districtId) return;
                 getRelatedLocations(districtId);
-                
+
             });
 
             locationSelect.addEventListener('change', function() {
@@ -1076,6 +1073,30 @@
                 allowInput: true
             });
         });
+
+        // age calculator 
+        document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("#date_of_birth_ad", {
+                dateFormat: "Y-m-d",
+                allowInput: true,
+                onChange: function(selectedDates, dateStr, instance) {
+                    calculateAge(dateStr);
+                }
+            });
+        });
+
+        function calculateAge(date_of_birth_ad) {
+            const birthDate = new Date(date_of_birth_ad);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            document.getElementById("age").value = age;
+        }
+
+
 
         const getTimes = (value, locationId) => {
             const timeContainer = document.getElementById('appointment_time');

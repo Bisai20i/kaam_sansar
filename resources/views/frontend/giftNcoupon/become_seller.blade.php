@@ -332,25 +332,25 @@
                         </div>
                         <div class="attestation">
                             <div class="">
-                                <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block">Show Picture</h4>
+                                <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block">Shop Picture</h4>
                             </div>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
                                 <div class="col">
-                                    <label for="show_pic1" class="form-label fs-6">Show Pic 1: <span class="text-danger">*</span></label>
+                                    <label for="show_pic1" class="form-label fs-6">Shop Pic 1: <span class="text-danger">*</span></label>
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="show_pic1"
                                         name="show_pic1" required accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                                 <div class="col">
-                                    <label for="show_pic2" class="form-label fs-6">Show Pic 2: </label>
+                                    <label for="show_pic2" class="form-label fs-6">Shop Pic 2: </label>
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="show_pic2"
                                         name="show_pic2" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                                 <div class="col">
-                                    <label for="show_pic3" class="form-label fs-6">Show Pic 3: </label>
+                                    <label for="show_pic3" class="form-label fs-6">Shop Pic 3: </label>
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="show_pic3"

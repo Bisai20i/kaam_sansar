@@ -219,51 +219,55 @@ class PassportRenewalController extends Controller
             'first_name'                     => 'required|string|max:255',
             'middle_name'                    => 'nullable|string|max:255',
             'last_name'                      => 'required|string|max:255',
-            'date_of_birth_ad'               => 'required|date',
-            'date_of_bs'                     => 'required|date',
+            'date_of_birth_ad'               => 'nullable|date',
+            'date_of_bs'                     => 'nullable|date',
             'birthplace'                     => 'required|string|max:255',
             'gender'                         => 'required|string|max:255',
-            'age'                            => 'required|integer',
+            'age'                            => 'nullable|integer',
             'nationality'                    => 'required|string|max:255',
             'religion'                       => 'nullable|string|max:255',
-            'birth_country'                  => 'required|string|max:255',
-            'father_name'                    => 'required|string|max:255',
-            'mother_name'                    => 'required|string|max:255',
-            'marital_status'                 => 'required|string|max:255',
+            'birth_country'                  => 'nullable|string|max:255',
+            'father_name'                    => 'nullable|string|max:255',
+            'mother_name'                    => 'nullable|string|max:255',
+            'marital_status'                 => 'nullable|string|max:255',
             'spouse_name'                    => 'nullable|string|max:255',
             'no_of_children'                 => 'nullable|integer',
             'spouse_age'                     => 'nullable|string|max:255',
 
             // Citizenship Information
-            'national_identify_no'           => 'required|string|max:255',
-            'citizenship_no'                 => 'required|string|max:255',
-            'citizenship_issue_date'         => 'required|date',
-            'citizenship_issue_place'        => 'required|string|max:255',
+            'national_identify_no'           => 'nullable|string|max:255',
+            'citizenship_no'                 => 'nullable|string|max:255',
+            'citizenship_issue_date'         => 'nullable|date',
+            'citizenship_issue_place'        => 'nullable|string|max:255',
             'citizenship_issue_place_abroad' => 'nullable|string|max:255',
 
             // Current Passport Details
-            'passport_no'                    => 'required|string|max:255',
-            'passport_type'                  => 'required|string|max:255',
-            'passport_issue_date'            => 'required|date',
-            'passport_expiry_date'           => 'required|date',
-            'passport_issue_place'           => 'required|string|max:255',
-            'issuing_authority'              => 'required|string|max:255',
+            'passport_no'                    => 'nullable|string|max:255',
+            'passport_type'                  => 'nullable|string|max:255',
+            'passport_issue_date'            => 'nullable|date',
+            'passport_expiry_date'           => 'nullable|date',
+            'passport_issue_place'           => 'nullable|string|max:255',
+            'issuing_authority'              => 'nullable|string|max:255',
 
             // Contact Information
             'email'                          => 'required|email|max:255',
-            'country'                        => 'required|string|max:255',
-            'state'                          => 'required|string|max:255',
-            'district'                       => 'required|string|max:255',
-            'city'                           => 'required|string|max:255',
+            'country'                        => 'nullable|string|max:255',
+            'state'                          => 'nullable|string|max:255',
+            'district'                       => 'nullable|string|max:255',
+            'city'                           => 'nullable|string|max:255',
             'phone'                          => 'required|string|max:255',
+            'contact_country'                => 'nullable|string|max:255',
+            'contact_state'                  => 'nullable|string|max:255',
+            'contact_district'               => 'nullable|string|max:255',
+            'contact_city'                   => 'nullable|string|max:255',
 
             // Emergency Contact
-            'emergency_contact_name'         => 'required|string|max:255',
-            'emergency_contact_relation'     => 'required|string|max:255',
-            'emergency_contact_country'      => 'required|string|max:255',
-            'emergency_contact_state'        => 'required|string|max:255',
-            'emergency_contact_district'     => 'required|string|max:255',
-            'emergency_contact_city'         => 'required|string|max:255',
+            'emergency_contact_name'         => 'nullable|string|max:255',
+            'emergency_contact_relation'     => 'nullable|string|max:255',
+            'emergency_contact_country'      => 'nullable|string|max:255',
+            'emergency_contact_state'        => 'nullable|string|max:255',
+            'emergency_contact_district'     => 'nullable|string|max:255',
+            'emergency_contact_city'         => 'nullable|string|max:255',
             'emergency_contact_email'        => 'required|email|max:255',
             'emergency_contact_phone'        => 'required|string|max:255',
 
@@ -400,6 +404,19 @@ class PassportRenewalController extends Controller
             ]);
         }
 
+    }
+
+    public function setStatus(Request $request, $id){
+        $passportRenewal = PassportRenewal::findOrFail($id);
+
+        $status = $request->query('to');
+
+        if(! $status){
+            return redirect()->back()->with('error', 'Status not provided.');
+        }
+        $passportRenewal->status = $status;
+        $passportRenewal->save();
+        return redirect()->back()->with('success', 'Passport Renewal Status Updated Successfully.');
     }
 
 }
