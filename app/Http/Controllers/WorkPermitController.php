@@ -21,7 +21,8 @@ class WorkPermitController extends Controller
      */
     public function index()
     {
-        //
+            $workPermits=WorkPermit::all();
+            return view('backend.workPermit.index', compact('workPermits'));   
     }
 
     /**
@@ -322,6 +323,6 @@ class WorkPermitController extends Controller
      */
     public function destroy(WorkPermit $workPermit)
     {
-        //
+        
     }
 }
