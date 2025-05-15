@@ -1514,7 +1514,7 @@ return $request->all();
                 'status'  => true,
                 'message' => 'Advertisements fetched successfully.',
                 'data'    => $ads,
-            ]) : view('frontend.profile.partials.advertisement', compact('ads'));
+            ]) : view('frontend.profile.partials.advertisement', compact('ads', 'adsCategory'));
 
         } catch (\Exception $e) {
 

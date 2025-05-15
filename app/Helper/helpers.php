@@ -27,7 +27,9 @@ function handleUpload($inputName, $model = null)
     if (request()->hasFile($inputName)) {
 
         // Delete the old file if it exists
+        
         if ($model && File::exists(storage_path('app/public/' . $model->{$inputName}))) {
+            Log::info("Image path is:".storage_path('app/public/' . $model->{$inputName}));
             Storage::delete('public/' . $model->{$inputName});
         }
 

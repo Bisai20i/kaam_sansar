@@ -61,6 +61,7 @@ use App\Http\Controllers\RewardController;
 use App\Http\Controllers\BecomeSellerController;
 
 
+Route::get('/ads/{id}/edit', [AdvertisementController::class, 'edit'])->name('ads.edit');
 
 
 Route::put('/jobseeker/getAbroadDeals', [JobSeekerController::class, 'updateAbroadDeals']);
@@ -489,7 +490,7 @@ Route::prefix('advertisements')->group(function () {
     Route::get('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
     // comment
 
-    // Route::resource('adscomment', CommentController::class);
+    Route::resource('adscomment', CommentController::class);
 
 });
 

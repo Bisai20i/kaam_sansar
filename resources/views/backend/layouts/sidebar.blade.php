@@ -68,22 +68,22 @@
                 <i class="menu-icon tf-icons bx bx-category"></i>
                 <div data-i18n="Manage Ads">Manage Ads Category</div>
             </a>
-        </li> 
+        </li>
 
-          <!-- Frequently Asked Questions -->
-          <li class="menu-item {{ request()->routeIs('faqs*') ? 'active' : '' }}">
+        <!-- Frequently Asked Questions -->
+        <li class="menu-item {{ request()->routeIs('faqs*') ? 'active' : '' }}">
             <a href="{{ route('faqs.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-help-circle"></i>
                 <div data-i18n="Manage Ads">Manage FAQs</div>
             </a>
-        </li> 
+        </li>
 
         <!-- Advertisements -->
         {{-- <li class="menu-item {{ request()->routeIs('ads*') ? 'active' : '' }}">
-            <a href="{{ route('ads.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
-                <div data-i18n="Manage Ads">Manage Ads</div>
-            </a>
+        <a href="{{ route('ads.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-rectangle"></i>
+            <div data-i18n="Manage Ads">Manage Ads</div>
+        </a>
         </li> --}}
 
 
@@ -131,7 +131,7 @@
                         <div data-i18n="Landing">Manage Aboard Product</div>
                     </a>
                     {{-- <a href="{{ route('aboards.index') }}" class="menu-link">
-                        <div data-i18n="Landing">Manage Aboard Product</div>
+                    <div data-i18n="Landing">Manage Aboard Product</div>
                     </a> --}}
                 </li>
             </ul>
@@ -168,9 +168,9 @@
         </li>
         {{-- <li class="menu-item ">
             <a href="{{ route('giftNcoupon.list') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-news"></i>
-                <div data-i18n="Manage Blogs and Podcasts">Manage Gift and Coupons</div>
-            </a>
+        <i class="menu-icon tf-icons bx bx-news"></i>
+        <div data-i18n="Manage Blogs and Podcasts">Manage Gift and Coupons</div>
+        </a>
         </li> --}}
 
         <!-- Blogs and Podcasts -->
@@ -267,19 +267,32 @@
         </li>
 
 
+        <!----quiz---->
+        <li class="menu-item">
+            <a href="{{ route('superadmin.quiz.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user-plus"></i> {{-- Arrow-like icon --}}
+                <div data-i18n="Quiz">Quiz</div>
+            </a>
+        </li>
+
+
+
+
+
+
         <!-- Manage Insurance-->
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
             <a href="{{ route('insurance.company') }}" class="menu-link">
-                
+
                 <i class="menu-icon tf-icons bx bx-heart"></i>
                 <div data-i18n="Insurance">Insurance Company</div>
             </a>
         </li>
-        
+
         <li class="menu-item {{ request()->routeIs('passport*') ? 'active' : '' }}">
             <a href="{{ route('passport.renewal') }}" class="menu-link">
-                
+
                 <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
                 <div data-i18n="Passport Renewal">Passport Renewal</div>
             </a>
