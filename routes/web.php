@@ -252,7 +252,7 @@ Route::get('/job-post/applications/{id}', [JobApplyController::class, 'index']);
 
 //delete forum post by admin
 
-Route::delete('discussioin_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');
+Route::delete('discussion_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');
 // Route::fallback(function () {
 //     return redirect('/admin');
 // });
