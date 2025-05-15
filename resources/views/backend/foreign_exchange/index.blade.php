@@ -112,7 +112,7 @@
                                 <td>
                                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#manageDetailModal"
-                                        onclick="updateEditModal({{ $rate->id }}, 
+                                        onclick="updateEditModal({{ $rate->id }},
                                         '{{ $rate->date_of_validity }}', 
                                         '{{ $rate->base_currency }}', 
                                         '{{ $rate->target_currency }}', 
