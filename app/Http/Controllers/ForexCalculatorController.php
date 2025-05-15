@@ -7,44 +7,51 @@ use App\Models\ForexCalculator;
 
 class ForexCalculatorController extends Controller
 {
-     public function store(Request $request)
+public function index()
     {
-        $validated = $request->validate([
-            'post_admin_id' => 'required|exists:admins,id',
-            'date_of_validity' => 'required|date',
-            'base_currency' => 'required|string|max:3',
-            'target_currency' => 'required|string|max:3',
-            'buying_rate' => 'required|numeric',
-            'selling_rate' => 'required|numeric',
+        // $forexRates = ForexCalculator::latest()->paginate(10);
+        return view('backend.foreign_exchange.index');
+    }
+
+    public function store(Request $request)
+    {
+
+        $adminId = Auth::guard('admins')->user()->id;
+        $request->validate([
+            'forex_rates' => 'required|json',
         ]);
 
-        ForexCalculator::create($validated);
+        $forexRates = json_decode($request->forex_rates, true);
 
-        return response()->json(['message' => 'Forex rate added successfully']);
+        foreach ($forexRates as $rate) {
+            ForexCalculator::create([
+                'country_name' => $rate['name'],
+                'publish_status' => $rate['status'],
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Forex records added successfully.');
     }
 
-    // Update (Edit) an existing forex record
-    public function update(Request $request, ForexCalculator $forexRate)
+    public function update(Request $request, ForexCalculator $forex)
     {
-        $validated = $request->validate([
-            'post_admin_id' => 'required|exists:admins,id',
-            'date_of_validity' => 'required|date',
-            'base_currency' => 'required|string|max:3',
-            'target_currency' => 'required|string|max:3',
-            'buying_rate' => 'required|numeric',
-            'selling_rate' => 'required|numeric',
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'status' => 'required|in:0,1',
         ]);
 
-        $forexRate->update($validated);
+        $forex->update([
+            'country_name' => $request->name,
+            'publish_status' => $request->status,
+        ]);
 
-        return response()->json(['message' => 'Forex rate updated successfully']);
+        return redirect()->back()->with('success', 'Forex record updated successfully.');
     }
 
-    // Delete a forex record
-    public function destroy(ForexCalculator $forexRate)
+    public function destroy(ForexCalculator $forex)
     {
-        $forexRate->delete();
-
-        return response()->json(['message' => 'Forex rate deleted successfully']);
+        $forex->delete();
+        return redirect()->back()->with('success', 'Forex record deleted successfully.');
     }
+
 }

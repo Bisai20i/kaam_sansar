@@ -286,8 +286,8 @@
         </li>
 
         <!-- Manage Forex Exchanges -->
-        <li class="menu-item {{ request()->routeIs('passport*') ? 'active' : '' }}">
-            <a href="{{ route('passport.renewal') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('forex*') ? 'active' : '' }}">
+            <a href="{{ route('forex.index') }}" class="menu-link">
                 
                 <i class="menu-icon tf-icons bx bx-money"></i>
                 <div data-i18n="Manage Forex Exchanges">Manage Forex Exchanges</div>

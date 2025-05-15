@@ -1,60 +1,75 @@
 @extends('backend.layouts.main')
 @section('title', 'Manage Forex Rates')
 @section('content')
-<div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold mb-4">Forex Exchange Rates</h4>
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold mb-4">Forex Exchange Rates</h4>
 
-    <!-- Form to Add Rates -->
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5 class="mb-0">Add Forex Rate</h5>
+        <!-- Form to Add Rates -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Add Forex Rate</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('forex.store') }}" id="forexForm">
+                    @csrf
+                    <input type="hidden" name="rates" id="ratesInput">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-2">
+                            <label for="rateDate" class="mb-1">Date of Validity</label>
+                            <input type="date" class="form-control" id="rateDate" placeholder="Date">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="baseCurrency" class="mb-1">Base Currency <small>(1 Unit Rate)</small></label>
+                            <select class="form-control" id="baseCurrency">
+                                <option value="">Select Base Currency</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="targetCurrency" class="mb-1">Target Currency</label>
+                            <select class="form-control" id="targetCurrency">
+                                <option value="">Select Target Currency</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="buyingRate" class="mb-1">Buying Rate</label>
+                            <input type="number" class="form-control" id="buyingRate" placeholder="Buying Rate">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="sellingRate" class="mb-1">Selling Rate</label>
+                            <input type="number" class="form-control" id="sellingRate" placeholder="Selling Rate">
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" onclick="addRate()">Add</button>
+                        </div>
+                    </div>
+
+
+                    <table class="table table-bordered my-4" id="ratesTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Base</th>
+                                <th>Target</th>
+                                <th>Buying</th>
+                                <th>Selling</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <button type="submit" class="btn btn-success" id="submitRatesBtn" disabled>Submit Rates</button>
+                </form>
+            </div>
         </div>
-        <div class="card-body">
-            <form method="POST" action="{{ route('forexRates.store') }}" id="forexForm">
-                @csrf
-                <input type="hidden" name="rates" id="ratesInput">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-2">
-                        <input type="date" class="form-control" id="rateDate" placeholder="Date">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="baseCurrency" placeholder="Base Currency (e.g. USD)">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="targetCurrency" placeholder="Target Currency (e.g. NPR)">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="number" class="form-control" id="buyingRate" placeholder="Buying Rate">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="number" class="form-control" id="sellingRate" placeholder="Selling Rate">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-primary" onclick="addRate()">Add</button>
-                    </div>
-                </div>
 
-                <table class="table table-bordered mt-3" id="ratesTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Base</th>
-                            <th>Target</th>
-                            <th>Buying</th>
-                            <th>Selling</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-
-                <button type="submit" class="btn btn-success" id="submitRatesBtn" disabled>Submit Rates</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Display Existing Rates -->
-    <div class="card">
+        <!-- Display Existing Rates -->
+        {{-- <div class="card">
         <div class="card-header">
             <h5>Forex Rates List</h5>
         </div>
@@ -93,46 +108,73 @@
             </table>
             {{ $forexRates->links() }}
         </div>
+    </div> --}}
     </div>
-</div>
 
-<script>
-    let forexRates = [];
+    <script>
+        let forexRates = [];
 
-    function addRate() {
-        const date = document.getElementById('rateDate').value;
-        const base = document.getElementById('baseCurrency').value;
-        const target = document.getElementById('targetCurrency').value;
-        const buy = document.getElementById('buyingRate').value;
-        const sell = document.getElementById('sellingRate').value;
+        function addRate() {
+            const date = document.getElementById('rateDate').value;
+            const base = document.getElementById('baseCurrency').value;
+            const target = document.getElementById('targetCurrency').value;
+            const buy = document.getElementById('buyingRate').value;
+            const sell = document.getElementById('sellingRate').value;
 
-        if (!date || !base || !target || !buy || !sell) {
-            alert('Fill all fields');
-            return;
+            if (!date || !base || !target || !buy || !sell) {
+                alert('Fill all fields');
+                return;
+            }
+
+            forexRates.push({
+                date_of_validity: date,
+                base_currency: base,
+                target_currency: target,
+                buying_rate: buy,
+                selling_rate: sell
+            });
+
+            const tbody = document.querySelector("#ratesTable tbody");
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${date}</td><td>${base}</td><td>${target}</td><td>${buy}</td><td>${sell}</td>
+            <td><button class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button></td>`;
+            tbody.appendChild(row);
+
+            updateHiddenInput();
         }
 
-        forexRates.push({ date_of_validity: date, base_currency: base, target_currency: target, buying_rate: buy, selling_rate: sell });
+        function removeRow(button) {
+            const row = button.parentElement.parentElement;
+            const index = Array.from(row.parentElement.children).indexOf(row);
+            forexRates.splice(index, 1);
+            row.remove();
+            updateHiddenInput();
+        }
 
-        const tbody = document.querySelector("#ratesTable tbody");
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${date}</td><td>${base}</td><td>${target}</td><td>${buy}</td><td>${sell}</td>
-            <td><button class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button></td>`;
-        tbody.appendChild(row);
+        function updateHiddenInput() {
+            document.getElementById('ratesInput').value = JSON.stringify(forexRates);
+            document.getElementById('submitRatesBtn').disabled = forexRates.length === 0;
+        }
+    </script>
 
-        updateHiddenInput();
-    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('https://api.frankfurter.app/currencies')
+                .then(response => response.json())
+                .then(data => {
+                    const baseSelect = document.getElementById('baseCurrency');
+                    const targetSelect = document.getElementById('targetCurrency');
 
-    function removeRow(button) {
-        const row = button.parentElement.parentElement;
-        const index = Array.from(row.parentElement.children).indexOf(row);
-        forexRates.splice(index, 1);
-        row.remove();
-        updateHiddenInput();
-    }
+                    Object.entries(data).forEach(([code, name]) => {
+                        const option = new Option(`${code} - ${name}`, code);
+                        baseSelect.add(option.cloneNode(true));
+                        targetSelect.add(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching currencies:', error);
+                });
+        });
+    </script>
 
-    function updateHiddenInput() {
-        document.getElementById('ratesInput').value = JSON.stringify(forexRates);
-        document.getElementById('submitRatesBtn').disabled = forexRates.length === 0;
-    }
-</script>
 @endsection
