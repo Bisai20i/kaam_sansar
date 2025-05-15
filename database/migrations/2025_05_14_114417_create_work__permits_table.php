@@ -149,7 +149,7 @@ return new class extends Migration
             $table->string('otherDocumentsPhoto')->nullable();
             $table->boolean('checkCorrect')->nullable();
             $table->boolean('checkTerms')->nullable();
-            $table->enum('status', ['pending', 'processing', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'approved'])->default('pending');
             $table->timestamps();
         });
     }

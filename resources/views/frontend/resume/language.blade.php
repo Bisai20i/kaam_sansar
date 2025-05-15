@@ -24,7 +24,7 @@
                 + Add Language
             </button>
             <div class="text-end">
-                <button type="button" class="btn text-center next-btn" id="submitLanguage">Sumbit Resume</button>
+                <button type="button" class="btn text-center next-btn" id="submitLanguage">Submit Resume</button>
             </div>
         </form>
     </div>

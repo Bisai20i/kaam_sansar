@@ -289,7 +289,7 @@ class WorkPermitController extends Controller
      */
     public function show(WorkPermit $workPermit)
     {
-        //
+        return view('backend.workPermit.show',compact('workPermit'));
     }
 
     /**
@@ -300,7 +300,7 @@ class WorkPermitController extends Controller
      */
     public function edit(WorkPermit $workPermit)
     {
-        //
+        
     }
 
     /**
@@ -323,6 +323,11 @@ class WorkPermitController extends Controller
      */
     public function destroy(WorkPermit $workPermit)
     {
-        
+    try {
+        $workPermit->delete();
+        return redirect()->back()->with('success', 'Work Permit deleted successfully.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Failed to delete Work Permit.');
+    }
     }
 }

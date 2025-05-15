@@ -156,8 +156,8 @@ class DocumentationAttestationController extends Controller
     {
         
 
-        $documentationAttestation = DocumentationAttestation::findOrFail($id);
-        return view('backend.documentAttestations.show', compact('documentationAttestation'));
+        $attestation = DocumentationAttestation::findOrFail($id);
+        return view('backend.documentAttestations.show', compact('attestation'));
     }
 
     /**

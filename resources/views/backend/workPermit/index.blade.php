@@ -30,45 +30,43 @@
                                 </thead>
                                 <tbody>
                                     @if($workPermits->isEmpty())
-                                        <tr>
-                                            <td colspan="8" class="text-center">No Data Found</td>
-                                        </tr>
+                                    <tr>
+                                        <td colspan="8" class="text-center">No Data Found</td>
+                                    </tr>
                                     @endif
 
                                     @foreach ($workPermits as $permit)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $permit->firstName . ' ' . $permit->lastName }}</td>
-                                            <td>{{ $permit->email }}</td>
-                                            <td>{{ $permit->phoneNo }}</td>
-                                            <td>{{ $permit->appDistrict ?? 'N/A' }}</td>
-                                            <td>{{ $permit->appLocation ?? 'N/A' }}</td>
-                                            <td>
-                                                <span class="badge bg-{{ $permit->status == 'pending' ? 'warning' : ($permit->status == 'rejected' ? 'danger' : 'success') }}">
-                                                    {{ ucfirst($permit->status) }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                                    </button>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item text-primary" href="javascript:void(0);"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#viewPermitModal{{ $permit->id }}">
-                                                            <i class="bx bx-show me-1"></i> View
-                                                        </a>
-                                                        <a class="dropdown-item text-danger" href="javascript:void(0);"
-                                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                            onclick="setDeleteFormAction({{ $permit->id }})">
-                                                            <i class="bx bx-trash me-1"></i> Delete
-                                                        </a>
-                                                    </div>
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $permit->firstName . ' ' . $permit->lastName }}</td>
+                                        <td>{{ $permit->email }}</td>
+                                        <td>{{ $permit->phoneNo }}</td>
+                                        <td>{{ $permit->appDistrict ?? 'N/A' }}</td>
+                                        <td>{{ $permit->appLocation ?? 'N/A' }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ $permit->status == 'pending' ? 'warning' : ($permit->status == 'rejected' ? 'danger' : 'success') }}">
+                                                {{ ucfirst($permit->status) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                    data-bs-toggle="dropdown">
+                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item text-primary" href="{{ route('workPermits.show', $permit->id) }}">
+                                                        <i class="bx bx-show me-1"></i> View
+                                                    </a>
+                                                    <a class="dropdown-item text-danger" href="javascript:void(0);"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                        onclick="setDeleteFormAction({{ $permit->id }})">
+                                                        <i class="bx bx-trash me-1"></i> Delete
+                                                    </a>
                                                 </div>
-                                            </td>
-                                        </tr>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>

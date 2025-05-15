@@ -5,210 +5,171 @@
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="content-wrapper">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="fw-bold mb-0">Document Attestation Details</h4>
-            <a href="{{ route('documentAttestations.index') }}" class="btn btn-secondary">Back to List</a>
-        </div>
+        <h4 class="fw-bold mb-4">Document Attestation Details</h4>
 
-        <div class="card mb-4">
+        <!-- Application Information Section -->
+        <div class="card">
             <div class="card-header">
-                <h5>Basic Information</h5>
+                <h5>Application Information</h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4">
-                        <p><strong>Job Seeker ID:</strong> {{ $documentationAttestation->jobSeekerId }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Document Type:</strong> {{ $documentationAttestation->documentType }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Sub Type:</strong> {{ $documentationAttestation->subType }}</p>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
-                        <p><strong>Applicant Name:</strong> {{ $documentationAttestation->applicantName }}</p>
+                        <p><strong>Document Type:</strong> {{ ucfirst($attestation->documentType) }}</p>
+                        <p><strong>Sub Type:</strong> {{ $attestation->subType }}</p>
+                        <p><strong>Applicant Country:</strong> {{ $attestation->applicantCountry }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Purpose:</strong> {{ $documentationAttestation->purpose }}</p>
+                        <p><strong>Attestation Country:</strong> {{ $attestation->attestationCountry }}</p>
+                        <p><strong>Status:</strong> 
+                            <span class="badge bg-{{ 
+                                $attestation->status == 'completed' ? 'success' : 'warning' 
+                            }}">
+                                {{ ucfirst($attestation->status) }}
+                            </span>
+                        </p>
+                        <p><strong>Payment Status:</strong> 
+                            <span class="badge bg-{{ 
+                                $attestation->paymentStatus == 'paid' ? 'success' : 'danger' 
+                            }}">
+                                {{ ucfirst($attestation->paymentStatus) }}
+                            </span>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="card mb-4">
+        <!-- Applicant Information Section -->
+        <div class="card mt-3">
             <div class="card-header">
-                <h5>Country Information</h5>
+                <h5>Applicant Information</h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4">
-                        <p><strong>Applicant Country:</strong> {{ $documentationAttestation->applicantCountry }}</p>
+                    <div class="col-md-6">
+                        <p><strong>Applicant Name:</strong> {{ $attestation->applicantName }}</p>
+                        <p><strong>Primary Contact:</strong> {{ $attestation->primaryContact }}</p>
+                        <p><strong>Secondary Contact:</strong> {{ $attestation->secondaryContact ?? 'N/A' }}</p>
                     </div>
-                    <div class="col-md-4">
-                        <p><strong>Attestation Country:</strong> {{ $documentationAttestation->attestationCountry }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Country Attestation:</strong> {{ $documentationAttestation->countryAttestation }}</p>
+                    <div class="col-md-6">
+                        <p><strong>Email:</strong> {{ $attestation->email }}</p>
+                        <p><strong>Purpose of Attestation:</strong> {{ $attestation->purpose }}</p>
+                        <p><strong>Country for Attestation:</strong> {{ $attestation->countryAttestation }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="card mb-4">
+        <!-- Delivery Address Section -->
+        <div class="card mt-3">
             <div class="card-header">
                 <h5>Delivery Address</h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-3">
-                        <p><strong>Country:</strong> {{ $documentationAttestation->deliveryCountry }}</p>
+                    <div class="col-md-6">
+                        <p><strong>Country:</strong> {{ $attestation->deliveryCountry }}</p>
+                        <p><strong>City:</strong> {{ $attestation->deliveryCity }}</p>
+                        <p><strong>Street:</strong> {{ $attestation->deliveryStreet }}</p>
                     </div>
-                    <div class="col-md-3">
-                        <p><strong>City:</strong> {{ $documentationAttestation->deliveryCity }}</p>
-                    </div>
-                    <div class="col-md-3">
-                        <p><strong>Street:</strong> {{ $documentationAttestation->deliveryStreet }}</p>
-                    </div>
-                    <div class="col-md-3">
-                        <p><strong>Apartment:</strong> {{ $documentationAttestation->deliveryApartment ?? 'N/A' }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <p><strong>Landmark:</strong> {{ $documentationAttestation->deliveryLandmark ?? 'N/A' }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Primary Contact:</strong> {{ $documentationAttestation->primaryContact }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Secondary Contact:</strong> {{ $documentationAttestation->secondaryContact ?? 'N/A' }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p><strong>Email:</strong> {{ $documentationAttestation->email }}</p>
+                    <div class="col-md-6">
+                        <p><strong>Apartment:</strong> {{ $attestation->deliveryApartment ?? 'N/A' }}</p>
+                        <p><strong>Landmark:</strong> {{ $attestation->deliveryLandmark ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        @if($documentationAttestation->workCountry)
-        <div class="card mb-4">
+        <!-- Work Address Section -->
+        @if($attestation->workCountry)
+        <div class="card mt-3">
             <div class="card-header">
                 <h5>Work Address</h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-3">
-                        <p><strong>Country:</strong> {{ $documentationAttestation->workCountry }}</p>
+                    <div class="col-md-6">
+                        <p><strong>Country:</strong> {{ $attestation->workCountry }}</p>
+                        <p><strong>City:</strong> {{ $attestation->workCity }}</p>
+                        <p><strong>Street:</strong> {{ $attestation->workStreet }}</p>
                     </div>
-                    <div class="col-md-3">
-                        <p><strong>City:</strong> {{ $documentationAttestation->workCity }}</p>
-                    </div>
-                    <div class="col-md-3">
-                        <p><strong>Street:</strong> {{ $documentationAttestation->workStreet }}</p>
-                    </div>
-                    <div class="col-md-3">
-                        <p><strong>Apartment:</strong> {{ $documentationAttestation->workApartment ?? 'N/A' }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p><strong>Landmark:</strong> {{ $documentationAttestation->workLandmark ?? 'N/A' }}</p>
+                    <div class="col-md-6">
+                        <p><strong>Apartment:</strong> {{ $attestation->workApartment ?? 'N/A' }}</p>
+                        <p><strong>Landmark:</strong> {{ $attestation->workLandmark ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
         </div>
         @endif
 
-        <div class="card mb-4">
+        <!-- Documents Section -->
+        <div class="card mt-3">
             <div class="card-header">
-                <h5>Documents</h5>
+                <h5>Submitted Documents</h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    @if($documentationAttestation->identification)
-                    <div class="col-md-4 mb-3">
-                        <p><strong>Identification:</strong></p>
-                        <a href="{{ asset( $documentationAttestation->identification) }}" target="_blank" class="btn btn-sm btn-primary">View Document</a>
+                    <div class="col-md-6">
+                        @if($attestation->identification)
+                        <p><strong>Identification Document:</strong> <a href="{{ asset($attestation->identification) }}" target="_blank">View</a></p>
+                        @endif
+                        @if($attestation->visa)
+                        <p><strong>Visa Document:</strong> <a href="{{ asset(  $attestation->visa) }}" target="_blank">View</a></p>
+                        @endif
+                        @if($attestation->citizenshipFront)
+                        <p><strong>Citizenship Front:</strong> <a href="{{ asset( $attestation->citizenshipFront) }}" target="_blank">View</a></p>
+                        @endif
+                        @if($attestation->citizenshipBack)
+                        <p><strong>Citizenship Back:</strong> <a href="{{ asset(  $attestation->citizenshipBack) }}" target="_blank">View</a></p>
+                        @endif
                     </div>
-                    @endif
-
-                    @if($documentationAttestation->visa)
-                    <div class="col-md-4 mb-3">
-                        <p><strong>Visa:</strong></p>
-                        <a href="{{ asset( $documentationAttestation->visa) }}" target="_blank" class="btn btn-sm btn-primary">View Document</a>
+                    <div class="col-md-6">
+                        @if($attestation->passport)
+                        <p><strong>Passport:</strong> <a href="{{ asset( $attestation->passport) }}" target="_blank">View</a></p>
+                        @endif
+                        @if($attestation->photo)
+                        <p><strong>Photo:</strong> <a href="{{ asset( $attestation->photo) }}" target="_blank">View</a></p>
+                        @endif
+                        @if($attestation->document1)
+                        <p><strong>Additional Document 1:</strong> <a href="{{ asset( $attestation->document1) }}" target="_blank">View</a></p>
+                        @endif
+                        @if($attestation->document2)
+                        <p><strong>Additional Document 2:</strong> <a href="{{ asset($attestation->document2) }}" target="_blank">View</a></p>
+                        @endif
                     </div>
-                    @endif
-
-                    @if($documentationAttestation->citizenshipFront)
-                    <div class="col-md-4 mb-3">
-                        <p><strong>Citizenship Front:</strong></p>
-                        <a href="{{ asset('storage/' . $documentationAttestation->citizenshipFront) }}" target="_blank" class="btn btn-sm btn-primary">View Document</a>
-                    </div>
-                    @endif
-
-                    @if($documentationAttestation->citizenshipBack)
-                    <div class="col-md-4 mb-3">
-                        <p><strong>Citizenship Back:</strong></p>
-                        <a href="{{ asset('storage/' . $documentationAttestation->citizenshipBack) }}" target="_blank" class="btn btn-sm btn-primary">View Document</a>
-                    </div>
-                    @endif
-
-                    @if($documentationAttestation->passport)
-                    <div class="col-md-4 mb-3">
-                        <p><strong>Passport:</strong></p>
-                        <a href="{{ asset('storage/' . $documentationAttestation->passport) }}" target="_blank" class="btn btn-sm btn-primary">View Document</a>
-                    </div>
-                    @endif
-
-                    @if($documentationAttestation->photo)
-                    <div class="col-md-4 mb-3">
-                        <p><strong>Photo:</strong></p>
-                        <img src="{{ asset('storage/' . $documentationAttestation->photo) }}" alt="Applicant Photo" style="max-width: 150px; height: auto;">
-                    </div>
-                    @endif
                 </div>
-
-                <div class="row mt-3">
-                    @for($i = 1; $i <= 4; $i++) @php $doc="document$i" @endphp @if($documentationAttestation->$doc)
-                    <div class="col-md-3 mb-3">
-                        <p><strong>Additional Document {{ $i }}:</strong></p>
-                        <a href="{{ asset('storage/' . $documentationAttestation->$doc) }}" target="_blank" class="btn btn-sm btn-primary">View Document</a>
+                @if($attestation->document3 || $attestation->document4)
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        @if($attestation->document3)
+                        <p><strong>Additional Document 3:</strong> <a href="{{ asset( $attestation->document3) }}" target="_blank">View</a></p>
+                        @endif
                     </div>
-                    @endif
-                    @endfor
+                    <div class="col-md-6">
+                        @if($attestation->document4)
+                        <p><strong>Additional Document 4:</strong> <a href="{{ asset( $attestation->document4) }}" target="_blank">View</a></p>
+                        @endif
+                    </div>
                 </div>
+                @endif
             </div>
         </div>
 
-        <div class="card">
+        <!-- Additional Information Section -->
+        <div class="card mt-3">
             <div class="card-header">
-                <h5>Status Information</h5>
+                <h5>Additional Information</h5>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <p><strong>Payment Status:</strong> 
-                            <span class="badge bg-{{ $documentationAttestation->paymentStatus === 'paid' ? 'success' : 'warning' }}">
-                                {{ ucfirst($documentationAttestation->paymentStatus) }}
-                            </span>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Processing Status:</strong> 
-                            <span class="badge bg-{{ $documentationAttestation->status === 'completed' ? 'success' : 'info' }}">
-                                {{ ucfirst($documentationAttestation->status) }}
-                            </span>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Last Updated:</strong> {{ $documentationAttestation->updated_at->format('M d, Y H:i') }}</p>
-                    </div>
-                </div>
+                <p><strong>Created At:</strong> {{ $attestation->created_at->format('Y-m-d H:i') }}</p>
+                <p><strong>Last Updated:</strong> {{ $attestation->updated_at->format('Y-m-d H:i') }}</p>
             </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-3">
+            <a href="{{ route('documentAttestations.index') }}" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
 </div>
