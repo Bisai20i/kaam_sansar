@@ -24,6 +24,7 @@ use libphonenumber\PhoneNumberUtil;
 
 class JobSeekerController extends Controller
 {
+    
     /**
      * Register a new job seeker.
      */
@@ -1435,6 +1436,44 @@ class JobSeekerController extends Controller
 
     }
 
+
+
+public function updateAbroadDeals(Request $request)
+{
+
+return $request->all();
+
+
+    // Validate incoming data
+    $validated = $request->validate([
+        'id' => 'required|exists:aboards,id',
+        'productTitle' => 'required|string|max:255',
+        'productCategoryId' => 'required|exists:product_categories,id',
+        'productDescription' => 'required|string',
+        // Add other fields if needed
+    ]);
+
+    // Find the Aboard record
+    $aboard = Aboard::find($validated['id']);
+
+    // Update the record
+    $aboard->productTitle = $validated['productTitle'];
+    $aboard->productCategoryId = $validated['productCategoryId'];
+    $aboard->productDescription = $validated['productDescription'];
+    // Update other fields if you have more (e.g., price, images, etc.)
+
+    $aboard->save();
+
+    // Return JSON response (or redirect, if applicable)
+    return response()->json([
+        'message' => 'Aboard deal updated successfully.',
+        'aboard' => $aboard
+    ]);
+}
+
+
+
+
     public function getAdvertisements(Request $request, $id)
     {
 
@@ -1895,5 +1934,17 @@ class JobSeekerController extends Controller
         } catch (\Exception $e) {
             return ($e);
         }
+    }
+
+    public function myforms(){
+        return view('frontend.profile.partials.my-forms');
+    }
+
+    public function mynews(){
+        return view('frontend.profile.partials.my-news');
+    }
+
+    public function myblogs(){
+        return view('frontend.profile.partials.my-podcasts');
     }
 }

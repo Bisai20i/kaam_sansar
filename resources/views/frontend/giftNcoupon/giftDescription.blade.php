@@ -6,8 +6,8 @@
             <div class="container mt" style="margin-top: 100px;">
                 <div class="row">
                     <!-- Product Image -->
-                    <div class="col-sm-12 col-md-3 col-lg-3 border border-1 rounded p-2 fixed-height-gifts">
-                        <div class="card-gift-desc-gifts">
+                    <div class="col-sm-12 col-md-3 col-lg-3">
+                        <div class="card-gift-desc-gifts border border-1 rounded p-2">
 
                             <img src="{{ $giftNcoupon->thumbnail ? asset('storage/' . $giftNcoupon->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}"
                                 class="bdy-packages-img-gifts img-fluid">
@@ -42,13 +42,13 @@
                                         OFF</span>
                                 @endif
                             </div>
-                            <div class="gift-info">
+                            <div class="gift-info d-flex flex-wrap justify-content-between">
                                 {!! $giftNcoupon->quantity > 0
                                     ? '<div class="instock-gift">Instock: ' . $giftNcoupon->quantity . '</div>'
                                     : '<div class="outstock-gift">Out of Stock</div>' !!}
                                 <div class="item-code-gift ">Item Code: {{ $giftNcoupon->itemCode }}</div>
                             </div>
-                            <div class="sold-by-gift my-2 px-2"> Published by:
+                            <div class="sold-by-gift my-2 px-2 flex-wrap h-auto py-1"> Published by:
                                 <a
                                     href="{{ route('gift.seller', ['id' => $giftNcoupon->adminId]) }}"
                                     class="text-underline ps-2 sold-by-link" style="cursor: pointer;">
@@ -164,7 +164,7 @@
                                     <div
                                         class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2 mt-2">
 
-                                        <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail"
+                                        <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail" style="width: 50px; height:50px;" 
                                             src="{{ Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/'.Auth::guard('job_seekers')->user()->userThumbnail[0]) : 'https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg' }}" style="max-width: 60px; height:auto;" />
                                         <input class="form-control w-100 p-2" name="comment" id="commentInput"
                                             placeholder="Write a comment...." type="text"  required/>

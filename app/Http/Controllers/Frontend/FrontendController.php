@@ -471,8 +471,11 @@ class FrontendController extends Controller
         return view('frontend.ForexChanger.forex-calculator');
     }
 
-    public function select_exchanger()
+    public function select_exchanger(Request $request)
     {
+
+
+        // dd($request->all());
 
         return view('frontend.ForexChanger.select-exchanger');
     }

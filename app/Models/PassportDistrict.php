@@ -20,8 +20,5 @@ class PassportDistrict extends Model
     {
         return $this->hasMany(PassportLocation::class, 'district_id');
     }
-    public function workPermitLocations()
-    {
-        return $this->hasMany(WorkPermitLocation::class, 'district_id');
-    }
+    
 }

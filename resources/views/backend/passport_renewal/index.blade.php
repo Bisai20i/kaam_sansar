@@ -94,9 +94,7 @@
                                                         </button>
                                                         <div class="dropdown-menu">
                                                             {{-- view  --}}
-                                                            <a class="dropdown-item text-primary" href="javascript:void(0);"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#viewJobCategoryModal{{ $renewal->id }}">
+                                                            <a class="dropdown-item text-primary" href="{{ route('passport.renewal.show', $renewal->id) }}">
                                                                 <i class="bx bx-show me-1"></i> View
                                                             </a>
                                                             <a class="dropdown-item text-danger" href="javascript:void(0);"
@@ -104,6 +102,7 @@
                                                                 onclick="setDeleteFormAction({{ $renewal->id }})">
                                                                 <i class="bx bx-trash me-1"></i> Delete
                                                             </a>
+                                                            
                                                         </div>
                                                     </div>
                                                 </td>

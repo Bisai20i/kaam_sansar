@@ -8,13 +8,14 @@ use App\Http\Controllers\AdvertisementCategoryController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\AstrologerController;
 use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\BecomeSellerController;
 use App\Http\Controllers\BlogsAndPodcastController;
 use App\Http\Controllers\BrokerAccountController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DiscussionForumController;
 use App\Http\Controllers\DocumentationAttestationController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\ForexCalculatorController;
 use App\Http\Controllers\ForumInteractionController;
 use App\Http\Controllers\FrequentlyAskedQuestionController;
 use App\Http\COntrollers\Frontend\FrontendAPIController;
@@ -51,6 +52,7 @@ use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ResumeHelpController;
+use App\Http\Controllers\RewardController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UserCommentController;
@@ -59,15 +61,11 @@ use App\Http\Controllers\VisaController;
 use App\Http\Controllers\VisaCountryListController;
 use App\Http\Controllers\VisaDetailsController;
 use App\Http\Controllers\VisaTypeController;
-use App\Http\Controllers\WorkPermitController;
 use App\Http\Controllers\WorkPermitDistrictController;
 use App\Http\Controllers\WorkPermitLocationController;
-use App\Models\IndustryCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-
 
 // Authentication Routes
 Route::get('master/login', [AdminController::class, 'loginView'])->name('login');
@@ -88,7 +86,6 @@ Route::middleware(['role:admin'])->prefix('adminuser')->group(function () {
 });
 
 Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
-
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
     // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
@@ -155,7 +152,6 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::resource('kundalimatching', KundaliMatchingController::class)->except('store');
     Route::get('/astrologer/show/{type}/{id}', [AstrologerController::class, 'view'])->name('astrologer.view');
 
-
     Route::resource('visaCountryList', VisaCountryListController::class);
     Route::put('/visaCountryList/publish/{id}', [VisaCountryListController::class, 'publish'])->name('visaCountryList.publish');
     Route::put('/visaCountryList/unpublish/{id}', [VisaCountryListController::class, 'unpublish'])->name('visaCountryList.unpublish');
@@ -174,10 +170,18 @@ Route::middleware(['role:postAdmin,superAdmin'])->prefix('postadmin')->group(fun
     // Route::get('/details', [AdminController::class, 'superadminindex'])->name('superadmin.details');
 });
 
-
 Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
 
+    //Reward Routes
+    Route::resource('rewards', RewardController::class);
 
+    //forex exchange
+    Route::prefix('forex')->group(function () {
+        Route::get('/', [ForexCalculatorController::class, 'index'])->name('forex.index');
+        Route::post('/store', [ForexCalculatorController::class, 'store'])->name('forex.store');
+        Route::put('/update/{forex}', [ForexCalculatorController::class, 'update'])->name('forex.update');
+        Route::delete('/destroy/{forex}', [ForexCalculatorController::class, 'destroy'])->name('forex.destroy');
+    });
 
     //faq
     Route::resource('faqs', FrequentlyAskedQuestionController::class);
@@ -187,7 +191,9 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::resource('workPermitLocations', WorkPermitLocationController::class);
 
     //passport renewal
+
     Route::resource('passportCountryList', PassportCountryListController::class)->except('edit', 'create');
+
     Route::resource('passportProvienceList', PassportProvienceController::class)->except('index', 'edit', 'create');
     Route::get('passportProvience/{country_id}', [PassportProvienceController::class, 'index'])->name('passportProvienceList.index');
     Route::put('/passportProvienceList/publish/{id}', [PassportProvienceController::class, 'publish'])->name('passportProvienceList.publish');
@@ -197,6 +203,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::put('/passportCountryList/unpublish/{id}', [PassportCountryListController::class, 'unpublish'])->name('passportCountryList.unpublish');
 
     Route::get('/passport/renewal', [PassportRenewalController::class, 'index'])->name('passport.renewal');
+    Route::get('/passport/renewal/{id}',[PassportRenewalController::class, 'show'])->name('passport.renewal.show');
     Route::delete('/passport/renewal/{id}', [PassportRenewalController::class, 'destroy'])->name('passport.renewal.destroy');
 
     Route::resource('passportDistrictList', PassportDistrictController::class)->except('index', 'edit', 'create');
@@ -212,8 +219,6 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::post('passportDateTime', [PassportDateTimeController::class, 'store'])->name('passportDateTime.store');
     Route::delete('passportDateTime/{passportDateTime}', [PassportDateTimeController::class, 'destroy'])->name('passportDateTime.destroy');
 });
-
-
 
 //manage Insurance
 
@@ -238,7 +243,6 @@ Route::put('/insurance/subcategory/{id}', [InsuranceSubCategoryController::class
 Route::delete('/insurance/subcategory/{id}', [InsuranceSubCategoryController::class, 'destroy'])->name('insuranceSubCategory.destroy');
 Route::put('/insurance/subcategory/publish/{id}', [InsuranceSubCategoryController::class, 'publish'])->name('insuranceSubCategory.publish');
 Route::put('/insurance/subcategory/unpublish/{id}', [InsuranceSubCategoryController::class, 'unpublish'])->name('insuranceSubCategory.unpublish');
-
 
 Route::get('/insurance/{id}/details', [InsuranceCategoryController::class, 'manage'])->name('insurance.manage');
 
@@ -378,6 +382,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('/passport/renew/{id}/edit', [PassportRenewalController::class, 'edit'])->name('passport.renew.edit');
     Route::put('/passport/renew/{id}', [PassportRenewalController::class, 'update'])->name('passport.renew.update');
     Route::post('/passport/renew/partial', [PassportRenewalController::class, 'store_partial'])->name('passport.renew.partial');
+
 });
 
 /* Frontend routes */
@@ -408,16 +413,9 @@ Route::get('aboardsdeals', [AboardController::class, 'aboard'])->name('aboarddea
 Route::resource('aboards', AboardController::class);
 Route::get('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');
 
-
 // commnet for aboard deals
 
-
-
 Route::resource('aboardcomment', ProductCommentController::class);
-
-
-
-
 
 //route related  to frontend horoscope and kundali
 
@@ -433,7 +431,6 @@ Route::post('kundalimatching', [KundaliMatchingController::class, 'store'])->nam
 //     // ✅ Redirect to login instead of index
 //     return redirect()->route('index')->with('info', 'You need to login first ');
 // })->name('set.redirect');
-
 
 Route::post('/set-redirect', function (Request $request) {
     // ✅ Store redirect URL in session
@@ -462,7 +459,6 @@ Route::prefix('insurance')->group(function () {
     Route::get('/details/{id}', [FrontendController::class, 'insurance_details'])->name('insurance.details');
 });
 
-
 Route::prefix('discussion')->group(function () {
     Route::resource('discussion_forum', DiscussionForumController::class)->except('index', 'create', 'edit')->middleware('auth:job_seekers');
 
@@ -483,7 +479,7 @@ Route::prefix('advertisements')->group(function () {
     Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
     Route::get('Ads/category/{categoryId}', [AdvertisementController::class, 'showByCategory'])->name('Ads.showByCategory');
     Route::get('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
-    // comment
+// comment
 
     // Route::resource('adscomment', CommentController::class);
 
@@ -510,3 +506,19 @@ Route::resource('brokerAccounts', BrokerAccountController::class);
 Route::resource('documentAttestations', DocumentationAttestationController::class);
 Route::resource('moneyExchanges', MoneyExchangeController::class);
 Route::resource('workPermits', WorkPermitController::class);
+
+// Frontend form route
+Route::get('/become_seller', function () {
+    return view('frontend.giftNcoupon.become_seller');
+})->name('become.seller');
+
+// Handle the form submission from the frontend
+Route::post('/become_seller', [BecomeSellerController::class, 'store'])->name('become.seller.store');
+
+// Superadmin routes grouped under /superadmin
+Route::prefix('superadmin')->middleware(['auth:admin', 'role:superAdmin'])->group(function () {
+    Route::get('/becomeseller', [BecomeSellerController::class, 'index'])->name('superadmin.becomeseller.index');
+    Route::post('/becomeseller', [BecomeSellerController::class, 'store'])->name('superadmin.becomeseller.store');
+    Route::get('/becomeseller/{id}', [BecomeSellerController::class, 'show'])->name('superadmin.becomeseller.show');
+    Route::delete('/becomeseller/{id}', [BecomeSellerController::class, 'destroy'])->name('superadmin.becomeseller.destroy');
+});

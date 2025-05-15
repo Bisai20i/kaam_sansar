@@ -29,27 +29,49 @@
     <section class="giftpackage">
         <div class="container mb-5">
             <div class="row">
+                <style>
+                    .become-seller span {
+                        display: inline-block;
+                        transition: transform 0.3s ease;
+                    }
+
+                    .become-seller:hover span {
+                        transform: translateX(6px);
+                    }
+                    
+                </style>
 
                 <div class="container mt-2">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="mt-2">Most Popular Gifts</h4>
+                        <h4 class="mt-2 text-nowrap">Most Popular Gifts</h4>
+
+                        <div class="container d-flex justify-content-end mb-4">
+                            <button class="bg-white border-0 border-bottom border-primary">
+                                <a href="{{ route('become.seller') }}"
+                                    class="become-seller text-primary text-decoration-none">Become a Seller
+                                    <span>&#8594;</span> <!-- Unicode right arrow: → -->
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mb-4 mt-4 flex-wrap justify-content-between align-items-center">
+                        <div class="d-flex gap-3">
+                            <a href="{{ route('gift.home', ['type' => 'all']) }}"
+                                class="btn btn-toggle btn-all-categories {{ request('type') == 'all' ? 'active' : '' }}"
+                                onclick="toggleActive(this)">All</a>
+
+                            <a href="{{ route('gift.home', ['type' => '0']) }}"
+                                class="btn btn-toggle {{ request('type') == '0' ? 'active' : '' }}"
+                                onclick="toggleActive(this)">Gifts</a>
+                            <a href="{{ route('gift.home', ['type' => '1']) }}"
+                                class="btn btn-toggle {{ request('type') == '1' ? 'active' : '' }}">Coupons</a>
+                        </div>
                         @auth('job_seekers')
                             <a href="{{ route('giftcart') }}" class="btn btn-cart cart-gift" id="cartButton"><i
                                     class="bi bi-cart3"></i>Cart</a>
                         @endauth
 
-                    </div>
-
-                    <div class="d-flex gap-3 mb-4 mt-4 ">
-                        <a href="{{ route('gift.home', ['type' => 'all']) }}"
-                            class="btn btn-toggle btn-all-categories {{ request('type') == 'all' ? 'active' : '' }}"
-                            onclick="toggleActive(this)">All</a>
-
-                        <a href="{{ route('gift.home', ['type' => '0']) }}"
-                            class="btn btn-toggle {{ request('type') == '0' ? 'active' : '' }}"
-                            onclick="toggleActive(this)">Gifts</a>
-                        <a href="{{ route('gift.home', ['type' => '1']) }}"
-                            class="btn btn-toggle {{ request('type') == '1' ? 'active' : '' }}">Coupons</a>
                     </div>
                     <h1>Find what you're looking for</h1>
 
@@ -57,27 +79,28 @@
 
                         <div class="col-md-4">
 
-                            <input type="text" class="form-control form-control-gift px-2" name="searchstr"
+                            <input type="text" class="form-control py-2" name="searchstr"
                                 placeholder="What are you looking for?" value="{{ request('searchstr') }}">
                         </div>
                         <div class="col-md-3 px-2">
-                            <select class="form-select form-select-gift" name="country">
+                            <select class="form-select py-2" name="country">
                                 <option value="">Select Country</option>
                                 @foreach ($countries as $cty)
                                     <option value="{{ $cty }}"
                                         {{ $cty == request('country') ? 'selected' : '' }}>
-                                        {{ $cty }}</option>
+                                        {{ $cty }}
+                                    </option>
                                 @endforeach
 
                             </select>
                         </div>
                         <div class="col-md-3 ">
-                            <select class="form-select form-select-gift" name="city">
+                            <select class="form-select py-2" name="city">
                                 <option value="">Select City</option>
                                 @foreach ($cities as $cty)
-                                    <option value="{{ $cty }}"
-                                        {{ $cty == request('city') ? 'selected' : '' }}>
-                                        {{ $cty }}</option>
+                                    <option value="{{ $cty }}" {{ $cty == request('city') ? 'selected' : '' }}>
+                                        {{ $cty }}
+                                    </option>
                                 @endforeach
 
                             </select>
@@ -85,7 +108,7 @@
                                 placeholder="Search City" value="{{ request('city') }}"> --}}
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-search-gift py-2" style="height: 100%;">Search</button>
+                            <button type="submit" class="btn w-100 btn-search py-2 text-white">Search</button>
                         </div>
                     </form>
 
@@ -124,23 +147,23 @@
                                             style="height: 200px;">
                                         <div class="card-body d-flex justify-content-between align-items-center ">
                                             <p class="text-truncate my-2">{{ $gNc->title }}</p>
-                                            
-                                                <input type="hidden" name="couponId" value="{{ $gNc->id }}">
-                                                @if (Auth::guard('job_seekers')->check())
+
+                                            @if (Auth::guard('job_seekers')->check())
                                                 <form action="{{ route('addtocart') }}" class="d-inline" method="post">
-                                                @csrf
+                                                    @csrf
+                                                    <input type="hidden" name="couponId" value="{{ $gNc->id }}">
                                                     <input type="hidden" name="jobSeekerId"
                                                         value="{{ Auth::guard('job_seekers')->user()->id }}">
                                                     <button type="submit" style="all: unset; cursor: pointer;">
                                                         <i class="bi bi-plus-lg ms-auto gift-cart"></i>
                                                     </button>
                                                 </form>
-                                                @else
-                                                    
-                                                    <button type="submit" style="all: unset; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
-                                                        <i class="bi bi-plus-lg ms-auto gift-cart"></i>
-                                                    </button>
-                                                @endif
+                                            @else
+                                                <button type="submit" style="all: unset; cursor: pointer;"
+                                                    data-bs-toggle="modal" data-bs-target="#loginModal">
+                                                    <i class="bi bi-plus-lg ms-auto gift-cart"></i>
+                                                </button>
+                                            @endif
 
                                             </form>
 
@@ -151,7 +174,8 @@
                                             @endif
 
                                             <p class="price">NRs.
-                                                {{ number_format((100 - $gNc->discount) * $gNc->price * 0.01, 2) }}</p>
+                                                {{ number_format((100 - $gNc->discount) * $gNc->price * 0.01, 2) }}
+                                            </p>
                                         </div>
 
                                         <div class="gift-info">
@@ -184,7 +208,7 @@
                 </div>
             </div>
 
-            @if ($giftNcoupons->hasMorePages() || $giftNcoupons->currentPage() !=1)
+            @if ($giftNcoupons->hasMorePages() || $giftNcoupons->currentPage() != 1)
 
                 <div class="row mt-3">
                     <nav>
