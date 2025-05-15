@@ -203,9 +203,9 @@
                     <h3 class="primary_color_text" style="margin:0;">1 NPR = 0.0072 USD</h3>
                 </div>
 
-                <div class="row justify-content-center">
+                <form action="{{ route('select_exchanger') }}" class="row justify-content-center">
                     <div class="row mx-auto">
-                        <input class="form-control primary_color_border w-50 m-auto" type="text"
+                        <input class="form-control primary_color_border w-50 m-auto" type="text" name="amount"
                             placeholder="Enter Amount">
                     </div>
 
@@ -215,14 +215,14 @@
                         <p class="primary_color_text m-0 fs-6">*Final amount may vary according to the exchanges.</p>
                     </div>
                     <div>
-                        <a type="button" class="btn primary_color_bg px-5 fs-5 mt-2 w-auto m-auto"
+                        <button type="submit" class="btn primary_color_bg px-5 fs-5 mt-2 w-auto m-auto"
                             href="select-exchange.html">Send
-                            Money</a>
+                            Money</button>
                     </div>
                     <!-- <p class="mt-3 fs-5 fw-bolder">Exchange Rate: <span class="primary_color_text">1 NPR = USD
                                 0.XXX</span> -->
                     </p>
-                </div>
+                </form>
 
 
 

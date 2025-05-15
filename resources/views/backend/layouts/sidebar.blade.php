@@ -283,6 +283,17 @@
                 <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
                 <div data-i18n="Passport Renewal">Passport Renewal</div>
             </a>
+        </li>
+
+        <!-- Manage Forex Exchanges -->
+        <li class="menu-item {{ request()->routeIs('passport*') ? 'active' : '' }}">
+            <a href="{{ route('passport.renewal') }}" class="menu-link">
+                
+                <i class="menu-icon tf-icons bx bx-money"></i>
+                <div data-i18n="Manage Forex Exchanges">Manage Forex Exchanges</div>
+            </a>
+        </li>
+
       <!-- Manage VISA HQ -->
         <li
             class="menu-item {{ request()->routeIs('workPermits*') || request()->routeIs('workPermitDistricts*') ? 'open' : '' }}">
