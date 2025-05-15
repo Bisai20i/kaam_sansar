@@ -269,8 +269,8 @@
 
         <!----quiz---->
         <li class="menu-item">
-            <a href="{{ route('superadmin.quiz.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user-plus"></i> {{-- Arrow-like icon --}}
+            <a href="{{ route('questions.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-question-mark"></i> {{-- Arrow-like icon --}}
                 <div data-i18n="Quiz">Quiz</div>
             </a>
         </li>
