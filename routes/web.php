@@ -68,7 +68,6 @@ use App\Http\Controllers\WorkPermitController;
 use App\Http\Controllers\WorkPermitDistrictController;
 use App\Http\Controllers\WorkPermitLocationController;
 use App\Http\Controllers\FormSubmissionController;
-use App\Http\Controllers\WorkPermitController;
 use App\Models\PollingQuestion;
 use App\Models\WorkPermit;
 use Illuminate\Http\Request;
