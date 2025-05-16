@@ -66,7 +66,7 @@
                                                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal{{ $question->id }}">
                                                     <i class="bx bx-edit-alt me-1"></i> Edit
                                                 </a>
-                                                <form action="{{ route('polling_questions.toggle', $question->id) }}" method="POST">
+                                                <form action="{{ route('update.publishStatus', $question->id) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="dropdown-item">
                                                         <i class="bx bx-refresh me-1"></i>

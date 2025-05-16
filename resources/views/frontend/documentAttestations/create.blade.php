@@ -1,7 +1,8 @@
 @extends('frontend.layouts.main')
 
 @section('title', 'Broker Account')
-@push('head') <meta name="csrf-token" content="{{ csrf_token() }}">
+@push('head')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 @section('content')
 
@@ -139,27 +140,23 @@
                     </div>
                     <div class="mt-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
                         <div>
-                            <h4 style="color:#0064a7;">Select Country for Attestation</h4>
-                            <p class="text-muted">First, please select the country where you live:</p>
+                            <p class="text-muted">First, please enter the country where you live:</p>
                         </div>
                         <div>
                             <div class="row row-cols-1">
                                 <div class="col">
-                                    <label for="applicantCountry">Select Country: <span class="text-danger">*</span></label>
-                                    <select id="applicantCountry" name="applicantCountry" class="form-select my-2 w-50" aria-label="Default select example" required>
-                                        <option selected>Nepal</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                    <p class="text-muted">Then, select the country where your documents to be attested:</p>
+                                    <label for="applicantCountry">Enter Country: <span class="text-danger">*</span></label>
+                                    <input type="text" id="applicantCountry" name="applicantCountry" class="form-control my-2 w-50" placeholder="Enter your country" required>
+
+                                    <p class="text-muted">Then, select the country where your documents are to be attested:</p>
                                 </div>
                                 <div class="col">
-                                    <label for="attestationCountry">Select Country: <span class="text-danger">*</span></label>
-                                    <select id="attestationCountry" name="attestationCountry" class="form-select w-50 my-2" aria-label="Default select example" required>
-                                        <option selected>USA</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                                    <label for="attestationCountry">Enter Country: <span class="text-danger">*</span></label>
+                                    <input type="text" id="attestationCountry" name="attestationCountry" class="form-control w-50 my-2" placeholder="Enter country name" required>
+
                                     <p class="text-muted">Also, enter the name of applicant.</p>
                                 </div>
+
                                 <div class="col">
                                     <label for="applicantName">Applicant Name: <span class="text-danger">*</span></label>
                                     <input id="applicantName" name="applicantName" type="text" class="form-control form-control-da fs-6 mt-2 my-0 w-50 text-muted" placeholder="Enter applicant Name" required>
@@ -389,8 +386,6 @@
         document.getElementById('multiStepForm' + formNumber).style.display = 'none';
         document.getElementById('multiStepForm' + (formNumber - 1)).style.display = 'block';
     }
-
-    
 </script>
 
 @endsection

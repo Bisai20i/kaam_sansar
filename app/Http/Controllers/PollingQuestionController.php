@@ -41,11 +41,12 @@ class PollingQuestionController extends Controller
         $adminId = $user->id;
         $request->validate([
             'question' => 'required|string|max:255',
-            'publish' =>'required|in:publish,unpublish',
+            'publishStatus' => 'required|in:publish,unpublish',
         ]);
         PollingQuestion::create([
             'admin_id' => $adminId,
             'question' => $request->question,
+            'publishStatus' =>$request->publishStatus,
         ]);
         return redirect()->back()->with('success', 'Question added successfully.');
     }
@@ -99,10 +100,10 @@ class PollingQuestionController extends Controller
      */
     public function destroy(PollingQuestion $pollingQuestion)
     {
-        $pollingQuestion->destory();
-        return redirect()->back()->with('success','Question deleted successfully.');
+        $pollingQuestion->delete();
+        return redirect()->back()->with('success', 'Question deleted successfully.');
     }
-       public function publishStatus($id)
+    public function publishStatus($id)
     {
         $question = PollingQuestion::findOrFail($id);
         $question->publishStatus = $question->publishStatus === 'publish' ? 'unpublish' : 'publish';

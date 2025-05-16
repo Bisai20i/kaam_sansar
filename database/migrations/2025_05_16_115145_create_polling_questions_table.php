@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('polling_questions', function (Blueprint $table) {
-        $table->id();
-$table->unsignedBigInteger('admin_id')->nullable(false);
-$table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
-$table->string('question')->nullable(false);
-$table->enum('publishStatus', ['publish', 'unpublish'])->default('unpublish');
-$table->timestamps();
+            $table->id();
+            $table->unsignedBigInteger('admin_id'); // Add this
+            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
+            $table->string('question');
+            $table->enum('publishStatus',['publish','unpublish']);
+            $table->timestamps();
         });
     }
 

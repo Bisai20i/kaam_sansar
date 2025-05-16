@@ -198,6 +198,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     //Polling System
     Route::resource('pollingQuestions', PollingQuestionController::class);
+    Route::post('/pollingQuestion/{id}/update-publish', [PollingQuestionController::class, 'publishStatus'])->name('update.publishStatus');
     Route::resource('pollingAnswers', PollingAnswerController::class);
 
 
@@ -212,7 +213,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::put('/passportCountryList/unpublish/{id}', [PassportCountryListController::class, 'unpublish'])->name('passportCountryList.unpublish');
 
     Route::get('/passport/renewal', [PassportRenewalController::class, 'index'])->name('passport.renewal');
-    Route::get('/passport/renewal/{id}',[PassportRenewalController::class, 'show'])->name('passport.renewal.show');
+    Route::get('/passport/renewal/{id}', [PassportRenewalController::class, 'show'])->name('passport.renewal.show');
     Route::delete('/passport/renewal/{id}', [PassportRenewalController::class, 'destroy'])->name('passport.renewal.destroy');
 
     Route::resource('passportDistrictList', PassportDistrictController::class)->except('index', 'edit', 'create');
@@ -391,7 +392,6 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('/passport/renew/{id}/edit', [PassportRenewalController::class, 'edit'])->name('passport.renew.edit');
     Route::put('/passport/renew/{id}', [PassportRenewalController::class, 'update'])->name('passport.renew.update');
     Route::post('/passport/renew/partial', [PassportRenewalController::class, 'store_partial'])->name('passport.renew.partial');
-
 });
 
 /* Frontend routes */
@@ -488,7 +488,7 @@ Route::prefix('advertisements')->group(function () {
     Route::get('Ads/type/{type}', [AdvertisementController::class, 'showByTypeAndCategory'])->name('Ads.showByType');
     Route::get('Ads/category/{categoryId}', [AdvertisementController::class, 'showByCategory'])->name('Ads.showByCategory');
     Route::get('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
-// comment
+    // comment
 
     // Route::resource('adscomment', CommentController::class);
 
@@ -520,11 +520,11 @@ Route::post('/brokerAccounts/{id}/update-status', [BrokerAccountController::clas
 Route::resource('documentAttestations', DocumentationAttestationController::class);
 Route::post('/documentAttestations/{id}/update-status', [DocumentationAttestationController::class, 'updateStatus'])
     ->name('documentAttestation.updateStatus');
-    
+
 Route::resource('workPermits', WorkPermitController::class);
 Route::post('/workPermits/{id}/update-status', [WorkPermitController::class, 'updateStatus'])
     ->name('workPermit.updateStatus');
-Route::resource('polls',PollController::class);
+Route::resource('polls', PollController::class);
 // Frontend form route
 Route::get('/become_seller', function () {
     return view('frontend.giftNcoupon.become_seller');

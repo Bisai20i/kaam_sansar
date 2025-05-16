@@ -334,12 +334,12 @@
                 </li>
                 <li class="menu-item {{ request()->routeIs('answers*') ? 'active' : '' }}">
                     <a href="{{ route('pollingAnswers.index') }}" class="menu-link">
-                        <div data-i18n="Pricing">Manage Work Pemrit Location</div>
+                        <div data-i18n="Pricing">Manage Answer</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('polls*') ? 'active' : '' }}">
                     <a href="{{ route('polls.index') }}" class="menu-link">
-                        <div data-i18n="Pricing">Manage Work Pemrit </div>
+                        <div data-i18n="Pricing">Manage Poll</div>
                     </a>
                 </li>
             </ul>
