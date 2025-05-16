@@ -37,12 +37,12 @@
 
                         <div class="col-md-2">
                             <label for="buyingRate" class="mb-1">Buying Rate</label>
-                            <input type="number" class="form-control" id="buyingRate" placeholder="Buying Rate">
+                            <input type="number" step="0.0001" min="0" class="form-control" id="buyingRate" placeholder="Buying Rate">
                         </div>
 
                         <div class="col-md-2">
                             <label for="sellingRate" class="mb-1">Selling Rate</label>
-                            <input type="number" class="form-control" id="sellingRate" placeholder="Selling Rate">
+                            <input type="number" step="0.0001" min="0" class="form-control" id="sellingRate" placeholder="Selling Rate">
                         </div>
 
                         <div class="col-md-2">
@@ -181,14 +181,14 @@
                                 <label for="description" class="form-label">Buying Rate <span
                                         class="text-danger">*</span></label>
 
-                                <input type="number" class="form-control" id="edit_buyingRate" name="buying_rate"
+                                <input type="number" step="0.0001" min="0" class="form-control" id="edit_buyingRate" name="buying_rate"
                                     placeholder="Buying Rate">
                             </div>
 
                             <div class="mb-3">
                                 <label for="description" class="form-label">Selling Rate <span
                                         class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="edit_sellingRate" name="selling_rate"
+                                <input type="number" step="0.0001" min="0" class="form-control" id="edit_sellingRate" name="selling_rate"
                                     placeholder="Selling Rate">
                             </div>
                         </div>

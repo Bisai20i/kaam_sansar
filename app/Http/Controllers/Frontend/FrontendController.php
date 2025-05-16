@@ -42,6 +42,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\ForexCalculator;
 
 
 class FrontendController extends Controller
@@ -474,10 +475,26 @@ class FrontendController extends Controller
     public function select_exchanger(Request $request)
     {
 
-
+        $base_currency = $request->query('base_currency');
+        $target_currency = $request->query('target_currency');
+        $amount = $request->query('amount');
         // dd($request->all());
 
-        return view('frontend.ForexChanger.select-exchanger');
+        $exchange_rates = ForexCalculator::where('base_currency', $base_currency)
+            ->where(function ($query) use ($target_currency, $base_currency) {
+                $query->where('target_currency', $target_currency);
+                $query->where('base_currency', $base_currency);
+            })
+            ->orWhere(function ($query) use ($target_currency, $base_currency) {
+                $query->where('target_currency', $base_currency);
+                $query->where('base_currency', $target_currency);
+            })
+            ->with('post_admin:id,fullName,profile_image')
+            ->get();
+
+        // return $exchange_rates;
+
+        return view('frontend.ForexChanger.select-exchanger', compact('exchange_rates','amount', 'base_currency', 'target_currency'));
     }
 
     public function exchange_bank_details()

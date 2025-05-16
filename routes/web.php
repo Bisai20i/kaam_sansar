@@ -63,6 +63,8 @@ use App\Http\Controllers\VisaDetailsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\WorkPermitDistrictController;
 use App\Http\Controllers\WorkPermitLocationController;
+use App\Http\Controllers\FormSubmissionController;
+use App\Http\Controllers\WorkPermitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -301,6 +303,10 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('getPurchaseHistory/{user_id?}', [JobSeekerController::class, 'getPurchaseHistory'])->name('jobseeker.getPurchaseHistory');
     Route::get('/myjobs/{user_id?}', [JobSeekerController::class, 'myjobs'])->name('jobseeker.myjobs');
     Route::get('/bookmark/remove/{jobId}', [JobSeekerController::class, 'removeBookmark'])->name('jobBookmark.remove');
+    Route::get('/myblogs', [JobSeekerController::class, 'myblogs'])->name('jobseeker.myblogs');
+    Route::get('/forms', [FormSubmissionController::class, 'index'])->name('jobseeker.forms');
+    Route::get('/mynews', [JobSeekerController::class, 'mynews'])->name('jobseeker.mynews');
+    Route::get('/form/complete/{id}', [FormSubmissionController::class, 'findForm'])->name('form.complete');
     // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
 
     Route::resource('profiles', ProfileController::class);
@@ -382,6 +388,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('/passport/renew/{id}/edit', [PassportRenewalController::class, 'edit'])->name('passport.renew.edit');
     Route::put('/passport/renew/{id}', [PassportRenewalController::class, 'update'])->name('passport.renew.update');
     Route::post('/passport/renew/partial', [PassportRenewalController::class, 'store_partial'])->name('passport.renew.partial');
+    Route::get('/passport/edit/{id}', [PassportRenewalController::class, 'edit'])->name('passport.edit');
 
 });
 
@@ -522,3 +529,10 @@ Route::prefix('superadmin')->middleware(['auth:admin', 'role:superAdmin'])->grou
     Route::get('/becomeseller/{id}', [BecomeSellerController::class, 'show'])->name('superadmin.becomeseller.show');
     Route::delete('/becomeseller/{id}', [BecomeSellerController::class, 'destroy'])->name('superadmin.becomeseller.destroy');
 });
+
+
+Route::get('/passport/countries', [PassportRenewalController::class, 'passport_countries'])->name('passport.countries');
+Route::get('/passport/proviences/{id}', [PassportRenewalController::class, 'passport_proviences'])->name('passport.proviences');
+Route::get('/passport/districts/{id}', [PassportRenewalController::class, 'passport_districts'])->name('passport.districts');
+Route::get('/passport/locations/{id}', [PassportRenewalController::class, 'passport_locations'])->name('passport.locations');
+Route::get('/passport/times/{id}/{date}', [PassportRenewalController::class, 'passport_times'])->name('passport.times');
