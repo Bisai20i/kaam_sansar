@@ -13,7 +13,7 @@
     <div class="container-fluid container-lg">
         <div id="form-container"
             class="container-fluid container-lg border border-1 border-dark-subtle rounded-4 p-md-5 py-5 mb-5 mt-5">
-            <form id="form" method="POST" action="{{ route('documentAttestations.store') }}">
+            <form id="form" method="POST" action="{{ route('documentAttestations.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div id="multiStepForm1" class="multi-step-form" style="display:block;">
                     <div class="d-flex">
@@ -358,7 +358,7 @@
                                 renewal service.
                             </label>
                         </div>
-                        <div class="required-fields-message">* - Required fields -
+                        <div class="required-fields-message text-danger">* - Required fields -
                             Please
                             fill all
                             required fields before proceeding.</div>
@@ -390,43 +390,7 @@
         document.getElementById('multiStepForm' + (formNumber - 1)).style.display = 'block';
     }
 
-    document.getElementById('form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Ensure checkboxes are checked
-        if (!document.getElementById('checkCorrect').checked ||
-            !document.getElementById('checkTerms').checked) {
-            return alert('Please agree to the terms and confirm the information is correct');
-        }
-
-        const formData = new FormData(this);
-
-        fetch(this.action, {
-            method: this.method,
-            credentials: 'same-origin',           // send cookies for CSRF
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
-                'X-Requested-With': 'XMLHttpRequest',  // mark as AJAX
-                'Accept': 'application/json'           // request JSON response
-            },
-            body: formData
-        })
-        .then(res => {
-            if (!res.ok) {
-                // if Laravel returns JSON errors
-                return res.json().then(err => Promise.reject(err));
-            }
-            return res.json();
-        })
-        .then(data => {
-            alert('Document Attestaion submitted Successfully! ');
-             window.location = '/documentAttestations/create';
-        })
-        .catch(err => {
-            console.error('Error response:', err);
-            alert(err.message || 'Something went wrong');
-        });
-    });
+    
 </script>
 
 @endsection

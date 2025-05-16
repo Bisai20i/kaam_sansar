@@ -221,6 +221,27 @@ class BrokerAccountController extends Controller
      */
     public function destroy(BrokerAccount $brokerAccount)
     {
-        //
+        $brokerAccount->delete();
+
+        return redirect()->back()->with('success', 'Bank account deleted successfully.');
+    }
+     public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,In-progress,approved,rejected'
+        ]);
+
+        $permit = BrokerAccount::findOrFail($id);
+        $permit->status = $request->status;
+        $permit->save();
+
+        $statusMessages = [
+            'approved' => 'Bank Account approved successfully!',
+            'rejected' => 'Bank Account rejected!',
+            'In-progress' => 'Bank Account marked as In-progress!',
+            'pending' => 'Bank Account status reset to pending!'
+        ];
+
+        return back()->with('success', $statusMessages[$request->status]);
     }
 }

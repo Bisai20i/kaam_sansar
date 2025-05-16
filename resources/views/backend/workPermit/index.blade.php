@@ -44,27 +44,65 @@
                                         <td>{{ $permit->appDistrict ?? 'N/A' }}</td>
                                         <td>{{ $permit->appLocation ?? 'N/A' }}</td>
                                         <td>
-                                            <span class="badge bg-{{ $permit->status == 'pending' ? 'warning' : ($permit->status == 'rejected' ? 'danger' : 'success') }}">
-                                                {{ ucfirst($permit->status) }}
-                                            </span>
+                                            @if($permit->status == 'approved')
+                                            <span class="badge bg-success">Approved</span>
+                                            @elseif($permit->status == 'rejected')
+                                            <span class="badge bg-danger">Rejected</span>
+                                            @elseif($permit->status == 'In-progress')
+                                            <span class="badge bg-info">In Progress</span>
+                                            @else
+                                            <span class="badge bg-warning">Pending</span>
+                                            @endif
                                         </td>
                                         <td>
                                             <div class="dropdown">
-                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                                    data-bs-toggle="dropdown">
+                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                     <i class="bx bx-dots-vertical-rounded"></i>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item text-primary" href="{{ route('workPermits.show', $permit->id) }}">
-                                                        <i class="bx bx-show me-1"></i> View
+                                                    <a class="dropdown-item text-success" href="{{ route('workPermits.show', $permit->id) }}">
+                                                        <i class="fas fa-show"></i> show
                                                     </a>
-                                                    <a class="dropdown-item text-danger" href="javascript:void(0);"
+
+                                                    @if($permit->status != 'In-progress')
+                                                    <form action="{{ route('workPermit.updateStatus', $permit->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <input type="hidden" name="status" value="In-progress">
+                                                        <button type="submit" class="dropdown-item text-info ps-3" style="background:none; border:none; padding:0; margin:0;">
+                                                            <i class="bx bx-loader-circle me-1"></i> Mark In-progress
+                                                        </button>
+                                                    </form>
+                                                    @endif
+
+                                                    @if($permit->status != 'approved')
+                                                    <form action="{{ route('workPermit.updateStatus', $permit->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <input type="hidden" name="status" value="approved">
+                                                        <button type="submit" class="dropdown-item text-success ps-3" style="background:none; border:none; padding:0; margin:0;">
+                                                            <i class="bx bx-check me-1"></i> Approve
+                                                        </button>
+                                                    </form>
+                                                    @endif
+
+                                                    @if($permit->status != 'rejected')
+                                                    <form action="{{ route('workPermit.updateStatus', $permit->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <input type="hidden" name="status" value="rejected">
+                                                        <button type="submit" class="dropdown-item text-danger ps-3" style="background:none; border:none; padding:0; margin:0;">
+                                                            <i class="bx bx-x me-1"></i> Reject
+                                                        </button>
+                                                    </form>
+                                                    @endif
+
+                                                    <a class="dropdown-item text-secondary" href="javascript:void(0);"
                                                         data-bs-toggle="modal" data-bs-target="#deleteModal"
                                                         onclick="setDeleteFormAction({{ $permit->id }})">
                                                         <i class="bx bx-trash me-1"></i> Delete
                                                     </a>
+
                                                 </div>
                                             </div>
+
                                         </td>
                                     </tr>
                                     @endforeach

@@ -93,7 +93,7 @@ class BankAccountController extends Controller
             'permanentMunicipality' => 'required|string|max:255',
             'permanentCity' => 'required|string|max:255',
             'permanentWardNo' => 'required',
-            'permanentStreet' => 'nullable|string|max:255',  
+            'permanentStreet' => 'nullable|string|max:255',
             'permanentState' => 'nullable|string|max:255',
             'permanentTole' => 'required|string|max:255',
             'permanentHouseNo' => 'nullable|string|max:255',
@@ -208,6 +208,28 @@ class BankAccountController extends Controller
      */
     public function destroy(BankAccount $bankAccount)
     {
-        //
+
+        $bankAccount->delete();
+
+        return redirect()->back()->with('success', 'Bank account deleted successfully.');
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,In-progress,approved,rejected'
+        ]);
+
+        $permit = BankAccount::findOrFail($id);
+        $permit->status = $request->status;
+        $permit->save();
+
+        $statusMessages = [
+            'approved' => 'Bank Account approved successfully!',
+            'rejected' => 'Bank Account rejected!',
+            'In-progress' => 'Bank Account marked as In-progress!',
+            'pending' => 'Bank Account status reset to pending!'
+        ];
+
+        return back()->with('success', $statusMessages[$request->status]);
     }
 }

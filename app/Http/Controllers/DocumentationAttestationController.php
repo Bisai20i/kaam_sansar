@@ -91,18 +91,14 @@ class DocumentationAttestationController extends Controller
             'document2'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'document3'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'document4'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'paymentStatus'      => 'in:unpaid,paid',
         ]);
     
         if ($validator->fails()) {
             Log::error('Validation errors:', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed.', 422, $validator->errors())
-                : response()->json([
-                    'success' => false,
-                    'message' => 'Validation failed.',
-                    'errors'  => $validator->errors()
-                ], 422);
+                : redirect()->back()->withErrors($validator)->withInput();
+
         }
     
         // 3) Handle file uploads
@@ -125,7 +121,6 @@ class DocumentationAttestationController extends Controller
             $fileUploads,
             [
                 'jobSeekerId'   => $userId,
-                'paymentStatus' => 'pending',
             ]
         );
     
@@ -136,11 +131,8 @@ class DocumentationAttestationController extends Controller
         // 6) Return response
         return $isMobile
             ? $this->responseSuccess('Attestation request submitted.', 200, $attestation)
-            : response()->json([
-                'success'     => true,
-                'message'     => 'Attestation request submitted successfully.',
-                'attestation' => $attestation
-            ], 200);
+            : redirect()->back()->with('success', 'Documente Attestation saved successfully.');
+
     }
     
 
@@ -189,8 +181,31 @@ class DocumentationAttestationController extends Controller
      * @param  \App\Models\DocumentationAttestation  $documentationAttestation
      * @return \Illuminate\Http\Response
      */
+  
     public function destroy(DocumentationAttestation $documentationAttestation)
     {
-        //
+        $documentationAttestation->delete();
+
+        return redirect()->back()->with('success', 'Bank account deleted successfully.');
+    }
+     public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,In-progress,approved,rejected'
+        ]);
+
+        $permit = DocumentationAttestation::findOrFail($id);
+        $permit->status = $request->status;
+        $permit->save();
+
+        $statusMessages = [
+            'approved' => 'Bank Account approved successfully!',
+            'rejected' => 'Bank Account rejected!',
+            'In-progress' => 'Bank Account marked as In-progress!',
+            'pending' => 'Bank Account status reset to pending!'
+        ];
+
+        return back()->with('success', $statusMessages[$request->status]);
     }
 }
+

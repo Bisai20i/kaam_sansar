@@ -68,22 +68,22 @@
                 <i class="menu-icon tf-icons bx bx-category"></i>
                 <div data-i18n="Manage Ads">Manage Ads Category</div>
             </a>
-        </li> 
+        </li>
 
-          <!-- Frequently Asked Questions -->
-          <li class="menu-item {{ request()->routeIs('faqs*') ? 'active' : '' }}">
+        <!-- Frequently Asked Questions -->
+        <li class="menu-item {{ request()->routeIs('faqs*') ? 'active' : '' }}">
             <a href="{{ route('faqs.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-help-circle"></i>
                 <div data-i18n="Manage Ads">Manage FAQs</div>
             </a>
-        </li> 
+        </li>
 
         <!-- Advertisements -->
         {{-- <li class="menu-item {{ request()->routeIs('ads*') ? 'active' : '' }}">
-            <a href="{{ route('ads.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-rectangle"></i>
-                <div data-i18n="Manage Ads">Manage Ads</div>
-            </a>
+        <a href="{{ route('ads.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-rectangle"></i>
+            <div data-i18n="Manage Ads">Manage Ads</div>
+        </a>
         </li> --}}
 
 
@@ -131,7 +131,7 @@
                         <div data-i18n="Landing">Manage Aboard Product</div>
                     </a>
                     {{-- <a href="{{ route('aboards.index') }}" class="menu-link">
-                        <div data-i18n="Landing">Manage Aboard Product</div>
+                    <div data-i18n="Landing">Manage Aboard Product</div>
                     </a> --}}
                 </li>
             </ul>
@@ -168,9 +168,9 @@
         </li>
         {{-- <li class="menu-item ">
             <a href="{{ route('giftNcoupon.list') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-news"></i>
-                <div data-i18n="Manage Blogs and Podcasts">Manage Gift and Coupons</div>
-            </a>
+        <i class="menu-icon tf-icons bx bx-news"></i>
+        <div data-i18n="Manage Blogs and Podcasts">Manage Gift and Coupons</div>
+        </a>
         </li> --}}
 
         <!-- Blogs and Podcasts -->
@@ -271,15 +271,15 @@
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
             <a href="{{ route('insurance.company') }}" class="menu-link">
-                
+
                 <i class="menu-icon tf-icons bx bx-heart"></i>
                 <div data-i18n="Insurance">Insurance Company</div>
             </a>
         </li>
-        
+
         <li class="menu-item {{ request()->routeIs('passport*') ? 'active' : '' }}">
             <a href="{{ route('passport.renewal') }}" class="menu-link">
-                
+
                 <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
                 <div data-i18n="Passport Renewal">Passport Renewal</div>
             </a>
@@ -288,13 +288,13 @@
         <!-- Manage Forex Exchanges -->
         <li class="menu-item {{ request()->routeIs('forex*') ? 'active' : '' }}">
             <a href="{{ route('forex.index') }}" class="menu-link">
-                
+
                 <i class="menu-icon tf-icons bx bx-money"></i>
                 <div data-i18n="Manage Forex Exchanges">Manage Forex Exchanges</div>
             </a>
         </li>
 
-      <!-- Manage VISA HQ -->
+        <!-- Manage Workk Pemrit -->
         <li
             class="menu-item {{ request()->routeIs('workPermits*') || request()->routeIs('workPermitDistricts*') ? 'open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -314,6 +314,31 @@
                 </li>
                 <li class="menu-item {{ request()->routeIs('workPermits*') ? 'active' : '' }}">
                     <a href="{{ route('workPermits.index') }}" class="menu-link">
+                        <div data-i18n="Pricing">Manage Work Pemrit </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!-- Manage Poll System-->
+        <li
+            class="menu-item {{ request()->routeIs('polls*') || request()->routeIs('workPermitDistricts*') ? 'open' : '' }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-store"></i>
+                <div data-i18n="Front Pages">Manage Polling System</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('pollingQestions*') ? 'active' : '' }}">
+                    <a href="{{ route('pollingQuestions.index') }}" class="menu-link">
+                        <div data-i18n="Landing">Manage Questions</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('answers*') ? 'active' : '' }}">
+                    <a href="{{ route('pollingAnswers.index') }}" class="menu-link">
+                        <div data-i18n="Pricing">Manage Work Pemrit Location</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('polls*') ? 'active' : '' }}">
+                    <a href="{{ route('polls.index') }}" class="menu-link">
                         <div data-i18n="Pricing">Manage Work Pemrit </div>
                     </a>
                 </li>

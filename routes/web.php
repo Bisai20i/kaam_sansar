@@ -47,6 +47,9 @@ use App\Http\Controllers\PassportDistrictController;
 use App\Http\Controllers\PassportLocationController;
 use App\Http\Controllers\PassportProvienceController;
 use App\Http\Controllers\PassportRenewalController;
+use App\Http\Controllers\PollController;
+use App\Http\Controllers\PollingAnswerController;
+use App\Http\Controllers\PollingQuestionController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProfileController;
@@ -61,8 +64,11 @@ use App\Http\Controllers\VisaController;
 use App\Http\Controllers\VisaCountryListController;
 use App\Http\Controllers\VisaDetailsController;
 use App\Http\Controllers\VisaTypeController;
+use App\Http\Controllers\WorkPermitController;
 use App\Http\Controllers\WorkPermitDistrictController;
 use App\Http\Controllers\WorkPermitLocationController;
+use App\Models\PollingQuestion;
+use App\Models\WorkPermit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -190,10 +196,13 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::resource('workPermitDistricts', WorkPermitDistrictController::class);
     Route::resource('workPermitLocations', WorkPermitLocationController::class);
 
+    //Polling System
+    Route::resource('pollingQuestions', PollingQuestionController::class);
+    Route::resource('pollingAnswers', PollingAnswerController::class);
+
+
     //passport renewal
-
     Route::resource('passportCountryList', PassportCountryListController::class)->except('edit', 'create');
-
     Route::resource('passportProvienceList', PassportProvienceController::class)->except('index', 'edit', 'create');
     Route::get('passportProvience/{country_id}', [PassportProvienceController::class, 'index'])->name('passportProvienceList.index');
     Route::put('/passportProvienceList/publish/{id}', [PassportProvienceController::class, 'publish'])->name('passportProvienceList.publish');
@@ -502,11 +511,20 @@ Route::get('/resume-help', [FrontendController::class, 'resumeHelp'])->name('res
 Route::get('/fireEvent', [MessageController::class, 'fireEvent']);
 
 Route::resource('bankAccounts', BankAccountController::class);
-Route::resource('brokerAccounts', BrokerAccountController::class);
-Route::resource('documentAttestations', DocumentationAttestationController::class);
-Route::resource('moneyExchanges', MoneyExchangeController::class);
-Route::resource('workPermits', WorkPermitController::class);
+Route::post('/bankAccounts/{id}/update-status', [BankAccountController::class, 'updateStatus'])
+    ->name('bankaccount.updateStatus');
 
+Route::resource('brokerAccounts', BrokerAccountController::class);
+Route::post('/brokerAccounts/{id}/update-status', [BrokerAccountController::class, 'updateStatus'])
+    ->name('brokerAccount.updateStatus');
+Route::resource('documentAttestations', DocumentationAttestationController::class);
+Route::post('/documentAttestations/{id}/update-status', [DocumentationAttestationController::class, 'updateStatus'])
+    ->name('documentAttestation.updateStatus');
+    
+Route::resource('workPermits', WorkPermitController::class);
+Route::post('/workPermits/{id}/update-status', [WorkPermitController::class, 'updateStatus'])
+    ->name('workPermit.updateStatus');
+Route::resource('polls',PollController::class);
 // Frontend form route
 Route::get('/become_seller', function () {
     return view('frontend.giftNcoupon.become_seller');

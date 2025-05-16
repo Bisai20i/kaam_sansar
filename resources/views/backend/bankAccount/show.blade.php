@@ -310,6 +310,7 @@
                     <label class="form-label">Signature Photo:</label>
                     <div class="form-value">
                         @if($bankAccount->signature)
+                        <img scr="{{ asset($bankAccount->signature) }}" height="150px" width="150px">
                         <a href="{{ asset($bankAccount->signature) }}" target="_blank">View Signature</a>
                         @else
                             N/A
@@ -320,7 +321,8 @@
                     <label class="form-label">Thumb Print Photo:</label>
                     <div class="form-value">
                         @if($bankAccount->fingerPrint)
-                        <a href="{{ asset($bankAccount->fingerPrint) }}" target="_blank">View FingerPrint</a>
+                    <img scr="{{ asset($bankAccount->fingerPrint) }}" height="150px" width="150px">
+                    <a href="{{ asset($bankAccount->fingerPrint) }}" target="_blank">View FingerPrint</a>
  
                         @else
                             N/A
