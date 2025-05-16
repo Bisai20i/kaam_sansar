@@ -103,12 +103,15 @@
 </div>
 
 @endsection
-<!-- <style>
-.question-content img {
-width: 150px;
-height: 100px;
-object-fit: contain;
-display: inline-block;
-margin-bottom: 5px;
-}
-</style> -->
+<style>
+ .question-body img {
+        width: 100%;
+        max-height: 250px;
+        /* Adjust height here */
+        object-fit: cover;
+        /* Crop the image nicely */
+        border-radius: 10px;
+        margin-bottom: 15px;
+        display: block;
+    }
+</style>

@@ -64,6 +64,15 @@ use App\Http\Controllers\QuestionController;
 
 
 
+Route::middleware(['auth:job_seekers'])->group(function () {
+    Route::get('/quiz', [QuestionController::class, 'quiz'])->name('quiz.frontend');
+    Route::post('/quiz/submit', [QuestionController::class, 'submitQuiz'])->name('quiz.submit');
+    
+    // Change this line to use the controller method, NOT a closure returning the view
+    Route::get('/quiz/thankyou', [QuestionController::class, 'thankYou'])->name('quiz.thankyou');
+});
+
+
 Route::get('/ads/{id}/edit', [AdvertisementController::class, 'edit'])->name('ads.edit');
 
 
@@ -495,7 +504,6 @@ Route::prefix('advertisements')->group(function () {
     // comment
 
     Route::resource('adscomment', CommentController::class);
-
 });
 
 Route::resource('ads', AdvertisementController::class);
