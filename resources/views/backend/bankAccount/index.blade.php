@@ -4,12 +4,12 @@
 
 @section('content')
 <div class="container">
-<h4 class="fw-bold mb-4"><span class="text-muted fw-light"></span></h4>
+    <h4 class="fw-bold mb-4"><span class="text-muted fw-light"></span></h4>
     <div class="card shadow">
         <div>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h4 class="card-title">Bank Account List</h4>
+                    <h4 class="card-title p-3">Bank Account List</h4>
                 </div>
             </div>
         </div>
@@ -27,8 +27,8 @@
                             <th>Citizenship</th>
                             <th>Bank</th>
                             <th>Branch</th>
-                            <th>Apply From</th>
                             <th>Purpose</th>
+                            <th>status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -39,14 +39,77 @@
                             <td>{{ $bank->firstName }} {{ $bank->middleName }} {{ $bank->lastName }}</td>
                             <td>{{ $bank->mobileNumber }}</td>
                             <td>{{ $bank->email ?? '-' }}</td>
-                            <td>{{ $bank->nepaleseCitizen ? 'Nepalese' : 'Other' }}</td>
+                            <td>
+                                @if ($bank->nepaleseCitizen===1)
+                                <span>Yes</span>
+                                @else
+                                <span>No</span>
+                                @endif
+                            </td>
                             <td>{{ $bank->preferredBank }}</td>
                             <td>{{ $bank->branch }}</td>
-                            <td>{{ $bank->applyFromCountry ?? 'Nepal' }}</td>
                             <td>{{ $bank->applicantPurpose }}</td>
-                            <td> <a href="{{ route('bankAccounts.show', $bank->id) }}" class="btn btn-sm btn-success">
-                                    <i class="fas fa-download"></i> Download
-                                </a></td>
+                            <td>
+                                @if($bank->status == 'approved')
+                                <span class="badge bg-success">Approved</span>
+                                @elseif($bank->status == 'rejected')
+                                <span class="badge bg-danger">Rejected</span>
+                                @elseif($bank->status == 'In-progress')
+                                <span class="badge bg-info">In Progress</span>
+                                @else
+                                <span class="badge bg-warning">Pending</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item text-success" href="{{ route('bankAccounts.show', $bank->id) }}">
+                                            <i class="fas fa-download me-1"></i> Download
+                                        </a>
+
+                                        @if($bank->status != 'In-progress')
+                                        <form action="{{ route('bankaccount.updateStatus', $bank->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            <input type="hidden" name="status" value="In-progress">
+                                            <button type="submit" class="dropdown-item text-info ps-3" style="background:none; border:none; padding:0; margin:0;">
+                                                <i class="bx bx-loader-circle me-1"></i> Mark In-progress
+                                            </button>
+                                        </form>
+                                        @endif
+
+                                        @if($bank->status != 'approved')
+                                        <form action="{{ route('bankaccount.updateStatus', $bank->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            <input type="hidden" name="status" value="approved">
+                                            <button type="submit" class="dropdown-item text-success ps-3" style="background:none; border:none; padding:0; margin:0;">
+                                                <i class="bx bx-check me-1"></i> Approve
+                                            </button>
+                                        </form>
+                                        @endif
+
+                                        @if($bank->status != 'rejected')
+                                        <form action="{{ route('bankaccount.updateStatus', $bank->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            <input type="hidden" name="status" value="rejected">
+                                            <button type="submit" class="dropdown-item text-danger ps-3" style="background:none; border:none; padding:0; margin:0;">
+                                                <i class="bx bx-x me-1"></i> Reject
+                                            </button>
+                                        </form>
+                                        @endif
+
+                                        <a class="dropdown-item text-secondary" href="javascript:void(0);"
+                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                            onclick="setDeleteFormAction({{ $bank->id }})">
+                                            <i class="bx bx-trash me-1"></i> Delete
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                            </td>
                         </tr>
                         @endforeach
                         @if ($bankAccount->isEmpty())
@@ -59,9 +122,36 @@
             </div>
         </div>
     </div>
+    <!-- Delete Confirmation Modal -->
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="deleteForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this bank account?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
-
+<script>
+    function setDeleteFormAction(id) {
+        document.getElementById('deleteForm').action = "{{ route('bankAccounts.destroy', ':id') }}".replace(':id', id);
+    }
+</script>
 <!-- Font Awesome for icons -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 @endsection

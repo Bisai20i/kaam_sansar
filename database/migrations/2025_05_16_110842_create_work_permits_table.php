@@ -136,7 +136,6 @@ return new class extends Migration
             $table->text('emergencyContactStateProvince')->nullable();
             $table->text('emergencyContactDistrict')->nullable();
             $table->text('emergencyContactCity')->nullable();
-
             $table->string('passportPhoto')->nullable();
             $table->string('bankAccountPhoto')->nullable();
             $table->string('visaPhoto')->nullable();
@@ -149,7 +148,8 @@ return new class extends Migration
             $table->string('otherDocumentsPhoto')->nullable();
             $table->boolean('checkCorrect')->nullable();
             $table->boolean('checkTerms')->nullable();
-            $table->enum('status', ['pending', 'processing', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'In-progress','approved','rejected'])->default('pending');
+            $table->enum('payment',['unpaid','paid'])->default('unpaid');
             $table->timestamps();
         });
     }

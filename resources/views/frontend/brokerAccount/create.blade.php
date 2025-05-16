@@ -320,15 +320,49 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="d-flex justify-content-end py-4">
-                                <button type="submit" class="btn btn" style="background-color: #0064a7; color: white;">Submit</button>
-                            </div>
-                        </form>
                     </div>
+                    <div class="my-4 border border-1 border-secondary"></div>
+                    <div class="d-flex flex-column mx-3 mb-5">
+                        <div class="form-check">
+                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkCorrect" required>
+                            <label class="form-check-label fs-6" for="checkCorrect">
+                                <span class="required"></span> I confirm that all
+                                information provided is accurate and complete. I
+                                understand
+                                that providing false
+                                information may result in the rejection of my
+                                application
+                                and
+                                possible
+                                legal
+                                consequences.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkTerms" required>
+                            <label class="form-check-label fs-6" for="checkTerms">
+                                <span class="required"></span> I agree to the Terms
+                                and
+                                Conditions
+                                and Privacy Policy of
+                                Kamsansar's
+                                passport
+                                renewal service.
+                            </label>
+                        </div>
+                        <div class="required-fields-message text-danger">* - Required fields -
+                            Please
+                            fill all
+                            required fields before proceeding.</div>
+                    </div>
+                    <div class="d-flex justify-content-end py-4">
+                        <button type="submit" class="btn btn" style="background-color: #0064a7; color: white;">Submit</button>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 </section>
 
 <script src="{{ asset('JS/home.js') }}"></script>
@@ -369,8 +403,8 @@
                 $('#temporaryStreet').val($('#permanentStreet').val());
                 $('#temporaryHouseNo').val($('#permanentHouseNo').val());
 
-             // Optionally disable them so user can't edit
-             $('#form-container .accordion-body input[id^="temporary"]').prop('readonly', true);
+                // Optionally disable them so user can't edit
+                $('#form-container .accordion-body input[id^="temporary"]').prop('readonly', true);
             } else {
                 // Clear values and re-enable
                 $('#form-container .accordion-body input[id^="temporary"]').val('').prop('readonly', false);
