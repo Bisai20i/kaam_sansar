@@ -144,6 +144,7 @@ class QuestionController extends Controller
 
         return redirect()->route('questions.index')->with('success', 'Question deleted successfully!');
     }
+
     public function quiz()
     {
 
@@ -153,6 +154,15 @@ class QuestionController extends Controller
         if (!$jobseeker) {
             abort(403, 'Unauthorized');
         }
+
+        // Check if this user has already attempted the quiz
+        $hasPlayed = UserAnswer::where('user_id', $jobseeker->id)->exists();
+
+        if ($hasPlayed) {
+            return redirect()->route('quiz.thankyou')->with('error', 'You have already taken the quiz.');
+        }
+
+
 
         $questions = Question::with('answers')->get();
         return view('frontend.quiz.show', compact('questions'));
@@ -166,6 +176,17 @@ class QuestionController extends Controller
         if (!$jobseeker) {
             abort(403, 'Unauthorized');
         }
+
+
+
+        // Prevent re-submission
+        $alreadySubmitted = UserAnswer::where('user_id', $jobseeker->id)->exists();
+        if ($alreadySubmitted) {
+            return redirect()->route('quiz.thankyou')->with('error', 'You have already taken the quiz.');
+        }
+
+
+
 
         $answers = $request->except('_token');
 
@@ -183,14 +204,14 @@ class QuestionController extends Controller
                     $correctAnswers++;
                 }
 
-                \App\Models\UserAnswer::updateOrCreate(
+                UserAnswer::updateOrCreate(
                     [
                         'user_id' => $jobseeker->id,
                         'question_id' => $questionId,
                     ],
                     [
                         'answer_id' => $answerId,
-                        'is_correct' => $isCorrect,
+                        'is_correct' =>(bool) $isCorrect,
                     ]
                 );
             }
@@ -205,30 +226,55 @@ class QuestionController extends Controller
             ]);
     }
 
-    public function thankYou()
-    {
-        $jobseeker = Auth::guard('job_seekers')->user(); // ✅ Fix added here
+   public function thankYou()
+{
+    $jobseeker = Auth::guard('job_seekers')->user();
 
-        $leaderboard = \App\Models\JobSeeker::join('user_answers', 'job_seekers.id', '=', 'user_answers.user_id')
-            ->join('answers', 'user_answers.answer_id', '=', 'answers.id')
-            ->where('answers.is_correct', true)
-            ->groupBy('job_seekers.id', 'job_seekers.firstName', 'job_seekers.lastName')
-            ->selectRaw('job_seekers.id as user_id, job_seekers.firstName, job_seekers.lastName, COUNT(*) as total_points')
-            ->orderByDesc('total_points')
-            ->get();
+    $leaderboard = JobSeeker::join('user_answers', 'job_seekers.id', '=', 'user_answers.user_id')
+        ->join('answers', 'user_answers.answer_id', '=', 'answers.id')
+        ->where('answers.is_correct', true)
+        ->groupBy('job_seekers.id', 'job_seekers.firstName', 'job_seekers.lastName')
+        ->selectRaw('job_seekers.id as user_id, job_seekers.firstName, job_seekers.lastName, COUNT(*) as total_points')
+        ->orderByDesc('total_points')
+        ->get();
 
-        $totalQuestions = session('total_questions') ?? UserAnswer::where('user_id', $jobseeker->id)
-            ->distinct('question_id')
-            ->count('question_id');
+    $totalQuestions = session('total_questions') ?? UserAnswer::where('user_id', $jobseeker->id)
+        ->distinct('question_id')
+        ->count('question_id');
 
+    $userScore = $leaderboard->firstWhere('user_id', $jobseeker->id);
 
-        $userScore = $leaderboard->firstWhere('user_id', $jobseeker->id);
+    // ✅ Eager load related answer and question.answers
+    $userAnswers = UserAnswer::with(['question', 'question.answers', 'answer'])
+        ->where('user_id', $jobseeker->id)
+        ->get();
 
-        return view('frontend.quiz.thankyou', [
-            'leaderboard' => $leaderboard,
-            'totalQuestions' => $totalQuestions,
-            'userScore' => $userScore,
+    $questions = [];
 
-        ]);
+    foreach ($userAnswers as $userAnswer) {
+        $question = $userAnswer->question;
+        $selectedAnswer = $userAnswer->answer;
+        $correctAnswer = $question->answers->firstWhere('is_correct', true);
+
+        $questions[] = [
+            'text' => $question->question,
+            'user_answer' => $selectedAnswer->answer_text ?? 'N/A',
+            'correct_answer' => $correctAnswer->answer_text ?? 'N/A',
+'is_correct' => $userAnswer->answer?->is_correct ?? false,
+        ];
     }
+
+
+    // dd($questions);
+
+
+
+    return view('frontend.quiz.thankyou', [
+        'leaderboard' => $leaderboard,
+        'totalQuestions' => $totalQuestions,
+        'userScore' => $userScore,
+        'questions' => $questions,
+    ]);
+}
+
 }

@@ -22,9 +22,6 @@ class UserAnswer extends Model
     {
         return $this->belongsTo(Answer::class);
     }
-public function user()
-{
-    return $this->belongsTo(\App\Models\JobSeeker::class, 'user_id');
-}
+
 
 }

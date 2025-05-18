@@ -1,3 +1,4 @@
+
 @extends('frontend.layouts.main')
 @section('title', 'Quiz')
 
