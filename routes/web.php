@@ -74,6 +74,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\ForeignExchangeDetailController;
+use App\Http\Controllers\QuestionController;
 
 // Authentication Routes
 Route::get('master/login', [AdminController::class, 'loginView'])->name('login');
@@ -94,6 +95,9 @@ Route::middleware(['role:admin'])->prefix('adminuser')->group(function () {
 });
 
 Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
+
+    //quize routes
+    Route::resource('questions', QuestionController::class);
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
     // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
