@@ -5700,3 +5700,101 @@ flex-wrap: wrap;
 #uploadImageButton:hover {
   color: #0056b3;
 }
+
+#carousel-wrapper {
+      overflow-x: hidden;
+      position: relative;
+      width: 100%;
+    }
+
+    #card-slider {
+      display: flex;
+      gap: 10px;
+      scroll-behavior: smooth;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: none;
+      /* Firefox */
+    }
+
+    #card-slider::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari */
+    }
+
+    /* New container styles */
+    .card-container {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    /* Changed .card1 to .formcard */
+    .formcard {
+      position: relative;
+      color: white;
+      text-align: center;
+      border: none;
+      overflow: hidden;
+      height: 100%;
+      border-radius: 7px;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+      width: calc((100% / 2) - 10px);
+      /* half container width minus gap */
+    }
+
+    .formcard img {
+      width: 100%;
+      /* updated from 180px */
+      object-fit: cover;
+      filter: brightness(50%);
+      border-radius: 8px;
+    }
+
+    .card-content {
+      padding: 10px 0;
+      color: white;
+      /* so text is visible on darkened image */
+      position: absolute;
+      /* to overlay text on image */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      z-index: 1;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background-color: #0064a7;
+      color: white;
+      border: none;
+      font-size: 32px;
+      width: 40px;
+      height: 40px;
+      line-height: 1;
+      border-radius: 50%;
+      opacity: 0.8;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      user-select: none;      
+    }
+
+    #prevBtn {
+      left: 20px;
+    }
+
+    #nextBtn {
+      right: 20px;
+    }
+    @media (max-width: 768px) {
+      .formcard {
+        width: 100%;
+        flex: 0 0 90%; /* Show 1 card per slide on small screens */
+      }
+    }

@@ -139,7 +139,7 @@
         @endif
 
         <section class="bn">
-            <div class="container">
+            <div class="container mb-0">
                 <div class="banner">
                     <div class="banner-content pt-3 pb-5 "
                         style="background-image:url('{{ asset('frontend/assets/Images/planehimal.png') }}');">
@@ -162,7 +162,7 @@
             </div>
         </section>
 
-
+{{-- 
         <section class="my-5">
             <div class="container my-4">
                 <div class="row g-4 card-container">
@@ -202,12 +202,176 @@
                     </div>
                 </div>
             </div>
+        </section> --}}
+
+        <!--Carousel for services-->
+
+        <section class="py-5" style="background-color: #DDDEDE;">
+            <div class="container my-4 position-relative ">
+                <div id="carousel-wrapper">
+                    <div id="card-slider">
+                        <!-- Cards with class renamed to formcard -->
+
+                        <div class="formcard card1" id="first-card">
+                            <img src="{{ asset('frontend/assets/Images/passport.png') }}" alt="Passport Renewal">
+                            <div class="card-content">
+                                <h4>Get Your Passport Renewed Today</h4>
+                                <p>Renew Your Passport Easily and Hassle-Free</p>
+                                @if (Auth::guard('job_seekers')->check())
+                                    <a href="{{ route('passport.partial') }}" class="btn bg-primary text-white fw-semibold px-4 py-2">Start Renewal Now</a>
+                                @else
+                                    <button class="btn bg-primary text-white fw-semibold px-4 py-2" data-bs-toggle="modal" data-bs-target="#loginModal">Start
+                                        Renewal Now</a>
+                                @endif
+
+                            </div>
+                        </div>
+
+                        <div class="card1 formcard" id="second-card">
+                            <img src="{{ asset('frontend/assets/Images/sharam.png') }}" alt="Work Permit Renewal">
+                            <div class="card-content">
+                                <h4>Get Your Work Permit Renewed Today</h4>
+                                <p>Trusted and Reliable Assistance for Securing Your Work Permit.</p>
+                                @if (Auth::guard('job_seekers')->check())
+                                    <a href="{{ route('workPermits.create') }}" class="btn bg-primary text-white fw-semibold px-4 py-2">Start Work Permit Now</a>
+                                @else
+                                    <button class="btn bg-primary text-white fw-semibold px-4 py-2" data-bs-toggle="modal" data-bs-target="#loginModal">Start Work
+                                        Permit Now</a>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="formcard card1" id="first-card">
+                            <img src="{{ asset('frontend/assets/Images/passport.png') }}" alt="Passport Renewal">
+                            <div class="card-content">
+                                <h4>Get Your Passport Renewed Today</h4>
+                                <p>Renew Your Passport Easily and Hassle-Free</p>
+                                @if (Auth::guard('job_seekers')->check())
+                                    <a href="{{ route('passport.partial') }}" class="btn bg-primary text-white fw-semibold px-4 py-2">Start Renewal Now</a>
+                                @else
+                                    <button class="btn bg-primary text-white fw-semibold px-4 py-2" data-bs-toggle="modal" data-bs-target="#loginModal">Start
+                                        Renewal Now</a>
+                                @endif
+
+                            </div>
+                        </div>
+
+                        <div class="card1 formcard" id="second-card">
+                            <img src="{{ asset('frontend/assets/Images/sharam.png') }}" alt="Work Permit Renewal">
+                            <div class="card-content">
+                                <h4>Get Your Work Permit Renewed Today</h4>
+                                <p>Trusted and Reliable Assistance for Securing Your Work Permit.</p>
+                                @if (Auth::guard('job_seekers')->check())
+                                    <a href="{{ route('workPermits.create') }}" class="btn bg-primary text-white fw-semibold px-4 py-2">Start Work Permit Now</a>
+                                @else
+                                    <button class="btn bg-primary text-white fw-semibold px-4 py-2" data-bs-toggle="modal" data-bs-target="#loginModal">Start Work
+                                        Permit Now</a>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- <div class="formcard card1">
+                            <img src="Images/sharam.png" alt="Passport Renewal" />
+                            <div class="card-content">
+                                <h4 class="" style="font-size: 32px; font-weight: 600;">Renew Passport</h4>
+                                <p style="font-size: 18px; font-weight: 500;"> Renew Your Passport <br> Easily and
+                                    Hassle-Free </p>
+                                <a href="passport_renewal_form.html"
+                                    class="btn bg-primary text-white fw-semibold px-4 py-2">Start
+                                    Renewal Now</a>
+                            </div>
+                        </div> --}}
+                        {{-- <div class="formcard card1">
+                            <img src="Images/ads4.jpg" alt="Passport Renewal" />
+                            <div class="card-content">
+                                <h4 class="" style="font-size: 32px; font-weight: 600;">Renew Passport</h4>
+                                <p style="font-size: 18px; font-weight: 500;"> Renew Your Passport <br> Easily and
+                                    Hassle-Free </p>
+                                <a href="passport_renewal_form.html"
+                                    class="btn bg-primary text-white fw-semibold px-4 py-2">Start
+                                    Renewal Now</a>
+                            </div>
+                        </div> --}}
+                    
+                    </div>
+                </div>
+                <button id="prevBtn" class="carousel-btn d-grid">&#8249;</button>
+                <button id="nextBtn" class="carousel-btn d-grid">&#8250;</button>
+            </div>
         </section>
+
+        <script>
+            const slider = document.getElementById('card-slider');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+
+            // Dynamically calculate scrollStep as width of 1 card + gap (10px)
+            const scrollStep = slider.querySelector('.formcard').offsetWidth + 10;
+
+            function scrollRight() {
+                const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                if (slider.scrollLeft >= maxScrollLeft) {
+                    slider.scrollTo({
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    slider.scrollBy({
+                        left: scrollStep,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+
+            function scrollLeft() {
+                if (slider.scrollLeft <= 0) {
+                    const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                    slider.scrollTo({
+                        left: maxScrollLeft,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    slider.scrollBy({
+                        left: -scrollStep,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+
+            function startAutoScroll() {
+                autoScrollInterval = setInterval(() => {
+                    const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                    if (slider.scrollLeft >= maxScrollLeft) {
+                        slider.scrollTo({
+                            left: 0,
+                            behavior: 'auto'
+                        });
+                    } else {
+                        slider.scrollBy({
+                            left: scrollStep,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 2000);
+            }
+
+            function stopAutoScroll() {
+                clearInterval(autoScrollInterval);
+            }
+
+            let autoScrollInterval;
+            nextBtn.addEventListener('click', scrollRight);
+            prevBtn.addEventListener('click', scrollLeft);
+            slider.addEventListener('mouseenter', stopAutoScroll);
+            slider.addEventListener('mouseleave', startAutoScroll);
+
+            startAutoScroll();
+        </script>
 
 
 
         <section class="cta">
-            <div class="container">
+            <div class="container mt-0">
                 <!-- CTA Section -->
                 <div class="cta-section py-5 mb-5">
                     <h3>Fuel Your Ambition, <br>Find Your Next Big Opportunity</h3>
