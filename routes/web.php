@@ -201,6 +201,39 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::post('/pollingQuestion/{id}/update-publish', [PollingQuestionController::class, 'publishStatus'])->name('update.publishStatus');
     Route::resource('pollingAnswers', PollingAnswerController::class);
 
+    //bank Account
+    Route::post('/bankAccounts/{id}/update-status', [BankAccountController::class, 'updateStatus'])
+        ->name('bankaccount.updateStatus');
+    Route::get('/bankAccounts', [BankAccountController::class, 'index'])->name('bankAccounts.index');
+    Route::get('/bankAccounts/{id}', [BankAccountController::class, 'show'])->name('bankAccounts.show');
+    Route::delete('/bankAccounts/{bankAccount}', [BankAccountController::class, 'destroy'])->name('bankAccounts.destroy');
+
+    //broker account
+    Route::get('/brokerAccounts/{brokerAccount}', [BrokerAccountController::class, 'show'])->name('brokerAccounts.show'); // Show specific broker account
+    Route::delete('/brokerAccounts/{brokerAccount}', [BrokerAccountController::class, 'destroy'])->name('brokerAccounts.destroy'); // Delete broker account
+    Route::get('/brokerAccounts', [BrokerAccountController::class, 'index'])->name('brokerAccounts.index'); // List all broker accounts
+    Route::post('/brokerAccounts/{id}/update-status', [BrokerAccountController::class, 'updateStatus'])
+        ->name('brokerAccount.updateStatus');
+
+    //document Attestation
+    Route::get('/documentAttestations', [DocumentationAttestationController::class, 'index'])->name('documentAttestations.index');
+    Route::get('/documentAttestations/{documentAttestation}', [DocumentationAttestationController::class, 'show'])->name('documentAttestations.show');
+    Route::delete('/documentAttestations/{documentAttestation}', [DocumentationAttestationController::class, 'destroy'])->name('documentAttestations.destroy');
+    Route::post('/documentAttestations/{id}/update-status', [DocumentationAttestationController::class, 'updateStatus'])
+        ->name('documentAttestation.updateStatus');
+
+    //work permit
+    Route::get('/workPermits', [WorkPermitController::class, 'index'])->name('workPermits.index');
+    Route::get('/workPermits/{workPermit}', [WorkPermitController::class, 'show'])->name('workPermits.show');
+    Route::delete('/workPermits/{workPermit}', [WorkPermitController::class, 'destroy'])->name('workPermits.destroy');
+
+    Route::post('/workPermits/{id}/update-status', [WorkPermitController::class, 'updateStatus'])
+        ->name('workPermit.updateStatus');
+    //poll
+    Route::get('/polls', [PollController::class, 'index'])->name('polls.index');
+    Route::get('/polls/{poll}', [PollController::class, 'show'])->name('polls.show');
+    Route::delete('/polls/{poll}', [PollController::class, 'destroy'])->name('polls.destroy');
+
 
     //passport renewal
     Route::resource('passportCountryList', PassportCountryListController::class)->except('edit', 'create');
@@ -322,6 +355,29 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::resource('experiences', ExperienceController::class);
     Route::resource('trainings', TrainingController::class);
     Route::resource('languages', LanguageController::class);
+
+    //bank account
+    Route::resource('bankAccounts', BankAccountController::class)
+        ->only(['create', 'store', 'edit', 'update']);
+
+
+    // Broker Account
+    Route::resource('brokerAccounts', BrokerAccountController::class)
+        ->only(['create', 'store', 'edit', 'update']);
+
+    //document Attestation
+    Route::resource('documentAttestations', DocumentationAttestationController::class)
+        ->only(['create', 'store', 'edit', 'update']);
+
+    // work Pemrit
+    Route::resource('workPermits', WorkPermitController::class)
+        ->only(['create', 'store', 'edit', 'update']);
+
+    //polls
+    Route::resource('polls', PollController::class)
+        ->only(['create', 'store', 'edit', 'update']);
+
+
 
     // Route::get('/profile/basic-info', [JobSeekerDashboardController::class, 'basicInfo'])->name('profile.basicInfo');
     // Route::get('/profile/your-cv', [JobSeekerDashboardController::class, 'yourCV'])->name('profile.yourCV');
@@ -510,22 +566,7 @@ Route::get('/resume-help', [FrontendController::class, 'resumeHelp'])->name('res
 
 Route::get('/fireEvent', [MessageController::class, 'fireEvent']);
 
-Route::resource('bankAccounts', BankAccountController::class);
-Route::post('/bankAccounts/{id}/update-status', [BankAccountController::class, 'updateStatus'])
-    ->name('bankaccount.updateStatus');
-
-Route::resource('brokerAccounts', BrokerAccountController::class);
-Route::post('/brokerAccounts/{id}/update-status', [BrokerAccountController::class, 'updateStatus'])
-    ->name('brokerAccount.updateStatus');
-Route::resource('documentAttestations', DocumentationAttestationController::class);
-Route::post('/documentAttestations/{id}/update-status', [DocumentationAttestationController::class, 'updateStatus'])
-    ->name('documentAttestation.updateStatus');
-
-Route::resource('workPermits', WorkPermitController::class);
-Route::post('/workPermits/{id}/update-status', [WorkPermitController::class, 'updateStatus'])
-    ->name('workPermit.updateStatus');
-Route::resource('polls', PollController::class);
-// Frontend form route
+// Frontend roure for become a seller
 Route::get('/become_seller', function () {
     return view('frontend.giftNcoupon.become_seller');
 })->name('become.seller');

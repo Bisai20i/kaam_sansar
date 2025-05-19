@@ -10,10 +10,11 @@ class PollingAnswer extends Model
         'polling_question_id', 'answer'
     ];
 
-    public function question()
-    {
-        return $this->belongsTo(PollingQuestion::class);
-    }
+  public function question()
+{
+    return $this->belongsTo(PollingQuestion::class, 'polling_question_id');
+
+}
 
     public function polls()
     {

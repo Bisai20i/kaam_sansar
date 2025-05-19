@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PollingQuestion extends Model
 {
-    protected $fillable = [
-        'admin_id', 'question', 'publish_status'
-    ];
+    protected $guarded = [];
 
     public function answers()
     {
