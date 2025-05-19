@@ -6,7 +6,7 @@
 
 <div class="container">
     <!-- Content -->
-    <h4 class="fw-bold mb-4"><span class="text-muted fw-light"></span></h4>
+    <h4 class="fw-bold m-4"><span class="text-muted fw-light">Frequently Ask Question</span></h4>
 
     <!-- Basic Bootstrap Table -->
     <div class="card shadow">
