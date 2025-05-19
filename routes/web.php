@@ -314,6 +314,7 @@ Route::prefix('jobseeker')->group(function () {
 Route::post('/clear-session-flag', [JobSeekerController::class, 'clearSessionFlag'])->name('clear.session.flag');
 
 Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () {
+    
 
     // Route::resource('jobApply', JobApplyController::class);
     //job applies routes
