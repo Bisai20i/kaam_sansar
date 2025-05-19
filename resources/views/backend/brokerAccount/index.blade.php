@@ -4,12 +4,12 @@
 
 @section('content')
 <div class="container">
-    <h4 class="fw-bold mb-4"><span class="text-muted fw-light">Broker Applications</span></h4>
+    <h4 class="fw-bold m-3"><span class="text-muted fw-light">Broker Applications</span></h4>
     <div class="card shadow">
         <div>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h4 class="card-title">Broker Account List</h4>
+                    <h4 class="card-title p-3">Broker Account List</h4>
                 </div>
             </div>
         </div>

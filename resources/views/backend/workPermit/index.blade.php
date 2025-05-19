@@ -5,8 +5,7 @@
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="content-wrapper">
-        <h4 class="fw-bold mb-4">Work Permit Requests</h4>
-
+    <h4 class="fw-bold m-3"><span class="text-muted fw-light">Work Permit Application</span></h4>
         <div class="row">
             <div class="col-12 ">
                 <div class="card mb-4">
