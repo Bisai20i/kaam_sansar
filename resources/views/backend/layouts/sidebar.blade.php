@@ -21,41 +21,40 @@
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('industryCategory*') || request()->routeIs('jobCategory*') || request()->routeIs('jobCompany*') || request()->routeIs('jobPost*') ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-briefcase-alt"></i>
-                <div data-i18n="Manage Jobs">Manage Jobs</div>
+
+        <!-- Industry Categories -->
+        <li class="menu-item {{ request()->routeIs('industryCategory*') ? 'active' : '' }}">
+            <a href="{{ route('industryCategory.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-category"></i>
+                <div data-i18n="Manage Industry Categories">Manage Industry Categories</div>
             </a>
-            <ul class="menu-sub">
-                <!-- Industry Categories -->
-                <li class="menu-item {{ request()->routeIs('industryCategory*') ? 'active' : '' }}">
-                    <a href="{{ route('industryCategory.index') }}" class="menu-link">
-                        <div data-i18n="Industry Categories">Manage Industry Categories</div>
-                    </a>
-                </li>
-
-                <!-- Job Categories -->
-                <li class="menu-item {{ request()->routeIs('jobCategory*') ? 'active' : '' }}">
-                    <a href="{{ route('jobCategory.index') }}" class="menu-link">
-                        <div data-i18n="Job Categories">Manage Job Categories</div>
-                    </a>
-                </li>
-
-                <!-- Job Companies -->
-                <li class="menu-item {{ request()->routeIs('jobCompany*') ? 'active' : '' }}">
-                    <a href="{{ route('jobCompany.index') }}" class="menu-link">
-                        <div data-i18n="Job Companies">Manage Job Companies</div>
-                    </a>
-                </li>
-
-                <!-- Job Posts -->
-                <li class="menu-item {{ request()->routeIs('jobPost*') ? 'active' : '' }}">
-                    <a href="{{ route('jobPost.index') }}" class="menu-link">
-                        <div data-i18n="Job Posts">Manage Job Posts</div>
-                    </a>
-                </li>
-            </ul>
         </li>
+
+        <!-- Job Categories -->
+        <li class="menu-item {{ request()->routeIs('jobCategory*') ? 'active' : '' }}">
+            <a href="{{ route('jobCategory.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-layer"></i>
+                <div data-i18n="Manage Job Categories">Manage Job Categories</div>
+            </a>
+        </li>
+
+        <!-- Job Companies -->
+        <li class="menu-item {{ request()->routeIs('jobCompany*') ? 'active' : '' }}">
+            <a href="{{ route('jobCompany.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-buildings"></i>
+                <div data-i18n="Manage Job Companies">Manage Job Companies</div>
+            </a>
+        </li>
+
+        <!-- Job Posts -->
+          <li class="menu-item {{ request()->routeIs('jobPost*') ? 'active' : '' }}">
+            <a href="{{ route('jobPost.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-file"></i>
+                <div data-i18n="Manage Job Posts">Manage Job Posts</div>
+            </a>
+        </li>
+
+
         
         <!-- Users -->
         <li class="menu-item">
@@ -65,8 +64,7 @@
             </a>
         </li>
 
-        <!-- Job Posts -->
-
+      
 
         <!-- Advertisement Category -->
         <li class="menu-item {{ request()->routeIs('advertisementcategory*') ? 'active' : '' }}">
