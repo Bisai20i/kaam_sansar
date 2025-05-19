@@ -579,8 +579,6 @@ Route::prefix('mydocuments')->group(function () {
 Route::get('allpodcasts', [FrontendAPIController::class, 'allpodcasts']);
 Route::get('/resume-help', [FrontendController::class, 'resumeHelp'])->name('resume');
 
-Route::get('/fireEvent', [MessageController::class, 'fireEvent']);
-
 // Frontend roure for become a seller
 Route::get('/become_seller', function () {
     return view('frontend.giftNcoupon.become_seller');
