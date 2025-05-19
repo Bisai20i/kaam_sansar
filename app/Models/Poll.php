@@ -5,13 +5,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Poll extends Model
 {
-    protected $fillable = [
-        'job_seeker_id', 'polling_question_id', 'polling_answer_id'
-    ];
+    protected $guarded = [];
 
     public function jobSeeker()
     {
-        return $this->belongsTo(JobSeeker::class);
+        return $this->belongsTo(JobSeeker::class,'jobSeekerId');
     }
 
     public function question()

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\PollingAnswer;
+use App\Models\PollingQuestion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PollingAnswerController extends Controller
 {
@@ -14,7 +16,9 @@ class PollingAnswerController extends Controller
      */
     public function index()
     {
-        //
+        $pollingQuestions = PollingQuestion::all();
+        $pollingAnswers = PollingAnswer::with('question')->get();
+        return view('backend.pollingAnswer.index', compact('pollingQuestions', 'pollingAnswers'));
     }
 
     /**
@@ -35,7 +39,20 @@ class PollingAnswerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'polling_question_id' => 'required|exists:polling_questions,id',
+            'answers' => 'required|array',
+            'answers.*' => 'required|string|max:255'
+        ]);
+
+        foreach ($request->answers as $answer) {
+            PollingAnswer::create([
+                'polling_question_id' => $request->polling_question_id,
+                'answer' => $answer
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Answers added successfully');
     }
 
     /**
@@ -69,7 +86,20 @@ class PollingAnswerController extends Controller
      */
     public function update(Request $request, PollingAnswer $pollingAnswer)
     {
-        //
+        {
+    $validated = $request->validate([
+        'polling_question_id' => 'required|exists:polling_questions,id',
+        'answer' => 'required|string|max:255'
+    ]);
+
+    try {
+        $pollingAnswer->update($validated);
+        return redirect()->back()->with('success', 'Answer updated successfully');
+    } catch (\Exception $e) {
+        return back()->withInput()
+            ->with('error', 'Error updating answer: ' . $e->getMessage());
+    }
+}
     }
 
     /**
@@ -80,6 +110,7 @@ class PollingAnswerController extends Controller
      */
     public function destroy(PollingAnswer $pollingAnswer)
     {
-        //
+        $pollingAnswer->delete();
+        return redirect()->back()->with('success','Answer Delete Successfully');
     }
 }
