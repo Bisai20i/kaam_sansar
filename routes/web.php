@@ -67,11 +67,13 @@ use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\WorkPermitController;
 use App\Http\Controllers\WorkPermitDistrictController;
 use App\Http\Controllers\WorkPermitLocationController;
+use App\Http\Controllers\FormSubmissionController;
 use App\Models\PollingQuestion;
 use App\Models\WorkPermit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\ForeignExchangeDetailController;
 
 // Authentication Routes
 Route::get('master/login', [AdminController::class, 'loginView'])->name('login');
@@ -180,6 +182,11 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     //Reward Routes
     Route::resource('rewards', RewardController::class);
+
+    //view forex exchange requests
+
+    Route::get('/forex/requests', [ForeignExchangeDetailController::class, 'exchange_requests'])->name('forex.requests');
+    Route::delete('/forex/requests/{foreignExchangeDetail}', [ForeignExchangeDetailController::class, 'destroy'])->name('forex.request.destroy');
 
     //forex exchange
     Route::prefix('forex')->group(function () {
@@ -295,7 +302,7 @@ Route::get('/job-post/applications/{id}', [JobApplyController::class, 'index']);
 
 //delete forum post by admin
 
-Route::delete('discussioin_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');
+Route::delete('discussion_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');
 // Route::fallback(function () {
 //     return redirect('/admin');
 // });
@@ -307,7 +314,6 @@ Route::prefix('jobseeker')->group(function () {
     Route::get('/reset-password', [JobSeekerController::class, 'resetPasswordPage'])->name('jobseeker.password_reset_page');
     Route::patch('reset-password', [JobSeekerController::class, 'resetPassword'])->name('jobseeker.password-reset');
     Route::post('/register', [JobSeekerController::class, 'register'])->name('jobseeker.register');
-    Route::post('/login', [JobSeekerController::class, 'login'])->name('jobseeker.login');
     Route::post('/login', [JobSeekerController::class, 'login'])->name('jobseeker.login');
 });
 
@@ -345,6 +351,10 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('getPurchaseHistory/{user_id?}', [JobSeekerController::class, 'getPurchaseHistory'])->name('jobseeker.getPurchaseHistory');
     Route::get('/myjobs/{user_id?}', [JobSeekerController::class, 'myjobs'])->name('jobseeker.myjobs');
     Route::get('/bookmark/remove/{jobId}', [JobSeekerController::class, 'removeBookmark'])->name('jobBookmark.remove');
+    Route::get('/myblogs', [JobSeekerController::class, 'myblogs'])->name('jobseeker.myblogs');
+    Route::get('/forms', [FormSubmissionController::class, 'index'])->name('jobseeker.forms');
+    Route::get('/mynews', [JobSeekerController::class, 'mynews'])->name('jobseeker.mynews');
+    Route::get('/form/complete/{id}', [FormSubmissionController::class, 'findForm'])->name('form.complete');
     // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
 
     Route::resource('profiles', ProfileController::class);
@@ -458,6 +468,11 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('/passport/renew/{id}/edit', [PassportRenewalController::class, 'edit'])->name('passport.renew.edit');
     Route::put('/passport/renew/{id}', [PassportRenewalController::class, 'update'])->name('passport.renew.update');
     Route::post('/passport/renew/partial', [PassportRenewalController::class, 'store_partial'])->name('passport.renew.partial');
+    Route::get('/passport/edit/{id}', [PassportRenewalController::class, 'edit'])->name('passport.edit');
+
+    //forex details
+    Route::get('/exchange/currency', [ForeignExchangeDetailController::class, 'index'])->name('exchange.currency');
+    Route::post('/exchange/currency', [ForeignExchangeDetailController::class, 'store'])->name('exchange.currency.store');
 });
 
 /* Frontend routes */
@@ -556,8 +571,7 @@ Route::prefix('advertisements')->group(function () {
     Route::get('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
     // comment
 
-    // Route::resource('adscomment', CommentController::class);
-
+    Route::resource('adscomment', CommentController::class);
 });
 
 Route::resource('ads', AdvertisementController::class);
@@ -574,8 +588,6 @@ Route::prefix('mydocuments')->group(function () {
 Route::get('allpodcasts', [FrontendAPIController::class, 'allpodcasts']);
 Route::get('/resume-help', [FrontendController::class, 'resumeHelp'])->name('resume');
 
-Route::get('/fireEvent', [MessageController::class, 'fireEvent']);
-
 // Frontend roure for become a seller
 Route::get('/become_seller', function () {
     return view('frontend.giftNcoupon.become_seller');
@@ -591,3 +603,10 @@ Route::prefix('superadmin')->middleware(['auth:admin', 'role:superAdmin'])->grou
     Route::get('/becomeseller/{id}', [BecomeSellerController::class, 'show'])->name('superadmin.becomeseller.show');
     Route::delete('/becomeseller/{id}', [BecomeSellerController::class, 'destroy'])->name('superadmin.becomeseller.destroy');
 });
+
+Route::get('/passport/countries', [PassportRenewalController::class, 'passport_countries'])->name('passport.countries');
+Route::get('/passport/proviences/{id}', [PassportRenewalController::class, 'passport_proviences'])->name('passport.proviences');
+Route::get('/passport/districts/{id}', [PassportRenewalController::class, 'passport_districts'])->name('passport.districts');
+Route::get('/passport/locations/{id}', [PassportRenewalController::class, 'passport_locations'])->name('passport.locations');
+Route::get('/passport/times/{id}/{date}', [PassportRenewalController::class, 'passport_times'])->name('passport.times');
+

@@ -1086,10 +1086,6 @@ hr p {
   color: #0064A7;
 }
 
-.text-primary:hover {
-  text-decoration: underline;
-  color: #005283;
-}
 
 .btn-primary{
   background-color: #fff;

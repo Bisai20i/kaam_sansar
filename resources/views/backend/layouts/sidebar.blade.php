@@ -250,6 +250,74 @@
             </ul>
         </li>
 
+        <li class="menu-item {{ request()->routeIs('forum-posts*') ? 'active' : '' }}">
+            <a href="{{ route('forum.index') }}" class="menu-link">
+                <i class='menu-icon tf-icons bx bx-conversation'></i>
+                <div data-i18n="Ads Manager">Discussion Forum</div>
+            </a>
+        </li>
+
+
+
+        <!-- Reward -->
+        <li class="menu-item">
+            <a href="{{ route('rewards.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-gift"></i> {{-- You can change the icon --}}
+                <div data-i18n="Rewards">Rewards</div>
+            </a>
+        </li>
+
+
+        <!--becomeSeller -->
+        <li class="menu-item">
+            <a href="{{ route('superadmin.becomeseller.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user-plus"></i> {{-- Arrow-like icon --}}
+                <div data-i18n="Become Seller">Become Seller</div>
+            </a>
+        </li>
+
+
+        <!----quiz---->
+        <li class="menu-item">
+            <a href="{{ route('questions.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-question-mark"></i> {{-- Arrow-like icon --}}
+                <div data-i18n="Quiz">Quiz</div>
+            </a>
+        </li>
+
+
+
+
+
+
+        <!-- Manage Insurance-->
+
+        <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
+            <a href="{{ route('insurance.company') }}" class="menu-link">
+
+                <i class="menu-icon tf-icons bx bx-heart"></i>
+                <div data-i18n="Insurance">Insurance Company</div>
+            </a>
+        </li>
+
+        <li class="menu-item {{ request()->routeIs('passport*') ? 'active' : '' }}">
+            <a href="{{ route('passport.renewal') }}" class="menu-link">
+
+                <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
+                <div data-i18n="Passport Renewal">Passport Renewal</div>
+            </a>
+        </li>
+
+        <!-- Manage Forex Exchanges -->
+        <li class="menu-item {{ request()->routeIs('forex*') ? 'active' : '' }}">
+            <a href="{{ route('forex.index') }}" class="menu-link">
+
+                <i class="menu-icon tf-icons bx bx-money"></i>
+                <div data-i18n="Manage Forex Exchanges">Manage Forex Exchanges</div>
+            </a>
+        </li>
+
+        <!-- Manage Workk Pemrit -->
         <li
             class="menu-item {{ request()->routeIs('workPermits*') || request()->routeIs('workPermitDistricts*') ? 'open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">

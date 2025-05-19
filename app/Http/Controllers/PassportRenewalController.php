@@ -185,7 +185,7 @@ class PassportRenewalController extends Controller
             'divorce_certificate', 'national_eid', 'other_document', 'previous_passport',
         ];
 
-        $filePaths = [];
+        $jobSeekerId = Auth::guard('job_seeker')->id();
 
         foreach ($fileFields as $field) {
             if ($request->hasFile($field)) {
@@ -195,7 +195,7 @@ class PassportRenewalController extends Controller
 
         PassportRenewal::create(array_merge($validatedData, ['job_seeker_id' => $jobSeekerId]));
 
-        return redirect()->route('frontend.passport-renewal.index')->with('success', 'Passport renewal application submitted successfully!');
+        return redirect()->route('jobseeker.forms')->with('success', 'Passport renewal application submitted successfully!');
     }
 
     public function edit($id)

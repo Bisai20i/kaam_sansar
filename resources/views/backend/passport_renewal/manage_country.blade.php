@@ -93,7 +93,7 @@
                                             <th>SN</th>
                                             <th>Country Name</th>
                                             <th>Publish Status</th>
-                                            <th>Manage Proviences</th>
+                                            <th>Manage Provinces</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -110,7 +110,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('passportProvienceList.index', ['country_id' => $passportCountryList->id]) }}"
-                                                        class="btn btn-info btn-sm  text-white">Manage Proviences</a>
+                                                        class="btn btn-info btn-sm  text-white">Manage Provinces</a>
                                                 </td>
                                                 <td>
                                                     <div class="dropdown">

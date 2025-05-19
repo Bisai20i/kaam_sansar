@@ -1514,7 +1514,7 @@ return $request->all();
                 'status'  => true,
                 'message' => 'Advertisements fetched successfully.',
                 'data'    => $ads,
-            ]) : view('frontend.profile.partials.advertisement', compact('ads'));
+            ]) : view('frontend.profile.partials.advertisement', compact('ads', 'adsCategory'));
 
         } catch (\Exception $e) {
 
@@ -1605,7 +1605,7 @@ return $request->all();
         // Handle validation errors
         if ($validator->fails()) {
 
-            Log::alert("Someting went wrong:", $validator->errors());
+            Log::alert("Something went wrong", ['errors' => $validator->errors()->toArray()]);
 
             if (request()->ajax()) {
                 return response()->json([

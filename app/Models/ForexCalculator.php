@@ -13,4 +13,8 @@ class ForexCalculator extends Model
     public function post_admin(){
         return $this->belongsTo(Admin::class, 'post_admin_id');
     }
+
+    public function forex_exchanges(){
+        return $this->hasMany(ForexExchangeDetail::class, 'forex_calculator_id');
+    }
 }

@@ -544,18 +544,7 @@ class DiscussionForumController extends Controller
 
     public function togglePinnedPost(Request $request, $id)
     {
-        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
-        $user     = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-        // Ensure user is authenticated and matches the requested profile
-        if (! $user) {
-
-            return $isMobile ?
-            response()->json([
-                'status'  => false,
-                'message' => "User not authenticated or access denied.",
-            ]) : redirect()->back()->with('error', "User not authenticated or access denied.");
-
-        }
+        
 
         try {
 
@@ -580,20 +569,10 @@ class DiscussionForumController extends Controller
             $forum->pinned = ! $forum->pinned;
             $forum->save();
 
-            return $isMobile ?
-            response()->json([
-                'status'  => true,
-                'message' => "Forum Post Pinned toggled Successfully",
-                'action'  => $forum->pinned ? 'pinned' : 'unpinned',
-            ]) : redirect()->back()->with('success', "Forum Post Pinned Successfully");
+            return redirect()->back()->with('success', "Forum Post Pinned Successfully");
 
         } catch (\Exception $e) {
-            return $isMobile ?
-            response()->json([
-                'status'  => false,
-                'message' => "Some Error Occured!",
-                'errors'  => $e->getMessage(),
-            ]) : redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
 
     }

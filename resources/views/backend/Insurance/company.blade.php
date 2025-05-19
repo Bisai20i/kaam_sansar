@@ -230,6 +230,7 @@
             </div>
         </div>
     </div>
+
     <!-- Manage Categories Modal -->
 
     <div class="modal fade" id="manageCategoriesModal" tabindex="-1" aria-labelledby="emanageCategoriesModalLabel"
@@ -247,7 +248,7 @@
 
                         <hr>
                         <input type="hidden" name="category_lists" id="insuranceCategories">
-                        <input type="hidden" name="company_id" value="{{ $company->id }}" id="company_id">
+                        <input type="hidden" name="company_id" id="company_id">
                         <div class="mb-3">
                             <label for="subTask" class="form-label">
                                 Category Name <span class="text-danger">*</span>
