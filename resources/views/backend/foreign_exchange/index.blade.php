@@ -2,24 +2,33 @@
 @section('title', 'Manage Forex Rates')
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold mb-4">Forex Exchange Rates</h4>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h4 class="fw-bold">Forex Exchange Rates</h4>
+            <a href="{{ route('forex.requests') }}" class="btn btn-primary position-relative">
+                <span class="p-2 position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
+                    {{ $exchange_request_count }}
+                    <span class="visually-hidden">unread messages</span>
+                </span>
+                Exchange requests</a>
+        </div>
+
 
         <!-- Form to Add Rates -->
         <div class="card mb-4">
-            <div class="card-header">
+            <div class="card-header ">
                 <h5 class="mb-0">Add Forex Rate</h5>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('forex.store') }}" id="forexForm">
                     @csrf
                     <input type="hidden" name="rates" id="ratesInput">
-                    <div class="row g-3 align-items-end">
-                        <div class="col-md-2">
+                    <div class="row g-2 align-items-end">
+                        <div class="col">
                             <label for="rateDate" class="mb-1">Date of Validity</label>
                             <input type="date" class="form-control" id="rateDate" placeholder="Date">
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col">
                             <label for="baseCurrency" class="mb-1">Base Currency <small>(1 Unit Rate)</small></label>
                             <select class="form-control" id="baseCurrency">
                                 <option value="">Select Base Currency</option>
@@ -27,7 +36,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col">
                             <label for="targetCurrency" class="mb-1">Target Currency</label>
                             <select class="form-control" id="targetCurrency">
                                 <option value="">Select Target Currency</option>
@@ -35,17 +44,19 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col">
                             <label for="buyingRate" class="mb-1">Buying Rate</label>
-                            <input type="number" step="0.0001" min="0" class="form-control" id="buyingRate" placeholder="Buying Rate">
+                            <input type="number" step="0.0001" min="0" class="form-control" id="buyingRate"
+                                placeholder="Buying Rate">
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col">
                             <label for="sellingRate" class="mb-1">Selling Rate</label>
-                            <input type="number" step="0.0001" min="0" class="form-control" id="sellingRate" placeholder="Selling Rate">
+                            <input type="number" step="0.0001" min="0" class="form-control" id="sellingRate"
+                                placeholder="Selling Rate">
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col">
                             <button type="button" class="btn btn-primary" onclick="addRate()">Add</button>
                         </div>
                     </div>
@@ -73,7 +84,13 @@
         <!-- Display Existing Rates -->
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5>Forex Rates List</h5>
+                <h5>Forex Rates List @if (request()->has('date_of_validity') && request('date_of_validity') != '')
+                        of date: {{ request('date_of_validity') }}
+                    @endif
+                    @if (request()->has('base_currency'))
+                        (Base Currency: {{ request('base_currency') }})
+                    @endif
+                </h5>
                 <form action="{{ route('forex.index') }}" class="d-flex gap-2">
                     <input type="date" class="form-control" name="date_of_validity" id="filterDate">
                     <select class="form-control" id="filter_baseCurrency" name="base_currency">
@@ -100,7 +117,6 @@
                             <tr>
                                 <td colspan="6" class="text-center">No forex rates found.</td>
                             </tr>
-                            
                         @endif
                         @foreach ($forexRates as $rate)
                             <tr>
@@ -118,7 +134,8 @@
                                         '{{ $rate->target_currency }}', 
                                         '{{ $rate->buying_rate }}', 
                                         '{{ $rate->selling_rate }}')">Edit</button>
-                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
                                         onclick="setDeleteFormAction({{ $rate->id }})">Delete</button>
                                     {{-- <form method="POST" action="{{ route('forex.destroy', $rate->id) }}"
                                         onsubmit="return confirm('Delete this rate?')">
@@ -131,7 +148,10 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $forexRates->links() }}
+                <div class="mt-1 d-flex justify-content-end">
+                    {{ $forexRates->links() }}
+                </div>
+
             </div>
         </div>
 
@@ -181,15 +201,15 @@
                                 <label for="description" class="form-label">Buying Rate <span
                                         class="text-danger">*</span></label>
 
-                                <input type="number" step="0.0001" min="0" class="form-control" id="edit_buyingRate" name="buying_rate"
-                                    placeholder="Buying Rate">
+                                <input type="number" step="0.0001" min="0" class="form-control"
+                                    id="edit_buyingRate" name="buying_rate" placeholder="Buying Rate">
                             </div>
 
                             <div class="mb-3">
                                 <label for="description" class="form-label">Selling Rate <span
                                         class="text-danger">*</span></label>
-                                <input type="number" step="0.0001" min="0" class="form-control" id="edit_sellingRate" name="selling_rate"
-                                    placeholder="Selling Rate">
+                                <input type="number" step="0.0001" min="0" class="form-control"
+                                    id="edit_sellingRate" name="selling_rate" placeholder="Selling Rate">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -342,8 +362,6 @@
                 document.getElementById('editForm').action = "{{ route('forex.update', ':id') }}".replace(':id',
                     id);
             }
-
-            
         </script>
 
     @endsection

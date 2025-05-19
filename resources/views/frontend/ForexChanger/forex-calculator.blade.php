@@ -21,8 +21,7 @@
             <div class="col-lg-12">
                 <div class="row">
                     <div class="container d-flex justify-content-end">
-                        <button class="bg-white border-0 border-bottom border-primary mt-2"><a
-                                href="{{ route('moneyExchanges.create') }}"
+                        <button class="bg-white border-0 border-bottom border-primary mt-2"><a href="#"
                                 class="text-decoration-none text-primary fw-semibold fs-6">Become a Money Exchanger<i
                                     class="bi bi-arrow-right ms-2"></i></a></button>
                     </div>
@@ -207,7 +206,7 @@
                     <input type="hidden" name="base_currency" value="USD" id="base_currency">
                     <input type="hidden" name="target_currency" value="NPR" id="target_currency">
                     <div class="row mx-auto">
-                        <input class="form-control primary_color_border w-50 m-auto" type="text" name="amount" value="1"
+                        <input class="form-control primary_color_border w-50 m-auto" type="text" name="amount"
                             placeholder="Enter Amount">
                     </div>
 

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('blogsAndPodcasts', function (Blueprint $table) {
+        Schema::create('blogs_and_podcasts', function (Blueprint $table) {
             $table->id(); // Auto-incrementing primary key
             $table->enum('blogOrPodcast', ['blog', 'podcast']); // Type of content (blog or podcast)
             $table->string('slug')->unique(); // Unique slug for SEO-friendly URLs

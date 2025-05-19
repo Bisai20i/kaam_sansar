@@ -303,19 +303,15 @@
                                     <span class="d-none d-md-inline">Chat</span>
                                 </button>
                             @else
-                                <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="redirect_url" value="{{ url()->current() }}">
-                                </form>
-
+asfae
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2"
                                     style="background-color: #0064a7;"
-                                    onclick="document.getElementById('redirectForm').submit(); ">+
+                                    onclick="setRedirectUrl()">+
                                     <span class="d-none d-md-inline">Follow</span></button>
-                                    
+
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
                                     style="background-color: #0064a7;"
-                                    onclick="document.getElementById('redirectForm').submit(); ">
+                                    onclick="setRedirectUrl()">
                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                     <span class="d-none d-md-inline">Chat</span>
                                 </button>
@@ -354,18 +350,18 @@
                                             </h5>
                                             <div class="d-inline-flex gap-4 ">
                                                 <small class="text-black-50 d-flex flex-wrap align-items-center gap-2">
-                                                    @if($profile->temporaryLocation)
+                                                    @if ($profile->temporaryLocation)
                                                         <span class="d-flex align-items-center gap-1">
                                                             <svg width="14" height="18" viewBox="0 0 14 18"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path
                                                                     d="M6.8 9.725C8.00122 9.725 8.975 8.75122 8.975 7.55C8.975 6.34878 8.00122 5.375 6.8 5.375C5.59878 5.375 4.625 6.34878 4.625 7.55C4.625 8.75122 5.59878 9.725 6.8 9.725Z"
-                                                                    stroke="#9D9999" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round" />
+                                                                    stroke="#9D9999" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
                                                                 <path
                                                                     d="M6.8 1.75C5.26174 1.75 3.78649 2.36107 2.69878 3.44878C1.61107 4.53649 1 6.01174 1 7.55C1 8.9217 1.29145 9.81925 2.0875 10.8125L6.8 16.25L11.5125 10.8125C12.3086 9.81925 12.6 8.9217 12.6 7.55C12.6 6.01174 11.9889 4.53649 10.9012 3.44878C9.81351 2.36107 8.33826 1.75 6.8 1.75Z"
-                                                                    stroke="#9D9999" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round" />
+                                                                    stroke="#9D9999" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
                                                             </svg> {{ $profile->temporaryLocation }}
                                                         </span>
                                                     @endif
@@ -563,15 +559,164 @@
 @endsection
 
 @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     <script>
-        function openChat(e) {
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        console.log(document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
+
+        var pusher = new Pusher('b08e227bde29e3142eb1', {
+            cluster: 'ap2',
+        });
+
+
+        var channel = pusher.subscribe('chat.' + "{{ Auth::guard('job_seekers')->id() }}");
+        channel.bind('new-message', function(data) {
+            let message = data.message
+            if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
+                $('#messageContainer').append(`
+                    <div class="d-flex my-2 w-100 justify-content-start">
+                        <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">
+                            ${message.message}
+                        </span>
+                    </div>
+                `)
+                $('#messageContainer').animate({
+                    scrollTop: $('#messageContainer')[0].scrollHeight
+                }, 500)
+
+            }
+
+            document.querySelectorAll('.list-group .list-group-item').forEach(item => {
+                if (item.getAttribute('data-receiver-id') == message.sender_id) {
+                    item.style.background = 'rgba(0, 100, 167, 0.1)'
+                    item.querySelector('.message-content').innerHTML = message.message
+                }
+            })
+
+        });
+    </script>
+
+    <script>
+        // document.querySelectorAll('.list-group .list-group-item').forEach(item => {
+        //     console.log(item.getAttribute('data-receiver-id'))
+        // })
+        async function openChat(e) {
             const chatBox = document.getElementById("chatBox");
             chatBox.querySelector('input[name="receiver_id"]').value = e.getAttribute('data-user-id')
             chatBox.querySelector('[name="receiver_name"]').innerHTML = e.getAttribute('data-user-name')
+            e.parentElement.parentElement.parentElement.style.background = 'transparent'
+
+            // console.log(e.parentElement.parentElement.parentElement)
             // alert(e.getAttribute('data-user-id'))
 
             chatBox.style.display = "block";
             // alert(chatBox.querySelector('input[name="receiver_id"]').value)
+            $('#sendMessageButton').html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+            );
+
+
+            try {
+                $('#messageContainer').html(
+                    '<p class="text-center text-secondary my-2 "><small>Loading Messages ....</small></p>')
+                const response = await fetch(getBaseUrl() + '/jobseeker/sender-messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        sender_id: $('#chatBox [name="receiver_id"]').val(),
+                    })
+                });
+
+                // Check for HTTP error response (like 401, 422, 500)
+                if (!response.ok) {
+                    // Try to parse JSON error response
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+
+                    // Laravel validation errors (422 Unprocessable Entity)
+                    if (response.status === 422) {
+                        alert('Validation failed: ' + Object.values(errorData.errors).join('\n'));
+                    }
+                    // Laravel unauthenticated (401)
+                    else if (response.status === 401) {
+                        window.location.href = getBaseUrl() + '/login';
+                    } else {
+                        alert('Something went wrong. Please try again.');
+                    }
+
+                    // Stop further execution
+                    return;
+                }
+
+                const data = await response.json();
+
+                $('#sendMessageButton').html(
+                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
+                );
+
+                if (data.status) {
+
+                    //update response in the message box
+                    if (!data.messages.length > 0) {
+                        $('#messageContainer').html(
+                            '<p class="text-center text-secondary my-2 "><small>Conversation Not Stated Yet!</small></p>'
+                        )
+                    } else {
+                        $('#messageContainer').html('')
+                    }
+
+
+
+
+
+                    data.messages.forEach(message => {
+
+                        if (message.receiver_id == e.getAttribute('data-user-id')) {
+
+
+                            $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-end">
+                                    <span style="background-color: #0064A7; max-width: 90%;"
+                                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">${message.message}</span>
+                                </div>
+                            `)
+
+                        } else {
+
+                            $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-start">
+                                    <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">
+                                        ${message.message}
+                                    </span>
+                                </div>
+                            `)
+
+                        }
+
+                    })
+                    $('#messageContainer').animate({
+                        scrollTop: $('#messageContainer')[0].scrollHeight
+                    }, 500)
+                } else {
+                    console.warn('Server responded with unexpected status:', data);
+                }
+
+            } catch (error) {
+                // Network error or unexpected failure
+                console.error('Fetch failed:', error);
+                alert('Network error. Please check your connection.');
+                $('#sendMessageButton').html(
+                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
+                );
+            }
+
         }
 
         function toggleChat() {
@@ -579,71 +724,9 @@
             chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
         }
     </script>
-    <script>
-        let forumPostImages = [];
-
-        function handleFiles(files) {
-            let currentImageCount = parseInt(document.getElementById('currentPostImageCount').value)
-            for (let i = 0; i < files.length; i++) {
-                if (forumPostImages.length >= 5 - currentImageCount)
-                    break; // Limit to 5 images
-                forumPostImages.push(files[i]);
-            }
-            updatePhotoDisplay();
-        }
-
-        function updatePhotoDisplay() {
-
-            const forumPreviewImages = document.getElementById('forumPreviewImages');
-            forumPreviewImages.innerHTML = '';
-
-            if (forumPostImages.length > 0) {
-
-
-                for (let i = 0; i < forumPostImages.length; i++) {
-                    const container = document.createElement("div");
-                    container.classList.add("uploaded-photo-container", "col-6", "col-md-4", "col-lg-4",
-                        "position-relative", "mb-2");
-
-                    const img = document.createElement('img');
-                    img.className = 'profile-photo w-100 h-auto ';
-                    img.src = URL.createObjectURL(forumPostImages[i]);
-                    img.alt = `Additional photo ${i}`;
-
-                    const options = document.createElement("div");
-                    options.classList.add("photo-options");
-
-
-                    const deleteBtn = document.createElement("button");
-                    deleteBtn.classList.add("btn", "btn-delete", "position-absolute", "top-0", "text-danger");
-                    deleteBtn.innerHTML = '<i class="bi bi-trash"></i>';
-                    deleteBtn.onclick = () => deletePhoto(i);
 
 
 
-                    // options.appendChild(selectBtn);
-                    options.appendChild(deleteBtn);
-                    container.appendChild(img);
-                    container.appendChild(options);
-                    forumPreviewImages.appendChild(container);
-                }
-
-                forumPreviewImages.classList.toggle('hidden', forumPostImages.length <= 0);
-            } else {
-                // primaryPhoto.src = 'https://placehold.co/100x100';
-                forumPreviewImages.classList.add('hidden');
-            }
-        }
-
-        function deletePhoto(index) {
-            forumPostImages.splice(index, 1);
-            updatePhotoDisplay();
-        }
-    </script>
-
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Function to get the base URL of your application
         function getBaseUrl() {
@@ -708,6 +791,17 @@
 
                 if (data.status) {
                     $('#chatBox [name="message"]').val('');
+
+                    $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-end">
+                                    <span style="background-color: #0064A7; max-width: 90%;"
+                                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">${message}</span>
+                                </div>
+                            `)
+
+                    $('#messageContainer').animate({
+                        scrollTop: $('#messageContainer')[0].scrollHeight
+                    }, 500)
                     console.log('Message sent:', data);
                 } else {
                     console.warn('Server responded with unexpected status:', data);
@@ -724,6 +818,81 @@
 
         }
     </script>
+    <script>
+        let forumPostImages = [];
+
+        function handleFiles(files) {
+            let currentImageCount = parseInt(document.getElementById('currentPostImageCount').value)
+            for (let i = 0; i < files.length; i++) {
+                if (forumPostImages.length >= 5 - currentImageCount)
+                    break; // Limit to 5 images
+                forumPostImages.push(files[i]);
+            }
+            updatePhotoDisplay();
+        }
+
+        function updatePhotoDisplay() {
+
+            const forumPreviewImages = document.getElementById('forumPreviewImages');
+            forumPreviewImages.innerHTML = '';
+
+            if (forumPostImages.length > 0) {
+
+
+                for (let i = 0; i < forumPostImages.length; i++) {
+                    const container = document.createElement("div");
+                    container.classList.add("uploaded-photo-container", "col-6", "col-md-4", "col-lg-4",
+                        "position-relative", "mb-2");
+
+                    const img = document.createElement('img');
+                    img.className = 'profile-photo w-100 h-auto ';
+                    img.src = URL.createObjectURL(forumPostImages[i]);
+                    img.alt = `Additional photo ${i}`;
+
+                    const options = document.createElement("div");
+                    options.classList.add("photo-options");
+
+
+                    const deleteBtn = document.createElement("button");
+                    deleteBtn.classList.add("btn", "btn-delete", "position-absolute", "top-0", "text-danger");
+                    deleteBtn.innerHTML = '<i class="bi bi-trash"></i>';
+                    deleteBtn.onclick = () => deletePhoto(i);
+
+
+
+                    // options.appendChild(selectBtn);
+                    options.appendChild(deleteBtn);
+                    container.appendChild(img);
+                    container.appendChild(options);
+                    forumPreviewImages.appendChild(container);
+                }
+
+                forumPreviewImages.classList.toggle('hidden', forumPostImages.length <= 0);
+            } else {
+                // primaryPhoto.src = 'https://placehold.co/100x100';
+                forumPreviewImages.classList.add('hidden');
+            }
+        }
+
+        function deletePhoto(index) {
+            forumPostImages.splice(index, 1);
+            updatePhotoDisplay();
+        }
+
+        function setRedirectUrl() {
+            fetch('/set-redirect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    redirect_url: window.location.href
+                })
+            });
+        }
+    </script>
+
 
     <script>
         function formatDateWithComma(timestamp) {

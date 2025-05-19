@@ -477,17 +477,19 @@ class FrontendController extends Controller
 
         $base_currency = $request->query('base_currency');
         $target_currency = $request->query('target_currency');
-        $amount = $request->query('amount');
+        $amount = $request->query('amount') ?? 1;
         // dd($request->all());
 
         $exchange_rates = ForexCalculator::where('base_currency', $base_currency)
             ->where(function ($query) use ($target_currency, $base_currency) {
                 $query->where('target_currency', $target_currency);
                 $query->where('base_currency', $base_currency);
+                $query->where('date_of_validity', date('Y-m-d'));
             })
             ->orWhere(function ($query) use ($target_currency, $base_currency) {
                 $query->where('target_currency', $base_currency);
                 $query->where('base_currency', $target_currency);
+                $query->where('date_of_validity', date('Y-m-d'));
             })
             ->with('post_admin:id,fullName,profile_image')
             ->get();
@@ -789,8 +791,8 @@ class FrontendController extends Controller
     public function resumeHelp()
     {
 
-        $freeResumeHelps    = ResumeHelp::where('type', 0)->orderBy('created_at', 'desc')->get();
-        $premiumResumeHelps = ResumeHelp::where('type', 1)->get();
+        $freeResumeHelps    = ResumeHelp::where('type', 0)->where('publish_not_publish', '1')->orderBy('created_at', 'desc')->get();
+        $premiumResumeHelps = ResumeHelp::where('type', 1)->where('publish_not_publish', '1')->get();
 
         $freeResumeHelps->transform(function ($resume) {
             $resume->image_preview = asset('storage/' . $resume->image_preview);

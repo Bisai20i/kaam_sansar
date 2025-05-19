@@ -43,8 +43,12 @@
                     <input type="hidden" value="{{ $amount ?? 1 }}" id="user_amount">
                     <input type="hidden" value="{{ $base_currency }}" id="user_base_currency">
                     @foreach ($exchange_rates as $exchange_rate)
-                        <div class="col p-2">
-                            <a href="bank-details.html" class="text-decoration-none">
+                        <form action="{{ route('exchange.currency') }}" class="col p-2">
+                            <input type="hidden" name="forex_id" value="{{ $exchange_rate->id }}">
+                            <input type="hidden" name="base_currency" value="{{ $base_currency }}">
+                            <input type="hidden" name="amount" value="{{ $amount ?? 1 }}">
+                            <input type="hidden" name="buy_or_sell" value="buy" class="forex_type">
+                            <button type="submit" style="all: unset; cursor: pointer;">
                                 <div class="card p-0">
                                     <img src="{{ $exchange_rate->post_admin->profile_image ? asset('storage/' . $exchange_rate->post_admin->profile_image) : asset('frontend/assets/Images/money-around-world.jpg') }}"
                                         class="card-img-top" alt="...">
@@ -66,7 +70,7 @@
                                         </p>
                                     </div>
                                 </div>
-                            </a>
+                            </button>
                         </div>
                     @endforeach
                 @endif
@@ -86,6 +90,7 @@
     <script>
         function toggleRatePreview(type) {
             let rates = document.querySelectorAll('.exchange_rate_display');
+            let forex_type = document.querySelectorAll('.forex_type');
 
             console.log(user_amount)
             if (type == 'buying') {
@@ -97,7 +102,9 @@
 
 
                 })
-                console.log(type)
+                forex_type.forEach(forex => {
+                    forex.value = 'buy'
+                })
             } else {
                 rates.forEach(rate => {
 
@@ -108,7 +115,9 @@
                         .dataset.base)
                     // rate.innerHTML = `${user_amount} ${base} = <span>${convertedAmount}</span> ${base} <br> <span class="fw-semibold fs-6">${base} = ${sellingRate} ${base}</span>`
                 })
-                console.log(type)
+                forex_type.forEach(forex => {
+                    forex.value = 'sell'
+                })
             }
         }
 

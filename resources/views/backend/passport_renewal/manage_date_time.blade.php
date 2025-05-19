@@ -104,7 +104,7 @@
                                         @foreach ($dateTimes as $dateTime)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $dateTime->date }}</td>
+                                                <td>{{  $dateTime->format('Y-m-d') }}</td>
                                                 <td>
                                                     @if ($dateTime->time)
                                                         @foreach ($dateTime->time as $time)

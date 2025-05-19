@@ -11,7 +11,8 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header d-flex bg-white">
-                        <h1 class="modal-title fs-5 mx-auto flex-fill d-flex justify-content-center text-black fs-4" id="createPostLabel">
+                        <h1 class="modal-title fs-5 mx-auto flex-fill d-flex justify-content-center text-black fs-4"
+                            id="createPostLabel">
                             Create Post
                         </h1>
                         <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -65,15 +66,17 @@
                                 <label for="floatingTextarea">Describe...</label>
                             </div>
                             <div class="form text-black-50 mt-2">
-                                <select name="country" id="forumCountry" class="form-control bg-secondary-subtle text-black-50">
+                                <select name="country" id="forumCountry"
+                                    class="form-control bg-secondary-subtle text-black-50">
                                     <option value="" selected>Select Country</option>
                                     <!-- Country options will be dynamically populated by JavaScript -->
                                 </select>
 
                             </div>
                             <div class="form-floating text-black-50 mt-3">
-                                <input name="person_name" type="text" class="form-control bg-secondary-subtle text-black-50"
-                                    id="person_name_input" placeholder="Person Name">
+                                <input name="person_name" type="text"
+                                    class="form-control bg-secondary-subtle text-black-50" id="person_name_input"
+                                    placeholder="Person Name">
                                 <label for="person Name">Person Name</label>
                             </div>
                             <div class="d-flex bg-secondary-subtle p-2 gap-3 align-items-center rounded">
@@ -276,7 +279,7 @@
                                             data-bs-target="#createPost">+
                                             Create</button>
                                     @else
-                                        <button data-bs-toggle="modal" data-bs-target="#loginModal"
+                                        <button data-bs-toggle="modal" data-bs-target="#loginModal" onclick="setRedirectUrl()"
                                             class="btn rounded-5 px-4 text-white text-nowrap m-auto"
                                             style="background-color: #0064a7;">
                                             + Create
@@ -373,7 +376,7 @@
                                                 <a href="{{ route('discussion.profile', ['id' => $forumPost->jobSeeker->id]) }}"
                                                     class="text-decoration-none">
                                                     <h5 class="m-0 text-black">
-                                                        {{ ucfirst($forumPost->jobSeeker->firstName)  . ' ' . $forumPost->jobSeeker->lastName }}
+                                                        {{ ucfirst($forumPost->jobSeeker->firstName) . ' ' . $forumPost->jobSeeker->lastName }}
                                                     </h5>
                                                 </a>
                                                 <div class="d-inline-flex gap-4">
@@ -439,11 +442,11 @@
 
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                                     style="background-color: #0064a7;" data-bs-toggle="modal"
-                                                    data-bs-target="#loginModal">+
+                                                    data-bs-target="#loginModal" onclick="setRedirectUrl()">+
                                                     <span class="d-none d-md-inline">Follow</span></button>
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                                     style="background-color: #0064a7;" data-bs-toggle="modal"
-                                                    data-bs-target="#loginModal">
+                                                    data-bs-target="#loginModal" onclick="setRedirectUrl()">
                                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                                     <span class="d-none d-md-inline">Chat</span>
                                                 </button>
@@ -770,7 +773,7 @@
         chatchannel.bind('new-message', function(data) {
             let message = data.message
 
-            if($('#chatBox [name="receiver_id"]').val() == message.receiver_id){
+            if ($('#chatBox [name="receiver_id"]').val() == message.receiver_id) {
                 return;
             }
             if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
@@ -1010,6 +1013,18 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function setRedirectUrl() {
+            fetch('/set-redirect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    redirect_url: window.location.href
+                })
+            });
+        }
         // Function to get the base URL of your application
         function getBaseUrl() {
             return window.location.protocol + "//" + window.location.host;

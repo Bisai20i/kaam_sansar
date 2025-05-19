@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ForexCalculator;
+use App\Models\ForeignExchangeDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,9 +10,9 @@ class ForexCalculatorController extends Controller
 {
     public function index(Request $request)
     {
-        $base_currency = $request->query('base_currency');
+        $base_currency    = $request->query('base_currency');
         $date_of_validity = $request->query('date_of_validity');
-        $forexRates = ForexCalculator::where('post_admin_id', Auth::guard('admin')->user()->id)
+        $forexRates       = ForexCalculator::where('post_admin_id', Auth::guard('admin')->user()->id)
             ->when($base_currency, function ($query) use ($base_currency) {
                 $query->where('base_currency', $base_currency);
             })
@@ -20,7 +21,11 @@ class ForexCalculatorController extends Controller
             })
             ->simplePaginate(10);
 
-        return view('backend.foreign_exchange.index', compact('forexRates'));
+        $exchange_request_count = ForeignExchangeDetail::whereHas('forex_calculator', function ($query) {
+            $query->where('post_admin_id', Auth::guard('admin')->user()->id);
+        })->count();
+
+        return view('backend.foreign_exchange.index', compact('forexRates','exchange_request_count'));
     }
 
     public function store(Request $request)
@@ -56,7 +61,7 @@ class ForexCalculatorController extends Controller
             return redirect()->back()->with('error', 'Forex records with missing records or past date used. ');
         }
 
-        return redirect()->back()->with('success', 'Forex records added successfully.');
+        return redirect()->route('forex.index')->with('success', 'Forex records added successfully.');
     }
 
     public function update(Request $request, ForexCalculator $forex)
@@ -79,7 +84,8 @@ class ForexCalculatorController extends Controller
                 'selling_rate'     => $validated['selling_rate'],
             ]);
 
-            return redirect()->back()->with('success', 'Forex record updated successfully.');
+
+            return redirect()->route('forex.index')->with('success', 'Forex record updated successfully.');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

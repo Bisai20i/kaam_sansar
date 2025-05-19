@@ -217,4 +217,9 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
    {
        return $this->hasMany(BankAccount::class, 'jobSeekerId');
    }
+
+   public function foreignExchanges()
+   {
+       return $this->hasMany(ForeignExchangeDetail::class, 'jobseeker_id');
+   }
 }

@@ -73,6 +73,7 @@ use App\Models\WorkPermit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\ForeignExchangeDetailController;
 
 // Authentication Routes
 Route::get('master/login', [AdminController::class, 'loginView'])->name('login');
@@ -182,6 +183,11 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     //Reward Routes
     Route::resource('rewards', RewardController::class);
 
+    //view forex exchange requests
+
+    Route::get('/forex/requests', [ForeignExchangeDetailController::class, 'exchange_requests'])->name('forex.requests');
+    Route::delete('/forex/requests/{foreignExchangeDetail}', [ForeignExchangeDetailController::class, 'destroy'])->name('forex.request.destroy');
+
     //forex exchange
     Route::prefix('forex')->group(function () {
         Route::get('/', [ForexCalculatorController::class, 'index'])->name('forex.index');
@@ -275,7 +281,6 @@ Route::prefix('jobseeker')->group(function () {
     Route::get('/reset-password', [JobSeekerController::class, 'resetPasswordPage'])->name('jobseeker.password_reset_page');
     Route::patch('reset-password', [JobSeekerController::class, 'resetPassword'])->name('jobseeker.password-reset');
     Route::post('/register', [JobSeekerController::class, 'register'])->name('jobseeker.register');
-    Route::post('/login', [JobSeekerController::class, 'login'])->name('jobseeker.login');
     Route::post('/login', [JobSeekerController::class, 'login'])->name('jobseeker.login');
 });
 
@@ -398,6 +403,10 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::put('/passport/renew/{id}', [PassportRenewalController::class, 'update'])->name('passport.renew.update');
     Route::post('/passport/renew/partial', [PassportRenewalController::class, 'store_partial'])->name('passport.renew.partial');
     Route::get('/passport/edit/{id}', [PassportRenewalController::class, 'edit'])->name('passport.edit');
+
+    //forex details
+    Route::get('/exchange/currency', [ForeignExchangeDetailController::class, 'index'])->name('exchange.currency');
+    Route::post('/exchange/currency', [ForeignExchangeDetailController::class, 'store'])->name('exchange.currency.store');
 });
 
 /* Frontend routes */
@@ -547,9 +556,9 @@ Route::prefix('superadmin')->middleware(['auth:admin', 'role:superAdmin'])->grou
     Route::delete('/becomeseller/{id}', [BecomeSellerController::class, 'destroy'])->name('superadmin.becomeseller.destroy');
 });
 
-
 Route::get('/passport/countries', [PassportRenewalController::class, 'passport_countries'])->name('passport.countries');
 Route::get('/passport/proviences/{id}', [PassportRenewalController::class, 'passport_proviences'])->name('passport.proviences');
 Route::get('/passport/districts/{id}', [PassportRenewalController::class, 'passport_districts'])->name('passport.districts');
 Route::get('/passport/locations/{id}', [PassportRenewalController::class, 'passport_locations'])->name('passport.locations');
 Route::get('/passport/times/{id}/{date}', [PassportRenewalController::class, 'passport_times'])->name('passport.times');
+
