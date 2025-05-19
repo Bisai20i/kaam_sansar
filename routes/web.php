@@ -314,7 +314,7 @@ Route::prefix('jobseeker')->group(function () {
 Route::post('/clear-session-flag', [JobSeekerController::class, 'clearSessionFlag'])->name('clear.session.flag');
 
 Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () {
-    
+
 
     // Route::resource('jobApply', JobApplyController::class);
     //job applies routes
@@ -358,21 +358,30 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::resource('languages', LanguageController::class);
 
     //bank account
-    Route::resource('bankAccounts', BankAccountController::class)
-        ->only(['create', 'store', 'edit', 'update']);
-
+    Route::get('bankAccounts/create', [BankAccountController::class, 'create'])->name('bankAccounts.create');
+    Route::post('bankAccounts', [BankAccountController::class, 'store'])->name('bankAccounts.store');
+    Route::get('bankAccounts/{bankAccount}/edit', [BankAccountController::class, 'edit'])->name('bankAccounts.edit');
+    Route::put('bankAccounts/{bankAccount}', [BankAccountController::class, 'update'])->name('bankAccounts.update');
 
     // Broker Account
-    Route::resource('brokerAccounts', BrokerAccountController::class)
-        ->only(['create', 'store', 'edit', 'update']);
+    Route::get('brokerAccounts/create', [BrokerAccountController::class, 'create'])->name('brokerAccounts.create');
+    Route::post('brokerAccounts', [BrokerAccountController::class, 'store'])->name('brokerAccounts.store');
+    Route::get('brokerAccounts/{brokerAccount}/edit', [BrokerAccountController::class, 'edit'])->name('brokerAccounts.edit');
+    Route::put('brokerAccounts/{brokerAccount}', [BrokerAccountController::class, 'update'])->name('brokerAccounts.update');
+
 
     //document Attestation
-    Route::resource('documentAttestations', DocumentationAttestationController::class)
-        ->only(['create', 'store', 'edit', 'update']);
+    Route::get('documentAttestations/create', [DocumentationAttestationController::class, 'create'])->name('documentAttestations.create');
+    Route::post('documentAttestations', [DocumentationAttestationController::class, 'store'])->name('documentAttestations.store');
+    Route::get('documentAttestations/{documentAttestation}/edit', [DocumentationAttestationController::class, 'edit'])->name('documentAttestations.edit');
+    Route::put('documentAttestations/{documentAttestation}', [DocumentationAttestationController::class, 'update'])->name('documentAttestations.update');
 
     // work Pemrit
-    Route::resource('workPermits', WorkPermitController::class)
-        ->only(['create', 'store', 'edit', 'update']);
+
+    Route::get('workPermits/create', [WorkPermitController::class, 'create'])->name('workPermits.create');
+    Route::post('workPermits', [WorkPermitController::class, 'store'])->name('workPermits.store');
+    Route::get('workPermits/{workPermit}/edit', [WorkPermitController::class, 'edit'])->name('workPermits.edit');
+    Route::put('workPermits/{workPermit}', [WorkPermitController::class, 'update'])->name('workPermits.update');
 
     //polls
     Route::resource('polls', PollController::class)
