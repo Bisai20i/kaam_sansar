@@ -1,93 +1,104 @@
 @extends('backend.layouts.main')
 
-@section('title', 'Dashboard')
+@section('title', 'Create Question')
 
 @section('content')
-    <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="content-wrapper">
-            <h4 class="fw-bold mb-4"><span class="text-muted fw-light"> </span> Create Reward</h4>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="content-wrapper">
+        <h4 class="fw-bold mb-4">Create Question</h4>
 
-            <!-- Main Content -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <h5 class="mb-0">Add Reward</h5>
-                            <a href="{{ route('rewards.index') }}" class="btn btn-primary btn-sm text-white">
-                                <i class="bx bx-arrow-back" aria-hidden="true"></i> Back
-                            </a>
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="mb-0">Add Question</h5>
+                        <a href="{{ route('questions.index') }}" class="btn btn-primary btn-sm text-white">
+                            <i class="bx bx-arrow-back" aria-hidden="true"></i> Back
+                        </a>
+                    </div>
+
+                    <div class="card-body">
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
-                        <div class="card-body">
-                            <form method="POST" action="{{ route('rewards.store') }}" id="RewardForm">
-                                @csrf
-                                <div class="row">
-                                    <!-- Job Seeker -->
-                                    <div class="mb-3 col-md-6">
-                                        <label for="job_seeker" class="form-label">Job Seeker <span class="text-danger">*</span></label>
-                                        <select class="form-control {{ $errors->has('job_seekers_id') ? 'is-invalid' : '' }}" 
-                                                id="job_seeker" name="job_seekers_id">
-                                            <option value="">Select Job Seeker</option>
-                                            @foreach($jobSeekers as $jobSeeker)
-                                                <option value="{{ $jobSeeker->id }}" 
-                                                    {{ old('job_seekers_id') == $jobSeeker->id ? 'selected' : '' }}>
-                                                    {{ $jobSeeker->firstName . ' ' . $jobSeeker->lastName }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('job_seekers_id')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
+                        @endif
 
-                                    <!-- Reward Points -->
-                                    <div class="mb-3 col-md-6">
-                                        <label for="reward_points" class="form-label">Reward Points <span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control {{ $errors->has('reward_points') ? 'is-invalid' : '' }}"
-                                               id="reward_points" name="reward_points" value="{{ old('reward_points') }}" 
-                                               placeholder="Reward Points">
-                                        @error('reward_points')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
+                        <form method="POST" action="{{ route('questions.store') }}">
+                            @csrf
 
-                                    <!-- Submit Button -->
-                                    <div class="d-flex align-items-center">
-                                        <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center" id="submitButton">
-                                            <span id="buttonText">Submit</span>
-                                            <div id="loaderSpinner" class="spinner-border spinner-border-sm d-none" role="status">
-                                                <span class="visually-hidden">Loading...</span>
-                                            </div>
-                                        </button>
-                                    </div>
+                            <div class="mb-3">
+                                <label for="question" class="form-label">Question</label>
+                                <textarea id="summernote" name="question"
+                                          class="form-control @error('question') is-invalid @enderror"
+                                          required>{{ old('question') }}</textarea>
+                                @error('question')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
+                            <div class="mb-3">
+                                <label for="points" class="form-label">Points</label>
+                                <input type="number" name="points"
+                                       class="form-control @error('points') is-invalid @enderror"
+                                       min="0" value="{{ old('points', 0) }}" required>
+                                @error('points')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <label class="form-label">Options (select one correct):</label>
+                            @for ($i = 0; $i < 4; $i++)
+                            <div class="input-group mb-2">
+                                <input type="text" 
+                                       name="options[]" 
+                                       class="form-control @error('options.' . $i) is-invalid @enderror" 
+                                       placeholder="Option text" 
+                                       value="{{ old('options.' . $i) }}" 
+                                       required>
+                                <div class="input-group-text">
+                                    <input type="radio" name="correct_option" value="{{ $i }}"
+                                           {{ old('correct_option', 0) == $i ? 'checked' : '' }} required>
                                 </div>
-                            </form>
-                        </div>
+                                @error('options.' . $i)
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            @endfor
+
+                            @error('correct_option')
+                            <div class="text-danger mb-3">{{ $message }}</div>
+                            @enderror
+
+                            <button type="submit" class="btn btn-primary mt-3">Save Question</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('RewardForm');
-        const submitButton = document.getElementById('submitButton');
-        const buttonText = document.getElementById('buttonText');
-        const loaderSpinner = document.getElementById('loaderSpinner');
+</div>
 
-        if (form) {
-            form.addEventListener('submit', function () {
-                submitButton.disabled = true;
-                loaderSpinner.classList.remove('d-none');
-                buttonText.style.display = 'none';
-            });
-        }
+<!-- Summernote CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 150,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['insert', ['picture', 'link', 'video']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['view', ['fullscreen', 'codeview']]
+            ]
+        });
     });
 </script>
-
-
 @endsection

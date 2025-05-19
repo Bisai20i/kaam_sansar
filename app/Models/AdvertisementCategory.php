@@ -15,6 +15,7 @@ class AdvertisementCategory extends Model
         'adsCategorySlug',
     ];
 
+    protected $table = 'advertisement_categories';  // Ensure the table name matches your migration
 
 
     

@@ -571,8 +571,7 @@ Route::prefix('advertisements')->group(function () {
     Route::get('Ads/adssearch', [AdvertisementController::class, 'search'])->name('ads.search');
     // comment
 
-    // Route::resource('adscomment', CommentController::class);
-
+    Route::resource('adscomment', CommentController::class);
 });
 
 Route::resource('ads', AdvertisementController::class);
