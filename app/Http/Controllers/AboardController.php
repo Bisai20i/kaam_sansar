@@ -65,6 +65,8 @@ class AboardController extends Controller
     {
         Log::info('Incoming request data:', $request->all());
 
+        // return $request->all();
+
         $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
 
@@ -78,7 +80,7 @@ class AboardController extends Controller
 
         $validated = Validator::make($request->all(), [
             'productTitle' => 'required|string|max:255',
-            'productCategoryId' => 'required|exists:categories,id',
+            'productCategoryId' => 'required|exists:product_categories,id',
             'productDescription' => 'required|string',
             'contactNumber' => 'nullable|string|max:255',
             'pricing' => 'nullable|numeric',
@@ -87,7 +89,7 @@ class AboardController extends Controller
             'productThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'location' => 'nullable',
             'country' => 'nullable',
-            'type' => 'in:Item,Buy',
+            'type' => 'required|in:Item,Buy',
             'urlLink' => 'nullable|url',
         ]);
 
@@ -111,17 +113,14 @@ class AboardController extends Controller
             'productTitle' => $request->input('productTitle'),
             'productCategoryId' => $request->input('productCategoryId'),
             'productDescription' => $request->input('productDescription'),
-            'location' => $request->input('location'),
             'country' => $request->input('country'),
             'type' => $request->input('type'),
-            'contactNumber' => $request->input('contactNumber'),
-            'pricing' => $request->input('pricing'),
-            'urlLink' => $request->input('urlLink'),
-            'publishStatus' => $request->input('publishStatus', 'publish'),
+            'pricing' => $request->input('pricing') ?? 0,
+            // 'publishStatus' => $request->input('publishStatus', 'publish'),
             'productSlug' => $productSlug,
             'productThumbnail' => $productThumbnail,
-            'created_at' => Carbon::now(),
             'postedDuration' => '0 Days',
+            'urlLink' => $request->input('urlLink') ?? null,
         ]);
 
         $aboard->save();

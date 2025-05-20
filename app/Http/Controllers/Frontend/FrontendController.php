@@ -548,6 +548,7 @@ class FrontendController extends Controller
         $fetchedData = VisaDetails::with('visaCountry', 'visaType')
             ->where('visaCountryId', $visaCountryId)
             ->where('visaTypeId', $visaTypeId)
+            ->where('publishStatus', 1)
             ->first();
 
         // Retrieve country lists and visa types again for re-rendering the form

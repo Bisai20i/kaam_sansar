@@ -11,7 +11,7 @@ class InsuranceCompanyController extends Controller
 {
     public function index(){
         $companies = InsuranceCompany::orderBy('id', 'desc')->simplePaginate(10);
-        return view('backend.Insurance.company', compact('companies'));
+        return view('backend.insurance.company', compact('companies'));
     }
 
     public function store(Request $request){

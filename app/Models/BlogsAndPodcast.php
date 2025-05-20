@@ -9,9 +9,6 @@ class BlogsAndPodcast extends Model
 {
     use HasFactory;
 
-    protected $table = 'blogsandpodcasts';
-
-
     // Define fillable columns for mass assignment
     protected $fillable = [
         'blogOrPodcast',

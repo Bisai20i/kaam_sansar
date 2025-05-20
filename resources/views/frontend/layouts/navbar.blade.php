@@ -15,50 +15,170 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- style for nav hover and active status -->
+
+        <style>
+            .active-navLink,
+            .nav-link {
+                position: relative;
+                transition: 0.3s ease-in-out;
+                padding: 5px 3px !important;
+            }
+
+            .nav-link::before {
+                content: "";
+                position: absolute;
+                bottom: 2px;
+                left: 0;
+                width: 0;
+                height: 2;
+                background-color: #0064A7;
+                transition: 0.3s ease-in-out;
+            }
+
+            .active-navLink::before {
+                content: "";
+                position: absolute;
+                bottom: 2px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: #0064A7;
+                transition: 0.3s ease-in-out;
+            }
+
+            .active-dropdown-item {
+                background-color: #d1ecff !important;
+
+            }
+
+            .active-navLink:hover::before,
+            .nav-link:hover::before {
+                content: "";
+                position: absolute;
+                bottom: 2px;
+                left: 0;
+                width: 35%;
+                height: 2px;
+                background-color: #0064A7;
+            }
+        </style>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav gap-3 m-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('frontend.finds-jobs') }}">Find jobs</a>
+                    <a class="nav-link {{ request()->routeIs('index') ? 'active-navLink' : '' }}" aria-current="page"
+                        href="{{ route('index') }}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="{{ route('resume') }}">Resume help</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('aboarddeals') }}">Abroad Deals</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('visaHQ') }}">Visa HQ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('frontend.insurance') }}">Insurance</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('forex_calculator') }}">Forex
-                        calculator</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('horoscope') }}">Horoscope</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('gift.home', ['type' => 'all']) }}">Gift &
-                        Coupon</a>
+                <!-- Jobs Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('frontend.finds-jobs') || request()->routeIs('resume') ? 'active-navLink' : '' }}"
+                        href="#" id="jobsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Jobs
+                    </a>
+                    <ul class="dropdown-menu " aria-labelledby="jobsDropdown">
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('frontend.finds-jobs') ? 'active-dropdown-item' : '' }} "
+                                aria-current="page" href="{{ route('frontend.finds-jobs') }}">Find
+                                jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('resume') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('resume') }}">Resume help</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('frontend.advertisements') }}" aria-current="page"
-                        href="adspage.html">Advertisement</a>
+                {{-- <!-- Games Dropdown {{ request()->routeIs('spinn') || request()->routeIs('exit-poll') || request()->routeIs('quiz') ? 'active-navLink' : '' }} --> --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="gamesDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Games
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="gamesDropdown">
+                        <li><a class="dropdown-item" href="spinn.html">Spinning Wheel</a></li>
+                        <li><a class="dropdown-item" href="exit-poll.html">Exist Poll</a></li>
+                        <li><a class="dropdown-item" href="quiz.html">Quiz</a></li>
+
+                    </ul>
+                </li>
+
+                <!-- Services Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle 
+                        {{ request()->routeIs('frontend.insurance') ||
+                        request()->routeIs('visaHQ') ||
+                        request()->routeIs('aboard*') ||
+                        request()->routeIs('frontend.advertisements') ||
+                        request()->routeIs('gift*')
+                            ? 'active-navLink'
+                            : '' }}"
+                        href="javascript:void(0);" id="servicesDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Services
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('frontend.insurance') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('frontend.insurance') }}">Insurance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('visaHQ') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('visaHQ') }}">Visa HQ</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('aboard*') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('aboarddeals') }}">Abroad
+                                Deals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('frontend.advertisements') ? 'active-dropdown-item' : '' }}"
+                                href="{{ route('frontend.advertisements') }}" aria-current="page">Advertisement</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('gift*') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('gift.home', ['type' => 'all']) }}">Gift &
+                                Coupon</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <!-- Forms Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="formsDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Forms
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="formsDropdown">
+                        <li><a class="dropdown-item" href="bank-----details-----new.html">Bank Details</a></li>
+                        <li><a class="dropdown-item" href="BankAccountForm.html"> Bank Account</a></li>
+                        <li><a class="dropdown-item" href="passport_renewal_form.html">Passport Renewal</a></li>
+
+                    </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('frontend.discussion') }}" aria-current="page"
+                    <a class="nav-link {{ request()->routeIs('forex*') ? 'active-navLink' : '' }}"
+                        aria-current="page" href="{{ route('forex_calculator') }}">Forex Calculator</a>
+                </li>
+                <!-- Individual Items -->
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('horoscope') ? 'active-navLink' : '' }}"
+                        aria-current="page" href="{{ route('horoscope') }}">Horoscope</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('frontend.discussion') ? 'active-navLink' : '' }}"
+                        href="{{ route('frontend.discussion') }}" aria-current="page"
                         href="forumfeed.html">Discussion Forum</a>
                 </li>
-
             </ul>
 
             @auth('job_seekers')
                 @if (Auth::guard('job_seekers')->user()->isOtpVerified())
                     <!-- Show Profile Button for Authenticated Users with Verified OTP -->
-                    <button id="main-profile" class="profile-button" data-bs-toggle="modal" data-bs-target="#profileModal">
+                    <button id="main-profile" class="profile-button" data-bs-toggle="modal"
+                        data-bs-target="#profileModal">
                         <img
                             src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                                 ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
@@ -312,16 +432,16 @@
                 <h2 class="text-center mb-4">Create Profile</h2>
 
                 <div class="text-center mb-4 d-flex justify-content-center">
-                    <div
-                            class="border border-secondary rounded rounded-circle d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1" style="width: 150px; height: 150px">
-                            <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
-                                name="image1" onchange="previewImage(this)" style="z-index: 1; cursor: pointer;" />
-                            <span></span> <i class="fas fa-plus text-muted position-absolute" style="top: 45%; "></i>
-                            <img src="{{ Auth::guard('job_seekers')->check() && isset(Auth::guard('job_seekers')->user()->userThumbnail[0]) ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : '' }}"
-                                class="rounded-circle w-100 h-100 {{ Auth::guard('job_seekers')->check() && isset(Auth::guard('job_seekers')->user()->userThumbnail[0]) ? '' : 'd-none' }}"
-                                alt="Preview Image" id="preview" accept="image/*" />
-                        </div>
-                    
+                    <div class="border border-secondary rounded rounded-circle d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1"
+                        style="width: 150px; height: 150px">
+                        <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                            name="image1" onchange="previewImage(this)" style="z-index: 1; cursor: pointer;" />
+                        <span></span> <i class="fas fa-plus text-muted position-absolute" style="top: 45%; "></i>
+                        <img src="{{ Auth::guard('job_seekers')->check() && isset(Auth::guard('job_seekers')->user()->userThumbnail[0]) ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : '' }}"
+                            class="rounded-circle w-100 h-100 {{ Auth::guard('job_seekers')->check() && isset(Auth::guard('job_seekers')->user()->userThumbnail[0]) ? '' : 'd-none' }}"
+                            alt="Preview Image" id="preview" accept="image/*" />
+                    </div>
+
                 </div>
 
                 <p class="text-center text-muted mb-4">Upload up to 5 photos. Click to select primary photo</p>
@@ -464,7 +584,6 @@
                         <label for="country" class="form-label mb-1"><small
                                 class="text-muted">Country</small></label>
                         <select type="text" class="form-control mb-2" name="country" id="selectCountry"
-                            
                             style="border-color: #8C8C8C; color: #818181;">
                             <option value="" selected>Select Country</option>
 
@@ -1239,14 +1358,15 @@
                         dropdown2.appendChild(option.cloneNode(true));
                     });
 
-                    
+
                     // Restore old value (if exists)
                     const oldCountry = "{{ old('country') }}";
                     if (oldCountry) {
                         dropdown.value = oldCountry;
                     }
 
-                    const userCountry = "{{  Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->country : '' }}";
+                    const userCountry =
+                        "{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->country : '' }}";
                     if (userCountry) {
                         dropdown2.value = userCountry;
                     }

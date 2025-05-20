@@ -453,141 +453,29 @@
 
         </div> --}}
 
-                <div class="row g-3 align-items-center row-cols-1 row-cols-md-3 row-cols-lg-5">
+                <div class="row g-3">
                     @foreach ($giftCoupons as $item)
-                        <div class="col gift-card h-100">
 
-
-                            <a href="{{ route('gift.details', ['id' => $item->id]) }}"
-                                class="text-decoration-none shadow-sm">
-                                <div class="card">
-                                    <img style="height: 175px; object-fit:cover;"
-                                        src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}"
-                                        class="card-img-top img-fluid" alt="giftNcoupon">
-                                    <div class="card-body text-start">
-
-                                        <h5 class="card-title mb-1 text-truncate">{{ $item->title }}</h5>
-
+                        <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+                            <div class="card">
+                                <a href="{{ route('gift.details', ['id' => $item->id]) }}" class="text-decoration-none">
+                                    <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}" class="card-img-top rounded-1"
+                                        alt="gift and coupon">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title">{{ $item->title }}</h5>
                                         <p class="card-text text-muted mb-1">NPR. {{ $item->price }}</p>
-                                        <p class="card-text text-muted ">
-                                            <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                            </small>
-                                        </p>
+                                        <p class="card-text text-muted"><small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small></p>
                                     </div>
-                                </div>
-                            </a>
+                                </a>
+                            </div>
                         </div>
+                        
                     @endforeach
 
-                    <div class="col gift-card">
-
-
-                        <a href="{{ route('aboarddeals') }}" class="text-decoration-none">
-                            <div class="card">
-                                <img src="{{ asset('frontend/assets/Images/giftiphone.png') }}"
-                                    class="card-img-top shadow" alt="abroadDeals">
-                                {{-- <div class="card-body">
-
-                                    <h5 class="card-title mb-2">{{ $item->title }}</h5>
-
-                        <p class="card-text text-muted mb-1">NPR. {{ $item->price }}</p>
-                        <p class="card-text text-muted ">
-                            <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                            </small>
-                        </p>
-                    </div> --}}
-                            </div>
-                        </a>
-                    </div>
-                    {{-- <div class="col" style="height:100%;">
-                        <div class="gift-card flex-grow-1 p-0">
-                            <a href="">
-
-                                <img src="{{ asset('frontend/assets/Images/giftiphone.png') }}" class="" alt="img-fluid">
-        </a>
-        </div>
-        </div> --}}
+                   
                 </div>
 
-                {{-- <div class="row g-3 justify-content-center align-items-center row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 mt-2">
-
-                    @if ($giftCoupons->count() > 0)
-                        @foreach ($giftCoupons as $gNc)
-                            <div class="col" name="giftCouponItem" data-gNcId="{{ $gNc->id }}" style="cursor: pointer;">
-
-        <div class="card-bdy-packages-gifts">
-            @if ($gNc->discount > 0)
-            <div class="discount-badge">{{ $gNc->discount }}% OFF</div>
-            @endif
-
-            <img src="{{ $gNc->thumbnail ? asset('storage/' . $gNc->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}"
-                class="bdy-packages-img product-image-gifts" id="product-image-gift"
-                style="height: 200px;">
-            <div class="card-body d-flex justify-content-between align-items-center ">
-                <p class="text-truncate my-2">{{ $gNc->title }}</p>
-                <form action="{{ Auth::guard('job_seekers')->check() ? route('addtocart') : route('set.redirect') }}" class="d-inline" method="post">
-                    @csrf
-                    <input type="hidden" name="couponId" value="{{ $gNc->id }}">
-                    @if (Auth::guard('job_seekers')->check())
-                    <input type="hidden" name="jobSeekerId"
-                        value="{{ Auth::guard('job_seekers')->user()->id }}">
-                    <button type="submit" style="all: unset; cursor: pointer;">
-                        <i class="bi bi-plus-lg ms-auto gift-cart"></i>
-                    </button>
-                    @else
-                    <input type="hidden" name="redirect_url" value="{{ url()->current() }}">
-                    <button type="submit" style="all: unset; cursor: pointer;">
-                        <i class="bi bi-plus-lg ms-auto gift-cart"></i>
-                    </button>
-                    @endif
-
-                </form>
-
-            </div>
-            <div class="price-gift mb-3">
-                @if ($gNc->discount > 0)
-                <del>Nrs. {{ $gNc->price }}</del>
-                @endif
-
-                <p class="price">NRs.
-                    {{ number_format((100 - $gNc->discount) * $gNc->price * 0.01, 2) }}
-                </p>
-            </div>
-
-            <div class="gift-info">
-                {!! $gNc->quantity > 0
-                ? '<div class="instock-gift">Instock: ' . $gNc->quantity . '</div>'
-                : '<div class="outstock-gift">Out of Stock</div>' !!}
-                <div class="item-code-gift ">Item Code: {{ $gNc->itemCode }}</div>
-            </div>
-            <div class="sold-by-gift mt-3 mb-1 px-2"> Published By:
-                <a href="{{ route('gift.seller', ['id' => $gNc->adminId]) }}"
-                    class="text-underline ps-2 sold-by-link" style="cursor: pointer;">
-                    {{ $gNc->admin->fullName }}
-                    <i class="bi bi-arrow-right ps-2"></i>
-                </a>
-            </div>
-
-        </div>
-
-        </div>
-        @endforeach
-        @else
-        <p class="text-danger text-center"> No Items Found !</p>
-        @endif
-
-        <div class="col" style="height:max-content">
-            <div class="gift-card flex-grow-1 p-0 w-100">
-                <a href="{{ route('aboarddeals') }}">
-
-                    <img src="{{ asset('frontend/assets/Images/giftiphone.png') }}" class="w-100" alt="img-fluid">
-                </a>
-            </div>
-        </div>
-
-
-
-        </div> --}}
+                
 
                 <div class="text-center mt-4">
                     <a href="{{ route('gift.home', ['type' => 'all']) }}" class="view-more">View More</a>

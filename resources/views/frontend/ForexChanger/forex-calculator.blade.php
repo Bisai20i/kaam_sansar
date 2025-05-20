@@ -415,6 +415,7 @@
             }
         }
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Function to update button content
@@ -438,6 +439,7 @@
             });
         });
     </script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
 @endsection
