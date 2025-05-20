@@ -351,6 +351,17 @@
         </li>
 
 
+
+
+        <!----jyotish---->
+        <li class="menu-item">
+            <a href="{{ route('jyotishs.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i> {{-- Arrow-like icon --}}
+                <div data-i18n="Jyotish">Jyotish</div>
+            </a>
+        </li>
+
+
         <!-- Manage Insurance-->
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">

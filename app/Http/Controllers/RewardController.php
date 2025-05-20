@@ -27,10 +27,20 @@ class RewardController extends Controller
             'reward_points' => 'required|integer|min:0',
         ]);
     
+    $reward = Reward::where('job_seekers_id', $request->job_seekers_id)->first();
+
+    if ($reward) {
+        // Update existing reward points
+        $reward->reward_points += $request->reward_points;
+        $reward->save();
+    } else {
+        // Create a new reward entry
         Reward::create([
             'job_seekers_id' => $request->job_seekers_id,
             'reward_points' => $request->reward_points,
         ]);
+    }
+
     
         return redirect()->route('rewards.index')->with('success', 'Reward added successfully!');
     }

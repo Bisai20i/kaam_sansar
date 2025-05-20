@@ -34,6 +34,7 @@ use App\Models\Visa;
 use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
 use App\Models\Horoscope;
+use App\Models\Jyotish;
 use App\Models\VisaType;
 use App\Models\InsuranceCompany;
 use App\Models\InsuranceCategory;
@@ -650,7 +651,11 @@ class FrontendController extends Controller
             Log::warning('No horoscopes found for the specified date and type');
         }
     
-        return view('frontend.horoscope.horoscope', compact('astrologer', 'orderedHoroscopes', 'type'));
+
+
+            $jyotishs = Jyotish::all();
+
+        return view('frontend.horoscope.horoscope', compact('astrologer', 'orderedHoroscopes', 'type', 'jyotishs'));
     }
     
     

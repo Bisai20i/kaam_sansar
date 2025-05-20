@@ -73,6 +73,11 @@ use App\Http\Controllers\WorkPermitLocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\JyotishController;
+
+
+
+Route::get('/horoscope', [JyotishController::class, 'showJyotishPage'])->name('frontend.horoscope');
 
 // Authentication Routes
 Route::get('master/login', [AdminController::class, 'loginView'])->name('login');
@@ -96,6 +101,8 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     //quize routes
     Route::resource('questions', QuestionController::class);
+        Route::resource('jyotishs', JyotishController::class);
+
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
     // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
