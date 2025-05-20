@@ -74,7 +74,7 @@
 
                                 .today {
                                     background-color: #0064A7 !important;
-                                    color: #fff;
+                                    color: #fff!important;
                                 }
                             </style>
 

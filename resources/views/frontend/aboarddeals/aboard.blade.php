@@ -584,7 +584,7 @@
                             <div class="card border-0 mb-3">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}" class="rounded-circle me-2"
+                                        <img src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}" class="rounded-circle me-2"
                                             alt="User" style="height:40px;width:40px;">
                                         <div>
                                             <h6 class="mb-0">{{ $ad->jobSeeker->firstName }}

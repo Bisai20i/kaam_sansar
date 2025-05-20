@@ -110,6 +110,7 @@
                         {{ request()->routeIs('frontend.insurance') ||
                         request()->routeIs('visaHQ') ||
                         request()->routeIs('aboard*') ||
+                        request()->routeIs('forex*') ||
                         request()->routeIs('frontend.advertisements') ||
                         request()->routeIs('gift*')
                             ? 'active-navLink'
@@ -127,7 +128,11 @@
                             <a class="dropdown-item {{ request()->routeIs('visaHQ') ? 'active-dropdown-item' : '' }}"
                                 aria-current="page" href="{{ route('visaHQ') }}">Visa HQ</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('forex*') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('forex_calculator') }}">
+                                Forex calculator</a>
+                        </li>
                         <li class="nav-item">
                             <a class="dropdown-item {{ request()->routeIs('aboard*') ? 'active-dropdown-item' : '' }}"
                                 aria-current="page" href="{{ route('aboarddeals') }}">Abroad
@@ -144,7 +149,6 @@
                         </li>
                     </ul>
                 </li>
-                
                 <!-- Forms Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle " href="#" id="formsDropdown" role="button"
@@ -157,10 +161,6 @@
                         <li><a class="dropdown-item" href="passport_renewal_form.html">Passport Renewal</a></li>
 
                     </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('forex*') ? 'active-navLink' : '' }}"
-                        aria-current="page" href="{{ route('forex_calculator') }}">Forex Calculator</a>
                 </li>
                 <!-- Individual Items -->
                 <li class="nav-item">
@@ -785,7 +785,7 @@
             <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
                 aria-label="Close"></button>
 
-            <div class="modal-body p-0 icon-gray">
+            <div class="modal-body p-0 icon-gray" style="font-family: unset;">
                 <!-- Social Login Buttons -->
                 <div class="text-center">
                     <p class="text-muted">Welcome back! Select a method to login:</p>
@@ -797,7 +797,7 @@
                         <i class="fa fa-envelope text-white"></i> Email
                     </button>
                     <button type="button" class="btn-outline-secondary rounded-start-0 border-phone" id="phone-btn">
-                        <i class="fas fa-phone text-white"></i> <span style="color: #555555;">Phone Number</span>
+                        <i class="fas fa-phone" style="color: #0064A7"></i> <span style="color: #555555;">Phone Number</span>
                     </button>
                 </div>
 
