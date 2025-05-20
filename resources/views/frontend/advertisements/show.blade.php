@@ -22,7 +22,6 @@
                             @else
                             <img src="{{ asset('images/default-profile.png') }}" class="rounded-circle abroad-chat" alt="Default Profile">
                             @endif
-                            class="rounded-circle abroad-chat" alt="Profile picture of Ram Baral">
                             <div class="ms-2">
                                 <p class="fw-semibold mb-0">{{$ads->jobSeeker->firstName}} {{$ads->jobSeeker->lastName}}</p>
                                 <p class="text-muted mb-0 mt-0">{{$ads->contactNumber}}</p>
