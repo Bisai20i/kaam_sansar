@@ -60,8 +60,11 @@ use App\Http\Controllers\FrequentlyAskedQuestionController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\BecomeSellerController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\JyotishController;
 
 
+
+Route::get('/horoscope', [JyotishController::class, 'showJyotishPage'])->name('frontend.horoscope');
 
 
 Route::middleware(['auth:job_seekers'])->group(function () {
@@ -107,6 +110,8 @@ Route::middleware(['role:admin'])->prefix('adminuser')->group(function () {
 Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
 
     Route::resource('questions', QuestionController::class);
+        Route::resource('jyotishs', JyotishController::class);
+
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
     // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
