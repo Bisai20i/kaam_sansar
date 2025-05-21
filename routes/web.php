@@ -61,6 +61,8 @@ use App\Http\Controllers\RewardController;
 use App\Http\Controllers\BecomeSellerController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\JyotishController;
+use App\Http\Controllers\AdminMessageController;
+
 
 
 
@@ -70,7 +72,7 @@ Route::get('/horoscope', [JyotishController::class, 'showJyotishPage'])->name('f
 Route::middleware(['auth:job_seekers'])->group(function () {
     Route::get('/quiz', [QuestionController::class, 'quiz'])->name('quiz.frontend');
     Route::post('/quiz/submit', [QuestionController::class, 'submitQuiz'])->name('quiz.submit');
-    
+
     // Change this line to use the controller method, NOT a closure returning the view
     Route::get('/quiz/thankyou', [QuestionController::class, 'thankYou'])->name('quiz.thankyou');
 });
@@ -110,7 +112,9 @@ Route::middleware(['role:admin'])->prefix('adminuser')->group(function () {
 Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
 
     Route::resource('questions', QuestionController::class);
-        Route::resource('jyotishs', JyotishController::class);
+    Route::resource('jyotishs', JyotishController::class);
+    Route::resource('admin-messages', AdminMessageController::class);
+
 
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
@@ -342,7 +346,8 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     });
 
     //Messages Related routes
-
+    
+    Route::get('/inbox', [MessageController::class, 'inbox'])->name('frontend.inbox');
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
     Route::get('/user-inbox', [MessageController::class, 'user_inbox'])->name('jobseeker.inbox');
     Route::post('/sender-messages', [MessageController::class, 'sender_messages']);

@@ -287,6 +287,16 @@
         </li>
 
 
+
+        <!----adminmessage---->
+        <li class="menu-item">
+            <a href="{{ route('admin-messages.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-moon"></i> {{-- Arrow-like icon --}}
+                <div data-i18n="Horoscope Reply">Horoscope Reply</div>
+            </a>
+        </li>
+
+
         <!-- Manage Insurance-->
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
