@@ -18,7 +18,7 @@ class JobCategoryController extends Controller
     public function index()
     {
         $jobCategories = JobCategory::orderBy('created_at', 'desc')->simplePaginate(10);
-        return view('backend.JobCategory.lists', compact('jobCategories'));
+        return view('backend.jobcategory.lists', compact('jobCategories'));
     }
 
     /**

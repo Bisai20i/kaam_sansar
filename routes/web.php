@@ -101,7 +101,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     //quize routes
     Route::resource('questions', QuestionController::class);
-        Route::resource('jyotishs', JyotishController::class);
+    Route::resource('jyotishs', JyotishController::class);
 
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');

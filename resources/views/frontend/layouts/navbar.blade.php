@@ -92,17 +92,18 @@
 
                 {{-- <!-- Games Dropdown {{ request()->routeIs('spinn') || request()->routeIs('exit-poll') || request()->routeIs('quiz') ? 'active-navLink' : '' }} --> --}}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="gamesDropdown" role="button"
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('polls*') || request()->routeIs('quiz') ? 'active-navLink' : '' }}" href="#" id="gamesDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Games
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="gamesDropdown">
                         <li><a class="dropdown-item" href="spinn.html">Spinning Wheel</a></li>
-                        <li><a class="dropdown-item" href="exit-poll.html">Exist Poll</a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('polls*') ? 'active-dropdown-item' : '' }}" href="{{ route('polls.create') }}">Exist Poll</a></li>
                         <li><a class="dropdown-item" href="quiz.html">Quiz</a></li>
 
                     </ul>
                 </li>
+
 
                 <!-- Services Dropdown -->
                 <li class="nav-item dropdown">
@@ -149,19 +150,39 @@
                         </li>
                     </ul>
                 </li>
-                <!-- Forms Dropdown -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle " href="#" id="formsDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Forms
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="formsDropdown">
-                        <li><a class="dropdown-item" href="bank-----details-----new.html">Bank Details</a></li>
-                        <li><a class="dropdown-item" href="BankAccountForm.html"> Bank Account</a></li>
-                        <li><a class="dropdown-item" href="passport_renewal_form.html">Passport Renewal</a></li>
 
-                    </ul>
-                </li>
+                @if (Auth::guard('job_seekers')->check())
+                    <!-- Forms Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle 
+                        {{ request()->routeIs('passport*') || request()->routeIs('workPermits*') ? 'active-navLink' : '' }}"
+                            href="#" id="formsDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Forms
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="formsDropdown">
+                            <li><a class="dropdown-item {{ request()->routeIs('documentAttestations*') ? 'active-dropdown-item' : '' }}" 
+                                href="{{ route('documentAttestations.create') }}">Document Attestation</a></li>
+
+                            <li><a class="dropdown-item {{ request()->routeIs('workPermits.create') ? 'active-dropdown-item' : '' }}"
+                                    href="{{ route('workPermits.create') }}">Work Permit</a></li>
+                            <li><a class="dropdown-item {{ request()->routeIs('passport.partial') ? 'active-dropdown-item' : '' }}"
+                                    href="{{ route('passport.partial') }}">Passport Renewal</a></li>
+                            <li><a class="dropdown-item {{ request()->routeIs('bankAccounts*') ? 'active-dropdown-item' : '' }}"
+                                    href="{{ route('bankAccounts.create') }}">Bank Account</a></li>
+                            <li><a class="dropdown-item {{ request()->routeIs('brokerAccounts*') ? 'active-dropdown-item' : '' }}"
+                                    href="{{ route('brokerAccounts.create') }}">Broker Account</a></li>
+
+                        </ul>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="modal"
+                            data-bs-target="#loginModal">Forms</button>
+                    </li>
+                @endif
+
+
                 <!-- Individual Items -->
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('horoscope') ? 'active-navLink' : '' }}"
@@ -797,7 +818,8 @@
                         <i class="fa fa-envelope text-white"></i> Email
                     </button>
                     <button type="button" class="btn-outline-secondary rounded-start-0 border-phone" id="phone-btn">
-                        <i class="fas fa-phone" style="color: #0064A7"></i> <span style="color: #555555;">Phone Number</span>
+                        <i class="fas fa-phone" style="color: #0064A7"></i> <span style="color: #555555;">Phone
+                            Number</span>
                     </button>
                 </div>
 

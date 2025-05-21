@@ -268,7 +268,7 @@ class AdvertisementController extends Controller
         $categories = AdvertisementCategory::all();
 
 
-        return view('backend.Advertisement.create', compact('ads', 'categories'));
+        return view('backend.advertisement.create', compact('ads', 'categories'));
     }
 
     /**

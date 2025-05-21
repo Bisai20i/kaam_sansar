@@ -348,28 +348,6 @@
             </div>
         </div>
 </section>
-</script>
-<script src="{{ asset('JS/home.js') }}"></script>
-<script src="{{ asset('JS/script.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/jquery-3.3.1.min.js"></script>
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/popper.min.js"></script>
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/bootstrap.min.js"></script>
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/rome.js"></script>
-
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/main.js"></script>
-<script defer
-    src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
-    integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
-    data-cf-beacon='{"rayId":"91b7e635cdf99888","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.1.0","token":"cd0b4b3a733644fc843ef0b185f98241"}'
-    crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#sameAsPermanent').on('change', function() {

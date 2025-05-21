@@ -19,7 +19,7 @@ class IndustryCategoryController extends Controller
     public function index()
     {
         $industrycategories = IndustryCategory::orderBy('created_at', 'desc')->simplePaginate(10);
-        return view('backend.IndustryCategory.lists', compact('industrycategories'));
+        return view('backend.industrycategory.lists', compact('industrycategories'));
     }
 
     public function getIndustries(Request $request)

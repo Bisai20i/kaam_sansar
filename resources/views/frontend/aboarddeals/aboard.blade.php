@@ -84,7 +84,8 @@
                             </div>
                         </div>
                         <div class="col-md-3 d-flex align-items-center">
-                            <select class="form-select py-2 bg-white border" id="countrySelect" name="country" aria-label="">
+                            <select class="form-select py-2 bg-white border" id="countrySelect" name="country"
+                                aria-label="">
                                 <option selected disabled>Select Country</option>
                                 @foreach ($uniqueAboards as $u)
                                     <option value="{{ $u->country }}">{{ $u->country }}</option>
@@ -282,7 +283,8 @@
                         // Loop through the API response and append country options to the dropdown
                         data.forEach(function(country) {
                             var countryName = country.name.common;
-                            var countryCode = country.cca2; // Optional: You can use the country code if needed
+                            var countryCode = country
+                            .cca2; // Optional: You can use the country code if needed
 
                             $('#countrySelect').append(new Option(countryName, countryName));
                             $('#newCountrySelect').append(new Option(countryName, countryName));
@@ -434,7 +436,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        
+
                         <form id="newPostForm" action="{{ route('aboards.store') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
@@ -579,13 +581,13 @@
                 <div class="row">
                     <!-- Left Section: Cards -->
 
-                    <div class="col-md-9">
+                    <div class="col-md-9 flex-grow-1">
                         @foreach ($ads->where('type', 'Buy') as $ad)
                             <div class="card border-0 mb-3">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}" class="rounded-circle me-2"
-                                            alt="User" style="height:40px;width:40px;">
+                                        <img src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}"
+                                            class="rounded-circle me-2" alt="User" style="height:40px;width:40px;">
                                         <div>
                                             <h6 class="mb-0">{{ $ad->jobSeeker->firstName }}
                                                 {{ $ad->jobSeeker->lastName }}</h6>
@@ -731,7 +733,8 @@
                                                             <input type="hidden" name="productId" id="productId"
                                                                 value="{{ $ad->id }}">
 
-                                                            <input name="comment" class="form-control rounded-3 py-2" placeholder="Write a comment..." required>
+                                                            <input name="comment" class="form-control rounded-3 py-2"
+                                                                placeholder="Write a comment..." required>
                                                             <button type="submit"
                                                                 class="btn btn-send rounded mb-0 text-primary"
                                                                 id="sendMessageButton">
@@ -847,10 +850,10 @@
                             </div>
                             <!-- Show delete button if the logged-in user is the author -->
                             ${cmt.canDelete ? `
-                                                                                                                                                                                                <button class="btn ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal${cmt.id}">
-                                                                                                                                                                                                    <i class="bi bi-trash text-danger"></i>
-                                                                                                                                                                                                </button>
-                                                                                                                                                                                            ` : ''}
+                                                                                                                                                                                                                                        <button class="btn ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal${cmt.id}">
+                                                                                                                                                                                                                                            <i class="bi bi-trash text-danger"></i>
+                                                                                                                                                                                                                                        </button>
+                                                                                                                                                                                                                                    ` : ''}
                         </div>`;
                                                             });
                                                             $('#commentsSection').html(commentsHTML);
@@ -949,10 +952,13 @@
 
 
                     <!-- Right Section: Ad Banner -->
-                    <div class="col-md-3 d-flex border align-items-center justify-content-center"
-                        style="max-height: 100vh;">
-                        <div class="ad-banner ">Advertisement Banner</div>
-                    </div>
+                    @isset($ad_banners['right'])
+                        <div class="col-md-3 p-0"
+                            style="max-height: 100vh;">
+                            <img src="{{ asset($ad_banners['right']->image) }}" alt="ad_banner" class="img-fluid img p-0 w-100">
+                        </div>
+                    @endisset
+
 
                 </div>
             </div>
