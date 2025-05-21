@@ -14,21 +14,21 @@ class FormSubmissionController extends Controller
 
         $forms->transform(function($form){
 
-            switch($form->title){
+            switch($form->title)
+            {
                 case 'Passport Renewal':
-                    
                     $model_name = 'PassportRenewal';
                     break;
                 case 'Work Permit':
                     $model_name = 'WorkPermit';
                     break;
                 case 'Document Attestation':
-                    $model_name = 'DocumentAttestation';
+                    $model_name = 'DocumentationAttestation';
                     break;
                 case 'Bank Account':
                     $model_name = 'BankAccount';
                     break;
-                case 'Broker_Account':
+                case 'Broker Account':
                     $model_name = 'BrokerAccount';
                     break;
                 default:
@@ -43,7 +43,7 @@ class FormSubmissionController extends Controller
             
         });
 
-        // return $forms;
+         //return $forms;
         return view('frontend.profile.partials.my-forms', compact('forms'));
     }
 
@@ -64,13 +64,14 @@ class FormSubmissionController extends Controller
                 case 'Bank Account':
                     $route_name = 'bankAccounts.edit';
                     break;
-                case 'Broker_Account':
+                case 'Broker Account':
                     $route_name = 'brokerAccounts.edit';
                     break;
                 default:
                     $route_name = null;
                     break;
             }
+            
         
             // return $route_name;
 

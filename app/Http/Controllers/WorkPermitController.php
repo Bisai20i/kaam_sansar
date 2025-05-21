@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FormSubmission;
 use App\Models\PassportCountryList;
 use App\Models\PassportProvience;
 use App\Models\WorkPermit;
@@ -269,6 +270,13 @@ class WorkPermitController extends Controller
 
         // 5) Create record
         $permit = WorkPermit::create($data);
+
+        $formSubmission          = new FormSubmission();
+        $formSubmission->title   = 'Work Permit';
+        $formSubmission->form_id = $permit->id;
+        $formSubmission->job_seeker_id = $userId;
+        $formSubmission->save();
+
         Log::info("WorkPermit created: ID {$permit->id}");
 
         // 6) Response
@@ -327,7 +335,7 @@ class WorkPermitController extends Controller
             return redirect()->back()->with('error', 'Failed to delete Work Permit.');
         }
     }
-   public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request, $id)
     {
         $request->validate([
             'status' => 'required|in:pending,In-progress,approved,rejected'

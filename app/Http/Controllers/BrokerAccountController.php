@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\BrokerAccount;
+use App\Models\FormSubmission;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class BrokerAccountController extends Controller
 {
@@ -86,7 +87,7 @@ class BrokerAccountController extends Controller
             'permanentTole' => 'required|string|max:255',
             'permanentStreet' => 'nullable|string|max:255',
             'permanentHouseNo' => 'nullable|string|max:255',
-            
+
             'sameAsPermanent' => 'sometimes|boolean',
             'temporaryCountry' => 'required_if:sameAsPermanent,false|string|max:255',
             'temporaryProvince' => 'required_if:sameAsPermanent,false|string|max:255',
@@ -151,6 +152,12 @@ class BrokerAccountController extends Controller
         $brokerAccount->fill($validated);
         $brokerAccount->save();
 
+        $formSubmission          = new FormSubmission();
+        $formSubmission->title   = 'Broker Account';
+        $formSubmission->form_id = $brokerAccount->id;
+        $formSubmission->job_seeker_id = $userId;
+        $formSubmission->save();
+
         Log::info('Broker account created successfully with ID: ' . $brokerAccount->id);
 
         return $isMobile
@@ -190,28 +197,140 @@ class BrokerAccountController extends Controller
         return $pdf->download('Broker_Application_' . $brokerAccount->id . '.pdf');
     }
 
+    public function edit($id)
+    {
+        $user =  Auth::guard('job_seekers')->user();
+        $brokerAccount = BrokerAccount::find($id);
+        if ($user->id !== $brokerAccount->jobSeekerId) {
+            abort(403, 'Unauthorized action.');
+        }
+        return view('frontend.brokerAccount.create', compact('brokerAccount'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\BrokerAccount  $brokerAccount
      * @return \Illuminate\Http\Response
      */
-    public function edit(BrokerAccount $brokerAccount)
+    public function update(Request $request, $id)
     {
-        //
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+
+        // Get authenticated user
+        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+        if (!$user) {
+            return $isMobile
+                ? $this->responseError('Unauthorized', 401)
+                : redirect()->route('login')->with('error', 'Unauthorized access.');
+        }
+
+        $brokerAccount = BrokerAccount::findOrFail($id);
+        if ($brokerAccount->jobSeekerId !== $user->id) {
+            return $isMobile
+                ? $this->responseError('Forbidden', 403)
+                : redirect()->back()->with('error', 'Unauthorized access to this record.');
+        }
+
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            'boid' => 'required|unique:broker_accounts,boid,' . $brokerAccount->id,
+            'referralCode' => 'nullable|string|max:255',
+            'clientType' => 'required|in:individual,institutional,minor,foreign',
+            'mobileNumber' => 'required|string|max:255',
+            'branchName' => 'required|string|max:255',
+            'panNumber' => 'nullable|string|max:255',
+            'emailAddress' => 'required|email|max:255',
+            'whatsappNumber' => 'nullable|string|max:255',
+            'viberNumber' => 'nullable|string|max:255',
+            'facebookLink' => 'nullable|string|max:255',
+            'bankName' => 'required|string|max:255',
+            'bankBranch' => 'required|string|max:255',
+            'accountType' => 'required|in:saving,current,fixed',
+            'accountNumber' => 'required|string|max:255',
+            'investmentSource' => 'nullable|string|max:255',
+            'companyName' => 'nullable|string|max:255',
+            'jobBusinessYears' => 'nullable|integer',
+            'investmentAmount' => 'nullable|numeric',
+            'tradingKnowledge' => 'nullable|boolean',
+            'permanentCountry' => 'required|string|max:255',
+            'permanentProvince' => 'required|string|max:255',
+            'permanentDistrict' => 'required|string|max:255',
+            'permanentMunicipality' => 'required|string|max:255',
+            'permanentWard' => 'required',
+            'permanentCity' => 'required|string|max:255',
+            'permanentTole' => 'required|string|max:255',
+            'permanentStreet' => 'nullable|string|max:255',
+            'permanentHouseNo' => 'nullable|string|max:255',
+
+            'sameAsPermanent' => 'sometimes|boolean',
+            'temporaryCountry' => 'required_if:sameAsPermanent,false|string|max:255',
+            'temporaryProvince' => 'required_if:sameAsPermanent,false|string|max:255',
+            'temporaryDistrict' => 'required_if:sameAsPermanent,false|string|max:255',
+            'temporaryMunicipality' => 'required_if:sameAsPermanent,false|string|max:255',
+            'temporaryCity' => 'required_if:sameAsPermanent,false|string|max:255',
+            'temporaryWard' => 'required_if:sameAsPermanent,false|string|max:255',
+            'temporaryStreet' => 'nullable|string|max:255',
+            'temporaryState' => 'nullable|string|max:255',
+            'temporaryTole' => 'required_if:sameAsPermanent,false|string|max:255',
+            'temporaryHouseNo' => 'nullable|string|max:255',
+
+            'kycForm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'citizenCertificate' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'birthCertificate' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'visaPassport' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'selfieWithId' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'guardianCitizenship' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'ppSizePhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'tradingAgreement' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'idCard' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return $isMobile
+                ? $this->responseError('Validation failed.', 422, $validator->errors())
+                : redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Handle file uploads
+        $fileUploads = handleMultipleUploads([
+            'kycForm',
+            'citizenCertificate',
+            'birthCertificate',
+            'visaPassport',
+            'selfieWithId',
+            'guardianCitizenship',
+            'ppSizePhoto',
+            'tradingAgreement',
+            'idCard'
+        ], $brokerAccount); // Optional: Pass model for overwriting old files
+
+        $validated = array_merge($validator->validated(), $fileUploads);
+        $validated['jobSeekerId'] = $user->id;
+
+        if ($request->has('sameAsPermanent') && $request->boolean('sameAsPermanent')) {
+            $validated['temporaryCountry'] = $validated['permanentCountry'];
+            $validated['temporaryProvince'] = $validated['permanentProvince'];
+            $validated['temporaryDistrict'] = $validated['permanentDistrict'];
+            $validated['temporaryMunicipality'] = $validated['permanentMunicipality'];
+            $validated['temporaryWard'] = $validated['permanentWard'];
+            $validated['temporaryCity'] = $validated['permanentCity'];
+            $validated['temporaryTole'] = $validated['permanentTole'];
+            $validated['temporaryStreet'] = $validated['permanentStreet'];
+            $validated['temporaryHouseNo'] = $validated['permanentHouseNo'];
+        }
+
+        // Update the record
+        $brokerAccount->fill($validated);
+        $brokerAccount->save();
+
+        Log::info('Broker account updated successfully with ID: ' . $brokerAccount->id);
+
+        return $isMobile
+            ? $this->responseSuccess('Broker account updated successfully.', 200, $brokerAccount)
+            : redirect()->route('jobseeker.forms')->with('success', 'Broker account updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BrokerAccount  $brokerAccount
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, BrokerAccount $brokerAccount)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -225,7 +344,7 @@ class BrokerAccountController extends Controller
 
         return redirect()->back()->with('success', 'Bank account deleted successfully.');
     }
-     public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request, $id)
     {
         $request->validate([
             'status' => 'required|in:pending,In-progress,approved,rejected'

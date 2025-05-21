@@ -11,11 +11,14 @@ use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\BecomeSellerController;
 use App\Http\Controllers\BlogsAndPodcastController;
 use App\Http\Controllers\BrokerAccountController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DiscussionForumController;
 use App\Http\Controllers\DocumentationAttestationController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\ForeignExchangeDetailController;
 use App\Http\Controllers\ForexCalculatorController;
+use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\ForumInteractionController;
 use App\Http\Controllers\FrequentlyAskedQuestionController;
 use App\Http\COntrollers\Frontend\FrontendAPIController;
@@ -54,6 +57,7 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResumeHelpController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\SkillController;
@@ -67,13 +71,12 @@ use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\WorkPermitController;
 use App\Http\Controllers\WorkPermitDistrictController;
 use App\Http\Controllers\WorkPermitLocationController;
-use App\Http\Controllers\FormSubmissionController;
 use App\Models\PollingQuestion;
 use App\Models\WorkPermit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\ForeignExchangeDetailController;
+
 
 // Authentication Routes
 Route::get('master/login', [AdminController::class, 'loginView'])->name('login');
@@ -94,6 +97,9 @@ Route::middleware(['role:admin'])->prefix('adminuser')->group(function () {
 });
 
 Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->group(function () {
+
+    //quize routes
+    Route::resource('questions', QuestionController::class);
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
     // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
@@ -370,21 +376,21 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     //bank account
     Route::get('bankAccounts/create', [BankAccountController::class, 'create'])->name('bankAccounts.create');
     Route::post('bankAccounts', [BankAccountController::class, 'store'])->name('bankAccounts.store');
-    Route::get('bankAccounts/{bankAccount}/edit', [BankAccountController::class, 'edit'])->name('bankAccounts.edit');
-    Route::put('bankAccounts/{bankAccount}', [BankAccountController::class, 'update'])->name('bankAccounts.update');
+    Route::get('bankAccounts/{id}/edit', [BankAccountController::class, 'edit'])->name('bankAccounts.edit');
+    Route::put('bankAccounts/{id}', [BankAccountController::class, 'update'])->name('bankAccounts.update');
 
     // Broker Account
     Route::get('brokerAccounts/create', [BrokerAccountController::class, 'create'])->name('brokerAccounts.create');
     Route::post('brokerAccounts', [BrokerAccountController::class, 'store'])->name('brokerAccounts.store');
-    Route::get('brokerAccounts/{brokerAccount}/edit', [BrokerAccountController::class, 'edit'])->name('brokerAccounts.edit');
-    Route::put('brokerAccounts/{brokerAccount}', [BrokerAccountController::class, 'update'])->name('brokerAccounts.update');
+    Route::get('brokerAccounts/{id}/edit', [BrokerAccountController::class, 'edit'])->name('brokerAccounts.edit');
+    Route::put('brokerAccounts/{id}', [BrokerAccountController::class, 'update'])->name('brokerAccounts.update');
 
 
     //document Attestation
     Route::get('documentAttestations/create', [DocumentationAttestationController::class, 'create'])->name('documentAttestations.create');
     Route::post('documentAttestations', [DocumentationAttestationController::class, 'store'])->name('documentAttestations.store');
-    Route::get('documentAttestations/{documentAttestation}/edit', [DocumentationAttestationController::class, 'edit'])->name('documentAttestations.edit');
-    Route::put('documentAttestations/{documentAttestation}', [DocumentationAttestationController::class, 'update'])->name('documentAttestations.update');
+    Route::get('documentAttestations/{id}/edit',  [DocumentationAttestationController::class, 'edit'])->name('documentAttestations.edit');
+    Route::put('documentAttestations/{id}', [DocumentationAttestationController::class, 'update'])->name('documentAttestations.update');
 
     // work Pemrit
 
@@ -609,4 +615,3 @@ Route::get('/passport/proviences/{id}', [PassportRenewalController::class, 'pass
 Route::get('/passport/districts/{id}', [PassportRenewalController::class, 'passport_districts'])->name('passport.districts');
 Route::get('/passport/locations/{id}', [PassportRenewalController::class, 'passport_locations'])->name('passport.locations');
 Route::get('/passport/times/{id}/{date}', [PassportRenewalController::class, 'passport_times'])->name('passport.times');
-
