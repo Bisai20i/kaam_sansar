@@ -364,7 +364,6 @@
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
             <a href="{{ route('insurance.company') }}" class="menu-link">
-
                 <i class="menu-icon tf-icons bx bx-heart"></i>
                 <div data-i18n="Insurance">Insurance Company</div>
             </a>
