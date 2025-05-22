@@ -74,6 +74,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\JyotishController;
+use App\Http\Controllers\Auth\GoogleController;
 
 
 
@@ -322,7 +323,7 @@ Route::prefix('jobseeker')->group(function () {
     Route::get('/reset-password', [JobSeekerController::class, 'resetPasswordPage'])->name('jobseeker.password_reset_page');
     Route::patch('reset-password', [JobSeekerController::class, 'resetPassword'])->name('jobseeker.password-reset');
     Route::post('/register', [JobSeekerController::class, 'register'])->name('jobseeker.register');
-    Route::post('/login', [JobSeekerController::class, 'login'])->name('jobseeker.login');
+    Route::match(['get', 'post'],'/login', [JobSeekerController::class, 'login'])->name('jobseeker.login');
 });
 
 Route::post('/clear-session-flag', [JobSeekerController::class, 'clearSessionFlag'])->name('clear.session.flag');
@@ -613,3 +614,14 @@ Route::get('/passport/proviences/{id}', [PassportRenewalController::class, 'pass
 Route::get('/passport/districts/{id}', [PassportRenewalController::class, 'passport_districts'])->name('passport.districts');
 Route::get('/passport/locations/{id}', [PassportRenewalController::class, 'passport_locations'])->name('passport.locations');
 Route::get('/passport/times/{id}/{date}', [PassportRenewalController::class, 'passport_times'])->name('passport.times');
+
+Route::middleware(['auth:job_seekers'])->group(function () {
+    Route::get('/quiz', [QuestionController::class, 'quiz'])->name('quiz.frontend');
+    Route::post('/quiz/submit', [QuestionController::class, 'submitQuiz'])->name('quiz.submit');
+    
+    // Change this line to use the controller method, NOT a closure returning the view
+    Route::get('/quiz/thankyou', [QuestionController::class, 'thankYou'])->name('quiz.thankyou');
+});
+
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);

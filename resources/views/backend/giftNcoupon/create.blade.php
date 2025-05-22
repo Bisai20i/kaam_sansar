@@ -145,7 +145,7 @@
                                             class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}"
                                             id="discount" name="discount" placeholder="Enter discount Percentage"
                                             value="{{ old('discount', isset($giftCoupon) ? $giftCoupon->discount : '') }}"
-                                            required min="0" max="100" step="0.01">
+                                            min="0" max="100" step="0.01">
                                         @error('discount')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -232,7 +232,8 @@
                                     <div class="mb-3 col-md-12">
                                         <label for="description" class="form-label">Description</label>
                                         <textarea id="description" name="description"
-                                            class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" placeholder="Enter description">{{ old('description', isset($giftCoupon) ? $giftCoupon->description : '') }}</textarea>
+                                            class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" 
+                                            >{{ old('description', isset($giftCoupon) ? $giftCoupon->description : '') }}</textarea>
                                         @error('description')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

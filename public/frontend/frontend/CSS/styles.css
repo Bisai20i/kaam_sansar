@@ -1562,7 +1562,7 @@ max-width: 900px;
 
 .list-group a {
   font-size: 20px !important;
-  font-weight: 600 !important;
+  font-weight: 600;
 
 }
 
@@ -2768,7 +2768,6 @@ max-width: 900px;
   font-weight: 400;
   display: flex;
   align-items: center;
-  height: 40px;
   max-width: 100%;
   text-decoration: none;
   padding: 0px;
@@ -2778,6 +2777,8 @@ max-width: 900px;
   border: 1px solid #196BA6;
 
 }
+
+
 
 /* Default styles (already defined) */
 .sidebox ul a {
@@ -5857,4 +5858,32 @@ max-width: 900px;
   /* Optional: light background */
   color: #0064A7 !important;
   /* Darker shade on hover */
+}
+
+.upload-box1 {
+  max-height: 160px;
+  max-width: 260px;
+  border: 2px dashed gray;
+  padding: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  color: #0064A7;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  display: flex;
+  text-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  /* Ensures text inside is centered */
+}
+
+
+.upload-box1:hover {
+  border-color: #0064A7;
+  background-color: #f0f8ff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  cursor:pointer;
 }

@@ -136,10 +136,12 @@ class AdvertisementController extends Controller
 
         $jobSeekerId = $user->id;
 
+        // return $request->all();
+
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'adsTitle' => 'required|string|max:255',
-            'adsCategoryId' => 'nullable',
+            'adsCategoryId' => 'nullable|exists:advertisement_categories,id',
             'type' => 'nullable',
             'location' => 'required|string|max:255',
             'country' => 'nullable|string|max:255',
@@ -158,13 +160,13 @@ class AdvertisementController extends Controller
             Log::error('Validation errors: ', $validator->errors()->toArray());
             return $isMobile
             ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-            : redirect()->back()->withErrors($validator->errors())->withInput();
+            : redirect()->back()->with('error', implode(', ', $validator->errors()->all()));
         }
 
         // Handle the ads thumbnail using helper
 
         $adsImg      = handleUpload('adsThumbnail');
-        $adsOwnerImg = handleUpload('adsOwnerImg');
+        // $adsOwnerImg = handleUpload('adsOwnerImg');
 
         // Log the image upload result
         Log::info('Uploaded Image Path:', ['adsThumbnail' => $adsImg]);
@@ -178,13 +180,13 @@ class AdvertisementController extends Controller
         $ads->location       = $request->input('location');
         $ads->country        = $request->input('country');
         $ads->adsDescription = $request->input('adsDescription');
-        $ads->adsOwner = $request->input('adsOwner');
+        // $ads->adsOwner = $request->input('adsOwner');
         $ads->adsThumbnail = $adsImg;
-        $ads->adsOwnerImg = $adsOwnerImg;
+        // $ads->adsOwnerImg = $adsOwnerImg;
         $ads->pricing = $request->input('pricing');
         $ads->contactNumber = $request->input('contactNumber');
         // Automatically set postedDuration based on created_at
-        $ads->created_at = Carbon::now();
+        // $ads->created_at = Carbon::now();
         $ads->postedDuration = Carbon::now()->diffInDays($ads->created_at) . ' Days';
         Log::info('Advertisement Updated:', $ads->toArray());
 

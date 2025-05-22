@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mt-4 py-5">
         <div class="card-basic border">
-            <h5 class="text-start m-2">Your Profile</h5>
+            <h5 class="text-start m-2 px-2 py-1 fs-4">Your Profile</h5>
         </div>
         <style>
             /* Profile */
@@ -13,41 +13,66 @@
                 color: #0064A7 !important;
                 font-weight: 500;
             }
+
+            .list-group-item-action {
+                font-weight: normal !important;
+                color: #A6A6A6;
+            }
+
+            .list-group-item-action:hover {
+
+                color: #0064A7;
+            }
+
+            .list-group-my-document a:hover {
+                color: #0064A7;
+                background-color: #fff;
+            }
+
+            .active-profile {
+                color: #0064A7;
+                font-weight: 500;
+                background-color: #f8f9fa;
+            }
+
+            .active-profile:hover {
+                color: #0064A7 !important;
+            }
         </style>
         <div class="row g-0">
             <!-- Sidebar -->
             <div class="col-md-3">
                 <div class="list-group">
                     <a href="{{ route('jobseeker.getProfile', ['user_id' => auth()->id()]) }}" data-section="basicInfo"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getProfile') ? 'active-profile' : '' }}">Basic
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.getProfile') ? 'active-profile' : '' }}">Basic
                         Information</a>
                     <a href="{{ route('jobseeker.getCV', ['user_id' => auth()->id()]) }}" data-section="yourCV"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getCV') ? 'active-profile' : '' }}">Your
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.getCV') ? 'active-profile' : '' }}">Your
                         CV</a>
                     <a href="{{ route('jobseeker.getPurchaseHistory', ['user_id' => auth()->id()]) }}"
                         data-section="purchaseHistory"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getPurchaseHistory') ? 'active-profile' : '' }}">Purchase
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.getPurchaseHistory') ? 'active-profile' : '' }}">Purchase
                         History</a>
                     <a href="{{ route('jobseeker.editProfile', ['user_id' => auth()->id()]) }}" data-section="editProfile"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.editProfile') ? 'active-profile' : '' }}">Edit
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.editProfile') ? 'active-profile' : '' }}">Edit
                         Profile</a>
                     <a href="{{ route('jobseeker.myjobs', ['user_id' => auth()->id()]) }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.myjobs') ? 'active-profile' : '' }}">My
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.myjobs') ? 'active-profile' : '' }}">My
                         Jobs</a>
                     <a href="{{ route('jobseeker.getAdvertisements', ['user_id' => auth()->id()]) }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAdvertisements') ? 'active-profile' : '' }}">My
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.getAdvertisements') ? 'active-profile' : '' }}">My
                         Advertisement</a>
                     <a href="{{ route('jobseeker.getAbroadDeals') }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAbroadDeals') ? 'active-profile' : '' }}">My
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.getAbroadDeals') ? 'active-profile' : '' }}">My
                         Abroad Deals</a>
                     <a href="{{ route('jobseeker.myblogs') }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.myblogs') ? 'active-profile' : '' }}">My
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.myblogs') ? 'active-profile' : '' }}">My
                         Podcast</a>
                     <a href="{{ route('jobseeker.mynews') }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.mynews') ? 'active-profile' : '' }}">My
-                         News and Articles</a>
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.mynews') ? 'active-profile' : '' }}">My
+                        News and Articles</a>
                     <a href="{{ route('jobseeker.forms') }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.forms') ? 'active-profile' : '' }}">My
+                        class="list-group-item list-group-item-action profile-link px-3 py-2 rounded-0 mb-0 {{ request()->routeIs('jobseeker.forms') ? 'active-profile' : '' }}">My
                         Form Submissions</a>
                 </div>
             </div>

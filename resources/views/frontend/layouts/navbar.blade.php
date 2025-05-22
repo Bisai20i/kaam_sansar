@@ -92,14 +92,14 @@
 
                 {{-- <!-- Games Dropdown {{ request()->routeIs('spinn') || request()->routeIs('exit-poll') || request()->routeIs('quiz') ? 'active-navLink' : '' }} --> --}}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('polls*') || request()->routeIs('quiz') ? 'active-navLink' : '' }}" href="#" id="gamesDropdown" role="button"
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('polls*') || request()->routeIs('quiz*') ? 'active-navLink' : '' }}" href="#" id="gamesDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Games
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="gamesDropdown">
-                        <li><a class="dropdown-item" href="spinn.html">Spinning Wheel</a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('quiz*') ? 'active-dropdown-item' : '' }}" href="{{ route('quiz.frontend') }}">Quiz</a></li>
                         <li><a class="dropdown-item {{ request()->routeIs('polls*') ? 'active-dropdown-item' : '' }}" href="{{ route('polls.create') }}">Exist Poll</a></li>
-                        <li><a class="dropdown-item" href="quiz.html">Quiz</a></li>
+                        <li><a class="dropdown-item" href="#">Spinning Wheel</a></li>
 
                     </ul>
                 </li>
@@ -200,8 +200,7 @@
                     <!-- Show Profile Button for Authenticated Users with Verified OTP -->
                     <button id="main-profile" class="profile-button" data-bs-toggle="modal"
                         data-bs-target="#profileModal">
-                        <img
-                            src="{{ Auth::guard('job_seekers')->user()->userThumbnail
+                        <img src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                                 ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
                                 : asset('frontend/assets/Images/profile.jpg') }}">
                     </button>
@@ -724,7 +723,7 @@
             <!-- Close Button Fixed to Top Right -->
             <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
                 aria-label="Close"></button>
-            <div class="modal-body icon">
+            <div class="modal-body">
                 <div class="text-center">
 
                     <img src="{{ @Auth::guard('job_seekers')->user()->userThumbnail
@@ -738,13 +737,16 @@
                             <i class="fa fa-pen p-1"></i>
                         </a>
                     </h5>
-                    <p class="text-muted"><i class="fas fa-award"></i> Reward Points <a
-                            href="{{ route('profile.documents', ['document_type' => 'passport']) }}"><i
-                                class="fa-solid fa-folder ms-2" style="cursor:pointer;"></i></a><br>272.38</p>
+                    <p class="text-muted"><i class="fas fa-award"></i> Reward Points <br>272.38</p>
                 </div>
                 <ul class="list-unstyled text-start">
                     <li><a href="{{ route('jobseeker.getProfile', @Auth::guard('job_seekers')->user()->id) }}"
                             class="d-block"><i class="fas fa-user p-1"></i> Profile</a>
+                    </li>
+                    <hr>
+                    <li>
+                        <a href="{{ route('profile.documents', ['document_type' => 'passport']) }}"><i
+                                class="fa-solid fa-folder ms-2" style="cursor:pointer;"></i> My Documents</a>
                     </li>
                     <hr>
                     <li><a href="{{ route('jobseeker.inbox', @Auth::guard('job_seekers')->user()->id) }}"
@@ -756,7 +758,7 @@
                                 class="fas fa-lock p-1"></i> Change
                             password</a></li>
                     <hr>
-                    <li><a href="#" class="d-block"><i class="fas fa-share-alt p-1"></i>
+                    <li><a href="#" class="d-block text-decoration-none"><i class="fas fa-share-alt p-1 text-decoration-none"></i>
                             Share</a></li>
                     <hr>
                     <li>
@@ -914,18 +916,18 @@
                             data-bs-toggle="modal" data-bs-target="#registerModal">Create an account</a></p>
                 </div>
                 <p class="text-center mt-3">or register with</p>
-                <div class="d-flex gap-2 justify-content-center" id="social-login">
-                    <button type="button" class="btn-outline-secondary w-100">
+                <form class="d-flex gap-2 justify-content-center" id="social-login" action="{{ route('auth.google') }}" >
+                    
+                    <button type="submit" class="btn-outline-secondary w-100 d-flex align-items-center justify-content-center">
                         <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo"
                             style="width: 20px;"> Google
                     </button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Register Modal -->
 <!-- Register Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true"
     data-bs-backdrop="static" data-bs-keyboard="false">
@@ -1130,13 +1132,13 @@
                     <div style="color: #A6A6A6; padding: 0 10px;">or continue with</div>
                     <hr style="flex: 1; color: #A6A6A6;">
                 </div>
-                <div class="d-flex gap-2 justify-content-center">
-                    <button type="button" class=" btn-outline-secondary w-100">
-                        <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo">
+                <form action="{{ route('auth.google') }}" class="d-flex gap-2 justify-content-center">
+                    <button type="submit" class=" btn-outline-secondary w-100 d-flex align-items-center justify-content-center">
+                        <img class="img-fluid shadow-sm" src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo">
                         Google
                     </button>
 
-                </div>
+                </form>
             </div>
         </div>
     </div>

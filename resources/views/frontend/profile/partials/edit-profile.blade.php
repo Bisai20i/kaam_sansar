@@ -38,31 +38,31 @@
                 <img src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                     ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
                     : asset('frontend/assets/Images/profile.jpg') }}"
-                    class="rounded-circle border border-4 border-primary-subtle my-3 mx-1" id="primary-photo" onclick="document.getElementById('primaryProfileImageBtn').click()" style="cursor: pointer;">
+                    class="rounded-circle my-3 mx-1" id="primary-photo" onclick="document.getElementById('primaryProfileImageBtn').click()" style="cursor: pointer; border:5px solid #0064A7">
                     <button type="button" id="primaryProfileImageBtn" class="toggleModalButton btn rounded rounded-circle bg-primary-subtle d-none"
-                            style="cursor: pointer; z-index: 99; left:0;" data-delete-route="{{route('jobseeker.deleteImage',['index'=>0])}}"
-                            data-bs-toggle="modal" data-bs-target="#photoActionModal" data-setProfile-route="{{route('jobseeker.setProfile',['index'=>0])}}">
+                        style="cursor: pointer; z-index: 99; left:0;" data-delete-route="{{route('jobseeker.deleteImage',['index'=>0])}}"
+                        data-bs-toggle="modal" data-bs-target="#photoActionModal" data-setProfile-route="{{route('jobseeker.setProfile',['index'=>0])}}">
+                    </button>
+                @if (Auth::guard('job_seekers')->user()->userThumbnail && count(Auth::guard('job_seekers')->user()->userThumbnail) > 1)
 
-                        </button>
-                @if (Auth::guard('job_seekers')->user()->userThumbnail)
 
-
-                @if (count(Auth::guard('job_seekers')->user()->userThumbnail) > 1)
                     @for ($i = 1; $i < count(Auth::guard('job_seekers')->user()->userThumbnail); $i++)
 
                     <div class="position-relative">
                         <img src="{{ asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[$i]) }}"
-                            class="rounded-circle my-3 mx-1">
-                        <button type="button" class="toggleModalButton btn rounded rounded-circle bg-primary-subtle position-absolute"
-                            style="cursor: pointer; z-index: 99; left:0;" data-delete-route="{{route('jobseeker.deleteImage',['index'=>$i])}}"
-                            data-bs-toggle="modal" data-bs-target="#photoActionModal" data-setProfile-route="{{route('jobseeker.setProfile',['index'=>$i])}}">
-                            <i class="fa-solid fa-bars"></i>
-                        </button>
+                            data-delete-route="{{route('jobseeker.deleteImage',['index'=>$i])}}"
+                            data-bs-toggle="modal" data-bs-target="#photoActionModal" 
+                            data-setProfile-route="{{route('jobseeker.setProfile',['index'=>$i])}}"
+                            class="toggleModalButton rounded-circle my-3 mx-1" style="cursor: pointer;">
+                            {{-- <button type="button" class="toggleModalButton btn rounded rounded-circle text-white position-absolute"
+                                style="cursor: pointer; z-index: 99; left:0; background: #0064A7;" 
+                                >
+                                <i class="fa-solid fa-bars"></i>
+                            </button> --}}
                     </div>
 
                     @endfor
 
-                @endif
 
                 @endif
 
