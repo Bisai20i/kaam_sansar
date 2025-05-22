@@ -29,19 +29,7 @@ return new class extends Migration
             $table->string('firstName');
             $table->string('middleName')->nullable();
             $table->string('lastName');
-            $table->string('phoneNo', 20);
-            $table->string('email', 100);
-            $table->string('emergencyContactPhone', 20);
-            $table->string('emergencyContactEmail', 100);
-
-            // Document references
-            $table->string('citizenshipFront');
-            $table->string('citizenshipBack');
-            $table->string('previousPassport');
-            $table->text('otherDocument')->nullable();
-
-            // Personal information
-            $table->text('dateOfBirthAd')->nullable();
+            $table->date('dateOfBirthAd')->nullable();
             $table->text('dateOfBirthBs')->nullable();
             $table->text('birthplace')->nullable();
             $table->text('gender')->nullable();
@@ -62,14 +50,20 @@ return new class extends Migration
             $table->text('accountType')->nullable();
             $table->text('bankBranch')->nullable();
             $table->text('bankNo')->nullable();
+
+            //Citizenship Information
             $table->text('nationalIdentityNo')->nullable();
             $table->text('citizenshipNumber')->nullable();
-            $table->text('dateOfIssue')->nullable();
+            $table->date('dateOfIssue')->nullable();
             $table->text('placeOfIssueDistrict')->nullable();
             $table->text('placeOfIssueAbroad')->nullable();
+            
+            //company Info
             $table->text('country')->nullable();
             $table->text('companyName')->nullable();
             $table->text('currency')->nullable();
+
+            //Facility Details
             $table->text('skill')->nullable();
             $table->text('salary')->nullable();
             $table->text('workType')->nullable();
@@ -79,10 +73,14 @@ return new class extends Migration
             $table->text('weeklyWorkDay')->nullable();
             $table->text('overTime')->nullable();
             $table->text('otherAllowance')->nullable();
+
+            //  Other facilities
             $table->text('transportation')->nullable();
             $table->text('healthInsurance')->nullable();
+
+            // VisaInfo
             $table->text('visaNo')->nullable();
-            $table->text('citizenshipDateOfIssue')->nullable();
+            $table->date('citizenshipDateOfIssue')->nullable();
             $table->text('citizenshipPlaceOfIssueDistrict')->nullable();
             $table->text('citizenshipPlaceOfIssueAbroad')->nullable();
 
@@ -100,14 +98,22 @@ return new class extends Migration
             // Passport details
             $table->text('passportNumber')->nullable();
             $table->text('passportType')->nullable();
-            $table->text('issueDate')->nullable();
-            $table->text('expiryDate')->nullable();
+            $table->date('issueDate')->nullable();
+            $table->date('expiryDate')->nullable();
             $table->text('placeOfIssue')->nullable();
             $table->text('issuingAuthority')->nullable();
 
+            //contact Information
+            $table->text('contCountry');
+            $table->text('state');
+            $table->text('contdistrict');
+            $table->text('contCity')->nullable();
+            $table->string('phoneNo', 20);
+            $table->string('email', 100);
+
+
             // Address details
             $table->text('contactCountry')->nullable();
-            $table->text('stateProvince')->nullable();
             $table->text('district')->nullable();
             $table->text('city')->nullable();
             $table->text('province')->nullable();
@@ -116,9 +122,9 @@ return new class extends Migration
             $table->text('tole')->nullable();
             $table->text('street')->nullable();
             $table->text('houseNo')->nullable();
-            $table->boolean('sameAsPermanent')->nullable();
 
             // Temporary address
+            $table->boolean('sameAsPermanent')->nullable();
             $table->text('tempCountry')->nullable();
             $table->text('tempProvince')->nullable();
             $table->text('tempDistrict')->nullable();
@@ -136,9 +142,12 @@ return new class extends Migration
             $table->text('emergencyContactStateProvince')->nullable();
             $table->text('emergencyContactDistrict')->nullable();
             $table->text('emergencyContactCity')->nullable();
-            $table->string('passportPhoto')->nullable();
+            $table->string('emergencyContactPhone', 20);
+            $table->string('emergencyContactEmail', 100);
+
+            $table->string('passportPhoto');
+            $table->string('visaPhoto');
             $table->string('bankAccountPhoto')->nullable();
-            $table->string('visaPhoto')->nullable();
             $table->string('chequePhoto')->nullable();
             $table->string('agreementPhoto')->nullable();
             $table->string('arrivalStampPhoto')->nullable();

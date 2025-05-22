@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('provience_id')->constrained('passport_proviences')->onDelete('cascade');
             $table->string('districtName');
+            $table->timestamps();
         });
     }
 

@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Passport Renewal')
+@section('title', 'work Permit')
 
 @section('content')
 
@@ -269,15 +269,34 @@
                         <label for="emergencyContactPhone" class="form-label fs-6 required">Emergency Contact
                             Phone</label>
                         <br>
-
                         <input type="text" class="form-control" name="emergencyContactPhone" id="emergencyContactPhone" required>
                     </div>
                     <div class="col">
                         <label for="emergencyContactEmail" class="form-label fs-6 required">Emergency Contact
                             Email</label>
                         <br>
-
                         <input type="email" class="form-control" name="emergencyContactEmail" id="emergencyContactEmail" required>
+                    </div>
+                    <div class="col">
+                        <label for="contCountry" class="form-label fs-6 required"> Contact Country
+                        </label>
+                        <br>
+                        <input type="text" class="form-control" name="contCountry" id="contCountry" required>
+                    </div>
+                    <div class="col">
+                        <label for="state" class="form-label fs-6 required">State/Provience</label>
+                        <br>
+                        <input type="text" class="form-control" name="state" id="state" required>
+                    </div>
+                    <div class="col">
+                        <label for="contdistrict" class="form-label fs-6 required">District</label>
+                        <br>
+                        <input type="text" class="form-control" name="contdistrict" id="contdistrict" required>
+                    </div>
+                    <div class="col">
+                        <label for="contCity" class="form-label fs-6 required">City</label>
+                        <br>
+                        <input type="text" class="form-control" name="contCity" id="contCity" required>
                     </div>
                     <br>
 
@@ -288,44 +307,29 @@
                 </h4>
                 <div class="row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3 gx-3">
                     <div class="col">
-                        <label for="citizenshipFront" class="form-label fs-6 required">Citizenship
-                            Front:</label>
+                        <label for="passportPhoto" class="form-label fs-6 required">Passport Photo:</label>
                         <br>
-
-                        <input type="file" class="form-control" id="citizenshipFront" name="citizenshipFront"
+                        <input type="file" class="form-control" id="passportPhoto" name="passportPhoto"
                             accept=".jpg,.jpeg,.png,.pdf" required accept=".jpg,.jpeg,.png,.pdf"
                             onchange="handleImagePreview(this)">
                         <img src="#" alt="preview Image" class="img img-fluid my-2 d-none">
                     </div>
 
                     <div class="col">
-                        <label for="citizenshipBack" class="form-label fs-6 required">Citizenship
-                            Back:</label>
+                        <label for="visaPhoto" class="form-label fs-6 required">Visa Photo</label>
                         <br>
 
-                        <input type="file" class="form-control" id="citizenshipBack" name="citizenshipBack"
+                        <input type="file" class="form-control" id="visaPhoto" name="visaPhoto"
                             required accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                         <img src="#" alt="preview Image" class="img img-fluid my-2 d-none">
                     </div>
-
                     <div class="col">
-                        <label for="previousPassport" class="form-label fs-6 required">Previous
-                            Passport:</label>
-                        <br>
-
-                        <input type="file" class="form-control" id="previousPassport" name="previousPassport"
-                            accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)" required>
-                        <img src="#" alt="preview Image" class="img img-fluid my-2 d-none">
-                    </div>
-
-                    <div class="col">
-                        <label for="otherDocument" class="form-label fs-6">Any
+                        <label for="otherDocumentsPhoto" class="form-label fs-6">Any
                             Other
                             Supporting
                             Document:</label>
                         <br>
-
-                        <input type="file" class="form-control" id="otherDocument" name="otherDocument"
+                        <input type="file" class="form-control" id="otherDocumentsPhoto" name="otherDocumentsPhoto"
                             accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
 
                         <img src="#" alt="preview Image" class="img img-fluid my-2 d-none">
@@ -360,8 +364,7 @@
                             <span class="required"></span> I agree to the Terms and Conditions
                             and Privacy Policy of
                             Kamsansar's
-                            passport
-                            renewal service.
+                            work permit service.
                         </label>
                     </div>
                     <div class="required-fields-message">* - Required fields - Please fill all
@@ -375,7 +378,7 @@
                     <div class="d-block">
                         <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0"
                             style="background-color: #0064a7;" type="submit" id="form3NextBtn"
-                            disabled>Renew</button>
+                            disabled>Renew Work Permit</button>
                     </div>
                 </div>
             </div>
@@ -401,16 +404,6 @@
 
 
 @push('scripts')
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/rome.js"></script>
-
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/main.js"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
-    integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
-    data-cf-beacon='{"rayId":"91b7e635cdf99888","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.1.0","token":"cd0b4b3a733644fc843ef0b185f98241"}'
-    crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
 <script>
     // Function to handle form navigation
     function goToForm(currentFormId, nextFormId) {
