@@ -12,15 +12,12 @@ use App\Http\Controllers\BecomeSellerController;
 use App\Http\Controllers\BlogsAndPodcastController;
 use App\Http\Controllers\BrokerAccountController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DiscussionForumController;
 use App\Http\Controllers\DocumentationAttestationController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\ForeignExchangeDetailController;
-use App\Http\Controllers\ForeignExchangeDetailController;
 use App\Http\Controllers\ForexCalculatorController;
-use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\ForumInteractionController;
 use App\Http\Controllers\FrequentlyAskedQuestionController;
@@ -59,7 +56,6 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResumeHelpController;
 use App\Http\Controllers\RewardController;
@@ -382,8 +378,8 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     //bank account
     Route::get('bankAccounts/create', [BankAccountController::class, 'create'])->name('bankAccounts.create');
     Route::post('bankAccounts', [BankAccountController::class, 'store'])->name('bankAccounts.store');
-    Route::get('bankAccounts/{id}/edit', [BankAccountController::class, 'edit'])->name('bankAccounts.edit');
-    Route::put('bankAccounts/{id}', [BankAccountController::class, 'update'])->name('bankAccounts.update');
+    Route::get('bankAccounts/{bankAccount}/edit', [BankAccountController::class, 'edit'])->name('bankAccounts.edit');
+    Route::put('bankAccounts/{bankAccount}', [BankAccountController::class, 'update'])->name('bankAccounts.update');
 
     // Broker Account
     Route::get('brokerAccounts/create', [BrokerAccountController::class, 'create'])->name('brokerAccounts.create');
@@ -394,15 +390,15 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     //document Attestation
     Route::get('documentAttestations/create', [DocumentationAttestationController::class, 'create'])->name('documentAttestations.create');
     Route::post('documentAttestations', [DocumentationAttestationController::class, 'store'])->name('documentAttestations.store');
-    Route::get('documentAttestations/{id}/edit',  [DocumentationAttestationController::class, 'edit'])->name('documentAttestations.edit');
-    Route::put('documentAttestations/{id}', [DocumentationAttestationController::class, 'update'])->name('documentAttestations.update');
+    Route::get('documentAttestations/{documentAttestation}/edit', [DocumentationAttestationController::class, 'edit'])->name('documentAttestations.edit');
+    Route::put('documentAttestations/{documentAttestation}', [DocumentationAttestationController::class, 'update'])->name('documentAttestations.update');
 
     // work Pemrit
 
     Route::get('workPermits/create', [WorkPermitController::class, 'create'])->name('workPermits.create');
     Route::post('workPermits', [WorkPermitController::class, 'store'])->name('workPermits.store');
-    Route::get('workPermits/{id}/edit', [WorkPermitController::class, 'edit'])->name('workPermits.edit');
-    Route::put('workPermits/{id}', [WorkPermitController::class, 'update'])->name('workPermits.update');
+    Route::get('workPermits/{workPermit}/edit', [WorkPermitController::class, 'edit'])->name('workPermits.edit');
+    Route::put('workPermits/{workPermit}', [WorkPermitController::class, 'update'])->name('workPermits.update');
 
     //polls
     Route::resource('polls', PollController::class)
