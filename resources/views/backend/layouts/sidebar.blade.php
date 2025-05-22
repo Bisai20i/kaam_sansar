@@ -96,7 +96,7 @@
 
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-menu-alt-right"></i>
-                <div data-i18n="Additional Management">Activity List</div>
+                <div data-i18n="Additional Management">Form List</div>
             </a>
 
             <ul class="menu-sub">
@@ -128,22 +128,9 @@
                     </a>
                 </li>
 
-                <!-- Forex -->
-                <li class="menu-item {{ request()->routeIs('forex*') ? 'active' : '' }}">
-                    <a href="{{ route('forex.index') }}" class="menu-link">
-                        <div data-i18n="Forex">Manage Forex Exchanges</div>
-                    </a>
-                </li>
 
-                <!-- Discussion Forum -->
-                <li class="menu-item {{ request()->routeIs('forum-posts*') ? 'active' : '' }}">
-                    <a href="{{ route('forum.index') }}" class="menu-link">
-                        <div data-i18n="Discussion Forum">Discussion Forum</div>
-                    </a>
-                </li>
             </ul>
         </li>
-
         <!-- Aboard Deals -->
         <li
             class="menu-item {{ request()->routeIs('aboards*') || request()->routeIs('productcategory*') ? 'open' : '' }}">
@@ -249,47 +236,6 @@
                 </li>
             </ul>
         </li>
-
-        <li class="menu-item {{ request()->routeIs('forum-posts*') ? 'active' : '' }}">
-            <a href="{{ route('forum.index') }}" class="menu-link">
-                <i class='menu-icon tf-icons bx bx-conversation'></i>
-                <div data-i18n="Ads Manager">Discussion Forum</div>
-            </a>
-        </li>
-
-
-
-        <!-- Reward -->
-        <li class="menu-item">
-            <a href="{{ route('rewards.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-gift"></i> {{-- You can change the icon --}}
-                <div data-i18n="Rewards">Rewards</div>
-            </a>
-        </li>
-
-
-        <!--becomeSeller -->
-        <li class="menu-item">
-            <a href="{{ route('superadmin.becomeseller.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user-plus"></i> {{-- Arrow-like icon --}}
-                <div data-i18n="Become Seller">Become Seller</div>
-            </a>
-        </li>
-
-
-        <!----quiz---->
-        <li class="menu-item">
-            <a href="{{ route('questions.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-question-mark"></i> {{-- Arrow-like icon --}}
-                <div data-i18n="Quiz">Quiz</div>
-            </a>
-        </li>
-
-
-
-
-
-
         <!-- Manage Insurance-->
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
@@ -308,14 +254,7 @@
             </a>
         </li>
 
-        <!-- Manage Forex Exchanges -->
-        <li class="menu-item {{ request()->routeIs('forex*') ? 'active' : '' }}">
-            <a href="{{ route('forex.index') }}" class="menu-link">
 
-                <i class="menu-icon tf-icons bx bx-money"></i>
-                <div data-i18n="Manage Forex Exchanges">Manage Forex Exchanges</div>
-            </a>
-        </li>
 
         <!-- Manage Workk Pemrit -->
         <li
@@ -380,13 +319,6 @@
             </a>
 
             <ul class="menu-sub">
-                <!-- Rewards -->
-                <li class="menu-item {{ request()->routeIs('rewards*') ? 'active' : '' }}">
-                    <a href="{{ route('rewards.index') }}" class="menu-link">
-                        <div data-i18n="Rewards">Manage Rewards</div>
-                    </a>
-                </li>
-
                 <!-- FAQs -->
                 <li class="menu-item {{ request()->routeIs('faqs*') ? 'active' : '' }}">
                     <a href="{{ route('faqs.index') }}" class="menu-link">
@@ -400,9 +332,33 @@
                         <div data-i18n="Blogs and Podcasts">Manage Blogs and Podcasts</div>
                     </a>
                 </li>
+
+                <!-- Reward -->
+                <li class="menu-item">
+                    <a href="{{ route('rewards.index') }}" class="menu-link">
+                        <div data-i18n="Rewards">Rewards</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('forum-posts*') ? 'active' : '' }}">
+                    <a href="{{ route('forum.index') }}" class="menu-link">
+                        <div data-i18n="Ads Manager">Discussion Forum</div>
+                    </a>
+                </li>
+                <!----quiz---->
+                <li class="menu-item" {{ request()->routeIs('questions*') ? 'active' : '' }}>
+                    <a href="{{ route('questions.index') }}" class="menu-link">
+                        <div data-i18n="Quiz">Quiz</div>
+                    </a>
+                </li>
             </ul>
         </li>
-
+            <!-- Forex -->
+        <li class="menu-item {{ request()->routeIs('forex*') ? 'active' : '' }}">
+            <a href="{{ route('forex.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-money"></i>
+                <div data-i18n="Forex">Manage Forex Exchanges</div>
+            </a>
+        </li>
 
         <!-- Manage Insurance-->
 

@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('mobileNumber');
             $table->string('phoneNumber')->nullable();
             $table->string('email')->nullable();
-            $table->date('nepaliDob');
+            $table->text('nepaliDob');
             $table->date('englishDob')->nullable();
             $table->string('applyFromCountry')->nullable();
             $table->string('contactMedium')->nullable();

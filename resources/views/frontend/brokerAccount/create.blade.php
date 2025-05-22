@@ -9,8 +9,13 @@
 </section>
 <style>
     .broker img.img {
-        max-width: 260px;
+        max-width: 200px;
         max-height: 250px;
+    }
+
+    .form-control::placeholder {
+        color: #6c757d;
+        opacity: 0.7;
     }
 </style>
 <section class="prform mt-4">
@@ -50,7 +55,7 @@
                                         <div class="col">
                                             <label for="boid" class="form-label fs-6">
                                                 BOID: <span class="text-danger fw-bold">*</span></label>
-                                            <input type="text" class="form-control form-control-da fs-6" id="boid" name="boid" required maxlength="255" value="{{ $brokerAccount->boid ?? old('boid') }}">
+                                            <input type="text" class="form-control form-control-da fs-6" id="boid" name="boid" required maxlength="255" value="{{ $brokerAccount->boid ?? old('boid') }}" placeholder="Enter your 16-digit BOID number">
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +66,7 @@
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                     <div class="col">
                                         <label for="referralCode" class="form-label fs-6">Referral Code:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="referralCode" name="referralCode" maxlength="255" value="{{ $brokerAccount->referralCode ?? old('referralCode') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="referralCode" name="referralCode" maxlength="255" value="{{ $brokerAccount->referralCode ?? old('referralCode') }}" placeholder="Enter referral code if any">
                                     </div>
                                     <div class="col">
                                         <label for="clientType" class="form-label fs-6">Client Type <span class="text-danger fw-bold">*</span>:</label>
@@ -75,31 +80,31 @@
                                     </div>
                                     <div class="col">
                                         <label for="mobileNumber" class="form-label fs-6">Mobile Number <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="mobileNumber" name="mobileNumber" required maxlength="255" value="{{ $brokerAccount->mobileNumber ?? old('mobileNumber') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="mobileNumber" name="mobileNumber" required maxlength="255" value="{{ $brokerAccount->mobileNumber ?? old('mobileNumber') }}" placeholder="Enter your mobile number">
                                     </div>
                                     <div class="col">
                                         <label for="branchName" class="form-label fs-6">Branch Name <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="branchName" name="branchName" required maxlength="255" value="{{ $brokerAccount->branchName ?? old('branchName') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="branchName" name="branchName" required maxlength="255" value="{{ $brokerAccount->branchName ?? old('branchName') }}" placeholder="Enter branch name">
                                     </div>
                                     <div class="col">
                                         <label for="panNumber" class="form-label fs-6">PAN Number:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="panNumber" name="panNumber" maxlength="255" value="{{ $brokerAccount->panNumber ?? old('panNumber') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="panNumber" name="panNumber" maxlength="255" value="{{ $brokerAccount->panNumber ?? old('panNumber') }}" placeholder="Enter PAN number if available">
                                     </div>
                                     <div class="col">
                                         <label for="emailAddress" class="form-label fs-6">Email Address <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="email" class="form-control form-control-da fs-6" id="emailAddress" name="emailAddress" required maxlength="255" value="{{ $brokerAccount->emailAddress ?? old('emailAddress') }}">
+                                        <input type="email" class="form-control form-control-da fs-6" id="emailAddress" name="emailAddress" required maxlength="255" value="{{ $brokerAccount->emailAddress ?? old('emailAddress') }}" placeholder="Enter your email address">
                                     </div>
                                     <div class="col">
                                         <label for="whatsappNumber" class="form-label fs-6">WhatsApp Number:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="whatsappNumber" name="whatsappNumber" maxlength="255" value="{{ $brokerAccount->whatsappNumber ?? old('whatsappNumber') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="whatsappNumber" name="whatsappNumber" maxlength="255" value="{{ $brokerAccount->whatsappNumber ?? old('whatsappNumber') }}" placeholder="Enter WhatsApp number if different">
                                     </div>
                                     <div class="col">
                                         <label for="viberNumber" class="form-label fs-6">Viber Number:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="viberNumber" name="viberNumber" maxlength="255" value="{{ $brokerAccount->viberNumber ?? old('viberNumber') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="viberNumber" name="viberNumber" maxlength="255" value="{{ $brokerAccount->viberNumber ?? old('viberNumber') }}" placeholder="Enter Viber number if available">
                                     </div>
                                     <div class="col">
                                         <label for="facebookLink" class="form-label fs-6">Facebook Link:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="facebookLink" name="facebookLink" maxlength="255" value="{{ $brokerAccount->facebookLink ?? old('facebookLink') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="facebookLink" name="facebookLink" maxlength="255" value="{{ $brokerAccount->facebookLink ?? old('facebookLink') }}" placeholder="Enter Facebook profile link">
                                     </div>
                                 </div>
                             </div>
@@ -112,11 +117,11 @@
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                     <div class="col">
                                         <label for="bankName" class="form-label fs-6">Bank Name <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="bankName" name="bankName" required maxlength="255" value="{{ $brokerAccount->bankName ?? old('bankName') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="bankName" name="bankName" required maxlength="255" value="{{ $brokerAccount->bankName ?? old('bankName') }}" placeholder="Enter your bank name">
                                     </div>
                                     <div class="col">
                                         <label for="bankBranch" class="form-label fs-6">Bank Branch <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="bankBranch" name="bankBranch" required maxlength="255" value="{{ $brokerAccount->bankBranch ?? old('bankBranch') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="bankBranch" name="bankBranch" required maxlength="255" value="{{ $brokerAccount->bankBranch ?? old('bankBranch') }}" placeholder="Enter bank branch">
                                     </div>
                                     <div class="col">
                                         <label for="accountType" class="form-label fs-6">Account Type <span class="text-danger fw-bold">*</span>:</label>
@@ -129,7 +134,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="accountNumber" class="form-label fs-6">Account Number <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="accountNumber" name="accountNumber" required maxlength="255" value="{{ $brokerAccount->accountNumber ?? old('accountNumber') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="accountNumber" name="accountNumber" required maxlength="255" value="{{ $brokerAccount->accountNumber ?? old('accountNumber') }}" placeholder="Enter your bank account number">
                                     </div>
                                 </div>
                             </div>
@@ -142,19 +147,19 @@
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                     <div class="col">
                                         <label for="investmentSource" class="form-label fs-6">Investment Source:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="investmentSource" name="investmentSource" maxlength="255" value="{{ $brokerAccount->investmentSource ?? old('investmentSource') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="investmentSource" name="investmentSource" maxlength="255" value="{{ $brokerAccount->investmentSource ?? old('investmentSource') }}" placeholder="Enter source of investment funds">
                                     </div>
                                     <div class="col">
                                         <label for="companyName" class="form-label fs-6">Company Name:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="companyName" name="companyName" maxlength="255" value="{{ $brokerAccount->companyName ?? old('companyName') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="companyName" name="companyName" maxlength="255" value="{{ $brokerAccount->companyName ?? old('companyName') }}" placeholder="Enter company name if applicable">
                                     </div>
                                     <div class="col">
                                         <label for="jobBusinessYears" class="form-label fs-6">Job/Business Years:</label>
-                                        <input type="number" class="form-control form-control-da fs-6" id="jobBusinessYears" name="jobBusinessYears" value="{{ $brokerAccount->jobBusinessYears ?? old('jobBusinessYears') }}">
+                                        <input type="number" class="form-control form-control-da fs-6" id="jobBusinessYears" name="jobBusinessYears" value="{{ $brokerAccount->jobBusinessYears ?? old('jobBusinessYears') }}" placeholder="Enter years in current job/business">
                                     </div>
                                     <div class="col">
                                         <label for="investmentAmount" class="form-label fs-6">Investment Amount (NPR):</label>
-                                        <input type="number" step="0.01" class="form-control form-control-da fs-6" id="investmentAmount" name="investmentAmount" value="{{ $brokerAccount->investmentAmount ?? old('investmentAmount') }}">
+                                        <input type="number" step="0.01" class="form-control form-control-da fs-6" id="investmentAmount" name="investmentAmount" value="{{ $brokerAccount->investmentAmount ?? old('investmentAmount') }}" placeholder="Enter approximate investment amount">
                                     </div>
                                     <div class="col">
                                         <label class="form-label fs-6 d-block">Trading Knowledge:</label>
@@ -168,7 +173,6 @@
                                                 {{ (isset($brokerAccount->tradingKnowledge) && $brokerAccount->tradingKnowledge == 0) ? 'checked' : (old('tradingKnowledge') == '0' ? 'checked' : '') }}>
                                             <label class="form-check-label" for="tradingKnowledge_no">No</label>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -181,39 +185,39 @@
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                     <div class="col">
                                         <label for="permanentCountry" class="form-label fs-6">Country <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="permanentCountry" name="permanentCountry" required maxlength="255" value="{{ $brokerAccount->permanentCountry ?? old('permanentCountry') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentCountry" name="permanentCountry" required maxlength="255" value="{{ $brokerAccount->permanentCountry ?? old('permanentCountry') }}" placeholder="Enter country name">
                                     </div>
                                     <div class="col">
                                         <label for="permanentProvince" class="form-label fs-6">Province <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="permanentProvince" name="permanentProvince" required maxlength="255" value="{{ $brokerAccount->permanentProvince ?? old('permanentProvince') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentProvince" name="permanentProvince" required maxlength="255" value="{{ $brokerAccount->permanentProvince ?? old('permanentProvince') }}" placeholder="Enter province name">
                                     </div>
                                     <div class="col">
                                         <label for="permanentDistrict" class="form-label fs-6">District <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="permanentDistrict" name="permanentDistrict" required maxlength="255" value="{{ $brokerAccount->permanentDistrict ?? old('permanentDistrict') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentDistrict" name="permanentDistrict" required maxlength="255" value="{{ $brokerAccount->permanentDistrict ?? old('permanentDistrict') }}" placeholder="Enter district name">
                                     </div>
                                     <div class="col">
                                         <label for="permanentMunicipality" class="form-label fs-6">Municipality <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="permanentMunicipality" name="permanentMunicipality" required maxlength="255" value="{{ $brokerAccount->permanentMunicipality ?? old('permanentMunicipality') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentMunicipality" name="permanentMunicipality" required maxlength="255" value="{{ $brokerAccount->permanentMunicipality ?? old('permanentMunicipality') }}" placeholder="Enter municipality name">
                                     </div>
                                     <div class="col">
                                         <label for="permanentWard" class="form-label fs-6">Ward No <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="number" class="form-control form-control-da fs-6" id="permanentWard" name="permanentWard" required value="{{ $brokerAccount->permanentWard ?? old('permanentWard') }}">
+                                        <input type="number" class="form-control form-control-da fs-6" id="permanentWard" name="permanentWard" required value="{{ $brokerAccount->permanentWard ?? old('permanentWard') }}" placeholder="Enter ward number">
                                     </div>
                                     <div class="col">
                                         <label for="permanentCity" class="form-label fs-6">City <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="permanentCity" name="permanentCity" required maxlength="255" value="{{ $brokerAccount->permanentCity ?? old('permanentCity') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentCity" name="permanentCity" required maxlength="255" value="{{ $brokerAccount->permanentCity ?? old('permanentCity') }}" placeholder="Enter city name">
                                     </div>
                                     <div class="col">
                                         <label for="permanentTole" class="form-label fs-6">Tole <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="permanentTole" name="permanentTole" required maxlength="255" value="{{ $brokerAccount->permanentTole ?? old('permanentTole') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentTole" name="permanentTole" required maxlength="255" value="{{ $brokerAccount->permanentTole ?? old('permanentTole') }}" placeholder="Enter tole name">
                                     </div>
                                     <div class="col">
                                         <label for="permanentStreet" class="form-label fs-6">Street:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="permanentStreet" name="permanentStreet" maxlength="255" value="{{ $brokerAccount->permanentStreet ?? old('permanentStreet') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentStreet" name="permanentStreet" maxlength="255" value="{{ $brokerAccount->permanentStreet ?? old('permanentStreet') }}" placeholder="Enter street name if applicable">
                                     </div>
                                     <div class="col">
                                         <label for="permanentHouseNo" class="form-label fs-6">House No:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="permanentHouseNo" name="permanentHouseNo" maxlength="255" value="{{ $brokerAccount->permanentHouseNo ?? old('permanentHouseNo') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="permanentHouseNo" name="permanentHouseNo" maxlength="255" value="{{ $brokerAccount->permanentHouseNo ?? old('permanentHouseNo') }}" placeholder="Enter house number if applicable">
                                     </div>
                                 </div>
                             </div>
@@ -227,44 +231,45 @@
                                     <div class="form-check mt-4">
                                         <input class="form-check-input fs-6" type="checkbox" value="1" id="sameAsPermanent" name="sameAsPermanent"
                                             {{ (isset($brokerAccount->sameAsPermanent) && $brokerAccount->sameAsPermanent == 1) ? 'checked' : (old('sameAsPermanent') == '1' ? 'checked' : '') }}>
+                                        <label class="form-check-label fs-6" for="sameAsPermanent">Same as Permanent Address</label>
                                     </div>
                                 </div>
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                     <div class="col">
                                         <label for="temporaryCountry" class="form-label fs-6">Country <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryCountry" name="temporaryCountry" required maxlength="255" value="{{ $brokerAccount->temporaryCountry ?? old('temporaryCountry') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryCountry" name="temporaryCountry" required maxlength="255" value="{{ $brokerAccount->temporaryCountry ?? old('temporaryCountry') }}" placeholder="Enter country name">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryProvince" class="form-label fs-6">Province <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryProvince" name="temporaryProvince" required maxlength="255" value="{{ $brokerAccount->temporaryProvince ?? old('temporaryProvince') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryProvince" name="temporaryProvince" required maxlength="255" value="{{ $brokerAccount->temporaryProvince ?? old('temporaryProvince') }}" placeholder="Enter province name">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryDistrict" class="form-label fs-6">District <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryDistrict" name="temporaryDistrict" required maxlength="255" value="{{ $brokerAccount->temporaryDistrict ?? old('temporaryDistrict') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryDistrict" name="temporaryDistrict" required maxlength="255" value="{{ $brokerAccount->temporaryDistrict ?? old('temporaryDistrict') }}" placeholder="Enter district name">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryMunicipality" class="form-label fs-6">Municipality <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryMunicipality" name="temporaryMunicipality" required maxlength="255" value="{{ $brokerAccount->temporaryMunicipality ?? old('temporaryMunicipality') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryMunicipality" name="temporaryMunicipality" required maxlength="255" value="{{ $brokerAccount->temporaryMunicipality ?? old('temporaryMunicipality') }}" placeholder="Enter municipality name">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryWard" class="form-label fs-6">Ward No <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="number" class="form-control form-control-da fs-6" id="temporaryWard" name="temporaryWard" required value="{{ $brokerAccount->temporaryWard ?? old('temporaryWard') }}">
+                                        <input type="number" class="form-control form-control-da fs-6" id="temporaryWard" name="temporaryWard" required value="{{ $brokerAccount->temporaryWard ?? old('temporaryWard') }}" placeholder="Enter ward number">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryCity" class="form-label fs-6">City <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryCity" name="temporaryCity" required maxlength="255" value="{{ $brokerAccount->temporaryCity ?? old('temporaryCity') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryCity" name="temporaryCity" required maxlength="255" value="{{ $brokerAccount->temporaryCity ?? old('temporaryCity') }}" placeholder="Enter city name">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryTole" class="form-label fs-6">Tole <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryTole" name="temporaryTole" required maxlength="255" value="{{ $brokerAccount->temporaryTole ?? old('temporaryTole') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryTole" name="temporaryTole" required maxlength="255" value="{{ $brokerAccount->temporaryTole ?? old('temporaryTole') }}" placeholder="Enter tole name">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryStreet" class="form-label fs-6">Street:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryStreet" name="temporaryStreet" maxlength="255" value="{{ $brokerAccount->temporaryStreet ?? old('temporaryStreet') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryStreet" name="temporaryStreet" maxlength="255" value="{{ $brokerAccount->temporaryStreet ?? old('temporaryStreet') }}" placeholder="Enter street name if applicable">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryHouseNo" class="form-label fs-6">House No:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryHouseNo" name="temporaryHouseNo" maxlength="255" value="{{ $brokerAccount->temporaryHouseNo ?? old('temporaryHouseNo') }}">
+                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryHouseNo" name="temporaryHouseNo" maxlength="255" value="{{ $brokerAccount->temporaryHouseNo ?? old('temporaryHouseNo') }}" placeholder="Enter house number if applicable">
                                     </div>
                                 </div>
                             </div>
@@ -282,6 +287,8 @@
                                         <input type="file" class="form-control form-control-da fs-6" id="kycForm" name="kycForm" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->kycForm)
                                         <img src="{{ asset($brokerAccount->kycForm) }}" alt="KYC Form" class="img-fluid img mt-2 rounded w-100">
+                                        @else
+                                        <img src="#" alt="KYC Form Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
@@ -291,42 +298,52 @@
                                         <input type="file" class="form-control form-control-da fs-6" id="citizenCertificate" name="citizenCertificate" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->citizenCertificate)
                                         <img src="{{ asset($brokerAccount->citizenCertificate) }}" alt="Citizenship Certificate" class="img-fluid img mt-2 rounded w-100 h-100">
+                                        @else
+                                        <img src="#" alt="Citizenship Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
                                     <div class="col">
-                                        <label for="birthCertificate" class="form-label fs-6">Birth Certificate:</label><br>
+                                        <label for="birthCertificate" class="form-label fs-6">Birth Certificate Incase of Minor:</label><br>
                                         <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="birthCertificate" name="birthCertificate" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->birthCertificate)
                                         <img src="{{ asset($brokerAccount->birthCertificate) }}" alt="Birth Certificate" class="img-fluid img mt-2 rounded w-100">
+                                        @else
+                                        <img src="#" alt="Birth Certificate Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
                                     <div class="col">
-                                        <label for="visaPassport" class="form-label fs-6">Visa/Passport:</label><br>
+                                        <label for="visaPassport" class="form-label fs-6">Visa/Passport incase of Foreign Emp.:</label><br>
                                         <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="visaPassport" name="visaPassport" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->visaPassport)
                                         <img src="{{ asset($brokerAccount->visaPassport) }}" alt="Visa/Passport" class="img-fluid img mt-2 rounded w-100">
+                                        @else
+                                        <img src="#" alt="Visa/Passport Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
                                     <div class="col">
-                                        <label for="selfieWithId" class="form-label fs-6">Selfie with ID:</label><br>
+                                        <label for="selfieWithId" class="form-label fs-6">Selfie with carrying any Gov issued ID:</label><br>
                                         <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="selfieWithId" name="selfieWithId" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->selfieWithId)
                                         <img src="{{ asset($brokerAccount->selfieWithId) }}" alt="Selfie with ID" class="img-fluid img mt-2 rounded w-100">
+                                        @else
+                                        <img src="#" alt="Selfie ID Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
                                     <div class="col">
-                                        <label for="guardianCitizenship" class="form-label fs-6">Guardian Citizenship:</label><br>
+                                        <label for="guardianCitizenship" class="form-label fs-6">Guardian Citizenship Incase of Minor:</label><br>
                                         <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="guardianCitizenship" name="guardianCitizenship" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->guardianCitizenship)
                                         <img src="{{ asset($brokerAccount->guardianCitizenship) }}" alt="Guardian Citizenship" class="img-fluid img mt-2 rounded w-100">
+                                        @else
+                                        <img src="#" alt="Guardian Citizenship Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
@@ -336,15 +353,19 @@
                                         <input type="file" class="form-control form-control-da fs-6" id="ppSizePhoto" name="ppSizePhoto" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->ppSizePhoto)
                                         <img src="{{ asset($brokerAccount->ppSizePhoto) }}" alt="Passport Size Photo" class="img-fluid img mt-2 rounded w-100">
+                                        @else
+                                        <img src="#" alt="Passport Size Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
                                     <div class="col">
-                                        <label for="tradingAgreement" class="form-label fs-6">Trading Agreement:</label><br>
+                                        <label for="tradingAgreement" class="form-label fs-6">Online Trading Agreement Form:</label><br>
                                         <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="tradingAgreement" name="tradingAgreement" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->tradingAgreement)
                                         <img src="{{ asset($brokerAccount->tradingAgreement) }}" alt="Trading Agreement" class="img-fluid img mt-2 rounded w-100">
+                                        @else
+                                        <img src="#" alt="Trading Agreement Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
@@ -354,10 +375,13 @@
                                         <input type="file" class="form-control form-control-da fs-6" id="idCard" name="idCard" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->idCard)
                                         <img src="{{ asset($brokerAccount->idCard) }}" alt="ID Card" class="img-fluid img mt-2 rounded w-100">
+                                        @else
+                                        <img src="#" alt="ID Card Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                         @endif
                                     </div>
 
                                 </div>
+
                             </div>
 
                     </div>
@@ -366,28 +390,15 @@
                         <div class="form-check">
                             <input class="form-check-input fs-6" type="checkbox" value="" id="checkCorrect" required>
                             <label class="form-check-label fs-6" for="checkCorrect">
-                                <span class="required"></span> I confirm that all
-                                information provided is accurate and complete. I
-                                understand
-                                that providing false
-                                information may result in the rejection of my
-                                application
-                                and
-                                possible
-                                legal
-                                consequences.
+                                <span class="required"></span> I confirm that all information provided is accurate and complete. I understand
+                                that providing false information may result in the rejection of my application and possible legal consequences.
                             </label>
                         </div>
+
                         <div class="form-check">
                             <input class="form-check-input fs-6" type="checkbox" value="" id="checkTerms" required>
                             <label class="form-check-label fs-6" for="checkTerms">
-                                <span class="required"></span> I agree to the Terms
-                                and
-                                Conditions
-                                and Privacy Policy of
-                                Kamsansar's
-                                passport
-                                renewal service.
+                                <span class="required"></span> I agree to the Terms and Conditions and Privacy Policy of Kamsansar's Brokers Account service.
                             </label>
                         </div>
                         <div class="required-fields-message text-danger fw-bold fw-bold">* - Required fields -
@@ -396,7 +407,9 @@
                             required fields before proceeding.</div>
                     </div>
                     <div class="d-flex justify-content-end py-4">
-                        <button type="submit" class="btn btn" style="background-color: #0064a7; color: white;">{{ isset($brokerAccount) ? 'Update' : 'Submit' }}</button>
+                        <button type="submit" class="btn btn" id="submitBtn" disabled style="background-color: #0064a7; color: white;">
+                            {{ isset($brokerAccount) ? 'Update Application' : 'Submit Application' }}
+                        </button>
                     </div>
                     </form>
                 </div>
@@ -452,6 +465,18 @@
         });
 
     });
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkCorrect = document.getElementById('checkCorrect');
+        const checkTerms = document.getElementById('checkTerms');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function toggleSubmitButton() {
+            submitBtn.disabled = !(checkCorrect.checked && checkTerms.checked);
+        }
+
+        checkCorrect.addEventListener('change', toggleSubmitButton);
+        checkTerms.addEventListener('change', toggleSubmitButton);
+    });
 
     function handleImagePreview(input) {
         if (input.files && input.files[0]) {
@@ -459,8 +484,10 @@
             const preview = input.nextElementSibling;
 
             reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.remove('d-none');
+                if (preview && preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                }
             }
 
             reader.readAsDataURL(input.files[0]);

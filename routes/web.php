@@ -396,8 +396,8 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
 
     Route::get('workPermits/create', [WorkPermitController::class, 'create'])->name('workPermits.create');
     Route::post('workPermits', [WorkPermitController::class, 'store'])->name('workPermits.store');
-    Route::get('workPermits/{workPermit}/edit', [WorkPermitController::class, 'edit'])->name('workPermits.edit');
-    Route::put('workPermits/{workPermit}', [WorkPermitController::class, 'update'])->name('workPermits.update');
+    Route::get('workPermits/{id}/edit', [WorkPermitController::class, 'edit'])->name('workPermits.edit');
+    Route::put('workPermits/{id}', [WorkPermitController::class, 'update'])->name('workPermits.update');
 
     //polls
     Route::resource('polls', PollController::class)

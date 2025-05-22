@@ -52,15 +52,15 @@ class FrontendController extends Controller
         $industries = IndustryCategory::all();
 
         // Load Home Page Data
-        $blogs = BlogsAndPodcast::orderBy('created_at', 'desc')
-            ->where('blogOrPodcast', 'blog')
-            ->where('publishStatus', 1)
-            ->take(4)->get();
+        // $blogs = BlogsAndPodcast::orderBy('created_at', 'desc')
+        //     ->where('blogOrPodcast', 'blog')
+        //     ->where('publishStatus', 1)
+        //     ->take(4)->get();
 
-        $podcasts = BlogsAndPodcast::orderBy('created_at', 'desc')
-            ->where('blogOrPodcast', 'podcast')
-            ->where('publishStatus', 1)
-            ->take(4)->get();
+        // $podcasts = BlogsAndPodcast::orderBy('created_at', 'desc')
+        //     ->where('blogOrPodcast', 'podcast')
+        //     ->where('publishStatus', 1)
+        //     ->take(4)->get();
 
         $findJobs = JobPost::orderBy('created_at', 'desc')
             ->where('jobStatus', 'published')
@@ -95,7 +95,8 @@ class FrontendController extends Controller
         }
 
         // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
+        //return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
+        return view('frontend.index', compact( 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
     }
 
     public function findJobs()

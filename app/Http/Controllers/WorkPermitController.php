@@ -86,7 +86,7 @@ class WorkPermitController extends Controller
             ? $request->user()
             : Auth::guard('job_seekers')->user();
 
-        if (! $user) {
+        if (!$user) {
             if ($isMobile) {
                 return $this->responseError('Unauthorized', 401);
             }
@@ -95,146 +95,156 @@ class WorkPermitController extends Controller
 
         $userId = $user->id;
         Log::info("Authenticated Job-Seeker ID: {$userId}");
-        // 1) Validation rules for every column
+
+        // Validation rules
         $rules = [
-            // Application details
-            'serviceType'       => 'required|string',
-            'appCountry'        => 'required|string',
-            'appProvince'       => 'required|string',
-            'appDistrict'       => 'required|string',
-            'appLocation'       => 'required|string',
+            // Application details (matches migration)
+            'serviceType' => 'required|string|max:255',
+            'appCountry' => 'required|string|max:255',
+            'appProvince' => 'required|string|max:255',
+            'appDistrict' => 'required|string|max:255',
+            'appLocation' => 'required|string|max:255',
 
-            // Personal details
-            'firstName'                 => 'required|string',
-            'middleName'                => 'nullable|string',
-            'lastName'                  => 'required|string',
-            'phoneNo'                   => 'required|string|max:20',
-            'email'                     => 'required|email|max:100',
-            'emergencyContactPhone'     => 'required|string|max:20',
-            'emergencyContactEmail'     => 'required|email|max:100',
+            // Personal details (aligned with migration)
+            'firstName' => 'required|string|max:255',
+            'middleName' => 'nullable|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'dateOfBirthAd' => 'nullable|date',
+            'dateOfBirthBs' => 'nullable|date|max:255',
+            'birthplace' => 'nullable|string|max:255',
+            'gender' => 'nullable|string|max:255',
+            'age' => 'nullable|integer',
+            'nationality' => 'nullable|string|max:255',
+            'religion' => 'nullable|string|max:255',
+            'birthCountry' => 'nullable|string|max:255',
+            'fatherName' => 'nullable|string|max:255',
+            'motherName' => 'nullable|string|max:255',
+            'marriedStatus' => 'nullable|string|max:255',
+            'spouseName' => 'nullable|string|max:255',
+            'numberOfChildren' => 'nullable|integer',
+            'spouseAge' => 'nullable|integer',
 
-            // Document references
-            'citizenshipFront'   => 'required|file|mimes:jpg,jpeg,png,pdf',
-            'citizenshipBack'    => 'required|file|mimes:jpg,jpeg,png,pdf',
-            'previousPassport'   => 'required|file|mimes:jpg,jpeg,png,pdf',
-            'otherDocument'      => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            // Bank Details (nullable as per migration)
+            'bankAccount' => 'nullable|string|max:255',
+            'bankName' => 'nullable|string|max:255',
+            'accountType' => 'nullable|string|max:255',
+            'bankBranch' => 'nullable|string|max:255',
+            'bankNo' => 'nullable|string|max:255',
 
-            // Personal information
-            'dateOfBirthAd'      => 'nullable|date',
-            'dateOfBirthBs'      => 'nullable|string',
-            'birthplace'         => 'nullable|string',
-            'gender'             => 'nullable|string',
-            'age'                => 'nullable|integer',
-            'nationality'        => 'nullable|string',
-            'religion'           => 'nullable|string',
-            'birthCountry'       => 'nullable|string',
-            'fatherName'         => 'nullable|string',
-            'motherName'         => 'nullable|string',
-            'marriedStatus'      => 'nullable|string',
-            'spouseName'         => 'nullable|string',
-            'numberOfChildren'   => 'nullable|integer',
-            'spouseAge'          => 'nullable|integer',
+            // Citizenship Information
+            'nationalIdentityNo' => 'nullable|string|max:255',
+            'citizenshipNumber' => 'nullable|string|max:255',
+            'dateOfIssue' => 'nullable|date',
+            'placeOfIssueDistrict' => 'nullable|string|max:255',
+            'placeOfIssueAbroad' => 'nullable|string|max:255',
 
-            // Bank Details
-            'bankAccount'                => 'nullable|string',
-            'bankName'                   => 'nullable|string',
-            'accountType'                => 'nullable|string',
-            'bankBranch'                 => 'nullable|string',
-            'bankNo'                     => 'nullable|string',
-            'nationalIdentityNo'         => 'nullable|string',
-            'citizenshipNumber'          => 'nullable|string',
-            'dateOfIssue'                => 'nullable|date',
-            'placeOfIssueDistrict'       => 'nullable|string',
-            'placeOfIssueAbroad'         => 'nullable|string',
-            'country'                    => 'nullable|string',
-            'companyName'                => 'nullable|string',
-            'currency'                   => 'nullable|string',
-            'skill'                      => 'nullable|string',
-            'salary'                     => 'nullable|string',
-            'workType'                   => 'nullable|string',
-            'food'                       => 'nullable|string',
-            'accommodation'              => 'nullable|string',
-            'dailyWorkHour'              => 'nullable|string',
-            'weeklyWorkDay'              => 'nullable|string',
-            'overTime'                   => 'nullable|string',
-            'otherAllowance'             => 'nullable|string',
-            'transportation'             => 'nullable|string',
-            'healthInsurance'            => 'nullable|string',
-            'visaNo'                     => 'nullable|string',
-            'citizenshipDateOfIssue'     => 'nullable|date',
-            'citizenshipPlaceOfIssueDistrict' => 'nullable|string',
-            'citizenshipPlaceOfIssueAbroad'   => 'nullable|string',
+            // Company Info
+            'country' => 'nullable|string|max:255',
+            'companyName' => 'nullable|string|max:255',
+            'currency' => 'nullable|string|max:255',
+
+            // Facility Details
+            'skill' => 'nullable|string|max:255',
+            'salary' => 'nullable|string|max:255',
+            'workType' => 'nullable|string|max:255',
+            'food' => 'nullable|string|max:255',
+            'accommodation' => 'nullable|string|max:255',
+            'dailyWorkHour' => 'nullable|string|max:255',
+            'weeklyWorkDay' => 'nullable|string|max:255',
+            'overTime' => 'nullable|string|max:255',
+            'otherAllowance' => 'nullable|string|max:255',
+            'transportation' => 'nullable|string|max:255', // Note: Typo in migration ('transportation' vs 'transportation')
+            'healthInsurance' => 'nullable|string|max:255',
+
+            // VisaInfo
+            'visaNo' => 'nullable|string|max:255',
+            'citizenshipDateOfIssue' => 'nullable|date',
+            'citizenshipPlaceOfIssueDistrict' => 'nullable|string|max:255',
+            'citizenshipPlaceOfIssueAbroad' => 'nullable|string|max:255',
 
             // Nominee details
-            'nominee'            => 'nullable|string',
-            'nomineeName'        => 'nullable|string',
-            'nomineeRelation'    => 'nullable|string',
-            'nomineeCountry'     => 'nullable|string',
-            'nomineeProvince'    => 'nullable|string',
-            'nomineeDistrict'    => 'nullable|string',
-            'nomineeCity'        => 'nullable|string',
-            'nomineeEmail'       => 'nullable|email',
-            'nomineePhone'       => 'nullable|string',
+            'nominee' => 'nullable|string|max:255',
+            'nomineeName' => 'nullable|string|max:255',
+            'nomineeRelation' => 'nullable|string|max:255',
+            'nomineeCountry' => 'nullable|string|max:255',
+            'nomineeProvince' => 'nullable|string|max:255',
+            'nomineeDistrict' => 'nullable|string|max:255',
+            'nomineeCity' => 'nullable|string|max:255',
+            'nomineeEmail' => 'nullable|email|max:255',
+            'nomineePhone' => 'nullable|string|max:20',
 
             // Passport details
-            'passportNumber'     => 'nullable|string',
-            'passportType'       => 'nullable|string',
-            'issueDate'          => 'nullable|date',
-            'expiryDate'         => 'nullable|date',
-            'placeOfIssue'       => 'nullable|string',
-            'issuingAuthority'   => 'nullable|string',
+            'passportNumber' => 'nullable|string|max:255',
+            'passportType' => 'nullable|string|max:255',
+            'issueDate' => 'nullable|date',
+            'expiryDate' => 'nullable|date',
+            'placeOfIssue' => 'nullable|string|max:255',
+            'issuingAuthority' => 'nullable|string|max:255',
 
-            // Address details
-            'contactCountry'     => 'nullable|string',
-            'stateProvince'      => 'nullable|string',
-            'district'           => 'nullable|string',
-            'city'               => 'nullable|string',
-            'province'           => 'nullable|string',
-            'municipality'       => 'nullable|string',
-            'wardNo'             => 'nullable|integer',
-            'tole'               => 'nullable|string',
-            'street'             => 'nullable|string',
-            'houseNo'            => 'nullable|string',
-            'sameAsPermanent'    => 'nullable|boolean',
+            // Contact information (from migration)
+            'contCountry' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'contdistrict' => 'required|string|max:255',
+            'contCity' => 'required|string|max:255',
+            'phoneNo' => 'required|string|max:20',
+            'email' => 'required|email|max:100',
+
+
+
+            // Address details (fixed field names to match migration)
+            'contactCountry' => 'nullable|string|max:255',
+            'district' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'province' => 'nullable|string|max:255',
+            'municipality' => 'nullable|string|max:255',
+            'wardNo' => 'nullable|integer',
+            'tole' => 'nullable|string|max:255',
+            'street' => 'nullable|string|max:255',
+            'houseNo' => 'nullable|string|max:255',
+            'sameAsPermanent' => 'nullable|boolean',
 
             // Temporary address
-            'tempCountry'        => 'nullable|string',
-            'tempProvince'       => 'nullable|string',
-            'tempDistrict'       => 'nullable|string',
-            'tempMunicipality'   => 'nullable|string',
-            'tempWardNo'         => 'nullable|integer',
-            'tempCity'           => 'nullable|string',
-            'tempTole'           => 'nullable|string',
-            'tempStreet'         => 'nullable|string',
-            'tempHouseNo'        => 'nullable|string',
+            'tempCountry' => 'nullable|string|max:255',
+            'tempProvince' => 'nullable|string|max:255',
+            'tempDistrict' => 'nullable|string|max:255',
+            'tempMunicipality' => 'nullable|string|max:255',
+            'tempWardNo' => 'nullable|integer',
+            'tempCity' => 'nullable|string|max:255',
+            'tempTole' => 'nullable|string|max:255',
+            'tempStreet' => 'nullable|string|max:255',
+            'tempHouseNo' => 'nullable|string|max:255',
 
             // Emergency contact details
-            'emergencyContactFullName'     => 'nullable|string',
-            'emergencyContactRelation'     => 'nullable|string',
-            'emergencyContactCountry'      => 'nullable|string',
-            'emergencyContactStateProvince' => 'nullable|string',
-            'emergencyContactDistrict'     => 'nullable|string',
-            'emergencyContactCity'         => 'nullable|string',
+            'emergencyContactFullName' => 'nullable|string|max:255',
+            'emergencyContactRelation' => 'nullable|string|max:255',
+            'emergencyContactCountry' => 'nullable|string|max:255',
+            'emergencyContactStateProvince' => 'nullable|string|max:255',
+            'emergencyContactDistrict' => 'nullable|string|max:255',
+            'emergencyContactCity' => 'nullable|string|max:255',
+            'emergencyContactPhone' => 'required|string|max:20',
+            'emergencyContactEmail' => 'required|email|max:100',
 
-            // Photos (files)
-            'passportPhoto'           => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'bankAccountPhoto'        => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'visaPhoto'               => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'chequePhoto'             => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'agreementPhoto'          => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'arrivalStampPhoto'       => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'embassyLetterPhoto'      => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'departureStampPhoto'     => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'oldLaborApprovalPhoto'   => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'otherDocumentsPhoto'     => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            // Document uploads (added max file size)
+            'passportPhoto' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bankAccountPhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'visaPhoto' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'chequePhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'agreementPhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'arrivalStampPhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'embassyLetterPhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'departureStampPhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'oldLaborApprovalPhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'otherDocumentsPhoto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
 
-            // Status
-            'status'                  => 'nullable|in:pending,processing,approved,rejected',
-            'checkCorrect'            => 'nullable|boolean',
-            'checkTerms'
+            // Status (matches migration enum)
+            'status' => 'nullable|in:pending,In-progress,approved,rejected',
+            'payment' => 'nullable|in:unpaid,paid',
+            'checkCorrect' => 'nullable',
+            'checkTerms' => 'nullable|' // Changed to required and accepted
         ];
-        // 2) Validate
+
         $validator = Validator::make($request->all(), $rules);
+
         if ($validator->fails()) {
             Log::error('Validation errors:', $validator->errors()->toArray());
             if ($isMobile) {
@@ -243,7 +253,7 @@ class WorkPermitController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-
+        // File upload handling (keep your existing implementation)
         $fileUploads = handleMultipleUploads([
             'passportPhoto',
             'bankAccountPhoto',
@@ -261,25 +271,22 @@ class WorkPermitController extends Controller
             'otherDocument'
         ]);
 
-        // 4) Merge data
         $data = array_merge(
             $validator->validated(),
             $fileUploads,
             ['jobSeekerId' => $userId]
         );
 
-        // 5) Create record
         $permit = WorkPermit::create($data);
 
-        $formSubmission          = new FormSubmission();
-        $formSubmission->title   = 'Work Permit';
+        $formSubmission = new FormSubmission();
+        $formSubmission->title = 'Work Permit';
         $formSubmission->form_id = $permit->id;
         $formSubmission->job_seeker_id = $userId;
         $formSubmission->save();
 
         Log::info("WorkPermit created: ID {$permit->id}");
 
-        // 6) Response
         if ($isMobile) {
             return $this->responseSuccess('Work permit submitted.', 200, $permit);
         }
@@ -306,7 +313,52 @@ class WorkPermitController extends Controller
      * @param  \App\Models\WorkPermit  $workPermit
      * @return \Illuminate\Http\Response
      */
-    public function edit(WorkPermit $workPermit) {}
+    public function edit($id)
+    {
+        $user = Auth::guard('job_seekers')->user();
+        $workPermit = WorkPermit::findOrFail($id);
+
+        if ($workPermit->jobSeekerId !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $nepal = PassportCountryList::where('countryName', 'Nepal')->firstOrFail();
+
+        $provinces = PassportProvience::where('country_id', $nepal->id)
+            ->where('publishStatus', true)
+            ->get();
+
+        // Load districts with their province relationship
+        $districts = WorkPermitDistrict::with('province')
+            ->whereIn('provience_id', $provinces->pluck('id'))
+            ->get()
+            ->map(function ($district) {
+                return [
+                    'id' => $district->id,
+                    'districtName' => $district->districtName,
+                    'provience_id' => $district->provience_id,
+                    'provienceName' => $district->province->provienceName // Add province name
+                ];
+            });
+        $locations = WorkPermitLocation::with('district')
+            ->whereIn('district_id', $districts->pluck('id'))
+            ->get()
+            ->map(function ($location) {
+                return [
+                    'id' => $location->id,
+                    'locationName' => $location->locationName,
+                    'district_id' => $location->district_id,
+                    'districtName' => $location->district->districtName // Add district name
+                ];
+            });
+        return view('frontend.workPermit.edit', compact(
+            'workPermit',
+            'nepal',
+            'provinces',
+            'districts',
+            'locations'
+        ));
+    }
 
     /**
      * Update the specified resource in storage.
@@ -315,10 +367,219 @@ class WorkPermitController extends Controller
      * @param  \App\Models\WorkPermit  $workPermit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, WorkPermit $workPermit)
-    {
-        //
+   /**
+ * Update an existing WorkPermit.
+ */
+public function update(Request $request, $id)
+{
+    $isMobile = $request->input('request_type') === 'mobile';
+    $user = $isMobile
+        ? $request->user()
+        : Auth::guard('job_seekers')->user();
+
+    if (! $user) {
+        if ($isMobile) {
+            return $this->responseError('Unauthorized', 401);
+        }
+        return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
     }
+
+    // Locate the permit, ensure it belongs to this job‐seeker
+    $permit = WorkPermit::where('id', $id)
+        ->where('jobSeekerId', $user->id)
+        ->first();
+
+    if (! $permit) {
+        if ($isMobile) {
+            return $this->responseError('Not found', 404);
+        }
+        return redirect()->back()->withErrors(['message' => 'Record not found.']);
+    }
+
+    // **Full validation rules per your migration columns**
+    $rules = [
+        // Application details
+        'serviceType'    => 'required|string|max:255',
+        'appCountry'     => 'required|string|max:255',
+        'appProvince'    => 'required|string|max:255',
+        'appDistrict'    => 'required|string|max:255',
+        'appLocation'    => 'required|string|max:255',
+
+        // Personal details
+        'firstName'            => 'required|string|max:255',
+        'middleName'           => 'nullable|string|max:255',
+        'lastName'             => 'required|string|max:255',
+        'dateOfBirthAd'        => 'nullable|date',
+        'dateOfBirthBs'        => 'nullable|string|max:255',
+        'birthplace'           => 'nullable|string|max:255',
+        'gender'               => 'nullable|string|max:255',
+        'age'                  => 'nullable|integer',
+        'nationality'          => 'nullable|string|max:255',
+        'religion'             => 'nullable|string|max:255',
+        'birthCountry'         => 'nullable|string|max:255',
+        'fatherName'           => 'nullable|string|max:255',
+        'motherName'           => 'nullable|string|max:255',
+        'marriedStatus'        => 'nullable|string|max:255',
+        'spouseName'           => 'nullable|string|max:255',
+        'numberOfChildren'     => 'nullable|integer',
+        'spouseAge'            => 'nullable|integer',
+
+        // Bank details
+        'bankAccount'   => 'nullable|string|max:255',
+        'bankName'      => 'nullable|string|max:255',
+        'accountType'   => 'nullable|string|max:255',
+        'bankBranch'    => 'nullable|string|max:255',
+        'bankNo'        => 'nullable|string|max:255',
+
+        // Citizenship Info
+        'nationalIdentityNo'         => 'nullable|string|max:255',
+        'citizenshipNumber'          => 'nullable|string|max:255',
+        'dateOfIssue'                => 'nullable|date',
+        'placeOfIssueDistrict'       => 'nullable|string|max:255',
+        'placeOfIssueAbroad'         => 'nullable|string|max:255',
+
+        // Company Info
+        'country'         => 'nullable|string|max:255',
+        'companyName'     => 'nullable|string|max:255',
+        'currency'        => 'nullable|string|max:255',
+
+        // Facility Details
+        'skill'              => 'nullable|string|max:255',
+        'salary'             => 'nullable|string|max:255',
+        'workType'           => 'nullable|string|max:255',
+        'food'               => 'nullable|string|max:255',
+        'accommodation'      => 'nullable|string|max:255',
+        'dailyWorkHour'      => 'nullable|string|max:255',
+        'weeklyWorkDay'      => 'nullable|string|max:255',
+        'overTime'           => 'nullable|string|max:255',
+        'otherAllowance'     => 'nullable|string|max:255',
+        'transportation'     => 'nullable|string|max:255',
+        'healthInsurance'    => 'nullable|string|max:255',
+
+        // Visa Info
+        'visaNo'                             => 'nullable|string|max:255',
+        'citizenshipDateOfIssue'             => 'nullable|date',
+        'citizenshipPlaceOfIssueDistrict'    => 'nullable|string|max:255',
+        'citizenshipPlaceOfIssueAbroad'      => 'nullable|string|max:255',
+
+        // Nominee details
+        'nominee'            => 'nullable|string|max:255',
+        'nomineeName'        => 'nullable|string|max:255',
+        'nomineeRelation'    => 'nullable|string|max:255',
+        'nomineeCountry'     => 'nullable|string|max:255',
+        'nomineeProvince'    => 'nullable|string|max:255',
+        'nomineeDistrict'    => 'nullable|string|max:255',
+        'nomineeCity'        => 'nullable|string|max:255',
+        'nomineeEmail'       => 'nullable|email|max:255',
+        'nomineePhone'       => 'nullable|string|max:20',
+
+        // Passport details
+        'passportNumber'     => 'nullable|string|max:255',
+        'passportType'       => 'nullable|string|max:255',
+        'issueDate'          => 'nullable|date',
+        'expiryDate'         => 'nullable|date',
+        'placeOfIssue'       => 'nullable|string|max:255',
+        'issuingAuthority'   => 'nullable|string|max:255',
+
+        // **Contact information (required per migration)**
+        'contCountry'        => 'required|string|max:255',
+        'state'              => 'required|string|max:255',
+        'contdistrict'       => 'required|string|max:255',
+        'contCity'           => 'required|string|max:255',
+        'phoneNo'            => 'required|string|max:20',
+        'email'              => 'required|email|max:100',
+
+        // Address details
+        'contactCountry'  => 'nullable|string|max:255',
+        'district'        => 'nullable|string|max:255',
+        'city'            => 'nullable|string|max:255',
+        'province'        => 'nullable|string|max:255',
+        'municipality'    => 'nullable|string|max:255',
+        'wardNo'          => 'nullable|integer',
+        'tole'            => 'nullable|string|max:255',
+        'street'          => 'nullable|string|max:255',
+        'houseNo'         => 'nullable|string|max:255',
+        'sameAsPermanent' => 'nullable|boolean',
+
+        // Temporary address
+        'tempCountry'      => 'nullable|string|max:255',
+        'tempProvince'     => 'nullable|string|max:255',
+        'tempDistrict'     => 'nullable|string|max:255',
+        'tempMunicipality' => 'nullable|string|max:255',
+        'tempWardNo'       => 'nullable|integer',
+        'tempCity'         => 'nullable|string|max:255',
+        'tempTole'         => 'nullable|string|max:255',
+        'tempStreet'       => 'nullable|string|max:255',
+        'tempHouseNo'      => 'nullable|string|max:255',
+
+        // Emergency contact
+        'emergencyContactFullName'      => 'nullable|string|max:255',
+        'emergencyContactRelation'      => 'nullable|string|max:255',
+        'emergencyContactCountry'       => 'nullable|string|max:255',
+        'emergencyContactStateProvince' => 'nullable|string|max:255',
+        'emergencyContactDistrict'      => 'nullable|string|max:255',
+        'emergencyContactCity'          => 'nullable|string|max:255',
+        'emergencyContactPhone'         => 'required|string|max:20',
+        'emergencyContactEmail'         => 'required|email|max:100',
+
+        // Document uploads (nullable to only overwrite when new file is provided)
+        'passportPhoto'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'bankAccountPhoto'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'visaPhoto'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'chequePhoto'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'agreementPhoto'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'arrivalStampPhoto'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'embassyLetterPhoto'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'departureStampPhoto'    => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'oldLaborApprovalPhoto'  => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'otherDocumentsPhoto'    => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+
+        // Status & flags
+        'status'      => 'nullable|in:pending,In-progress,approved,rejected',
+        'payment'     => 'nullable|in:unpaid,paid',
+        'checkCorrect'=> 'nullable',
+        'checkTerms'  => 'nullable',
+    ];
+
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+        Log::error('Validation errors (update):', $validator->errors()->toArray());
+        if ($isMobile) {
+            return $this->responseError('Validation failed.', 422, $validator->errors());
+        }
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    // Handle uploads (your existing helper)
+    $fileUploads = handleMultipleUploads([
+        'passportPhoto',
+        'bankAccountPhoto',
+        'visaPhoto',
+        'chequePhoto',
+        'agreementPhoto',
+        'arrivalStampPhoto',
+        'embassyLetterPhoto',
+        'departureStampPhoto',
+        'oldLaborApprovalPhoto',
+        'otherDocumentsPhoto',
+    ]);
+
+    // Merge validated data + any new file paths
+    $data = array_merge(
+        $validator->validated(),
+        $fileUploads
+    );
+
+    $permit->update($data);
+    Log::info("WorkPermit updated: ID {$permit->id} by user {$user->id}");
+
+    if ($isMobile) {
+        return $this->responseSuccess('Work permit updated.', 200, $permit);
+    }
+    return redirect()->back()->with('success', 'Application updated successfully.');
+}
+
 
     /**
      * Remove the specified resource from storage.

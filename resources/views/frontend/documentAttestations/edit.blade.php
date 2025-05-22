@@ -376,7 +376,7 @@
 
                                     <!-- Documents 1-4 -->
                                     <div class="col">
-                                        <label for="document1" class="form-label fs-6">Document 1:</label>
+                                        <label for="document1" class="form-label fs-6">Document  to be attestated I:</label>
                                         <br>
                                         <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                         <input type="file" class="form-control" id="document1"
@@ -389,7 +389,7 @@
                                     </div>
 
                                     <div class="col">
-                                        <label for="document2" class="form-label fs-6">Document 2:</label>
+                                        <label for="document2" class="form-label fs-6">Document  to be attestated II>:</label>
                                         <br>
                                         <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                         <input type="file" class="form-control" id="document2"
@@ -402,7 +402,7 @@
                                     </div>
 
                                     <div class="col">
-                                        <label for="document3" class="form-label fs-6">Document 3:</label>
+                                        <label for="document3" class="form-label fs-6">Document  to be attestated III:</label>
                                         <br>
                                         <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                         <input type="file" class="form-control" id="document3"
@@ -415,7 +415,7 @@
                                     </div>
 
                                     <div class="col">
-                                        <label for="document4" class="form-label fs-6">Document 4:</label>
+                                        <label for="document4" class="form-label fs-6">Document  to be attestated IV:</label>
                                         <br>
                                         <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                         <input type="file" class="form-control" id="document4"
@@ -434,49 +434,29 @@
                     <div class="my-4 border border-1 border-secondary"></div>
                     <div class="d-flex flex-column mx-3 mb-5">
                         <div class="form-check">
-                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkCorrect" required checked>
+                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkCorrect" required>
                             <label class="form-check-label fs-6" for="checkCorrect">
-                                <span class="required"></span> I confirm that all
-                                information
-                                provided is accurate and complete. I
-                                understand
-                                that providing false
-                                information may result in the rejection of my
-                                application
-                                and
-                                possible
-                                legal
-                                consequences.
+                                <span class="required"></span> I confirm that all information provided is accurate and complete. I understand
+                                that providing false information may result in the rejection of my application and possible legal consequences.
                             </label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkTerms" required checked>
+                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkTerms" required>
                             <label class="form-check-label fs-6" for="checkTerms">
-                                <span class="required"></span> I agree to the Terms
-                                and
-                                Conditions
-                                and Privacy Policy of
-                                Kamsansar's
-                                passport
-                                renewal service.
+                                <span class="required"></span> I agree to the Terms and Conditions and Privacy Policy of Kamsansar's Document Attestaion service.
                             </label>
                         </div>
-                        <div class="required-fields-message text-danger fw-bold">* - Required fields -
+                        <div class="required-fields-message text-danger fw-bold fw-bold">* - Required fields -
                             Please
                             fill all
                             required fields before proceeding.</div>
                     </div>
-
-                    <div class="d-flex justify-content-between align-items-center mt-2">
-                        <button class="btn btn-light" type="button">Cancel</button>
-                        <div class="d-block">
-                            <button class="btn text-white border-0 mt-0"
-                                style="background-color: #0064a7;"
-                                type="submit"
-                                id="form3NextBtn">Update Application</button>
-                        </div>
+                    <div class="d-flex justify-content-end py-4">
+                        <button type="submit" class="btn btn" id="submitBtn" disabled style="background-color: #0064a7; color: white;">
+                            Update Appication
+                        </button>
                     </div>
-                </div>
             </form>
         </div>
     </div>
@@ -492,13 +472,36 @@
         document.getElementById('multiStepForm' + formNumber).style.display = 'none';
         document.getElementById('multiStepForm' + (formNumber - 1)).style.display = 'block';
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkCorrect = document.getElementById('checkCorrect');
+        const checkTerms = document.getElementById('checkTerms');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function toggleSubmitButton() {
+            submitBtn.disabled = !(checkCorrect.checked && checkTerms.checked);
+        }
+
+        checkCorrect.addEventListener('change', toggleSubmitButton);
+        checkTerms.addEventListener('change', toggleSubmitButton);
+    });
 
     function handleImagePreview(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
+                // Try to find existing image element
                 let imageContainer = input.parentElement.querySelector('img');
-                imageContainer.classList.remove('d-none');
+
+                // If no existing image element, create one
+                if (!imageContainer) {
+                    imageContainer = document.createElement('img');
+                    imageContainer.classList.add('img-fluid', 'img', 'mt-2', 'rounded');
+                    imageContainer.style.width = '250px';
+                    imageContainer.style.height = '250px';
+                    imageContainer.style.objectFit = 'contain';
+                    input.parentElement.appendChild(imageContainer);
+                }
+
                 imageContainer.src = e.target.result;
             }
             reader.readAsDataURL(input.files[0]);
