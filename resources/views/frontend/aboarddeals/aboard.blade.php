@@ -24,7 +24,8 @@
                 <!-- Left Side Buttons -->
                 <div class="d-flex gap-2">
 
-                    <button id="wantToItem" class="btn-toggle type-btn rounded fs-6 active-btn" onclick="filterType('Item', this)">
+                    <button id="wantToItem" class="btn-toggle type-btn rounded fs-6 active-btn"
+                        onclick="filterType('Item', this)">
                         Item</button>
                     <button id="wantToBuy" class="btn-toggle type-btn rounded fs-6" data-url="{{ url()->current() }}"
                         onclick="filterType('Buy', this)">Want to buy</button>
@@ -66,20 +67,6 @@
                     </script>
                 @endif
 
-                {{-- <!-- <script>
-    document.getElementById('addItemBtn').addEventListener('click', function() {
-        @if (Auth::check())
-            //  User is logged in: open Add Item Modal
-            var addItemModal = new bootstrap.Modal(document.getElementById('addItemModal'));
-            addItemModal.show();
-        @else
-            //  User not logged in: open Login Modal
-            var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-            loginModal.show();
-        @endif
-    });
-</script> --> --}}
-
             </div>
             <form action="{{ route('aboard.search') }}" method="get">
                 <h6>Find what you're looking for ?</h6>
@@ -92,12 +79,13 @@
                                 </span>
 
                                 <input type="hidden" id="selectedTypeInput" name="type" value="{{ $type }}">
-                                <input type="text" name="productTitle" class="form-control border-start-0"
+                                <input type="text" name="productTitle" class="form-control border-start-0 py-2"
                                     placeholder="What are you looking for?">
                             </div>
                         </div>
                         <div class="col-md-3 d-flex align-items-center">
-                            <select class="form-select py-2 bg-white" id="countrySelect" name="country" aria-label="">
+                            <select class="form-select py-2 bg-white border" id="countrySelect" name="country"
+                                aria-label="">
                                 <option selected disabled>Select Country</option>
                                 @foreach ($uniqueAboards as $u)
                                     <option value="{{ $u->country }}">{{ $u->country }}</option>
@@ -114,13 +102,12 @@
                             </select>
                         </div>
                         <div class="col-md-1 d-grid">
-                            <button class="btn btn-search w-100" type="submit">Search</button>
+                            <button class="btn btn-search w-100 py-2" type="submit">Search</button>
                         </div>
                     </div>
                 </div>
             </form>
 
-        </div>
         </div>
 
         <!-- Item Form Section -->
@@ -160,7 +147,7 @@
                                 <div class="card p-2">
                                     <a class="card-bdy" style="width: 100%; object-fit: auto; text-decoration:none;"
                                         href="{{ route('aboards.show', $ad->id) }}" style="cursor: pointer;">
-                                        <img src="{{ $ad->productThumbnail ? asset($ad->productThumbnail) : asset('Images/default-image.png') }}"
+                                        <img src="{{ $ad->productThumbnail ? asset($ad->productThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg') }}"
                                             class="bdy-packages-img" alt="Product Image"
                                             style="width: 100%; height: 180px; object-fit: auto;">
                                         <div class="card-body p-2">
@@ -194,13 +181,7 @@
                             @csrf
 
                             <div class="mb-3 form-floating">
-                                <!-- <select class="form-select abroad-deal-1 fw-semibold" id="countrySelect" name="country" aria-label="Country" >
-            <option value="Nepal" disabled selected>Choose a Country</option>
-             Countries will be populated by JS -->
-                                <!-- </select> -->
-                                <!-- <label for="countrySelect">Country</label>  -->
 
-                                
                                 <select class="form-select abroad-deal-1 fw-semibold" id="newCountrySelect"
                                     aria-label="Country" name="country" required>
 
@@ -211,76 +192,74 @@
                                 </select>
                                 <label for="newCountrySelect">Country</label>
                             </div>
-                            
-                            
 
-                             <!-- Category Select with Floating Label -->
-                    <div class="mb-3 form-floating">
-                        <select class="form-select abroad-deal-1 fw-semibold" id="categorySelect"
-                            name="productCategoryId" aria-label="Category" required>
-                            <option value="" disabled selected>Choose a Category</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->productCategoryTitle }}</option>
-                            @endforeach
-                        </select>
-                        <label for="categorySelect">Category</label>
-                    </div>
-                    <input type="hidden" id="type" name ="type" value="Item">
 
-                    <!-- Title Input with Floating Label -->
-                    <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
-                        <input type="text" class="form-control abroad-deal-1 fw-semibold" id="titleInput"
-                            name="productTitle" placeholder="Title" required>
-                        <label for="titleInput">Title</label>
+
+                            <!-- Category Select with Floating Label -->
+                            <div class="mb-3 form-floating">
+                                <select class="form-select abroad-deal-1 fw-semibold" id="categorySelect"
+                                    name="productCategoryId" aria-label="Category" required>
+                                    <option value="" disabled selected>Choose a Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->productCategoryTitle }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <label for="categorySelect">Category</label>
+                            </div>
+                            <input type="hidden" id="type" name ="type" value="Item">
+
+                            <!-- Title Input with Floating Label -->
+                            <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                <input type="text" class="form-control abroad-deal-1 fw-semibold" id="titleInput"
+                                    name="productTitle" placeholder="Title" required>
+                                <label for="titleInput">Title</label>
+                            </div>
+
+                            <!-- Price Input with Floating Label -->
+                            <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                <input type="text" class="form-control abroad-deal-1 fw-semibold" id="priceInput"
+                                    name="pricing" placeholder="Enter Price" required>
+                                <label for="priceInput">Enter Price</label>
+                            </div>
+
+                            <!-- Description Textarea with Floating Label -->
+                            <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
+                                <textarea class="form-control abroad-deal-1 fw-semibold" id="descriptionInput" name="productDescription"
+                                    rows="4" placeholder="Describe..." required></textarea>
+                                <label for="descriptionInput">Description</label>
+                            </div>
+
+                            <!-- Input Group for "Add to your Post" with Image Icon -->
+                            <div class="mb-3 input-group">
+                                <input type="text" class="form-control abroad-deal-1 fw-semibold border-0"
+                                    placeholder="Add to your Post" id="addToPostInput">
+                                <button class="btn abroad-deal-1 fw-semibold border-0"
+                                    style="border-top-right-radius: 5px; border-bottom-right-radius: 5px;" type="button"
+                                    id="uploadImageButton">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                                <!-- File Input (hidden) -->
+                                <input type="file" id="imageInput" name="productThumbnail" class="d-none"
+                                    accept="image/*" />
+                            </div>
+
+                            <!-- Dynamically Display Image Here -->
+                            <div id="imagePreviewContainer" class="mb-3" style="display: none;">
+                                <img id="imagePreview" class="img-fluid" alt="Selected Image"
+                                    style="width: 120px; height: 80px;" />
+                            </div>
+
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="submit" class="btn btn-search w-25">Submit</button>
+                            </div>
                     </div>
 
-                    <!-- Price Input with Floating Label -->
-                    <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
-                        <input type="text" class="form-control abroad-deal-1 fw-semibold" id="priceInput"
-                            name="pricing" placeholder="Enter Price" required>
-                        <label for="priceInput">Enter Price</label>
-                    </div>
 
-                    <!-- Description Textarea with Floating Label -->
-                    <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
-                        <textarea class="form-control abroad-deal-1 fw-semibold" id="descriptionInput" name="productDescription"
-                            rows="4" placeholder="Describe..." required></textarea>
-                        <label for="descriptionInput">Description</label>
-                    </div>
-
-                    <!-- Input Group for "Add to your Post" with Image Icon -->
-                    <div class="mb-3 input-group">
-                        <input type="text" class="form-control abroad-deal-1 fw-semibold border-0"
-                            placeholder="Add to your Post" id="addToPostInput">
-                        <button class="btn abroad-deal-1 fw-semibold border-0"
-                            style="border-top-right-radius: 5px; border-bottom-right-radius: 5px;" type="button"
-                            id="uploadImageButton">
-                            <i class="fas fa-image"></i>
-                        </button>
-                        <!-- File Input (hidden) -->
-                        <input type="file" id="imageInput" name="productThumbnail" class="d-none"
-                            accept="image/*" />
-                    </div>
-
-                    <!-- Dynamically Display Image Here -->
-                    <div id="imagePreviewContainer" class="mb-3" style="display: none;">
-                        <img id="imagePreview" class="img-fluid" alt="Selected Image"
-                            style="width: 120px; height: 80px;" />
-                    </div>
-
-                    <div class="modal-footer d-flex justify-content-center">
-                        <button type="submit" class="btn btn-search w-25">Submit</button>
-                    </div>
-                    </div>
-
-                   
                     </form>
                 </div>
             </div>
         </div>
-        </div>
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
             $(document).ready(function() {
@@ -308,6 +287,8 @@
                             .cca2; // Optional: You can use the country code if needed
 
                             $('#countrySelect').append(new Option(countryName, countryName));
+                            $('#newCountrySelect').append(new Option(countryName, countryName));
+                            $('#newCountrySelectWant').append(new Option(countryName, countryName));
                         });
                     },
                     error: function(err) {
@@ -316,6 +297,7 @@
                 });
             });
         </script>
+
         <script>
             // Global filter variables
             let selectedCategory = 'all';
@@ -396,11 +378,6 @@
             }
         </script>
 
-
-
-
-
-
         <script>
             // Open file input when image button is clicked
             document.getElementById('uploadImageButton').addEventListener('click', function() {
@@ -432,7 +409,7 @@
                 const description = document.getElementById('descriptionInput').value;
                 const imageInput = document.getElementById('imageInput').files[0]; // Get the image file
                 const imageURL = imageInput ? URL.createObjectURL(imageInput) :
-                'Images/default-image.png'; // Default image if no file selected
+                    'Images/default-image.png'; // Default image if no file selected
 
 
 
@@ -448,7 +425,6 @@
             });
         </script>
 
-
         <!-- Add Post Modal -->
         <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true"
             data-bs-backdrop="static" data-bs-keyboard="false">
@@ -460,18 +436,13 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="img/Nirmal.png" width="60" height="60" class="rounded-circle me-2"
-                                alt="User">
-                            <span class="ms-2 fw-semibold" style="font-size: 22px; color: #282828;">
-                                John doe</span>
-                        </div>
+
                         <form id="newPostForm" action="{{ route('aboards.store') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
 
                             <div class="mb-3 form-floating">
-                                <select class="form-select abroad-deal-1 fw-semibold" id="newCountrySelect"
+                                <select class="form-select abroad-deal-1 fw-semibold" id="newCountrySelectWant"
                                     aria-label="Country" name="country" required>
 
                                     <option value="" disabled selected>Choose a Country</option>
@@ -606,22 +577,22 @@
         <!-- "Want to Buy" Section to display the post -->
         <div id="wantToBuyForm" style="display: none;">
 
-            <div class="container mt-4">
+            <div class="container mt-2">
                 <div class="row">
                     <!-- Left Section: Cards -->
 
-                    <div class="col-md-9">
+                    <div class="col-md-9 flex-grow-1">
                         @foreach ($ads->where('type', 'Buy') as $ad)
                             <div class="card border-0 mb-3">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ asset($ad->productThumbnail) }}" class="rounded-circle me-2"
-                                            alt="User" style="height:40px;width:40px;">
+                                        <img src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}"
+                                            class="rounded-circle me-2" alt="User" style="height:40px;width:40px;">
                                         <div>
                                             <h6 class="mb-0">{{ $ad->jobSeeker->firstName }}
                                                 {{ $ad->jobSeeker->lastName }}</h6>
                                             <small class="text-muted">
-                                                <i class="bi bi-geo-alt"></i>
+                                                <i class="bi bi-geo-alt"></i> {{ $ad->country }}
                                                 <i class="bi bi-clock ms-2"></i>
                                                 {{ $ad->postedDuration }}
                                             </small>
@@ -640,8 +611,9 @@
                                             </button>
                                         @else
                                             <!-- If user is not logged in, open login modal -->
-                                            <button class="btn custom-outline-btn  ms-auto" data-bs-toggle="modal" style="color: #0064A7"
-                                                data-bs-target="#loginModal" onclick="setRedirectUrl()">
+                                            <button class="btn custom-outline-btn  ms-auto" data-bs-toggle="modal"
+                                                style="color: #0064A7" data-bs-target="#loginModal"
+                                                onclick="setRedirectUrl()">
                                                 <span class="d-none d-md-inline">Chat</span>
                                             </button>
 
@@ -761,7 +733,8 @@
                                                             <input type="hidden" name="productId" id="productId"
                                                                 value="{{ $ad->id }}">
 
-                                                            <textarea name="comment" class="form-control rounded-3 " placeholder="Write a comment..." rows="2" required></textarea>
+                                                            <input name="comment" class="form-control rounded-3 py-2"
+                                                                placeholder="Write a comment..." required>
                                                             <button type="submit"
                                                                 class="btn btn-send rounded mb-0 text-primary"
                                                                 id="sendMessageButton">
@@ -877,10 +850,10 @@
                             </div>
                             <!-- Show delete button if the logged-in user is the author -->
                             ${cmt.canDelete ? `
-                                                                        <button class="btn ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal${cmt.id}">
-                                                                            <i class="bi bi-trash text-danger"></i>
-                                                                        </button>
-                                                                    ` : ''}
+                                                                                                                                                                                                                                        <button class="btn ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal${cmt.id}">
+                                                                                                                                                                                                                                            <i class="bi bi-trash text-danger"></i>
+                                                                                                                                                                                                                                        </button>
+                                                                                                                                                                                                                                    ` : ''}
                         </div>`;
                                                             });
                                                             $('#commentsSection').html(commentsHTML);
@@ -939,10 +912,6 @@
                                         </script>
 
 
-                                        <!-- /////////////////////////////////////////// -->
-
-                                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
                                         <script>
                                             document.addEventListener("DOMContentLoaded", function() {
                                                 const shareIcon = document.getElementById("shareIcon");
@@ -983,9 +952,13 @@
 
 
                     <!-- Right Section: Ad Banner -->
-                    <div class="col-md-3 d-flex border align-items-center justify-content-center" style="max-height: 100vh;">
-                        <div class="ad-banner ">Advertisement Banner</div>
-                    </div>
+                    @isset($ad_banners['right'])
+                        <div class="col-md-3 p-0"
+                            style="max-height: 100vh;">
+                            <img src="{{ asset($ad_banners['right']->image) }}" alt="ad_banner" class="img-fluid img p-0 w-100">
+                        </div>
+                    @endisset
+
 
                 </div>
             </div>
@@ -993,12 +966,6 @@
 
         </div>
 
-
-
-
-
-        </div>
-        </div>
     </section>
 
 
@@ -1054,8 +1021,6 @@
 
     </div>
 
-    </section>
-    </div>
 
 
     <style>
@@ -1165,7 +1130,8 @@
             cluster: 'ap2'
         });
 
-        var chatchannel = pusher.subscribe('chat.' + "{{Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->id() }}");
+        var chatchannel = pusher.subscribe('chat.' +
+            "{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->id() }}");
         chatchannel.bind('new-message', function(data) {
             let message = data.message
             if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
@@ -1370,8 +1336,6 @@
     </script>
 
 
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Function to get the base URL of your application
         function getBaseUrl() {
@@ -1462,121 +1426,4 @@
 
         }
     </script>
-
-
-
-
-
-
-    <script>
-        // Image Upload and Preview
-
-        // document.getElementById('uploadImageButton').addEventListener('click', function () {
-        //     document.getElementById('imageInput').click();
-        // });
-
-        // document.getElementById('imageInput').addEventListener('change', function (e) {
-        //     const file = e.target.files[0];
-        //     if (file) {
-        //         const reader = new FileReader();
-        //         reader.onload = function (event) {
-        //             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-        //             const imagePreview = document.getElementById('imagePreview');
-        //             imagePreview.src = event.target.result;
-        //             imagePreviewContainer.style.display = 'block';
-        //         };
-        //         reader.readAsDataURL(file);
-        //     }
-        // });
-
-
-
-
-
-        // Item Submission and Dynamic Addition to Product List
-
-        // document.getElementById('submitItemButton').addEventListener('click', function () {
-        //     const category = document.getElementById('categorySelect').value;
-        //     const title = document.getElementById('titleInput').value;
-        //     const price = document.getElementById('priceInput').value;
-        //     const description = document.getElementById('descriptionInput').value;
-        //     const imageInput = document.getElementById('imageInput').files[0];
-        //     const imageURL = imageInput ? URL.createObjectURL(imageInput) : 'Images/default-image.png';
-
-        //     const productCard = document.createElement('div');
-        //     productCard.classList.add('col-lg-3', 'col-md-3', 'col-sm-6', 'col-12', 'product');
-        //     productCard.setAttribute('data-category', category);
-
-        //     productCard.innerHTML = `
-    //     <div class="card-bdy-packages" onclick="window.location.href='abroadchat1.html';" style="cursor: pointer;">
-    //         <img src="${imageURL}" class="bdy-packages-img" alt="Product Image" style="width: 286px; height: 180px;">
-    //         <div class="card-body">
-    //             <p class="mt-3 mb-0">${title}</p>
-    //             <p class="price">NRs. ${price}</p>
-    //         </div>
-    //     </div>
-    //     `;
-
-        //     document.getElementById('product-list').appendChild(productCard);
-        //     $('#addItemModal').modal('hide');
-        //     document.getElementById('addItemForm').reset();
-        //     document.getElementById('imagePreviewContainer').style.display = 'none';
-        // });
-
-
-
-
-
-
-        // Post Submission for 'Want to Buy' Section
-
-
-
-
-        // Toggle Active State Between Forms
-
-        // function toggleActive(button) {
-        //     document.querySelectorAll('.btn-toggle').forEach(btn => btn.classList.remove('active'));
-        //     button.classList.add('active');
-
-        //     const addItemBtn = document.getElementById('addItemBtn');
-        //     const itemForm = document.getElementById('itemForm');
-        //     const wantToBuyForm = document.getElementById('wantToBuyForm');
-        //     const categorybar = document.getElementById('categoryBar'); // if used
-
-        //     if (!addItemBtn || !itemForm || !wantToBuyForm) {
-        //         console.error("One or more elements are missing.");
-        //         return;
-        //     }
-
-        //     if (button.textContent.trim() === "Want to buy") {
-        //         itemForm.style.display = 'none';
-        //         wantToBuyForm.style.display = 'block';
-        //         addItemBtn.textContent = "+ Add Post";
-        //         addItemBtn.setAttribute('data-bs-target', '#addPostModal');
-        //         if (categorybar) categorybar.style.display = 'none';
-        //     } else {
-        //         itemForm.style.display = 'block';
-        //         wantToBuyForm.style.display = 'none';
-        //         addItemBtn.textContent = "+ Add Item";
-        //         addItemBtn.setAttribute('data-bs-target', '#addItemModal');
-        //         if (categorybar) categorybar.style.display = 'block';
-        //     }
-        // }
-
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     const currentType = "{{ $type ?? 'Item' }}"; // Use server-side value
-        //     const buttons = document.querySelectorAll('.btn-toggle');
-
-        //     buttons.forEach(button => {
-        //         const buttonText = button.textContent.trim();
-        //         if ((currentType === 'Buy' && buttonText === 'Want to buy') ||
-        //             (currentType === 'Item' && buttonText === 'Item')) {
-        //             toggleActive(button);
-        //         }
-        //     });
-        // });
-    </script>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 @endsection

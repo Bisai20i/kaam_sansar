@@ -26,6 +26,12 @@
                                         $totalVotes = $pollQuestion->polls->count();
                                         $answerVotes = $answer->polls->count();
                                         $percentage = $totalVotes > 0 ? round(($answerVotes / $totalVotes) * 100, 1) : 0;
+                                        $checkedAnswerId = $pollQuestion->polls
+                                            ->where('jobSeekerId', Auth::guard('job_seekers')->id())
+                                            ->where('polling_answer_id', $answer->id)
+                                            ->where('polling_question_id', $pollQuestion->id)
+                                            ->pluck('polling_answer_id')->first();
+                                        
                                         @endphp
 
                                         <div class="d-flex align-items-center mb-2 poll-option" style="width: 100%;">
@@ -36,11 +42,16 @@
                                                     id="answer-{{ $answer->id }}"
                                                     value="{{ $answer->id }}"
                                                     class="me-3 vote-radio"
-                                                    style="transform: scale(1.3);" />
+                                                    style="transform: scale(1.3);" 
+                                            
+                                                    {{ $checkedAnswerId == $answer->id ? 'checked' : '' }}
+                                                    />
                                                 <label for="answer-{{ $answer->id }}"
                                                     style="font-size: 22px; font-weight: 600; margin-bottom: 0;">
                                                     {{ $answer->answer }}
+                                                    
                                                 </label>
+                                                
                                             </div>
 
                                             <!-- 60%: Percentage bar -->
@@ -59,6 +70,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                         @endforeach
                                     </div>
 

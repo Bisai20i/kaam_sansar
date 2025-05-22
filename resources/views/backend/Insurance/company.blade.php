@@ -390,7 +390,7 @@
 
 
         async function loadRelatedCategories(id) {
-            console.log("fetch category with",id)
+            // console.log("fetch category with",id)
 
             try {
                 let response = await fetch(window.location.protocol + "//" + window.location.host +
@@ -404,6 +404,7 @@
 
                 let data = await response.json();
                 if(data.status){
+                    // console.log(data)
                     let responseCategories = document.querySelector("#categoryListTable tbody")
                     responseCategories.innerHTML = "";
                     let addedCategories = data.data;
@@ -415,7 +416,7 @@
                             newRow.innerHTML = `
                                 <td>${category.name}</td>
                                 <td>${category.publishStatus == 1 ? 'Published' : 'Unpublished'}</td>
-                                <td>
+                                <td class="d-flex flex-wrap gap-1">
                                     <button class="btn btn-danger btn-sm" onclick="deleteCategory(this)" data-category-id="${category.id}">Remove</button>
                                     <button class="btn btn-primary btn-sm"  data-category-id="${category.id}" onclick="viewCategoryDetails(this)">Details</button>
                                 </td>
@@ -431,7 +432,7 @@
                         responseCategories.appendChild(newRow);
                     }
                 }
-                console.log(data)
+                // console.log(data)
 
             } catch (error) {
                 console.error(error)
@@ -473,7 +474,7 @@
             newRow.innerHTML = `
             <td>${taskName}</td>
             <td data-status="${taskStatus}">${displayStatus}</td>
-            <td>
+            <td class="d-flex flex-wrap gap-1">
                 <button class="btn btn-danger btn-sm" onclick="removeRow(this)">Remove</button>
             </td>
 
@@ -496,7 +497,7 @@
         function toggleSubmitButton() {
             const tableBody = document.querySelector("#taskTable tbody");
             const submitButton = document.getElementById("submitButton");
-            console.log(tableBody.children.length)
+            // console.log(tableBody.children.length)
             submitButton.disabled = tableBody.children.length === 0;
 
         }
@@ -535,7 +536,7 @@
 
                 let data = await response.json();
 
-                console.log(data);
+                // console.log(data);
 
                 if (data.status) {
                     document.querySelector("#taskTable tbody").innerHTML = "";
@@ -557,7 +558,7 @@
                             newRow.innerHTML = `
                                 <td>${category.name}</td>
                                 <td>${category.publishStatus == 1 ? 'Published' : 'Unpublished'}</td>
-                                <td>
+                                <td class="d-flex flex-wrap gap-1">
                                     <button class="btn btn-danger btn-sm" onclick="deleteCategory(this)" data-category-id="${category.id}">Remove</button>
                                     <button class="btn btn-primary btn-sm" data-category-id="${category.id}" onclick="viewCategoryDetails(this)">Details</button>
                                 </td>
@@ -601,7 +602,7 @@
 
                 let data = await response.json();
 
-                console.log(data)
+                // console.log(data)
 
                 if(data.status){
                     let parentRow = button.parentElement.parentElement;

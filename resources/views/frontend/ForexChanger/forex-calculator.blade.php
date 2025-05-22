@@ -53,67 +53,67 @@
                             NPR
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="fromCurrency">
-                            <li><a class="dropdown-item" href="#" data-currency="NPR" data-flag="np"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="NPR" data-flag="np"><span
                                         class="flag-icon flag-icon-np"></span> NPR - Nepalese Rupees</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="USD" data-flag="us"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="USD" data-flag="us"><span
                                         class="flag-icon flag-icon-us"></span> USD - US Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="EUR" data-flag="eu"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="EUR" data-flag="eu"><span
                                         class="flag-icon flag-icon-eu"></span> EUR - Euro</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="GBP" data-flag="gb"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="GBP" data-flag="gb"><span
                                         class="flag-icon flag-icon-gb"></span> GBP - British Pound</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="JPY" data-flag="jp"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="JPY" data-flag="jp"><span
                                         class="flag-icon flag-icon-jp"></span> JPY - Japanese Yen</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="AUD" data-flag="au"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="AUD" data-flag="au"><span
                                         class="flag-icon flag-icon-au"></span> AUD - Australian Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="CAD" data-flag="ca"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="CAD" data-flag="ca"><span
                                         class="flag-icon flag-icon-ca"></span> CAD - Canadian Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="CHF" data-flag="ch"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="CHF" data-flag="ch"><span
                                         class="flag-icon flag-icon-ch"></span> CHF - Swiss Franc</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="CNY" data-flag="cn"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="CNY" data-flag="cn"><span
                                         class="flag-icon flag-icon-cn"></span> CNY - Chinese Yuan</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="HKD" data-flag="hk"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="HKD" data-flag="hk"><span
                                         class="flag-icon flag-icon-hk"></span> HKD - Hong Kong Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="NZD" data-flag="nz"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="NZD" data-flag="nz"><span
                                         class="flag-icon flag-icon-nz"></span> NZD - New Zealand Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="SEK" data-flag="se"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="SEK" data-flag="se"><span
                                         class="flag-icon flag-icon-se"></span> SEK - Swedish Krona</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="KRW" data-flag="kr"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="KRW" data-flag="kr"><span
                                         class="flag-icon flag-icon-kr"></span> KRW - South Korean Won</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="SGD" data-flag="sg"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="SGD" data-flag="sg"><span
                                         class="flag-icon flag-icon-sg"></span> SGD - Singapore Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="NOK" data-flag="no"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="NOK" data-flag="no"><span
                                         class="flag-icon flag-icon-no"></span> NOK - Norwegian Krone</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="MXN" data-flag="mx"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="MXN" data-flag="mx"><span
                                         class="flag-icon flag-icon-mx"></span> MXN - Mexican Peso</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="INR" data-flag="in"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="INR" data-flag="in"><span
                                         class="flag-icon flag-icon-in"></span> INR - Indian Rupee</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="RUB" data-flag="ru"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="RUB" data-flag="ru"><span
                                         class="flag-icon flag-icon-ru"></span> RUB - Russian Ruble</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="ZAR" data-flag="za"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="ZAR" data-flag="za"><span
                                         class="flag-icon flag-icon-za"></span> ZAR - South African Rand</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="TRY" data-flag="tr"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="TRY" data-flag="tr"><span
                                         class="flag-icon flag-icon-tr"></span> TRY - Turkish Lira</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="BRL" data-flag="br"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="BRL" data-flag="br"><span
                                         class="flag-icon flag-icon-br"></span> BRL - Brazilian Real</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="THB" data-flag="th"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="THB" data-flag="th"><span
                                         class="flag-icon flag-icon-th"></span> THB - Thai Baht</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="AED" data-flag="ae"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="AED" data-flag="ae"><span
                                         class="flag-icon flag-icon-ae"></span> AED - UAE Dirham</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="DKK" data-flag="dk"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="DKK" data-flag="dk"><span
                                         class="flag-icon flag-icon-dk"></span> DKK - Danish Krone</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="PLN" data-flag="pl"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="PLN" data-flag="pl"><span
                                         class="flag-icon flag-icon-pl"></span> PLN - Polish Złoty</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="IDR" data-flag="id"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="IDR" data-flag="id"><span
                                         class="flag-icon flag-icon-id"></span> IDR - Indonesian Rupiah</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="ILS" data-flag="il"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="ILS" data-flag="il"><span
                                         class="flag-icon flag-icon-il"></span> ILS - Israeli Shekel</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="PHP" data-flag="ph"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="PHP" data-flag="ph"><span
                                         class="flag-icon flag-icon-ph"></span> PHP - Philippine Peso</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="CZK" data-flag="cz"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="CZK" data-flag="cz"><span
                                         class="flag-icon flag-icon-cz"></span> CZK - Czech Koruna</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="RON" data-flag="ro"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="RON" data-flag="ro"><span
                                         class="flag-icon flag-icon-ro"></span> RON - Romanian Leu</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="HUF" data-flag="hu"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="HUF" data-flag="hu"><span
                                         class="flag-icon flag-icon-hu"></span> HUF - Hungarian Forint</a></li>
                         </ul>
                     </div>
@@ -131,67 +131,67 @@
                             USD
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="toCurrency">
-                            <li><a class="dropdown-item" href="#" data-currency="NPR" data-flag="np"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="NPR" data-flag="np"><span
                                         class="flag-icon flag-icon-np"></span> NPR - Nepalese Rupees</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="USD" data-flag="us"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="USD" data-flag="us"><span
                                         class="flag-icon flag-icon-us"></span> USD - US Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="EUR" data-flag="eu"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="EUR" data-flag="eu"><span
                                         class="flag-icon flag-icon-eu"></span> EUR - Euro</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="GBP" data-flag="gb"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="GBP" data-flag="gb"><span
                                         class="flag-icon flag-icon-gb"></span> GBP - British Pound</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="JPY" data-flag="jp"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="JPY" data-flag="jp"><span
                                         class="flag-icon flag-icon-jp"></span> JPY - Japanese Yen</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="AUD" data-flag="au"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="AUD" data-flag="au"><span
                                         class="flag-icon flag-icon-au"></span> AUD - Australian Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="CAD" data-flag="ca"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="CAD" data-flag="ca"><span
                                         class="flag-icon flag-icon-ca"></span> CAD - Canadian Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="CHF" data-flag="ch"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="CHF" data-flag="ch"><span
                                         class="flag-icon flag-icon-ch"></span> CHF - Swiss Franc</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="CNY" data-flag="cn"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="CNY" data-flag="cn"><span
                                         class="flag-icon flag-icon-cn"></span> CNY - Chinese Yuan</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="HKD" data-flag="hk"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="HKD" data-flag="hk"><span
                                         class="flag-icon flag-icon-hk"></span> HKD - Hong Kong Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="NZD" data-flag="nz"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="NZD" data-flag="nz"><span
                                         class="flag-icon flag-icon-nz"></span> NZD - New Zealand Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="SEK" data-flag="se"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="SEK" data-flag="se"><span
                                         class="flag-icon flag-icon-se"></span> SEK - Swedish Krona</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="KRW" data-flag="kr"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="KRW" data-flag="kr"><span
                                         class="flag-icon flag-icon-kr"></span> KRW - South Korean Won</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="SGD" data-flag="sg"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="SGD" data-flag="sg"><span
                                         class="flag-icon flag-icon-sg"></span> SGD - Singapore Dollar</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="NOK" data-flag="no"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="NOK" data-flag="no"><span
                                         class="flag-icon flag-icon-no"></span> NOK - Norwegian Krone</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="MXN" data-flag="mx"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="MXN" data-flag="mx"><span
                                         class="flag-icon flag-icon-mx"></span> MXN - Mexican Peso</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="INR" data-flag="in"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="INR" data-flag="in"><span
                                         class="flag-icon flag-icon-in"></span> INR - Indian Rupee</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="RUB" data-flag="ru"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="RUB" data-flag="ru"><span
                                         class="flag-icon flag-icon-ru"></span> RUB - Russian Ruble</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="ZAR" data-flag="za"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="ZAR" data-flag="za"><span
                                         class="flag-icon flag-icon-za"></span> ZAR - South African Rand</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="TRY" data-flag="tr"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="TRY" data-flag="tr"><span
                                         class="flag-icon flag-icon-tr"></span> TRY - Turkish Lira</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="BRL" data-flag="br"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="BRL" data-flag="br"><span
                                         class="flag-icon flag-icon-br"></span> BRL - Brazilian Real</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="THB" data-flag="th"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="THB" data-flag="th"><span
                                         class="flag-icon flag-icon-th"></span> THB - Thai Baht</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="AED" data-flag="ae"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="AED" data-flag="ae"><span
                                         class="flag-icon flag-icon-ae"></span> AED - UAE Dirham</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="DKK" data-flag="dk"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="DKK" data-flag="dk"><span
                                         class="flag-icon flag-icon-dk"></span> DKK - Danish Krone</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="PLN" data-flag="pl"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="PLN" data-flag="pl"><span
                                         class="flag-icon flag-icon-pl"></span> PLN - Polish Złoty</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="IDR" data-flag="id"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="IDR" data-flag="id"><span
                                         class="flag-icon flag-icon-id"></span> IDR - Indonesian Rupiah</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="ILS" data-flag="il"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="ILS" data-flag="il"><span
                                         class="flag-icon flag-icon-il"></span> ILS - Israeli Shekel</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="PHP" data-flag="ph"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="PHP" data-flag="ph"><span
                                         class="flag-icon flag-icon-ph"></span> PHP - Philippine Peso</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="CZK" data-flag="cz"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="CZK" data-flag="cz"><span
                                         class="flag-icon flag-icon-cz"></span> CZK - Czech Koruna</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="RON" data-flag="ro"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="RON" data-flag="ro"><span
                                         class="flag-icon flag-icon-ro"></span> RON - Romanian Leu</a></li>
-                            <li><a class="dropdown-item" href="#" data-currency="HUF" data-flag="hu"><span
+                            <li><a class="dropdown-item forex-country-item" href="#" data-currency="HUF" data-flag="hu"><span
                                         class="flag-icon flag-icon-hu"></span> HUF - Hungarian Forint</a></li>
                         </ul>
                     </div>
@@ -216,13 +216,9 @@
                         <p class="primary_color_text m-0 fs-6">*Final amount may vary according to the exchanges.</p>
                     </div>
                     <div>
-                        <button type="submit" class="btn primary_color_bg px-5 fs-5 mt-2 w-auto m-auto"
-                            href="select-exchange.html">Send
+                        <button type="submit" class="btn primary_color_bg px-5 fs-5 mt-2 w-auto m-auto">Send
                             Money</button>
                     </div>
-                    <!-- <p class="mt-3 fs-5 fw-bolder">Exchange Rate: <span class="primary_color_text">1 NPR = USD
-                                                    0.XXX</span> -->
-                    </p>
                 </form>
 
 
@@ -370,7 +366,7 @@
             updateCurrencyButton(toCurrencyBtn, "us", "USD", false);
 
             // Handle currency selection changes
-            document.querySelectorAll(".dropdown-item").forEach((item) => {
+            document.querySelectorAll(".dropdown-item forex-country-item").forEach((item) => {
                 item.addEventListener("click", function(e) {
                     e.preventDefault();
                     const currency = this.dataset.currency;
@@ -415,6 +411,7 @@
             }
         }
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Function to update button content
@@ -426,7 +423,7 @@
             }
 
             // Handle clicks on dropdown items
-            document.querySelectorAll(".dropdown-item").forEach((item) => {
+            document.querySelectorAll(".forex-country-item").forEach((item) => {
                 item.addEventListener("click", function(e) {
                     e.preventDefault();
                     const currency = this.dataset.currency;
@@ -438,6 +435,7 @@
             });
         });
     </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
 @endsection

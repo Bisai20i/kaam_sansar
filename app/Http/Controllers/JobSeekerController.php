@@ -1637,8 +1637,6 @@ return $request->all();
             if ($request->hasFile('images')) {
                 $files = $request->file('images');
 
-                Log::info("Files: ", $files);
-
                 // Limit to 5 images
 
                 if ($user->userThumbnail) {
@@ -1652,6 +1650,7 @@ return $request->all();
                 }
                 $imagePaths = [];
                 foreach ($files as $file) {
+                    Log::info("File: ", [$file]);
                     $path         = $file->store('jobSeekerImage', 'public');
                     $imagePaths[] = $path;
                 }

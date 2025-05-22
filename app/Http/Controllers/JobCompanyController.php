@@ -20,7 +20,7 @@ class JobCompanyController extends Controller
     {
         $jobCompanies = JobCompany::with('industryCategory')->orderBy('created_at', 'desc')->simplePaginate(10);
 
-        return view('backend.JobCompany.lists', compact('jobCompanies'));
+        return view('backend.jobcompany.lists', compact('jobCompanies'));
     }
 
     /**

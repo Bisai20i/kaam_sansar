@@ -23,11 +23,14 @@
         </li>
 
         <!-- Industry Categories -->
-        <li class="menu-item 
-            {{ request()->routeIs('industryCategory*') || 
-            request()->routeIs('jobCategory*') || 
-            request()->routeIs('jobCompany*') || 
-            request()->routeIs('jobPost*') ? 'open' : '' }}">
+        <li
+            class="menu-item 
+            {{ request()->routeIs('industryCategory*') ||
+            request()->routeIs('jobCategory*') ||
+            request()->routeIs('jobCompany*') ||
+            request()->routeIs('jobPost*')
+                ? 'open'
+                : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-briefcase-alt"></i>
                 <div data-i18n="Manage Job">Manage Job</div>
@@ -64,7 +67,8 @@
         </li>
 
         <!-- Advertisement Management -->
-        <li class="menu-item 
+        <li
+            class="menu-item 
             {{ request()->routeIs('advertisementcategory*') || request()->routeIs('ads-manager*') ? 'open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-bullseye"></i>
@@ -86,13 +90,16 @@
         </li>
         <!-- Users -->
 
-        <li class="menu-item 
-            {{ request()->routeIs('bankAccounts*') || 
-            request()->routeIs('brokerAccounts*') || 
-            request()->routeIs('documentAttestations*') || 
-            request()->routeIs('superadmin.becomeseller.index') || 
-            request()->routeIs('forex*') || 
-            request()->routeIs('forum-posts*') ? 'open' : '' }}">
+        <li
+            class="menu-item 
+            {{ request()->routeIs('bankAccounts*') ||
+            request()->routeIs('brokerAccounts*') ||
+            request()->routeIs('documentAttestations*') ||
+            request()->routeIs('superadmin.becomeseller.index') ||
+            request()->routeIs('forex*') ||
+            request()->routeIs('forum-posts*')
+                ? 'open'
+                : '' }}">
 
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-menu-alt-right"></i>
@@ -308,10 +315,11 @@
             </ul>
         </li>
 
-        <li class="menu-item 
-            {{ request()->routeIs('rewards*') || 
-            request()->routeIs('faqs*') || 
-            request()->routeIs('blogsAndPodcast*') ? 'open' : '' }}">
+        <li
+            class="menu-item 
+            {{ request()->routeIs('rewards*') || request()->routeIs('faqs*') || request()->routeIs('blogsAndPodcast*') || request()->routeIs('questions*')
+                ? 'open'
+                : '' }}">
 
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-bulb"></i>

@@ -17,7 +17,7 @@ class InsuranceSubCategoryController extends Controller
 
 
        // $sub_categories = InsuranceSubCategory::orderBy('id', 'desc')->where('insurance_category_id', $id)->with('category')->simplePaginate(10);
-        return view('backend.Insurance.sub_category', compact('category', 'sub_categories'));
+        return view('backend.insurance.sub_category', compact('category', 'sub_categories'));
     }
 
     public function store(Request $request){

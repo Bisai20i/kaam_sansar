@@ -26,7 +26,7 @@ class BlogsAndPodcastController extends Controller
 
         $type =  $request->type ?? 'Blogs and Podcast';
 
-        return view('backend.BlogsAndPodcast.lists', compact('blogsAndPodcasts', 'type'));
+        return view('backend.blogsandpodcast.lists', compact('blogsAndPodcasts', 'type'));
     }
 
     /**
@@ -36,7 +36,7 @@ class BlogsAndPodcastController extends Controller
      */
     public function create()
     {
-        return view('backend.BlogsAndPodcast.create');
+        return view('backend.blogsandpodcast.create');
     }
 
     /**
@@ -142,7 +142,7 @@ class BlogsAndPodcastController extends Controller
         $type = $blogsAndPodcast->blogOrPodcast;
 
 
-        return view('backend.BlogsAndPodcast.create', compact('blogsAndPodcast', 'type'));
+        return view('backend.blogsandpodcast.create', compact('blogsAndPodcast', 'type'));
     }
 
     /**

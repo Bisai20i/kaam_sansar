@@ -156,7 +156,7 @@ class GiftCouponController extends Controller
             'country' => $request->input('country'),
             'city' => $request->input('city'),
             'publishStatus' => false,
-            'discount' => $request->input('discount'),
+            'discount' => $request->input('discount') ?? 0,
             'itemCode' => $request->input('itemCode'),
             'customApplied' => $request->input('customApplied'),
             'adminId' => $adminId,

@@ -34,6 +34,7 @@ use App\Models\Visa;
 use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
 use App\Models\Horoscope;
+use App\Models\Jyotish;
 use App\Models\VisaType;
 use App\Models\InsuranceCompany;
 use App\Models\InsuranceCategory;
@@ -549,6 +550,7 @@ class FrontendController extends Controller
         $fetchedData = VisaDetails::with('visaCountry', 'visaType')
             ->where('visaCountryId', $visaCountryId)
             ->where('visaTypeId', $visaTypeId)
+            ->where('publishStatus', 1)
             ->first();
 
         // Retrieve country lists and visa types again for re-rendering the form
@@ -650,7 +652,11 @@ class FrontendController extends Controller
             Log::warning('No horoscopes found for the specified date and type');
         }
     
-        return view('frontend.horoscope.horoscope', compact('astrologer', 'orderedHoroscopes', 'type'));
+
+
+            $jyotishs = Jyotish::all();
+
+        return view('frontend.horoscope.horoscope', compact('astrologer', 'orderedHoroscopes', 'type', 'jyotishs'));
     }
     
     

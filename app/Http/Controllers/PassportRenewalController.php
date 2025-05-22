@@ -185,7 +185,7 @@ class PassportRenewalController extends Controller
             'divorce_certificate', 'national_eid', 'other_document', 'previous_passport',
         ];
 
-        $jobSeekerId = Auth::guard('job_seeker')->id();
+        $jobSeekerId = Auth::guard('job_seekers')->id();
 
         foreach ($fileFields as $field) {
             if ($request->hasFile($field)) {
@@ -200,7 +200,10 @@ class PassportRenewalController extends Controller
 
     public function edit($id)
     {
-        $passportRenewal = PassportRenewal::findOrFail($id);
+        $passportRenewal = PassportRenewal::find($id);
+        if( !$passportRenewal || $passportRenewal->job_seeker_id != Auth::guard('job_seekers')->id()){
+            return redirect()->back()->with('error', 'Unauthorized access.');
+        }
         return view('frontend.passport-renewal.index', compact('passportRenewal'));
     }
 
