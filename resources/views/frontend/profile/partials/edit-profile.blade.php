@@ -11,8 +11,30 @@
         outline: 1px solid #0064A7;
     }
 </style>
+
 <!-- Modal -->
+
 <div class="modal fade" id="photoActionModal" tabindex="-1" aria-labelledby="photoActionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="mb-3">
+        <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+          <i class="bi bi-trash-fill text-danger fs-3"></i>
+        </div>
+      </div>
+      <h4 class="fw-bold">Are you sure?</h4>
+      <p class="text-secondary mb-4">Are you sure you want to deactivate account? This action can be undone.</p>
+      <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
+        <a href="#" class="btn border-secondary-subtle rounded-3 px-4 py-2 col-6 me-1" id="setProfilePicture">Set as Profile Photo</a>
+        <a href="#" class="btn btn-danger rounded-3 px-4 py-2 flex-grow-1 col-6 ms-1" id="deleteIndexPicture">Delete Photo</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+{{-- <div class="modal fade" id="photoActionModal" tabindex="-1" aria-labelledby="photoActionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -31,7 +53,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
     <div id="editProfile" class="profile-section">
         <div class="edit-profile-card border py-3">
             <div class="d-flex align-items-center mb-4 upload-profile-image ">
@@ -106,8 +128,11 @@
                     <input type="text" class="form-control" name="profession"
                         placeholder="Designation: {{ Auth::guard('job_seekers')->user()->profession }}">
                 </div>
-                <div class="mb-3 d-flex align-items-center justify-content-center">
-                    <label for="gender" class="text-nowrap me-2" style="width: max-content;">Gender:</label>
+                <div class="mb-3">
+                    <input type="number" name="luckyNumber" class="form-control" placeholder="Lucky Number: {{Auth::guard('job_seekers')->user()->luckyNumber}}">
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="text-nowrap me-2 mb-1 text-secondary " style="width: max-content;">Gender:</label>
                     <select name="gender" class="form-control m-0 border-1 border-dark-subtle" style="cursor: pointer">
                         <option value="male"
                             {{ Auth::guard('job_seekers')->user()->gender === 'male' ? 'selected' : '' }}>
@@ -118,8 +143,8 @@
                             {{ Auth::guard('job_seekers')->user()->gender === 'other' ? 'selected' : '' }}>Other</option>
                     </select>
                 </div>
-                <div class="mb-3 d-flex align-items-center justify-content-center">
-                    <label for="whoamI" class="text-nowrap me-2" style="width: max-content;">I am a:</label>
+                <div class="mb-3">
+                    <label for="whoamI" class="text-nowrap me-2 mb-1 text-secondary" style="width: max-content;">I am a:</label>
                     <select name="whoAmI" class="form-control m-0 border-1 border-dark-subtle" style="cursor: pointer">
                         <option value="student"
                             {{ Auth::guard('job_seekers')->user()->whoAmI === 'student' ? 'selected' : '' }}>
@@ -130,11 +155,9 @@
                             {{ Auth::guard('job_seekers')->user()->whoAmI === 'consultant' ? 'selected' : '' }}>Consultant</option>
                     </select>
                 </div>
+                
                 <div class="mb-3">
-                    <input type="number" name="luckyNumber" class="form-control" placeholder="Lucky Number: {{Auth::guard('job_seekers')->user()->luckyNumber}}">
-                </div>
-                <div class="mb-3 d-flex align-items-center justify-content-center">
-                    <label for="dob" class="text-nowrap me-2" style="width: max-content;">Date of Birth:</label>
+                    <label for="dob" class="text-nowrap me-2 mb-1 text-secondary" style="width: max-content;">Date of Birth:</label>
                     <input type="date" name="dob" class="form-control m-0" style="cursor: pointer" value="{{Auth::guard('job_seekers')->user()->dateOfBirth}}">
                 </div>
                 <div class="save-btn">
@@ -143,6 +166,15 @@
             </form>
         </div>
     </div>
+
+    <style>
+        .save-changes-btn:hover {
+            background-color: white;
+            color: #0064A7;
+            outline: 1px solid #0064A7 !important;
+            border-radius: 3px;
+        }
+    </style>
 
 
     {{-- <div id="editProfile" class="content-section">

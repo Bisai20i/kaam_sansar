@@ -150,8 +150,7 @@
                                     <input type="file" id="imageUpload" name="images[]" accept="image/*" multiple
                                         class="d-none" onchange="previewImages()">
                                 </div> --}}
-                                <div class="text-center upload-box1" style="cursor:pointer!important;"
-                                    onclick="this.querySelector('input[type=file]').click();">
+                                <div class="text-center upload-box1" style="cursor:pointer!important;">
                                     <!-- Upload Button -->
                                     <label for="imageUpload" id="uploadText1" style="cursor:pointer!important;">
                                         <i class="bi bi-cloud-arrow-up-fill"

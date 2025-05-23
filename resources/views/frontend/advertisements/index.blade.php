@@ -133,7 +133,7 @@
             </div>
         </div>
 
-        
+
 
         <div class="nav nav-pills gap-1 justify-content-center justify-content-md-start">
             {{-- Show All --}}
@@ -148,7 +148,6 @@
                 @endforeach
             @else
                 @foreach ($categories as $categoryItem)
-                    
                     <a href="{{ route('Ads.showByCategory', ['categoryId' => $categoryItem->id]) }}"
                         class="btn btn-outline-custom rounded-pill mx-1 px-3 py-1 border border-2 {{ request('categoryId') && request('categoryId') == $categoryItem->id ? 'active' : '' }}">
                         {{ $categoryItem->adsCategoryTitle }}
@@ -160,135 +159,134 @@
         </div>
 
 
-        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 ">
-            @if ($ads->count())
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1">
+            @if ($ads->count() > 0)
                 @foreach ($ads as $ad)
                     <div class="col">
                         <div class="card p-1" style="border-color:#0694BF;"><a href="{{ route('ads.show', $ad->id) }}"
                                 class="text-decoration-none text-black">
-                                <img src="{{ $ad->adsThumbnail ? asset($ad->adsThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg') }}" class="card-img-top rounded" alt="Ad Image"
+                                <img src="{{ $ad->adsThumbnail ? asset($ad->adsThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg') }}"
+                                    class="card-img-top rounded" alt="Ad Image"
                                     style="height: 131px; width: 100%; object-fit:cover;">
-                                <div class="card-body p-1 ">
+                                <div class="card-body p-1 mt-1">
                                     <h6 class="card-title text-black mb-0">{{ $ad->adsTitle }}</h6>
                                     <p class="card-text text-muted mb-0">{{ $ad->location }}</p>
-                                    <p class="card-text text-muted"><small
-                                            class="text-body-secondary">{{ $ad->postedDuration }}</small></p>
+                                    <p class="card-text text-muted">
+                                        <small class="text-body-secondary">{{ $ad->postedDuration }}</small>
+                                    </p>
                                 </div>
                             </a>
                         </div>
                     </div>
                 @endforeach
+            @else
+                <!-- error shown -->
+                <main
+                    class="d-flex flex-column flex-grow-1 justify-content-center align-items-center bg-white text-center py-5">
+                    <div class="text-primary display-3 mb-4 mt-5">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h1 class="fs-2 fw-semibold mb-3">Result Not Found</h1>
+                    <p class="text-secondary">We couldn’t find the result you are searching.</p>
+                    <p class="text-secondary mb-4">Please try navigating using the options below.</p>
+                    <div class="d-flex gap-3">
+                        <a href="{{ route('ads.index') }}"
+                            class="btn-create d-flex align-items-center justify-content-center gap-3"
+                            style="text-decoration: none;">
+                            <i class="fas fa-arrow-left ms-2"></i>
+                            <span class="me-1 fw-semibold">Go Back</span>
+                        </a>
 
-
+                        <a href="{{ route('index') }}"
+                            class="btn-create d-flex align-items-center justify-content-center gap-2"
+                            style="text-decoration: none;">
+                            <i class="fas fa-home ms-2"></i>
+                            <span class="me-1 fw-semibold">Homepage</span>
+                        </a>
+                    </div>
+                </main>
+            @endif
         </div>
 
-        @if ($ads->hasMorePages() || $ads->currentPage() != 1)
+    </div>
 
-            <div class="row mt-3">
-                <nav>
-                    <ul class="pagination justify-content-end converter">
-                        {{-- Previous Button --}}
-                        @if ($ads->onFirstPage())
-                            <li class="page-item disabled">
-                                <a class="page-link primary_color_text">&lt;</a>
-                            </li>
-                        @else
-                            <li class="page-item">
-                                <a class="page-link primary_color_text" href="{{ $ads->previousPageUrl() }}">&lt;</a>
-                            </li>
-                        @endif
+    @if ($ads->hasMorePages() || $ads->currentPage() != 1)
 
-                        {{-- Pagination Numbers --}}
-                        @php
-                            $currentPage = $ads->currentPage();
-                            $lastPage = $ads->lastPage();
-                            $pageRange = 2; // Number of pages to display before and after the current page
-                        @endphp
-
-                        {{-- Show First Page --}}
-                        @if ($currentPage > $pageRange + 1)
-                            <li class="page-item">
-                                <a class="page-link primary_color_text" href="{{ $ads->url(1) }}">1</a>
-                            </li>
-                            @if ($currentPage > $pageRange + 2)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                        @endif
-
-                        {{-- Show Pages Before Current Page --}}
-                        @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
-                            <li class="page-item">
-                                <a class="page-link primary_color_text"
-                                    href="{{ $ads->url($i) }}">{{ $i }}</a>
-                            </li>
-                        @endfor
-
-                        {{-- Current Page --}}
-                        <li class="page-item active">
-                            <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+        <div class="row mt-3">
+            <nav>
+                <ul class="pagination justify-content-end converter">
+                    {{-- Previous Button --}}
+                    @if ($ads->onFirstPage())
+                        <li class="page-item disabled">
+                            <a class="page-link primary_color_text">&lt;</a>
                         </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link primary_color_text" href="{{ $ads->previousPageUrl() }}">&lt;</a>
+                        </li>
+                    @endif
 
-                        {{-- Show Pages After Current Page --}}
-                        @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
-                            <li class="page-item">
-                                <a class="page-link primary_color_text"
-                                    href="{{ $ads->url($i) }}">{{ $i }}</a>
-                            </li>
-                        @endfor
+                    {{-- Pagination Numbers --}}
+                    @php
+                        $currentPage = $ads->currentPage();
+                        $lastPage = $ads->lastPage();
+                        $pageRange = 2; // Number of pages to display before and after the current page
+                    @endphp
 
-                        {{-- Show Last Page --}}
-                        @if ($currentPage < $lastPage - $pageRange)
-                            @if ($currentPage < $lastPage - $pageRange - 1)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                            <li class="page-item">
-                                <a class="page-link primary_color_text"
-                                    href="{{ $ads->url($lastPage) }}">{{ $lastPage }}</a>
-                            </li>
+                    {{-- Show First Page --}}
+                    @if ($currentPage > $pageRange + 1)
+                        <li class="page-item">
+                            <a class="page-link primary_color_text" href="{{ $ads->url(1) }}">1</a>
+                        </li>
+                        @if ($currentPage > $pageRange + 2)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
                         @endif
+                    @endif
 
-                        {{-- Next Button --}}
-                        @if ($ads->hasMorePages())
-                            <li class="page-item">
-                                <a class="page-link primary_color_text" href="{{ $ads->nextPageUrl() }}">&gt;</a>
-                            </li>
-                        @else
-                            <li class="page-item disabled">
-                                <a class="page-link primary_color_text">&gt;</a>
-                            </li>
+                    {{-- Show Pages Before Current Page --}}
+                    @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                        <li class="page-item">
+                            <a class="page-link primary_color_text" href="{{ $ads->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    {{-- Current Page --}}
+                    <li class="page-item active">
+                        <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+                    </li>
+
+                    {{-- Show Pages After Current Page --}}
+                    @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                        <li class="page-item">
+                            <a class="page-link primary_color_text" href="{{ $ads->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    {{-- Show Last Page --}}
+                    @if ($currentPage < $lastPage - $pageRange)
+                        @if ($currentPage < $lastPage - $pageRange - 1)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
                         @endif
-                    </ul>
-                </nav>
-            </div>
-        @endif
-    @else
-        <!-- error shown -->
-        <main class="d-flex flex-column flex-grow-1 justify-content-center align-items-center bg-white text-center py-5">
-            <div class="text-primary display-3 mb-4 mt-5">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h1 class="fs-2 fw-semibold mb-3">Result Not Found</h1>
-            <p class="text-secondary">We couldn’t find the result you are searching.</p>
-            <p class="text-secondary mb-4">Please try navigating using the options below.</p>
-            <div class="d-flex gap-3">
-                <a href="{{ route('ads.index') }}"
-                    class="btn-create d-flex align-items-center justify-content-center gap-3"
-                    style="text-decoration: none;">
-                    <i class="fas fa-arrow-left ms-2"></i>
-                    <span class="me-1 fw-semibold">Go Back</span>
-                </a>
+                        <li class="page-item">
+                            <a class="page-link primary_color_text"
+                                href="{{ $ads->url($lastPage) }}">{{ $lastPage }}</a>
+                        </li>
+                    @endif
 
-                <a href="{{ route('index') }}" class="btn-create d-flex align-items-center justify-content-center gap-2"
-                    style="text-decoration: none;">
-                    <i class="fas fa-home ms-2"></i>
-                    <span class="me-1 fw-semibold">Homepage</span>
-                </a>
-            </div>
-        </main>
-        @endif
-    </div>
-
-    </div>
+                    {{-- Next Button --}}
+                    @if ($ads->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link primary_color_text" href="{{ $ads->nextPageUrl() }}">&gt;</a>
+                        </li>
+                    @else
+                        <li class="page-item disabled">
+                            <a class="page-link primary_color_text">&gt;</a>
+                        </li>
+                    @endif
+                </ul>
+            </nav>
+        </div>
+    @endif
 
     <!-- Post Ad Modal -->
     <div class="modal fade" id="postAdModal" tabindex="-1" aria-labelledby="postAdModalLabel" aria-hidden="true">
@@ -388,8 +386,8 @@
                                     const reader = new FileReader();
                                     reader.onload = function(e) {
                                         imagePreview.innerHTML = `
-          <img src="${e.target.result}" alt="Preview" style="height: 100%; width:30%; border-radius: 6px; object-fit: cover;">
-        `;
+                                        <img src="${e.target.result}" alt="Preview" style="height: 100%; width:30%; border-radius: 6px; object-fit: cover;">
+                                        `;
                                     };
                                     reader.readAsDataURL(file);
                                 } else {
@@ -414,6 +412,5 @@
 
             </div>
         </div>
-    </div>
     </div>
 @endsection

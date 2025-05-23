@@ -53,18 +53,19 @@ class FrontendController extends Controller
         $industries = IndustryCategory::all();
 
         // Load Home Page Data
-        // $blogs = BlogsAndPodcast::orderBy('created_at', 'desc')
-        //     ->where('blogOrPodcast', 'blog')
-        //     ->where('publishStatus', 1)
-        //     ->take(4)->get();
+        $blogs = BlogsAndPodcast::orderBy('created_at', 'desc')
+            ->where('blogOrPodcast', 'blog')
+            ->where('publishStatus', 1)
+            ->take(4)->get();
 
-        // $podcasts = BlogsAndPodcast::orderBy('created_at', 'desc')
-        //     ->where('blogOrPodcast', 'podcast')
-        //     ->where('publishStatus', 1)
-        //     ->take(4)->get();
+        $podcasts = BlogsAndPodcast::orderBy('created_at', 'desc')
+            ->where('blogOrPodcast', 'podcast')
+            ->where('publishStatus', 1)
+            ->take(4)->get();
 
         $findJobs = JobPost::orderBy('created_at', 'desc')
             ->where('jobStatus', 'published')
+            ->where('jobDeadline', '>=', date('Y-m-d'))
             ->take(4)->get();
 
         $ads = Advertisement::orderBy('created_at', 'desc')
@@ -96,14 +97,15 @@ class FrontendController extends Controller
         }
 
         // dd($giftCoupons);
-        //return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
-        return view('frontend.index', compact( 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
+        // return view('frontend.index', compact( 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
     }
 
     public function findJobs()
     {
         $findJobs = JobPost::orderBy('created_at', 'desc')
             ->where('jobStatus', 'published')
+            ->where('jobDeadline', '>=', date('Y-m-d'))
             ->paginate(8);
 
         $categories = JobCategory::orderBy('created_at', 'desc')
@@ -298,6 +300,7 @@ class FrontendController extends Controller
                         ->when($request->input('jobsby') == 'skill', fn($query) => $query->where('skills', 'LIKE', "%{$request->input('skill')}%"))
                         ->when($request->input('jobsby') == 'location', fn($query) => $query->where('jobLocation', 'LIKE', "%{$request->input('location')}%"));
                 })
+            ->where('jobDeadline', '>=', date('Y-m-d'))
             ->paginate(8)
             ->withQueryString();
 
@@ -358,9 +361,10 @@ class FrontendController extends Controller
             ->where('jobStatus', 'published')
             ->where('jobCategoryId', $category_id) // Matching the category_id
             ->where('jobSlug', '!=', $slug)        // Exclude the current job
+            ->where('jobDeadline', '>=', date('Y-m-d'))
             ->take(4)
             ->get();
-
+        // return $similar_jobs;
         $categories = JobCategory::orderBy('created_at', 'desc')
             ->where('publishStatus', 1)
             ->get();

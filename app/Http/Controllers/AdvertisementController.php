@@ -564,7 +564,10 @@ public function destroy(Request $request, $id)
             $ad = Advertisement::all();
 
             $adTypes = $this->getEnumValues('advertisements', 'type');
-            $categories = AdvertisementCategory::where('id', $categoryId)->get();
+            // $type = Advertisement::where('adsCategoryId', $categoryId)->first()->type;
+            
+            $categories = AdvertisementCategory::get();
+            // dd($categories);
             $ad_banners = [];
             $ad_banners['top'] = AdsManager::where('which_page', 'advertisement')
                 ->where('publish_or_not', 1)
@@ -602,7 +605,7 @@ public function destroy(Request $request, $id)
                 ], 200);
             }
 
-            // Return a view for web users
+            // Return a view for web users 'ads', 'allCategories', 'type', 'selectedCategory', 'ad', 'category', 'categories', 'ad_banners'
             return view('frontend.advertisements.index', compact('ads', 'ad', 'categories', 'all', 'ad_banners'));
         } catch (\Exception $e) {
             Log::error("Error fetching advertisements by category: " . $e->getMessage());

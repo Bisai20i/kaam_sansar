@@ -3,6 +3,22 @@
         background: #0064A7 !important;
     }
 </style>
+<style>
+  .icon-circle {
+    background-color: #ffe6e6;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    border-radius: 16px;
+  }
+</style>
+
 
 <nav class="navbar navbar-expand-lg fixed-top ">
     <div class="container">
@@ -19,14 +35,14 @@
         <!-- style for nav hover and active status -->
 
         <style>
-            .active-navLink,
-            .nav-link {
+
+            .navbar-nav .nav-item .nav-link {
                 position: relative;
                 transition: 0.3s ease-in-out;
                 padding: 5px 3px !important;
             }
 
-            .nav-link::before {
+            .navbar-nav .nav-item .nav-link::before {
                 content: "";
                 position: absolute;
                 bottom: 2px;
@@ -37,7 +53,7 @@
                 transition: 0.3s ease-in-out;
             }
 
-            .active-navLink::before {
+            .navbar-nav .nav-item .active-navLink::before {
                 content: "";
                 position: absolute;
                 bottom: 2px;
@@ -53,8 +69,8 @@
 
             }
 
-            .active-navLink:hover::before,
-            .nav-link:hover::before {
+            .navbar-nav .nav-item .active-navLink:hover::before,
+            .navbar-nav .nav-item .nav-link:hover::before {
                 content: "";
                 position: absolute;
                 bottom: 2px;
@@ -733,8 +749,8 @@
                         alt="Profile Picture">
                     <h5 class="card-title">{{ @Auth::guard('job_seekers')->user()->firstName }}
                         {{ @Auth::guard('job_seekers')->user()->lastName }}
-                        <a href="#" class="d-block">
-                            <i class="fa fa-pen p-1"></i>
+                        <a href="{{ route('jobseeker.editProfile', ['user_id' => auth()->id()]) }}" class="d-block">
+                            <i class="fa fa-pen p-1 text-decoration-none"></i>
                         </a>
                     </h5>
                     <p class="text-muted"><i class="fas fa-award"></i> Reward Points <br>272.38</p>

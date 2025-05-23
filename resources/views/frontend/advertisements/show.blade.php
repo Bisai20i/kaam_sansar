@@ -16,18 +16,18 @@
 
                     <!-- Profile & Price Section -->
                     <div class="profile-price d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
+                        <div class="d-flex justify-content-between align-items-center px-0 w-100">
                             @if (!empty($ads->jobSeeker->userThumbnail) && is_array($ads->jobSeeker->userThumbnail))
-                            <img src="{{ asset('storage/' . $ads->jobSeeker->userThumbnail[0]) }}" class="rounded-circle abroad-chat" alt="Profile picture">
+                                <img src="{{ asset('storage/' . $ads->jobSeeker->userThumbnail[0]) }}" class="rounded-circle abroad-chat" alt="Profile picture">
                             @else
                             <img src="{{ asset('frontend/assets/Images/profile.jpg') }}" class="rounded-circle abroad-chat" alt="Default Profile">
                             @endif
-                            <div class="ms-2">
-                                <p class="fw-semibold mb-0">{{$ads->jobSeeker->firstName}} {{$ads->jobSeeker->lastName}}</p>
+                            <div class="ms-2 text-end">
+                                <p class="fw-semibold mb-0 ">{{$ads->jobSeeker->firstName}} {{$ads->jobSeeker->lastName}}</p>
                                 <p class="text-muted mb-0 mt-0">{{$ads->contactNumber}}</p>
                             </div>
                         </div>
-                        <h3 class="mt-2 mt-md-0 text-end price-text">{{$ads->pricing}}</h3>
+                        <h3 class="w-100 mt-2 mt-md-0 text-end price-text">Rs. {{$ads->pricing}}</h3>
                     </div>
 
                     <div class="mt-3 mb-3 d-flex flex-wrap justify-content-center gap-2">

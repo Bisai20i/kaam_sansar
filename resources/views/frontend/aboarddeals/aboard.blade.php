@@ -126,7 +126,7 @@
 
                                 <div class="d-flex gap-2 py-3">
                                     <a href="{{ route('aboarddeals') }}"
-                                        class="btn-sm btn-outline-secondary rounded-pill category-btn active-btn text-decoration-none d-flex justify-content-center align-items-center"
+                                        class="btn btn-outline-secondary btn-sm rounded-pill category-btn active-btn"
                                         onclick="filterCategory('all', this)">All Categories </a>
                                     @foreach ($categories as $category)
                                         <button class="btn btn-outline-secondary btn-sm rounded-pill category-btn"
@@ -140,6 +140,10 @@
 
 
                         </div>
+
+                        @if($ads->count() == 0)
+                            @include('frontend.notFound')
+                        @endif
 
                         @foreach ($ads->where('type', 'Item') as $ad)
                             <div class="col-lg-3 col-md-6 col-sm-12 col-12 product"

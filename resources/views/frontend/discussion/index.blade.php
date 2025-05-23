@@ -164,27 +164,31 @@
         </script>
 
         <!-- Delete Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Confirm
-                            Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModallLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="mb-3">
+                        <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center"
+                            style="width: 64px; height: 64px;">
+                            <i class="bi bi-trash-fill text-danger fs-3"></i>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this comment?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <h4 class="fw-bold">Are you sure?</h4>
+                    <p class="text-secondary mb-4">Are you sure you want to delete this comment?</p>
+                    <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
+                        <button type="button" class="btn border-secondary col-6 me-1" data-bs-dismiss="modal">Cancel</button>
 
                         <button id="deleteCommentButton" data-comment-id="0" onclick="deleteComment(this)"
-                            data-forum-id="0" class="btn btn-danger">Delete</button>
+                            data-forum-id="0" class="btn btn-danger w-100 ms-1">Delete</button>
+                        
                     </div>
                 </div>
             </div>
         </div>
-
+       
 
         <!-- Comment Modal -->
         <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true"
@@ -247,7 +251,7 @@
 
         <div class="container position-relative">
             <div class="row mb-3">
-                <div class="col-lg-3 col-12">
+                <div class="col-lg-3 col-auto">
                     <a href="{{ route('frontend.discussion') }}" class=" text-decoration-none">
                         <h5 class="text-black">Discussion
                             Forum</h5>
@@ -257,15 +261,26 @@
                 <div class="col-lg-9 col-12 ps-2 lg:ps-4">
                     <div class="">
                         <form action="{{ route('frontend.discussion') }}" class="row g-2">
+                            @if (Auth::guard('job_seekers')->check())
+                                <div class="col-3 me-1 me-md-2 ratio ratio-1x1" style="max-width: 50px; ratio: 1/1; ">
+                                    <a
+                                        href="{{ route('discussion.profile', ['id' => Auth::guard('job_seekers')->user()->id]) }}">
+                                        <img class="img rounded-circle img-thumbnail" style="width: 45px; height: 45px;"
+                                            src="{{ Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}"
+                                            alt="">
+                                    </a>
+                                </div>
+                            @endif
+
                             <div
-                                class="col-12 col-md-auto d-flex flex-fill border border-1 border-dark-subtle rounded-5 align-items-center ps-3 overflow-hidden gap-1">
+                                class="col-8 col-md-auto d-flex flex-fill border border-1 border-dark-subtle rounded-5 align-items-center ps-3 overflow-hidden gap-1">
                                 <i class="fa-solid fa-magnifying-glass text-black-50"></i>
                                 <input type="search" placeholder="Search" name='searchstr'
                                     value="{{ request('searchstr') }}"
                                     class="w-100 h-100 border-0 m-0 text-black-50 rounded-end-5 px-1 py-2"
                                     style="outline: none; min">
                             </div>
-                            <div class="col-12 col-md-auto d-flex gap-2 justify-content-center ms-md-3">
+                            <div class="col-12 col-md-auto d-flex gap-2 justify-content-center ms-md-2">
 
                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                     style="background-color: #0064a7;" type="submit">
@@ -274,12 +289,13 @@
 
                                 <div class="">
                                     @auth('job_seekers')
-                                        <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
+                                        <button class="btn rounded-5 px-4 text-white text-nowrap m-auto py-2"
                                             style="background-color: #0064a7;" data-bs-toggle="modal"
                                             data-bs-target="#createPost">+
                                             Create</button>
                                     @else
-                                        <button data-bs-toggle="modal" data-bs-target="#loginModal" onclick="setRedirectUrl()"
+                                        <button data-bs-toggle="modal" data-bs-target="#loginModal"
+                                            onclick="setRedirectUrl()"
                                             class="btn rounded-5 px-4 text-white text-nowrap m-auto"
                                             style="background-color: #0064a7;">
                                             + Create
@@ -361,7 +377,7 @@
                     </div>
                     <div id="forumPosts">
 
-                        @if (count($forumPosts) > 0)
+                        @if ($forumPosts->count() > 0)
                             @foreach ($forumPosts as $forumPost)
                                 <div
                                     class="row flex-wrap align-items-center gap-2 p-2 d-flex justify-content-between mt-2">
@@ -513,7 +529,7 @@
                                         </span>
                                     </span>
 
-                                    <span class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                    {{-- <span class="text-decoration-none text-black d-flex align-items-center gap-1"
                                         data-forum-id="{{ $forumPost->id }}"
                                         data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
                                         style="cursor: pointer;">
@@ -521,11 +537,11 @@
                                         <span class="d-flex align-items-center gap-1">
                                             1
                                         </span>
-                                    </span>
+                                    </span> --}}
                                 </div>
                             @endforeach
                         @else
-                            <h4 class="text-center mt-4 text-danger">No Post Found</h4>
+                            @include('frontend.notFound')
                         @endif
 
 
@@ -1363,6 +1379,9 @@
                     // ✅ What to do on success
                     if (response.status) {
                         $('#commentInput').val('')
+                        if($('#commentsList').html() == '<p class="text-center my-2 text-secondary">No Comments yet !</p>'){
+                            $('#commentsList').html('')
+                        }
                         $('#commentsList').append(`
                             <div class="mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
                                 <div>

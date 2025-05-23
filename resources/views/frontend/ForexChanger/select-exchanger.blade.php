@@ -25,12 +25,12 @@
             <div class="row mb-4">
                 <ul class="nav nav-pills gap-3" id="myNavTabs">
                     <li class="nav-item">
-                        <button class="nav-link active fw-bold fs-6 primary_border" id="tab1" data-bs-toggle="tab"
-                            data-bs-target="#tab1Content" onclick="toggleRatePreview('buying')">Buying Rate</button>
+                        <button class="nav-link active fs-6 primary_border" id="tab1" data-bs-toggle="tab"
+                            data-bs-target="#tab1Content" onclick="toggleRatePreview('buying')" style="color: #0064A7;">Buying Rate</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link fw-bold fs-6 primary_border" id="tab2" data-bs-toggle="tab"
-                            data-bs-target="#tab2Content" onclick="toggleRatePreview('selling')">Selling Rate</button>
+                        <button class="nav-link fs-6 primary_border" id="tab2" data-bs-toggle="tab"
+                            data-bs-target="#tab2Content" onclick="toggleRatePreview('selling')" style="color:#0064A7;">Selling Rate</button>
                     </li>
                 </ul>
             </div>

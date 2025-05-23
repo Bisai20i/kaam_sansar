@@ -197,7 +197,8 @@
                                 </div>
                             @endforeach
                         @else
-                            <p class="text-danger text-center"> No Items Found !</p>
+                            @include('frontend.notFound')
+                            
                         @endif
 
 

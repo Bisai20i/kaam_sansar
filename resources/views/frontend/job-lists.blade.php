@@ -53,7 +53,7 @@
 
                 <div class="row popular-search ">
                     <div class="col-lg-12 ">
-                        <h4 class="mt-5">Popular Search</h4>
+                        <h4 class="mt-3">Popular Search</h4>
                         <div class="row text-center">
                             @foreach ($categories as $jobCategory)
                                 <div class="col g-2 ">
@@ -290,7 +290,7 @@
                                     <a href="{{ route('frontend.job-details', ['slug' => $job->jobSlug]) }}"
                                         class="text-dark d-block text-decoration-none ">
 
-                                        <div class="job-card-1 p-0 border border-secondary border-1 mb-3 position-relative"
+                                        <div class="d-block job-card-1 p-0 border border-secondary border-1 mb-3 position-relative"
                                             style="{{ $job->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
 
                                             @if ($job->jobFeature == 'premium')
@@ -305,7 +305,7 @@
 
                                                 <div class="job-card-body">
 
-                                                    <h5 class="card-title" style="max-width: 95%;">{{ $job->jobTitle }}
+                                                    <h5 class="card-title m-1" style="max-width: 95%;">{{ $job->jobTitle }}
                                                     </h5>
                                                     <p>Company Name: {{ $job->jobCompany->companyName }}</p>
                                                     <p>Location: {{ $job->jobLocation }}</p>
@@ -335,7 +335,7 @@
 
                                             </div>
 
-                                            <div class="full-width-border"
+                                            <div class="full-width-border mt-0 border-top border-dark-subtle"
                                                 style="{{ $job->jobFeature == 'premium' ? 'border-top: 0.5px solid #FAAC24!important;' : '' }}">
                                             </div>
                                             <div class="job-card-footer p-2 p-md-3 mt-0">

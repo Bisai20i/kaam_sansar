@@ -5,7 +5,59 @@
 @section('content')
 
     <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteImageModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+
+    <div class="modal fade" id="deleteImageModal" tabindex="-1" aria-labelledby="deleteImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="mb-3">
+                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center"
+                        style="width: 64px; height: 64px;">
+                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold">Are you sure?</h4>
+                <p class="text-secondary mb-4">Are you sure you want to delete this Image?</p>
+                <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
+                    <button type="button" class="btn border-secondary col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+                    <form action="{{ route('discussion.deleteimage') }}" method="POST" id="deleteImageForm" class="col-6 ms-1">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="image_index">
+                        <input type="hidden" name="forum_id">
+                        <button type="submit" class="btn btn-danger w-100">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteForumModal" tabindex="-1" aria-labelledby="deleteForumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="mb-3">
+                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center"
+                        style="width: 64px; height: 64px;">
+                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold">Are you sure?</h4>
+                <p class="text-secondary mb-4">Are you sure you want to delete this forum post?</p>
+                <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
+                    <button type="button" class="btn border-secondary col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+                    <form action="#" method="POST" id="deleteForumForm" class="col-6 ms-1">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger w-100">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="modal fade" id="deleteForumModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -14,29 +66,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this Image?
+                    Are you sure you want to delete this forum post?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form action="{{ route('discussion.deleteimage') }}" method="POST" id="deleteImageForm">
+                    <form action="#" method="POST" id="deleteForumForm">
                         @csrf
                         @method('DELETE')
-                        <input type="hidden" name="image_index">
-                        <input type="hidden" name="forum_id">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
 
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Edit Modal -->
     <div class="modal fade" id="createPost" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createPostLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header d-flex">
+                <div class="modal-header d-flex bg-white text-center">
                     <h1 class="modal-title fs-5 mx-auto flex-fill" id="createPostLabel">Edit Post
                         Post
                     </h1>
@@ -68,7 +118,7 @@
                         </div>
                         <div class="form mt-2">
 
-                            <select name="category" class="form-select bg-dark-subtle text-black-50" id="category"
+                            <select name="category" class="form-select bg-secondary-subtle text-black-50" id="category"
                                 aria-label="">
                                 <option>Category</option>
                                 <option value="education">Education</option>
@@ -80,28 +130,30 @@
                             </select>
                         </div>
                         <div class="form-floating text-black-50 mt-3">
-                            <input name="topic" type="text" class="form-control bg-dark-subtle text-black-50"
+                            <input name="topic" type="text" class="form-control bg-secondary-subtle text-black-50"
                                 id="titleInput" placeholder="Post Title">
                             <label for="titleInput">Title</label>
                         </div>
                         <div class="form-floating text-black-50">
-                            <textarea class="form-control bg-dark-subtle text-black-50" name="description" placeholder="Post Details"
+                            <textarea class="form-control bg-secondary-subtle text-black-50" name="description" placeholder="Post Details"
                                 id="floatingTextarea" style="height: 100px"></textarea>
                             <label for="floatingTextarea">Describe...</label>
                         </div>
                         <div class="form text-black-50 mt-2">
-                            <select name="country" id="forumCountry" class="form-control bg-dark-subtle text-black-50">
+                            <select name="country" id="forumCountry"
+                                class="form-control bg-secondary-subtle text-black-50">
                                 <option value="" selected>Select Country</option>
                                 <!-- Country options will be dynamically populated by JavaScript -->
                             </select>
 
                         </div>
                         <div class="form-floating text-black-50 mt-3">
-                            <input name="person_name" type="text" class="form-control bg-dark-subtle text-black-50"
-                                id="person_name" placeholder="Person Name">
+                            <input name="person_name" type="text"
+                                class="form-control bg-secondary-subtle text-black-50" id="person_name"
+                                placeholder="Person Name">
                             <label for="person Name">Person Name</label>
                         </div>
-                        <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
+                        <div class="d-flex bg-secondary-subtle p-2 gap-3 align-items-center rounded">
                             <p class="flex-grow-1 my-auto text-black-50">Add to your post</p>
                             <div class="d-flex gap-3 align-items-center">
                                 <a href="#" class="primary_color_text">
@@ -303,15 +355,12 @@
                                     <span class="d-none d-md-inline">Chat</span>
                                 </button>
                             @else
-asfae
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2"
-                                    style="background-color: #0064a7;"
-                                    onclick="setRedirectUrl()">+
+                                    style="background-color: #0064a7;" onclick="setRedirectUrl()">+
                                     <span class="d-none d-md-inline">Follow</span></button>
 
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
-                                    style="background-color: #0064a7;"
-                                    onclick="setRedirectUrl()">
+                                    style="background-color: #0064a7;" onclick="setRedirectUrl()">
                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                     <span class="d-none d-md-inline">Chat</span>
                                 </button>
@@ -400,14 +449,17 @@ asfae
                                                                     onclick="handleEdit(this)">Edit</button>
                                                             </li>
                                                             <li>
-                                                                <form
+                                                                <button type="submit" class="dropdown-item"
+                                                                    data-forum-id="{{ $forumPost->id }}"
+                                                                    onclick="handleForumDelete(this)"
+                                                                    style="color: #0064A7;font-size: 16px; font-weight: 500;">Delete</button>
+                                                                {{-- <form
                                                                     action="{{ route('discussion_forum.destroy', ['discussion_forum' => $forumPost->id]) }}"
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="dropdown-item"
-                                                                        style="color: #0064A7;font-size: 16px; font-weight: 500;">Delete</button>
-                                                                </form>
+                                                                    
+                                                                </form> --}}
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -428,16 +480,19 @@ asfae
                                 @if (count($forumPost->images) > 0)
                                     <div
                                         class="mt-2 text-center g-2 row {{ count($forumPost->images) === 1 ? 'row-cols-1' : 'row-cols-md-2 row-cols-1' }}">
-
+                                       
                                         @for ($i = 0; $i < count($forumPost->images); $i++)
                                             <div class="col position-relative" style="max-width:600px;">
-                                                <span
-                                                    class="position-absolute top-0 end-0 text-danger py-1 px-2 m-2 rounded-circle bg-white"
-                                                    data-forum-id="{{ $forumPost->id }}"
-                                                    data-image-index="{{ $i }}"
-                                                    onclick="handleImageDelete(this)">
-                                                    <i class="bi bi-trash text-danger"></i>
-                                                </span>
+                                                @if (Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->id === $forumPost->jobSeekerId)
+                                                    <span
+                                                        class="position-absolute top-0 end-0 text-danger py-1 px-2 m-2 rounded-circle bg-white"
+                                                        data-forum-id="{{ $forumPost->id }}"
+                                                        data-image-index="{{ $i }}"
+                                                        onclick="handleImageDelete(this)">
+                                                        <i class="bi bi-trash text-danger"></i>
+                                                    </span>
+                                                @endif
+
                                                 <img src="{{ $forumPost->images[$i] }}" class="img-fluid w-100"
                                                     style="max-width:600px;" alt="Post Image">
                                             </div>
@@ -495,6 +550,7 @@ asfae
                             </div>
                         @endforeach
                     @else
+                        <p class="text-center text-secondary mt-5"><small>You haven't created any post yet!</small></p>
                     @endif
 
 
@@ -1295,6 +1351,14 @@ asfae
             $("#deleteImageForm input[name='image_index']").val(imageIndex)
             $("#deleteImageForm input[name='forum_id']").val(postId)
             $('#deleteImageModal').modal('show');
+        }
+
+        function handleForumDelete(e) {
+            let postId = e.getAttribute('data-forum-id')
+            document.getElementById('deleteForumForm').action = "{{ route('discussion_forum.destroy', ':id') }}".replace(
+                ':id', postId);
+            $("#deleteForumForm input[name='forum_id']").val(postId)
+            $('#deleteForumModal').modal('show');
         }
     </script>
 @endpush
