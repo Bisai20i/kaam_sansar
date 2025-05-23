@@ -17,7 +17,8 @@ class VisaController extends Controller
      */
     public function index()
     {
-        //
+        $visas=Visa::all();
+        return view('visa.index',compact('visas'));
     }
 
     /**

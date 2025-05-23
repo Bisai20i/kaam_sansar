@@ -1,6 +1,6 @@
 <div id="skill" class="section-content" style="display: none;">
     <h4 class="mb-3 your-project-text">Your Skills</h4>
-    <div class="card p-3">
+    <div class="card-center border p-3">
         <form id="skillForm">
             @csrf
             <h3>Skills</h3>
@@ -8,8 +8,8 @@
                 <div class="col-md-12">
                     <div class="input-group">
                         <input type="hidden" id="skillId" name="id" value="">
-                        <input type="text" class="form-control custom-input border-end-0" id="skillName" name="skillName" placeholder="Skill" required>
-                        <select class="form-select custom-input border-start-0 text-end me-3" id="skillProficiency" name="skillProficiency" required>
+                        <input type="text" class="form-control rounded custom-input border-end-0" id="skillName" name="skillName" placeholder="Skill" required>
+                        <select class="form-select custom-input border-start-0 text-end me-1" id="skillProficiency" name="skillProficiency" required>
                             <option>Beginner</option>
                             <option>Intermediate</option>
                             <option>Advanced</option>
@@ -21,7 +21,7 @@
             <div class="d-flex justify-content-between">
                 <button type="button" class="btn add-project float-start" id="addSkill">+ Add Skill</button>
                 <div class="text-end">
-                    <button type="submit" class="btn text-center skip-btn mx-2" data-current="skill" data-next="achievement" data-link="achievementLink">continue to achievement</button>
+                    <button type="submit" class="btn text-center skip-btn mx-2" data-current="skill" data-next="achievement" data-link="achievementLink">Skip</button>
                 </div>
             </div>
         </form>
@@ -47,7 +47,33 @@
             @endforeach
         </div>
     </div>
-</div>@push('scripts')
+</div>
+
+<!-- Delete Modal for Skill -->
+<div class="modal fade" id="deleteSkillModal" tabindex="-1" aria-labelledby="deleteSkillModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="deleteSkillForm" method="POST" action="">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" id="deleteSkillId" name="id" value="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Skill</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this skill?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let isEditingSkill = false;
@@ -153,17 +179,12 @@
             e.preventDefault();
             const data = collectSkillData();
 
-            if (!data.skillName || !data.skillProficiency) {
-                alert('Please fill all required fields');
-                return;
-            }
 
             try {
                 const result = await saveSkillData(data);
                 if (result.success) {
                     if (isEditingSkill) {
                         updateSkillCard(result.skill);
-                        alert('Skill updated successfully!');
                     } else {
                         appendSkillCard(result.skill);
                     }
@@ -190,16 +211,51 @@
             } else if (e.target.classList.contains('delete-skill')) {
                 e.preventDefault();
                 const id = e.target.dataset.id;
-                if (confirm('Are you sure you want to delete this skill?')) {
-                    deleteSkillData(id)
-                        .then(result => {
-                            if (result.status) {
-                                document.getElementById(`card_id_${id}`).remove();
-                                if (currentSkillId === parseInt(id)) resetSkillForm();
-                            }
-                        })
-                        .catch(err => alert('Error deleting: ' + err.message));
+                
+                // Set the form action and ID
+                document.getElementById('deleteSkillId').value = id;
+                document.getElementById('deleteSkillForm').action = `/jobseeker/skills/${id}`;
+                
+                // Show the modal
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteSkillModal'));
+                deleteModal.show();
+            }
+        });
+
+        // Handle form submission for delete modal
+        document.getElementById('deleteSkillForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('deleteSkillId').value;
+            const form = this;
+            
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ _method: 'DELETE', id: id })
+                });
+                
+                const json = await res.json();
+                if (json.success) {
+                    document.getElementById(`card_id_${id}`).remove();
+                    if (currentSkillId === parseInt(id)) {
+                        resetSkillForm();
+                    }
+                    
+                    // Hide the modal
+                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteSkillModal'));
+                    deleteModal.hide();
+                } else {
+                    alert('Error deleting skill');
                 }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Error deleting skill');
             }
         });
 

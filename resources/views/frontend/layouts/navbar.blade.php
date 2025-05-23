@@ -106,6 +106,8 @@
                     </ul>
                 </li>
 
+              
+              @if(Auth::guard('job_seekers')->user())
                 {{-- <!-- Games Dropdown {{ request()->routeIs('spinn') || request()->routeIs('exit-poll') || request()->routeIs('quiz') ? 'active-navLink' : '' }} --> --}}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('polls*') || request()->routeIs('quiz*') ? 'active-navLink' : '' }}" href="#" id="gamesDropdown" role="button"
@@ -119,6 +121,12 @@
 
                     </ul>
                 </li>
+                 @else
+                    <li class="nav-item">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="modal"
+                            data-bs-target="#loginModal">Forms</button>
+                    </li>
+                @endif
 
 
                 <!-- Services Dropdown -->

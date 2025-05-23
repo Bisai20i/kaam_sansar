@@ -39,7 +39,7 @@
             </div>
             <button type="button" class="btn add-project float-start" id="addEducation">+ Add Education</button>
             <div class="text-end">
-                <button type="submit" class="btn text-center skip-btn mx-2" data-current="education" data-next="project" data-link="projectLink">Continue to Project</button>
+                <button type="submit" class="btn text-center skip-btn mx-2" data-current="education" data-next="project" data-link="projectLink">Skip</button>
             </div>
         </form>
     </div>
@@ -66,6 +66,30 @@
             </div>
             @endforeach
         </div>
+    </div>
+</div>
+
+<!-- Delete Modal for Education -->
+<div class="modal fade" id="deleteEducationModal" tabindex="-1" aria-labelledby="deleteEducationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="deleteEducationForm" method="POST" action="">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" id="deleteEducationId" name="id" value="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Education</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this education entry?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -219,11 +243,12 @@
 
         // Event delegation for both edit and delete buttons
         document.getElementById('educationList').addEventListener('click', function(e) {
+            const id = e.target.dataset.id;
+            if (!id) return;
+
             // Handle edit button
             if (e.target.classList.contains('edit-education')) {
                 e.preventDefault();
-                const id = e.target.dataset.id;
-                
                 fetchEducationData(id)
                     .then(education => {
                         populateForm(education);
@@ -239,23 +264,50 @@
             // Handle delete button
             else if (e.target.classList.contains('delete-education')) {
                 e.preventDefault();
-                const id = e.target.dataset.id;
+                // Set the form action and ID
+                document.getElementById('deleteEducationId').value = id;
+                document.getElementById('deleteEducationForm').action = `/jobseeker/educations/${id}`;
+                
+                // Show the modal
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteEducationModal'));
+                deleteModal.show();
+            }
+        });
 
-                if (confirm('Are you sure you want to delete this education entry?')) {
-                    deleteEducationData(id)
-                        .then(result => {
-                            if (result.status) {
-                                document.getElementById(`card_id_${id}`).remove();
-                                alert('Education deleted successfully!');
-                                if (currentEducationId === parseInt(id)) {
-                                    resetForm();
-                                }
-                            }
-                        })
-                        .catch(error => {
-                            alert('Error deleting education: ' + error.message);
-                        });
+        // Handle form submission for delete modal
+        document.getElementById('deleteEducationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('deleteEducationId').value;
+            const form = this;
+            
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ _method: 'DELETE', id: id })
+                });
+                
+                const json = await res.json();
+                if (json.success) {
+                    document.getElementById(`card_id_${id}`).remove();
+                    if (currentEducationId === parseInt(id)) {
+                        resetForm();
+                    }
+                    
+                    // Hide the modal
+                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteEducationModal'));
+                    deleteModal.hide();
+                } else {
+                    alert('Error deleting education');
                 }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Error deleting education');
             }
         });
 

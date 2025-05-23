@@ -375,6 +375,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::resource('trainings', TrainingController::class);
     Route::resource('languages', LanguageController::class);
 
+
     //bank account
     Route::get('bankAccounts/create', [BankAccountController::class, 'create'])->name('bankAccounts.create');
     Route::post('bankAccounts', [BankAccountController::class, 'store'])->name('bankAccounts.store');
