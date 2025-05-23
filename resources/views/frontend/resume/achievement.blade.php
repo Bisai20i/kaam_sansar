@@ -22,7 +22,7 @@
             <div class="d-flex justify-content-between">
                 <button type="button" class="btn add-project float-start" id="addAchievement">+ Add Achievement</button>
                 <div class="text-end">
-                    <button type="submit" class="btn text-center skip-btn mx-2" data-current="achievement" data-next="experience" data-link="experienceLink">Continue to Experience</button>
+                    <button type="submit" class="btn text-center skip-btn mx-2" data-current="achievement" data-next="experience" data-link="experienceLink">Skip</button>
                 </div>
             </div>
         </form>
@@ -38,7 +38,7 @@
                     </div>
                     <div>
                         <button type="button" class="btn fw-semibold edit-achievement" style="color: #0064A7;" data-id="{{ $achievement->id }}">Edit</button>
-                        <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="{{ $achievement->id }}">Delete</button>
+                        <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="{{ $achievement->id }}" data-bs-toggle="modal" data-bs-target="#deleteAchievementModal">Delete</button>
                     </div>
                 </div>
                 <div class="text-black-50">
@@ -49,6 +49,31 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Achievement Modal -->
+<div class="modal fade" id="deleteAchievementModal" tabindex="-1" aria-labelledby="deleteAchievementModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="deleteAchievementForm" method="POST" action="">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" id="deleteAchievementId" name="id" value="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Achievement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this achievement?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -114,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div><h5>${data.achievementTitle}</h5></div>
                 <div>
                     <button type="button" class="btn fw-semibold edit-achievement" style="color: #0064A7;" data-id="${data.id}">Edit</button>
-                    <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="${data.id}">Delete</button>
+                    <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="${data.id}" data-bs-toggle="modal" data-bs-target="#deleteAchievementModal">Delete</button>
                 </div>
             </div>
             <div class="text-black-50">
@@ -131,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div><h5>${data.achievementTitle}</h5></div>
                     <div>
                         <button type="button" class="btn fw-semibold edit-achievement" style="color: #0064A7;" data-id="${data.id}">Edit</button>
-                        <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="${data.id}">Delete</button>
+                        <button type="button" class="btn text-danger fw-semibold delete-achievement" data-id="${data.id}" data-bs-toggle="modal" data-bs-target="#deleteAchievementModal">Delete</button>
                     </div>
                 </div>
                 <div class="text-black-50">
@@ -139,6 +164,50 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>`;
         }
     }
+
+    // Handle delete modal opening
+    document.getElementById('achievementList').addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-achievement')) {
+            const achievementId = e.target.getAttribute('data-id');
+            document.getElementById('deleteAchievementId').value = achievementId;
+            document.getElementById('deleteAchievementForm').action = `/jobseeker/achievements/${achievementId}`;
+        }
+    });
+
+    // Handle form submission for delete
+    document.getElementById('deleteAchievementForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const achievementId = document.getElementById('deleteAchievementId').value;
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ id: achievementId })
+            });
+
+            if (!response.ok) throw new Error('Failed to delete achievement');
+
+            const result = await response.json();
+            if (result.success) {
+                document.getElementById(`achievement_card_${achievementId}`).remove();
+                if (currentAchievementId === parseInt(achievementId)) {
+                    resetAchievementForm();
+                }
+                // Hide the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteAchievementModal'));
+                modal.hide();
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error deleting achievement');
+        }
+    });
 
     document.getElementById('addAchievement').addEventListener('click', async function (e) {
         e.preventDefault();
@@ -155,7 +224,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result.success) {
                 if (isEditingAchievement) {
                     updateAchievementCard(result.achievement);
-                    alert('Achievement updated successfully!');
                 } else {
                     appendAchievementCard(result.achievement);
                 }
@@ -177,36 +245,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('achievementForm').scrollIntoView({ behavior: 'smooth' });
                 })
                 .catch(err => alert('Error loading data: ' + err.message));
-        } else if (e.target.classList.contains('delete-achievement')) {
-            e.preventDefault();
-            const id = e.target.dataset.id;
-            if (confirm('Are you sure you want to delete this achievement?')) {
-                deleteAchievementData(id)
-                    .then(result => {
-                        if (result.status) {
-                            document.getElementById(`achievement_card_${id}`).remove();
-                            if (currentAchievementId === parseInt(id)) resetAchievementForm();
-                        }
-                    })
-                    .catch(err => alert('Error deleting: ' + err.message));
-            }
         }
     });
-
-    async function deleteAchievementData(id) {
-        const response = await fetch(`/jobseeker/achievements/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ request_type: 'mobile' })
-        });
-
-        if (!response.ok) throw new Error('Failed to delete achievement');
-        return await response.json();
-    }
 });
 </script>
 @endpush

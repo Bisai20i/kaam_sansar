@@ -107,7 +107,7 @@
                 data-current="experience"
                 data-next="training"
                 data-link="trainingLink">
-          Continue to Training
+          Skip
         </button>
       </div>
     </form>
@@ -140,6 +140,30 @@
       @endforeach
     </div>
   </div>
+</div>
+
+<!-- Delete Modal for Experience -->
+<div class="modal fade" id="deleteExperienceModal" tabindex="-1" aria-labelledby="deleteExperienceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="deleteExperienceForm" method="POST" action="">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" id="deleteExperienceId" name="id" value="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Experience</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this experience entry?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 @push('scripts')
@@ -224,12 +248,11 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('addExperience').addEventListener('click', async function(e) {
     e.preventDefault();
     const data = collectExperienceData();
-  console.log(collectExperienceData());
+    console.log(collectExperienceData());
     const result = await saveExperienceData(data);
     if (result.success) {
       if (isEditing) {
         updateExperienceCard(result.experience);
-        alert('Experience updated successfully!');
       } else {
         appendExperienceCard(result.experience);
       }
@@ -241,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('experienceList').addEventListener('click', function(e) {
     const id = e.target.dataset.id;
+    if (!id) return;
 
     if (e.target.classList.contains('edit-experience')) {
       e.preventDefault();
@@ -250,31 +274,52 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     else if (e.target.classList.contains('delete-experience')) {
       e.preventDefault();
-      if (!confirm('Are you sure you want to delete this experience entry?')) return;
-      deleteExperienceData(id)
-        .then(res => {
-          if (res.status) {
-            document.getElementById(`card_id_${id}`).remove();
-            if (currentExperienceId === parseInt(id)) resetForm();
-          }
-        })
-        .catch(err => alert('Error deleting experience: ' + err.message));
+      // Set the form action and ID
+      document.getElementById('deleteExperienceId').value = id;
+      document.getElementById('deleteExperienceForm').action = `/jobseeker/experiences/${id}`;
+      
+      // Show the modal
+      const deleteModal = new bootstrap.Modal(document.getElementById('deleteExperienceModal'));
+      deleteModal.show();
     }
   });
 
-  async function deleteExperienceData(id) {
-    const res = await fetch(`/jobseeker/experiences/${id}`, {
-      method:'DELETE',
-      headers:{
-        'Content-Type':'application/json',
-        'Accept':'application/json',
-        'X-CSRF-TOKEN':'{{ csrf_token() }}'
-      },
-      body: JSON.stringify({ request_type:'mobile' })
-    });
-    if (!res.ok) throw new Error('Failed to delete');
-    return await res.json();
-  }
+  // Handle form submission for delete modal
+  document.getElementById('deleteExperienceForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const id = document.getElementById('deleteExperienceId').value;
+    const form = this;
+    
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ _method: 'DELETE', id: id })
+      });
+      
+      const json = await res.json();
+      if (json.success) {
+        document.getElementById(`card_id_${id}`).remove();
+        if (currentExperienceId === parseInt(id)) {
+          resetForm();
+        }
+        
+        // Hide the modal
+        const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteExperienceModal'));
+        deleteModal.hide();
+      } else {
+        alert('Error deleting experience');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('Error deleting experience');
+    }
+  });
 
   function appendExperienceCard(exp) {
     const card = document.createElement('div');

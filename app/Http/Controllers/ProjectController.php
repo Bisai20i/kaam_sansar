@@ -42,13 +42,13 @@ class ProjectController extends Controller
     {
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
-
+        $jobSeekerId = $user->id;
         if (! $user) {
             return $isMobile
                 ? $this->responseError('Unauthorized', 401)
                 : redirect()->route('login')->with('error', 'Unauthorized access.');
         }
-        
+
         $validator = Validator::make($request->all(), [
             'projectTitle'       => 'required|string|max:255',
             'pl'        => 'nullable',
@@ -66,12 +66,14 @@ class ProjectController extends Controller
                 ]);
         }
 
-        $project = new Project([
-            'jobSeekerId'        => $user->id,
-            'projectTitle'       => $request->input('projectTitle'),
-            'projectLink'        => $request->input('pl') ?: null,
-            'projectDescription' => $request->input('projectDescription'),
-        ]);
+        $validated = $validator->validated();
+
+        $project = new Project();
+        $project->projectTitle = $validated['projectTitle'];
+        $project->projectLink = $validated['pl'];
+        $project->projectDescription = $validated['projectDescription'];
+        $project->jobSeekerId = $jobSeekerId;
+
         $project->save();
 
         Log::info('Project created', ['id' => $project->id]);
@@ -183,6 +185,7 @@ class ProjectController extends Controller
                 ]);
         }
         //update the filled
+
         $project->projectTitle = $request->input('projectTitle');
         $project->projectLink = $request->input('projectLink');
         $project->projectDescription = $request->input('projectDescription');

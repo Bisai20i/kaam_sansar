@@ -18,6 +18,7 @@ return new class extends Migration
             $table->longText('question');
             $table->foreignId('admin_id')->constrained('admins')->onDelete('cascade');
             $table->integer('points')->default(0); 
+            $table->enum('publishStauts',['publish','unpublish'])->default('unpublish');
             $table->timestamps();
         });
     }
