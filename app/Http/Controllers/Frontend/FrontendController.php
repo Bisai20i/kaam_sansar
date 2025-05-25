@@ -43,6 +43,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\BlogsAndPodcastsBookmark;
+
 
 
 class FrontendController extends Controller
@@ -79,7 +81,7 @@ class FrontendController extends Controller
             ->where('publishStatus', 1)
             ->take(12)
             ->get();
-            $faqs = FrequentlyAskedQuestion::all();
+        $faqs = FrequentlyAskedQuestion::all();
         $ad_banners           = [];
         $ad_banners['middle'] = AdsManager::where('which_page', 'home')
             ->where('publish_or_not', 1)
@@ -91,11 +93,10 @@ class FrontendController extends Controller
             if ($ad_banners['middle']) {
                 $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
             }
-
         }
 
         // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners', 'faqs'));
     }
 
     public function findJobs()
@@ -270,32 +271,44 @@ class FrontendController extends Controller
             ->when(! empty($request->input('location')), function ($q) use ($request) {
                 return $q->where('jobLocation', 'LIKE', "%{$request->input('location')}%");
             })
-            ->when(! empty($request->query('filtersite') && in_array($request->query('filtersite'), ['remote', 'onsite', 'hybrid'])),
+            ->when(
+                ! empty($request->query('filtersite') && in_array($request->query('filtersite'), ['remote', 'onsite', 'hybrid'])),
                 function ($q) use ($request) {
                     return $q->where('jobSite', $request->query('filtersite'));
-                })
-            ->when(! empty($request->query('filtertype') && in_array($request->query('filtertype'), ['trainee', 'parttime', 'fulltime', 'casual'])),
+                }
+            )
+            ->when(
+                ! empty($request->query('filtertype') && in_array($request->query('filtertype'), ['trainee', 'parttime', 'fulltime', 'casual'])),
                 function ($q) use ($request) {
                     return $q->where('jobType', $request->query('filtertype'));
-                })
-            ->when(! empty($request->query('filterdate') && in_array($request->query('filterdate'), ['1', '5', '15', '30'])),
+                }
+            )
+            ->when(
+                ! empty($request->query('filterdate') && in_array($request->query('filterdate'), ['1', '5', '15', '30'])),
                 function ($q) use ($request) {
                     return $q->where('created_at', '>=', Carbon::now()->subDays($request->query('filterdate')));
-                })
-            ->when(! empty($request->query('filterlevel') && in_array($request->query('filterlevel'), ['entry', 'mid', 'senior'])),
+                }
+            )
+            ->when(
+                ! empty($request->query('filterlevel') && in_array($request->query('filterlevel'), ['entry', 'mid', 'senior'])),
                 function ($q) use ($request) {
                     return $q->where('jobLevel', 'LIKE', "%{$request->query('filterlevel')}%");
-                })
-            ->when(! empty($request->query('filterfeature') && in_array($request->query('filterfeature'), ['normal', 'premium'])),
+                }
+            )
+            ->when(
+                ! empty($request->query('filterfeature') && in_array($request->query('filterfeature'), ['normal', 'premium'])),
                 function ($q) use ($request) {
                     return $q->where('jobFeature', $request->query('filterfeature'));
-                })
-            ->when(! empty($request->input('jobsby')) && in_array($request->input('jobsby'), ['category', 'skill', 'location']),
+                }
+            )
+            ->when(
+                ! empty($request->input('jobsby')) && in_array($request->input('jobsby'), ['category', 'skill', 'location']),
                 function ($q) use ($request) {
                     $q->when($request->input('jobsby') == 'category', fn($query) => $query->where('jobCategoryId', $request->input('searchcategoryid')))
                         ->when($request->input('jobsby') == 'skill', fn($query) => $query->where('skills', 'LIKE', "%{$request->input('skill')}%"))
                         ->when($request->input('jobsby') == 'location', fn($query) => $query->where('jobLocation', 'LIKE', "%{$request->input('location')}%"));
-                })
+                }
+            )
             ->paginate(8)
             ->withQueryString();
 
@@ -376,7 +389,7 @@ class FrontendController extends Controller
             })
             ->unique()  // Remove duplicate skills
             ->values(); // Reindex collection
-                    // dd($similar_jobs);
+        // dd($similar_jobs);
         $ad_banners = [];
 
         $ad_banners['bottom'] = AdsManager::where('which_page', 'jobs')
@@ -422,6 +435,100 @@ class FrontendController extends Controller
         }
     }
 
+
+        public function bookmarkedPodcasts()
+        {
+            try {
+                $jobSeekerId = auth()->id();
+
+                $bookmarks = BlogsAndPodcastsBookmark::with('blogsAndPodcasts')
+                    ->where('job_seeker_id', $jobSeekerId)
+                    ->where('type', 'podcast')  // filter by podcast type in bookmarks table
+                    ->whereHas('blogsAndPodcasts', function ($query) {
+                        $query->where('blogOrPodcast', 'podcast'); // extra safety check, optional
+                    })
+                    ->get();
+                Log::info('Bookmarked Podcasts full result:', $bookmarks->toArray());
+
+                $podcasts = $bookmarks->pluck('blogsAndPodcasts')->filter();
+                // Log::info('Bookmarked Podcasts:', $podcasts->toArray());
+
+                return view('frontend.profile.partials.my-podcast', [
+                    'podcasts' => $podcasts
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Bookmarked Podcasts Error: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Something went wrong!');
+            }
+        }
+
+        public function bookmarkPodcast(Request $request)
+        {
+            $request->validate([
+                'blogs_and_podcasts_id' => 'required|integer|exists:blogs_and_podcasts,id',
+                'type' => 'required|in:podcast,article',  // force required type for clarity
+            ]);
+
+            $jobSeekerId = auth()->id();
+            $contentId = $request->input('blogs_and_podcasts_id');
+            $type = $request->input('type');
+
+            // Check that the content type in blogs_and_podcasts matches the requested type
+            $content = \App\Models\BlogsAndPodcast::findOrFail($contentId);
+            if (($type === 'podcast' && $content->blogOrPodcast !== 'podcast') ||
+                ($type === 'article' && $content->blogOrPodcast !== 'blog')
+            ) {
+                return redirect()->back()->with('error', 'Content type mismatch.');
+            }
+
+            // Check if bookmark already exists for this user, content, and type
+            $existingBookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+                ->where('blogs_and_podcasts_id', $contentId)
+                ->where('type', $type)
+                ->first();
+
+            if ($existingBookmark) {
+                return redirect()->back()->with('info', 'Already added to your bookmarks.');
+            }
+
+            // Create new bookmark with correct type
+            BlogsAndPodcastsBookmark::create([
+                'job_seeker_id' => $jobSeekerId,
+                'blogs_and_podcasts_id' => $contentId,
+                'type' => $type,
+            ]);
+
+            return redirect()->back()->with('success', ucfirst($type) . ' bookmarked successfully.');
+        }
+
+      public function remove($contentId)
+{
+    try {
+        $jobSeekerId = auth()->id();
+
+        $bookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+            ->where('blogs_and_podcasts_id', $contentId)
+            ->where('type', 'podcast') // 🔥 Add this line
+            ->first();
+
+        if ($bookmark) {
+            $bookmark->delete();
+            return redirect()->back()->with('success', 'Bookmark removed.');
+        }
+
+        return redirect()->back()->with('error', 'Bookmark not found.');
+    } catch (\Exception $e) {
+        Log::error('Remove Bookmark Error: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Something went wrong!');
+    }
+}
+
+
+
+
+
+
+
     public function newsAndBlogs()
     {
         $blogs = BlogsAndPodcast::where('blogOrPodcast', 'blog')
@@ -440,6 +547,99 @@ class FrontendController extends Controller
 
         return view('frontend.blog-details', compact('news_detail', 'similar_news'));
     }
+
+
+public function bookmarkedBlogs()
+{
+    try {
+        $jobSeekerId = auth()->id();
+
+        $bookmarks = BlogsAndPodcastsBookmark::with('blogsAndPodcasts')
+            ->where('job_seeker_id', $jobSeekerId)
+            ->where('type', 'article') // consistent use of 'article'
+            ->whereHas('blogsAndPodcasts', function ($query) {
+                $query->where('blogOrPodcast', 'blog');
+            })
+            ->get();
+
+        $blogs = $bookmarks->pluck('blogsAndPodcasts')->filter();
+
+        return view('frontend.profile.partials.my-articles', [
+            'blogs' => $blogs
+        ]);
+    } catch (\Exception $e) {
+        Log::error('Bookmarked Blogs Error: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Something went wrong!');
+    }
+}
+
+   public function bookmarkBlog(Request $request)
+{
+    $request->validate([
+        'blogs_and_podcasts_id' => 'required|integer|exists:blogs_and_podcasts,id',
+        'type' => 'required|in:podcast,blog',
+    ]);
+
+    $jobSeekerId = auth()->id();
+    $contentId = $request->input('blogs_and_podcasts_id');
+    $originalType = $request->input('type');
+
+    $content = BlogsAndPodcast::findOrFail($contentId);
+
+    if (($originalType === 'podcast' && $content->blogOrPodcast !== 'podcast') ||
+        ($originalType === 'blog' && $content->blogOrPodcast !== 'blog')
+    ) {
+        return back()->with('error', 'Content type mismatch.');
+    }
+
+    // Normalize type for storage
+    $type = $originalType === 'blog' ? 'article' : 'podcast';
+
+    $existingBookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+        ->where('blogs_and_podcasts_id', $contentId)
+        ->where('type', $type)
+        ->first();
+
+    if ($existingBookmark) {
+        return back()->with('info', 'Already bookmarked.');
+    }
+
+    BlogsAndPodcastsBookmark::create([
+        'job_seeker_id' => $jobSeekerId,
+        'blogs_and_podcasts_id' => $contentId,
+        'type' => $type,
+    ]);
+
+    return back()->with('success', ucfirst($originalType) . ' bookmarked successfully.');
+}
+
+public function removeBlogBookmark($blogId)
+{
+    try {
+        $jobSeekerId = auth()->id();
+
+        $bookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+            ->where('blogs_and_podcasts_id', $blogId)
+            ->where('type', 'article') // match the stored type
+            ->first();
+
+        if ($bookmark) {
+            $bookmark->delete();
+            return redirect()->back()->with('success', 'Bookmarked article removed.');
+        }
+
+        return redirect()->back()->with('error', 'Bookmark not found.');
+    } catch (\Exception $e) {
+        Log::error('Remove Blog Bookmark Error: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Something went wrong!');
+    }
+}
+
+
+
+
+
+
 
     public function podcasts()
     {
@@ -556,89 +756,98 @@ class FrontendController extends Controller
     public function horoscope(Request $request)
     {
         Log::info('Horoscope request received', ['request_data' => $request->all()]);
-    
+
         $astrologer = Astrologer::with('kundali', 'kundaliMatching')->get();
         Log::info('Fetched astrologers', ['astrologers_count' => $astrologer->count()]);
-    
+
         $type = $request->input('type', 'daily');
         Log::info('Horoscope type', ['type' => $type]);
-    
+
         $date = Carbon::today();
-    
+
         $horoscopes = Horoscope::where('type', $type);
         $startDate = null;
         $endDate = null;
-    
+
         switch ($type) {
             case 'daily':
                 $horoscopes->whereDate('publishDate', $date);
                 $startDate = $endDate = $date;
                 break;
 
-                case 'weekly':
-                    $startDate = $date->startOfWeek(); // Sunday as default start
-                    $endDate = $startDate->copy()->addDays(6); // Next 6 days
-                    break;
+            case 'weekly':
+                $startDate = $date->startOfWeek(); // Sunday as default start
+                $endDate = $startDate->copy()->addDays(6); // Next 6 days
+                break;
 
-                case 'monthly':
-                    $startDate = $date->startOfMonth();
-                    $endDate = $date->endOfMonth();
-                    break;
+            case 'monthly':
+                $startDate = $date->startOfMonth();
+                $endDate = $date->endOfMonth();
+                break;
 
-                case 'yearly':
-                    $startDate = $date->startOfYear();
-                    $endDate = $date->endOfYear();
-                    break;
-
+            case 'yearly':
+                $startDate = $date->startOfYear();
+                $endDate = $date->endOfYear();
+                break;
         }
         Log::info('Weekly range', ['startDate' => $startDate, 'endDate' => $endDate]);
 
-    
+
         $horoscopes = $horoscopes->get();
-    
+
         if ($startDate && $endDate) {
             Log::info('Fetching horoscope from-to', [
                 'startDate' => $startDate->toDateString(),
                 'endDate' => $endDate->toDateString()
             ]);
         }
-    
+
         $zodiacOrder = [
-            'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
-            'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'
+            'aries',
+            'taurus',
+            'gemini',
+            'cancer',
+            'leo',
+            'virgo',
+            'libra',
+            'scorpio',
+            'sagittarius',
+            'capricorn',
+            'aquarius',
+            'pisces'
         ];
         Log::info('Zodiac order', ['zodiac_order' => $zodiacOrder]);
-    
+
         Log::info('Fetched horoscopes', ['horoscopes_count' => $horoscopes->count()]);
         Log::info('Horoscopes data', ['horoscopes' => $horoscopes]);
-    
+
         $horoscopeMap = $horoscopes->keyBy(function ($item) {
             return strtolower($item->zodiacSignEnglish);
         });
-    
+
         Log::info('Horoscope map', ['horoscope_map' => $horoscopeMap]);
-    
+
         $orderedHoroscopes = collect($zodiacOrder)
             ->map(fn($zodiac) => $horoscopeMap->get($zodiac))
             ->filter();
-    
+
         Log::info('Ordered horoscopes', ['ordered_horoscopes' => $orderedHoroscopes]);
-    
+
         if ($orderedHoroscopes->isEmpty()) {
             Log::warning('No horoscopes found for the specified date and type');
         }
-    
 
 
-            $jyotishs = Jyotish::all();
+
+        $jyotishs = Jyotish::all();
 
         return view('frontend.horoscope.horoscope', compact('astrologer', 'orderedHoroscopes', 'type', 'jyotishs'));
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     public function giftNcoupon(Request $request, $type = null, $giftCategoryId = null)
     {
         // return $giftCategoryId;
@@ -748,7 +957,6 @@ class FrontendController extends Controller
         }
 
         return view('frontend.giftNcoupon.giftDescription', compact('giftNcoupon', 'similarGifts', 'giftComments', 'ad_banners'));
-
     }
 
     public function sellerProfile($id, $type = null)
@@ -977,7 +1185,6 @@ class FrontendController extends Controller
 
                 return $forumPost;
             });
-
         }
 
         // return $profile;
@@ -988,34 +1195,34 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads = Advertisement::paginate(8); 
+        $ads = Advertisement::paginate(8);
         $ad       = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();
 
         $ad_banners = [];
-        $ad_banners ['top'] = AdsManager::where('which_page', 'advertisement')
+        $ad_banners['top'] = AdsManager::where('which_page', 'advertisement')
             ->where('publish_or_not', 1)
             ->where('active', 1)
             ->where('position', 'top')
             ->first();
 
-        if($ad_banners){
-            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/'.$ad_banners['top']->image) : null;
+        if ($ad_banners) {
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
         }
 
 
-        return view('frontend.advertisements.index', compact('all', 'category', 'ads','ad', 'categories','ad_banners'))
+        return view('frontend.advertisements.index', compact('all', 'category', 'ads', 'ad', 'categories', 'ad_banners'))
             ->with('success', 'Advertisements retrieved successfully!');
-
     }
 
-    public function insurance(){
+    public function insurance()
+    {
         $companies = InsuranceCompany::orderBy('id', 'desc')->where('publishStatus', 1)->get();
 
         $companies->transform(function ($company) {
-            if($company->thumbnail){
+            if ($company->thumbnail) {
                 $company->thumbnail = asset('storage/' . $company->thumbnail);
             }
             return $company;
@@ -1025,9 +1232,10 @@ class FrontendController extends Controller
         return view('frontend.insurance.home', compact('companies'));
     }
 
-    public function insurance_category($id){
+    public function insurance_category($id)
+    {
         $categories = InsuranceCategory::orderBy('id', 'desc')
-            ->where('insurance_company_id',$id)
+            ->where('insurance_company_id', $id)
             ->where('publishStatus', 1)->get();
 
         // return $categories;
@@ -1035,13 +1243,14 @@ class FrontendController extends Controller
         return view('frontend.insurance.categories', compact('categories'));
     }
 
-    public function insurance_details($id){
+    public function insurance_details($id)
+    {
 
         $category = InsuranceCategory::with('insuranceDetail')
             ->with('subCategory')
             ->findOrFail($id);
         // $category = InsuranceCategoryDetail::with('insuranceDetail')->findOrFail($id);
-        $category->insuranceDetail->thumbnail = $category->insuranceDetail->thumbnail ? 
+        $category->insuranceDetail->thumbnail = $category->insuranceDetail->thumbnail ?
             asset('storage/' . $category->insuranceDetail->thumbnail) :
             asset('frontend/assets/Images/job.png');
 
@@ -1050,9 +1259,8 @@ class FrontendController extends Controller
         //         $detail->thumbnail = asset('storage/' . $detail->thumbnail);
         //     return $detail;
         // });
-        
+
         // return $category;
         return view('frontend.insurance.category_detail', compact('category'));
     }
-
 }

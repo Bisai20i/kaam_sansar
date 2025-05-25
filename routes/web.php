@@ -326,6 +326,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
     Route::get('jobseeker/getAbroadDeals', [JobSeekerController::class, 'getAbroadDeals']);
 
+
     Route::resource('profiles', ProfileController::class);
     Route::resource('visas', VisaController::class);
     // Route::resource('educations', EducationController::class);
@@ -346,7 +347,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     });
 
     //Messages Related routes
-    
+
     Route::get('/inbox', [MessageController::class, 'inbox'])->name('frontend.inbox');
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
     Route::get('/user-inbox', [MessageController::class, 'user_inbox'])->name('jobseeker.inbox');
@@ -391,6 +392,24 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('apply/{slug?}', [FrontendController::class, 'applyJob'])->name('frontend.apply');
 
     Route::post('/job/bookmark', [FrontendController::class, 'bookmarkjob'])->name('job.bookmark');
+
+    //podcast//
+    Route::post('/bookmark/podcast', [FrontendController::class, 'bookmarkPodcast'])->name('bookmark.podcast');
+    // Route::get('/jobseeker/mypodcasts', [FrontendController::class, 'bookmarkedPodcasts'])->name('jobseeker.mypodcasts');
+    Route::get('/profile/bookmarked-podcast/{user_id}', [FrontendController::class, 'bookmarkedPodcasts'])->name('jobseeker.mypodcasts');
+    // Route::get('/bookmark/remove/{podcastId}', [JobSeekerController::class, 'removeBookmark'])->name('podcastBookmark.remove');
+    Route::post('/bookmark/podcast/remove/{podcastId}', [FrontendController::class, 'remove'])
+        ->name('podcastBookmark.remove');
+
+
+    //news-article//
+
+    Route::post('/bookmark/blog', [FrontendController::class, 'bookmarkBlog'])->name('bookmark.blog');
+    Route::get('/profile/bookmarked-blogs/{user_id}', [FrontendController::class, 'bookmarkedBlogs'])->name('jobseeker.myblogs');
+    Route::post('/bookmark/blog/remove/{blogId}', [FrontendController::class, 'removeBlogBookmark'])->name('blogBookmark.remove');
+
+
+
     /* Visa HQ */
     Route::post('visa-HQ/apply', [FrontendController::class, 'visaDetails_apply'])->name('visaDetails.apply');
     Route::post('/visa-details/apply/save', [VisaApplicationController::class, 'saveApplication'])->name('visaDetails.apply.save');

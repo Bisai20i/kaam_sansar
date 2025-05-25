@@ -25,6 +25,14 @@
                                 <div class="card-body lh-1" style="padding: .5rem;">
                                     <div class="row">
                                         <p class="card-title fw-bold text-black">{{ $item->title }}</p>
+                                         <form action="{{ route('bookmark.podcast') }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <!-- <input type="hidden" name="jobSeekerId" value="{{ auth()->id() }}"> -->
+                                        <input type="hidden" name="blogs_and_podcasts_id" value="{{ $item->id }}">
+                                        <button type="submit" style="border:none; background:none; padding:0; cursor:pointer;">
+                                            <i class="far fa-bookmark bookmark-icon text-muted" style="font-size:18px;"></i>
+                                        </button>
+                                    </form>
                                     </div>
                                     <p class="card-text"> <small class="text-body-secondary fw-bold">
                                             @php
@@ -46,49 +54,80 @@
 
 
             </div>
-            <div class="row mt-3">
-                <nav>
-                    <ul class="pagination justify-content-end converter">
-                        @if ($podcasts->onFirstPage())
-                            <li class="page-item disabled d-none">
-                                <a class="page-link primary_color_text">Previous</a>
-                            </li>
-                        @else
-                            <li class="page-item">
-                                <a class="page-link primary_color_text"
-                                    href="{{ $podcasts->previousPageUrl() }}">Previous</a>
-                            </li>
-                        @endif
+           <div class="row mt-3">
+    <nav>
+        <ul class="pagination justify-content-end converter">
+            {{-- Previous Button --}}
+            @if ($podcasts->onFirstPage())
+                <li class="page-item disabled">
+                    <a class="page-link primary_color_text">&lt;</a>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->previousPageUrl() }}">&lt;</a>
+                </li>
+            @endif
 
-                        @foreach ($podcasts->getUrlRange(1, $podcasts->lastPage()) as $page => $url)
-                            @if ($page == $podcasts->currentPage())
-                                <li class="page-item page-item active"><a class="page-link primary_color_text"
-                                        href="#">{{ $page }}</a></li>
-                            @else
-                                <li class="page-item"><a class="page-link primary_color_text"
-                                        href="{{ $url }}">{{ $page }}</a></li>
-                            @endif
-                        @endforeach
+            {{-- Pagination Numbers --}}
+            @php
+                $currentPage = $podcasts->currentPage();
+                $lastPage = $podcasts->lastPage();
+                $pageRange = 2; // Number of pages to show before/after current page
+            @endphp
 
-                        @if ($podcasts->currentPage() < $podcasts->lastPage() - 2)
-                            <li class="page-item"><a class="page-link primary_color_text">...</a></li>
-                            <li class="page-item"><a class="page-link primary_color_text"
-                                    href="{{ $podcasts->url($podcasts->lastPage()) }}">{{ $podcasts->lastPage() }}</a>
-                            </li>
-                        @endif
+            {{-- Show First Page --}}
+            @if ($currentPage > $pageRange + 1)
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->url(1) }}">1</a>
+                </li>
+                @if ($currentPage > $pageRange + 2)
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                @endif
+            @endif
 
-                        @if ($podcasts->hasMorePages())
-                            <li class="page-item">
-                                <a class="page-link primary_color_text" href="{{ $podcasts->nextPageUrl() }}">Next</a>
-                            </li>
-                        @else
-                            <li class="page-item disabled">
-                                <a class="page-link primary_color_text">Next</a>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
-            </div>
+            {{-- Pages Before Current --}}
+            @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->url($i) }}">{{ $i }}</a>
+                </li>
+            @endfor
+
+            {{-- Current Page --}}
+            <li class="page-item active">
+                <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+            </li>
+
+            {{-- Pages After Current --}}
+            @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->url($i) }}">{{ $i }}</a>
+                </li>
+            @endfor
+
+            {{-- Show Last Page --}}
+            @if ($currentPage < $lastPage - $pageRange)
+                @if ($currentPage < $lastPage - $pageRange - 1)
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                @endif
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->url($lastPage) }}">{{ $lastPage }}</a>
+                </li>
+            @endif
+
+            {{-- Next Button --}}
+            @if ($podcasts->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->nextPageUrl() }}">&gt;</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link primary_color_text">&gt;</a>
+                </li>
+            @endif
+        </ul>
+    </nav>
+</div>
+
         </div>
     </section>
 @endsection

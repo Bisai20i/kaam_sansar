@@ -1,62 +1,73 @@
 @extends('frontend.layouts.main')
 @section('title', 'My Profile')
 @section('content')
-    <div class="container mt-4 py-5">
-        <div class="card-basic border">
-            <h5 class="text-start m-2">Your Profile</h5>
-        </div>
-        <style>
-            /* Profile */
+<div class="container mt-4 py-5">
+    <div class="card-basic border">
+        <h5 class="text-start m-2">Your Profile</h5>
+    </div>
+    <style>
+        /* Profile */
 
-            .active-profile {
-                background-color: #f8f9fa;
-                color: #0064A7 !important;
-                font-weight: 500;
-            }
+        .active-profile {
+            background-color: #f8f9fa;
+            color: #0064A7 !important;
+            font-weight: 500;
+        }
+    </style>
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{{ route('jobseeker.getProfile', ['user_id' => auth()->id()]) }}" data-section="basicInfo"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getProfile') ? 'active-profile' : '' }}">Basic
+                    Information</a>
+                <a href="{{ route('jobseeker.getCV', ['user_id' => auth()->id()]) }}" data-section="yourCV"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getCV') ? 'active-profile' : '' }}">Your
+                    CV</a>
+                <a href="{{ route('jobseeker.getPurchaseHistory', ['user_id' => auth()->id()]) }}"
+                    data-section="purchaseHistory"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getPurchaseHistory') ? 'active-profile' : '' }}">Purchase
+                    History</a>
+                <a href="{{ route('jobseeker.editProfile', ['user_id' => auth()->id()]) }}" data-section="editProfile"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.editProfile') ? 'active-profile' : '' }}">Edit
+                    Profile</a>
+                <a href="{{ route('jobseeker.myjobs', ['user_id' => auth()->id()]) }}" data-section="myJobs"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.myjobs') ? 'active-profile' : '' }}">My
+                    Jobs</a>
+                <a href="{{ route('jobseeker.getAdvertisements', ['user_id' => auth()->id()]) }}" data-section="myJobs"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAdvertisements') ? 'active-profile' : '' }}">My
+                    Advertisement</a>
+                <a href="{{ route('jobseeker.getAbroadDeals') }}" data-section="myJobs"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAbroadDeals') ? 'active-profile' : '' }}">My
+                    Abroad Deals</a>
+                <a href="{{ route('jobseeker.mypodcasts', ['user_id' => auth()->id()]) }}"
+                    data-section="myPodcasts"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.mypodcasts') ? 'active-profile' : '' }}">
+                    My Podcasts
+                </a>
+                <a href="{{ route('jobseeker.myblogs', ['user_id' => auth()->id()]) }}"
+                    data-section="myBlogs"
+                    class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.myblogs') ? 'active-profile' : '' }}">
+                    My Articles
+                </a>
 
-        </style>
-        <div class="row g-0">
-            <!-- Sidebar -->
-            <div class="col-md-3">
-                <div class="list-group">
-                    <a href="{{ route('jobseeker.getProfile', ['user_id' => auth()->id()]) }}" data-section="basicInfo"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getProfile') ? 'active-profile' : '' }}">Basic
-                        Information</a>
-                    <a href="{{ route('jobseeker.getCV', ['user_id' => auth()->id()]) }}" data-section="yourCV"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getCV') ? 'active-profile' : '' }}">Your
-                        CV</a>
-                    <a href="{{ route('jobseeker.getPurchaseHistory', ['user_id' => auth()->id()]) }}"
-                        data-section="purchaseHistory"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getPurchaseHistory') ? 'active-profile' : '' }}">Purchase
-                        History</a>
-                    <a href="{{ route('jobseeker.editProfile', ['user_id' => auth()->id()]) }}" data-section="editProfile"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.editProfile') ? 'active-profile' : '' }}">Edit
-                        Profile</a>
-                    <a href="{{ route('jobseeker.myjobs', ['user_id' => auth()->id()]) }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.myjobs') ? 'active-profile' : '' }}">My
-                        Jobs</a>
-                    <a href="{{ route('jobseeker.getAdvertisements', ['user_id' => auth()->id()]) }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAdvertisements') ? 'active-profile' : '' }}">My
-                        Advertisement</a>
-                    <a href="{{ route('jobseeker.getAbroadDeals') }}" data-section="myJobs"
-                        class="list-group-item list-group-item-action profile-link {{ request()->routeIs('jobseeker.getAbroadDeals') ? 'active-profile' : '' }}">My
-                        Abroad Deals</a>
-                </div>
+
             </div>
+        </div>
 
 
-            <!-- Content Area -->
-            <div class="col-md-9">
-                <div id="profileContent" class="content-section">
-                    @yield('profileSection')
-                    <!-- Content will be loaded here via AJAX -->
-                </div>
+        <!-- Content Area -->
+        <div class="col-md-9">
+            <div id="profileContent" class="content-section">
+                @yield('profileSection')
+                <!-- Content will be loaded here via AJAX -->
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Add this before closing body tag -->
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Add this before closing body tag -->
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             // Function to get the base URL of your application
