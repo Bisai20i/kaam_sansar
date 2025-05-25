@@ -72,11 +72,11 @@
                                 color: red;
                             }
 
-                                .today {
-                                    background-color: #0064A7 !important;
-                                    color: #fff!important;
-                                }
-                            </style>
+                            .today {
+                                background-color: #0064A7 !important;
+                                color: #fff !important;
+                            }
+                        </style>
 
 
 
@@ -456,19 +456,6 @@
                 });
             });
         </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
     </div>
 
@@ -822,8 +809,8 @@
                             <img src="{{ asset('images/default-image.jpg') }}" alt="No Image" class="card-img-top" style="height: 200px; object-fit: cover;">
                             @endif
                             <div class="card-body">
-                                <h5 class="card-title">{{ $jyotish->name }}</h5> 
-                                <p class="card-text" style="color:rgb(114, 116, 120);">Phone: {{ $jyotish->phone ?? 'N/A' }}</p> 
+                                <h5 class="card-title">{{ $jyotish->name }}</h5>
+                                <p class="card-text" style="color:rgb(114, 116, 120);">Phone: {{ $jyotish->phone ?? 'N/A' }}</p>
                                 <p class="card-text" style="color:rgb(114, 116, 120);">Email: {{ $jyotish->email ?? 'N/A' }}</p>
 
                                 @if(!empty($jyotish->astroVideoLink))
@@ -881,292 +868,6 @@
             height: 250px;
         }
     </style>
-
-
-
-
-
-
-
-
-
-
-    <!-- 
-<script>
-    $('#payButton').on('click', function () {
-        let formData = new FormData();
-
-        // Girl Info
-        formData.append('girlName', $('input[name="girlName"]').val());
-        formData.append('girlPlaceOfBirth', $('select[name="girlPlaceOfBirth"]').val());
-
-        let gday = $('input[name="gday"]').val();
-        let gmonth = $('input[name="gmonth"]').val();
-        let gyear = $('input[name="gyear"]').val();
-        formData.append('girlDateOfBirth', `${gyear}-${gmonth}-${gday}`); // YYYY-MM-DD
-
-        let ghour = $('input[name="hour"]').eq(0).val();
-        let gminute = $('input[name="minute"]').eq(0).val();
-        let gsecond = $('input[name="second"]').eq(0).val();
-        formData.append('girlTimeOfBirth', `${ghour}:${gminute}:${gsecond}`); // HH:MM:SS
-
-        // Boy Info
-        formData.append('boyName', $('input[name="boyName"]').val());
-        formData.append('boyPlaceOfBirth', $('select[name="boyPlaceOfBirth"]').val());
-
-        let bday = $('input[name="bday"]').val();
-        let bmonth = $('input[name="bmonth"]').val();
-        let byear = $('input[name="byear"]').val();
-        formData.append('boyDateOfBirth', `${byear}-${bmonth}-${bday}`);
-
-        let bhour = $('input[name="hour"]').eq(1).val();
-        let bminute = $('input[name="minute"]').eq(1).val();
-        let bsecond = $('input[name="second"]').eq(1).val();
-        formData.append('boyTimeOfBirth', `${bhour}:${bminute}:${bsecond}`);
-
-        // Questions
-        formData.append('Query1', $('input[name="Query1"]').val());
-        formData.append('Query2', $('input[name="Query2"]').val());
-        formData.append('Query3', $('input[name="Query3"]').val());
-
-        $.ajax({
-            url: "{{ route('kundalimatching.store') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            success: function (response) {
-                alert("Kundali details saved successfully!");
-                // Optional: redirect or reset
-            },
-            error: function (xhr) {
-                alert("Something went wrong!");
-                console.error(xhr.responseText);
-            }
-        });
-    });
-</script> -->
-
-
-    <!-- <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const buttons = document.querySelectorAll(".button-container-horoscope button");
-                const sections = document.querySelectorAll(".horoscope-section");
-
-                // Function to show the selected section and hide others
-                function showSection(sectionId) {
-                    sections.forEach(section => {
-                        section.style.display = "none"; // Hide all sections
-                    });
-
-                    document.getElementById(sectionId).style.display = "block"; // Show the selected section
-
-                    buttons.forEach(button => {
-                        button.classList.remove("btn-primary", "active");
-                        button.classList.add("btn-outline-primary");
-                    });
-
-
-
-
-                    // Activate the clicked button
-                    document.getElementById(sectionId + "Btn").classList.remove("btn-outline-primary");
-                    document.getElementById(sectionId + "Btn").classList.add("btn-primary", "active");
-                }
-
-                // Attach event listeners to all buttons
-                document.getElementById("dailyBtn").addEventListener("click", () => showSection("daily"));
-                document.getElementById("weeklyBtn").addEventListener("click", () => showSection("weekly"));
-                document.getElementById("monthlyBtn").addEventListener("click", () => showSection("monthly"));
-                document.getElementById("yearlyBtn").addEventListener("click", () => showSection("yearly"));
-
-                // Set default active section
-                showSection("daily");
-            });
-
-            // Function to show horoscope details in the modal
-            function showDescription(title, description) {
-                document.getElementById("horoscopeTitle").innerText = title;
-                document.getElementById("horoscopeDescription").innerText = description;
-            }
-
-
-            // Show Girls Section in kundali
-            document.getElementById("nextButton").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById("Girls-Section").style.display = "none"; // Hide Girls Section
-                document.getElementById("Boys-Section").style.display = "block"; // Show Boys Section
-                document.getElementById("Boys-Section").scrollIntoView({
-                    behavior: "smooth"
-                });
-            });
-
-            // Show Thanks Section
-            document.getElementById("MatchButton").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById("Girls-Section").style.display = "none"; // Hide Girls Section
-                document.getElementById("Boys-Section").style.display = "none"; // Hide Boys Section
-                document.getElementById("Question-Section").style.display = "block"; // Show Thanks Section
-                document.getElementById("Question-Section").scrollIntoView({
-                    behavior: "smooth"
-                });
-            });
-
-            // Go back to Girls Section when clicking the arrow icon
-            document.getElementById("backButton").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent default action
-                document.getElementById("Girls-Section").style.display = "block"; // Show Girls Section
-                document.getElementById("Boys-Section").style.display = "none"; // Hide Boys Section
-                document.getElementById("Girls-Section").scrollIntoView({
-                    behavior: "smooth"
-                });
-            });
-
-            document.querySelector(".ok-btn").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent any default behavior of the button
-                document.getElementById("Thanks-Section").style.display = "none"; // Hide the Thanks Section
-                document.getElementById("Girls-Section").style.display = "block"; // Show the Girls Section
-                document.getElementById("Girls-Section").scrollIntoView({
-                    behavior: "smooth"
-                }); // Scroll to Girls Section
-            });
-
-
-            // Kundali & Horoscope btn
-            document.addEventListener("DOMContentLoaded", function() {
-                const kundaliBtn = document.getElementById("kundaliBtn");
-                const horoscopeBtn = document.getElementById("horoscopeBtn");
-                const girlsSection = document.getElementById("Girls-Section");
-                const boysSection = document.getElementById("Boys-Section");
-                const personalDetailsSection = document.getElementById("Personal-Section");
-                const paymentSection = document.getElementById("payment-section");
-                const questionSection = document.getElementById("Question-Section");
-
-                // Initially show only the Girls-Section and hide Personal-Section
-                function showSection(activeSection) {
-                    girlsSection.style.display = activeSection === girlsSection ? "block" : "none";
-                    boysSection.style.display = activeSection === boysSection ? "block" : "none";
-                    personalDetailsSection.style.display = activeSection === personalDetailsSection ? "block" : "none";
-                    paymentSection.style.display = activeSection === paymentSection ? "block" : "none";
-                    questionSection.style.display = activeSection === questionSection ? "block" : "none";
-                }
-
-                function toggleActiveButton(activeBtn, inactiveBtn) {
-                    activeBtn.classList.add("active");
-                    inactiveBtn.classList.remove("active");
-                }
-
-                kundaliBtn.addEventListener("click", function() {
-                    toggleActiveButton(kundaliBtn, horoscopeBtn);
-                    showSection(girlsSection);
-                });
-
-                horoscopeBtn.addEventListener("click", function() {
-                    toggleActiveButton(horoscopeBtn, kundaliBtn);
-                    showSection(personalDetailsSection);
-                    personalDetailsSection.scrollIntoView({
-                        behavior: "smooth"
-                    });
-                });
-
-                // Show only the initial section on load
-                showSection(girlsSection);
-            });
-
-
-            document.getElementById("nextButton1").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById("Personal-Section").style.display = "none"; // Hide Girls Section
-                document.getElementById("Question-Section").style.display = "block"; // Show Boys Section
-                document.getElementById("Question-Section").scrollIntoView({
-                    behavior: "smooth"
-                });
-            });
-
-
-            // Go back to personal when clicking the arrow icon
-            document.getElementById("backButtonqen2").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent default action
-                document.getElementById("Boys-Section").style.display = "block"; // Show Girls Section
-                document.getElementById("Question-Section").style.display = "none"; // Hide Boys Section
-                document.getElementById("Boys-Section").scrollIntoView({
-                    behavior: "smooth"
-                });
-
-            });
-
-            // Go back to personal when clicking the arrow icon
-            document.getElementById("backButtonqen1").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent default action
-                document.getElementById("Personal-Section").style.display = "block"; // Show Girls Section
-                document.getElementById("Question-Section").style.display = "none"; // Hide Boys Section
-                document.getElementById("Personal-Section").scrollIntoView({
-                    behavior: "smooth"
-                });
-
-            });
-
-            // Show Thanks Section
-            document.getElementById("MatchButton").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById("Girls-Section").style.display = "none"; // Hide Girls Section
-                document.getElementById("Boys-Section").style.display = "none"; // Hide Boys Section
-                document.getElementById("Question-Section").style.display = "block"; // Show Thanks Section
-                document.getElementById("Question-Section").scrollIntoView({
-                    behavior: "smooth"
-                });
-            });
-
-
-            document.getElementById("payButton").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById("Girls-Section").style.display = "none"; // Hide Girls Section
-                document.getElementById("Boys-Section").style.display = "none"; // Hide Boys Section
-                document.getElementById("Question-Section").style.display = "none"; // Show Thanks Section
-                document.getElementById("payment-section").style.display = "block"; // Show Thanks Section
-                document.getElementById("payment-section").scrollIntoView({
-                    behavior: "smooth"
-                });
-            });
-
-            document.getElementById("back-btn").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent default action
-
-                // Show the Question Section
-                document.getElementById("Question-Section").style.display = "block";
-
-                // Hide the Payment Section
-                document.getElementById("payment-section").style.display = "none";
-
-                // Scroll to the Question Section smoothly
-                document.getElementById("Question-Section").scrollIntoView({
-                    behavior: "smooth"
-                });
-            });
-        </script> -->
-    <!-- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll(".button-container-horoscope button");
-        const typeInput = document.getElementById("horoscopeTypeInput");
-        const form = document.getElementById("horoscopeTypeForm");
-
-        // Function to update form and submit it
-        function submitType(type) {
-            typeInput.value = type;
-            form.submit();
-        }
-
-        buttons.forEach(button => {
-            const type = button.id.replace("Btn", ""); // Get 'daily', 'weekly', etc.
-            button.addEventListener("click", () => submitType(type));
-        });
-    });
-</script> -->
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const buttons = document.querySelectorAll(".button-container-horoscope button");
@@ -1189,15 +890,6 @@
                 document.getElementById(sectionId + "Btn").classList.remove("btn-outline-primary");
                 document.getElementById(sectionId + "Btn").classList.add("btn-primary", "active");
             }
-
-            // // Attach event listeners to all buttons
-            // document.getElementById("dailyBtn").addEventListener("click", () => showSection("daily"));
-            // document.getElementById("weeklyBtn").addEventListener("click", () => showSection("weekly"));
-            // document.getElementById("monthlyBtn").addEventListener("click", () => showSection("monthly"));
-            // document.getElementById("yearlyBtn").addEventListener("click", () => showSection("yearly"));
-
-            // // Set default active section
-            // showSection("daily");
         });
 
         // Function to show horoscope details in the modal
@@ -1383,9 +1075,6 @@
                 behavior: "smooth"
             });
         });
-
-
-
         // Back to Question Section from Payment Section
         document.getElementById("back-btn").addEventListener("click", function(event) {
             event.preventDefault();

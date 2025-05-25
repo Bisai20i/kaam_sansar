@@ -50,7 +50,6 @@ class QuestionController extends Controller
             'options' => 'required|array|size:4',
             'options.*' => 'required|string',
             'correct_option' => 'required|integer|between:0,3',
-            'publishStatus' => 'in:publish,unpublish',
         ]);
 
         $question = Question::create([
@@ -130,6 +129,14 @@ class QuestionController extends Controller
 
         return redirect()->route('questions.index')->with('success', 'Question updated successfully!');
     }
+    
+     public function updateStatus($id)
+    {
+        $question = Question::findOrFail($id);
+        $question->publishStauts = $question->publishStauts === 'publish' ? 'unpublish' : 'publish';
+        $question->save();
+        return redirect()->back()->with('success', 'Question status updated.');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -145,35 +152,35 @@ class QuestionController extends Controller
 
         return redirect()->route('questions.index')->with('success', 'Question deleted successfully!');
     }
+
     public function quiz()
-    {
-        $jobseeker = Auth::guard('job_seekers')->user();
+{
+    $jobseeker = Auth::guard('job_seekers')->user();
 
-        if (!$jobseeker) {
-            abort(403, 'Unauthorized');
-        }
-        $hasPlayedToday = UserAnswer::where('user_id', $jobseeker->id)
-            ->whereDate('created_at', now()->today())
-            ->exists();
-
-        if ($hasPlayedToday) {
-            return redirect()->route('quiz.thankyou')->with('error', 'You have already taken the quiz today. Try again tomorrow.');
-        }
-        $answeredQuestionIds = UserAnswer::where('user_id', $jobseeker->id)
-            ->pluck('question_id')
-            ->toArray();
-
-        $questions = Question::where('publishStatus', 'publish')
-            ->whereNotIn('id', $answeredQuestionIds)
-            ->with('answers')
-            ->get();
-
-        if ($questions->isEmpty()) {
-            return redirect()->route('quiz.thankyou')->with('error', 'No new questions available at the moment.');
-        }
-
-        return view('frontend.quiz.show', compact('questions'));
+    if (!$jobseeker) {
+        abort(403, 'Unauthorized');
     }
+
+    // Get IDs of questions the user has already answered
+    $answeredQuestionIds = UserAnswer::where('user_id', $jobseeker->id)
+        ->pluck('question_id')
+        ->toArray();
+
+    // Fetch only published questions that the user hasn't answered yet
+    $questions = Question::with('answers')
+        ->where('publishStauts', 'publish')
+        ->whereNotIn('id', $answeredQuestionIds)
+        ->get();
+
+    // If no questions remain, redirect to thank you page
+    if ($questions->isEmpty()) {
+        return redirect()->route('quiz.thankyou')->with('error', 'You have already taken all available questions.');
+    }
+
+    return view('frontend.quiz.show', compact('questions'));
+}
+
+
 
     public function submitQuiz(Request $request)
     {
@@ -232,6 +239,7 @@ class QuestionController extends Controller
             ]);
     }
 
+
     public function thankYou()
     {
         $jobseeker = Auth::guard('job_seekers')->user();
@@ -282,4 +290,5 @@ class QuestionController extends Controller
             'questions' => $questions,
         ]);
     }
+
 }
