@@ -69,17 +69,18 @@
             @csrf
             @method('DELETE')
             <input type="hidden" id="deleteProjectId" name="id" value="">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Project</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="mb-3">
+                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this project?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                <h4 class="fw-bold">Are you sure?</h4>
+                <p class="text-secondary mb-4">Are you sure you want to delete this Project? This action cannot be undone.</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn border-secondary-subtle rounded-3 px-4 py-2 col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger rounded-3 px-4 py-2 col-6 ms-1">Delete</button>
                 </div>
             </div>
         </form>
@@ -88,75 +89,75 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let isEditingProject = false;
-    let currentProjectId = null;
+    document.addEventListener('DOMContentLoaded', function() {
+        let isEditingProject = false;
+        let currentProjectId = null;
 
-    // Collect form data
-    function collectProjectData() {
-        return {
-            id: document.getElementById('projectId').value,
-            projectTitle: document.getElementById('projectTitle').value,
-            pl: document.getElementById('pl').value,
-            projectDescription: document.getElementById('projectDescription').value
-        };
-    }
-
-    // Reset form to initial state
-    function resetProjectForm() {
-        document.getElementById('projectForm').reset();
-        document.getElementById('projectId').value = '';
-        isEditingProject = false;
-        currentProjectId = null;
-        document.getElementById('addProject').textContent = '+ Add Project';
-    }
-
-    // Fetch project data for editing
-    async function fetchProjectData(id) {
-        try {
-            const response = await fetch(`/jobseeker/projects/${id}/edit`);
-            if (!response.ok) throw new Error('Failed to fetch project data');
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching project:', error);
-            throw error;
+        // Collect form data
+        function collectProjectData() {
+            return {
+                id: document.getElementById('projectId').value,
+                projectTitle: document.getElementById('projectTitle').value,
+                pl: document.getElementById('pl').value,
+                projectDescription: document.getElementById('projectDescription').value
+            };
         }
-    }
 
-    // Save project data (create or update)
-    async function saveProjectData(data) {
-        const url = data.id ? `/jobseeker/projects/${data.id}` : "{{ route('projects.store') }}";
-        const method = data.id ? 'PUT' : 'POST';
+        // Reset form to initial state
+        function resetProjectForm() {
+            document.getElementById('projectForm').reset();
+            document.getElementById('projectId').value = '';
+            isEditingProject = false;
+            currentProjectId = null;
+            document.getElementById('addProject').textContent = '+ Add Project';
+        }
 
-        try {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to save project');
+        // Fetch project data for editing
+        async function fetchProjectData(id) {
+            try {
+                const response = await fetch(`/jobseeker/projects/${id}/edit`);
+                if (!response.ok) throw new Error('Failed to fetch project data');
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching project:', error);
+                throw error;
             }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Error saving project:', error);
-            throw error;
         }
-    }
 
-    // Create HTML for project card
-    function createProjectCard(project) {
-        const card = document.createElement('div');
-        card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
-        card.id = `project_card_${project.id}`;
-        card.innerHTML = `
+        // Save project data (create or update)
+        async function saveProjectData(data) {
+            const url = data.id ? `/jobseeker/projects/${data.id}` : "{{ route('projects.store') }}";
+            const method = data.id ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to save project');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Error saving project:', error);
+                throw error;
+            }
+        }
+
+        // Create HTML for project card
+        function createProjectCard(project) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.id = `project_card_${project.id}`;
+            card.innerHTML = `
             <div class="d-flex justify-content-between">
                 <div><h5>${project.projectTitle}</h5></div>
                 <div>
@@ -165,22 +166,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="text-black-50">
-                ${project.pl ? `
+                ${project.projectLink ? `
                 <p class="m-0">
-                    <a href="${project.pl}" target="_blank" style="color: #0064A7;">
-                        ${project.pl}
+                    <a href="${project.projectLink}" target="_blank" style="color: #0064A7;">
+                        ${project.projectLink}
                     </a>
                 </p>` : ''}
                 <p class="m-0">${project.projectDescription}</p>
             </div>`;
-        return card;
-    }
+            return card;
+        }
 
-    // Update existing project card
-    function updateProjectCard(project) {
-        const card = document.getElementById(`project_card_${project.id}`);
-        if (card) {
-            card.innerHTML = `
+        // Update existing project card
+        function updateProjectCard(project) {
+            const card = document.getElementById(`project_card_${project.id}`);
+            if (card) {
+                card.innerHTML = `
                 <div class="d-flex justify-content-between">
                     <div><h5>${project.projectTitle}</h5></div>
                     <div>
@@ -197,99 +198,105 @@ document.addEventListener('DOMContentLoaded', function() {
                     </p>` : ''}
                     <p class="m-0">${project.projectDescription}</p>
                 </div>`;
-        }
-    }
-
-    // Add/Update Project button handler
-    document.getElementById('addProject').addEventListener('click', async function() {
-        const data = collectProjectData();
-      console.log(collectProjectData());
-
-        try {
-            const result = await saveProjectData(data);
-            if (result.success) {
-                if (isEditingProject) {
-                    updateProjectCard(result.project);
-                } else {
-                    document.getElementById('projectList').prepend(createProjectCard(result.project));
-                }
-                resetProjectForm();
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert(error.message || 'Error saving project');
         }
-    });
 
-    // Edit Project handler
-    document.getElementById('projectList').addEventListener('click', async function(e) {
-        if (e.target.classList.contains('edit-project')) {
-            const projectId = e.target.dataset.id;
+        // Add/Update Project button handler
+        document.getElementById('addProject').addEventListener('click', async function() {
+            const data = collectProjectData();
+            console.log(collectProjectData());
+
             try {
-                const project = await fetchProjectData(projectId);
-                
-                // Populate form
-                document.getElementById('projectId').value = project.id;
-                document.getElementById('projectTitle').value = project.projectTitle;
-                document.getElementById('pl').value = project.pl;
-                document.getElementById('projectDescription').value = project.projectDescription;
-
-                // Update state
-                isEditingProject = true;
-                currentProjectId = project.id;
-                document.getElementById('addProject').textContent = 'Update Project';
-
-                // Scroll to form
-                document.getElementById('projectForm').scrollIntoView({ behavior: 'smooth' });
-            } catch (error) {
-                console.error('Error:', error);
-                alert(error.message || 'Error loading project');
-            }
-        }
-    });
-
-    // Delete Project handler
-    document.getElementById('projectList').addEventListener('click', function(e) {
-        if (e.target.classList.contains('delete-project')) {
-            const projectId = e.target.dataset.id;
-            document.getElementById('deleteProjectId').value = projectId;
-            document.getElementById('deleteProjectForm').action = `/jobseeker/projects/${projectId}`;
-        }
-    });
-
-    // Delete form submission handler
-    document.getElementById('deleteProjectForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const projectId = document.getElementById('deleteProjectId').value;
-
-        try {
-            const response = await fetch(this.action, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ id: projectId })
-            });
-
-            if (!response.ok) throw new Error('Failed to delete project');
-
-            const result = await response.json();
-            if (result.success) {
-                document.getElementById(`project_card_${projectId}`).remove();
-                if (currentProjectId === parseInt(projectId)) {
+                const result = await saveProjectData(data);
+                console.log(result.success)
+                console.log(result.project)
+                if (result.success) {
+                    if (isEditingProject) {
+                        updateProjectCard(result.project);
+                    } else {
+                        document.getElementById('projectList').prepend(createProjectCard(result.project));
+                    }
                     resetProjectForm();
                 }
-                // Hide the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteProjectModal'));
-                modal.hide();
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message || 'Error saving project');
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert(error.message || 'Error deleting project');
-        }
+        });
+
+        // Edit Project handler
+        document.getElementById('projectList').addEventListener('click', async function(e) {
+            if (e.target.classList.contains('edit-project')) {
+                const projectId = e.target.dataset.id;
+                try {
+                    const project = await fetchProjectData(projectId);
+
+                    // Populate form
+                    document.getElementById('projectId').value = project.id;
+                    document.getElementById('projectTitle').value = project.projectTitle;
+                    document.getElementById('pl').value = project.projectLink;
+                    document.getElementById('projectDescription').value = project.projectDescription;
+
+                    // Update state
+                    isEditingProject = true;
+                    currentProjectId = project.id;
+                    document.getElementById('addProject').textContent = 'Update Project';
+
+                    // Scroll to form
+                    document.getElementById('projectForm').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message || 'Error loading project');
+                }
+            }
+        });
+
+        // Delete Project handler
+        document.getElementById('projectList').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-project')) {
+                const projectId = e.target.dataset.id;
+                document.getElementById('deleteProjectId').value = projectId;
+                document.getElementById('deleteProjectForm').action = `/jobseeker/projects/${projectId}`;
+            }
+        });
+
+        // Delete form submission handler
+        document.getElementById('deleteProjectForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const projectId = document.getElementById('deleteProjectId').value;
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: projectId
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to delete project');
+
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById(`project_card_${projectId}`).remove();
+                    if (currentProjectId === parseInt(projectId)) {
+                        resetProjectForm();
+                    }
+                    // Hide the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteProjectModal'));
+                    modal.hide();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message || 'Error deleting project');
+            }
+        });
     });
-});
 </script>
 @endpush

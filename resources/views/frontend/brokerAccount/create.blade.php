@@ -61,7 +61,7 @@
                                 </div>
 
                                 <div class="">
-                                    <h4 class="pt-3 pb-1 border-bottom border-2 border-primary d-inline-block">Account Information</h4>
+                                    <h4 class="pt-3 pb-1 border-bottom border-2 border-primary d-inline-block">Personal Details</h4>
                                 </div>
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                     <div class="col">
@@ -146,32 +146,32 @@
                                 </div>
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                     <div class="col">
-                                        <label for="investmentSource" class="form-label fs-6">Investment Source:</label>
+                                        <label for="investmentSource" class="form-label fs-6">Source of Investment:</label>
                                         <input type="text" class="form-control form-control-da fs-6" id="investmentSource" name="investmentSource" maxlength="255" value="{{ $brokerAccount->investmentSource ?? old('investmentSource') }}" placeholder="Enter source of investment funds">
                                     </div>
                                     <div class="col">
-                                        <label for="companyName" class="form-label fs-6">Company Name:</label>
+                                        <label for="companyName" class="form-label fs-6">Company?Business Name:</label>
                                         <input type="text" class="form-control form-control-da fs-6" id="companyName" name="companyName" maxlength="255" value="{{ $brokerAccount->companyName ?? old('companyName') }}" placeholder="Enter company name if applicable">
                                     </div>
                                     <div class="col">
-                                        <label for="jobBusinessYears" class="form-label fs-6">Job/Business Years:</label>
+                                        <label for="jobBusinessYears" class="form-label fs-6">Years of Job/Business :</label>
                                         <input type="number" class="form-control form-control-da fs-6" id="jobBusinessYears" name="jobBusinessYears" value="{{ $brokerAccount->jobBusinessYears ?? old('jobBusinessYears') }}" placeholder="Enter years in current job/business">
                                     </div>
                                     <div class="col">
-                                        <label for="investmentAmount" class="form-label fs-6">Investment Amount (NPR):</label>
+                                        <label for="investmentAmount" class="form-label fs-6">Amount Willing to invest (NPR):</label>
                                         <input type="number" step="0.01" class="form-control form-control-da fs-6" id="investmentAmount" name="investmentAmount" value="{{ $brokerAccount->investmentAmount ?? old('investmentAmount') }}" placeholder="Enter approximate investment amount">
                                     </div>
                                     <div class="col">
-                                        <label class="form-label fs-6 d-block">Trading Knowledge:</label>
+                                        <label class="form-label fs-6 d-block"> Do you have Trading Knowledge:</label>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="tradingKnowledge" id="tradingKnowledge_yes" value="1"
                                                 {{ (isset($brokerAccount->tradingKnowledge) && $brokerAccount->tradingKnowledge == 1) ? 'checked' : (old('tradingKnowledge') == '1' ? 'checked' : '') }}>
-                                            <label class="form-check-label" for="tradingKnowledge_yes">Yes</label>
+                                            <label class="form-check-label  text-secondary" for="tradingKnowledge_yes">Yes</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="tradingKnowledge" id="tradingKnowledge_no" value="0"
                                                 {{ (isset($brokerAccount->tradingKnowledge) && $brokerAccount->tradingKnowledge == 0) ? 'checked' : (old('tradingKnowledge') == '0' ? 'checked' : '') }}>
-                                            <label class="form-check-label" for="tradingKnowledge_no">No</label>
+                                            <label class="form-check-label text-secondary" for="tradingKnowledge_no">No(First Time)</label>
                                         </div>
                                     </div>
                                 </div>
@@ -282,8 +282,8 @@
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
 
                                     <div class="col">
-                                        <label for="kycForm" class="form-label fs-6">KYC Form:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label for="kycForm" class="form-label fs-6">Clienr Registration Form  KYC:</label><br>
+                                        <label class="form-label  mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="kycForm" name="kycForm" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->kycForm)
                                         <img src="{{ asset($brokerAccount->kycForm) }}" alt="KYC Form" class="img-fluid img mt-2 rounded w-100">
@@ -294,7 +294,7 @@
 
                                     <div class="col">
                                         <label for="citizenCertificate" class="form-label fs-6">Citizenship Certificate <span class="text-danger fw-bold">*</span>:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label class="form-label  mb-3"  style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="citizenCertificate" name="citizenCertificate" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->citizenCertificate)
                                         <img src="{{ asset($brokerAccount->citizenCertificate) }}" alt="Citizenship Certificate" class="img-fluid img mt-2 rounded w-100 h-100">
@@ -305,7 +305,7 @@
 
                                     <div class="col">
                                         <label for="birthCertificate" class="form-label fs-6">Birth Certificate Incase of Minor:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label class="form-label  mb-3"  style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="birthCertificate" name="birthCertificate" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->birthCertificate)
                                         <img src="{{ asset($brokerAccount->birthCertificate) }}" alt="Birth Certificate" class="img-fluid img mt-2 rounded w-100">
@@ -316,7 +316,7 @@
 
                                     <div class="col">
                                         <label for="visaPassport" class="form-label fs-6">Visa/Passport incase of Foreign Emp.:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label class="form-label mb-3"  style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="visaPassport" name="visaPassport" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->visaPassport)
                                         <img src="{{ asset($brokerAccount->visaPassport) }}" alt="Visa/Passport" class="img-fluid img mt-2 rounded w-100">
@@ -327,7 +327,7 @@
 
                                     <div class="col">
                                         <label for="selfieWithId" class="form-label fs-6">Selfie with carrying any Gov issued ID:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label class="form-label  mb-3"  style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="selfieWithId" name="selfieWithId" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->selfieWithId)
                                         <img src="{{ asset($brokerAccount->selfieWithId) }}" alt="Selfie with ID" class="img-fluid img mt-2 rounded w-100">
@@ -338,7 +338,7 @@
 
                                     <div class="col">
                                         <label for="guardianCitizenship" class="form-label fs-6">Guardian Citizenship Incase of Minor:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="guardianCitizenship" name="guardianCitizenship" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->guardianCitizenship)
                                         <img src="{{ asset($brokerAccount->guardianCitizenship) }}" alt="Guardian Citizenship" class="img-fluid img mt-2 rounded w-100">
@@ -349,7 +349,7 @@
 
                                     <div class="col">
                                         <label for="ppSizePhoto" class="form-label fs-6">Passport Size Photo <span class="text-danger fw-bold">*</span>:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label class="form-label mb-3"  style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="ppSizePhoto" name="ppSizePhoto" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->ppSizePhoto)
                                         <img src="{{ asset($brokerAccount->ppSizePhoto) }}" alt="Passport Size Photo" class="img-fluid img mt-2 rounded w-100">
@@ -360,7 +360,7 @@
 
                                     <div class="col">
                                         <label for="tradingAgreement" class="form-label fs-6">Online Trading Agreement Form:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label class="form-label mb-3"  style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="tradingAgreement" name="tradingAgreement" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->tradingAgreement)
                                         <img src="{{ asset($brokerAccount->tradingAgreement) }}" alt="Trading Agreement" class="img-fluid img mt-2 rounded w-100">
@@ -371,7 +371,7 @@
 
                                     <div class="col">
                                         <label for="idCard" class="form-label fs-6">ID Card:</label><br>
-                                        <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control form-control-da fs-6" id="idCard" name="idCard" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
                                         @if(isset($brokerAccount) && $brokerAccount->idCard)
                                         <img src="{{ asset($brokerAccount->idCard) }}" alt="ID Card" class="img-fluid img mt-2 rounded w-100">

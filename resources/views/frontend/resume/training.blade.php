@@ -68,17 +68,18 @@
             @csrf
             @method('DELETE')
             <input type="hidden" id="deleteTrainingId" name="id" value="">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Training</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="mb-3">
+                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this Training/Certification?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                <h4 class="fw-bold">Are you sure?</h4>
+                <p class="text-secondary mb-4">Are you sure you want to delete this Training? This action cannot be undone.</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn border-secondary-subtle rounded-3 px-4 py-2 col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger rounded-3 px-4 py-2 col-6 ms-1">Delete</button>
                 </div>
             </div>
         </form>

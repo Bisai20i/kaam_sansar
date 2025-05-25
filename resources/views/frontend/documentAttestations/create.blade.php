@@ -165,7 +165,7 @@
                         </div>
                         <div class="d-flex justify-content-between mt-5">
                             <button class="btn btn-light">Cancel</button>
-                            <button class="btn text-white border-0" style="background-color: #0064a7;" type="button" onclick="showNextForm(3)">Next</button>
+                            <button class="btn text-white border-0" style="background-color: #0064a7;" type="button" onclick="if(validateForm2()) { showNextForm(3); }">Next</button>
                         </div>
                     </div>
                 </div>
@@ -388,6 +388,33 @@
         document.getElementById('multiStepForm' + formNumber).style.display = 'none';
         document.getElementById('multiStepForm' + (formNumber - 1)).style.display = 'block';
     }
+
+ function validateForm2() {
+    const requiredFields = document.querySelectorAll('#multiStepForm2 [required]');
+    let isValid = true;
+
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('error');
+            
+            field.style.transition = 'border 0.3s ease';
+            field.style.border = '2px solid red';
+            
+            setTimeout(() => {
+                field.style.border = ''; 
+                field.style.transition = ''; 
+            }, 2000);
+            
+            isValid = false;
+        } else {
+            field.classList.remove('error');
+            field.style.border = ''; // Reset if valid
+            field.style.transition = ''; // Reset transition
+        }
+    });
+
+    return isValid;
+}
 
     document.addEventListener('DOMContentLoaded', function() {
         const checkCorrect = document.getElementById('checkCorrect');
