@@ -6,9 +6,20 @@
 
             <div class="d-flex align-items-center mb-3">
                 <!-- Profile Picture -->
-                <img id="profilePreview" src="{{ Auth::guard('job_seekers')->user()->userThumbnail ? asset($profile->profileImg . Auth::guard('job_seekers')->user()->userThumbnail) : asset('frontend/assets/Images/profile.jpg') }}"
+                @if(isset($profile->profileImg) && $profile->profileImg)
+                <img id="profilePreview" src="{{ asset($profile->profileImg) }}"
                     class="img-fluid rounded-circle overflow-hidden"
                     style="aspect-ratio: 1; width:5rem; object-fit: cover;" alt="Profile Picture">
+                @elseif(Auth::guard('job_seekers')->user()->profileImg)
+                <img id="profilePreview" src="{{ asset( Auth::guard('job_seekers')->user()->profileImg) }}"
+                    class="img-fluid rounded-circle overflow-hidden"
+                    style="aspect-ratio: 1; width:5rem; object-fit: cover;" alt="Profile Picture">
+                @else
+                <img id="profilePreview" src="{{ asset('images/default-profile.png') }}"
+                    class="img-fluid rounded-circle overflow-hidden"
+                    style="aspect-ratio: 1; width:5rem; object-fit: cover;" alt="Profile Picture">
+                @endif
+
                 <!-- Upload Button -->
                 <label for="profileUpload" class="btn btn-primary border-0 bg-transparent"
                     style="color:#0064A7;">
@@ -103,8 +114,6 @@
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('profilePreview').src = e.target.result;
-            // Store temporarily in localStorage for better UX
-            localStorage.setItem('tempProfileImage', e.target.result);
         };
         reader.readAsDataURL(file);
     }
@@ -131,7 +140,9 @@
                 })
                 .then(response => {
                     if (!response.ok) {
-                        return response.json().then(err => { throw err; });
+                        return response.json().then(err => {
+                            throw err;
+                        });
                     }
                     return response.json();
                 })

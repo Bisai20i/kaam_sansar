@@ -63,7 +63,7 @@
                                         </select>
                                     </div>
                                     <div class="col">
-                                        <label class="form-label fs-6 d-block">Nepali Citizen <span class="text-danger fw-bold">*</span>:</label>
+                                        <label class="form-label fs-6 d-block">Nepalese Citizen <span class="text-danger fw-bold">*</span>:</label>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="nepaleseCitizen" id="nepaleseCitizen_yes" value="1" {{ (old('nepaleseCitizen', $bankAccount->nepaleseCitizen ?? 1) == 1) ? 'checked' : '' }} required>
                                             <label class="form-check-label" for="nepaleseCitizen_yes">Yes</label>
