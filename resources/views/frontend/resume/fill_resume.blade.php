@@ -122,31 +122,31 @@ Resume Maker
                                 <ul class="nav flex-column">
                                     <li><a href="#" class="profile-link active" id="profileLink" data-sectionId="profile">
                                             <i class="bi bi-person"></i> Profile Information
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                     <li><a href="#" class="profile-link" id="visaLink" data-sectionId="visa">
                                             <i class="bi bi-credit-card"></i> Visa
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                     <li><a href="#" class="profile-link" id="educationLink" data-sectionId="education">
                                             <i class="bi bi-mortarboard"></i> Education
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                     <li><a href="#" class="profile-link" id="projectLink" data-sectionId="project">
                                             <i class="bi bi-clipboard-check"></i> Project
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                     <li><a href="#" class="profile-link" id="skillLink" data-sectionId="skill">
                                             <i class="bi bi-tools"></i> Skills
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                     <li><a href="#" class="profile-link" id="achievementLink" data-sectionId="achievement">
                                             <i class="bi bi-trophy"></i> Achievements
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                     <li><a href="#" class="profile-link" id="experienceLink" data-sectionId="experience">
                                             <i class="bi bi-briefcase"></i> Experience
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                     <li><a href="#" class="profile-link" id="trainingLink" data-sectionId="training">
                                             <i class="bi bi-journal"></i> Trainings
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                     <li><a href="#" class="profile-link" id="languageLink" data-sectionId="language">
                                             <i class="bi bi-globe"></i> Language
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                            <i class="fas fa-angle-right "></i></a></li>
                                 </ul>
 
                             </div>

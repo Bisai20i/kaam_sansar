@@ -6,7 +6,7 @@
 
             <div class="d-flex align-items-center mb-3">
                 <!-- Profile Picture -->
-                <img id="profilePreview" src="{{ Auth::guard('job_seekers')->user()->userThumbnail ? asset($profile->profileImg . Auth::guard('job_seekers')->user()->userThumbnail) : asset('frontend/assets/Images/profile.jpg') }}"
+                <img id="profilePreview" src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/'.Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}"
                     class="img-fluid rounded-circle overflow-hidden"
                     style="aspect-ratio: 1; width:5rem; object-fit: cover;" alt="Profile Picture">
                 <!-- Upload Button -->

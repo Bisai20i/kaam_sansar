@@ -1611,6 +1611,7 @@ return $request->all();
                 return response()->json([
                     'success' => false,
                     'message' => 'Validation failed. Please check your inputs.',
+                    'data' => $request->all(),
                     'errors'  => $validator->errors(),
                 ]);
             }

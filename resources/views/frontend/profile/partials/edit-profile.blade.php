@@ -1,7 +1,7 @@
 @extends('frontend.profile.jobseeker-dashboard')
 
 @section('profileSection')
-
+{{-- 
 <style>
     .modalLink{
         text-decoration: none;
@@ -10,7 +10,7 @@
     .modalLink:hover{
         outline: 1px solid #0064A7;
     }
-</style>
+</style> --}}
 
 <!-- Modal -->
 
@@ -23,8 +23,8 @@
           <i class="bi bi-trash-fill text-danger fs-3"></i>
         </div>
       </div>
-      <h4 class="fw-bold">Are you sure?</h4>
-      <p class="text-secondary mb-4">Are you sure you want to deactivate account? This action can be undone.</p>
+      <h4 class="fw-bold">Photo Actions</h4>
+      <p class="text-secondary mb-4">What action would you like to perform with this photo?</p>
       <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
         <a href="#" class="btn border-secondary-subtle rounded-3 px-4 py-2 col-6 me-1" id="setProfilePicture">Set as Profile Photo</a>
         <a href="#" class="btn btn-danger rounded-3 px-4 py-2 flex-grow-1 col-6 ms-1" id="deleteIndexPicture">Delete Photo</a>
