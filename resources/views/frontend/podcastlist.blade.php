@@ -8,14 +8,14 @@
     </style>
     <section class="container-fluid mt-5 podcastlist">
         <div class="container-md border border-1 border-dark-subtle rounded p-3 my-4">
-            <div class="row px-3 my-2">
+            <div class="row g-2 my-2">
                 <h4>Our Podcasts</h4>
             </div>
-            <div class="row px-3 gap-2">
+            <div class="row">
                     @foreach ($podcasts as $item)
-                        <div class="card col col-md-6 col-lg-3 flex-grow-1 p-1">
+                        <div class="col-12  col-sm-6 col-md-4 col-lg-3">
                             <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}"
-                                class="text-decoration-none">
+                                class="text-decoration-none p-1 card mb-2"  style="min-height: 250px;">
                                 <div class="pi">
                                     <img src="{{ $item->imageUrl ? $item->imageUrl : asset('frontend/assets/Images/default.png') }}" class="card-img-top" alt="...">
                                     <div class="pio">
@@ -25,14 +25,6 @@
                                 <div class="card-body lh-1" style="padding: .5rem;">
                                     <div class="row">
                                         <p class="card-title fw-bold text-black">{{ $item->title }}</p>
-                                         <form action="{{ route('bookmark.podcast') }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <!-- <input type="hidden" name="jobSeekerId" value="{{ auth()->id() }}"> -->
-                                        <input type="hidden" name="blogs_and_podcasts_id" value="{{ $item->id }}">
-                                        <button type="submit" style="border:none; background:none; padding:0; cursor:pointer;">
-                                            <i class="far fa-bookmark bookmark-icon text-muted" style="font-size:18px;"></i>
-                                        </button>
-                                    </form>
                                     </div>
                                     <p class="card-text"> <small class="text-body-secondary fw-bold">
                                             @php
@@ -49,10 +41,6 @@
                             </a>
                         </div>
                     @endforeach
-
-
-
-
             </div>
            <div class="row mt-3">
     <nav>

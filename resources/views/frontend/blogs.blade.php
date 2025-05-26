@@ -21,43 +21,7 @@
                     </a>
 
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="card-title text-truncate mb-0">{{ $blog->title }}</h5>
-
-                            @auth('job_seekers')
-                            @php
-                            $isBookmarked = \App\Models\BlogsAndPodcastsBookmark::where('job_seeker_id', auth()->id())
-                            ->where('blogs_and_podcasts_id', $blog->id)
-                            ->exists();
-                            @endphp
-
-                            @if ($isBookmarked)
-                            <!-- Remove Bookmark -->
-                            <form method="POST" action="{{ route('blogBookmark.remove', ['blogId' => $blog->id]) }}">
-                                @csrf
-                                <button type="submit" style="border:none; background:none; padding:0; cursor:pointer;">
-                                    <i class="fas fa-bookmark text-primary" style="font-size:18px;"></i>
-                                </button>
-                            </form>
-                            @else
-                            <!-- Add Bookmark -->
-                            <form action="{{ route('bookmark.blog') }}" method="POST" style="display:inline;">
-                                @csrf
-                                <input type="hidden" name="blogs_and_podcasts_id" value="{{ $blog->id }}">
-                                <input type="hidden" name="type" value="blog">
-                                <button type="submit" style="border:none; background:none; padding:0; cursor:pointer;">
-                                    <i class="far fa-bookmark text-muted" style="font-size:18px;"></i>
-                                </button>
-                            </form>
-                            @endif
-                            @else
-                            <!-- Guest Bookmark -->
-                            <button type="button" style="border:none; background:none; padding:0; cursor:pointer;"
-                                data-bs-toggle="modal" data-bs-target="#loginModal">
-                                <i class="far fa-bookmark text-muted" style="font-size:18px;"></i>
-                            </button>
-                            @endauth
-                        </div>
+                        <h5 class="card-title text-truncate mb-0">{{ $blog->title }}</h5>
 
                         <p class="card-text text-muted mt-1">
                             <small>{{ \Carbon\Carbon::parse($blog->created_at)->format('Y/m/d') }}</small>
@@ -67,7 +31,6 @@
             </div>
             @endforeach
         </div>
-
 
         <!-- Pagination -->
         <div class="row mt-3">

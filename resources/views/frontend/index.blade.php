@@ -236,49 +236,8 @@
                         </a>
 
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <!-- Title -->
-                                <h5 class="card-title text-truncate mb-0">{{ $item->title }}</h5>
-
-                                @auth('job_seekers')
-
-                                @php
-                                $isBookmarked = \App\Models\BlogsAndPodcastsBookmark::where('job_seeker_id', auth()->id())
-                                ->where('blogs_and_podcasts_id', $item->id)
-                                ->exists();
-                                @endphp
-
-                                @if ($isBookmarked)
-                                <!-- Remove Bookmark -->
-                                <form method="POST" action="{{ route('blogBookmark.remove', ['blogId' => $item->id]) }}">
-                                    @csrf
-                                    <button type="submit" style="border:none; background:none; padding:0; cursor:pointer;">
-                                        <i class="fas fa-bookmark text-primary" style="font-size:18px;"></i>
-                                    </button>
-                                </form>
-                                @else
-                                <!-- Add Bookmark -->
-
-                                <form action="{{ route('bookmark.blog') }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    <input type="hidden" name="blogs_and_podcasts_id" value="{{ $item->id }}">
-                                    <input type="hidden" name="type" value="blog">
-
-                                    <button type="submit" style="border:none; background:none; padding:0; cursor:pointer;">
-                                        <i class="far fa-bookmark text-muted" style="font-size:18px;"></i>
-                                    </button>
-                                </form>
-                                @endif
-                                @else
-                                <!-- Show login modal trigger if not logged in -->
-                                <button type="button" style="border:none; background:none; padding:0; cursor:pointer;"
-                                    data-bs-toggle="modal" data-bs-target="#loginModal">
-                                    <i class="far fa-bookmark text-muted" style="font-size:18px;"></i>
-                                </button>
-                                @endauth
-                            </div>
-
-
+                            <!-- Title only, no bookmark -->
+                            <h5 class="card-title text-truncate mb-0">{{ $item->title }}</h5>
 
                             <!-- Date -->
                             <p class="card-text text-muted mt-1">
@@ -296,6 +255,7 @@
         </div>
     </section>
     @endif
+
 
 
 
@@ -506,67 +466,54 @@
     {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
     @endif
 
-   @if ($podcasts->count() > 0)
+
+    @if ($podcasts->count() > 0)
     <section class="podcast">
         <div class="container my-5">
             <h3 class="mb-4">Podcast</h3>
             <div class="row g-3">
                 @foreach ($podcasts as $item)
-                    <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
-                        <div class="card">
-                            <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}" style="text-decoration:none;">
-                                <!-- Display Podcast Image -->
-                                <div class="pi" style="height:150px;">
-                                    <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                        class="h-100 w-100 card-img-top rounded-1" alt="..."
-                                        style="object-fit:cover;">
-                                    <div class="pio">
-                                        <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
-                                    </div>
+                <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+                    <div class="card">
+                        <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}" style="text-decoration:none;">
+                            <!-- Display Podcast Image -->
+                            <div class="pi" style="height:150px;">
+                                <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
+                                    class="h-100 w-100 card-img-top rounded-1" alt="..."
+                                    style="object-fit:cover;">
+                                <div class="pio">
+                                    <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
                                 </div>
-                            </a>
-
-                            <div class="card-body p-2">
-                                <!-- Display Podcast Title and Bookmark Form side by side -->
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}"
-                                        class="card-title text-truncate mb-0" style="text-decoration:none; color:inherit;">
-                                        {{ $item->title }}
-                                    </a>
-
-                                    @auth('job_seekers')
-                                        <form action="{{ route('bookmark.podcast') }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            <input type="hidden" name="blogs_and_podcasts_id" value="{{ $item->id }}">
-                                            <input type="hidden" name="type" value="podcast">
-                                            <button type="submit" style="border:none; background:none; padding:0; cursor:pointer;">
-                                                <i class="far fa-bookmark bookmark-icon text-muted" style="font-size:18px;"></i>
-                                            </button>
-                                        </form>
-                                    @else
-                                        <!-- Show login modal trigger if not logged in -->
-                                        <button type="button" style="border:none; background:none; padding:0; cursor:pointer;"
-                                            data-bs-toggle="modal" data-bs-target="#loginModal">
-                                            <i class="far fa-bookmark bookmark-icon text-muted" style="font-size:18px;"></i>
-                                        </button>
-                                    @endauth
-                                </div>
-
-                                <!-- Display Podcast Duration -->
-                                <p class="card-text text-muted mb-1">
-                                    @php
-                                        $podcastDuration = \Carbon\Carbon::parse($item->podcastTime);
-                                    @endphp
-                                    {{ $podcastDuration->hour }} hour {{ $podcastDuration->minute }} minutes {{ $podcastDuration->second }} sec
-                                </p>
-
-                                <!-- Display Date -->
-                                <p class="card-text text-muted">
-                                    <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
-                                </p>
                             </div>
+                        </a>
+
+                        <div class="card-body p-2">
+                            <!-- Display Podcast Title -->
+                            <div style="width: 100%; overflow: hidden;">
+                                <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}"
+                                    class="card-title text-truncate d-block mb-0"
+                                    style="text-decoration: none; color: inherit;">
+                                    {{ $item->title }}
+                                </a>
+                            </div>
+
+
+                            <!-- Display Podcast Duration -->
+                            <p class="card-text text-muted mb-1">
+                                @php
+                                $podcastDuration = \Carbon\Carbon::parse($item->podcastTime);
+                                @endphp
+                                {{ $podcastDuration->hour }} hour {{ $podcastDuration->minute }} minutes {{ $podcastDuration->second }} sec
+                            </p>
+
+                            <!-- Display Date -->
+                            <p class="card-text text-muted">
+                                <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
+                            </p>
                         </div>
+
                     </div>
+                </div>
                 @endforeach
             </div>
 
@@ -576,7 +523,98 @@
             </div>
         </div>
     </section>
-@endif
+    @endif
+
+
+    <!--     
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const buttons = document.querySelectorAll('.bookmark-toggle-btn');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const podcastId = this.getAttribute('data-podcast-id');
+            const isBookmarked = this.getAttribute('data-bookmarked') === '1';
+
+            let url = '';
+            let method = 'POST';  // default POST method
+            let body = null;
+
+            if (isBookmarked) {
+                url = `/bookmark/podcast/remove/${podcastId}`;
+                // Usually removal uses DELETE method, but if your route expects POST, keep it
+                // If you want DELETE, change below accordingly
+                method = 'POST';
+            } else {
+                url = `/bookmark/podcast`;
+                method = 'POST';
+                body = JSON.stringify({
+                    blogs_and_podcasts_id: podcastId,
+                    type: 'podcast'
+                });
+            }
+
+            console.log(`Sending ${method} request to ${url} with body:`, body);
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',  // Send cookies/session info!
+                body: body
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (response.status === 419) {
+                    alert('Session expired. Please refresh the page and try again.');
+                    throw new Error('CSRF token mismatch or session expired');
+                }
+                return response.json();
+            })
+            .then(json => {
+                console.log('Response JSON:', json);
+                if (json.success) {
+                    this.setAttribute('data-bookmarked', isBookmarked ? '0' : '1');
+
+                    const icon = this.querySelector('i');
+                    if (isBookmarked) {
+                        icon.classList.remove('fas', 'text-primary');
+                        icon.classList.add('far', 'text-muted');
+                        this.setAttribute('title', 'Add Bookmark');
+                    } else {
+                        icon.classList.remove('far', 'text-muted');
+                        icon.classList.add('fas', 'text-primary');
+                        this.setAttribute('title', 'Remove Bookmark');
+                    }
+                } else {
+                    alert(json.message || 'Something went wrong!');
+                }
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                alert('An error occurred while processing your request.');
+            });
+        });
+    });
+});
+</script> -->
+
+
+
+
+
+
+
+
+
+
 
 
 

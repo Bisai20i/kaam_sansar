@@ -57,12 +57,42 @@ class FrontendController extends Controller
         $blogs = BlogsAndPodcast::orderBy('created_at', 'desc')
             ->where('blogOrPodcast', 'blog')
             ->where('publishStatus', 1)
-            ->take(4)->get();
+            ->take(4)
+            ->get();
+
+        $bookmarkedBlogIds = [];
+
+        if (auth()->check()) {
+            $bookmarkedBlogIds = BlogsAndPodcastsBookmark::where('job_seeker_id', auth()->id())
+                ->where('type', 'article')
+                ->pluck('blogs_and_podcasts_id')
+                ->toArray();
+        }
+
 
         $podcasts = BlogsAndPodcast::orderBy('created_at', 'desc')
             ->where('blogOrPodcast', 'podcast')
             ->where('publishStatus', 1)
-            ->take(4)->get();
+            ->take(4)
+            ->get();
+
+        $podcasts->transform(function ($podcast) {
+            $podcast->imageUrl = $podcast->imageUrl ? asset('storage/' . $podcast->imageUrl) : null;
+            return $podcast;
+        });
+
+        // Initialize as empty in case the user is not authenticated
+        $bookmarkedPodcastIds = [];
+
+        // Only fetch bookmarks if a job_seeker is logged in
+        if (auth('job_seekers')->check()) {
+            $jobSeekerId = auth('job_seekers')->id();
+
+            $bookmarkedPodcastIds = \App\Models\BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+                ->where('type', 'podcast')
+                ->pluck('blogs_and_podcasts_id')
+                ->toArray();
+        }
 
         $findJobs = JobPost::orderBy('created_at', 'desc')
             ->where('jobStatus', 'published')
@@ -96,7 +126,7 @@ class FrontendController extends Controller
         }
 
         // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners', 'faqs'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners', 'faqs', 'bookmarkedPodcastIds', 'bookmarkedBlogIds'));
     }
 
     public function findJobs()
@@ -436,92 +466,92 @@ class FrontendController extends Controller
     }
 
 
-        public function bookmarkedPodcasts()
-        {
-            try {
-                $jobSeekerId = auth()->id();
-
-                $bookmarks = BlogsAndPodcastsBookmark::with('blogsAndPodcasts')
-                    ->where('job_seeker_id', $jobSeekerId)
-                    ->where('type', 'podcast')  // filter by podcast type in bookmarks table
-                    ->whereHas('blogsAndPodcasts', function ($query) {
-                        $query->where('blogOrPodcast', 'podcast'); // extra safety check, optional
-                    })
-                    ->get();
-                Log::info('Bookmarked Podcasts full result:', $bookmarks->toArray());
-
-                $podcasts = $bookmarks->pluck('blogsAndPodcasts')->filter();
-                // Log::info('Bookmarked Podcasts:', $podcasts->toArray());
-
-                return view('frontend.profile.partials.my-podcast', [
-                    'podcasts' => $podcasts
-                ]);
-            } catch (\Exception $e) {
-                Log::error('Bookmarked Podcasts Error: ' . $e->getMessage());
-                return redirect()->back()->with('error', 'Something went wrong!');
-            }
-        }
-
-        public function bookmarkPodcast(Request $request)
-        {
-            $request->validate([
-                'blogs_and_podcasts_id' => 'required|integer|exists:blogs_and_podcasts,id',
-                'type' => 'required|in:podcast,article',  // force required type for clarity
-            ]);
-
+    public function bookmarkedPodcasts()
+    {
+        try {
             $jobSeekerId = auth()->id();
-            $contentId = $request->input('blogs_and_podcasts_id');
-            $type = $request->input('type');
 
-            // Check that the content type in blogs_and_podcasts matches the requested type
-            $content = \App\Models\BlogsAndPodcast::findOrFail($contentId);
-            if (($type === 'podcast' && $content->blogOrPodcast !== 'podcast') ||
-                ($type === 'article' && $content->blogOrPodcast !== 'blog')
-            ) {
-                return redirect()->back()->with('error', 'Content type mismatch.');
-            }
+            $bookmarks = BlogsAndPodcastsBookmark::with('blogsAndPodcasts')
+                ->where('job_seeker_id', $jobSeekerId)
+                ->where('type', 'podcast')  // filter by podcast type in bookmarks table
+                ->whereHas('blogsAndPodcasts', function ($query) {
+                    $query->where('blogOrPodcast', 'podcast'); // extra safety check, optional
+                })
+                ->get();
+            Log::info('Bookmarked Podcasts full result:', $bookmarks->toArray());
 
-            // Check if bookmark already exists for this user, content, and type
-            $existingBookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
-                ->where('blogs_and_podcasts_id', $contentId)
-                ->where('type', $type)
-                ->first();
+            $podcasts = $bookmarks->pluck('blogsAndPodcasts')->filter();
+            // Log::info('Bookmarked Podcasts:', $podcasts->toArray());
 
-            if ($existingBookmark) {
-                return redirect()->back()->with('info', 'Already added to your bookmarks.');
-            }
-
-            // Create new bookmark with correct type
-            BlogsAndPodcastsBookmark::create([
-                'job_seeker_id' => $jobSeekerId,
-                'blogs_and_podcasts_id' => $contentId,
-                'type' => $type,
+            return view('frontend.profile.partials.my-podcast', [
+                'podcasts' => $podcasts
             ]);
+        } catch (\Exception $e) {
+            Log::error('Bookmarked Podcasts Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
+    }
 
-            return redirect()->back()->with('success', ucfirst($type) . ' bookmarked successfully.');
+    public function bookmarkPodcast(Request $request)
+    {
+        $request->validate([
+            'blogs_and_podcasts_id' => 'required|integer|exists:blogs_and_podcasts,id',
+            'type' => 'required|in:podcast,article',  // force required type for clarity
+        ]);
+
+        $jobSeekerId = auth()->id();
+        $contentId = $request->input('blogs_and_podcasts_id');
+        $type = $request->input('type');
+
+        // Check that the content type in blogs_and_podcasts matches the requested type
+        $content = \App\Models\BlogsAndPodcast::findOrFail($contentId);
+        if (($type === 'podcast' && $content->blogOrPodcast !== 'podcast') ||
+            ($type === 'article' && $content->blogOrPodcast !== 'blog')
+        ) {
+            return redirect()->back()->with('error', 'Content type mismatch.');
         }
 
-      public function remove($contentId)
-{
-    try {
-        $jobSeekerId = auth()->id();
-
-        $bookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+        // Check if bookmark already exists for this user, content, and type
+        $existingBookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
             ->where('blogs_and_podcasts_id', $contentId)
-            ->where('type', 'podcast') // 🔥 Add this line
+            ->where('type', $type)
             ->first();
 
-        if ($bookmark) {
-            $bookmark->delete();
-            return redirect()->back()->with('success', 'Bookmark removed.');
+        if ($existingBookmark) {
+            return redirect()->back()->with('info', 'Already added to your bookmarks.');
         }
 
-        return redirect()->back()->with('error', 'Bookmark not found.');
-    } catch (\Exception $e) {
-        Log::error('Remove Bookmark Error: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Something went wrong!');
+        // Create new bookmark with correct type
+        BlogsAndPodcastsBookmark::create([
+            'job_seeker_id' => $jobSeekerId,
+            'blogs_and_podcasts_id' => $contentId,
+            'type' => $type,
+        ]);
+
+        return redirect()->back()->with('success', ucfirst($type) . ' bookmarked successfully.');
     }
-}
+
+    public function remove($contentId)
+    {
+        try {
+            $jobSeekerId = auth()->id();
+
+            $bookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+                ->where('blogs_and_podcasts_id', $contentId)
+                ->where('type', 'podcast') // 🔥 Add this line
+                ->first();
+
+            if ($bookmark) {
+                $bookmark->delete();
+                return redirect()->back()->with('success', 'Bookmark removed.');
+            }
+
+            return redirect()->back()->with('error', 'Bookmark not found.');
+        } catch (\Exception $e) {
+            Log::error('Remove Bookmark Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
+    }
 
 
 
@@ -539,101 +569,118 @@ class FrontendController extends Controller
         return view('frontend.blogs', compact('blogs'));
     }
 
+
     public function newsDetail($slug)
     {
         $news_detail = BlogsAndPodcast::where('slug', $slug)->first();
 
-        $similar_news = BlogsAndPodcast::where('blogOrPodcast', $news_detail->blogOrPodcast)->where('slug', '!=', $slug)->orderBy('created_at', 'desc')->take(3)->get();
 
-        return view('frontend.blog-details', compact('news_detail', 'similar_news'));
-    }
+        // Increment the view count
+        $news_detail->increment('views_count');
 
-
-public function bookmarkedBlogs()
-{
-    try {
-        $jobSeekerId = auth()->id();
-
-        $bookmarks = BlogsAndPodcastsBookmark::with('blogsAndPodcasts')
-            ->where('job_seeker_id', $jobSeekerId)
-            ->where('type', 'article') // consistent use of 'article'
-            ->whereHas('blogsAndPodcasts', function ($query) {
-                $query->where('blogOrPodcast', 'blog');
-            })
+        $similar_news = BlogsAndPodcast::where('blogOrPodcast', $news_detail->blogOrPodcast)
+            ->where('slug', '!=', $slug)
+            ->orderBy('created_at', 'desc')
+            ->take(3)
             ->get();
 
-        $blogs = $bookmarks->pluck('blogsAndPodcasts')->filter();
+        $isBookmarked = false;
 
-        return view('frontend.profile.partials.my-articles', [
-            'blogs' => $blogs
-        ]);
-    } catch (\Exception $e) {
-        Log::error('Bookmarked Blogs Error: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Something went wrong!');
-    }
-}
-
-   public function bookmarkBlog(Request $request)
-{
-    $request->validate([
-        'blogs_and_podcasts_id' => 'required|integer|exists:blogs_and_podcasts,id',
-        'type' => 'required|in:podcast,blog',
-    ]);
-
-    $jobSeekerId = auth()->id();
-    $contentId = $request->input('blogs_and_podcasts_id');
-    $originalType = $request->input('type');
-
-    $content = BlogsAndPodcast::findOrFail($contentId);
-
-    if (($originalType === 'podcast' && $content->blogOrPodcast !== 'podcast') ||
-        ($originalType === 'blog' && $content->blogOrPodcast !== 'blog')
-    ) {
-        return back()->with('error', 'Content type mismatch.');
-    }
-
-    // Normalize type for storage
-    $type = $originalType === 'blog' ? 'article' : 'podcast';
-
-    $existingBookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
-        ->where('blogs_and_podcasts_id', $contentId)
-        ->where('type', $type)
-        ->first();
-
-    if ($existingBookmark) {
-        return back()->with('info', 'Already bookmarked.');
-    }
-
-    BlogsAndPodcastsBookmark::create([
-        'job_seeker_id' => $jobSeekerId,
-        'blogs_and_podcasts_id' => $contentId,
-        'type' => $type,
-    ]);
-
-    return back()->with('success', ucfirst($originalType) . ' bookmarked successfully.');
-}
-
-public function removeBlogBookmark($blogId)
-{
-    try {
-        $jobSeekerId = auth()->id();
-
-        $bookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
-            ->where('blogs_and_podcasts_id', $blogId)
-            ->where('type', 'article') // match the stored type
-            ->first();
-
-        if ($bookmark) {
-            $bookmark->delete();
-            return redirect()->back()->with('success', 'Bookmarked article removed.');
+        if (auth('job_seekers')->check()) {
+            $isBookmarked = \App\Models\BlogsAndPodcastsBookmark::where('job_seeker_id', auth('job_seekers')->id())
+                ->where('blogs_and_podcasts_id', $news_detail->id)
+                ->exists();
         }
 
-        return redirect()->back()->with('error', 'Bookmark not found.');
-    } catch (\Exception $e) {
-        Log::error('Remove Blog Bookmark Error: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Something went wrong!');
+        return view('frontend.blog-details', compact('news_detail', 'similar_news', 'isBookmarked'));
     }
-}
+
+
+    public function bookmarkedBlogs()
+    {
+        try {
+            $jobSeekerId = auth()->id();
+
+            $bookmarks = BlogsAndPodcastsBookmark::with('blogsAndPodcasts')
+                ->where('job_seeker_id', $jobSeekerId)
+                ->where('type', 'article') // consistent use of 'article'
+                ->whereHas('blogsAndPodcasts', function ($query) {
+                    $query->where('blogOrPodcast', 'blog');
+                })
+                ->get();
+
+            $blogs = $bookmarks->pluck('blogsAndPodcasts')->filter();
+
+            return view('frontend.profile.partials.my-articles', [
+                'blogs' => $blogs
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Bookmarked Blogs Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
+    }
+
+    public function bookmarkBlog(Request $request)
+    {
+        $request->validate([
+            'blogs_and_podcasts_id' => 'required|integer|exists:blogs_and_podcasts,id',
+            'type' => 'required|in:podcast,blog',
+        ]);
+
+        $jobSeekerId = auth()->id();
+        $contentId = $request->input('blogs_and_podcasts_id');
+        $originalType = $request->input('type');
+
+        $content = BlogsAndPodcast::findOrFail($contentId);
+
+        if (($originalType === 'podcast' && $content->blogOrPodcast !== 'podcast') ||
+            ($originalType === 'blog' && $content->blogOrPodcast !== 'blog')
+        ) {
+            return back()->with('error', 'Content type mismatch.');
+        }
+
+        // Normalize type for storage
+        $type = $originalType === 'blog' ? 'article' : 'podcast';
+
+        $existingBookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+            ->where('blogs_and_podcasts_id', $contentId)
+            ->where('type', $type)
+            ->first();
+
+        if ($existingBookmark) {
+            return back()->with('info', 'Already bookmarked.');
+        }
+
+        BlogsAndPodcastsBookmark::create([
+            'job_seeker_id' => $jobSeekerId,
+            'blogs_and_podcasts_id' => $contentId,
+            'type' => $type,
+        ]);
+
+        return back()->with('success', ucfirst($originalType) . ' bookmarked successfully.');
+    }
+
+    public function removeBlogBookmark($blogId)
+    {
+        try {
+            $jobSeekerId = auth()->id();
+
+            $bookmark = BlogsAndPodcastsBookmark::where('job_seeker_id', $jobSeekerId)
+                ->where('blogs_and_podcasts_id', $blogId)
+                ->where('type', 'article') // match the stored type
+                ->first();
+
+            if ($bookmark) {
+                $bookmark->delete();
+                return redirect()->back()->with('success', 'Bookmarked article removed.');
+            }
+
+            return redirect()->back()->with('error', 'Bookmark not found.');
+        } catch (\Exception $e) {
+            Log::error('Remove Blog Bookmark Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
+    }
 
 
 
@@ -660,11 +707,36 @@ public function removeBlogBookmark($blogId)
 
     public function podcastDetail($slug)
     {
-        $podcast_detail = BlogsAndPodcast::where('slug', $slug)->first();
+        $podcast_detail = BlogsAndPodcast::where('slug', $slug)->firstOrFail();
 
-        $similar_podcasts = BlogsAndPodcast::where('blogOrPodcast', $podcast_detail->blogOrPodcast)->where('slug', '!=', $slug)->orderBy('created_at', 'desc')->take(3)->get();
-        return view('frontend.podcastdetails', compact('podcast_detail', 'similar_podcasts'));
+        // Increment the view count
+        $podcast_detail->increment('views_count');
+
+        // Fetch similar podcasts
+        $similar_podcasts = BlogsAndPodcast::where('blogOrPodcast', $podcast_detail->blogOrPodcast)
+            ->where('slug', '!=', $slug)
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        // Fix image URLs
+        $similar_podcasts->transform(function ($podcast) {
+            $podcast->imageUrl = $podcast->imageUrl ? asset('storage/' . $podcast->imageUrl) : null;
+            return $podcast;
+        });
+
+        // Get bookmarks
+        $bookmarkedPodcastIds = [];
+        if (auth('job_seekers')->check()) {
+            $bookmarkedPodcastIds = \App\Models\BlogsAndPodcastsBookmark::where('job_seeker_id', auth('job_seekers')->id())
+                ->where('type', 'podcast')
+                ->pluck('blogs_and_podcasts_id')
+                ->toArray();
+        }
+
+        return view('frontend.podcastdetails', compact('podcast_detail', 'similar_podcasts', 'bookmarkedPodcastIds'));
     }
+
 
     public function forex_calculator()
     {
