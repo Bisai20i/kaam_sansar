@@ -214,12 +214,6 @@
         document.getElementById('addSkill').addEventListener('click', async function(e) {
             e.preventDefault();
             const data = collectSkillData();
-
-            if (!data.skillName || !data.skillProficiency) {
-                alert('Please fill all required fields');
-                return;
-            }
-
             try {
                 const result = await saveSkillData(data);
                 if (result.success) {

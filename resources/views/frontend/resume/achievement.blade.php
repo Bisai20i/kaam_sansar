@@ -214,10 +214,6 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         const data = collectAchievementData();
 
-        if (!data.achievementTitle || !data.achievementDescription) {
-            alert('Please fill all required fields');
-            return;
-        }
 
         try {
             const result = await saveAchievementData(data);

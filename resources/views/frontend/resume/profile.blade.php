@@ -106,11 +106,6 @@
     // Function to preview selected image
     function previewProfileImage(event) {
         const file = event.target.files[0];
-        if (!file || !file.type.startsWith('image/')) {
-            alert('Please select an image file');
-            return;
-        }
-
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('profilePreview').src = e.target.result;
