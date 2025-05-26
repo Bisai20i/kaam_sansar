@@ -222,12 +222,6 @@
         document.getElementById('addEducation').addEventListener('click', async function(e) {
             e.preventDefault();
             const data = collectEducationData();
-            
-            if (!data.schoolName || !data.degree || !data.city || !data.startDate || !data.graduationDate || !data.educationDescription) {
-                alert('Please fill all required fields');
-                return;
-            }
-
             const result = await saveEducationData(data);
             if (result.success) {
                 if (isEditing) {
@@ -237,7 +231,7 @@
                 }
                 resetForm();
             } else {
-                alert('Error saving education');
+                console.error('something  wents wrong');
             }
         });
 
@@ -257,7 +251,7 @@
                         });
                     })
                     .catch(error => {
-                        alert('Error fetching education data: ' + error.message);
+                        console.error('something wents worng')
                     });
             }
             

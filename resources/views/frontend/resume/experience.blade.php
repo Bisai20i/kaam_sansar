@@ -266,7 +266,7 @@
         }
         resetForm();
       } else {
-        alert('Error saving experience');
+        console.error('something wents worng')
       }
     });
 
@@ -278,7 +278,7 @@
         e.preventDefault();
         fetchExperienceData(id)
           .then(populateForm)
-          .catch(err => alert('Error fetching experience: ' + err.message));
+          .catch(err => console.error('something wents worng'));
       } else if (e.target.classList.contains('delete-experience')) {
         e.preventDefault();
         // Set the form action and ID
@@ -323,11 +323,11 @@
           const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteExperienceModal'));
           deleteModal.hide();
         } else {
-          alert('Error deleting experience');
+          console.error('something wents worng')
         }
       } catch (error) {
         console.error('Delete error:', error);
-        alert('Error deleting experience');
+        console.error('something wents worng')
       }
     });
 

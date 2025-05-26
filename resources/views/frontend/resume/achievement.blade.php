@@ -57,7 +57,7 @@
             @csrf
             @method('DELETE')
             <input type="hidden" id="deleteAchievementId" name="id" value="">
-             <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+            <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
                 <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="mb-3">
                     <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
@@ -77,65 +77,65 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    let isEditingAchievement = false;
-    let currentAchievementId = null;
+    document.addEventListener('DOMContentLoaded', function() {
+        let isEditingAchievement = false;
+        let currentAchievementId = null;
 
-    function collectAchievementData() {
-        return {
-            id: document.getElementById('achievementId').value,
-            achievementTitle: document.getElementById('achievement-title').value,
-            achievementDescription: document.getElementById('achievement-description').value
-        };
-    }
+        function collectAchievementData() {
+            return {
+                id: document.getElementById('achievementId').value,
+                achievementTitle: document.getElementById('achievement-title').value,
+                achievementDescription: document.getElementById('achievement-description').value
+            };
+        }
 
-    function resetAchievementForm() {
-        document.getElementById('achievementForm').reset();
-        document.getElementById('achievementId').value = '';
-        isEditingAchievement = false;
-        currentAchievementId = null;
-        document.getElementById('addAchievement').textContent = '+ Add Achievement';
-    }
+        function resetAchievementForm() {
+            document.getElementById('achievementForm').reset();
+            document.getElementById('achievementId').value = '';
+            isEditingAchievement = false;
+            currentAchievementId = null;
+            document.getElementById('addAchievement').textContent = '+ Add Achievement';
+        }
 
-    async function fetchAchievementData(id) {
-        const response = await fetch(`/jobseeker/achievements/${id}/edit`);
-        if (!response.ok) throw new Error('Failed to fetch achievement data');
-        return await response.json();
-    }
+        async function fetchAchievementData(id) {
+            const response = await fetch(`/jobseeker/achievements/${id}/edit`);
+            if (!response.ok) throw new Error('Failed to fetch achievement data');
+            return await response.json();
+        }
 
-    function populateAchievementForm(data) {
-        document.getElementById('achievementId').value = data.id;
-        document.getElementById('achievement-title').value = data.achievementTitle;
-        document.getElementById('achievement-description').value = data.achievementDescription;
+        function populateAchievementForm(data) {
+            document.getElementById('achievementId').value = data.id;
+            document.getElementById('achievement-title').value = data.achievementTitle;
+            document.getElementById('achievement-description').value = data.achievementDescription;
 
-        isEditingAchievement = true;
-        currentAchievementId = data.id;
-        document.getElementById('addAchievement').textContent = 'Update Achievement';
-    }
+            isEditingAchievement = true;
+            currentAchievementId = data.id;
+            document.getElementById('addAchievement').textContent = 'Update Achievement';
+        }
 
-    async function saveAchievementData(data) {
-        const url = data.id ? `/jobseeker/achievements/${data.id}` : "{{ route('achievements.store') }}";
-        const method = data.id ? 'PUT' : 'POST';
+        async function saveAchievementData(data) {
+            const url = data.id ? `/jobseeker/achievements/${data.id}` : "{{ route('achievements.store') }}";
+            const method = data.id ? 'PUT' : 'POST';
 
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-        if (!response.ok) throw new Error(await response.text());
-        return await response.json();
-    }
+            if (!response.ok) throw new Error(await response.text());
+            return await response.json();
+        }
 
-    function appendAchievementCard(data) {
-        const card = document.createElement('div');
-        card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
-        card.id = `achievement_card_${data.id}`;
-        card.innerHTML = `
+        function appendAchievementCard(data) {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+            card.id = `achievement_card_${data.id}`;
+            card.innerHTML = `
             <div class="d-flex justify-content-between">
                 <div><h5>${data.achievementTitle}</h5></div>
                 <div>
@@ -146,13 +146,13 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="text-black-50">
                 <p class="m-0">${data.achievementDescription}</p>
             </div>`;
-        document.getElementById('achievementList').appendChild(card);
-    }
+            document.getElementById('achievementList').appendChild(card);
+        }
 
-    function updateAchievementCard(data) {
-        const card = document.getElementById(`achievement_card_${data.id}`);
-        if (card) {
-            card.innerHTML = `
+        function updateAchievementCard(data) {
+            const card = document.getElementById(`achievement_card_${data.id}`);
+            if (card) {
+                card.innerHTML = `
                 <div class="d-flex justify-content-between">
                     <div><h5>${data.achievementTitle}</h5></div>
                     <div>
@@ -163,87 +163,90 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="text-black-50">
                     <p class="m-0">${data.achievementDescription}</p>
                 </div>`;
+            }
         }
-    }
 
-    // Handle delete modal opening
-    document.getElementById('achievementList').addEventListener('click', function(e) {
-        if (e.target.classList.contains('delete-achievement')) {
-            const achievementId = e.target.getAttribute('data-id');
-            document.getElementById('deleteAchievementId').value = achievementId;
-            document.getElementById('deleteAchievementForm').action = `/jobseeker/achievements/${achievementId}`;
-        }
-    });
+        // Handle delete modal opening
+        document.getElementById('achievementList').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-achievement')) {
+                const achievementId = e.target.getAttribute('data-id');
+                document.getElementById('deleteAchievementId').value = achievementId;
+                document.getElementById('deleteAchievementForm').action = `/jobseeker/achievements/${achievementId}`;
+            }
+        });
 
-    // Handle form submission for delete
-    document.getElementById('deleteAchievementForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const achievementId = document.getElementById('deleteAchievementId').value;
+        // Handle form submission for delete
+        document.getElementById('deleteAchievementForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const achievementId = document.getElementById('deleteAchievementId').value;
 
-        try {
-            const response = await fetch(form.action, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ id: achievementId })
-            });
+            try {
+                const response = await fetch(form.action, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        id: achievementId
+                    })
+                });
 
-            if (!response.ok) throw new Error('Failed to delete achievement');
+                if (!response.ok) throw new Error('Failed to delete achievement');
 
-            const result = await response.json();
-            if (result.success) {
-                document.getElementById(`achievement_card_${achievementId}`).remove();
-                if (currentAchievementId === parseInt(achievementId)) {
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById(`achievement_card_${achievementId}`).remove();
+                    if (currentAchievementId === parseInt(achievementId)) {
+                        resetAchievementForm();
+                    }
+                    // Hide the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteAchievementModal'));
+                    modal.hide();
+                }
+            } catch (error) {
+                console.error(error);
+                console.error('something wents worng')
+            }
+        });
+
+        document.getElementById('addAchievement').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const data = collectAchievementData();
+
+
+            try {
+                const result = await saveAchievementData(data);
+                console.log(result)
+                if (result.success) {
+                    if (isEditingAchievement) {
+                        updateAchievementCard(result.achievement);
+                    } else {
+                        appendAchievementCard(result.achievement);
+                    }
                     resetAchievementForm();
                 }
-                // Hide the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteAchievementModal'));
-                modal.hide();
+            } catch (error) {
+                console.error(error);
             }
-        } catch (error) {
-            console.error(error);
-            alert('Error deleting achievement');
-        }
-    });
+        });
 
-    document.getElementById('addAchievement').addEventListener('click', async function (e) {
-        e.preventDefault();
-        const data = collectAchievementData();
-
-
-        try {
-            const result = await saveAchievementData(data);
-            console.log(result)
-            if (result.success) {
-                if (isEditingAchievement) {
-                    updateAchievementCard(result.achievement);
-                } else {
-                    appendAchievementCard(result.achievement);
-                }
-                resetAchievementForm();
+        document.getElementById('achievementList').addEventListener('click', function(e) {
+            if (e.target.classList.contains('edit-achievement')) {
+                e.preventDefault();
+                const id = e.target.dataset.id;
+                fetchAchievementData(id)
+                    .then(data => {
+                        populateAchievementForm(data);
+                        document.getElementById('achievementForm').scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    })
+                console.error('something wents worng')
             }
-        } catch (error) {
-            console.error(error);
-            alert('Error saving achievement');
-        }
+        });
     });
-
-    document.getElementById('achievementList').addEventListener('click', function (e) {
-        if (e.target.classList.contains('edit-achievement')) {
-            e.preventDefault();
-            const id = e.target.dataset.id;
-            fetchAchievementData(id)
-                .then(data => {
-                    populateAchievementForm(data);
-                    document.getElementById('achievementForm').scrollIntoView({ behavior: 'smooth' });
-                })
-                .catch(err => alert('Error loading data: ' + err.message));
-        }
-    });
-});
 </script>
 @endpush

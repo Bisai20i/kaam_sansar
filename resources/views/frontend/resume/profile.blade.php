@@ -150,7 +150,7 @@
                 })
                 .catch(error => {
                     console.error(error);
-                    alert(error.message || "Something went wrong while saving the profile.");
+                    console.error('something wents worng')
                 });
         });
     });

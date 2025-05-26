@@ -220,7 +220,7 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert(error.message || 'Error saving project');
+                console.error('something wents worng')
             }
         });
 
@@ -248,7 +248,7 @@
                     });
                 } catch (error) {
                     console.error('Error:', error);
-                    alert(error.message || 'Error loading project');
+                    console.error('something wents worng')
                 }
             }
         });
@@ -294,7 +294,7 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert(error.message || 'Error deleting project');
+                console.error('something wents worng')
             }
         });
     });

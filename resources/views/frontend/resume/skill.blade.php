@@ -207,7 +207,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                alert('Error deleting skill');
+                console.error('something wents worng')
             }
         });
 
@@ -226,7 +226,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                alert('Error saving skill');
+                console.error('something wents worng')
             }
         });
 
@@ -241,7 +241,7 @@
                             behavior: 'smooth'
                         });
                     })
-                    .catch(err => alert('Error loading data: ' + err.message));
+                    .catch(err => console.error('something wents worng'));
             }
         });
     });

@@ -226,7 +226,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                alert('Error deleting language');
+                console.error('something wents worng')
             }
         });
 
@@ -246,7 +246,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                alert('Error saving language');
+                console.error('something wents worng')
             }
         });
 
@@ -261,36 +261,36 @@
                             behavior: 'smooth'
                         });
                     })
-                    .catch(err => alert('Error loading data: ' + err.message));
+                console.error('something wents worng')
             }
         });
 
         // Handle submit button click
         document.querySelector('.skip-btn[data-current="language"]').addEventListener('click', async function(e) {
             e.preventDefault();
-            
+
             try {
                 // Optional: Submit any unsaved data first
                 const data = collectLanguageData();
                 if (data.languageName && data.languageProficiency) {
                     await saveLanguageData(data);
                 }
-                
+
                 // Show the success modal
                 const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                 successModal.show();
-                
+
                 // Set up the redirect handlers
                 document.getElementById('successModalButton').addEventListener('click', function() {
                     window.location.href = "{{ route('jobseeker.resume-maker') }}"; // Replace with your actual back route
                 });
-                
+
                 document.getElementById('successModal').addEventListener('hidden.bs.modal', function() {
                     window.location.href = "{{ route('jobseeker.resume-maker') }}"; // Replace with your actual back route
                 });
             } catch (error) {
                 console.error(error);
-                alert('Error submitting data');
+                console.error('something wents worng')
             }
         });
     });

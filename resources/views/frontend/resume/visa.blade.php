@@ -288,7 +288,7 @@
                 resetVisaForm();
             } catch (err) {
                 console.error(err);
-                alert('Error saving visa');
+                console.error('something wents worng')
             }
         });
 
@@ -304,7 +304,7 @@
                         behavior: 'smooth'
                     });
                 } catch (err) {
-                    alert('Error fetching visa data');
+                    console.error('something wents worng')
                 }
             }
 
@@ -349,11 +349,11 @@
                     const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteVisaModal'));
                     deleteModal.hide();
                 } else {
-                    alert('Error deleting visa');
+                    console.error('something wents worng')
                 }
             } catch (error) {
                 console.error('Delete error:', error);
-                alert('Error deleting visa');
+                console.error('something wents worng')
             }
         });
     });
