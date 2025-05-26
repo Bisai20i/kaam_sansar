@@ -26,6 +26,7 @@
                                         <th>Question</th>
                                         <th> Reward Points</th>
                                         <th>Created By</th>
+                                        <th>Publish Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -40,6 +41,7 @@
                                         </td>
                                         <td>{{ $question->points }}</td>
                                         <td>{{ $question->admin->fullName ?? 'N/A' }}</td>
+                                        <td>{{ $question->publishStauts ?? 'N/A' }}</td>
                                         <td>
                                             <div class="dropdown">
                                                 <button type="button" class="btn btn-sm btn-link text-dark p-0" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,23 +58,18 @@
                                                             <i class="bx bx-edit-alt me-1"></i> Edit
                                                         </a>
                                                     </li>
-                                                    {{-- @if ($question->publishStatus=='unpublish')
-                                                       <li>
-                                                        <a class="dropdown-item" href="{{ route('questions.publishStatus', $question->id) }}">
-                                                            <i class="bx bx-edit-alt me-1"></i> Publish
-                                                        </a>
-                                                    </li>  
-                                                    @endif
-                                                     <li>
-                                                        <a class="dropdown-item" href="{{ route('questions.publishSatus', $question->id) }}">
-                                                            <i class="bx bx-edit-alt me-1"></i> Unpublish
-                                                        </a>
-                                                    </li> --}}
                                                     <li>
                                                         <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $question->id }}">
                                                             <i class="bx bx-trash me-1"></i> Delete
                                                         </button>
                                                     </li>
+                                                    <form action="{{ route('question.updateStatus', $question->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="dropdown-item">
+                                                            <i class="bx bx-refresh me-1"></i>
+                                                            {{ $question->publishStauts == 'publish' ? 'Unpublish' : 'Publish' }}
+                                                        </button>
+                                                    </form>
                                                 </ul>
                                             </div>
                                         </td>
@@ -116,7 +113,7 @@
 
 @endsection
 <style>
- .question-body img {
+    .question-body img {
         width: 100%;
         max-height: 250px;
         /* Adjust height here */

@@ -7,28 +7,28 @@
             <h3>School/Institution</h3>
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <label for="schoolName" class="form-label">School Name</label>
-                    <input type="text" class="form-control custom-input" id="schoolName" name="schoolName" placeholder="California University" required />
+                    <label for="schoolName" class="form-label">School Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control custom-input" id="schoolName" name="schoolName" placeholder="Enter school name" required />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="degree" class="form-label">Degree <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="degree" name="degree" placeholder="Bachelor" required />
+                    <input type="text" class="form-control custom-input" id="degree" name="degree" placeholder="Enter education degree " required />
                 </div>
                 <div class="col-md-6">
                     <label for="city" class="form-label">City <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="city" name="city" placeholder="Pokhara" required />
+                    <input type="text" class="form-control custom-input" id="city" name="city" placeholder="Enter city" required />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="startDate" class="form-label">Start Date <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control custom-input" id="startDate" name="startDate" required />
+                    <input type="date" class="form-control custom-input" id="startDate" name="startDate" placeholder="Enter start date"   required />
                 </div>
                 <div class="col-md-6">
                     <label for="graduationDate" class="form-label">Graduation Date <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control custom-input" id="graduationDate" name="graduationDate" required />
+                    <input type="date" class="form-control custom-input" id="graduationDate" name="graduationDate" placeholder="Enter end date"  required />
                 </div>
             </div>
             <div class="row mb-3">
@@ -222,23 +222,16 @@
         document.getElementById('addEducation').addEventListener('click', async function(e) {
             e.preventDefault();
             const data = collectEducationData();
-            
-            if (!data.schoolName || !data.degree || !data.city || !data.startDate || !data.graduationDate || !data.educationDescription) {
-                alert('Please fill all required fields');
-                return;
-            }
-
             const result = await saveEducationData(data);
             if (result.success) {
                 if (isEditing) {
                     updateEducationCard(result.education);
-                    alert('Education updated successfully!');
                 } else {
                     appendEducationCard(result.education);
                 }
                 resetForm();
             } else {
-                alert('Error saving education');
+                console.error('something  wents wrong');
             }
         });
 
@@ -258,7 +251,7 @@
                         });
                     })
                     .catch(error => {
-                        alert('Error fetching education data: ' + error.message);
+                        console.error('something wents worng')
                     });
             }
             

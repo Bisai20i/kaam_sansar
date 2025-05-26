@@ -30,6 +30,26 @@
                 </div>
 
                 <div class="mt-4">
+                    @if ($errors->any())
+                    <div class="alert alert-danger" id="error-alert">
+                        <strong>Please fix the following errors:</strong>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <script>
+                        // Automatically hide the error message after 10 seconds (10000 milliseconds)
+                        setTimeout(function() {
+                            let alert = document.getElementById('error-alert');
+                            if (alert) {
+                                alert.style.display = 'none';
+                            }
+                        }, 10000);
+                    </script>
+
                     <!-- Form 1 Content -->
                     <form id="bankAccount" action="{{ isset($bankAccount) ? route('bankAccounts.update', $bankAccount->id) : route('bankAccounts.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
@@ -217,7 +237,7 @@
                                         </div>
                                         <div class="col">
                                             <label for="permanentWardNo" class="form-label fs-6">Ward No <span class="text-danger fw-bold">*</span>:</label>
-                                            <input type="text" class="form-control form-control-da fs-6" id="permanentWardNo" name="permanentWardNo" value="{{ old('permanentWardNo', $bankAccount->permanentWardNo ?? '') }}" required maxlength="255" placeholder="Enter ward number">
+                                            <input type="number" class="form-control form-control-da fs-6" id="permanentWardNo" name="permanentWardNo" value="{{ old('permanentWardNo', $bankAccount->permanentWardNo ?? '') }}" required maxlength="255" placeholder="Enter ward number">
                                         </div>
                                         <div class="col">
                                             <label for="permanentStreet" class="form-label fs-6">Street:</label>
@@ -268,7 +288,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="temporaryWardNo" class="form-label fs-6">Ward No <span class="text-danger fw-bold">*</span>:</label>
-                                        <input type="text" class="form-control form-control-da fs-6" id="temporaryWardNo" name="temporaryWardNo" value="{{ old('temporaryWardNo', $bankAccount->temporaryWardNo ?? '') }}" required maxlength="255" placeholder="Enter ward number">
+                                        <input type="number" class="form-control form-control-da fs-6" id="temporaryWardNo" name="temporaryWardNo" value="{{ old('temporaryWardNo', $bankAccount->temporaryWardNo ?? '') }}" required maxlength="255" placeholder="Enter ward number">
                                     </div>
                                     <div class="col">
                                         <label for="temporaryCity" class="form-label fs-6">City <span class="text-danger fw-bold">*</span>:</label>
@@ -430,7 +450,7 @@
                         </div>
                         <div class="d-flex justify-content-end py-4">
                             <button type="submit" id="submitBtn" class="btn btn" style="background-color: #0064a7; color: white;" disabled>
-                                {{ isset($bankAccount) ? 'Update Application' : 'Submit Application' }}
+                                {{ isset($bankAccount) ? 'Update ' : 'Submit ' }}
                             </button>
                         </div>
                     </form>

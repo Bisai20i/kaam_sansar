@@ -18,7 +18,7 @@
         </div>
         <div class="col text-center">
             <h2 style="color:#0064a7;">Work Permit</h2>
-            <p class="fs-3 mb-2">Complete the form below to start your passport renewal process</p>
+            <p class="fs-3 mb-2">Complete the form below to start your Work Permit Renewal process</p>
         </div>
 
 

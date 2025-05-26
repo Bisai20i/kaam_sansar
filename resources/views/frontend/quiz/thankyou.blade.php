@@ -1,5 +1,5 @@
 @extends('frontend.layouts.main')
-@section('title', 'Quiz')
+@section('title', 'Quiz Thank You')
 
 @section('content')
 <style>
@@ -10,7 +10,6 @@
         margin-top: 10px;
     }
 </style>
-
 
 <div id="quiz5" class="d-flex justify-content-center align-items-center vh-100 px-3">
     <div class="w-100" style="max-width: 800px;">
@@ -60,13 +59,6 @@
                 <button type="button" class="btn btn-outline-secondary my-2" data-bs-toggle="modal" data-bs-target="#breakdownModal">
                     See Result
                 </button>
-
-                <!-- Optional: Play Again button -->
-                <!--
-                <a href="{{ route('quiz.frontend') }}" class="btn bg-primary text-white fw-semibold rounded-2 my-3 px-4 py-2">
-                    Play Again
-                </a>
-                -->
             </div>
         </div>
     </div>
@@ -99,6 +91,12 @@
                                 <div class="quiz-question" style="font-size: 14px;">
                                     {!! $question['text'] !!}
                                 </div>
+                                <div>
+                                    Your Answer: <strong>{{ $question['user_answer'] }}</strong>
+                                </div>
+                                <div>
+                                    Correct Answer: <strong>{{ $question['correct_answer'] }}</strong>
+                                </div>
                             </div>
 
                             <div class="d-flex align-items-center ms-3">
@@ -112,7 +110,6 @@
                                 </span>
                             </div>
                         </div>
-
                         @endforeach
                     </div>
                     @endforeach
@@ -137,11 +134,7 @@
 </div>
 
 <script>
-    const totalPages = {
-        {
-            count($chunks)
-        }
-    };
+    const totalPages = {{ count($chunks) }};
     let currentPage = 1;
 
     function changePage(direction) {

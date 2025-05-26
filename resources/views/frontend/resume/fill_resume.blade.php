@@ -98,8 +98,17 @@ Resume Maker
                 <div class="container">
                     <h5>Hi, {{ Auth::guard('job_seekers')->user()->firstName }} {{ Auth::guard('job_seekers')->user()->lastName }}</h5>
                     <p class="d-flex">
-                        <i class="fas fa-envelope  pt-1 me-2"></i> {{ Auth::guard('job_seekers')->user()->emailAddress }}
-                        <i class="fas fa-phone ps-4  pt-1 me-2"></i> {{ Auth::guard('job_seekers')->user()->phoneNumber }}
+                        {{-- Email --}}
+                        @if (!empty(Auth::guard('job_seekers')->user()->emailAddress))
+                        <i class="fas fa-envelope pt-1 me-2"></i>
+                        {{ Auth::guard('job_seekers')->user()->emailAddress }}
+                        @endif
+
+                        {{-- Phone --}}
+                        @if (!empty(Auth::guard('job_seekers')->user()->phoneNumber))
+                        <i class="fas fa-phone ps-4 pt-1 me-2"></i>
+                        {{ Auth::guard('job_seekers')->user()->phoneNumber }}
+                        @endif
                     </p>
                     <h4>Create Your Resume Today and Find The Perfect Job for You</h4>
 
@@ -129,21 +138,21 @@ Resume Maker
                                             <i class="bi bi-credit-card"></i> Visa
                                             <i class="fas fa-angle-right arrow"></i></a></li>
                                     <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="educationLink" data-sectionId="education">
-                                            <i class="bi bi-mortarboard"></i> 
+                                            <i class="bi bi-mortarboard"></i>
                                             <span class="d-flex align-items-center justify-content-between w-100">Education
                                                 <i class="fas fa-angle-right"></i></span>
                                     <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="projectLink" data-sectionId="project">
-                                            <i class="bi bi-clipboard-check"></i>  
+                                            <i class="bi bi-clipboard-check"></i>
                                             <span class="d-flex align-items-center justify-content-between w-100">Project
                                                 <i class="fas fa-angle-right"></i></span>
                                     <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="skillLink" data-sectionId="skill">
-                                            <i class="bi bi-tools"></i>  
+                                            <i class="bi bi-tools"></i>
                                             <span class="d-flex align-items-center justify-content-between w-100">Skill
                                                 <i class="fas fa-angle-right"></i></span>
                                     <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="achievementLink" data-sectionId="achievement">
-                                            <i class="bi bi-trophy"></i> 
+                                            <i class="bi bi-trophy"></i>
                                             <span class="d-flex align-items-center justify-content-between w-100">Achievement
-                                                <i class="fas fa-angle-right"></i></span> 
+                                                <i class="fas fa-angle-right"></i></span>
                                     <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="experienceLink" data-sectionId="experience">
                                             <i class="bi bi-briefcase"></i>
                                             <span class="d-flex align-items-center justify-content-between w-100">Experience

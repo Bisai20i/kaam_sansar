@@ -2,336 +2,334 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Bank Account Application</title>
+    <title>Bank Account Application - {{ $bankAccount->id }}</title>
     <style>
-        body { 
+        body {
             font-family: DejaVu Sans, sans-serif;
-            line-height: 1.6;
+            line-height: 1.5;
+            color: #333;
         }
-        .form-container {
-            max-width: 1200px;
+        .container {
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
         }
-        .form-header {
+        .header {
             text-align: center;
             margin-bottom: 30px;
-        }
-        .form-header h3 {
-            color: #0064a7;
-        }
-        .form-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
             border-bottom: 2px solid #0064a7;
+            padding-bottom: 15px;
         }
-        .form-section h4 {
+        .header h2 {
             color: #0064a7;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
-        .form-row {
+        .header .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        .section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+        .section-title {
+            background-color: #f5f5f5;
+            padding: 8px 12px;
+            border-left: 4px solid #0064a7;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #0064a7;
+        }
+        .row {
             display: flex;
             flex-wrap: wrap;
-            margin: 0 -10px 15px;
+            margin: 0 -10px 10px;
         }
-        .form-group {
+        .field {
             flex: 0 0 33.33%;
             padding: 0 10px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
+        .label {
             font-weight: 600;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 3px;
         }
-        .form-value {
-            display: block;
-            width: 100%;
-            padding: 8px 12px;
-            background-color: #f8f9fa;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            min-height: 38px;
+        .value {
+            padding: 6px 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            min-height: 32px;
+            word-break: break-word;
         }
-        @media (max-width: 992px) {
-            .form-group {
+        .empty-value {
+            color: #999;
+            font-style: italic;
+        }
+        .signature-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .signature-box {
+            flex: 1;
+            text-align: center;
+        }
+        .signature-image {
+            max-width: 200px;
+            max-height: 100px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .field {
                 flex: 0 0 50%;
             }
         }
-        @media (max-width: 768px) {
-            .form-group {
+        @media (max-width: 480px) {
+            .field {
                 flex: 0 0 100%;
             }
         }
     </style>
 </head>
 <body>
-<div class="form-container">
-    <div class="form-header">
-        <h3>Account Opening Form</h3>
+<div class="container">
+    <div class="header">
+        <h2>Bank Account Application</h2>
+        <div class="subtitle">Application ID: {{ $bankAccount->id }}</div>
     </div>
 
-    <form id="bankAccountForm">
-        <!-- Applicant Type Section -->
-        <div class="form-section">
-            <h4>Applicant Type</h4>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Applicant Type:</label>
-                    <div class="form-value">{{ $bankAccount->applicantType ?? 'N/A' }}</div>
+    <!-- Applicant Information Section -->
+    <div class="section">
+        <div class="section-title">1. Applicant Information</div>
+        <div class="row">
+            <div class="field">
+                <div class="label">Applicant Type</div>
+                <div class="value">{{ $bankAccount->applicantType ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Salutation</div>
+                <div class="value">{{ $bankAccount->salutation ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Nepali Citizen</div>
+                <div class="value">{{ isset($bankAccount->nepaleseCitizen) ? ($bankAccount->nepaleseCitizen ? 'Yes' : 'No') : '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Purpose</div>
+                <div class="value">{{ $bankAccount->applicantPurpose ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Preferred Bank</div>
+                <div class="value">{{ $bankAccount->preferredBank ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Branch</div>
+                <div class="value">{{ $bankAccount->branch ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personal Details Section -->
+    <div class="section">
+        <div class="section-title">2. Personal Details</div>
+        <div class="row">
+            <div class="field">
+                <div class="label">Full Name</div>
+                <div class="value">
+                    {{ $bankAccount->firstName ?? '' }} 
+                    {{ $bankAccount->middleName ? ' '.$bankAccount->middleName : '' }} 
+                    {{ $bankAccount->lastName ?? '' }}
+                    @if(empty($bankAccount->firstName) )
+                        <span class="empty-value">Not provided</span>
+                    @endif
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Salutation:</label>
-                    <div class="form-value">{{ $bankAccount->salutation ?? 'N/A' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Mobile Number</div>
+                <div class="value">{{ $bankAccount->mobileNumber ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Phone Number</div>
+                <div class="value">{{ $bankAccount->phoneNumber ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Email</div>
+                <div class="value">{{ $bankAccount->email ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Date of Birth (BS)</div>
+                <div class="value">{{ $bankAccount->nepaliDob ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Date of Birth (AD)</div>
+                <div class="value">
+                    @if($bankAccount->englishDob)
+                        {{ \Carbon\Carbon::parse($bankAccount->englishDob)->format('Y-m-d') }}
+                    @else
+                        <span class="empty-value">Not provided</span>
+                    @endif
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Nepali Citizen:</label>
-                    <div class="form-value">{{ $bankAccount->nepaleseCitizen ? 'Yes' : 'No' }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Family Details Section -->
+    <div class="section">
+        <div class="section-title">3. Family Details</div>
+        <div class="row">
+            <div class="field">
+                <div class="label">Father's Name</div>
+                <div class="value">{{ $bankAccount->fatherName ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Mother's Name</div>
+                <div class="value">{{ $bankAccount->motherName ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Grandfather's Name</div>
+                <div class="value">{{ $bankAccount->grandfatherName ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Spouse Name</div>
+                <div class="value">{{ $bankAccount->spouse ?? '<span class="empty-value">Not applicable</span>' }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Address Section -->
+    <div class="section">
+        <div class="section-title">4. Address Details</div>
+        
+        <div class="sub-section" style="margin-bottom: 20px;">
+            <h4 style="margin-bottom: 10px; color: #444;">Permanent Address</h4>
+            <div class="row">
+                <div class="field">
+                    <div class="label">Country</div>
+                    <div class="value">{{ $bankAccount->permanentCountry ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Applicant Purpose:</label>
-                    <div class="form-value">{{ $bankAccount->applicantPurpose ?? 'N/A' }}</div>
+                <div class="field">
+                    <div class="label">Province</div>
+                    <div class="value">{{ $bankAccount->permanentProvince ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Preferred Bank:</label>
-                    <div class="form-value">{{ $bankAccount->preferredBank ?? 'N/A' }}</div>
+                <div class="field">
+                    <div class="label">District</div>
+                    <div class="value">{{ $bankAccount->permanentDistrict ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Branch:</label>
-                    <div class="form-value">{{ $bankAccount->branch ?? 'N/A' }}</div>
+                <div class="field">
+                    <div class="label">Municipality</div>
+                    <div class="value">{{ $bankAccount->permanentMunicipality ?? '<span class="empty-value">Not provided</span>' }}</div>
+                </div>
+                <div class="field">
+                    <div class="label">Ward No</div>
+                    <div class="value">{{ $bankAccount->permanentWardNo ?? '<span class="empty-value">Not provided</span>' }}</div>
+                </div>
+                <div class="field">
+                    <div class="label">Tole</div>
+                    <div class="value">{{ $bankAccount->permanentTole ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
             </div>
         </div>
 
-        <!-- Personal Details Section -->
-        <div class="form-section">
-            <h4>Personal Details</h4>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">First Name:</label>
-                    <div class="form-value">{{ $bankAccount->firstName ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Middle Name:</label>
-                    <div class="form-value">{{ $bankAccount->middleName ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Last Name:</label>
-                    <div class="form-value">{{ $bankAccount->lastName ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Mobile Number:</label>
-                    <div class="form-value">{{ $bankAccount->mobileNumber ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Phone Number:</label>
-                    <div class="form-value">{{ $bankAccount->phoneNumber ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email Address:</label>
-                    <div class="form-value">{{ $bankAccount->email ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Date of Birth (BS):</label>
-                    <div class="form-value">{{ $bankAccount->nepaliDob ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Date of Birth (AD):</label>
-                    <div class="form-value">{{ $bankAccount->englishDob ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Apply From Country:</label>
-                    <div class="form-value">{{ $bankAccount->applyFromCountry ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Contact Medium:</label>
-                    <div class="form-value">{{ $bankAccount->contactMedium ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Other Contact Details:</label>
-                    <div class="form-value">{{ $bankAccount->otherContactDetail ?? 'N/A' }}</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Family Details Section -->
-        <div class="form-section">
-            <h4>Family Details</h4>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Father's Name:</label>
-                    <div class="form-value">{{ $bankAccount->fatherName ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Mother's Name:</label>
-                    <div class="form-value">{{ $bankAccount->motherName ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Grandfather's Name:</label>
-                    <div class="form-value">{{ $bankAccount->grandfatherName ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Spouse Name:</label>
-                    <div class="form-value">{{ $bankAccount->spouse ?? 'N/A' }}</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Permanent Address Section -->
-        <div class="form-section">
-            <h4>Permanent Address</h4>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Country:</label>
-                    <div class="form-value">{{ $bankAccount->permanentCountry ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Province:</label>
-                    <div class="form-value">{{ $bankAccount->permanentProvince ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">District:</label>
-                    <div class="form-value">{{ $bankAccount->permanentDistrict ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Municipality:</label>
-                    <div class="form-value">{{ $bankAccount->permanentMunicipality ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">City:</label>
-                    <div class="form-value">{{ $bankAccount->permanentCity ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Ward No:</label>
-                    <div class="form-value">{{ $bankAccount->permanentWardNo ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Street:</label>
-                    <div class="form-value">{{ $bankAccount->permanentStreet ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">State:</label>
-                    <div class="form-value">{{ $bankAccount->permanentState ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tole:</label>
-                    <div class="form-value">{{ $bankAccount->permanentTole ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">House No:</label>
-                    <div class="form-value">{{ $bankAccount->permanentHouseNo ?? 'N/A' }}</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Temporary Address Section -->
         @if(!$bankAccount->sameAsPermanent)
-        <div class="form-section">
-            <h4>Temporary Address</h4>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Country:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryCountry ?? 'N/A' }}</div>
+        <div class="sub-section">
+            <h4 style="margin-bottom: 10px; color: #444;">Temporary Address</h4>
+            <div class="row">
+                <div class="field">
+                    <div class="label">Country</div>
+                    <div class="value">{{ $bankAccount->temporaryCountry ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Province:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryProvince ?? 'N/A' }}</div>
+                <div class="field">
+                    <div class="label">Province</div>
+                    <div class="value">{{ $bankAccount->temporaryProvince ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">District:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryDistrict ?? 'N/A' }}</div>
+                <div class="field">
+                    <div class="label">District</div>
+                    <div class="value">{{ $bankAccount->temporaryDistrict ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Municipality:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryMunicipality ?? 'N/A' }}</div>
+                <div class="field">
+                    <div class="label">Municipality</div>
+                    <div class="value">{{ $bankAccount->temporaryMunicipality ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">City:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryCity ?? 'N/A' }}</div>
+                <div class="field">
+                    <div class="label">Ward No</div>
+                    <div class="value">{{ $bankAccount->temporaryWardNo ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Ward No:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryWardNo ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Street:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryStreet ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">State:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryState ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tole:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryTole ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">House No:</label>
-                    <div class="form-value">{{ $bankAccount->temporaryHouseNo ?? 'N/A' }}</div>
+                <div class="field">
+                    <div class="label">Tole</div>
+                    <div class="value">{{ $bankAccount->temporaryTole ?? '<span class="empty-value">Not provided</span>' }}</div>
                 </div>
             </div>
         </div>
         @endif
+    </div>
 
-        <!-- Job Details Section -->
-        <div class="form-section">
-            <h4>Job Details</h4>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Job Title:</label>
-                    <div class="form-value">{{ $bankAccount->jobTitle ?? 'N/A' }}</div>
+    <!-- Employment Details Section -->
+    <div class="section">
+        <div class="section-title">5. Employment Details</div>
+        <div class="row">
+            <div class="field">
+                <div class="label">Job Title</div>
+                <div class="value">{{ $bankAccount->jobTitle ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Company Name</div>
+                <div class="value">{{ $bankAccount->companyName ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Job Location</div>
+                <div class="value">{{ $bankAccount->jobCity ?? '<span class="empty-value">Not provided</span>' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Monthly Salary</div>
+                <div class="value">
+                    @if($bankAccount->monthlySalary)
+                        Rs. {{ number_format($bankAccount->monthlySalary, 2) }}
+                    @else
+                        <span class="empty-value">Not provided</span>
+                    @endif
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Job City:</label>
-                    <div class="form-value">{{ $bankAccount->jobCity ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Company Name:</label>
-                    <div class="form-value">{{ $bankAccount->companyName ?? 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Yearly Salary:</label>
-                    <div class="form-value">{{ $bankAccount->yearlySalary ? number_format($bankAccount->yearlySalary, 2) : 'N/A' }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Monthly Salary:</label>
-                    <div class="form-value">{{ $bankAccount->monthlySalary ? number_format($bankAccount->monthlySalary, 2) : 'N/A' }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Yearly Salary</div>
+                <div class="value">
+                    @if($bankAccount->yearlySalary)
+                        Rs. {{ number_format($bankAccount->yearlySalary, 2) }}
+                    @else
+                        <span class="empty-value">Not provided</span>
+                    @endif
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Documents Section -->
-        <div class="form-section">
-            <h4>Required Documents</h4>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Signature Photo:</label>
-                    <div class="form-value">
-                        @if($bankAccount->signature)
-                        <img scr="{{ asset($bankAccount->signature) }}" height="150px" width="150px">
-                        <a href="{{ asset($bankAccount->signature) }}" target="_blank">View Signature</a>
-                        @else
-                            N/A
-                        @endif
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Thumb Print Photo:</label>
-                    <div class="form-value">
-                        @if($bankAccount->fingerPrint)
-                    <img scr="{{ asset($bankAccount->fingerPrint) }}" height="150px" width="150px">
-                    <a href="{{ asset($bankAccount->fingerPrint) }}" target="_blank">View FingerPrint</a>
- 
-                        @else
-                            N/A
-                        @endif
-                    </div>
-                </div>
+    <!-- Documents Section -->
+    <div class="section">
+        <div class="section-title">6. Documents</div>
+        <div class="signature-container">
+            <div class="signature-box">
+                <div class="label">Signature</div>
+                @if($bankAccount->signature && file_exists(public_path($bankAccount->signature)))
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path($bankAccount->signature))) }}" 
+                         class="signature-image" alt="Signature">
+                @else
+                    <div class="value empty-value">Not provided</div>
+                @endif
+            </div>
+            <div class="signature-box">
+                <div class="label">Fingerprint</div>
+                @if($bankAccount->fingerPrint && file_exists(public_path($bankAccount->fingerPrint)))
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path($bankAccount->fingerPrint))) }}" 
+                         class="signature-image" alt="Fingerprint">
+                @else
+                    <div class="value empty-value">Not provided</div>
+                @endif
             </div>
         </div>
-    </form>
+    </div>
 </div>
 </body>
 </html>

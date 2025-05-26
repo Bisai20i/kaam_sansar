@@ -8,7 +8,7 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="input-group">
-                        <input type="text" class="form-control rounded custom-input border-end-0" id="languageName" name="languageName" placeholder="Language" required>
+                        <input type="text" class="form-control rounded custom-input border-end-0" id="languageName" name="languageName" placeholder="Enter Language" required>
                         <select class="form-select custom-input border-start-0 text-end text-center me-1" id="languageProficiency" name="languageProficiency" required>
                             <option value="Beginner">Beginner</option>
                             <option value="Intermediate">Intermediate</option>
@@ -21,7 +21,7 @@
             <div class="d-flex justify-content-between">
                 <button type="button" class="btn add-project float-start" id="addLanguage">+ Add Language</button>
                 <div class="text-end">
-                    <button type="button" class="btn text-center skip-btn mx-2" data-current="language" data-next="certification" data-link="certificationLink">Skip</button>
+                    <button type="button" class="btn text-center skip-btn mx-2" data-current="language" data-next="certification" data-link="certificationLink">Submit</button>
                 </div>
             </div>
         </form>
@@ -71,6 +71,25 @@
                 </div>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="mb-3">
+                <div class="mx-auto rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                    <i class="bi bi-check-circle-fill text-success fs-3"></i>
+                </div>
+            </div>
+            <h4 class="fw-bold">Success!</h4>
+            <p class="text-secondary mb-4">Your resume has been successfully submitted.</p>
+            <div class="d-flex justify-content-center align-items-center">
+                <button type="button" class="btn  rounded-3 px-4 py-2" style="background-color: #0064A7; color: white;" data-bs-dismiss="modal" id="successModalButton">OK</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -207,18 +226,13 @@
                 }
             } catch (error) {
                 console.error(error);
-                alert('Error deleting language');
+                console.error('something wents worng')
             }
         });
 
         document.getElementById('addLanguage').addEventListener('click', async function(e) {
             e.preventDefault();
             const data = collectLanguageData();
-
-            if (!data.languageName || !data.languageProficiency) {
-                alert('Please fill all required fields');
-                return;
-            }
 
             try {
                 const result = await saveLanguageData(data);
@@ -232,7 +246,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                alert('Error saving language');
+                console.error('something wents worng')
             }
         });
 
@@ -247,7 +261,36 @@
                             behavior: 'smooth'
                         });
                     })
-                    .catch(err => alert('Error loading data: ' + err.message));
+                console.error('something wents worng')
+            }
+        });
+
+        // Handle submit button click
+        document.querySelector('.skip-btn[data-current="language"]').addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            try {
+                // Optional: Submit any unsaved data first
+                const data = collectLanguageData();
+                if (data.languageName && data.languageProficiency) {
+                    await saveLanguageData(data);
+                }
+
+                // Show the success modal
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+
+                // Set up the redirect handlers
+                document.getElementById('successModalButton').addEventListener('click', function() {
+                    window.location.href = "{{ route('jobseeker.resume-maker') }}"; // Replace with your actual back route
+                });
+
+                document.getElementById('successModal').addEventListener('hidden.bs.modal', function() {
+                    window.location.href = "{{ route('jobseeker.resume-maker') }}"; // Replace with your actual back route
+                });
+            } catch (error) {
+                console.error(error);
+                console.error('something wents worng')
             }
         });
     });

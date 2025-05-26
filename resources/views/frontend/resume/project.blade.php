@@ -14,13 +14,13 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label for="pl" class="form-label">Project Link</label>
-                    <input type="url" class="form-control custom-input" name="pl" id="pl" placeholder="https://example.com">
+                    <input type="url" class="form-control custom-input" name="pl" id="pl" placeholder="Enter project link">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-12">
                     <label for="projectDescription" class="form-label">Description <span class="text-danger">*</span></label>
-                    <textarea class="form-control custom-input" rows="4" id="projectDescription" name="projectDescription" placeholder="Describe your project" required></textarea>
+                    <textarea class="form-control custom-input" rows="4" id="projectDescription" name="projectDescription" placeholder="Describe  project" required></textarea>
                 </div>
             </div>
             <div class="d-flex justify-content-between">
@@ -166,12 +166,6 @@
                 </div>
             </div>
             <div class="text-black-50">
-                ${project.projectLink ? `
-                <p class="m-0">
-                    <a href="${project.projectLink}" target="_blank" style="color: #0064A7;">
-                        ${project.projectLink}
-                    </a>
-                </p>` : ''}
                 <p class="m-0">${project.projectDescription}</p>
             </div>`;
             return card;
@@ -181,6 +175,7 @@
         function updateProjectCard(project) {
             const card = document.getElementById(`project_card_${project.id}`);
             if (card) {
+                console.log(project)
                 card.innerHTML = `
                 <div class="d-flex justify-content-between">
                     <div><h5>${project.projectTitle}</h5></div>
@@ -190,12 +185,7 @@
                     </div>
                 </div>
                 <div class="text-black-50">
-                    ${project.pl ? `
-                    <p class="m-0">
-                        <a href="${project.pl}" target="_blank" style="color: #0064A7;">
-                            ${project.pl}
-                        </a>
-                    </p>` : ''}
+                    
                     <p class="m-0">${project.projectDescription}</p>
                 </div>`;
             }
@@ -220,7 +210,7 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert(error.message || 'Error saving project');
+                console.error('something wents worng')
             }
         });
 
@@ -248,7 +238,7 @@
                     });
                 } catch (error) {
                     console.error('Error:', error);
-                    alert(error.message || 'Error loading project');
+                    console.error('something wents worng')
                 }
             }
         });
@@ -294,7 +284,7 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert(error.message || 'Error deleting project');
+                console.error('something wents worng')
             }
         });
     });

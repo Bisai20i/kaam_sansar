@@ -102,6 +102,8 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     //quize routes
     Route::resource('questions', QuestionController::class);
+  Route::post('/questions/{id}/update-status', [QuestionController::class, 'updateStatus'])
+        ->name('question.updateStatus');
     Route::resource('jyotishs', JyotishController::class);
 
 

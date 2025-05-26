@@ -155,11 +155,11 @@
                             <label for="person Name">Person Name</label>
                         </div>
                         <div class="">
-                                <label for="forumImages" class="mb-2">Upload Images (Max 2MB each, 5 images)</label>
-                                <input id="forumImages" class="form-control py-2" type="file" multiple
-                                    accept="image/*" onchange="handleFiles(this.files)" name="images[]">
-                                <small>You can upload up to 5 images, each with a maximum size of 2MB.</small>
-                            </div>
+                            <label for="forumImages" class="mb-2">Upload Images (Max 2MB each, 5 images)</label>
+                            <input id="forumImages" class="form-control py-2" type="file" multiple accept="image/*"
+                                onchange="handleFiles(this.files)" name="images[]">
+                            <small>You can upload up to 5 images, each with a maximum size of 2MB.</small>
+                        </div>
                         <div id="forumPreviewImages" class="row flex-wrap mt-2">
 
                         </div>
@@ -323,7 +323,7 @@
                             <h4 class="m-0 text-black">{{ ucfirst($profile->firstName) . ' ' . $profile->lastName }}</h4>
                             <div class="d-inline-flex gap-4 fw-medium">
                                 <span>{{ $profile->postCount }} Posts</span>
-                                <span>{{ $profile->followers }} Followers</span>
+                                <span> <span id="userFollowers">{{ $profile->followers }}</span> Followers</span>
                                 <span>{{ $profile->followings }} Followings</span>
                             </div>
                         </div>
@@ -335,19 +335,18 @@
                                         style="background-color: #0064a7;" data-user-id="{{ $profile->id }}"
                                         onclick="follow(this)">
                                         {!! $profile->followed
-                                            ? '- <span class="d-none d-md-inline">Unfollow</span>'
+                                            ? '<span class="d-none d-md-inline">Unfollow</span>'
                                             : '+ <span class="d-none d-md-inline">Follow</span>' !!}
 
                                     </button>
+                                    <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
+                                        style="background-color: #0064a7;" data-user-id="{{ $profile->id }}"
+                                        onclick="openChat(this)"
+                                        data-user-name="{{ ucfirst($profile->firstName) . ' ' . $profile->lastName }}">
+                                        <i class="bi bi-chat-left-text me-1 align-content-center"></i>
+                                        <span class="d-none d-md-inline">Chat</span>
+                                    </button>
                                 @endif
-
-                                <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
-                                    style="background-color: #0064a7;" data-user-id="{{ $profile->id }}"
-                                    onclick="openChat(this)"
-                                    data-user-name="{{ ucfirst($profile->firstName) . ' ' . $profile->lastName }}">
-                                    <i class="bi bi-chat-left-text me-1 align-content-center"></i>
-                                    <span class="d-none d-md-inline">Chat</span>
-                                </button>
                             @else
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2"
                                     style="background-color: #0064a7;" onclick="setRedirectUrl()">+
@@ -958,7 +957,7 @@
 
         function follow(e) {
             let userId = e.getAttribute('data-user-id')
-            console.log(userId)
+            let currentStatus = e.querySelector('span').textContent
             $.ajax({
                 url: getBaseUrl() + '/discussion/follow-user',
                 method: 'POST',
@@ -976,11 +975,17 @@
                 success: function(response) {
                     // ✅ What to do on success
                     if (response.status) {
-                        if (e.innerHTML.includes('Unfollow')) {
-                            e.innerHTML = `+ <span class="d-none d-md-inline">Follow</span>`
-                        } else {
+                        console.log(currentStatus);
+                        if (currentStatus == 'Follow') {
                             e.innerHTML = `<span class="d-none d-md-inline">Unfollow</span>`
+                            $("#userFollowers").text(parseInt($("#userFollowers").text()) + 1)
+
+                        } else {
+                            e.innerHTML = `+ <span class="d-none d-md-inline">Follow</span>`
+                            $("#userFollowers").text(parseInt($("#userFollowers").text()) - 1)
                         }
+
+
 
                     } else {
                         alert('Something went wrong!')
@@ -1170,7 +1175,7 @@
                                     ? '<img class="rounded-circle me-1" src="' .
                                         asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) .
                                         '" width="30" height="30"/>'
-                                    : '' !!} {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName }}</strong>
+                                    : '' !!} {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName : 'User' }}</strong>
                                 <p class="mb-1">${response.data.comment}</p>
                                 <small class="text-muted">${formatDateWithComma(response.data.created_at)}</small>
                                 </div>
