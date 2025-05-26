@@ -14,13 +14,13 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label for="pl" class="form-label">Project Link</label>
-                    <input type="url" class="form-control custom-input" name="pl" id="pl" placeholder="https://example.com">
+                    <input type="url" class="form-control custom-input" name="pl" id="pl" placeholder="Enter project link">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-12">
                     <label for="projectDescription" class="form-label">Description <span class="text-danger">*</span></label>
-                    <textarea class="form-control custom-input" rows="4" id="projectDescription" name="projectDescription" placeholder="Describe your project" required></textarea>
+                    <textarea class="form-control custom-input" rows="4" id="projectDescription" name="projectDescription" placeholder="Describe  project" required></textarea>
                 </div>
             </div>
             <div class="d-flex justify-content-between">

@@ -11,7 +11,7 @@
           <label for="jobTitle" class="form-label">Job Title</label>
           <input type="text" class="form-control custom-input"
             id="jobTitle" name="jobTitle"
-            placeholder="Software Engineer" required />
+            placeholder="enter job title" required />
         </div>
       </div>
 
@@ -20,13 +20,13 @@
           <label for="companyName" class="form-label">Company Name <span class="text-danger">*</span></label>
           <input type="text" class="form-control custom-input"
             id="companyName" name="companyName"
-            placeholder="Google Inc." required />
+            placeholder="Enter company name" required />
         </div>
         <div class="col-md-6">
           <label for="location" class="form-label">Location <span class="text-danger">*</span></label>
           <input type="text" class="form-control custom-input"
             id="location" name="location"
-            placeholder="San Francisco, CA" required />
+            placeholder="Enter location" required />
         </div>
       </div>
 
@@ -34,12 +34,12 @@
         <div class="col-md-6">
           <label for="startDate" class="form-label">Start Date <span class="text-danger">*</span></label>
           <input type="date" class="form-control custom-input"
-            id="start_Date" name="startDate" required />
+            id="start_Date" name="startDate" placeholder="Enter start date" required />
         </div>
         <div class="col-md-6">
           <label for="endDate" class="form-label">End Date <span class="text-danger">*</span></label>
           <input type="date" class="form-control custom-input"
-            id="endDate" name="endDate" required />
+            id="endDate" name="endDate" placeholder="Enter end date" required />
         </div>
       </div>
 
@@ -68,7 +68,7 @@
               <input type="radio" id="salaryRating1" name="salaryRating" value="1" checked><label for="salaryRating1">&#9733;</label>
             </div>
           </div>
-          <input type="text" id="salaryFeedback" name="salaryFeedback" class="form-control custom-input mt-2" placeholder="Salary feedback" />
+          <input type="text" id="salaryFeedback" name="salaryFeedback" class="form-control custom-input mt-2" placeholder="Enter salary feedback" />
         </div>
 
         <div class="col-md-12 mb-2">
@@ -82,7 +82,7 @@
               <input type="radio" id="workingEnvironmentRating1" name="workingEnvironmentRating" value="1" checked><label for="workingEnvironmentRating1">&#9733;</label>
             </div>
           </div>
-          <input type="text" id="workingEnvironmentFeedback" name="workingEnvironmentFeedback" class="form-control custom-input mt-2" placeholder="Environment feedback" />
+          <input type="text" id="workingEnvironmentFeedback" name="workingEnvironmentFeedback" class="form-control custom-input mt-2" placeholder="Enter environment feedback" />
         </div>
 
         <div class="col-md-12">
@@ -96,7 +96,7 @@
               <input type="radio" id="benefitsRating1" name="benefitsRating" value="1" checked><label for="benefitsRating1">&#9733;</label>
             </div>
           </div>
-          <input type="text" id="benefitsFeedback" name="benefitsFeedback" class="form-control custom-input mt-2" placeholder="Benefits feedback" />
+          <input type="text" id="benefitsFeedback" name="benefitsFeedback" class="form-control custom-input mt-2" placeholder="Enter benefits feedback" />
         </div>
       </div>
 

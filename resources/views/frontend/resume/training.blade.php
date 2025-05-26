@@ -9,11 +9,11 @@
             <div class="row mb-3">
                 <div class="col-md-12 mb-3">
                     <label for="training-title" class="form-label">Training/Certification Title <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="training-title" name="trainingTitle" required>
+                    <input type="text" class="form-control custom-input" id="training-title" name="trainingTitle" placeholder="Enter training title" required>
                 </div>
                 <div class="col-md-12 mb-3">
                     <label for="training-organization" class="form-label">Institution/Organization <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="training-organization" name="institutionName" required>
+                    <input type="text" class="form-control custom-input" id="training-organization" name="institutionName" placeholder="Enter Institution name" required>
                 </div>
                 <div class="col-md-12 mb-3">
                     <label for="training-date" class="form-label">Completion Date <span class="text-danger">*</span></label>

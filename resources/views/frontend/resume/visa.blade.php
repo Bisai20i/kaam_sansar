@@ -9,15 +9,15 @@
             <div class="row mb-3">
                 <div class="col-md-12 mb-3">
                     <label for="visa-details" class="form-label">Visa Details <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="visa-details" name="visaDetails" placeholder="California University" required>
+                    <input type="text" class="form-control custom-input" id="visa-details" name="visaDetails" placeholder=" Enter visa details" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="visa-expire" class="form-label">Visa Expiry <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control custom-input" id="visa-expire" name="visaExpire" required>
+                    <input type="date" class="form-control custom-input" id="visa-expire" name="visaExpire" placeholder="Enter visa Expire" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="visa-country" class="form-label">Country <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="visa-country" name="country" placeholder="Pokhara" required>
+                    <input type="text" class="form-control custom-input" id="visa-country" name="country" placeholder="Enter Country" required>
                 </div>
                 <div class="col-md-12 mb-3">
                     <label for="visaImage" class="form-label fs-6">Visa Photo</label><br>
