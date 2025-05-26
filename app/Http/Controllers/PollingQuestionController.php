@@ -106,7 +106,17 @@ class PollingQuestionController extends Controller
     public function publishStatus($id)
     {
         $question = PollingQuestion::findOrFail($id);
+
+        // if ($question->publishStatus === 'publish') {
+        //     $question->publishStatus = 'unpublish';
+        // }
+
+        if(PollingQuestion::where('publishStatus', 'publish')->count() >= 1 && $question->publishStatus === 'unpublish')
+        {
+            return redirect()->back()->with('error', 'Only one question can be published at a time.');
+        }
         $question->publishStatus = $question->publishStatus === 'publish' ? 'unpublish' : 'publish';
+
         $question->save();
         return redirect()->back()->with('success', 'Question status updated.');
     }

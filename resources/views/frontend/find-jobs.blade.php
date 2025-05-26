@@ -326,11 +326,7 @@
 
             </div>
         @else
-            <div class="container my-5">
-                <div class="alert alert-warning" role="alert">
-                    No jobs found.
-                </div>
-            </div>
+            @include('frontend.notFound')
         @endif
 
 

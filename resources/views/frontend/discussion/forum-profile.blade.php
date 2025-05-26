@@ -20,7 +20,8 @@
                 <p class="text-secondary mb-4">Are you sure you want to delete this Image?</p>
                 <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
                     <button type="button" class="btn border-secondary col-6 me-1" data-bs-dismiss="modal">Cancel</button>
-                    <form action="{{ route('discussion.deleteimage') }}" method="POST" id="deleteImageForm" class="col-6 ms-1">
+                    <form action="{{ route('discussion.deleteimage') }}" method="POST" id="deleteImageForm"
+                        class="col-6 ms-1">
                         @csrf
                         @method('DELETE')
                         <input type="hidden" name="image_index">
@@ -153,20 +154,13 @@
                                 placeholder="Person Name">
                             <label for="person Name">Person Name</label>
                         </div>
-                        <div class="d-flex bg-secondary-subtle p-2 gap-3 align-items-center rounded">
-                            <p class="flex-grow-1 my-auto text-black-50">Add to your post</p>
-                            <div class="d-flex gap-3 align-items-center">
-                                <a href="#" class="primary_color_text">
-                                    <i class="fa-solid fa-location-dot"></i></a>
-                                <a href="#" class="primary_color_text"
-                                    onclick=" document.getElementById('forumImages').click()">
-                                    <i class="fa-solid fa-image"></i></a>
-                                <input id="forumImages" class="d-none" type="file" multiple accept="image/*"
-                                    onchange="handleFiles(this.files)" name="images[]">
+                        <div class="">
+                                <label for="forumImages" class="mb-2">Upload Images (Max 2MB each, 5 images)</label>
+                                <input id="forumImages" class="form-control py-2" type="file" multiple
+                                    accept="image/*" onchange="handleFiles(this.files)" name="images[]">
+                                <small>You can upload up to 5 images, each with a maximum size of 2MB.</small>
                             </div>
-
-                        </div>
-                        <div id="forumPreviewImages" class="row flex-wrap mt-4">
+                        <div id="forumPreviewImages" class="row flex-wrap mt-2">
 
                         </div>
                         <div class="d-flex justify-content-center mt-3">
@@ -480,7 +474,7 @@
                                 @if (count($forumPost->images) > 0)
                                     <div
                                         class="mt-2 text-center g-2 row {{ count($forumPost->images) === 1 ? 'row-cols-1' : 'row-cols-md-2 row-cols-1' }}">
-                                       
+
                                         @for ($i = 0; $i < count($forumPost->images); $i++)
                                             <div class="col position-relative" style="max-width:600px;">
                                                 @if (Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->id === $forumPost->jobSeekerId)

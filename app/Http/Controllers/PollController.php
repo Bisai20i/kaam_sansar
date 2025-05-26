@@ -32,6 +32,9 @@ class PollController extends Controller
         $pollQuestion = PollingQuestion::with(['answers', 'polls'])
             ->where('publishStatus', 'publish')
             ->first();
+        if($pollQuestion == null) {
+            return redirect()->back()->with('error', 'No Polls to display. Come back later!');
+        }
         return view('frontend.pollingSystem.create', compact('pollQuestion'));
     }
 

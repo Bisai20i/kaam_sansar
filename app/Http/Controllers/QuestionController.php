@@ -162,8 +162,10 @@ class QuestionController extends Controller
         $answeredQuestionIds = UserAnswer::where('user_id', $jobseeker->id)
             ->pluck('question_id')
             ->toArray();
+        
 
-        $questions = Question::where('publishStatus', 'publish')
+        // return Question::all();
+        $questions = Question::where('publishStauts', 'unpublish')
             ->whereNotIn('id', $answeredQuestionIds)
             ->with('answers')
             ->get();

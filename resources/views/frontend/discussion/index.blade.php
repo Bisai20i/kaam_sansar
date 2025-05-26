@@ -3,6 +3,7 @@
     Discussion Form
 @endsection
 @section('content')
+
     <section class="main  container-fluid pt-5 pb-2" style="box-sizing: border-box;">
 
         <!-- Create Post Modal -->
@@ -10,8 +11,8 @@
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header d-flex bg-white">
-                        <h1 class="modal-title fs-5 mx-auto flex-fill d-flex justify-content-center text-black fs-4"
+                    <div class="modal-header d-flex bg-white border-bottom border-1">
+                        <h1 class="modal-title fs-5 mx-auto flex-fill d-flex justify-content-center text-black fs-4 "
                             id="createPostLabel">
                             Create Post
                         </h1>
@@ -79,23 +80,17 @@
                                     placeholder="Person Name">
                                 <label for="person Name">Person Name</label>
                             </div>
-                            <div class="d-flex bg-secondary-subtle p-2 gap-3 align-items-center rounded">
-                                <p class="flex-grow-1 my-auto text-black-50">Add to your post
-                                </p>
-                                <div class="d-flex gap-3 align-items-center">
-
-                                    <a href="#" class="primary_color_text"
-                                        onclick=" document.getElementById('forumImages').click()">
-                                        <i class="fa-solid fa-image text-secondary"></i></a>
-                                    <input id="forumImages" class="d-none" type="file" multiple accept="image/*"
-                                        onchange="handleFiles(this.files)" name="images[]">
-                                </div>
+                            <div class="mb-1">
+                                <label for="forumImages" class="mb-2">Upload Images (Max 2MB each, 5 images)</label>
+                                <input id="forumImages" class="form-control py-2" type="file" multiple accept="image/*"
+                                    onchange="handleFiles(this.files)" name="images[]">
+                                <small>You can upload up to 5 images, each with a maximum size of 2MB.</small>
 
                             </div>
                             <div id="forumPreviewImages" class="row flex-wrap mt-4">
 
                             </div>
-                            <div class="d-flex justify-content-center mt-3">
+                            <div class="d-flex justify-content-center mt-1">
                                 <button type="submit" class="btn btn-primary mx-auto"
                                     style="background-color: #0064a7;">Post</button>
                             </div>
@@ -165,8 +160,7 @@
 
         <!-- Delete Modal -->
 
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModallLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModallLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
                     <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -179,16 +173,17 @@
                     <h4 class="fw-bold">Are you sure?</h4>
                     <p class="text-secondary mb-4">Are you sure you want to delete this comment?</p>
                     <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
-                        <button type="button" class="btn border-secondary col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn border-secondary col-6 me-1"
+                            data-bs-dismiss="modal">Cancel</button>
 
                         <button id="deleteCommentButton" data-comment-id="0" onclick="deleteComment(this)"
                             data-forum-id="0" class="btn btn-danger w-100 ms-1">Delete</button>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
-       
+
 
         <!-- Comment Modal -->
         <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true"
@@ -248,6 +243,146 @@
             </div>
             {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
         @endif
+
+        <style>
+            .scrolling-container {
+                overflow: hidden;
+                background-color: #e9f1f7;
+                white-space: nowrap;
+            }
+
+            .scrolling-wrapper {
+                display: flex;
+                width: max-content;
+                animation: scrollLeft 30s linear infinite;
+            }
+
+            @keyframes scrollLeft {
+                0% {
+                    transform: translateX(0%);
+                }
+
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
+
+            .profile-item {
+                display: flex;
+                align-items: center;
+                margin-right: 15px;
+                gap: 15px;
+                flex-shrink: 0;
+                min-width: 200px;
+                /* Make all profile items uniform */
+            }
+        </style>
+
+        <div class="scrolling-container p-4 mb-4">
+            <div class="scrolling-wrapper" id="profile-wrapper">
+                <!-- Original profile items -->
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Bsai Raj Doe</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/4eec1808-d6d9-457b-1a6e-4fc46b86f8b9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Kabita Subedi</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Sangam Doe</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/d902be3e-4448-4664-ad49-1f5da29f9e18.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Nirmal Roy</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+
+                <!-- Clones of the same items for seamless loop -->
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Bsai Raj Doe</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/4eec1808-d6d9-457b-1a6e-4fc46b86f8b9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Kabita Subedi</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Sangam Doe</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/d902be3e-4448-4664-ad49-1f5da29f9e18.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Nirmal Roy</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const wrapper = document.getElementById('profile-wrapper');
+            let profiles = Array.from(wrapper.children); // Get all the profile items
+            const container = document.querySelector('.scrolling-container');
+            let profileWidth = profiles[0].offsetWidth + 15; // Profile width + margin-right
+            let scrollSpeed = 2; // Adjust the speed of scroll (higher is slower)
+
+            // Clone and append profiles to ensure infinite scrolling
+            profiles.forEach(profile => {
+                const clone = profile.cloneNode(true);
+                wrapper.appendChild(clone);
+            });
+
+            function scroll() {
+                const maxScrollWidth = wrapper.scrollWidth; // The total scrollable width of all profiles
+
+                // Scroll the profiles by shifting them left
+                wrapper.style.transform = `translateX(-${scrollSpeed}px)`;
+
+                // If the leftmost profile is fully out of view, move it to the right end
+                if (parseFloat(wrapper.style.transform.replace('translateX(', '').replace('px)', '')) <= -profileWidth) {
+                    const firstItem = wrapper.firstElementChild;
+                    wrapper.appendChild(firstItem); // Move the first item to the end of the list
+                    wrapper.style.transform = 'translateX(0)'; // Reset the position
+                }
+
+                // Continue the scroll animation
+                requestAnimationFrame(scroll);
+            }
+
+            // Start scrolling
+            scroll();
+        </script>
 
         <div class="container position-relative">
             <div class="row mb-3">
@@ -1379,7 +1514,8 @@
                     // ✅ What to do on success
                     if (response.status) {
                         $('#commentInput').val('')
-                        if($('#commentsList').html() == '<p class="text-center my-2 text-secondary">No Comments yet !</p>'){
+                        if ($('#commentsList').html() ==
+                            '<p class="text-center my-2 text-secondary">No Comments yet !</p>') {
                             $('#commentsList').html('')
                         }
                         $('#commentsList').append(`

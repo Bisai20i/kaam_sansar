@@ -56,7 +56,7 @@
                                                             <i class="bx bx-edit-alt me-1"></i> Edit
                                                         </a>
                                                     </li>
-                                                    @if ($question->publishStatus=='unpublish')
+                                                    {{-- @if ($question->publishStatus=='unpublish')
                                                        <li>
                                                         <a class="dropdown-item" href="{{ route('questions.publishStatus', $question->id) }}">
                                                             <i class="bx bx-edit-alt me-1"></i> Publish
@@ -67,7 +67,7 @@
                                                         <a class="dropdown-item" href="{{ route('questions.publishSatus', $question->id) }}">
                                                             <i class="bx bx-edit-alt me-1"></i> Unpublish
                                                         </a>
-                                                    </li>
+                                                    </li> --}}
                                                     <li>
                                                         <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $question->id }}">
                                                             <i class="bx bx-trash me-1"></i> Delete

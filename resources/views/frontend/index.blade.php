@@ -418,7 +418,7 @@
                                             class="card-img-top rounded-1" alt="{{ $item->title }}">
                                         <div class="card-body">
                                             <!-- Display Title -->
-                                            <h5 class="card-title text-truncate" style="">{{ $item->title }}</h5>
+                                            <h5 class="card-title text-truncate me-3 fw-bold my-1 text-dark" style="">{{ $item->title }}</h5>
                                             <!-- Display Date (or any other date you have in the database) -->
                                             <p class="card-text text-muted">
                                                 <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
@@ -470,7 +470,7 @@
                                     <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}"
                                         class="card-img-top rounded-1" alt="gift and coupon">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{ $item->title }}</h5>
+                                        <h5 class="card-title text-truncate me-3 fw-bold my-1 text-dark">{{ $item->title }}</h5>
                                         <p class="card-text text-muted mb-1">NPR. {{ $item->price }}</p>
                                         <p class="card-text text-muted">
                                             <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
@@ -504,7 +504,7 @@
                                     <img src="{{ $ad->adsThumbnail ? asset($ad->adsThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg') }}"
                                         class="card-img-top rounded-1" alt="adsThumbnail">
                                     <div class="card-body p-2">
-                                        <h5 class="card-title">{{ $ad->adsTitle }} </h5>
+                                        <h5 class="card-title text-truncate me-3 fw-bold my-1 text-dark">{{ $ad->adsTitle }} </h5>
                                         <p class="card-text text-muted mb-1">{{ $ad->location }}</p>
                                         <p class="card-text text-muted"><small>{{ $ad->postedDuration }}</small></p>
                                     </div>
@@ -555,7 +555,7 @@
                                         </div>
                                         <div class="card-body p-2">
                                             <!-- Display Podcast Title -->
-                                            <h5 class="card-title text-truncate">{{ $item->title }}</h5>
+                                            <h5 class="card-title text-truncate me-3 fw-bold my-1 text-dark">{{ $item->title }}</h5>
                                             <!-- Display Podcast Duration -->
                                             <p class="card-text text-muted mb-1">
                                                 @php
