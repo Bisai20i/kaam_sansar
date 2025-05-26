@@ -59,7 +59,7 @@ class BrokerAccountController extends Controller
 
         // Validate the request data
         $validator = Validator::make($request->all(), [
-            'boid' => 'required|unique:broker_accounts',
+            'boid' => 'required|numeric|unique:broker_accounts',
             'referralCode' => 'nullable|string|max:255',
             'clientType' => 'required|in:individual,institutional,minor,foreign',
             'mobileNumber' => 'required|string|max:255',
@@ -226,6 +226,12 @@ class BrokerAccountController extends Controller
         }
 
         $brokerAccount = BrokerAccount::findOrFail($id);
+        
+        if($brokerAccount->status !="pending")
+        {
+            return redirect()->back()->with('warning','You are not  accessible to edit Broker Account Form');
+        }
+        
         if ($brokerAccount->jobSeekerId !== $user->id) {
             return $isMobile
                 ? $this->responseError('Forbidden', 403)
@@ -234,7 +240,7 @@ class BrokerAccountController extends Controller
 
         // Validation rules
         $validator = Validator::make($request->all(), [
-            'boid' => 'required|unique:broker_accounts,boid,' . $brokerAccount->id,
+            'boid' => 'required|numeric|unique:broker_accounts,boid,' . $brokerAccount->id,
             'referralCode' => 'nullable|string|max:255',
             'clientType' => 'required|in:individual,institutional,minor,foreign',
             'mobileNumber' => 'required|string|max:255',

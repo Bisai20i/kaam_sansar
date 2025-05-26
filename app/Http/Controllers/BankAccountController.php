@@ -178,8 +178,9 @@ class BankAccountController extends Controller
      * @param  \App\Models\BankAccount  $bankAccount
      * @return \Illuminate\Http\Response
      */
-    public function show(BankAccount $bankAccount)
+    public function show($id)
     {
+        $bankAccount = BankAccount::find($id);      
         $pdf = Pdf::loadView('backend.bankAccount.show', compact('bankAccount'));
         return $pdf->download('Bank_Application_' . $bankAccount->id . '.pdf');
     }
@@ -220,6 +221,11 @@ class BankAccountController extends Controller
         }
 
         $bankAccount = BankAccount::findOrFail($id);
+
+        if($bankAccount->status !="pending")
+        {
+            return redirect()->back()->with('warning','You are not  accessible to edit Bank Account Form');
+        }
 
         // Validate the request
         $bankData = Validator::make($request->all(), [
@@ -301,7 +307,7 @@ class BankAccountController extends Controller
 
         $validated['jobSeekerId'] = $user->id;
 
-        // Update and save
+        
         $bankAccount->update($validated);
 
         Log::info('Bank account updated successfully with ID: ' . $bankAccount->id);

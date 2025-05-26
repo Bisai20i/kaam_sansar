@@ -52,7 +52,6 @@
                     <p class="m-0">{{ $training->institutionName }}</p>
                     <p class="m-0">{{ \Carbon\Carbon::parse($training->completionDate)->format('M Y') }}</p>
                     @if($training->certificate)
-                    <p class="m-0"><a href="{{ asset($training->certificate) }}" target="_blank">View Certificate</a></p>
                     @endif
                 </div>
             </div>
@@ -238,8 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="text-black-50">
                 <p class="m-0">${t.institutionName}</p>
                 <p class="m-0">${new Date(t.completionDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})}</p>
-                ${t.certificate ? `<p class="m-0"><a href="${t.certificate}" target="_blank">View Certificate</a></p>` : ''}
-            </div>`;
+                   </div>`;
         container.appendChild(card);
     }
 
@@ -257,8 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="text-black-50">
                 <p class="m-0">${t.institutionName}</p>
                 <p class="m-0">${new Date(t.completionDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})}</p>
-                ${t.certificate ? `<p class="m-0"><a href="${t.certificate}" target="_blank">View Certificate</a></p>` : ''}
-            </div>`;
+     </div>`;
     }
 
     document.getElementById('addTraining').addEventListener('click', async function(e) {

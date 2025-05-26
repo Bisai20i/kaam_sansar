@@ -94,7 +94,7 @@
             </div>
             <div class="text-end">
                 <button type="button" class="btn text-center skip-btn mx-2 float-end border-primary text-primary" id="saveProfile" data-current="profile" data-next="visa" data-link="visaLink">
-                    Continue to visa
+                    save and continue
                 </button>
             </div>
         </form>

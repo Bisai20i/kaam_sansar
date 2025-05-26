@@ -232,7 +232,6 @@
             if (result.success) {
                 if (isEditing) {
                     updateEducationCard(result.education);
-                    alert('Education updated successfully!');
                 } else {
                     appendEducationCard(result.education);
                 }

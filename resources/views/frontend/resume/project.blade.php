@@ -190,7 +190,7 @@
                     </div>
                 </div>
                 <div class="text-black-50">
-                    ${project.pl ? `
+                    ${project.projectLink ? `
                     <p class="m-0">
                         <a href="${project.pl}" target="_blank" style="color: #0064A7;">
                             ${project.pl}

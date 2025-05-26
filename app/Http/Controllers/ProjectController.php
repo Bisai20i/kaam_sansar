@@ -171,7 +171,7 @@ class ProjectController extends Controller
         //Validate request data
         $validator = Validator::make($request->all(), [
             'projectTitle' => 'required|string|max:255',
-            'projectLink' => 'nullable',
+            'pl' => 'nullable',
             'projectDescription' => 'nullable|string',
         ]);
 
@@ -187,7 +187,7 @@ class ProjectController extends Controller
         //update the filled
 
         $project->projectTitle = $request->input('projectTitle');
-        $project->projectLink = $request->input('projectLink');
+        $project->projectLink = $request->input('pl');
         $project->projectDescription = $request->input('projectDescription');
 
         $project->save();

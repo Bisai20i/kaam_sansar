@@ -198,6 +198,11 @@ class DocumentationAttestationController extends Controller
         }
 
         $attestation = DocumentationAttestation::findOrFail($id);
+        
+        if($attestation->status !="pending")
+        {
+            return redirect()->back()->with('warning','You are not  accessible to edit Document Attestation Form');
+        }
 
         // Validate incoming data
         $validator = Validator::make($request->all(), [
