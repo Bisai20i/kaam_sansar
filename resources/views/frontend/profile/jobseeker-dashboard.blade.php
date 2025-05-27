@@ -78,18 +78,18 @@
             </div>
 
 
-            <!-- Content Area -->
-            <div class="col-md-9">
-                <div id="profileContent" class="content-section">
-                    @yield('profileSection')
-                    <!-- Content will be loaded here via AJAX -->
-                </div>
+        <!-- Content Area -->
+        <div class="col-md-9">
+            <div id="profileContent" class="content-section">
+                @yield('profileSection')
+                <!-- Content will be loaded here via AJAX -->
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Add this before closing body tag -->
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Add this before closing body tag -->
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             // Function to get the base URL of your application

@@ -8,14 +8,14 @@
     </style>
     <section class="container-fluid mt-5 podcastlist">
         <div class="container-md border border-1 border-dark-subtle rounded p-3 my-4">
-            <div class="row px-3 my-2">
+            <div class="row g-2 my-2">
                 <h4>Our Podcasts</h4>
             </div>
-            <div class="row px-3 gap-2">
+            <div class="row">
                     @foreach ($podcasts as $item)
-                        <div class="card col col-md-6 col-lg-3 flex-grow-1 p-1">
+                        <div class="col-12  col-sm-6 col-md-4 col-lg-3">
                             <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}"
-                                class="text-decoration-none">
+                                class="text-decoration-none p-1 card mb-2"  style="min-height: 250px;">
                                 <div class="pi">
                                     <img src="{{ $item->imageUrl ? $item->imageUrl : asset('frontend/assets/Images/default.png') }}" class="card-img-top" alt="...">
                                     <div class="pio">
@@ -41,54 +41,81 @@
                             </a>
                         </div>
                     @endforeach
-
-
-
-
             </div>
-            <div class="row mt-3">
-                <nav>
-                    <ul class="pagination justify-content-end converter">
-                        @if ($podcasts->onFirstPage())
-                            <li class="page-item disabled d-none">
-                                <a class="page-link primary_color_text">Previous</a>
-                            </li>
-                        @else
-                            <li class="page-item">
-                                <a class="page-link primary_color_text"
-                                    href="{{ $podcasts->previousPageUrl() }}">Previous</a>
-                            </li>
-                        @endif
+           <div class="row mt-3">
+    <nav>
+        <ul class="pagination justify-content-end converter">
+            {{-- Previous Button --}}
+            @if ($podcasts->onFirstPage())
+                <li class="page-item disabled">
+                    <a class="page-link primary_color_text">&lt;</a>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->previousPageUrl() }}">&lt;</a>
+                </li>
+            @endif
 
-                        @foreach ($podcasts->getUrlRange(1, $podcasts->lastPage()) as $page => $url)
-                            @if ($page == $podcasts->currentPage())
-                                <li class="page-item page-item active"><a class="page-link primary_color_text"
-                                        href="#">{{ $page }}</a></li>
-                            @else
-                                <li class="page-item"><a class="page-link primary_color_text"
-                                        href="{{ $url }}">{{ $page }}</a></li>
-                            @endif
-                        @endforeach
+            {{-- Pagination Numbers --}}
+            @php
+                $currentPage = $podcasts->currentPage();
+                $lastPage = $podcasts->lastPage();
+                $pageRange = 2; // Number of pages to show before/after current page
+            @endphp
 
-                        @if ($podcasts->currentPage() < $podcasts->lastPage() - 2)
-                            <li class="page-item"><a class="page-link primary_color_text">...</a></li>
-                            <li class="page-item"><a class="page-link primary_color_text"
-                                    href="{{ $podcasts->url($podcasts->lastPage()) }}">{{ $podcasts->lastPage() }}</a>
-                            </li>
-                        @endif
+            {{-- Show First Page --}}
+            @if ($currentPage > $pageRange + 1)
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->url(1) }}">1</a>
+                </li>
+                @if ($currentPage > $pageRange + 2)
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                @endif
+            @endif
 
-                        @if ($podcasts->hasMorePages())
-                            <li class="page-item">
-                                <a class="page-link primary_color_text" href="{{ $podcasts->nextPageUrl() }}">Next</a>
-                            </li>
-                        @else
-                            <li class="page-item disabled">
-                                <a class="page-link primary_color_text">Next</a>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
-            </div>
+            {{-- Pages Before Current --}}
+            @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->url($i) }}">{{ $i }}</a>
+                </li>
+            @endfor
+
+            {{-- Current Page --}}
+            <li class="page-item active">
+                <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+            </li>
+
+            {{-- Pages After Current --}}
+            @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->url($i) }}">{{ $i }}</a>
+                </li>
+            @endfor
+
+            {{-- Show Last Page --}}
+            @if ($currentPage < $lastPage - $pageRange)
+                @if ($currentPage < $lastPage - $pageRange - 1)
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                @endif
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->url($lastPage) }}">{{ $lastPage }}</a>
+                </li>
+            @endif
+
+            {{-- Next Button --}}
+            @if ($podcasts->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link primary_color_text" href="{{ $podcasts->nextPageUrl() }}">&gt;</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link primary_color_text">&gt;</a>
+                </li>
+            @endif
+        </ul>
+    </nav>
+</div>
+
         </div>
     </section>
 @endsection

@@ -9,6 +9,9 @@ class BlogsAndPodcast extends Model
 {
     use HasFactory;
 
+    protected $table = 'blogs_and_podcasts';
+
+
     // Define fillable columns for mass assignment
     protected $fillable = [
         'blogOrPodcast',
@@ -31,5 +34,9 @@ class BlogsAndPodcast extends Model
         'publishStatus' => '0', // Default value for publishStatus
     ];
 
-
+ // relationships
+    public function bookmarks()
+    {
+        return $this->hasMany(BlogsAndPodcastsBookmark::class);
+    }
 }

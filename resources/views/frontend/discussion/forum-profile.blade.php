@@ -1354,8 +1354,7 @@
 
         function handleForumDelete(e) {
             let postId = e.getAttribute('data-forum-id')
-            document.getElementById('deleteForumForm').action = "{{ route('discussion_forum.destroy', ':id') }}".replace(
-                ':id', postId);
+            document.getElementById('deleteForumForm').action = "{{ route('discussion_forum.destroy', ':id') }}".replace(':id', postId);
             $("#deleteForumForm input[name='forum_id']").val(postId)
             $('#deleteForumModal').modal('show');
         }

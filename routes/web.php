@@ -75,6 +75,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\JyotishController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\AdminMessageController;
+
 
 
 
@@ -102,9 +104,11 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     //quize routes
     Route::resource('questions', QuestionController::class);
+    Route::resource('jyotishs', JyotishController::class);
+    Route::resource('admin-messages', AdminMessageController::class);
+
   Route::post('/questions/{id}/update-status', [QuestionController::class, 'updateStatus'])
         ->name('question.updateStatus');
-    Route::resource('jyotishs', JyotishController::class);
 
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
@@ -361,11 +365,13 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('getPurchaseHistory/{user_id?}', [JobSeekerController::class, 'getPurchaseHistory'])->name('jobseeker.getPurchaseHistory');
     Route::get('/myjobs/{user_id?}', [JobSeekerController::class, 'myjobs'])->name('jobseeker.myjobs');
     Route::get('/bookmark/remove/{jobId}', [JobSeekerController::class, 'removeBookmark'])->name('jobBookmark.remove');
-    Route::get('/myblogs', [JobSeekerController::class, 'myblogs'])->name('jobseeker.myblogs');
+    // Route::get('/myblogs', [JobSeekerController::class, 'myblogs'])->name('jobseeker.myblogs');
     Route::get('/forms', [FormSubmissionController::class, 'index'])->name('jobseeker.forms');
     Route::get('/mynews', [JobSeekerController::class, 'mynews'])->name('jobseeker.mynews');
     Route::get('/form/complete/{id}', [FormSubmissionController::class, 'findForm'])->name('form.complete');
     // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
+    Route::get('jobseeker/getAbroadDeals', [JobSeekerController::class, 'getAbroadDeals']);
+
 
     Route::resource('profiles', ProfileController::class);
     Route::resource('visas', VisaController::class);
@@ -418,6 +424,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
 
     //Messages Related routes
 
+    Route::get('/inbox', [MessageController::class, 'inbox'])->name('frontend.inbox');
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
     Route::get('/user-inbox', [MessageController::class, 'user_inbox'])->name('jobseeker.inbox');
     Route::post('/sender-messages', [MessageController::class, 'sender_messages']);
@@ -461,6 +468,24 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('apply/{slug?}', [FrontendController::class, 'applyJob'])->name('frontend.apply');
 
     Route::post('/job/bookmark', [FrontendController::class, 'bookmarkjob'])->name('job.bookmark');
+
+    //podcast//
+    Route::post('/bookmark/podcast', [FrontendController::class, 'bookmarkPodcast'])->name('bookmark.podcast');
+    // Route::get('/jobseeker/mypodcasts', [FrontendController::class, 'bookmarkedPodcasts'])->name('jobseeker.mypodcasts');
+    Route::get('/profile/bookmarked-podcast/{user_id}', [FrontendController::class, 'bookmarkedPodcasts'])->name('jobseeker.mypodcasts');
+    // Route::get('/bookmark/remove/{podcastId}', [JobSeekerController::class, 'removeBookmark'])->name('podcastBookmark.remove');
+    Route::post('/bookmark/podcast/remove/{podcastId}', [FrontendController::class, 'remove'])
+        ->name('podcastBookmark.remove');
+
+
+    //news-article//
+
+    Route::post('/bookmark/blog', [FrontendController::class, 'bookmarkBlog'])->name('bookmark.blog');
+    Route::get('/profile/bookmarked-blogs', [FrontendController::class, 'bookmarkedBlogs'])->name('jobseeker.myblogs');
+    Route::post('/bookmark/blog/remove/{blogId}', [FrontendController::class, 'removeBlogBookmark'])->name('blogBookmark.remove');
+
+
+
     /* Visa HQ */
     Route::post('visa-HQ/apply', [FrontendController::class, 'visaDetails_apply'])->name('visaDetails.apply');
     Route::post('/visa-details/apply/save', [VisaApplicationController::class, 'saveApplication'])->name('visaDetails.apply.save');

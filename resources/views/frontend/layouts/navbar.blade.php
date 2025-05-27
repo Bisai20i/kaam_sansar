@@ -107,7 +107,7 @@
                 </li>
 
 
-                @if(Auth::guard('job_seekers')->user())
+                @if(Auth::guard('job_seekers')->check())
                 {{-- <!-- Games Dropdown {{ request()->routeIs('spinn') || request()->routeIs('exit-poll') || request()->routeIs('quiz') ? 'active-navLink' : '' }} --> --}}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('polls*') || request()->routeIs('quiz*') ? 'active-navLink' : '' }}" href="#" id="gamesDropdown" role="button"
@@ -124,7 +124,7 @@
                 @else
                 <li class="nav-item">
                     <button class="nav-link" aria-current="page" data-bs-toggle="modal"
-                        data-bs-target="#loginModal">Forms</button>
+                        data-bs-target="#loginModal">Games</button>
                 </li>
                 @endif
 
@@ -757,7 +757,7 @@
                         alt="Profile Picture">
                     <h5 class="card-title">{{ @Auth::guard('job_seekers')->user()->firstName }}
                         {{ @Auth::guard('job_seekers')->user()->lastName }}
-                        <a href="{{ route('jobseeker.editProfile', ['user_id' => auth()->id()]) }}" class="d-block">
+                        <a href="{{ route('jobseeker.editProfile', ['user_id' => Auth::guard('job_seekers')->user()->id]) }}" class="d-block">
                             <i class="fa fa-pen p-1 text-decoration-none"></i>
                         </a>
                     </h5>

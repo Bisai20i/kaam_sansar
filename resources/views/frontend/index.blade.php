@@ -43,13 +43,13 @@
                     </div>
 
 
-                    <div class="row popular-search ">
-                        <div class="col-lg-12 ">
-                            <h4 class="mt-3">Popular Search</h4>
-                            <div class="row text-center justify-content-center">
-                                @foreach ($categories as $jobCategory)
-                                    <div class="col-auto g-2 ">
-                                        <form action="{{ route('frontend.job-search') }}">
+                <div class="row popular-search ">
+                    <div class="col-lg-12 ">
+                        <h4 class="mt-3">Popular Search</h4>
+                        <div class="row text-center justify-content-center">
+                            @foreach ($categories as $jobCategory)
+                            <div class="col-auto g-2 ">
+                                <form action="{{ route('frontend.job-search') }}">
 
                                             <input type="hidden" name="jobsby" value="category">
                                             <input type="hidden" name="searchcategoryid" value="{{ $jobCategory->id }}">
@@ -69,71 +69,71 @@
         </section>
 
 
-        @if ($findJobs->count() > 0)
-            <section class="jobs">
-                <div class="container my-5">
-                    <h3 class="mb-3">Top Jobs</h3>
-                    <div class="row g-3 mb-4">
-                        @foreach ($findJobs as $item)
-                            <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card position-relative">
-                                @auth('job_seekers')
-                                    <form action="{{ route('job.bookmark') }}" method="post"
-                                        class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
-                                        @csrf
-                                        <input type="hidden" name="jobSeekerId"
-                                            value="{{ Auth::guard('job_seekers')->user()->id }}">
-                                        <input type="hidden" name="jobPostId" value="{{ $item->id }}" />
+    @if ($findJobs->count() > 0)
+    <section class="jobs">
+        <div class="container my-5">
+            <h3 class="mb-3">Top Jobs</h3>
+            <div class="row g-3 mb-4">
+                @foreach ($findJobs as $item)
+                <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card position-relative">
+                    @auth('job_seekers')
+                    <form action="{{ route('job.bookmark') }}" method="post"
+                        class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
+                        @csrf
+                        <input type="hidden" name="jobSeekerId"
+                            value="{{ Auth::guard('job_seekers')->user()->id }}">
+                        <input type="hidden" name="jobPostId" value="{{ $item->id }}" />
 
-                                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;">
-                                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
-                                        </button>
-                                    </form>
-                                @else
-                                    <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
-                                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;"
-                                            data-bs-toggle="modal" data-bs-target="#loginModal">
-                                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
-                                        </button>
-                                    </div>
-                                @endauth
+                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;">
+                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
+                        </button>
+                    </form>
+                    @else
+
+                    <div class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
+                        <button type="submit" class="favourite-btn mt-2" style="all:unset; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
+                        </button>
+                    </div>
 
 
-                                <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"
-                                    class="text-decoration-none">
-                                    <div class="card"
-                                        style="{{ $item->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
-                                        <div class="position-relative">
-                                            @if ($item->jobFeature == 'premium')
-                                                <span
-                                                    class="position-absolute top-0 left-0 badge rounded-1 bg-warning">Premium</span>
-                                            @endif
-                                            <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
-                                                class="card-img-top rounded-1" alt="BMW">
-                                        </div>
 
-                                        <div class="card-body p-2">
+                    @endauth
 
-                                            <h5 class="card-title text-truncate me-3 fw-bold my-1">{{ $item->jobTitle }}
-                                            </h5>
 
-                                            <p class="card-text text-muted mb-0 fw-semibold">{{ $item->jobLevel }}</p>
-                                            <p class="card-text text-muted mb-1 fw-semibold">{{ $item->jobLocation }}</p>
-                                            <p class="card-text text-muted ">
-                                                <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                                </small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
+                    <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"
+                        class="text-decoration-none">
+                        <div class="card" style="{{ $item->jobFeature == 'premium' ? 'border: 1px solid #FAAC24!important;' : '' }}">
+                            <div class="position-relative">
+                                @if($item->jobFeature == 'premium')
+                                <span class="position-absolute top-0 left-0 badge rounded-1 bg-warning">Premium</span>
+                                @endif
+                                <img src="{{ $item->jobBanner ? asset('storage/' . $item->jobBanner) : asset('frontend/assets/Images/jobdefault.png') }}"
+                                    class="card-img-top rounded-1" alt="BMW">
                             </div>
-                        @endforeach
-                    </div>
-                    <!-- View More Button -->
-                    <div class="text-center my-4">
-                        <a href="{{ route('frontend.finds-jobs') }}" class="view-more">
-                            View More</a>
-                    </div>
+
+                            <div class="card-body p-2">
+
+                                <h5 class="card-title text-truncate me-3 fw-bold my-1">{{ $item->jobTitle }}</h5>
+
+                                <p class="card-text text-muted mb-0 fw-semibold">{{ $item->jobLevel }}</p>
+                                <p class="card-text text-muted mb-1 fw-semibold">{{ $item->jobLocation }}</p>
+                                <p class="card-text text-muted ">
+                                    <small>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
+                @endforeach
+            </div>
+            <!-- View More Button -->
+            <div class="text-center my-4">
+                <a href="{{ route('frontend.finds-jobs') }}" class="view-more">
+                    View More</a>
+            </div>
+        </div>
 
             </section>
         @endif
@@ -179,6 +179,10 @@
                                     <button class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">Start
                                         Renewal Now</a>
                                 @endif
+
+                        </div>
+                    </div>
+                </div>
 
                         </div>
                     </div>
@@ -394,49 +398,53 @@
                                 class="btn ml-3" target="_blank" class=""><img
                                     src="{{ asset('frontend/assets/Images/google.png') }}" alt="Google Play"></a>
 
-                            <a href="https://apps.apple.com/us/app/yourapp/id123456789" href="#" class="btn "
-                                target="_blank" class="ml-3"><img
-                                    src="{{ asset('frontend/assets/Images/appstore.png') }}" alt="App Store"></a>
-                        </div>
+                        <a href="https://apps.apple.com/us/app/yourapp/id123456789" href="#" class="btn "
+                            target="_blank" class="ml-3"><img
+                                src="{{ asset('frontend/assets/Images/appstore.png') }}" alt="App Store"></a>
                     </div>
                 </div>
             </div>
-        </section>
-        @if ($blogs->count() > 0)
-            <section class="news">
-                <!-- News and Articles Section -->
-                <div class="container my-5">
-                    <h3 class="mb-4">News and Articles</h3>
-                    <div class="row g-3">
-                        @foreach ($blogs as $item)
-                            <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
-                                <a href="{{ route('frontend.news-detail', ['slug' => $item->slug]) }}"
-                                    style="text-decoration:none;">
-                                    <div class="card">
-                                        <!-- Display Image -->
-                                        <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                            class="card-img-top rounded-1" alt="{{ $item->title }}">
-                                        <div class="card-body">
-                                            <!-- Display Title -->
-                                            <h5 class="card-title text-truncate me-3 fw-bold my-1 text-dark" style="">{{ $item->title }}</h5>
-                                            <!-- Display Date (or any other date you have in the database) -->
-                                            <p class="card-text text-muted">
-                                                <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="text-center mt-4">
-                        <a href="{{ route('frontend.news-and-blogs') }}" class="view-more">View More</a>
+        </div>
+    </section>
+
+
+    @if ($blogs->count() > 0)
+    <section class="news">
+        <div class="container my-5">
+            <h3 class="mb-4">News and Articles</h3>
+            <div class="row g-3">
+                @foreach ($blogs as $item)
+                <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+                    <div class="card">
+                        <a href="{{ route('frontend.news-detail', ['slug' => $item->slug]) }}" style="text-decoration:none;">
+                            <!-- Display Image -->
+                            <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
+                                class="card-img-top rounded-1" alt="{{ $item->title }}">
+                        </a>
+
+                        <div class="card-body">
+                            <!-- Title only, no bookmark -->
+                            <h5 class="card-title text-truncate mb-0">{{ $item->title }}</h5>
+
+                            <!-- Date -->
+                            <p class="card-text text-muted mt-1">
+                                <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
+                            </p>
+                        </div>
                     </div>
                 </div>
+                @endforeach
+            </div>
 
-            </section>
+            <div class="text-center mt-4">
+                <a href="{{ route('frontend.news-and-blogs') }}" class="view-more">View More</a>
+            </div>
+        </div>
+    </section>
+    @endif
 
-        @endif
+
+
 
         <section class="gift">
             <div class="container gift-section">
@@ -486,11 +494,11 @@
 
 
 
-                <div class="text-center mt-4">
-                    <a href="{{ route('gift.home', ['type' => 'all']) }}" class="view-more">View More</a>
-                </div>
-            </div>
-        </section>
+        <div class="text-center mt-4">
+            <a href="{{ route('gift.home', ['type' => 'all']) }}" class="view-more">View More</a>
+        </div>
+        </div>
+    </section>
 
         <section class="ads">
             <div class="container my-5">
@@ -514,13 +522,13 @@
                     @endforeach
 
 
-                </div>
-                <!-- View More Button -->
-                <div class="text-center mt-4">
-                    <a href="{{ route('frontend.advertisements') }}" class="view-more">View More</a>
-                </div>
             </div>
-        </section>
+            <!-- View More Button -->
+            <div class="text-center mt-4">
+                <a href="{{ route('frontend.advertisements') }}" class="view-more">View More</a>
+            </div>
+        </div>
+    </section>
 
         @if ($ad_banners['middle'])
             <div class="container">
@@ -534,77 +542,156 @@
             {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
         @endif
 
-        @if ($podcasts->count() > 0)
-            <section class="podcast">
-                <div class="container my-5">
-                    <h3 class="mb-4">Podcast</h3>
-                    <div class="row g-3">
-                        @foreach ($podcasts as $item)
-                            <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+    @if ($podcasts->count() > 0)
+    <section class="podcast">
+        <div class="container my-5">
+            <h3 class="mb-4">Podcast</h3>
+            <div class="row g-3">
+                @foreach ($podcasts as $item)
+                <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
+                    <div class="card">
+                        <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}" style="text-decoration:none;">
+                            <!-- Display Podcast Image -->
+                            <div class="pi" style="height:150px;">
+                                <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
+                                    class="h-100 w-100 card-img-top rounded-1" alt="..."
+                                    style="object-fit:cover;">
+                                <div class="pio">
+                                    <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="card-body p-2">
+                            <!-- Display Podcast Title -->
+                            <div style="width: 100%; overflow: hidden;">
                                 <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}"
-                                    style="text-decoration:none;">
-                                    <div class="card">
-                                        <!-- Display Podcast Image -->
-                                        <div class="pi" style="height:150px;">
-                                            <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                                class=" h-100 w-100 card-img-top rounded-1" alt="..."
-                                                style="object-fit:cover;">
-                                            <div class="pio">
-                                                <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
-                                            </div>
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <!-- Display Podcast Title -->
-                                            <h5 class="card-title text-truncate me-3 fw-bold my-1 text-dark">{{ $item->title }}</h5>
-                                            <!-- Display Podcast Duration -->
-                                            <p class="card-text text-muted mb-1">
-                                                @php
-                                                    $timeString = substr($item->podcastTime, 0, 8); // Take just "00:03:00"
-                                                    $podcastDuration = \Carbon\Carbon::parse($timeString);
-                                                    $parts = [];
-
-                                                    if ($podcastDuration->hour > 0) {
-                                                        $parts[] =
-                                                            $podcastDuration->hour .
-                                                            ' hour' .
-                                                            ($podcastDuration->hour > 1 ? 's' : '');
-                                                    }
-
-                                                    if ($podcastDuration->minute > 0) {
-                                                        $parts[] =
-                                                            $podcastDuration->minute .
-                                                            ' minute' .
-                                                            ($podcastDuration->minute > 1 ? 's' : '');
-                                                    }
-
-                                                    if ($podcastDuration->second > 0) {
-                                                        $parts[] =
-                                                            $podcastDuration->second .
-                                                            ' second' .
-                                                            ($podcastDuration->second > 1 ? 's' : '');
-                                                    }
-
-                                                    echo implode(' ', $parts);
-                                                @endphp
-                                            </p>
-
-                                            <!-- Display Date -->
-                                            <p class="card-text text-muted">
-                                                <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
-                                            </p>
-                                        </div>
-                                    </div>
+                                    class="card-title text-truncate d-block mb-0"
+                                    style="text-decoration: none; color: inherit;">
+                                    {{ $item->title }}
                                 </a>
                             </div>
-                        @endforeach
-                    </div>
-                    <!-- View More Button -->
-                    <div class="text-center mt-4">
-                        <a href="{{ route('frontend.podcasts') }}" class="view-more">View More</a>
+
+
+                            <!-- Display Podcast Duration -->
+                            <p class="card-text text-muted mb-1">
+                                @php
+                                $podcastDuration = \Carbon\Carbon::parse($item->podcastTime);
+                                @endphp
+                                {{ $podcastDuration->hour }} hour {{ $podcastDuration->minute }} minutes {{ $podcastDuration->second }} sec
+                            </p>
+
+                            <!-- Display Date -->
+                            <p class="card-text text-muted">
+                                <small>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
+                            </p>
+                        </div>
+
                     </div>
                 </div>
-            </section>
-        @endif
+                @endforeach
+            </div>
+
+            <!-- View More Button -->
+            <div class="text-center mt-4">
+                <a href="{{ route('frontend.podcasts') }}" class="view-more">View More</a>
+            </div>
+        </div>
+    </section>
+    @endif
+
+
+    <!--     
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const buttons = document.querySelectorAll('.bookmark-toggle-btn');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const podcastId = this.getAttribute('data-podcast-id');
+            const isBookmarked = this.getAttribute('data-bookmarked') === '1';
+
+            let url = '';
+            let method = 'POST';  // default POST method
+            let body = null;
+
+            if (isBookmarked) {
+                url = `/bookmark/podcast/remove/${podcastId}`;
+                // Usually removal uses DELETE method, but if your route expects POST, keep it
+                // If you want DELETE, change below accordingly
+                method = 'POST';
+            } else {
+                url = `/bookmark/podcast`;
+                method = 'POST';
+                body = JSON.stringify({
+                    blogs_and_podcasts_id: podcastId,
+                    type: 'podcast'
+                });
+            }
+
+            console.log(`Sending ${method} request to ${url} with body:`, body);
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',  // Send cookies/session info!
+                body: body
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (response.status === 419) {
+                    alert('Session expired. Please refresh the page and try again.');
+                    throw new Error('CSRF token mismatch or session expired');
+                }
+                return response.json();
+            })
+            .then(json => {
+                console.log('Response JSON:', json);
+                if (json.success) {
+                    this.setAttribute('data-bookmarked', isBookmarked ? '0' : '1');
+
+                    const icon = this.querySelector('i');
+                    if (isBookmarked) {
+                        icon.classList.remove('fas', 'text-primary');
+                        icon.classList.add('far', 'text-muted');
+                        this.setAttribute('title', 'Add Bookmark');
+                    } else {
+                        icon.classList.remove('far', 'text-muted');
+                        icon.classList.add('fas', 'text-primary');
+                        this.setAttribute('title', 'Remove Bookmark');
+                    }
+                } else {
+                    alert(json.message || 'Something went wrong!');
+                }
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                alert('An error occurred while processing your request.');
+            });
+        });
+    });
+});
+</script> -->
+
+
+
+
+
+
+
+
+
+
+
+
 
         <section class="FAQ">
             <div class="container mb-4">
