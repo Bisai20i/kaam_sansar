@@ -87,7 +87,7 @@
                                 <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
                                     class="card-img-top rounded" alt="{{ $item->title }}">
                                 <div class="card-body p-1">
-                                    <h6 class="card-title">{{ $item->title }}</h6>
+                                    <h6 class="card-title text-truncate mb-0">{{ $item->title }}</h6>
                                     <small class="text-body-secondary">{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</small>
                                 </div>
                             </a>

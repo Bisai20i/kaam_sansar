@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('mobileNumber');
             $table->string('phoneNumber')->nullable();
             $table->string('email')->nullable();
-            $table->date('nepaliDob');
+            $table->text('nepaliDob');
             $table->date('englishDob')->nullable();
             $table->string('applyFromCountry')->nullable();
             $table->string('contactMedium')->nullable();
@@ -77,6 +77,8 @@ return new class extends Migration
             // Required Documents (File Uploads)
             $table->string('signature'); // Changed to camelCase
             $table->string('fingerPrint'); // Changed to camelCase
+            $table->enum('status',['pending','In-progress','approved','rejected'])->default('pending');
+            $table->enum('payment',['unpaid','paid'])->default('unpaid');
             $table->timestamps();
         });
     }

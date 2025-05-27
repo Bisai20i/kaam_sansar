@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('passport_renewals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('job_seeker_id')->constrained('job_seekers')->cascadeOnDelete();
+
             // Personal Information
             $table->string('first_name');
             $table->string('middle_name')->nullable();
@@ -52,11 +53,11 @@ return new class extends Migration
 
             // Contact Information
             $table->string('email')->nullable();
-            $table->string('country')->nullable();
-            $table->string('state')->nullable();
-            $table->string('district')->nullable();
-            $table->string('city')->nullable();
             $table->string('phone')->nullable();
+            $table->string('contact_country')->nullable();
+            $table->string('contact_state')->nullable();
+            $table->string('contact_district')->nullable();
+            $table->string('contact_city')->nullable();
 
             // Emergency Contact
             $table->string('emergency_contact_name')->nullable();
@@ -84,6 +85,13 @@ return new class extends Migration
             $table->enum('service_type',['apply','renewal', 'replacement'])->default('renewal');
 
             $table->enum('passport_pages',['34_pages','66_pages'])->default('34_pages');
+
+            $table->string('country')->nullable();
+            $table->string('state')->nullable();
+            $table->string('district')->nullable();
+            $table->string('location')->nullable();
+            $table->date('appointment_date')->nullable();
+            $table->time('appointment_time')->nullable();
 
             $table->timestamps();
         });

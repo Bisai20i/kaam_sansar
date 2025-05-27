@@ -1,18 +1,17 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Advertisement;
-use App\Models\Comment;
-use App\Models\AdvertisementCategory;
 use App\Models\AdsManager;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Advertisement;
+use App\Models\AdvertisementCategory;
+use App\Models\Comment;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -116,7 +115,6 @@ class AdvertisementController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
     public function store(Request $request)
     {
         // Log all incoming request data
@@ -130,64 +128,65 @@ class AdvertisementController extends Controller
 
         if (!$user) {
             return $isMobile
-                ? $this->responseError('Unauthorized', 401)
-                : redirect()->route('login')->with('error', 'Unauthorized access.');
+            ? $this->responseError('Unauthorized', 401)
+            : redirect()->route('login')->with('error', 'Unauthorized access.');
         }
 
         Log::info('Authenticated Job Seeker ID: ' . $user->id);
 
         $jobSeekerId = $user->id;
 
+        // return $request->all();
+
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'adsTitle' => 'required|string|max:255',
-            'adsCategoryId' => 'nullable',
+            'adsCategoryId' => 'nullable|exists:advertisement_categories,id',
             'type' => 'nullable',
             'location' => 'required|string|max:255',
             'country' => 'nullable|string|max:255',
             'adsDescription' => 'required|string|max:100000',
-            'adsOwner' => 'nullable|string|max:255',
-            'adsThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'adsOwnerImg' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'pricing' => 'required|numeric',
-            'status' => 'nullable|string|max:255',
-            'publishStatus' => 'nullable|string|max:255',
-            'contactNumber' => 'nullable|string|max:255',
+            'adsOwner'       => 'nullable|string|max:255',
+            'adsThumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'adsOwnerImg'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'pricing'        => 'required|numeric',
+            'status'         => 'nullable|string|max:255',
+            'publishStatus'  => 'nullable|string|max:255',
+            'contactNumber'  => 'nullable|string|max:255',
         ]);
 
         // Handle validation errors
         if ($validator->fails()) {
             Log::error('Validation errors: ', $validator->errors()->toArray());
             return $isMobile
-                ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
-                : redirect()->back()->withErrors($validator->errors())->withInput();
+            ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
+            : redirect()->back()->with('error', implode(', ', $validator->errors()->all()));
         }
 
         // Handle the ads thumbnail using helper
 
-        $adsImg = handleUpload('adsThumbnail');
-        $adsOwnerImg = handleUpload('adsOwnerImg');
-
+        $adsImg      = handleUpload('adsThumbnail');
+        // $adsOwnerImg = handleUpload('adsOwnerImg');
 
         // Log the image upload result
         Log::info('Uploaded Image Path:', ['adsThumbnail' => $adsImg]);
 
         // Store the new record
-        $ads = new Advertisement();
-        $ads->jobSeekerId =  $jobSeekerId; // Get admin's ID
-        $ads->adsTitle = $request->input('adsTitle');
-        $ads->type = $request->input('type');
-        $ads->adsCategoryId = $request->input('adsCategoryId');
-        $ads->location = $request->input('location');
-        $ads->country = $request->input('country');
+        $ads                 = new Advertisement();
+        $ads->jobSeekerId    = $jobSeekerId; // Get admin's ID
+        $ads->adsTitle       = $request->input('adsTitle');
+        $ads->type           = $request->input('type');
+        $ads->adsCategoryId  = $request->input('adsCategoryId');
+        $ads->location       = $request->input('location');
+        $ads->country        = $request->input('country');
         $ads->adsDescription = $request->input('adsDescription');
-        $ads->adsOwner = $request->input('adsOwner');
+        // $ads->adsOwner = $request->input('adsOwner');
         $ads->adsThumbnail = $adsImg;
-        $ads->adsOwnerImg = $adsOwnerImg;
+        // $ads->adsOwnerImg = $adsOwnerImg;
         $ads->pricing = $request->input('pricing');
         $ads->contactNumber = $request->input('contactNumber');
         // Automatically set postedDuration based on created_at
-        $ads->created_at = Carbon::now();
+        // $ads->created_at = Carbon::now();
         $ads->postedDuration = Carbon::now()->diffInDays($ads->created_at) . ' Days';
         Log::info('Advertisement Updated:', $ads->toArray());
 
@@ -271,7 +270,7 @@ class AdvertisementController extends Controller
         $categories = AdvertisementCategory::all();
 
 
-        return view('backend.Advertisement.create', compact('ads', 'categories'));
+        return view('backend.advertisement.create', compact('ads', 'categories'));
     }
 
     /**
@@ -387,10 +386,9 @@ class AdvertisementController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
     public function publish($id)
     {
-        $ads = Advertisement::find($id);
+        $ads                = Advertisement::find($id);
         $ads->publishStatus = 'publish';
         $ads->save();
         return redirect()->route('ads.index')->with('success', 'Ads published successfully.');
@@ -398,7 +396,7 @@ class AdvertisementController extends Controller
 
     public function unpublish($id)
     {
-        $ads = Advertisement::find($id);
+        $ads                = Advertisement::find($id);
         $ads->publishStatus = 'unpublish';
         $ads->save();
         return redirect()->route('ads.index')->with('success', 'Ads unpublished successfully.');
@@ -566,7 +564,10 @@ public function destroy(Request $request, $id)
             $ad = Advertisement::all();
 
             $adTypes = $this->getEnumValues('advertisements', 'type');
-            $categories = AdvertisementCategory::where('id', $categoryId)->get();
+            // $type = Advertisement::where('adsCategoryId', $categoryId)->first()->type;
+            
+            $categories = AdvertisementCategory::get();
+            // dd($categories);
             $ad_banners = [];
             $ad_banners['top'] = AdsManager::where('which_page', 'advertisement')
                 ->where('publish_or_not', 1)
@@ -604,7 +605,7 @@ public function destroy(Request $request, $id)
                 ], 200);
             }
 
-            // Return a view for web users
+            // Return a view for web users 'ads', 'allCategories', 'type', 'selectedCategory', 'ad', 'category', 'categories', 'ad_banners'
             return view('frontend.advertisements.index', compact('ads', 'ad', 'categories', 'all', 'ad_banners'));
         } catch (\Exception $e) {
             Log::error("Error fetching advertisements by category: " . $e->getMessage());
@@ -713,9 +714,9 @@ public function destroy(Request $request, $id)
     protected function responseError($message, $statusCode, $errors = [])
     {
         return response()->json([
-            'status' => 'error',
+            'status'  => 'error',
             'message' => $message,
-            'errors' => $errors
+            'errors'  => $errors,
         ], $statusCode);
     }
     /**
@@ -724,9 +725,9 @@ public function destroy(Request $request, $id)
     protected function responseSuccess($message, $data = [], $statusCode = 200)
     {
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => $message,
-            'data' => $data
+            'data'    => $data,
         ], $statusCode);
     }
 }

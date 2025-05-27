@@ -3,6 +3,7 @@
     Discussion Form
 @endsection
 @section('content')
+
     <section class="main  container-fluid pt-5 pb-2" style="box-sizing: border-box;">
 
         <!-- Create Post Modal -->
@@ -10,8 +11,9 @@
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header d-flex">
-                        <h1 class="modal-title fs-5 mx-auto flex-fill" id="createPostLabel">
+                    <div class="modal-header d-flex bg-white border-bottom border-1">
+                        <h1 class="modal-title fs-5 mx-auto flex-fill d-flex justify-content-center text-black fs-4 "
+                            id="createPostLabel">
                             Create Post
                         </h1>
                         <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -43,7 +45,7 @@
 
                             <div class="form mt-2">
 
-                                <select name="category" class="form-select bg-dark-subtle text-black-50" id="cat"
+                                <select name="category" class="form-select bg-secondary-subtle text-black-50" id="cat"
                                     aria-label="">
                                     <option selected>Category</option>
                                     <option value="education">Education</option>
@@ -55,44 +57,40 @@
                                 </select>
                             </div>
                             <div class="form-floating text-black-50 mt-3">
-                                <input name="topic" type="text" class="form-control bg-dark-subtle text-black-50"
+                                <input name="topic" type="text" class="form-control bg-secondary-subtle text-black-50"
                                     id="titleInput" placeholder="Post Title">
                                 <label for="titleInput">Title</label>
                             </div>
                             <div class="form-floating text-black-50">
-                                <textarea class="form-control bg-dark-subtle text-black-50" name="description" placeholder="Post Details"
+                                <textarea class="form-control bg-secondary-subtle text-black-50" name="description" placeholder="Post Details"
                                     id="floatingTextarea" style="height: 100px"></textarea>
                                 <label for="floatingTextarea">Describe...</label>
                             </div>
                             <div class="form text-black-50 mt-2">
-                                <select name="country" id="forumCountry" class="form-control bg-dark-subtle text-black-50">
+                                <select name="country" id="forumCountry"
+                                    class="form-control bg-secondary-subtle text-black-50">
                                     <option value="" selected>Select Country</option>
                                     <!-- Country options will be dynamically populated by JavaScript -->
                                 </select>
 
                             </div>
                             <div class="form-floating text-black-50 mt-3">
-                                <input name="person_name" type="text" class="form-control bg-dark-subtle text-black-50"
-                                    id="person_name_input" placeholder="Person Name">
+                                <input name="person_name" type="text"
+                                    class="form-control bg-secondary-subtle text-black-50" id="person_name_input"
+                                    placeholder="Person Name">
                                 <label for="person Name">Person Name</label>
                             </div>
-                            <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
-                                <p class="flex-grow-1 my-auto text-black-50">Add to your post
-                                </p>
-                                <div class="d-flex gap-3 align-items-center">
-
-                                    <a href="#" class="primary_color_text"
-                                        onclick=" document.getElementById('forumImages').click()">
-                                        <i class="fa-solid fa-image"></i></a>
-                                    <input id="forumImages" class="d-none" type="file" multiple accept="image/*"
-                                        onchange="handleFiles(this.files)" name="images[]">
-                                </div>
+                            <div class="mb-1">
+                                <label for="forumImages" class="mb-2">Upload Images (Max 2MB each, 5 images)</label>
+                                <input id="forumImages" class="form-control py-2" type="file" multiple accept="image/*"
+                                    onchange="handleFiles(this.files)" name="images[]">
+                                <small>You can upload up to 5 images, each with a maximum size of 2MB.</small>
 
                             </div>
                             <div id="forumPreviewImages" class="row flex-wrap mt-4">
 
                             </div>
-                            <div class="d-flex justify-content-center mt-3">
+                            <div class="d-flex justify-content-center mt-1">
                                 <button type="submit" class="btn btn-primary mx-auto"
                                     style="background-color: #0064a7;">Post</button>
                             </div>
@@ -161,22 +159,26 @@
         </script>
 
         <!-- Delete Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Confirm
-                            Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModallLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="mb-3">
+                        <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center"
+                            style="width: 64px; height: 64px;">
+                            <i class="bi bi-trash-fill text-danger fs-3"></i>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this comment?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <h4 class="fw-bold">Are you sure?</h4>
+                    <p class="text-secondary mb-4">Are you sure you want to delete this comment?</p>
+                    <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
+                        <button type="button" class="btn border-secondary col-6 me-1"
+                            data-bs-dismiss="modal">Cancel</button>
 
                         <button id="deleteCommentButton" data-comment-id="0" onclick="deleteComment(this)"
-                            data-forum-id="0" class="btn btn-danger">Delete</button>
+                            data-forum-id="0" class="btn btn-danger w-100 ms-1">Delete</button>
+
                     </div>
                 </div>
             </div>
@@ -242,9 +244,149 @@
             {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
         @endif
 
+        <style>
+            .scrolling-container {
+                overflow: hidden;
+                background-color: #e9f1f7;
+                white-space: nowrap;
+            }
+
+            .scrolling-wrapper {
+                display: flex;
+                width: max-content;
+                animation: scrollLeft 30s linear infinite;
+            }
+
+            @keyframes scrollLeft {
+                0% {
+                    transform: translateX(0%);
+                }
+
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
+
+            .profile-item {
+                display: flex;
+                align-items: center;
+                margin-right: 15px;
+                gap: 15px;
+                flex-shrink: 0;
+                min-width: 200px;
+                /* Make all profile items uniform */
+            }
+        </style>
+
+        <div class="scrolling-container p-4 mb-4">
+            <div class="scrolling-wrapper" id="profile-wrapper">
+                <!-- Original profile items -->
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Bsai Raj Doe</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/4eec1808-d6d9-457b-1a6e-4fc46b86f8b9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Kabita Subedi</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Sangam Doe</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/d902be3e-4448-4664-ad49-1f5da29f9e18.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Nirmal Roy</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+
+                <!-- Clones of the same items for seamless loop -->
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Bsai Raj Doe</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/4eec1808-d6d9-457b-1a6e-4fc46b86f8b9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Kabita Subedi</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Sangam Doe</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+                <div class="profile-item mx-3">
+                    <img src="https://storage.googleapis.com/a1aa/image/d902be3e-4448-4664-ad49-1f5da29f9e18.jpg"
+                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    <div>
+                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Nirmal Roy</p>
+                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const wrapper = document.getElementById('profile-wrapper');
+            let profiles = Array.from(wrapper.children); // Get all the profile items
+            const container = document.querySelector('.scrolling-container');
+            let profileWidth = profiles[0].offsetWidth + 15; // Profile width + margin-right
+            let scrollSpeed = 2; // Adjust the speed of scroll (higher is slower)
+
+            // Clone and append profiles to ensure infinite scrolling
+            profiles.forEach(profile => {
+                const clone = profile.cloneNode(true);
+                wrapper.appendChild(clone);
+            });
+
+            function scroll() {
+                const maxScrollWidth = wrapper.scrollWidth; // The total scrollable width of all profiles
+
+                // Scroll the profiles by shifting them left
+                wrapper.style.transform = `translateX(-${scrollSpeed}px)`;
+
+                // If the leftmost profile is fully out of view, move it to the right end
+                if (parseFloat(wrapper.style.transform.replace('translateX(', '').replace('px)', '')) <= -profileWidth) {
+                    const firstItem = wrapper.firstElementChild;
+                    wrapper.appendChild(firstItem); // Move the first item to the end of the list
+                    wrapper.style.transform = 'translateX(0)'; // Reset the position
+                }
+
+                // Continue the scroll animation
+                requestAnimationFrame(scroll);
+            }
+
+            // Start scrolling
+            scroll();
+        </script>
+
         <div class="container position-relative">
             <div class="row mb-3">
-                <div class="col-lg-3 col-12">
+                <div class="col-lg-3 col-auto">
                     <a href="{{ route('frontend.discussion') }}" class=" text-decoration-none">
                         <h5 class="text-black">Discussion
                             Forum</h5>
@@ -254,15 +396,26 @@
                 <div class="col-lg-9 col-12 ps-2 lg:ps-4">
                     <div class="">
                         <form action="{{ route('frontend.discussion') }}" class="row g-2">
+                            @if (Auth::guard('job_seekers')->check())
+                                <div class="col-3 me-1 me-md-2 ratio ratio-1x1" style="max-width: 50px; ratio: 1/1; ">
+                                    <a
+                                        href="{{ route('discussion.profile', ['id' => Auth::guard('job_seekers')->user()->id]) }}">
+                                        <img class="img rounded-circle img-thumbnail" style="width: 45px; height: 45px;"
+                                            src="{{ Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}"
+                                            alt="">
+                                    </a>
+                                </div>
+                            @endif
+
                             <div
-                                class="col-12 col-md-auto d-flex flex-fill border border-1 border-dark-subtle rounded-5 align-items-center ps-3 overflow-hidden gap-1">
+                                class="col-8 col-md-auto d-flex flex-fill border border-1 border-dark-subtle rounded-5 align-items-center ps-3 overflow-hidden gap-1">
                                 <i class="fa-solid fa-magnifying-glass text-black-50"></i>
                                 <input type="search" placeholder="Search" name='searchstr'
                                     value="{{ request('searchstr') }}"
                                     class="w-100 h-100 border-0 m-0 text-black-50 rounded-end-5 px-1 py-2"
                                     style="outline: none; min">
                             </div>
-                            <div class="col-12 col-md-auto d-flex gap-2 justify-content-center ms-md-3">
+                            <div class="col-12 col-md-auto d-flex gap-2 justify-content-center ms-md-2">
 
                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                     style="background-color: #0064a7;" type="submit">
@@ -271,12 +424,13 @@
 
                                 <div class="">
                                     @auth('job_seekers')
-                                        <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
+                                        <button class="btn rounded-5 px-4 text-white text-nowrap m-auto py-2"
                                             style="background-color: #0064a7;" data-bs-toggle="modal"
                                             data-bs-target="#createPost">+
                                             Create</button>
                                     @else
                                         <button data-bs-toggle="modal" data-bs-target="#loginModal"
+                                            onclick="setRedirectUrl()"
                                             class="btn rounded-5 px-4 text-white text-nowrap m-auto"
                                             style="background-color: #0064a7;">
                                             + Create
@@ -358,7 +512,7 @@
                     </div>
                     <div id="forumPosts">
 
-                        @if (count($forumPosts) > 0)
+                        @if ($forumPosts->count() > 0)
                             @foreach ($forumPosts as $forumPost)
                                 <div
                                     class="row flex-wrap align-items-center gap-2 p-2 d-flex justify-content-between mt-2">
@@ -373,7 +527,7 @@
                                                 <a href="{{ route('discussion.profile', ['id' => $forumPost->jobSeeker->id]) }}"
                                                     class="text-decoration-none">
                                                     <h5 class="m-0 text-black">
-                                                        {{ ucfirst($forumPost->jobSeeker->firstName)  . ' ' . $forumPost->jobSeeker->lastName }}
+                                                        {{ ucfirst($forumPost->jobSeeker->firstName) . ' ' . $forumPost->jobSeeker->lastName }}
                                                     </h5>
                                                 </a>
                                                 <div class="d-inline-flex gap-4">
@@ -439,11 +593,11 @@
 
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                                     style="background-color: #0064a7;" data-bs-toggle="modal"
-                                                    data-bs-target="#loginModal">+
+                                                    data-bs-target="#loginModal" onclick="setRedirectUrl()">+
                                                     <span class="d-none d-md-inline">Follow</span></button>
                                                 <button class="btn rounded-5 px-4 text-white text-nowrap"
                                                     style="background-color: #0064a7;" data-bs-toggle="modal"
-                                                    data-bs-target="#loginModal">
+                                                    data-bs-target="#loginModal" onclick="setRedirectUrl()">
                                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                                     <span class="d-none d-md-inline">Chat</span>
                                                 </button>
@@ -510,7 +664,7 @@
                                         </span>
                                     </span>
 
-                                    <span class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                    {{-- <span class="text-decoration-none text-black d-flex align-items-center gap-1"
                                         data-forum-id="{{ $forumPost->id }}"
                                         data-current-user-id="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->id : null }}"
                                         style="cursor: pointer;">
@@ -518,11 +672,11 @@
                                         <span class="d-flex align-items-center gap-1">
                                             1
                                         </span>
-                                    </span>
+                                    </span> --}}
                                 </div>
                             @endforeach
                         @else
-                            <h4 class="text-center mt-4 text-danger">No Post Found</h4>
+                            @include('frontend.notFound')
                         @endif
 
 
@@ -769,6 +923,10 @@
         var chatchannel = pusher.subscribe('chat.' + "{{ Auth::guard('job_seekers')->id() }}");
         chatchannel.bind('new-message', function(data) {
             let message = data.message
+
+            if ($('#chatBox [name="receiver_id"]').val() == message.receiver_id) {
+                return;
+            }
             if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
                 $('#messageContainer').append(`
                     <div class="d-flex my-2 w-100 justify-content-start">
@@ -783,12 +941,12 @@
 
             }
 
-            document.querySelectorAll('.list-group .list-group-item').forEach(item => {
-                if (item.getAttribute('data-receiver-id') == message.sender_id) {
-                    item.style.background = 'rgba(0, 100, 167, 0.1)'
-                    item.querySelector('.message-content').innerHTML = message.message
-                }
-            })
+            // document.querySelectorAll('.list-group .list-group-item').forEach(item => {
+            //     if (item.getAttribute('data-receiver-id') == message.sender_id) {
+            //         item.style.background = 'rgba(0, 100, 167, 0.1)'
+            //         item.querySelector('.message-content').innerHTML = message.message
+            //     }
+            // })
 
             //     // $('.list-group-item').each(function() {
             //     //     let userId = $(this).data('user-id'); // safer than attr()
@@ -1006,6 +1164,18 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function setRedirectUrl() {
+            fetch('/set-redirect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    redirect_url: window.location.href
+                })
+            });
+        }
         // Function to get the base URL of your application
         function getBaseUrl() {
             return window.location.protocol + "//" + window.location.host;
@@ -1344,6 +1514,10 @@
                     // ✅ What to do on success
                     if (response.status) {
                         $('#commentInput').val('')
+                        if ($('#commentsList').html() ==
+                            '<p class="text-center my-2 text-secondary">No Comments yet !</p>') {
+                            $('#commentsList').html('')
+                        }
                         $('#commentsList').append(`
                             <div class="mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
                                 <div>

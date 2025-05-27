@@ -14,19 +14,19 @@ return new class extends Migration
             // Personal Information
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email');
+            $table->string('email')->nullable(); 
             $table->string('phone');
             $table->string('whatsapp_number')->nullable();
             $table->string('country');
             
             // Bank Details
-            $table->string('bank_name');
-            $table->string('bank_holder_name');
-            $table->string('bank_account_number');
+            $table->string('bank_name')->nullable();
+            $table->string('bank_holder_name')->nullable();
+            $table->string('bank_account_number')->nullable();
             $table->string('iban_number')->nullable();
             $table->string('swift_code')->nullable();
-            $table->string('bank_country');
-            $table->string('branch_location');
+            $table->string('bank_country')->nullable();
+            $table->string('branch_location')->nullable();
             
             // Business Details
             $table->string('business_name');
@@ -41,16 +41,16 @@ return new class extends Migration
             $table->string('target_country');
             
             // Document paths (will store file paths)
-            $table->string('citizen_document')->nullable();   // Path to citizen document (nullable)
-            $table->string('passport_document')->nullable();  // Path to passport document (nullable)
-            $table->string('visa_document')->nullable();      // Path to visa document (nullable)
-            $table->string('resident_id_document')->nullable(); // Path to resident ID document (nullable)
-            $table->string('registration_doc1')->nullable();  // Path to first registration document (nullable)
-            $table->string('registration_doc2')->nullable();  // Path to second registration document (nullable)
-            $table->string('registration_doc3')->nullable();  // Path to third registration document (nullable)
-            $table->string('show_pic1')->nullable();          // Path to first show picture (nullable)
-            $table->string('show_pic2')->nullable();          // Path to second show picture (nullable)
-            $table->string('show_pic3')->nullable();          // Path to third show picture (nullable)
+            $table->string('citizen_document')->nullable();  
+            $table->string('passport_document')->nullable(); 
+            $table->string('visa_document')->nullable();     
+            $table->string('resident_id_document')->nullable();
+            $table->string('registration_doc1')->nullable(); 
+            $table->string('registration_doc2')->nullable(); 
+            $table->string('registration_doc3')->nullable(); 
+            $table->string('show_pic1')->nullable();         
+            $table->string('show_pic2')->nullable();         
+            $table->string('show_pic3')->nullable();         
             
             // Terms acceptance
             $table->boolean('terms_accepted')->default(false);

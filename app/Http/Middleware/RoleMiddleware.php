@@ -26,7 +26,7 @@ class RoleMiddleware
 
         // Check if the user has the required role
         if ($adminuser->roleType !== $role) {
-            return abort(403, 'You do not have access to this resource.'); // Return 403 for unauthorized access
+            return abort(403, message: 'You do not have access to this resource.'); // Return 403 for unauthorized access
         }
 
         return $next($request); // Proceed to the next middleware/handler

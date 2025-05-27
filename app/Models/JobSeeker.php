@@ -205,6 +205,10 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
    public function messages(){
     return $this->hasMany(Message::class, 'sender_id');
    }
+   public function polls()
+    {
+        return $this->hasMany(Poll::class);
+    }
    public function brokerAccounts()
    {
        return $this->hasMany(BrokerAccount::class, 'jobSeekerId');
@@ -212,5 +216,10 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
    public function bankAccounts()
    {
        return $this->hasMany(BankAccount::class, 'jobSeekerId');
+   }
+
+   public function foreignExchanges()
+   {
+       return $this->hasMany(ForeignExchangeDetail::class, 'jobseeker_id');
    }
 }

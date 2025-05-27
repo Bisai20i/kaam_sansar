@@ -1605,12 +1605,13 @@ return $request->all();
         // Handle validation errors
         if ($validator->fails()) {
 
-            Log::alert("Someting went wrong:", $validator->errors());
+            Log::alert("Something went wrong", ['errors' => $validator->errors()->toArray()]);
 
             if (request()->ajax()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Validation failed. Please check your inputs.',
+                    'data' => $request->all(),
                     'errors'  => $validator->errors(),
                 ]);
             }
@@ -1637,8 +1638,6 @@ return $request->all();
             if ($request->hasFile('images')) {
                 $files = $request->file('images');
 
-                Log::info("Files: ", $files);
-
                 // Limit to 5 images
 
                 if ($user->userThumbnail) {
@@ -1652,6 +1651,7 @@ return $request->all();
                 }
                 $imagePaths = [];
                 foreach ($files as $file) {
+                    Log::info("File: ", [$file]);
                     $path         = $file->store('jobSeekerImage', 'public');
                     $imagePaths[] = $path;
                 }
@@ -1936,4 +1936,15 @@ return $request->all();
         }
     }
 
+    public function myforms(){
+        return view('frontend.profile.partials.my-forms');
+    }
+
+    public function mynews(){
+        return view('frontend.profile.partials.my-news');
+    }
+
+    public function myblogs(){
+        return view('frontend.profile.partials.my-podcasts');
+    }
 }

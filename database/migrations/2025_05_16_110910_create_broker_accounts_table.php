@@ -76,7 +76,8 @@ return new class extends Migration
             $table->string('ppSizePhoto');
             $table->string('tradingAgreement')->nullable();
             $table->string('idCard')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('status',['pending','In-progress','approved','rejected'])->default('pending');
+            $table->enum('payment',['unpaid','paid'])->default('unpaid');
             $table->timestamps();
         });
     }

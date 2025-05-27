@@ -7,28 +7,28 @@
             <h3>School/Institution</h3>
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <label for="schoolName" class="form-label">School Name</label>
-                    <input type="text" class="form-control custom-input" id="schoolName" name="schoolName" placeholder="California University" required />
+                    <label for="schoolName" class="form-label">School Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control custom-input" id="schoolName" name="schoolName" placeholder="Enter school name" required />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="degree" class="form-label">Degree <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="degree" name="degree" placeholder="Bachelor" required />
+                    <input type="text" class="form-control custom-input" id="degree" name="degree" placeholder="Enter education degree " required />
                 </div>
                 <div class="col-md-6">
                     <label for="city" class="form-label">City <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control custom-input" id="city" name="city" placeholder="Pokhara" required />
+                    <input type="text" class="form-control custom-input" id="city" name="city" placeholder="Enter city" required />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="startDate" class="form-label">Start Date <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control custom-input" id="startDate" name="startDate" required />
+                    <input type="date" class="form-control custom-input" id="startDate" name="startDate" placeholder="Enter start date"   required />
                 </div>
                 <div class="col-md-6">
                     <label for="graduationDate" class="form-label">Graduation Date <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control custom-input" id="graduationDate" name="graduationDate" required />
+                    <input type="date" class="form-control custom-input" id="graduationDate" name="graduationDate" placeholder="Enter end date"  required />
                 </div>
             </div>
             <div class="row mb-3">
@@ -39,7 +39,7 @@
             </div>
             <button type="button" class="btn add-project float-start" id="addEducation">+ Add Education</button>
             <div class="text-end">
-                <button type="submit" class="btn text-center skip-btn mx-2" data-current="education" data-next="project" data-link="projectLink">Continue to Project</button>
+                <button type="submit" class="btn text-center skip-btn mx-2" data-current="education" data-next="project" data-link="projectLink">Skip</button>
             </div>
         </form>
     </div>
@@ -66,6 +66,31 @@
             </div>
             @endforeach
         </div>
+    </div>
+</div>
+
+<!-- Delete Modal for Education -->
+<div class="modal fade" id="deleteEducationModal" tabindex="-1" aria-labelledby="deleteEducationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="deleteEducationForm" method="POST" action="">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" id="deleteEducationId" name="id" value="">
+             <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="mb-3">
+                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold">Are you sure?</h4>
+                <p class="text-secondary mb-4">Are you sure you want to delete this education? This action cannot be undone.</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn border-secondary-subtle rounded-3 px-4 py-2 col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger rounded-3 px-4 py-2 col-6 ms-1">Delete</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -197,33 +222,27 @@
         document.getElementById('addEducation').addEventListener('click', async function(e) {
             e.preventDefault();
             const data = collectEducationData();
-            
-            if (!data.schoolName || !data.degree || !data.city || !data.startDate || !data.graduationDate || !data.educationDescription) {
-                alert('Please fill all required fields');
-                return;
-            }
-
             const result = await saveEducationData(data);
             if (result.success) {
                 if (isEditing) {
                     updateEducationCard(result.education);
-                    alert('Education updated successfully!');
                 } else {
                     appendEducationCard(result.education);
                 }
                 resetForm();
             } else {
-                alert('Error saving education');
+                console.error('something  wents wrong');
             }
         });
 
         // Event delegation for both edit and delete buttons
         document.getElementById('educationList').addEventListener('click', function(e) {
+            const id = e.target.dataset.id;
+            if (!id) return;
+
             // Handle edit button
             if (e.target.classList.contains('edit-education')) {
                 e.preventDefault();
-                const id = e.target.dataset.id;
-                
                 fetchEducationData(id)
                     .then(education => {
                         populateForm(education);
@@ -232,30 +251,57 @@
                         });
                     })
                     .catch(error => {
-                        alert('Error fetching education data: ' + error.message);
+                        console.error('something wents worng')
                     });
             }
             
             // Handle delete button
             else if (e.target.classList.contains('delete-education')) {
                 e.preventDefault();
-                const id = e.target.dataset.id;
+                // Set the form action and ID
+                document.getElementById('deleteEducationId').value = id;
+                document.getElementById('deleteEducationForm').action = `/jobseeker/educations/${id}`;
+                
+                // Show the modal
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteEducationModal'));
+                deleteModal.show();
+            }
+        });
 
-                if (confirm('Are you sure you want to delete this education entry?')) {
-                    deleteEducationData(id)
-                        .then(result => {
-                            if (result.status) {
-                                document.getElementById(`card_id_${id}`).remove();
-                                alert('Education deleted successfully!');
-                                if (currentEducationId === parseInt(id)) {
-                                    resetForm();
-                                }
-                            }
-                        })
-                        .catch(error => {
-                            alert('Error deleting education: ' + error.message);
-                        });
+        // Handle form submission for delete modal
+        document.getElementById('deleteEducationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('deleteEducationId').value;
+            const form = this;
+            
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ _method: 'DELETE', id: id })
+                });
+                
+                const json = await res.json();
+                if (json.success) {
+                    document.getElementById(`card_id_${id}`).remove();
+                    if (currentEducationId === parseInt(id)) {
+                        resetForm();
+                    }
+                    
+                    // Hide the modal
+                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteEducationModal'));
+                    deleteModal.hide();
+                } else {
+                    alert('Error deleting education');
                 }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Error deleting education');
             }
         });
 

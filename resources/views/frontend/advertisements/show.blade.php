@@ -11,23 +11,23 @@
             <div class="row mt">
                 <div class="col-sm-12 col-md-3 col-lg-3 border border-1 rounded p-2 fixed-height">
                     <!-- Responsive Image -->
-                    <img src="{{asset($ads->adsThumbnail)}}" class="img-fluid rounded mb-3 w-100"
+                    <img src="{{$ads->adsThumbnail ? asset($ads->adsThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg')}}" class="img-fluid rounded mb-3 w-100"
                         alt="Product Thumbnail">
 
                     <!-- Profile & Price Section -->
                     <div class="profile-price d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
+                        <div class="d-flex justify-content-between align-items-center px-0 w-100">
                             @if (!empty($ads->jobSeeker->userThumbnail) && is_array($ads->jobSeeker->userThumbnail))
-                            <img src="{{ asset('storage/' . $ads->jobSeeker->userThumbnail[0]) }}" class="rounded-circle abroad-chat" alt="Profile picture">
+                                <img src="{{ asset('storage/' . $ads->jobSeeker->userThumbnail[0]) }}" class="rounded-circle abroad-chat" alt="Profile picture">
                             @else
-                            <img src="{{ asset('images/default-profile.png') }}" class="rounded-circle abroad-chat" alt="Default Profile">
+                            <img src="{{ asset('frontend/assets/Images/profile.jpg') }}" class="rounded-circle abroad-chat" alt="Default Profile">
                             @endif
-                            <div class="ms-2">
-                                <p class="fw-semibold mb-0">{{$ads->jobSeeker->firstName}} {{$ads->jobSeeker->lastName}}</p>
+                            <div class="ms-2 text-end">
+                                <p class="fw-semibold mb-0 ">{{$ads->jobSeeker->firstName}} {{$ads->jobSeeker->lastName}}</p>
                                 <p class="text-muted mb-0 mt-0">{{$ads->contactNumber}}</p>
                             </div>
                         </div>
-                        <h3 class="mt-2 mt-md-0 text-end price-text">{{$ads->pricing}}</h3>
+                        <h3 class="w-100 mt-2 mt-md-0 text-end price-text">Rs. {{$ads->pricing}}</h3>
                     </div>
 
                     <div class="mt-3 mb-3 d-flex flex-wrap justify-content-center gap-2">
@@ -69,8 +69,6 @@
                             }
                         </script>
                         @endif
-
-
 
                         <!-- Share Button -->
                         <button class="btn custom-outline-btn flex-grow-1" id="shareButton" data-url="{{ url()->current() }}">
@@ -231,104 +229,104 @@
         <div class="row mt-4">
             <h3>Similar product</h3>
             <div class="row g-2 mt-0" id="product-list">
+
                 @foreach($similarAds as $product )
-                <div class="col-lg-3 col-md-3 col-sm-6 col-12 product" data-category="electronics">
-                    <div class="card-bdy-packages">
-                        <a href="{{route('ads.show',$product->id)}}" class="text-decoration-none text-black">
-                            <img src="{{asset($product->adsThumbnail)}}" class="bdy-packages-img"
-                                style="width: 100%; height: 180px; object-fit:auto;">
-                            <div class="card-body">
-                                <h6 class="card-title text-black mb-0">{{$product->adsTitle }}</h6>
-                                <p class="card-text text-muted mb-0">{{$product->location}}</p>
-                                <p class="card-text text-muted">{{$product->postedDuration}}</p>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-12 product" data-category="electronics">
+                        <div class="card-bdy-packages">
+                            <a href="{{route('ads.show',$product->id)}}" class="text-decoration-none text-black">
+                                <img src="{{ $product->adsThumbnail ? asset($product->adsThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg') }}" class="bdy-packages-img mb-2"
+                                    style="width: 100%; height: 180px; object-fit:auto;">
+                                <div class="card-body">
+                                    <h6 class="card-title text-black mb-0">{{$product->adsTitle }}</h6>
+                                    <p class="card-text text-muted mb-0">{{$product->location}}</p>
+                                    <p class="card-text text-muted">{{$product->postedDuration}}</p>
 
-                            </div>
-                        </a>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 @endforeach
-
 
                 @if ($similarAds->hasMorePages() || $similarAds->currentPage() !=1)
 
-                <div class="row mt-3">
-                    <nav>
-                        <ul class="pagination justify-content-end converter">
-                            {{-- Previous Button --}}
-                            @if ($similarAds->onFirstPage())
-                            <li class="page-item disabled">
-                                <a class="page-link primary_color_text">&lt;</a>
-                            </li>
-                            @else
-                            <li class="page-item">
-                                <a class="page-link primary_color_text"
-                                    href="{{ $similarAds->previousPageUrl() }}">&lt;</a>
-                            </li>
-                            @endif
-
-                            {{-- Pagination Numbers --}}
-                            @php
-                            $currentPage = $similarAds->currentPage();
-                            $lastPage = $similarAds->lastPage();
-                            $pageRange = 2; // Number of pages to display before and after the current page
-                            @endphp
-
-                            {{-- Show First Page --}}
-                            @if ($currentPage > $pageRange + 1)
-                            <li class="page-item">
-                                <a class="page-link primary_color_text" href="{{ $similarAds->url(1) }}">1</a>
-                            </li>
-                            @if ($currentPage > $pageRange + 2)
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                            @endif
-
-                            {{-- Show Pages Before Current Page --}}
-                            @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                    <div class="row mt-3">
+                        <nav>
+                            <ul class="pagination justify-content-end converter">
+                                {{-- Previous Button --}}
+                                @if ($similarAds->onFirstPage())
+                                <li class="page-item disabled">
+                                    <a class="page-link primary_color_text">&lt;</a>
+                                </li>
+                                @else
                                 <li class="page-item">
-                                <a class="page-link primary_color_text"
-                                    href="{{ $similarAds->url($i) }}">{{ $i }}</a>
+                                    <a class="page-link primary_color_text"
+                                        href="{{ $similarAds->previousPageUrl() }}">&lt;</a>
                                 </li>
-                                @endfor
+                                @endif
 
-                                {{-- Current Page --}}
-                                <li class="page-item active">
-                                    <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+                                {{-- Pagination Numbers --}}
+                                @php
+                                $currentPage = $similarAds->currentPage();
+                                $lastPage = $similarAds->lastPage();
+                                $pageRange = 2; // Number of pages to display before and after the current page
+                                @endphp
+
+                                {{-- Show First Page --}}
+                                @if ($currentPage > $pageRange + 1)
+                                <li class="page-item">
+                                    <a class="page-link primary_color_text" href="{{ $similarAds->url(1) }}">1</a>
                                 </li>
+                                @if ($currentPage > $pageRange + 2)
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                @endif
+                                @endif
 
-                                {{-- Show Pages After Current Page --}}
-                                @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                                {{-- Show Pages Before Current Page --}}
+                                @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
                                     <li class="page-item">
                                     <a class="page-link primary_color_text"
                                         href="{{ $similarAds->url($i) }}">{{ $i }}</a>
                                     </li>
                                     @endfor
 
-                                    {{-- Show Last Page --}}
-                                    @if ($currentPage < $lastPage - $pageRange)
-                                        @if ($currentPage < $lastPage - $pageRange - 1)
-                                        <li class="page-item disabled"><span class="page-link">...</span></li>
-                                        @endif
-                                        <li class="page-item">
-                                            <a class="page-link primary_color_text"
-                                                href="{{ $similarAds->url($lastPage) }}">{{ $lastPage }}</a>
-                                        </li>
-                                        @endif
+                                    {{-- Current Page --}}
+                                    <li class="page-item active">
+                                        <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+                                    </li>
 
-                                        {{-- Next Button --}}
-                                        @if ($similarAds->hasMorePages())
+                                    {{-- Show Pages After Current Page --}}
+                                    @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
                                         <li class="page-item">
-                                            <a class="page-link primary_color_text"
-                                                href="{{ $similarAds->nextPageUrl() }}">&gt;</a>
+                                        <a class="page-link primary_color_text"
+                                            href="{{ $similarAds->url($i) }}">{{ $i }}</a>
                                         </li>
-                                        @else
-                                        <li class="page-item disabled">
-                                            <a class="page-link primary_color_text">&gt;</a>
-                                        </li>
-                                        @endif
-                        </ul>
-                    </nav>
-                </div>
+                                        @endfor
+
+                                        {{-- Show Last Page --}}
+                                        @if ($currentPage < $lastPage - $pageRange)
+                                            @if ($currentPage < $lastPage - $pageRange - 1)
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            @endif
+                                            <li class="page-item">
+                                                <a class="page-link primary_color_text"
+                                                    href="{{ $similarAds->url($lastPage) }}">{{ $lastPage }}</a>
+                                            </li>
+                                            @endif
+
+                                            {{-- Next Button --}}
+                                            @if ($similarAds->hasMorePages())
+                                            <li class="page-item">
+                                                <a class="page-link primary_color_text"
+                                                    href="{{ $similarAds->nextPageUrl() }}">&gt;</a>
+                                            </li>
+                                            @else
+                                            <li class="page-item disabled">
+                                                <a class="page-link primary_color_text">&gt;</a>
+                                            </li>
+                                            @endif
+                            </ul>
+                        </nav>
+                    </div>
                 @endif
 
             </div>
@@ -518,6 +516,7 @@
         // alert(JSON.stringify(data));
     });
 </script>
+
 <script>
     async function openChat(e) {
         const chatBox = document.getElementById("chatBox");
@@ -640,6 +639,7 @@
         chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
     }
 </script>
+
 <script>
     let forumPostImages = [];
 
@@ -702,8 +702,6 @@
 </script>
 
 
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // Function to get the base URL of your application
     function getBaseUrl() {
@@ -801,8 +799,6 @@
     }
 </script>
 
-
-
 <!-- ✅ Place script here, before closing body tag -->
 <script>
     function setActive(tabIndex) {
@@ -857,12 +853,12 @@
             // Set comment box class and add HTML content
             newComment.className = 'd-flex align-items-start p-1 bg-white rounded shadow-sm mb-2 comment-box';
             newComment.innerHTML = `
-    <img alt="Profile picture of user" class="rounded-circle me-3" src="https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg"/>
-    <div class="comment-text">
-        <h6 class="fw-semibold mb-0 mb-0"></h6>
-        <p class="mb-0">${commentText}</p>
-    </div>
-`;
+                    <img alt="Profile picture of user" class="rounded-circle me-3" src="https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg"/>
+                    <div class="comment-text">
+                        <h6 class="fw-semibold mb-0 mb-0"></h6>
+                        <p class="mb-0">${commentText}</p>
+                    </div>
+                `;
 
             // Insert the new comment at the top of the list
             commentsList.insertBefore(newComment, commentsList.firstChild);
@@ -877,5 +873,5 @@
         setActive(0); // Default active tab
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 @endsection

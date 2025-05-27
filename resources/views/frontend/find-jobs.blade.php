@@ -54,7 +54,7 @@
 
                 <div class="row popular-search ">
                     <div class="col-lg-12 ">
-                        <h4 class="mt-5">Popular Search</h4>
+                        <h4 class="mt-3">Popular Search</h4>
                         <div class="row text-center">
                             @foreach ($categories as $jobCategory)
                                 <div class="col g-2 ">
@@ -326,21 +326,17 @@
 
             </div>
         @else
-            <div class="container my-5">
-                <div class="alert alert-warning" role="alert">
-                    No jobs found.
-                </div>
-            </div>
+            @include('frontend.notFound')
         @endif
 
 
 
-        <div class="container my-5">
-
-            <div class="row flex-wrap gap-3 justify-content-center align-items-start">
-                <div class="col col-md-6 col-lg-3 job-categories flex-grow-1 px-0" style="background: #F3F3F3;">
+        <div class="container my-4">
+            <div class="row gap-0 g-0 justify-content-center align-items-start">
+                <div class=" col-md-5 col-lg-3 job-categories flex-grow-1 px-0 m-2" style="background: #F3F3F3;">
                     <h3 class="sidebar-title px-3">Jobs by Category</h3>
                     <ul class="category-list mb-0 overflow-auto px-3" style="max-height: 500px;">
+
                         @foreach ($categories as $item)
                             <li>
                                 <form action="{{ route('frontend.job-search') }}">
@@ -355,7 +351,7 @@
 
                     </ul>
                 </div>
-                <div class="col col-md-6 col-lg-3 job-categories flex-grow-1 px-0" style="background: #F3F3F3;">
+                <div class=" col-md-5 col-lg-3 job-categories flex-grow-1 px-0 m-2" style="background: #F3F3F3;">
                     <h3 class="sidebar-title px-3">Jobs by Skill</h3>
                     <ul class="category-list mb-0 px-3 overflow-auto" style="max-height: 500px;">
                         @foreach ($skills as $item)
@@ -371,7 +367,7 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="col col-md-6 col-lg-3 job-categories px-0 flex-grow-1" style="background: #F3F3F3;">
+                <div class=" col-md-5 col-lg-3 job-categories px-0 flex-grow-1 m-2" style="background: #F3F3F3;">
                     <h3 class="sidebar-title px-3">Jobs by Location</h3>
                     <ul class="category-list mb-0 overflow-auto px-3" style="max-height: 500px;">
                         @foreach ($jobLocation as $item)

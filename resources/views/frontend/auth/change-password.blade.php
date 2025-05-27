@@ -1,7 +1,7 @@
 @extends('frontend.layouts.main')
 @section('title', 'Change Password')
 @section('content')
-    <div class="container">
+    <div class="container my-5 pt-3">
         <div class="password-card">
             <div class="text-center">
                 <div class="fs-1 text-primary mb-3">

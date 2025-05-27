@@ -5,7 +5,60 @@
 @section('content')
 
     <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteImageModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+
+    <div class="modal fade" id="deleteImageModal" tabindex="-1" aria-labelledby="deleteImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="mb-3">
+                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center"
+                        style="width: 64px; height: 64px;">
+                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold">Are you sure?</h4>
+                <p class="text-secondary mb-4">Are you sure you want to delete this Image?</p>
+                <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
+                    <button type="button" class="btn border-secondary col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+                    <form action="{{ route('discussion.deleteimage') }}" method="POST" id="deleteImageForm"
+                        class="col-6 ms-1">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="image_index">
+                        <input type="hidden" name="forum_id">
+                        <button type="submit" class="btn btn-danger w-100">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteForumModal" tabindex="-1" aria-labelledby="deleteForumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="mb-3">
+                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center"
+                        style="width: 64px; height: 64px;">
+                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold">Are you sure?</h4>
+                <p class="text-secondary mb-4">Are you sure you want to delete this forum post?</p>
+                <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
+                    <button type="button" class="btn border-secondary col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+                    <form action="#" method="POST" id="deleteForumForm" class="col-6 ms-1">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger w-100">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="modal fade" id="deleteForumModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -14,29 +67,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this Image?
+                    Are you sure you want to delete this forum post?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form action="{{ route('discussion.deleteimage') }}" method="POST" id="deleteImageForm">
+                    <form action="#" method="POST" id="deleteForumForm">
                         @csrf
                         @method('DELETE')
-                        <input type="hidden" name="image_index">
-                        <input type="hidden" name="forum_id">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
 
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Edit Modal -->
     <div class="modal fade" id="createPost" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createPostLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header d-flex">
+                <div class="modal-header d-flex bg-white text-center">
                     <h1 class="modal-title fs-5 mx-auto flex-fill" id="createPostLabel">Edit Post
                         Post
                     </h1>
@@ -68,7 +119,7 @@
                         </div>
                         <div class="form mt-2">
 
-                            <select name="category" class="form-select bg-dark-subtle text-black-50" id="category"
+                            <select name="category" class="form-select bg-secondary-subtle text-black-50" id="category"
                                 aria-label="">
                                 <option>Category</option>
                                 <option value="education">Education</option>
@@ -80,41 +131,36 @@
                             </select>
                         </div>
                         <div class="form-floating text-black-50 mt-3">
-                            <input name="topic" type="text" class="form-control bg-dark-subtle text-black-50"
+                            <input name="topic" type="text" class="form-control bg-secondary-subtle text-black-50"
                                 id="titleInput" placeholder="Post Title">
                             <label for="titleInput">Title</label>
                         </div>
                         <div class="form-floating text-black-50">
-                            <textarea class="form-control bg-dark-subtle text-black-50" name="description" placeholder="Post Details"
+                            <textarea class="form-control bg-secondary-subtle text-black-50" name="description" placeholder="Post Details"
                                 id="floatingTextarea" style="height: 100px"></textarea>
                             <label for="floatingTextarea">Describe...</label>
                         </div>
                         <div class="form text-black-50 mt-2">
-                            <select name="country" id="forumCountry" class="form-control bg-dark-subtle text-black-50">
+                            <select name="country" id="forumCountry"
+                                class="form-control bg-secondary-subtle text-black-50">
                                 <option value="" selected>Select Country</option>
                                 <!-- Country options will be dynamically populated by JavaScript -->
                             </select>
 
                         </div>
                         <div class="form-floating text-black-50 mt-3">
-                            <input name="person_name" type="text" class="form-control bg-dark-subtle text-black-50"
-                                id="person_name" placeholder="Person Name">
+                            <input name="person_name" type="text"
+                                class="form-control bg-secondary-subtle text-black-50" id="person_name"
+                                placeholder="Person Name">
                             <label for="person Name">Person Name</label>
                         </div>
-                        <div class="d-flex bg-dark-subtle p-2 gap-3 align-items-center rounded">
-                            <p class="flex-grow-1 my-auto text-black-50">Add to your post</p>
-                            <div class="d-flex gap-3 align-items-center">
-                                <a href="#" class="primary_color_text">
-                                    <i class="fa-solid fa-location-dot"></i></a>
-                                <a href="#" class="primary_color_text"
-                                    onclick=" document.getElementById('forumImages').click()">
-                                    <i class="fa-solid fa-image"></i></a>
-                                <input id="forumImages" class="d-none" type="file" multiple accept="image/*"
-                                    onchange="handleFiles(this.files)" name="images[]">
-                            </div>
-
+                        <div class="">
+                            <label for="forumImages" class="mb-2">Upload Images (Max 2MB each, 5 images)</label>
+                            <input id="forumImages" class="form-control py-2" type="file" multiple accept="image/*"
+                                onchange="handleFiles(this.files)" name="images[]">
+                            <small>You can upload up to 5 images, each with a maximum size of 2MB.</small>
                         </div>
-                        <div id="forumPreviewImages" class="row flex-wrap mt-4">
+                        <div id="forumPreviewImages" class="row flex-wrap mt-2">
 
                         </div>
                         <div class="d-flex justify-content-center mt-3">
@@ -277,7 +323,7 @@
                             <h4 class="m-0 text-black">{{ ucfirst($profile->firstName) . ' ' . $profile->lastName }}</h4>
                             <div class="d-inline-flex gap-4 fw-medium">
                                 <span>{{ $profile->postCount }} Posts</span>
-                                <span>{{ $profile->followers }} Followers</span>
+                                <span> <span id="userFollowers">{{ $profile->followers }}</span> Followers</span>
                                 <span>{{ $profile->followings }} Followings</span>
                             </div>
                         </div>
@@ -289,33 +335,25 @@
                                         style="background-color: #0064a7;" data-user-id="{{ $profile->id }}"
                                         onclick="follow(this)">
                                         {!! $profile->followed
-                                            ? '- <span class="d-none d-md-inline">Unfollow</span>'
+                                            ? '<span class="d-none d-md-inline">Unfollow</span>'
                                             : '+ <span class="d-none d-md-inline">Follow</span>' !!}
 
                                     </button>
+                                    <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
+                                        style="background-color: #0064a7;" data-user-id="{{ $profile->id }}"
+                                        onclick="openChat(this)"
+                                        data-user-name="{{ ucfirst($profile->firstName) . ' ' . $profile->lastName }}">
+                                        <i class="bi bi-chat-left-text me-1 align-content-center"></i>
+                                        <span class="d-none d-md-inline">Chat</span>
+                                    </button>
                                 @endif
-
-                                <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
-                                    style="background-color: #0064a7;" data-user-id="{{ $profile->id }}"
-                                    onclick="openChat(this)"
-                                    data-user-name="{{ ucfirst($profile->firstName) . ' ' . $profile->lastName }}">
-                                    <i class="bi bi-chat-left-text me-1 align-content-center"></i>
-                                    <span class="d-none d-md-inline">Chat</span>
-                                </button>
                             @else
-                                <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="redirect_url" value="{{ url()->current() }}">
-                                </form>
-
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2"
-                                    style="background-color: #0064a7;"
-                                    onclick="document.getElementById('redirectForm').submit(); ">+
+                                    style="background-color: #0064a7;" onclick="setRedirectUrl()">+
                                     <span class="d-none d-md-inline">Follow</span></button>
-                                    
+
                                 <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
-                                    style="background-color: #0064a7;"
-                                    onclick="document.getElementById('redirectForm').submit(); ">
+                                    style="background-color: #0064a7;" onclick="setRedirectUrl()">
                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                     <span class="d-none d-md-inline">Chat</span>
                                 </button>
@@ -354,18 +392,18 @@
                                             </h5>
                                             <div class="d-inline-flex gap-4 ">
                                                 <small class="text-black-50 d-flex flex-wrap align-items-center gap-2">
-                                                    @if($profile->temporaryLocation)
+                                                    @if ($profile->temporaryLocation)
                                                         <span class="d-flex align-items-center gap-1">
                                                             <svg width="14" height="18" viewBox="0 0 14 18"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path
                                                                     d="M6.8 9.725C8.00122 9.725 8.975 8.75122 8.975 7.55C8.975 6.34878 8.00122 5.375 6.8 5.375C5.59878 5.375 4.625 6.34878 4.625 7.55C4.625 8.75122 5.59878 9.725 6.8 9.725Z"
-                                                                    stroke="#9D9999" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round" />
+                                                                    stroke="#9D9999" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
                                                                 <path
                                                                     d="M6.8 1.75C5.26174 1.75 3.78649 2.36107 2.69878 3.44878C1.61107 4.53649 1 6.01174 1 7.55C1 8.9217 1.29145 9.81925 2.0875 10.8125L6.8 16.25L11.5125 10.8125C12.3086 9.81925 12.6 8.9217 12.6 7.55C12.6 6.01174 11.9889 4.53649 10.9012 3.44878C9.81351 2.36107 8.33826 1.75 6.8 1.75Z"
-                                                                    stroke="#9D9999" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round" />
+                                                                    stroke="#9D9999" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
                                                             </svg> {{ $profile->temporaryLocation }}
                                                         </span>
                                                     @endif
@@ -404,14 +442,17 @@
                                                                     onclick="handleEdit(this)">Edit</button>
                                                             </li>
                                                             <li>
-                                                                <form
+                                                                <button type="submit" class="dropdown-item"
+                                                                    data-forum-id="{{ $forumPost->id }}"
+                                                                    onclick="handleForumDelete(this)"
+                                                                    style="color: #0064A7;font-size: 16px; font-weight: 500;">Delete</button>
+                                                                {{-- <form
                                                                     action="{{ route('discussion_forum.destroy', ['discussion_forum' => $forumPost->id]) }}"
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="dropdown-item"
-                                                                        style="color: #0064A7;font-size: 16px; font-weight: 500;">Delete</button>
-                                                                </form>
+                                                                    
+                                                                </form> --}}
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -435,13 +476,16 @@
 
                                         @for ($i = 0; $i < count($forumPost->images); $i++)
                                             <div class="col position-relative" style="max-width:600px;">
-                                                <span
-                                                    class="position-absolute top-0 end-0 text-danger py-1 px-2 m-2 rounded-circle bg-white"
-                                                    data-forum-id="{{ $forumPost->id }}"
-                                                    data-image-index="{{ $i }}"
-                                                    onclick="handleImageDelete(this)">
-                                                    <i class="bi bi-trash text-danger"></i>
-                                                </span>
+                                                @if (Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->id === $forumPost->jobSeekerId)
+                                                    <span
+                                                        class="position-absolute top-0 end-0 text-danger py-1 px-2 m-2 rounded-circle bg-white"
+                                                        data-forum-id="{{ $forumPost->id }}"
+                                                        data-image-index="{{ $i }}"
+                                                        onclick="handleImageDelete(this)">
+                                                        <i class="bi bi-trash text-danger"></i>
+                                                    </span>
+                                                @endif
+
                                                 <img src="{{ $forumPost->images[$i] }}" class="img-fluid w-100"
                                                     style="max-width:600px;" alt="Post Image">
                                             </div>
@@ -499,6 +543,7 @@
                             </div>
                         @endforeach
                     @else
+                        <p class="text-center text-secondary mt-5"><small>You haven't created any post yet!</small></p>
                     @endif
 
 
@@ -563,15 +608,164 @@
 @endsection
 
 @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     <script>
-        function openChat(e) {
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        console.log(document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
+
+        var pusher = new Pusher('b08e227bde29e3142eb1', {
+            cluster: 'ap2',
+        });
+
+
+        var channel = pusher.subscribe('chat.' + "{{ Auth::guard('job_seekers')->id() }}");
+        channel.bind('new-message', function(data) {
+            let message = data.message
+            if ($('#chatBox [name="receiver_id"]').val() == message.sender_id) {
+                $('#messageContainer').append(`
+                    <div class="d-flex my-2 w-100 justify-content-start">
+                        <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">
+                            ${message.message}
+                        </span>
+                    </div>
+                `)
+                $('#messageContainer').animate({
+                    scrollTop: $('#messageContainer')[0].scrollHeight
+                }, 500)
+
+            }
+
+            document.querySelectorAll('.list-group .list-group-item').forEach(item => {
+                if (item.getAttribute('data-receiver-id') == message.sender_id) {
+                    item.style.background = 'rgba(0, 100, 167, 0.1)'
+                    item.querySelector('.message-content').innerHTML = message.message
+                }
+            })
+
+        });
+    </script>
+
+    <script>
+        // document.querySelectorAll('.list-group .list-group-item').forEach(item => {
+        //     console.log(item.getAttribute('data-receiver-id'))
+        // })
+        async function openChat(e) {
             const chatBox = document.getElementById("chatBox");
             chatBox.querySelector('input[name="receiver_id"]').value = e.getAttribute('data-user-id')
             chatBox.querySelector('[name="receiver_name"]').innerHTML = e.getAttribute('data-user-name')
+            e.parentElement.parentElement.parentElement.style.background = 'transparent'
+
+            // console.log(e.parentElement.parentElement.parentElement)
             // alert(e.getAttribute('data-user-id'))
 
             chatBox.style.display = "block";
             // alert(chatBox.querySelector('input[name="receiver_id"]').value)
+            $('#sendMessageButton').html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+            );
+
+
+            try {
+                $('#messageContainer').html(
+                    '<p class="text-center text-secondary my-2 "><small>Loading Messages ....</small></p>')
+                const response = await fetch(getBaseUrl() + '/jobseeker/sender-messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        sender_id: $('#chatBox [name="receiver_id"]').val(),
+                    })
+                });
+
+                // Check for HTTP error response (like 401, 422, 500)
+                if (!response.ok) {
+                    // Try to parse JSON error response
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+
+                    // Laravel validation errors (422 Unprocessable Entity)
+                    if (response.status === 422) {
+                        alert('Validation failed: ' + Object.values(errorData.errors).join('\n'));
+                    }
+                    // Laravel unauthenticated (401)
+                    else if (response.status === 401) {
+                        window.location.href = getBaseUrl() + '/login';
+                    } else {
+                        alert('Something went wrong. Please try again.');
+                    }
+
+                    // Stop further execution
+                    return;
+                }
+
+                const data = await response.json();
+
+                $('#sendMessageButton').html(
+                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
+                );
+
+                if (data.status) {
+
+                    //update response in the message box
+                    if (!data.messages.length > 0) {
+                        $('#messageContainer').html(
+                            '<p class="text-center text-secondary my-2 "><small>Conversation Not Stated Yet!</small></p>'
+                        )
+                    } else {
+                        $('#messageContainer').html('')
+                    }
+
+
+
+
+
+                    data.messages.forEach(message => {
+
+                        if (message.receiver_id == e.getAttribute('data-user-id')) {
+
+
+                            $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-end">
+                                    <span style="background-color: #0064A7; max-width: 90%;"
+                                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">${message.message}</span>
+                                </div>
+                            `)
+
+                        } else {
+
+                            $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-start">
+                                    <span class="py-1 rounded-end-3 rounded-top-3 bg-secondary-subtle px-2" style="max-width: 90%;">
+                                        ${message.message}
+                                    </span>
+                                </div>
+                            `)
+
+                        }
+
+                    })
+                    $('#messageContainer').animate({
+                        scrollTop: $('#messageContainer')[0].scrollHeight
+                    }, 500)
+                } else {
+                    console.warn('Server responded with unexpected status:', data);
+                }
+
+            } catch (error) {
+                // Network error or unexpected failure
+                console.error('Fetch failed:', error);
+                alert('Network error. Please check your connection.');
+                $('#sendMessageButton').html(
+                    '<i class="fas fa-paper-plane" style="color:#0064A7"></i>'
+                );
+            }
+
         }
 
         function toggleChat() {
@@ -579,71 +773,9 @@
             chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
         }
     </script>
-    <script>
-        let forumPostImages = [];
-
-        function handleFiles(files) {
-            let currentImageCount = parseInt(document.getElementById('currentPostImageCount').value)
-            for (let i = 0; i < files.length; i++) {
-                if (forumPostImages.length >= 5 - currentImageCount)
-                    break; // Limit to 5 images
-                forumPostImages.push(files[i]);
-            }
-            updatePhotoDisplay();
-        }
-
-        function updatePhotoDisplay() {
-
-            const forumPreviewImages = document.getElementById('forumPreviewImages');
-            forumPreviewImages.innerHTML = '';
-
-            if (forumPostImages.length > 0) {
-
-
-                for (let i = 0; i < forumPostImages.length; i++) {
-                    const container = document.createElement("div");
-                    container.classList.add("uploaded-photo-container", "col-6", "col-md-4", "col-lg-4",
-                        "position-relative", "mb-2");
-
-                    const img = document.createElement('img');
-                    img.className = 'profile-photo w-100 h-auto ';
-                    img.src = URL.createObjectURL(forumPostImages[i]);
-                    img.alt = `Additional photo ${i}`;
-
-                    const options = document.createElement("div");
-                    options.classList.add("photo-options");
-
-
-                    const deleteBtn = document.createElement("button");
-                    deleteBtn.classList.add("btn", "btn-delete", "position-absolute", "top-0", "text-danger");
-                    deleteBtn.innerHTML = '<i class="bi bi-trash"></i>';
-                    deleteBtn.onclick = () => deletePhoto(i);
 
 
 
-                    // options.appendChild(selectBtn);
-                    options.appendChild(deleteBtn);
-                    container.appendChild(img);
-                    container.appendChild(options);
-                    forumPreviewImages.appendChild(container);
-                }
-
-                forumPreviewImages.classList.toggle('hidden', forumPostImages.length <= 0);
-            } else {
-                // primaryPhoto.src = 'https://placehold.co/100x100';
-                forumPreviewImages.classList.add('hidden');
-            }
-        }
-
-        function deletePhoto(index) {
-            forumPostImages.splice(index, 1);
-            updatePhotoDisplay();
-        }
-    </script>
-
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Function to get the base URL of your application
         function getBaseUrl() {
@@ -708,6 +840,17 @@
 
                 if (data.status) {
                     $('#chatBox [name="message"]').val('');
+
+                    $('#messageContainer').append(`
+                                <div class="d-flex my-2 w-100 justify-content-end">
+                                    <span style="background-color: #0064A7; max-width: 90%;"
+                                        class="py-1 rounded-start-3 rounded-top-3  px-2 text-white">${message}</span>
+                                </div>
+                            `)
+
+                    $('#messageContainer').animate({
+                        scrollTop: $('#messageContainer')[0].scrollHeight
+                    }, 500)
                     console.log('Message sent:', data);
                 } else {
                     console.warn('Server responded with unexpected status:', data);
@@ -724,6 +867,81 @@
 
         }
     </script>
+    <script>
+        let forumPostImages = [];
+
+        function handleFiles(files) {
+            let currentImageCount = parseInt(document.getElementById('currentPostImageCount').value)
+            for (let i = 0; i < files.length; i++) {
+                if (forumPostImages.length >= 5 - currentImageCount)
+                    break; // Limit to 5 images
+                forumPostImages.push(files[i]);
+            }
+            updatePhotoDisplay();
+        }
+
+        function updatePhotoDisplay() {
+
+            const forumPreviewImages = document.getElementById('forumPreviewImages');
+            forumPreviewImages.innerHTML = '';
+
+            if (forumPostImages.length > 0) {
+
+
+                for (let i = 0; i < forumPostImages.length; i++) {
+                    const container = document.createElement("div");
+                    container.classList.add("uploaded-photo-container", "col-6", "col-md-4", "col-lg-4",
+                        "position-relative", "mb-2");
+
+                    const img = document.createElement('img');
+                    img.className = 'profile-photo w-100 h-auto ';
+                    img.src = URL.createObjectURL(forumPostImages[i]);
+                    img.alt = `Additional photo ${i}`;
+
+                    const options = document.createElement("div");
+                    options.classList.add("photo-options");
+
+
+                    const deleteBtn = document.createElement("button");
+                    deleteBtn.classList.add("btn", "btn-delete", "position-absolute", "top-0", "text-danger");
+                    deleteBtn.innerHTML = '<i class="bi bi-trash"></i>';
+                    deleteBtn.onclick = () => deletePhoto(i);
+
+
+
+                    // options.appendChild(selectBtn);
+                    options.appendChild(deleteBtn);
+                    container.appendChild(img);
+                    container.appendChild(options);
+                    forumPreviewImages.appendChild(container);
+                }
+
+                forumPreviewImages.classList.toggle('hidden', forumPostImages.length <= 0);
+            } else {
+                // primaryPhoto.src = 'https://placehold.co/100x100';
+                forumPreviewImages.classList.add('hidden');
+            }
+        }
+
+        function deletePhoto(index) {
+            forumPostImages.splice(index, 1);
+            updatePhotoDisplay();
+        }
+
+        function setRedirectUrl() {
+            fetch('/set-redirect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    redirect_url: window.location.href
+                })
+            });
+        }
+    </script>
+
 
     <script>
         function formatDateWithComma(timestamp) {
@@ -739,7 +957,7 @@
 
         function follow(e) {
             let userId = e.getAttribute('data-user-id')
-            console.log(userId)
+            let currentStatus = e.querySelector('span').textContent
             $.ajax({
                 url: getBaseUrl() + '/discussion/follow-user',
                 method: 'POST',
@@ -757,11 +975,17 @@
                 success: function(response) {
                     // ✅ What to do on success
                     if (response.status) {
-                        if (e.innerHTML.includes('Unfollow')) {
-                            e.innerHTML = `+ <span class="d-none d-md-inline">Follow</span>`
-                        } else {
+                        console.log(currentStatus);
+                        if (currentStatus == 'Follow') {
                             e.innerHTML = `<span class="d-none d-md-inline">Unfollow</span>`
+                            $("#userFollowers").text(parseInt($("#userFollowers").text()) + 1)
+
+                        } else {
+                            e.innerHTML = `+ <span class="d-none d-md-inline">Follow</span>`
+                            $("#userFollowers").text(parseInt($("#userFollowers").text()) - 1)
                         }
+
+
 
                     } else {
                         alert('Something went wrong!')
@@ -951,7 +1175,7 @@
                                     ? '<img class="rounded-circle me-1" src="' .
                                         asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) .
                                         '" width="30" height="30"/>'
-                                    : '' !!} {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName }}</strong>
+                                    : '' !!} {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName : 'User' }}</strong>
                                 <p class="mb-1">${response.data.comment}</p>
                                 <small class="text-muted">${formatDateWithComma(response.data.created_at)}</small>
                                 </div>
@@ -1126,6 +1350,13 @@
             $("#deleteImageForm input[name='image_index']").val(imageIndex)
             $("#deleteImageForm input[name='forum_id']").val(postId)
             $('#deleteImageModal').modal('show');
+        }
+
+        function handleForumDelete(e) {
+            let postId = e.getAttribute('data-forum-id')
+            document.getElementById('deleteForumForm').action = "{{ route('discussion_forum.destroy', ':id') }}".replace(':id', postId);
+            $("#deleteForumForm input[name='forum_id']").val(postId)
+            $('#deleteForumModal').modal('show');
         }
     </script>
 @endpush

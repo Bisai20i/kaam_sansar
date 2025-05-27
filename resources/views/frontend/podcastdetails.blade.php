@@ -71,6 +71,8 @@
                     <img id="video-thumbnail" src="{{ asset('storage/' . $podcast_detail->imageUrl) }}"
                         alt="YouTube Video Thumbnail" class="w-full h-full object-cover img-fluid">
 
+
+
                     <!-- Centered Play Icon -->
                     <div class="absolute inset-0 d-flex items-center justify-center bg-black bg-opacity-50">
                         <i class="fa-solid fa-circle-play fa-4x text-white m-auto"></i>
@@ -153,7 +155,7 @@
                         </span>
                     </p>
 
-                   
+
                 </div>
 
 
@@ -168,10 +170,10 @@
                         @foreach ($similar_podcasts as $item)
                         <div class="card p-1 my-2">
                             <a href="{{route('frontend.podcast-detail', ['slug' => $item->slug])}}" class="text-decoration-none text-black">
-                                <img src="{{$item->imageUrl? asset('storage/' . $item->imageUrl):asset('frontend/assets/Images/default.png') }}" class="card-img-top rounded"
-                                    alt="...">
+                                <img src="{{ $item->imageUrl ?? asset('frontend/assets/Images/default.png') }}" class="card-img-top rounded" alt="...">
+
                                 <div class="card-body p-1">
-                                    <h6 class="card-title">{{ $item->title }}</h6>
+                                    <h6 class="card-title text-truncate mb-0">{{ $item->title }}</h6>
                                     <p class="card-text text-muted mb-1">
                                         @php
                                         $podcastDuration = \Carbon\Carbon::parse($item->podcastTime);

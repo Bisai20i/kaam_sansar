@@ -39,7 +39,7 @@ class GiftCartController extends Controller
             // return $validatedData->errors()->all();
             return $isMobile
                 ? $this->responseError('Validation failed.', 422, $validatedData->errors())
-                : redirect()->back()->withErrors($validatedData->errors())->withInput();
+                : redirect()->back()->with('error', $validatedData->errors());
         }
 
         try{

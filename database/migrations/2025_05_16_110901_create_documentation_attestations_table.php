@@ -58,8 +58,8 @@ return new class extends Migration
             $table->string('document2')->nullable();
             $table->string('document3')->nullable();
             $table->string('document4')->nullable();
-            $table->string('paymentStatus')->default('unpaid');
-            $table->enum('status', ['inProcess', 'completed'])->default('inProcess');
+            $table->enum('status',['pending','In-progress','approved','rejected'])->default('pending');
+            $table->enum('payment',['unpaid','paid'])->default('unpaid');
             $table->timestamps();
         });
     }

@@ -191,7 +191,7 @@ class InsuranceCategoryController extends Controller
     {
         $category = InsuranceCategory::with('insuranceDetail')->findOrFail($id);
         
-        return view('backend.Insurance.details', [
+        return view('backend.insurance.details', [
             'category' => $category,
             'detail' => $category->insuranceDetail
         ]);

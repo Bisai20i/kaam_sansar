@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('visas', function (Blueprint $table) {
+        Schema::create('form_submissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('jobSeekerId');
-            $table->foreign('jobSeekerId')->references('id')->on('job_seekers')->onDelete('cascade');
-            $table->text('visaDetails');
-            $table->time('visaExpire')->nullable();
-            $table->string('country');
-            $table->text('visaImage');
-
+            $table->string('title');
+            $table->unsignedBigInteger('form_id');
+            $table->foreignId('job_seeker_id')->constrained('job_seekers')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('visas');
+        Schema::dropIfExists('form_submissions');
     }
 };

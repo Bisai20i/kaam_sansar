@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Aboard;
+use App\Models\AdsManager;
 use App\Models\ProductCategory;
 use App\Models\ProductComment;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +17,7 @@ class AboardController extends Controller
     {
         $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
 
-        $aboards = Aboard::with('jobSeeker')->orderBy('created_at', 'desc')->paginate(10);
+        $aboards    = Aboard::with('jobSeeker')->orderBy('created_at', 'desc')->paginate(10);
         $categories = ProductCategory::all();
 
         $aboards->transform(function ($aboard) {
@@ -28,9 +27,9 @@ class AboardController extends Controller
 
         if ($isMobile) {
             return response()->json([
-                'status' => true,
+                'status'  => true,
                 'message' => 'Products fetched successfully.',
-                'data' => $aboards,
+                'data'    => $aboards,
             ], 200);
         }
 
@@ -39,20 +38,37 @@ class AboardController extends Controller
 
     public function aboard(Request $request)
     {
-        $validTypes = ['Item', 'Buy'];
-        $categories = ProductCategory::all();
-        $ads = Aboard::where('publishStatus', 'publish')->where('status', 'Available')->get();
-        $cmt = Aboard::where('publishStatus', 'publish')->where('status', 'Available')->get();
-        $items = Aboard::all();
+        $validTypes    = ['Item', 'Buy'];
+        $categories    = ProductCategory::all();
+        $ads           = Aboard::where('publishStatus', 'publish')->where('status', 'Available')->orderBy('created_at', 'desc')->get();
+        $cmt           = Aboard::where('publishStatus', 'publish')->where('status', 'Available')->get();
+        $items         = Aboard::orderBy('created_at', 'desc')->get();
         $uniqueAboards = Aboard::select('country')->distinct()->get();
-        $uniqueCity = Aboard::select('location')->distinct()->get();
-        $comments = ProductComment::all();
+        $uniqueCity    = Aboard::select('location')->distinct()->get();
+        $comments      = ProductComment::all();
 
         $type = $request->has('type') && in_array($request->input('type'), $validTypes)
-            ? $request->input('type')
-            : 'Item';
+        ? $request->input('type')
+        : 'Item';
 
-        return view('frontend.aboarddeals.aboard', compact('categories', 'ads', 'type', 'uniqueAboards', 'uniqueCity', 'items', 'comments', 'cmt'));
+        $ad_banners          = [];
+        $ad_banners['right'] = AdsManager::where('which_page', 'abroad')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'right')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        // return $ad_banners;
+        if ($ad_banners && $ad_banners['right']) {
+
+            $ad_banners['right']->image = asset('storage/' . $ad_banners['right']->image) ?? null;
+
+        }
+
+        // return $ad_banners;
+
+        return view('frontend.aboarddeals.aboard', compact('categories', 'ads', 'type', 'uniqueAboards', 'uniqueCity', 'items', 'comments', 'cmt', 'ad_banners'));
     }
 
     public function create()
@@ -65,38 +81,40 @@ class AboardController extends Controller
     {
         Log::info('Incoming request data:', $request->all());
 
-        $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
-        $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+        // return $request->all();
 
-        if (!$user) {
+        $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
+        $user     = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
+
+        if (! $user) {
             return $isMobile
-                ? response()->json(['status' => false, 'message' => 'Unauthorized.'], 401)
-                : redirect()->route('login')->with('error', 'Please log in.');
+            ? response()->json(['status' => false, 'message' => 'Unauthorized.'], 401)
+            : redirect()->route('login')->with('error', 'Please log in.');
         }
 
         Log::info('Authenticated Job Seeker ID: ' . $user->id);
 
         $validated = Validator::make($request->all(), [
-            'productTitle' => 'required|string|max:255',
-            'productCategoryId' => 'required|exists:categories,id',
+            'productTitle'       => 'required|string|max:255',
+            'productCategoryId'  => 'required|exists:product_categories,id',
             'productDescription' => 'required|string',
-            'contactNumber' => 'nullable|string|max:255',
-            'pricing' => 'nullable|numeric',
-            'status' => 'nullable|string|max:255',
-            'publishStatus' => 'nullable|string|max:255',
-            'productThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'location' => 'nullable',
-            'country' => 'nullable',
-            'type' => 'in:Item,Buy',
-            'urlLink' => 'nullable|url',
+            'contactNumber'      => 'nullable|string|max:255',
+            'pricing'            => 'nullable|numeric',
+            'status'             => 'nullable|string|max:255',
+            'publishStatus'      => 'nullable|string|max:255',
+            'productThumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'location'           => 'nullable',
+            'country'            => 'nullable',
+            'type'               => 'required|in:Item,Buy',
+            'urlLink'            => 'nullable|url',
         ]);
 
         if ($validated->fails()) {
             Log::error('Validation failed:', $validated->errors()->toArray());
 
             return $isMobile
-                ? response()->json(['status' => false, 'message' => 'Validation failed.', 'errors' => $validated->errors()], 422)
-                : redirect()->back()->withErrors($validated)->withInput();
+            ? response()->json(['status' => false, 'message' => 'Validation failed.', 'errors' => $validated->errors()], 422)
+            : redirect()->back()->with('error', implode(', ', $validated->errors()->all()));
         }
 
         $productSlug = Str::slug($request->input('productTitle'));
@@ -107,21 +125,18 @@ class AboardController extends Controller
         $productThumbnail = handleUpload('productThumbnail');
 
         $aboard = new Aboard([
-            'jobSeekerId' => $user->id,
-            'productTitle' => $request->input('productTitle'),
-            'productCategoryId' => $request->input('productCategoryId'),
+            'jobSeekerId'        => $user->id,
+            'productTitle'       => $request->input('productTitle'),
+            'productCategoryId'  => $request->input('productCategoryId'),
             'productDescription' => $request->input('productDescription'),
-            'location' => $request->input('location'),
-            'country' => $request->input('country'),
-            'type' => $request->input('type'),
-            'contactNumber' => $request->input('contactNumber'),
-            'pricing' => $request->input('pricing'),
-            'urlLink' => $request->input('urlLink'),
-            'publishStatus' => $request->input('publishStatus', 'publish'),
-            'productSlug' => $productSlug,
-            'productThumbnail' => $productThumbnail,
-            'created_at' => Carbon::now(),
-            'postedDuration' => '0 Days',
+            'country'            => $request->input('country'),
+            'type'               => $request->input('type'),
+            'pricing'            => $request->input('pricing') ?? 0,
+            // 'publishStatus' => $request->input('publishStatus', 'publish'),
+            'productSlug'        => $productSlug,
+            'productThumbnail'   => $productThumbnail,
+            'postedDuration'     => '0 Days',
+            'urlLink'            => $request->input('urlLink') ?? null,
         ]);
 
         $aboard->save();
@@ -129,8 +144,8 @@ class AboardController extends Controller
         Log::info('Product Created:', $aboard->toArray());
 
         return $isMobile
-            ? response()->json(['status' => 'success', 'message' => 'Product created successfully.', 'data' => $aboard], 201)
-            : redirect()->back()->with('success', 'Product created successfully.');
+        ? response()->json(['status' => 'success', 'message' => 'Product created successfully.', 'data' => $aboard], 201)
+        : redirect()->back()->with('success', 'Product created successfully.');
     }
 
     public function show(Request $request, $id)
@@ -138,15 +153,15 @@ class AboardController extends Controller
         $isMobile = request()->has('request_type') && request()->input('request_type') === 'mobile';
 
         try {
-            $aboard = Aboard::findOrFail($id);
-            $comments = ProductComment::where('productId', $id)->with('jobSeeker')->get();
+            $aboard          = Aboard::findOrFail($id);
+            $comments        = ProductComment::where('productId', $id)->with('jobSeeker')->get();
             $similarProducts = Aboard::where('productCategoryId', $aboard->productCategoryId)
                 ->where('id', '!=', $aboard->id)
                 ->paginate(4);
 
             return $isMobile
-                ? response()->json(['status' => true, 'message' => 'Aboard fetched successfully.', 'data' => $aboard], 200)
-                : view('frontend.aboarddeals.show', compact('aboard', 'similarProducts', 'comments'));
+            ? response()->json(['status' => true, 'message' => 'Aboard fetched successfully.', 'data' => $aboard], 200)
+            : view('frontend.aboarddeals.show', compact('aboard', 'similarProducts', 'comments'));
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => 'Aboard not found.', 'data' => null], 404);
         }
@@ -155,7 +170,7 @@ class AboardController extends Controller
     public function edit($id)
     {
         try {
-            $aboard = Aboard::findOrFail($id);
+            $aboard     = Aboard::findOrFail($id);
             $categories = ProductCategory::all();
 
             // Log the data to ensure everything is correct
@@ -164,12 +179,12 @@ class AboardController extends Controller
 
             if (request()->has('request_type') && request()->input('request_type') === 'mobile') {
                 return response()->json([
-                    'status' => true,
+                    'status'  => true,
                     'message' => 'Aboard fetched successfully.',
-                    'data' => [
-                        'aboard' => $aboard,
-                        'categories' => $categories
-                    ]
+                    'data'    => [
+                        'aboard'     => $aboard,
+                        'categories' => $categories,
+                    ],
                 ], 200);
             }
 
@@ -179,13 +194,12 @@ class AboardController extends Controller
             Log::error("Error in fetching Aboard with ID $id: " . $e->getMessage());
 
             return response()->json([
-                'status' => false,
+                'status'  => false,
                 'message' => 'An error occurred while fetching the Aboard data.',
-                'data' => null
+                'data'    => null,
             ], 500);
         }
     }
-
 
     public function update(Request $request, $id)
     {
@@ -195,36 +209,34 @@ class AboardController extends Controller
 
         // Validate incoming request
         $validated = Validator::make($request->all(), [
-            'productTitle' => 'required|string|max:255',
-            'productCategoryId' => 'required|exists:product_categories,id',
+            'productTitle'       => 'required|string|max:255',
+            'productCategoryId'  => 'required|exists:product_categories,id',
             'productDescription' => 'required|string',
-            'pricing' => 'nullable|numeric',
-            'productThumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'country' => 'nullable',
+            'pricing'            => 'nullable|numeric',
+            'productThumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'country'            => 'nullable',
         ]);
 
         // If validation fails, return errors
         if ($validated->fails()) {
             Log::error('Validation failed:', $validated->errors()->toArray());
             return $isMobile
-                ? response()->json(['status' => false, 'message' => 'Validation failed.', 'errors' => $validated->errors()], 422)
-                : redirect()->back()->withErrors($validated)->withInput();
+            ? response()->json(['status' => false, 'message' => 'Validation failed.', 'errors' => $validated->errors()], 422)
+            : redirect()->back()->withErrors($validated)->withInput();
         }
 
         // Find the product (aboard) by ID
         $aboard = Aboard::findOrFail($id);
 
-
-
         // Update the product details
         $aboard->update([
-            'productTitle' => $request->input('productTitle'),
-            'productCategoryId' => $request->input('productCategoryId'),
+            'productTitle'       => $request->input('productTitle'),
+            'productCategoryId'  => $request->input('productCategoryId'),
             'productDescription' => $request->input('productDescription'),
-            'contactNumber' => $request->input('contactNumber'),
-            'pricing' => $request->input('pricing'),
-            'location' => $request->input('location'),
-            'country' => $request->input('country'),
+            'contactNumber'      => $request->input('contactNumber'),
+            'pricing'            => $request->input('pricing'),
+            'location'           => $request->input('location'),
+            'country'            => $request->input('country'),
         ]);
 
         // Handle product thumbnail upload if a file is provided
@@ -238,30 +250,29 @@ class AboardController extends Controller
 
         // Return the success response (mobile AJAX response)
         return $isMobile
-            ? response()->json(['status' => true, 'message' => 'Product updated successfully.', 'data' => $aboard])
-            : redirect()->back()->with('success', 'Product updated successfully.');
+        ? response()->json(['status' => true, 'message' => 'Product updated successfully.', 'data' => $aboard])
+        : redirect()->back()->with('success', 'Product updated successfully.');
     }
 
-function handleUpload($inputName)
-{
-    // Check if a file is provided
-    if (request()->hasFile($inputName)) {
-        // Get the file from the request
-        $file = request()->file($inputName);
+    public function handleUpload($inputName)
+    {
+        // Check if a file is provided
+        if (request()->hasFile($inputName)) {
+            // Get the file from the request
+            $file = request()->file($inputName);
 
-        // Generate a unique filename with timestamp and the original name
-        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            // Generate a unique filename with timestamp and the original name
+            $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-        // Store the file (in public storage or wherever you need)
-        $file->storeAs('public/product-thumbnails', $fileName);
+            // Store the file (in public storage or wherever you need)
+            $file->storeAs('public/product-thumbnails', $fileName);
 
-        // Return the file path (adjust this to match your storage config)
-        return 'storage/product-thumbnails/' . $fileName;
+            // Return the file path (adjust this to match your storage config)
+            return 'storage/product-thumbnails/' . $fileName;
+        }
+
+        return null; // Return null if no file is uploaded
     }
-
-    return null; // Return null if no file is uploaded
-}
-
 
     public function destroy($id)
     {

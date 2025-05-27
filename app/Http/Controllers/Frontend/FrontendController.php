@@ -43,6 +43,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\ForexCalculator;
 use App\Models\BlogsAndPodcastsBookmark;
 
 
@@ -96,6 +97,7 @@ class FrontendController extends Controller
 
         $findJobs = JobPost::orderBy('created_at', 'desc')
             ->where('jobStatus', 'published')
+            ->where('jobDeadline', '>=', date('Y-m-d'))
             ->take(4)->get();
 
         $ads = Advertisement::orderBy('created_at', 'desc')
@@ -124,15 +126,14 @@ class FrontendController extends Controller
                 $ad_banners['middle']->image = asset('storage/' . $ad_banners['middle']->image) ?? null;
             }
         }
-
-        // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners', 'faqs', 'bookmarkedPodcastIds', 'bookmarkedBlogIds'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners', 'faqs'));
     }
 
     public function findJobs()
     {
         $findJobs = JobPost::orderBy('created_at', 'desc')
             ->where('jobStatus', 'published')
+            ->where('jobDeadline', '>=', date('Y-m-d'))
             ->paginate(8);
 
         $categories = JobCategory::orderBy('created_at', 'desc')
@@ -339,6 +340,7 @@ class FrontendController extends Controller
                         ->when($request->input('jobsby') == 'location', fn($query) => $query->where('jobLocation', 'LIKE', "%{$request->input('location')}%"));
                 }
             )
+            ->where('jobDeadline', '>=', date('Y-m-d'))
             ->paginate(8)
             ->withQueryString();
 
@@ -399,9 +401,10 @@ class FrontendController extends Controller
             ->where('jobStatus', 'published')
             ->where('jobCategoryId', $category_id) // Matching the category_id
             ->where('jobSlug', '!=', $slug)        // Exclude the current job
+            ->where('jobDeadline', '>=', date('Y-m-d'))
             ->take(4)
             ->get();
-
+        // return $similar_jobs;
         $categories = JobCategory::orderBy('created_at', 'desc')
             ->where('publishStatus', 1)
             ->get();
@@ -599,7 +602,7 @@ class FrontendController extends Controller
     public function bookmarkedBlogs()
     {
         try {
-            $jobSeekerId = auth()->id();
+            $jobSeekerId = Auth::guard('job_seekers')->id();
 
             $bookmarks = BlogsAndPodcastsBookmark::with('blogsAndPodcasts')
                 ->where('job_seeker_id', $jobSeekerId)
@@ -744,10 +747,31 @@ class FrontendController extends Controller
         return view('frontend.ForexChanger.forex-calculator');
     }
 
-    public function select_exchanger()
+    public function select_exchanger(Request $request)
     {
 
-        return view('frontend.ForexChanger.select-exchanger');
+        $base_currency = $request->query('base_currency');
+        $target_currency = $request->query('target_currency');
+        $amount = $request->query('amount') ?? 1;
+        // dd($request->all());
+
+        $exchange_rates = ForexCalculator::where('base_currency', $base_currency)
+            ->where(function ($query) use ($target_currency, $base_currency) {
+                $query->where('target_currency', $target_currency);
+                $query->where('base_currency', $base_currency);
+                $query->where('date_of_validity', date('Y-m-d'));
+            })
+            ->orWhere(function ($query) use ($target_currency, $base_currency) {
+                $query->where('target_currency', $base_currency);
+                $query->where('base_currency', $target_currency);
+                $query->where('date_of_validity', date('Y-m-d'));
+            })
+            ->with('post_admin:id,fullName,profile_image')
+            ->get();
+
+        // return $exchange_rates;
+
+        return view('frontend.ForexChanger.select-exchanger', compact('exchange_rates', 'amount', 'base_currency', 'target_currency'));
     }
 
     public function exchange_bank_details()
@@ -799,6 +823,7 @@ class FrontendController extends Controller
         $fetchedData = VisaDetails::with('visaCountry', 'visaType')
             ->where('visaCountryId', $visaCountryId)
             ->where('visaTypeId', $visaTypeId)
+            ->where('publishStatus', 1)
             ->first();
 
         // Retrieve country lists and visa types again for re-rendering the form
@@ -1054,8 +1079,8 @@ class FrontendController extends Controller
     public function resumeHelp()
     {
 
-        $freeResumeHelps    = ResumeHelp::where('type', 0)->orderBy('created_at', 'desc')->get();
-        $premiumResumeHelps = ResumeHelp::where('type', 1)->get();
+        $freeResumeHelps    = ResumeHelp::where('type', 0)->where('publish_not_publish', '1')->orderBy('created_at', 'desc')->get();
+        $premiumResumeHelps = ResumeHelp::where('type', 1)->where('publish_not_publish', '1')->get();
 
         $freeResumeHelps->transform(function ($resume) {
             $resume->image_preview = asset('storage/' . $resume->image_preview);

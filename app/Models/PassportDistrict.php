@@ -20,4 +20,5 @@ class PassportDistrict extends Model
     {
         return $this->hasMany(PassportLocation::class, 'district_id');
     }
+    
 }

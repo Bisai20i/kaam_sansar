@@ -3,6 +3,22 @@
         background: #0064A7 !important;
     }
 </style>
+<style>
+  .icon-circle {
+    background-color: #ffe6e6;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    border-radius: 16px;
+  }
+</style>
+
 
 <nav class="navbar navbar-expand-lg fixed-top ">
     <div class="container">
@@ -15,75 +31,223 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- style for nav hover and active status -->
+
+        <style>
+
+            .navbar-nav .nav-item .nav-link {
+                position: relative;
+                transition: 0.3s ease-in-out;
+                padding: 5px 3px !important;
+            }
+
+            .navbar-nav .nav-item .nav-link::before {
+                content: "";
+                position: absolute;
+                bottom: 2px;
+                left: 0;
+                width: 0;
+                height: 2;
+                background-color: #0064A7;
+                transition: 0.3s ease-in-out;
+            }
+
+            .navbar-nav .nav-item .active-navLink::before {
+                content: "";
+                position: absolute;
+                bottom: 2px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: #0064A7;
+                transition: 0.3s ease-in-out;
+            }
+
+            .active-dropdown-item {
+                background-color: #d1ecff !important;
+
+            }
+
+            .navbar-nav .nav-item .active-navLink:hover::before,
+            .navbar-nav .nav-item .nav-link:hover::before {
+                content: "";
+                position: absolute;
+                bottom: 2px;
+                left: 0;
+                width: 35%;
+                height: 2px;
+                background-color: #0064A7;
+            }
+        </style>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav gap-3 m-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('frontend.finds-jobs') }}">Find jobs</a>
+                    <a class="nav-link {{ request()->routeIs('index') ? 'active-navLink' : '' }}" aria-current="page"
+                        href="{{ route('index') }}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="{{ route('resume') }}">Resume help</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('aboarddeals') }}">Abroad Deals</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('visaHQ') }}">Visa HQ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('frontend.insurance') }}">Insurance</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('forex_calculator') }}">Forex
-                        calculator</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('horoscope') }}">Horoscope</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('gift.home', ['type' => 'all']) }}">Gift &
-                        Coupon</a>
+                <!-- Jobs Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('frontend.finds-jobs') || request()->routeIs('resume') ? 'active-navLink' : '' }}"
+                        href="#" id="jobsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Jobs
+                    </a>
+                    <ul class="dropdown-menu " aria-labelledby="jobsDropdown">
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('frontend.finds-jobs') ? 'active-dropdown-item' : '' }} "
+                                aria-current="page" href="{{ route('frontend.finds-jobs') }}">Find
+                                jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('resume') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('resume') }}">Resume help</a>
+                        </li>
+                    </ul>
                 </li>
 
+
+                @if(Auth::guard('job_seekers')->check())
+                {{-- <!-- Games Dropdown {{ request()->routeIs('spinn') || request()->routeIs('exit-poll') || request()->routeIs('quiz') ? 'active-navLink' : '' }} --> --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('polls*') || request()->routeIs('quiz*') ? 'active-navLink' : '' }}" href="#" id="gamesDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Games
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="gamesDropdown">
+                        <li><a class="dropdown-item {{ request()->routeIs('quiz*') ? 'active-dropdown-item' : '' }}" href="{{ route('quiz.frontend') }}">Quiz</a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('polls*') ? 'active-dropdown-item' : '' }}" href="{{ route('polls.create') }}">Exist Poll</a></li>
+                        <li><a class="dropdown-item" href="#">Spinning Wheel</a></li>
+
+                    </ul>
+                </li>
+                @else
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('frontend.advertisements') }}" aria-current="page"
-                        href="adspage.html">Advertisement</a>
+                    <button class="nav-link" aria-current="page" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">Games</button>
+                </li>
+                @endif
+
+
+                <!-- Services Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle 
+                        {{ request()->routeIs('frontend.insurance') ||
+                        request()->routeIs('visaHQ') ||
+                        request()->routeIs('aboard*') ||
+                        request()->routeIs('forex*') ||
+                        request()->routeIs('frontend.advertisements') ||
+                        request()->routeIs('gift*')
+                            ? 'active-navLink'
+                            : '' }}"
+                        href="javascript:void(0);" id="servicesDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Services
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('frontend.insurance') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('frontend.insurance') }}">Insurance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('visaHQ') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('visaHQ') }}">Visa HQ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('forex*') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('forex_calculator') }}">
+                                Forex calculator</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('aboard*') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('aboarddeals') }}">Abroad
+                                Deals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('frontend.advertisements') ? 'active-dropdown-item' : '' }}"
+                                href="{{ route('frontend.advertisements') }}" aria-current="page">Advertisement</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item {{ request()->routeIs('gift*') ? 'active-dropdown-item' : '' }}"
+                                aria-current="page" href="{{ route('gift.home', ['type' => 'all']) }}">Gift &
+                                Coupon</a>
+                        </li>
+                    </ul>
+                </li>
+
+                @if (Auth::guard('job_seekers')->check())
+                <!-- Forms Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle 
+                        {{ request()->routeIs('passport*') || request()->routeIs('workPermits*') ? 'active-navLink' : '' }}"
+                        href="#" id="formsDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Forms
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="formsDropdown">
+                        <li><a class="dropdown-item {{ request()->routeIs('documentAttestations*') ? 'active-dropdown-item' : '' }}"
+                                href="{{ route('documentAttestations.create') }}">Document Attestation</a></li>
+
+                        <li><a class="dropdown-item {{ request()->routeIs('workPermits.create') ? 'active-dropdown-item' : '' }}"
+                                href="{{ route('workPermits.create') }}">Work Permit</a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('passport.partial') ? 'active-dropdown-item' : '' }}"
+                                href="{{ route('passport.partial') }}">Passport Renewal</a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('bankAccounts*') ? 'active-dropdown-item' : '' }}"
+                                href="{{ route('bankAccounts.create') }}">Bank Account</a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('brokerAccounts*') ? 'active-dropdown-item' : '' }}"
+                                href="{{ route('brokerAccounts.create') }}">Broker Account</a></li>
+
+                    </ul>
+                </li>
+                @else
+                <li class="nav-item">
+                    <button class="nav-link" aria-current="page" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">Forms</button>
+                </li>
+                @endif
+
+
+                <!-- Individual Items -->
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('horoscope') ? 'active-navLink' : '' }}"
+                        aria-current="page" href="{{ route('horoscope') }}">Horoscope</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('frontend.discussion') }}" aria-current="page"
+                    <a class="nav-link {{ request()->routeIs('frontend.discussion') ? 'active-navLink' : '' }}"
+                        href="{{ route('frontend.discussion') }}" aria-current="page"
                         href="forumfeed.html">Discussion Forum</a>
                 </li>
-
             </ul>
 
             @auth('job_seekers')
-                @if (Auth::guard('job_seekers')->user()->isOtpVerified())
-                    <!-- Show Profile Button for Authenticated Users with Verified OTP -->
-                    <button id="main-profile" class="profile-button" data-bs-toggle="modal" data-bs-target="#profileModal">
-                        <img
-                            src="{{ Auth::guard('job_seekers')->user()->userThumbnail
+            @if (Auth::guard('job_seekers')->user()->isOtpVerified())
+            <!-- Show Profile Button for Authenticated Users with Verified OTP -->
+            <button id="main-profile" class="profile-button" data-bs-toggle="modal"
+                data-bs-target="#profileModal">
+                <img src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                                 ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
                                 : asset('frontend/assets/Images/profile.jpg') }}">
-                    </button>
+            </button>
 
-                    <button class="btn-register" data-bs-toggle="modal" data-bs-target="#completeModal">Create
-                    </button>
-                @else
-                    <!-- If user is logged in but OTP is not verified, show Login/Register buttons -->
-                    <a href="{{ route('jobseeker.otp_page') }}"> <button class="profile-button">
-                            <img
-                                src="{{ Auth::guard('job_seekers')->user()->userThumbnail
+            <button class="btn-register" data-bs-toggle="modal" data-bs-target="#completeModal">Create
+            </button>
+            @else
+            <!-- If user is logged in but OTP is not verified, show Login/Register buttons -->
+            <a href="{{ route('jobseeker.otp_page') }}"> <button class="profile-button">
+                    <img
+                        src="{{ Auth::guard('job_seekers')->user()->userThumbnail
                                     ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
                                     : asset('frontend/assets/Images/profile.jpg') }}">
-                        </button>
-                    </a>
-                @endif
+                </button>
+            </a>
+            @endif
             @else
-                <!-- If user is completely unauthenticated, show Login/Register buttons -->
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn-login mt-0" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                    <button class="btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
-                </div>
-                <!-- If user is completely unauthenticated, show Login/Register buttons -->
+            <!-- If user is completely unauthenticated, show Login/Register buttons -->
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn-login mt-0" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                <button class="btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+            </div>
+            <!-- If user is completely unauthenticated, show Login/Register buttons -->
             @endauth
 
 
@@ -250,9 +414,9 @@
     </div>
 </div>
 <script>
-    @if (session('showLoginModal'))
-        var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-        loginModal.show();
+    @if(session('showLoginModal'))
+    var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
     @endif
 </script>
 
@@ -311,12 +475,17 @@
 
                 <h2 class="text-center mb-4">Create Profile</h2>
 
-                <div class="text-center mb-4">
-                    <img src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail
-                        ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0])
-                        : asset('frontend/Images/profile.png') }}"
-                        class="rounded-circle object-cover border border-secondary"
-                        style="width: 100px; aspect-ratio: 1/1;" alt="Profile Photo">
+                <div class="text-center mb-4 d-flex justify-content-center">
+                    <div class="border border-secondary rounded rounded-circle d-flex flex-column align-items-center justify-content-center p-2 position-relative ratio ratio-1x1"
+                        style="width: 150px; height: 150px">
+                        <input type="file" class="position-absolute w-100 h-100 opacity-0" accept="image/*"
+                            name="image1" onchange="previewImage(this)" style="z-index: 1; cursor: pointer;" />
+                        <span></span> <i class="fas fa-plus text-muted position-absolute" style="top: 45%; "></i>
+                        <img src="{{ Auth::guard('job_seekers')->check() && isset(Auth::guard('job_seekers')->user()->userThumbnail[0]) ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : '' }}"
+                            class="rounded-circle w-100 h-100 {{ Auth::guard('job_seekers')->check() && isset(Auth::guard('job_seekers')->user()->userThumbnail[0]) ? '' : 'd-none' }}"
+                            alt="Preview Image" id="preview" accept="image/*" />
+                    </div>
+
                 </div>
 
                 <p class="text-center text-muted mb-4">Upload up to 5 photos. Click to select primary photo</p>
@@ -384,98 +553,97 @@
                     {{-- <div class="form-group">
                         <input type="text" class="form-control mb-2" 
                             placeholder="I am looking for : {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->type : '' }}"
-                            style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
-                    </div> --}}
-                    <div class="form-group">
-                        <input type="text" class="form-control mb-2" name="profession"
-                            placeholder="Designation: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->profession : '' }}"
-                            style="border-color: #8C8C8C; color: #818181;" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control mb-2" name="expectedSalary"
-                            placeholder="Expected Salary: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->expectedSalary : '' }}"
-                            style="border-color: #8C8C8C; color: #818181;" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control mb-2" name="temporaryLocation"
-                            placeholder="Current Address: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->temporaryLocation : '' }}"
-                            style="border-color: #8C8C8C; color: #818181;" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control mb-2" name="permanentLocation"
-                            placeholder="Permanent Address: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->permanentLocation : '' }}"
-                            style="border-color: #8C8C8C; color: #818181;" />
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control mb-2" readonly
-                            placeholder="Email Address: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->emailAddress : '' }}"
-                            style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control mb-2" name="phoneNumber"
-                            placeholder="Mobile No.: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->phoneNumber : '' }}"
-                            style="border-color: #8C8C8C; color: #818181;" />
-                    </div>
-                    <div class="form-group">
-                        <label for="gender" class="form-label mb-1"><small
-                                class="text-muted">Gender</small></label>
-                        <select type="text" class="form-control mb-2" placeholder="Gender: Female" name="gender"
-                            style="border-color: #8C8C8C; color: #818181;">
-                            <option value="male"
-                                {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->gender == 'male' ? 'selected' : '' }}>
-                                Male</option>
-                            <option value="female"
-                                {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->gender == 'female' ? 'selected' : '' }}>
-                                Female</option>
-                            <option value="other"
-                                {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->gender == 'other' ? 'selected' : '' }}>
-                                Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="gender" class="form-label mb-1"><small class="text-muted">I am
-                                A</small></label>
-                        <select type="text" class="form-control mb-2" name="whoAmI"
-                            style="border-color: #8C8C8C; color: #818181;">
-                            <option value="student"
-                                {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->whoAmI == 'student' ? 'selected' : '' }}>
-                                Student</option>
-                            <option value="worker"
-                                {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->whoAmI == 'worker' ? 'selected' : '' }}>
-                                Worker</option>
-                            <option value="consultant"
-                                {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->whoAmI == 'consultant' ? 'selected' : '' }}>
-                                Consultant</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="date" class="form-label mb-1"><small class="text-muted">Date of
-                                Birth</small></label>
-                        <input type="date" class="form-control" name="dob"
-                            value="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->dateOfBirth : '' }}"
-                            placeholder="Date of Birth: 2002-09-27" style="border-color: #8C8C8C; color: #818181;" />
-                    </div>
-                    <div class="form-group">
-                        <label for="country" class="form-label mb-1"><small
-                                class="text-muted">Country</small></label>
-                        <select type="text" class="form-control mb-2" name="country" id="selectCountry"
-                            
-                            style="border-color: #8C8C8C; color: #818181;">
-                            <option value="" selected>Select Country</option>
+                    style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+            </div> --}}
+            <div class="form-group">
+                <input type="text" class="form-control mb-2" name="profession"
+                    placeholder="Designation: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->profession : '' }}"
+                    style="border-color: #8C8C8C; color: #818181;" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control mb-2" name="expectedSalary"
+                    placeholder="Expected Salary: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->expectedSalary : '' }}"
+                    style="border-color: #8C8C8C; color: #818181;" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control mb-2" name="temporaryLocation"
+                    placeholder="Current Address: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->temporaryLocation : '' }}"
+                    style="border-color: #8C8C8C; color: #818181;" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control mb-2" name="permanentLocation"
+                    placeholder="Permanent Address: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->permanentLocation : '' }}"
+                    style="border-color: #8C8C8C; color: #818181;" />
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control mb-2" readonly
+                    placeholder="Email Address: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->emailAddress : '' }}"
+                    style="border-color: #8C8C8C; background-color: #EDEDED; color: #818181;" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control mb-2" name="phoneNumber"
+                    placeholder="Mobile No.: {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->phoneNumber : '' }}"
+                    style="border-color: #8C8C8C; color: #818181;" />
+            </div>
+            <div class="form-group">
+                <label for="gender" class="form-label mb-1"><small
+                        class="text-muted">Gender</small></label>
+                <select type="text" class="form-control mb-2" placeholder="Gender: Female" name="gender"
+                    style="border-color: #8C8C8C; color: #818181;">
+                    <option value="male"
+                        {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->gender == 'male' ? 'selected' : '' }}>
+                        Male</option>
+                    <option value="female"
+                        {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->gender == 'female' ? 'selected' : '' }}>
+                        Female</option>
+                    <option value="other"
+                        {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->gender == 'other' ? 'selected' : '' }}>
+                        Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gender" class="form-label mb-1"><small class="text-muted">I am
+                        A</small></label>
+                <select type="text" class="form-control mb-2" name="whoAmI"
+                    style="border-color: #8C8C8C; color: #818181;">
+                    <option value="student"
+                        {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->whoAmI == 'student' ? 'selected' : '' }}>
+                        Student</option>
+                    <option value="worker"
+                        {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->whoAmI == 'worker' ? 'selected' : '' }}>
+                        Worker</option>
+                    <option value="consultant"
+                        {{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->whoAmI == 'consultant' ? 'selected' : '' }}>
+                        Consultant</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date" class="form-label mb-1"><small class="text-muted">Date of
+                        Birth</small></label>
+                <input type="date" class="form-control" name="dob"
+                    value="{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->dateOfBirth : '' }}"
+                    placeholder="Date of Birth: 2002-09-27" style="border-color: #8C8C8C; color: #818181;" />
+            </div>
+            <div class="form-group">
+                <label for="country" class="form-label mb-1"><small
+                        class="text-muted">Country</small></label>
+                <select type="text" class="form-control mb-2" name="country" id="selectCountry"
+                    style="border-color: #8C8C8C; color: #818181;">
+                    <option value="" selected>Select Country</option>
 
-                        </select>
-                    </div>
-                </form>
+                </select>
+            </div>
+            </form>
 
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
-                        data-bs-toggle="modal" data-bs-target="#completeModal">Back</button>
-                    <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff"
-                        onclick="updateProfileDetails(this)">Next</button>
-                </div>
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn btn-light" style="background-color: #E9E9E9;"
+                    data-bs-toggle="modal" data-bs-target="#completeModal">Back</button>
+                <button type="button" class="btn btn-light" style="background-color: #0064A7; color:#fff"
+                    onclick="updateProfileDetails(this)">Next</button>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Modal for completing profile 3 -->
@@ -540,20 +708,20 @@
 
                     @php
 
-                        $resumes = \App\Models\ResumeHelp::where('type', 0)
-                            ->orderBy('created_at', 'desc')
-                            ->take(3)
-                            ->get();
+                    $resumes = \App\Models\ResumeHelp::where('type', 0)
+                    ->orderBy('created_at', 'desc')
+                    ->take(3)
+                    ->get();
 
                     @endphp
 
                     @foreach ($resumes as $resume)
-                        <div class="col">
-                            <div class="border p-2 rounded">
-                                <img src="{{ asset('storage/' . $resume->image_preview) }}" alt="CV template"
-                                    class="img-fluid w-100" />
-                            </div>
+                    <div class="col">
+                        <div class="border p-2 rounded">
+                            <img src="{{ asset('storage/' . $resume->image_preview) }}" alt="CV template"
+                                class="img-fluid w-100" />
                         </div>
+                    </div>
                     @endforeach
                 </div>
 
@@ -579,7 +747,7 @@
             <!-- Close Button Fixed to Top Right -->
             <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
                 aria-label="Close"></button>
-            <div class="modal-body icon">
+            <div class="modal-body">
                 <div class="text-center">
 
                     <img src="{{ @Auth::guard('job_seekers')->user()->userThumbnail
@@ -589,17 +757,22 @@
                         alt="Profile Picture">
                     <h5 class="card-title">{{ @Auth::guard('job_seekers')->user()->firstName }}
                         {{ @Auth::guard('job_seekers')->user()->lastName }}
-                        <a href="#" class="d-block">
-                            <i class="fa fa-pen p-1"></i>
+                        @auth('job_seekers')
+                        <a href="{{ route('jobseeker.editProfile', ['user_id' => Auth::guard('job_seekers')->user()->id]) }}" class="d-block">
+                            <i class="fa fa-pen p-1 text-decoration-none"></i>
                         </a>
+                        @endauth
                     </h5>
-                    <p class="text-muted"><i class="fas fa-award"></i> Reward Points <a
-                            href="{{ route('profile.documents', ['document_type' => 'passport']) }}"><i
-                                class="fa-solid fa-folder ms-2" style="cursor:pointer;"></i></a><br>272.38</p>
+                    <p class="text-muted"><i class="fas fa-award"></i> Reward Points <br>272.38</p>
                 </div>
                 <ul class="list-unstyled text-start">
                     <li><a href="{{ route('jobseeker.getProfile', @Auth::guard('job_seekers')->user()->id) }}"
                             class="d-block"><i class="fas fa-user p-1"></i> Profile</a>
+                    </li>
+                    <hr>
+                    <li>
+                        <a href="{{ route('profile.documents', ['document_type' => 'passport']) }}"><i
+                                class="fa-solid fa-folder ms-2" style="cursor:pointer;"></i> My Documents</a>
                     </li>
                     <hr>
                     <li><a href="{{ route('jobseeker.inbox', @Auth::guard('job_seekers')->user()->id) }}"
@@ -611,8 +784,13 @@
                                 class="fas fa-lock p-1"></i> Change
                             password</a></li>
                     <hr>
-                    <li><a href="#" class="d-block"><i class="fas fa-share-alt p-1"></i>
+
+                    <li><a href="{{ route('jobseeker.resume-maker') }}" class="d-block text-decoration-none"><i class="fas fa-edit p-1 text-decoration-none"></i>
+                            Edit CV</a></li>
+                    <hr>
+                    <li><a href="#" class="d-block text-decoration-none"><i class="fas fa-share-alt p-1 text-decoration-none"></i>
                             Share</a></li>
+
                     <hr>
                     <li>
                         <form action="{{ route('jobseeker.logout') }}" method="POST" id="logoutForm"
@@ -661,7 +839,7 @@
             <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
                 aria-label="Close"></button>
 
-            <div class="modal-body p-0 icon-gray">
+            <div class="modal-body p-0 icon-gray" style="font-family: unset;">
                 <!-- Social Login Buttons -->
                 <div class="text-center">
                     <p class="text-muted">Welcome back! Select a method to login:</p>
@@ -673,7 +851,8 @@
                         <i class="fa fa-envelope text-white"></i> Email
                     </button>
                     <button type="button" class="btn-outline-secondary rounded-start-0 border-phone" id="phone-btn">
-                        <i class="fas fa-phone text-white"></i> <span style="color: #555555;">Phone Number</span>
+                        <i class="fas fa-phone" style="color: #0064A7"></i> <span style="color: #555555;">Phone
+                            Number</span>
                     </button>
                 </div>
 
@@ -699,7 +878,7 @@
                                     class="form-control @error('login_email') is-invalid @enderror"
                                     placeholder="Enter Your Email" autocomplete="off">
                                 @error('login_email')
-                                    <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -714,72 +893,72 @@
                                       {{ $message }}
                     </div>
                     @enderror --}}
-                    </div>
+            </div>
 
-                    <div class="d-none" id="phone-form">
-                        <div class="mb-3 col-12" class="d-none">
-                            <input type="text" name="login_phone_number" id="loginPhone"
-                                class="form-control @error('login_phone_number') is-invalid @enderror"
-                                placeholder="Enter Your Phone" minlength="10" maxlength="10" inputmode="numeric"
-                                pattern="[0-9]*" title="Phone number should be 10 digits" autocomplete="off">
-                            <input type="hidden" name="country_code" id="country_code">
-                            @error('login_phone_number')
-                                <div class="invalid-feedback" style="display: block;" style="display: block">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
+            <div class="d-none" id="phone-form">
+                <div class="mb-3 col-12" class="d-none">
+                    <input type="text" name="login_phone_number" id="loginPhone"
+                        class="form-control @error('login_phone_number') is-invalid @enderror"
+                        placeholder="Enter Your Phone" minlength="10" maxlength="10" inputmode="numeric"
+                        pattern="[0-9]*" title="Phone number should be 10 digits" autocomplete="off">
+                    <input type="hidden" name="country_code" id="country_code">
+                    @error('login_phone_number')
+                    <div class="invalid-feedback" style="display: block;" style="display: block">
+                        {{ $message }}
                     </div>
-                    <!-- Password Input -->
-                    <div class="mb-3 input-group">
-                        <span class="input-group-text" style="background-color: #fff!important"><i
-                                class="fa fa-lock"></i></span>
-                        <input type="password" name="login_password"
-                            class="form-control @error('login_password') is-invalid @enderror" id="loginPassword"
-                            placeholder="Enter Your Password" minlength="6" autocomplete="current-password">
-                        <span class="position-absolute"
-                            style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"
-                            onclick="togglePasswordVisibility('loginPassword')">
-                            <i id="eyeIcon" class="fa fa-eye"></i>
-                        </span>
-                        @error('login_password')
-                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- Remember Me & Forgot Password -->
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe" name="remember"
-                                {{ old('remember') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="rememberMe">Remember me</label>
-                        </div>
-                        <a href="{{ route('jobseeker.verify-phone-page') }}" class="text-decoration-none">Forgot
-                            Password?</a>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="  btn-create w-100" id="loginBtn">Login</button>
-                </form>
-
-                <!-- Register Link -->
-                <div class="text-center mt-3">
-                    <p>Don't have an account? <a href="#registerModal" class="text-primary text-decoration-none"
-                            data-bs-toggle="modal" data-bs-target="#registerModal">Create an account</a></p>
-                </div>
-                <p class="text-center mt-3">or register with</p>
-                <div class="d-flex gap-2 justify-content-center" id="social-login">
-                    <button type="button" class="btn-outline-secondary w-100">
-                        <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo"
-                            style="width: 20px;"> Google
-                    </button>
+                    @enderror
                 </div>
             </div>
+            <!-- Password Input -->
+            <div class="mb-3 input-group">
+                <span class="input-group-text" style="background-color: #fff!important"><i
+                        class="fa fa-lock"></i></span>
+                <input type="password" name="login_password"
+                    class="form-control @error('login_password') is-invalid @enderror" id="loginPassword"
+                    placeholder="Enter Your Password" minlength="6" autocomplete="current-password">
+                <span class="position-absolute"
+                    style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"
+                    onclick="togglePasswordVisibility('loginPassword')">
+                    <i id="eyeIcon" class="fa fa-eye"></i>
+                </span>
+                @error('login_password')
+                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="remember"
+                        {{ old('remember') ? 'checked' : '' }}>
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                </div>
+                <a href="{{ route('jobseeker.verify-phone-page') }}" class="text-decoration-none">Forgot
+                    Password?</a>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="  btn-create w-100" id="loginBtn">Login</button>
+            </form>
+
+            <!-- Register Link -->
+            <div class="text-center mt-3">
+                <p>Don't have an account? <a href="#registerModal" class="text-primary text-decoration-none"
+                        data-bs-toggle="modal" data-bs-target="#registerModal">Create an account</a></p>
+            </div>
+            <p class="text-center mt-3">or register with</p>
+            <form class="d-flex gap-2 justify-content-center" id="social-login" action="{{ route('auth.google') }}">
+
+                <button type="submit" class="btn-outline-secondary w-100 d-flex align-items-center justify-content-center">
+                    <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo"
+                        style="width: 20px;"> Google
+                </button>
+            </form>
         </div>
     </div>
 </div>
+</div>
 
-<!-- Register Modal -->
 <!-- Register Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true"
     data-bs-backdrop="static" data-bs-keyboard="false">
@@ -836,7 +1015,7 @@
                                     class="form-control @error('first_name') is-invalid @enderror"
                                     placeholder=" First Name" value="{{ old('first_name') }}">
                                 @error('first_name')
-                                    <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -848,7 +1027,7 @@
                                     class="form-control @error('last_name') is-invalid @enderror"
                                     placeholder="Last Name" value="{{ old('last_name') }}">
                                 @error('last_name')
-                                    <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -875,7 +1054,7 @@
                                     class="form-control @error('email') is-invalid @enderror"
                                     placeholder="Enter Your Email" autocomplete="off" value="{{ old('email') }}">
                                 @error('email')
-                                    <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -894,9 +1073,9 @@
                                 pattern="[0-9]*" title="Phone number should be 10 digits" autocomplete="off">
                             <input type="hidden" name="country_code" id="registerCountryCode">
                             @error('phone_number')
-                                <div class="invalid-feedback" style="display: block;" style="display: block">
-                                    {{ $message }}
-                                </div>
+                            <div class="invalid-feedback" style="display: block;" style="display: block">
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
 
@@ -919,7 +1098,7 @@
 
                             </select>
                             @error('whoAmI')
-                                <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
@@ -936,7 +1115,7 @@
                             <i id="registerEyeIcon" class="fa fa-eye"></i>
                         </span>
                         @error('password')
-                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                        <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3 input-group">
@@ -952,7 +1131,7 @@
                             <i id="confirmRegisterEyeIcon" class="fa fa-eye"></i>
                         </span>
                         @error('password_confirmation')
-                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                        <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -967,9 +1146,9 @@
 
                         </div>
                         @error('acceptedTerms')
-                            <div class="invalid-feedback" style="display: block;" style="display: block">
-                                {{ $message }}
-                            </div>
+                        <div class="invalid-feedback" style="display: block;" style="display: block">
+                            {{ $message }}
+                        </div>
                         @enderror
                     </div>
 
@@ -984,13 +1163,13 @@
                     <div style="color: #A6A6A6; padding: 0 10px;">or continue with</div>
                     <hr style="flex: 1; color: #A6A6A6;">
                 </div>
-                <div class="d-flex gap-2 justify-content-center">
-                    <button type="button" class=" btn-outline-secondary w-100">
-                        <img src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo">
+                <form action="{{ route('auth.google') }}" class="d-flex gap-2 justify-content-center">
+                    <button type="submit" class=" btn-outline-secondary w-100 d-flex align-items-center justify-content-center">
+                        <img class="img-fluid shadow-sm" src="{{ asset('frontend/assets/Images/icons8-google-48.png') }}" alt="Google Logo">
                         Google
                     </button>
 
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -1234,14 +1413,15 @@
                         dropdown2.appendChild(option.cloneNode(true));
                     });
 
-                    
+
                     // Restore old value (if exists)
                     const oldCountry = "{{ old('country') }}";
                     if (oldCountry) {
                         dropdown.value = oldCountry;
                     }
 
-                    const userCountry = "{{  Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->country : '' }}";
+                    const userCountry =
+                        "{{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->country : '' }}";
                     if (userCountry) {
                         dropdown2.value = userCountry;
                     }

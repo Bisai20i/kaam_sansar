@@ -8,10 +8,10 @@
       <h3>Job Title</h3>
       <div class="row mb-3">
         <div class="col-md-12">
-          <label for="jobTitle" class="form-label">Job Title</label>
+          <label for="jobTitle" class="form-label">Job Title <span class="text-danger">*</span></label>
           <input type="text" class="form-control custom-input"
-                 id="jobTitle" name="jobTitle"
-                 placeholder="Software Engineer" required />
+            id="jobTitle" name="jobTitle"
+            placeholder="enter job title" required />
         </div>
       </div>
 
@@ -19,14 +19,14 @@
         <div class="col-md-6">
           <label for="companyName" class="form-label">Company Name <span class="text-danger">*</span></label>
           <input type="text" class="form-control custom-input"
-                 id="companyName" name="companyName"
-                 placeholder="Google Inc." required />
+            id="companyName" name="companyName"
+            placeholder="Enter company name" required />
         </div>
         <div class="col-md-6">
           <label for="location" class="form-label">Location <span class="text-danger">*</span></label>
           <input type="text" class="form-control custom-input"
-                 id="location" name="location"
-                 placeholder="San Francisco, CA" required />
+            id="location" name="location"
+            placeholder="Enter location" required />
         </div>
       </div>
 
@@ -34,12 +34,12 @@
         <div class="col-md-6">
           <label for="startDate" class="form-label">Start Date <span class="text-danger">*</span></label>
           <input type="date" class="form-control custom-input"
-                 id="start_Date" name="startDate" required />
+            id="start_Date" name="startDate" placeholder="Enter start date" required />
         </div>
         <div class="col-md-6">
           <label for="endDate" class="form-label">End Date <span class="text-danger">*</span></label>
           <input type="date" class="form-control custom-input"
-                 id="endDate" name="endDate" required />
+            id="endDate" name="endDate" placeholder="Enter end date" required />
         </div>
       </div>
 
@@ -47,11 +47,11 @@
         <div class="col-12">
           <label for="experienceDescription" class="form-label">Description <span class="text-danger">*</span></label>
           <textarea class="form-control custom-input"
-                    id="experienceDescription"
-                    name="experienceDescription"
-                    rows="3"
-                    placeholder="Describe your job role and achievements..."
-                    required></textarea>
+            id="experienceDescription"
+            name="experienceDescription"
+            rows="3"
+            placeholder="Describe your job role and achievements..."
+            required></textarea>
         </div>
       </div>
 
@@ -68,7 +68,7 @@
               <input type="radio" id="salaryRating1" name="salaryRating" value="1" checked><label for="salaryRating1">&#9733;</label>
             </div>
           </div>
-          <input type="text" id="salaryFeedback" name="salaryFeedback" class="form-control custom-input mt-2" placeholder="Salary feedback" />
+          <input type="text" id="salaryFeedback" name="salaryFeedback" class="form-control custom-input mt-2" placeholder="Enter salary feedback" />
         </div>
 
         <div class="col-md-12 mb-2">
@@ -82,7 +82,7 @@
               <input type="radio" id="workingEnvironmentRating1" name="workingEnvironmentRating" value="1" checked><label for="workingEnvironmentRating1">&#9733;</label>
             </div>
           </div>
-          <input type="text" id="workingEnvironmentFeedback" name="workingEnvironmentFeedback" class="form-control custom-input mt-2" placeholder="Environment feedback" />
+          <input type="text" id="workingEnvironmentFeedback" name="workingEnvironmentFeedback" class="form-control custom-input mt-2" placeholder="Enter environment feedback" />
         </div>
 
         <div class="col-md-12">
@@ -96,18 +96,18 @@
               <input type="radio" id="benefitsRating1" name="benefitsRating" value="1" checked><label for="benefitsRating1">&#9733;</label>
             </div>
           </div>
-          <input type="text" id="benefitsFeedback" name="benefitsFeedback" class="form-control custom-input mt-2" placeholder="Benefits feedback" />
+          <input type="text" id="benefitsFeedback" name="benefitsFeedback" class="form-control custom-input mt-2" placeholder="Enter benefits feedback" />
         </div>
       </div>
 
       <button type="button" class="btn add-project float-start" id="addExperience">+ Add Experience</button>
       <div class="text-end">
         <button type="submit"
-                class="btn text-center skip-btn mx-2"
-                data-current="experience"
-                data-next="training"
-                data-link="trainingLink">
-          Continue to Training
+          class="btn text-center skip-btn mx-2"
+          data-current="experience"
+          data-next="training"
+          data-link="trainingLink">
+          Skip
         </button>
       </div>
     </form>
@@ -116,9 +116,11 @@
   <div class="container mt-4 p-0">
     <div id="experienceList">
       @foreach($experiences as $experience)
-      <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="card_id_{{ $experience->id }}">
+      <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="card_exp_id_{{ $experience->id }}">
         <div class="d-flex justify-content-between">
-          <div><h5>{{ $experience->jobTitle }}</h5></div>
+          <div>
+            <h5>{{ $experience->jobTitle }}</h5>
+          </div>
           <div>
             <button type="button" class="btn fw-semibold edit-experience" style="color:#0064A7" data-id="{{ $experience->id }}">Edit</button>
             <button type="button" class="btn text-danger fw-semibold delete-experience" data-id="{{ $experience->id }}">Delete</button>
@@ -142,145 +144,198 @@
   </div>
 </div>
 
+<!-- Delete Modal for Experience -->
+<div class="modal fade" id="deleteExperienceModal" tabindex="-1" aria-labelledby="deleteExperienceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="deleteExperienceForm" method="POST" action="">
+      @csrf
+      @method('DELETE')
+      <input type="hidden" id="deleteExperienceId" name="id" value="">
+      <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="mb-3">
+          <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+            <i class="bi bi-trash-fill text-danger fs-3"></i>
+          </div>
+        </div>
+        <h4 class="fw-bold">Are you sure?</h4>
+        <p class="text-secondary mb-4">Are you sure you want to delete this experiance? This action cannot be undone.</p>
+        <div class="d-flex justify-content-center align-items-center">
+          <button type="button" class="btn border-secondary-subtle rounded-3 px-4 py-2 col-6 me-1" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger rounded-3 px-4 py-2 col-6 ms-1">Delete</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  let isEditing = false;
-  let currentExperienceId = null;
+  document.addEventListener('DOMContentLoaded', function() {
+    let isEditing = false;
+    let currentExperienceId = null;
 
-  function collectExperienceData() {
-    return {
-      id:                          document.getElementById('id').value,
-      jobTitle:                    document.getElementById('jobTitle').value,
-      companyName:                 document.getElementById('companyName').value,
-      location:                    document.getElementById('location').value,
-      startDate:                   document.getElementById('start_Date').value,
-      endDate:                     document.getElementById('endDate').value,
-      experienceDescription:       document.getElementById('experienceDescription').value,
-      salaryRating:                document.querySelector('input[name="salaryRating"]:checked').value,
-      salaryFeedback:              document.getElementById('salaryFeedback').value,
-      workingEnvironmentRating:    document.querySelector('input[name="workingEnvironmentRating"]:checked').value,
-      workingEnvironmentFeedback:  document.getElementById('workingEnvironmentFeedback').value,
-      benefitsRating:              document.querySelector('input[name="benefitsRating"]:checked').value,
-      benefitsFeedback:            document.getElementById('benefitsFeedback').value
-    };
-  }
+    function collectExperienceData() {
+      return {
+        id: document.getElementById('id').value,
+        jobTitle: document.getElementById('jobTitle').value,
+        companyName: document.getElementById('companyName').value,
+        location: document.getElementById('location').value,
+        startDate: document.getElementById('start_Date').value,
+        endDate: document.getElementById('endDate').value,
+        experienceDescription: document.getElementById('experienceDescription').value,
+        salaryRating: document.querySelector('input[name="salaryRating"]:checked').value,
+        salaryFeedback: document.getElementById('salaryFeedback').value,
+        workingEnvironmentRating: document.querySelector('input[name="workingEnvironmentRating"]:checked').value,
+        workingEnvironmentFeedback: document.getElementById('workingEnvironmentFeedback').value,
+        benefitsRating: document.querySelector('input[name="benefitsRating"]:checked').value,
+        benefitsFeedback: document.getElementById('benefitsFeedback').value
+      };
+    }
 
-  function formatDate(s) {
-    return new Date(s).toLocaleDateString('en-US',{ month:'short', year:'numeric' });
-  }
+    function formatDate(s) {
+      return new Date(s).toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric'
+      });
+    }
 
-  function resetForm() {
-    document.getElementById('experienceForm').reset();
-    document.getElementById('id').value = '';
-    isEditing = false;
-    currentExperienceId = null;
-    document.getElementById('addExperience').textContent = '+ Add Experience';
-  }
+    function resetForm() {
+      document.getElementById('experienceForm').reset();
+      document.getElementById('id').value = '';
+      isEditing = false;
+      currentExperienceId = null;
+      document.getElementById('addExperience').textContent = '+ Add Experience';
+    }
 
-  async function fetchExperienceData(id) {
-    const res = await fetch(`/jobseeker/experiences/${id}/edit`);
-    if (!res.ok) throw new Error('Fetch failed');
-    return await res.json();
-  }
+    async function fetchExperienceData(id) {
+      const res = await fetch(`/jobseeker/experiences/${id}/edit`);
+      if (!res.ok) throw new Error('Fetch failed');
+      return await res.json();
+    }
 
-  function populateForm(exp) {
-    document.getElementById('id').value                         = exp.id;
-    document.getElementById('jobTitle').value                   = exp.jobTitle;
-    document.getElementById('companyName').value                = exp.companyName;
-    document.getElementById('location').value                   = exp.location;
-    document.getElementById('start_Date').value                  = exp.startDate;
-    document.getElementById('endDate').value                    = exp.endDate;
-    document.getElementById('experienceDescription').value      = exp.experienceDescription;
-    document.querySelector(`input[name="salaryRating"][value="${exp.salaryRating}"]`).checked = true;
-    document.getElementById('salaryFeedback').value             = exp.salaryFeedback;
-    document.querySelector(`input[name="workingEnvironmentRating"][value="${exp.workingEnvironmentRating}"]`).checked = true;
-    document.getElementById('workingEnvironmentFeedback').value = exp.workingEnvironmentFeedback;
-    document.querySelector(`input[name="benefitsRating"][value="${exp.benefitsRating}"]`).checked = true;
-    document.getElementById('benefitsFeedback').value           = exp.benefitsFeedback;
+    function populateForm(exp) {
+      document.getElementById('id').value = exp.id;
+      document.getElementById('jobTitle').value = exp.jobTitle;
+      document.getElementById('companyName').value = exp.companyName;
+      document.getElementById('location').value = exp.location;
+      document.getElementById('start_Date').value = exp.startDate;
+      document.getElementById('endDate').value = exp.endDate;
+      document.getElementById('experienceDescription').value = exp.experienceDescription;
+      document.querySelector(`input[name="salaryRating"][value="${exp.salaryRating}"]`).checked = true;
+      document.getElementById('salaryFeedback').value = exp.salaryFeedback;
+      document.querySelector(`input[name="workingEnvironmentRating"][value="${exp.workingEnvironmentRating}"]`).checked = true;
+      document.getElementById('workingEnvironmentFeedback').value = exp.workingEnvironmentFeedback;
+      document.querySelector(`input[name="benefitsRating"][value="${exp.benefitsRating}"]`).checked = true;
+      document.getElementById('benefitsFeedback').value = exp.benefitsFeedback;
 
-    isEditing = true;
-    currentExperienceId = exp.id;
-    document.getElementById('addExperience').textContent = 'Update Experience';
-  }
+      isEditing = true;
+      currentExperienceId = exp.id;
+      document.getElementById('addExperience').textContent = 'Update Experience';
+    }
 
-  async function saveExperienceData(data) {
-    const url    = data.id
-      ? `/jobseeker/experiences/${data.id}`
-      : "{{ route('experiences.store') }}";
-    const method = data.id ? 'PUT' : 'POST';
-    const res    = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type':'application/json',
-        'X-CSRF-TOKEN':'{{ csrf_token() }}',
-        'Accept':'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-    return res.ok ? await res.json() : { success:false };
-  }
+    async function saveExperienceData(data) {
+      const url = data.id ?
+        `/jobseeker/experiences/${data.id}` :
+        "{{ route('experiences.store') }}";
+      const method = data.id ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      return res.ok ? await res.json() : {
+        success: false
+      };
+    }
 
-  document.getElementById('addExperience').addEventListener('click', async function(e) {
-    e.preventDefault();
-    const data = collectExperienceData();
-  console.log(collectExperienceData());
-    const result = await saveExperienceData(data);
-    if (result.success) {
-      if (isEditing) {
-        updateExperienceCard(result.experience);
-        alert('Experience updated successfully!');
+    document.getElementById('addExperience').addEventListener('click', async function(e) {
+      e.preventDefault();
+      const data = collectExperienceData();
+      console.log(collectExperienceData());
+      const result = await saveExperienceData(data);
+      if (result.success) {
+        if (isEditing) {
+          updateExperienceCard(result.experience);
+        } else {
+          appendExperienceCard(result.experience);
+        }
+        resetForm();
       } else {
-        appendExperienceCard(result.experience);
+        console.error('something wents worng')
       }
-      resetForm();
-    } else {
-      alert('Error saving experience');
-    }
-  });
-
-  document.getElementById('experienceList').addEventListener('click', function(e) {
-    const id = e.target.dataset.id;
-
-    if (e.target.classList.contains('edit-experience')) {
-      e.preventDefault();
-      fetchExperienceData(id)
-        .then(populateForm)
-        .catch(err => alert('Error fetching experience: ' + err.message));
-    }
-    else if (e.target.classList.contains('delete-experience')) {
-      e.preventDefault();
-      if (!confirm('Are you sure you want to delete this experience entry?')) return;
-      deleteExperienceData(id)
-        .then(res => {
-          if (res.status) {
-            document.getElementById(`card_id_${id}`).remove();
-            if (currentExperienceId === parseInt(id)) resetForm();
-          }
-        })
-        .catch(err => alert('Error deleting experience: ' + err.message));
-    }
-  });
-
-  async function deleteExperienceData(id) {
-    const res = await fetch(`/jobseeker/experiences/${id}`, {
-      method:'DELETE',
-      headers:{
-        'Content-Type':'application/json',
-        'Accept':'application/json',
-        'X-CSRF-TOKEN':'{{ csrf_token() }}'
-      },
-      body: JSON.stringify({ request_type:'mobile' })
     });
-    if (!res.ok) throw new Error('Failed to delete');
-    return await res.json();
-  }
 
-  function appendExperienceCard(exp) {
-    const card = document.createElement('div');
-    card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
-    card.id = `card_id_${exp.id}`;
-    card.innerHTML = `
+    document.getElementById('experienceList').addEventListener('click', function(e) {
+      const id = e.target.dataset.id;
+      if (!id) return;
+
+      if (e.target.classList.contains('edit-experience')) {
+        e.preventDefault();
+        fetchExperienceData(id)
+          .then(populateForm)
+          .catch(err => console.error('something wents worng'));
+      } else if (e.target.classList.contains('delete-experience')) {
+        e.preventDefault();
+        // Set the form action and ID
+        document.getElementById('deleteExperienceId').value = id;
+        document.getElementById('deleteExperienceForm').action = `/jobseeker/experiences/${id}`;
+
+        // Show the modal
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteExperienceModal'));
+        deleteModal.show();
+      }
+    });
+
+    // Handle form submission for delete modal
+    document.getElementById('deleteExperienceForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const id = document.getElementById('deleteExperienceId').value;
+      const form = this;
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            _method: 'DELETE',
+            id: id
+          })
+        });
+
+        const json = await res.json();
+        if (json.success) {
+          document.getElementById(`card_exp_id_${id}`).remove();
+          if (currentExperienceId === parseInt(id)) {
+            resetForm();
+          }
+
+          // Hide the modal
+          const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteExperienceModal'));
+          deleteModal.hide();
+        } else {
+          console.error('something wents worng')
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        console.error('something wents worng')
+      }
+    });
+
+    function appendExperienceCard(exp) {
+      const card = document.createElement('div');
+      card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
+      card.id = `card_exp_id_${exp.id}`;
+      card.innerHTML = `
       <div class="d-flex justify-content-between">
         <div><h5>${exp.jobTitle}</h5></div>
         <div>
@@ -300,13 +355,13 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="m-0"><strong>Benefits Rating:</strong> ${exp.benefitsRating}/5</p>
         <p class="m-0">${exp.benefitsFeedback}</p>
       </div>`;
-    document.getElementById('experienceList').appendChild(card);
-  }
+      document.getElementById('experienceList').appendChild(card);
+    }
 
-  function updateExperienceCard(exp) {
-    const card = document.getElementById(`card_id_${exp.id}`);
-    if (!card) return;
-    card.innerHTML = `
+    function updateExperienceCard(exp) {
+      const card = document.getElementById(`card_exp_id_${exp.id}`);
+      if (!card) return;
+      card.innerHTML = `
       <div class="d-flex justify-content-between">
         <div><h5>${exp.jobTitle}</h5></div>
         <div>
@@ -326,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="m-0"><strong>Benefits Rating:</strong> ${exp.benefitsRating}/5</p>
         <p class="m-0">${exp.benefitsFeedback}</p>
       </div>`;
-  }
-});
+    }
+  });
 </script>
 @endpush

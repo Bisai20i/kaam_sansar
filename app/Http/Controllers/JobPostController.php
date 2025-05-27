@@ -32,7 +32,7 @@ class JobPostController extends Controller
     public function index()
     {
         $jobpost = JobPost::orderBy('created_at', 'desc')->simplePaginate(10);
-        return view('backend.postadmin.jobPost.lists', compact('jobpost'));
+        return view('backend.postadmin.jobpost.lists', compact('jobpost'));
     }
 
     /**
@@ -376,7 +376,7 @@ class JobPostController extends Controller
         $companies = JobCompany::all();
         $admins = Admin::all();
 
-        return view('backend.postadmin.JobPost.create', compact('jobPost', 'admins', 'categories', 'companies'));
+        return view('backend.postadmin.jobpost.create', compact('jobPost', 'admins', 'categories', 'companies'));
     }
 
     public function publish($id)

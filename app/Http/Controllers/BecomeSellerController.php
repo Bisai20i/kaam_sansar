@@ -22,19 +22,19 @@ class BecomeSellerController extends Controller
             // Personal Information
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'phone' => 'required|string|max:255',
             'whatsapp_number' => 'nullable|string|max:255',
             'country' => 'required|string|max:255',
 
             // Bank Details
-            'bank_name' => 'required|string|max:255',
-            'bank_holder_name' => 'required|string|max:255',
-            'bank_account_number' => 'required|string|max:255',
+            'bank_name' => 'nullable|string|max:255',
+            'bank_holder_name' => 'nullable|string|max:255',
+            'bank_account_number' => 'nullable|string|max:255',
             'iban_number' => 'nullable|string|max:255',
             'swift_code' => 'nullable|string|max:255',
-            'bank_country' => 'required|string|max:255',
-            'branch_location' => 'required|string|max:255',
+            'bank_country' => 'nullable|string|max:255',
+            'branch_location' => 'nullable|string|max:255',
 
             // Business Details
             'business_name' => 'required|string|max:255',
@@ -49,14 +49,14 @@ class BecomeSellerController extends Controller
             'target_country' => 'required|string|max:255',
 
             // Documents
-            'citizen_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'passport_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'visa_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'resident_id_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'registration_doc1' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'citizen_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'passport_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'visa_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'resident_id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'registration_doc1' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'registration_doc2' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'registration_doc3' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'show_pic1' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'show_pic1' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'show_pic2' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'show_pic3' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
 
@@ -71,6 +71,8 @@ class BecomeSellerController extends Controller
         // if ($validator->fails()) {
         //     dd($validator->errors()->all());
         // }
+
+
 
 
         $validated = $validator->validated();

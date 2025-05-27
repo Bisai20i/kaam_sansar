@@ -106,7 +106,7 @@
                             class="text-danger-subtle ms-2"></span></label>
         
                         <input type="file" class="form-control"
-                            id="imageUrl" name="imageUrl" accept="image/*" required>
+                            id="imageUrl" name="imageUrl" accept="image/*">
                         <!-- Hidden input for Base64 image -->
                         <input type="hidden" id="croppedImageBase64" name="image">
                         <!-- Image Preview -->
@@ -209,9 +209,9 @@
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(image, {
                     aspectRatio: ratio, // Set your desired aspect ratio
-                    viewMode: 3,
+                    viewMode: 1,
                     preview: '.preview',
-                    autoCropArea: 1,
+                    autoCropArea: false,
                     responsive: true,
                 });
             }).on('hidden.bs.modal', function() {
@@ -227,7 +227,7 @@
 
                 var canvas = cropper.getCroppedCanvas({
                     width: 600, // Set your desired width
-                    height: 400 // Set your desired height
+                    height: 600 // Set your desired height
                 });
 
                 canvas.toBlob(function(blob) {

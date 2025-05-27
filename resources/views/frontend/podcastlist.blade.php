@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="card-body lh-1" style="padding: .5rem;">
                                     <div class="row">
-                                        <p class="card-title fw-bold text-black">{{ $item->title }}</p>
+                                        <p class="card-title text-truncate mb-0">{{ $item->title }}</p>
                                     </div>
                                     <p class="card-text"> <small class="text-body-secondary fw-bold">
                                             @php
@@ -43,6 +43,7 @@
                     @endforeach
             </div>
            <div class="row mt-3">
+   @if ($podcasts->lastPage() > 1)
     <nav>
         <ul class="pagination justify-content-end converter">
             {{-- Previous Button --}}
@@ -60,7 +61,7 @@
             @php
                 $currentPage = $podcasts->currentPage();
                 $lastPage = $podcasts->lastPage();
-                $pageRange = 2; // Number of pages to show before/after current page
+                $pageRange = 2;
             @endphp
 
             {{-- Show First Page --}}
@@ -114,6 +115,8 @@
             @endif
         </ul>
     </nav>
+@endif
+
 </div>
 
         </div>

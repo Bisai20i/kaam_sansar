@@ -1,112 +1,117 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Passport Renewal')
+@section('title', 'Edit Passport Renewal')
 
 @section('content')
-<style>
-   
-
-    .btn-check:checked+.btn {
-        background-color: var(--bs-primary);
-    }
-
-    .date-picker {
-        width: 100% !important;
-        border: none;
-    }
-
-    .prform .form-check-input {
-        border: 1px solid #000;
-    }
-
-    .prform .rd-container {
-        border: none;
-        padding: 0;
-        box-shadow: none;
-    }
-
-    .prform .payment .pay_btn {
-        width: 15rem;
-        height: 6rem;
-    }
-</style>
-
-<section class="ad_banner p-4 border border-1 border-dark-subtle mt-5 text-center mb-4">
-    <h2 class="py-4">Advertisement Banner</h2>
-</section>
 
 
-<section class="prform">
-    <div class="container-fluid container-lg">
-        <div id="form-container"
-            class="container-fluid container-lg border border-1 border-dark-subtle rounded-4 p-md-5 py-5">
-            <!-- Form 1 -->
-            <div id="multiStepForm1" class="multi-step-form" style="display:block;">
-                <div class="d-flex">
-                    <div class="col-auto">
-                        <a href="#">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
-                                <path fill="#000" fill-rule="evenodd"
-                                    d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="col text-center">
-                        <h2 style="color:#0064a7;">Passport Renewal Form</h2>
-                        <p class="fs-3">Complete the form below to start your passport renewal process</p>
-                    </div>
+    <!-- Form 3 -->
+    <div id="multiStepForm3" class="container multi-step-form mt-5 pt-3">
+        <div class="row">
+            <div class="col-auto">
+                <a href="{{ route('jobseeker.forms') }}" style="cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
+                        <path fill="#000" fill-rule="evenodd"
+                            d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
+                    </svg>
+                </a>
+            </div>
+            <div class="col text-center">
+                <h2 style="color:#0064a7;">Edit Passport Renewal Form</h2>
+                <p class="fs-3 mb-2">Edit the form below to update your passport renewal information</p>
+            </div>
 
 
-                </div>
-                <div class="text-center my-4">
-                    <div class="d-md-inline-flex justify-content-center align-items-center gap-3 bg-light fs-4">
-                        <p class="p-lg-2 rounded-2 text-white m-0" style="background-color: #0064a7;">Select Service
-                            &
-                            Read
-                            Instructions
-                        </p>
-                        <p class="p-2 bg-light rounded-2 m-0">Book Appointment</p>
-                        <p class="p-2 bg-light rounded-2 m-0">Fill Application</p>
-                        <p class="p-2 bg-light rounded-2 m-0">Payment</p>
-                    </div>
-                </div>
-                <div class="mt-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
+        </div>
+
+        <style>
+            .activeTitle {
+                background-color: #0064a7 !important;
+                color: #fff;
+            }
+        </style>
+
+        <div class="text-center my-4">
+            <div class="d-md-inline-flex justify-content-center align-items-center gap-3 bg-light fs-6">
+                <p class="title p-2 rounded-2 m-0 activeTitle" id="firstFormTitle">Select Service
+                    &
+                    Read
+                    Instructions
+                </p>
+                <p class="title p-2 bg-light rounded-2 m-0" id="secondFormTitle">Book Appointment</p>
+                <p class="title p-2 bg-light rounded-2 m-0" id="mainFormTitle">Fill Application</p>
+                <p class="title p-2 bg-light rounded-2 m-0" id="fourthFormTitle">Payment</p>
+            </div>
+        </div>
+
+
+        <div class="my-3 mb-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
+
+            <form id="passportRenewalForm" action="{{ route('passport.renew.update', $passportRenewal->id) }}"
+                enctype="multipart/form-data" method="POST" class="accordion">
+
+                @csrf
+                @method('PUT')
+
+                <style>
+                    .nav-link {
+                        color: #0064a7;
+                    }
+
+                    .accordion-header {
+                        position: relative;
+                    }
+
+                    .accordion-header::after {
+                        content: '';
+                        position: absolute;
+                        height: 1.5px;
+                        width: 100%;
+                        bottom: 1px;
+                        left: 0;
+                        background-color: #0064a7;
+                    }
+                </style>
+
+                <div id="firstForm">
                     <div>
-                        <h2 style="color:#0064a7;">Select Service Type</h2>
-                        <p class="fs-4 my-3">Please select one of following passport type:</p>
+                        <h4 style="color:#0064a7;">Select Service Type</h4>
+                        <p class="fs-6 my-3">Please select one of following passport type:</p>
                     </div>
                     <div class="mb-3">
-                        <div class="nav nav-pills mb-3 row gap-5" id="pills-tab" role="tablist">
+                        <div class="nav nav-pills mb-3 row" id="pills-tab" role="tablist">
+                            <input type="hidden" name="service_type" id="service_type"
+                                value="{{ $passportRenewal->service_type }}" required>
                             <div class="col-auto nav-item" role="presentation">
-                                <button class="nav-link  h-100 py-4 border border-1 border-dark-subtle fs-5"
-                                    id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-                                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">First
+                                <button
+                                    class="nav-link border border-1 border-dark-subtle fs-6 {{ $passportRenewal->service_type == 'apply' ? 'active' : '' }}"
+                                    data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab"
+                                    aria-controls="pills-home" aria-selected="true"
+                                    onclick="document.getElementById('service_type').value = 'apply'">First
                                     Issuance</button>
                             </div>
                             <div class="col-auto nav-item" role="presentation">
-                                <button class="nav-link h-100 py-4 border border-1 border-dark-subtle fs-5"
-                                    id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-                                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Renewal
+                                <button
+                                    class="nav-link border border-1 border-dark-subtle fs-6 {{ $passportRenewal->service_type == 'renewal' ? 'active' : '' }}"
+                                    data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab"
+                                    aria-controls="pills-home" aria-selected="true"
+                                    onclick="document.getElementById('service_type').value = 'renewal'">Renewal
                                     Issuance</button>
                             </div>
+
                             <div class="col-auto nav-item" role="presentation">
-                                <button class="nav-link h-100 py-4 border border-1 border-dark-subtle fs-5"
-                                    id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-                                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Renew
-                                    Issuance</button>
-                            </div>
-                            <div class="col-auto nav-item" role="presentation">
-                                <button class="nav-link h-100 py-4 border border-1 border-dark-subtle fs-5"
-                                    id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-                                    type="button" role="tab" aria-controls="pills-home"
-                                    aria-selected="true">Replacement</button>
+                                <button
+                                    class="nav-link border border-1 border-dark-subtle fs-6 {{ $passportRenewal->service_type == 'replacement' ? 'active' : '' }}"
+                                    data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab"
+                                    aria-controls="pills-home" aria-selected="true"
+                                    onclick="document.getElementById('service_type').value = 'replacement'">Replacement</button>
                             </div>
                         </div>
                     </div>
                     <div class="mt-5">
-                        <h2 style="color:#0064a7;">Read Instructions</h2>
-                        <p class="fs-4 my-3">Read before pre-enrollment</p>
-                        <p class="fs-5 text-black-50">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        <h4 style="color:#0064a7;">Read Instructions</h4>
+                        <p class="fs-6 my-3">Read before pre-enrollment</p>
+                        <p class="fs-6 text-black-50">Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             Inventore
                             libero
                             repellendus quo.
@@ -138,1180 +143,1190 @@
                             atque, quidem ipsam corporis deserunt veniam possimus facilis.</p>
                     </div>
                     <div class="mt-5">
-                        <h3 style="color:#0064a7;">Please choose from the following available Passport Types</h3>
-                        <form class="">
-                            <div class="d-flex flex-column flex-md-row m-3">
-                                <div class="col form-check">
-                                    <input class="form-check-input fs-4" type="radio" name="option" id="option1"
-                                        value="1" checked>
-                                    <label class="form-check-label fs-4" for="option1">
-                                        Ordinary 34 Pages
-                                    </label>
-                                </div>
-                                <div class="col form-check">
-                                    <input class="form-check-input fs-4" type="radio" name="option" id="option2"
-                                        value="2">
-                                    <label class="form-check-label fs-4" for="option2">
-                                        Ordinary 66 Pages
-                                    </label>
-                                </div>
+                        <h5 style="color:#0064a7;">Please choose from the following available Passport Types</h5>
+                        <div class="d-flex flex-column flex-md-row m-3">
+                            <div class="col form-check">
+                                <input class="form-check-input fs-6" type="radio" name="passport_pages" id="option1"
+                                    value="34_pages" {{ $passportRenewal->passport_pages == '34_pages' ? 'checked' : '' }}>
+                                <label class="form-check-label fs-6" for="option1">
+                                    Ordinary 34 Pages
+                                </label>
                             </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <button class="btn btn-light btn-lg py-3 px-5">Cancel</button>
-                                <button class="btn btn-lg py-3 px-5 text-white btn-next"
-                                    style="background-color: #0064a7;" type="button"
-                                    onclick="showNextForm(2)">Next</button>
+                            <div class="col form-check">
+                                <input class="form-check-input fs-6" type="radio" name="passport_pages" id="option2"
+                                    value="66_pages" {{ $passportRenewal->passport_pages == '66_pages' ? 'checked' : '' }}>
+                                <label class="form-check-label fs-6" for="option2">
+                                    Ordinary 66 Pages
+                                </label>
                             </div>
-                        </form>
+                        </div>
+                        <div class="d-flex justify-content-between mt-5">
+                            <a href="{{ route('jobseeker.forms') }}" class="btn btn-light btn-lg py-2 px-4"
+                                type="button">Cancel</a>
+                            <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0"
+                                style="background-color: #0064a7;" type="button"
+                                onclick="goToForm('firstForm','secondForm')">Next</button>
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                <div id="secondForm" class="d-none">
 
-            <!-- Form 2 -->
-            <div id="multiStepForm2" class="multi-step-form" style="display:none;">
-                <div class="d-flex">
-                    <div class="col-auto">
-                        <a onclick="showPreviousForm(2)" style="cursor: pointer;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
-                                <path fill="#000" fill-rule="evenodd"
-                                    d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="col text-center">
-                        <h2 style="color:#0064a7;">Passport Renewal Form</h2>
-                        <p class="fs-3">Complete the form below to start your passport renewal process</p>
-                    </div>
-
-
-                </div>
-                <div class="text-center my-4">
-                    <div class="d-lg-inline-flex justify-content-center align-items-center gap-3 bg-light fs-4">
-                        <p class="p-2 bg-light rounded-2 m-0">Select Service &
-                            Read
-                            Instructions
-                        </p>
-                        <p class="p-2 rounded-2 text-white m-0" style="background-color: #0064a7;">Book Appointment
-                        </p>
-                        <p class="p-2 bg-light rounded-2 m-0">Fill Application</p>
-                        <p class="p-2 bg-light rounded-2 m-0">Payment</p>
-                    </div>
-                </div>
-                <div class="mt-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
                     <div>
-                        <h2 style="color:#0064a7;">Book Appointment</h2>
+                        <h4 class="fs-4 text-semibold d-flex align-items-center" style="color:#0064a7;">
+                            <button style="all:unset;cursor: pointer; margin-right:10px;" type="button"
+                                onclick="goToForm('secondForm','firstForm')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36"
+                                    viewBox="0 0 12 24">
+                                    <path fill="#000" fill-rule="evenodd"
+                                        d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
+                                </svg>
+                            </button>
+                            Book Appointment
+                        </h4>
 
                     </div>
-                    <div>
-                        <form action="">
-                            <div class="row row-cols-1 row-cols-md-2">
-                                <div class="col">
-                                    <label for="app_country">Appointment Country:</label>
-                                    <select class="form-select my-2" aria-label="Default select example">
-                                        <option selected>Nepal</option>
-                                        <option value="1">Other</option>
+                    <div class="mb-2">
 
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <label for="app_province">Appointment Province:</label>
-                                    <select class="form-select my-2" aria-label="Default select example">
-                                        <option selected>Gandaki</option>
-                                        <option value="1">Other</option>
+                        <div class="row row-cols-1 row-cols-md-2">
+                            <div class="col">
+                                <label for="app_country" class="required">Appointment Country:</label>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_country"
+                                    required name="country" data-value="{{ $passportRenewal->country }}">
+                                    <option value="">Select Country</option>
+                                    <option value="nepal">Nepal</option>
+                                    <option value="1">Other</option>
 
-                                    </select>
-                                </div>
-
-                                <div class="col">
-                                    <label for="app_district">Select District:</label>
-                                    <select class="form-select my-2" aria-label="Default select example">
-                                        <option selected>Kaski</option>
-                                        <option value="1">Other</option>
-
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <label for="app_province">Appointment Location:</label>
-                                    <select class="form-select my-2" aria-label="Default select example">
-                                        <option selected>Department of Passports</option>
-                                        <option value="1">Other</option>
-
-                                    </select>
-                                </div>
+                                </select>
                             </div>
-                            <div class="row">
-                                <h4 style="color:#0064a7;" class="my-4">Please choose the nearest enrollment centre
-                                    to
-                                    your location
-                                </h4>
+                            <div class="col">
+                                <label for="app_province" class="required">Appointment Province:</label>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_province"
+                                    name="state" required data-value="{{ $passportRenewal->state }}">
+                                    <option value="">Select Provience</option>
+                                    <option>Gandaki</option>
+                                    <option value="1">Other</option>
+
+                                </select>
                             </div>
-                            <div class="row row-cols-1 row-cols-md-2 row-gap-5">
-                                <div class="col">
-                                    <h4>Select a Date</h4>
-                                    <div class="content border border-1 border-secondary-subtle rounded-4 h-100 pt-2"
-                                        style="margin-bottom: -2rem;">
-                                        <div class="container text-left">
-                                            <div class="row justify-content-center">
-                                                <div class="col-md-12 text-center">
-                                                    <form action="#" class="row align-items-center">
-                                                        <div class="col">
-                                                            <div id="inline_cal"></div>
-                                                        </div>
-                                                    </form>
+
+                            <div class="col">
+                                <label for="app_district" class="required">Select District:</label>
+                                <select class="form-select my-2" aria-label="Default select example" name="district"
+                                    id="app_district" required data-value="{{ $passportRenewal->district }}">
+                                    <option value=""></option>
+                                    <option>Kaski</option>
+                                    <option value="1">Other</option>
+
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="app_province" class="required">Appointment Location:</label>
+                                <select class="form-select my-2" aria-label="Default select example" id="app_location"
+                                    name="location" required data-value="{{ $passportRenewal->location }}">
+                                    <option value="">Department of Passports</option>
+                                    <option value="1">Other</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4 style="color:#0064a7;" class="my-4">Please choose the nearest enrollment centre
+                                to
+                                your location
+                            </h4>
+                        </div>
+                        <div class="row row-cols-1 row-cols-md-2 row-gap-5">
+                            <input type="hidden" id="appointment_date" name="appointment_date"
+                                value="{{ $passportRenewal->appointment_date }}">
+                            <div class="col">
+                                <h4>Select a Date</h4>
+                                <div class="content border border-1 border-secondary-subtle rounded-4 h-100 pt-2 mb-2">
+                                    <div class="container text-left">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-12 text-center">
+                                                <div action="#" class="row align-items-center">
+                                                    <div class="col">
+                                                        <div id="inline_cal"></div>
+                                                    </div>
                                                 </div>
                                             </div>
-
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <h4>Select an hour</h4>
-                                    <div class="border border-1 border-secondary-subtle
-                                         rounded-4 p-4 h-100">
-                                        <div class="row row-cols-auto g-4">
-                                            <div class="col">
-                                                <input type="radio" class="btn-check" name="options-time"
-                                                    id="btn-check-1" autocomplete="off">
-                                                <label class="btn btn-outline-secondary fs-5 pt-2 w-auto h-auto"
-                                                    for="btn-check-1">10:30</label>
-                                            </div>
-                                            <div class="col">
-                                                <input type="radio" class="btn-check" name="options-time"
-                                                    id="btn-check-2" autocomplete="off">
-                                                <label class="btn btn-outline-secondary fs-5 pt-2 w-auto h-auto"
-                                                    for="btn-check-2">11:30</label>
-                                            </div>
-                                            <div class="col">
-                                                <input type="radio" class="btn-check" name="options-time"
-                                                    id="btn-check-3" autocomplete="off">
-                                                <label class="btn btn-outline-secondary fs-5 pt-2 w-auto h-auto"
-                                                    for="btn-check-3">12:30</label>
-                                            </div>
-                                            <div class="col">
-                                                <input type="radio" class="btn-check" name="options-time"
-                                                    id="btn-check-4" autocomplete="off">
-                                                <label class="btn btn-outline-secondary fs-5 pt-2 w-auto h-auto"
-                                                    for="btn-check-4">13:30</label>
-                                            </div>
-                                        </div>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col">
+                                <h4>Select an hour</h4>
+                                <div class="border border-1 border-secondary-subtle rounded-4 p-4 h-100">
 
-                        </form>
+                                    {{-- <input type="time" class="form-control" id="appointment_time" value="appointment_time"> --}}
+                                    <div class="row row-cols-auto g-4" id="appointment_time"
+                                        data-value="{{ $passportRenewal->appointment_time }}">
+                                        <div class="col">
+                                            <input type="radio" class="btn-check" name="appointment_time"
+                                                id="btn-check-1" autocomplete="off" value="10:30">
+                                            <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
+                                                for="btn-check-1">10:30</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="radio" class="btn-check" name="appointment_time"
+                                                id="btn-check-2" autocomplete="off" value="11:30">
+                                            <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
+                                                for="btn-check-2">11:30</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="radio" class="btn-check" name="appointment_time"
+                                                id="btn-check-3" autocomplete="off" value="12:30">
+                                            <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto"
+                                                for="btn-check-3">12:30</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                     <div class="d-flex justify-content-between mt-5">
-                        <button class="btn btn-light btn-lg py-3 px-5">Cancel</button>
-                        <button class="btn btn-lg py-3 px-5 text-white btn-next" style="background-color: #0064a7;"
-                            type="button" onclick="showNextForm(3)">Next</button>
+                        <button class="btn btn-light btn-lg py-2 px-4" type="button"
+                            onclick="goToForm('secondForm','firstForm')">Back</button>
+                        <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0" style="background-color: #0064a7;"
+                            type="button"
+                            onclick="if(validateAppointmentForm()) goToForm('secondForm','mainForm')">Next</button>
                     </div>
+
                 </div>
 
-            </div>
 
-            <!-- Form 3 -->
-            <div id="multiStepForm3" class="multi-step-form" style="display:none;">
-                <div class="d-flex">
-                    <div class="col-auto">
-                        <a onclick="showPreviousForm(3)" style="cursor: pointer;">
+                <div id="mainForm" class="d-none">
+
+
+                    <h2 class="fs-4 text-semibold d-flex align-items-center" style="color:#0064a7;">
+                        <button style="all:unset;cursor: pointer; margin-right:10px;" type="button"
+                            onclick="goToForm('mainForm','secondForm')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
                                 <path fill="#000" fill-rule="evenodd"
                                     d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
                             </svg>
-                        </a>
-                    </div>
-                    <div class="col text-center">
-                        <h2 style="color:#0064a7;">Passport Renewal Form</h2>
-                        <p class="fs-3">Complete the form below to start your passport renewal process</p>
-                    </div>
+                        </button> Required Information
+                    </h2>
+
+                    <hr>
+                    <div class="accordion-item">
+                        <h4 class="d-inline py-2 accordion-header">
+                            <button class="accordion-button fs-6 bg-body-tertiary" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true"
+                                aria-controls="collapseOne">
+                                Personal
+                                Information</button>
+                        </h4>
 
 
-                </div>
-                <div class="text-center my-4">
-                    <div class="d-lg-inline-flex justify-content-center align-items-center gap-3 bg-light fs-4">
-                        <p class="p-2 bg-light rounded-2 m-0">Select Service &
-                            Read
-                            Instructions
-                        </p>
-                        <p class="p-2 bg-light rounded-2 m-0">Book Appointment
-                        </p>
-                        <p class="p-2 rounded-2 text-white m-0" style="background-color: #0064a7;">Fill Application
-                        </p>
-                        <p class="p-2 bg-light rounded-2 m-0">Payment</p>
-                    </div>
-                </div>
+                        <div id="collapseOne" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                <div class="col">
+                                    <label for="first_name" class="form-label fs-6 required">First
+                                        Name:</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $passportRenewal->first_name ?? '' }}"
+                                        required maxlength="255" placeholder="John">
+                                </div>
+                                <div class="col">
+                                    <label for="middle_name" class="form-label fs-6">Middle
+                                        Name:</label>
+                                    <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{ $passportRenewal->middle_name ?? '' }}"
+                                        maxlength="255" placeholder="Bahadur">
+                                </div>
+                                <div class="col">
+                                    <label for="last_name" class="form-label fs-6 required">Last
+                                        Name:</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" required
+                                        maxlength="255" placeholder="Doe" value="{{ $passportRenewal->last_name ?? '' }}">
+                                </div>
 
-                <div class="accordion" id="accordionExample">
-
-
-                    <div class="mt-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
-                        {{-- <form>
-                            <div class="accordion-item">
-                                <h2 class="d-inline py-2 accordion-header">
-                                    <button class="accordion-button fs-4 bg-body-tertiary" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true"
-                                        aria-controls="collapseOne">
-                                        Personal
-                                        Information</button>
-                                </h2>
-
-                                <div id="collapseOne" class="accordion-collapse collapse show"
-                                    data-bs-parent="#accordionExample">
+                                <div class="flatpickr-container flatpickr col d-flex flex-column">
+                                    <label for="date_of_birth_ad" class="fs-6 mb-1">Date of
+                                        Birth
+                                        (AD):</label>
                                     <div
-                                        class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
-                                        <div class="col">
-                                            <label for="firstname" class="form-label fs-5">First Name:</label>
-                                            <input type="text" class="form-control" id="firstname"
-                                                placeholder="John" aria-label="First name">
-                                        </div>
-                                        <div class="col">
-                                            <label for="midname" class="form-label fs-5">Middle Name:</label>
-                                            <input type="text" class="form-control" id="midname"
-                                                placeholder="Bahadur" aria-label="Middle name">
-                                        </div>
-                                        <div class="col">
-                                            <label for="lastname" class="form-label fs-5">Last Name:</label>
-                                            <input type="text" class="form-control" id="lastname" placeholder="Doe"
-                                                aria-label="Last name">
-                                        </div>
-
-                                        <div class="flatpickr-container flatpickr col d-flex flex-column">
-                                            <label for="dateOfBirth" class="fs-5 mb-1">Date of Birth (AD):</label>
-                                            <div
-                                                class=" d-flex border border-1 border-light-subtle justify-content-between align-items-center rounded-2 h-100 p-2 my-1">
-                                                <input type="text" placeholder="1990-10-01" id="dateOfBirth"
-                                                    class="date-picker fs-6" style="outline: none;">
-                                                <!-- input is mandatory -->
-
-                                                <label for="dateOfBirth" class="input-button " title="toggle"
-                                                    data-toggle>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24">
-                                                        <path fill="#000"
-                                                            d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
-                                                    </svg>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="flatpickr col d-flex flex-column">
-                                            <label for="datePicker2" class="fs-5 mb-1">Date of Birth (BS):</label>
-                                            <div
-                                                class=" d-flex border border-1 border-light-subtle justify-content-between align-items-center rounded-2 h-100 p-2 my-1">
-                                                <input type="text" placeholder="1990-10-01" id="datePicker2"
-                                                    class="date-picker fs-6" style="outline: none;">
-                                                <!-- input is mandatory -->
-
-                                                <label for="datePicker2" class="input-button" title="toggle"
-                                                    data-toggle>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24">
-                                                        <path fill="#000"
-                                                            d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
-                                                    </svg>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <label for="birthplace" class="form-label fs-5">Birthplace (District/
-                                                Country if
-                                                abroad):</label>
-                                            <input type="text" class="form-control" id="birthplace"
-                                                placeholder="Kaski"
-                                                aria-label="Birthplace (District/ Country if abroad):">
-                                        </div>
-
-
-                                        <div class="col">
-                                            <label for="gender" class="form-label fs-5">Gender:</label>
-                                            <select class="form-select fs-5" id="gender"
-                                                aria-label="Default select example">
-                                                <option selected>Male</option>
-                                                <option value="1">Female</option>
-                                                <option value="2">Other</option>
-
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <label for="age" class="form-label fs-5">Age:</label>
-                                            <input type="text" class="form-control" id="age"
-                                                placeholder="Enter your DOB above" readonly>
-                                        </div>
-                                        <div class="col">
-                                            <label for="nationality" class="form-label fs-5">Nationality:</label>
-                                            <input type="text" class="form-control" id="nationality"
-                                                placeholder="Nepali" aria-label="Nationality">
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="religion" class="form-label fs-5">Religion:</label>
-                                            <input type="text" class="form-control" id="religion"
-                                                placeholder="Hindu" aria-label="Religion">
-                                        </div>
-                                        <div class="col">
-                                            <label for="birthCountry" class="form-label fs-5">Birth Country:</label>
-                                            <input type="text" class="form-control" id="birthCountry"
-                                                placeholder="Nepal" aria-label="Birth Country">
-                                        </div>
-                                        <div class="col">
-                                            <label for="fathername" class="form-label fs-5">Father's Name:</label>
-                                            <input type="text" class="form-control" id="fathername"
-                                                placeholder="Elon Doe" aria-label="Father's Name:">
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="mothername" class="form-label fs-5">Mother's Name:</label>
-                                            <input type="text" class="form-control" id="mothername"
-                                                placeholder="Joana Doe" aria-label="Mother's Name:">
-                                        </div>
-                                        <div class="col">
-                                            <label for="status" class="form-label fs-5">Marital Status:</label>
-                                            <select class="form-select fs-5" id="status"
-                                                aria-label="Default select example">
-                                                <option selected>Unmarried</option>
-                                                <option value="1">Married</option>
-                                                <option value="2">Divorced</option>
-                                                <option value="3">Widowed</option>
-
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <label for="spousename" class="form-label fs-5">Spouse's Name:</label>
-                                            <input type="text" class="form-control" id="spousename"
-                                                placeholder="Jane Doe" aria-label="Spouse's Name:">
-                                        </div>
-                                        <div class="col">
-                                            <label for="noOfChildren" class="form-label fs-5">No. of
-                                                Children:</label>
-                                            <input type="number" class="form-control" id="noOfChildren"
-                                                placeholder="2" aria-label="No. of Children">
-                                        </div>
-                                        <div class="col">
-                                            <label for="spouseAge" class="form-label fs-5">Spouse's Age:</label>
-                                            <input type="number" class="form-control" id="spouseAge"
-                                                placeholder="20" aria-label="Spouse's Age:">
-                                        </div>
+                                        class=" d-flex border border-1 border-light-subtle justify-content-between align-items-center rounded-2 h-100 p-2 my-1">
+                                        <input type="text" placeholder="1990-10-01" id="date_of_birth_ad"
+                                            name="date_of_birth_ad" class="date-picker fs-6" value="{{ $passportRenewal->date_of_birth_ad ?? '' }}" required>
+                                        <label for="date_of_birth_ad" class="input-button" title="toggle" data-toggle>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="#000"
+                                                    d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
+                                            </svg>
+                                        </label>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <h2 class="accordion-header d-inline py-2">
-                                    <button class="accordion-button fs-4 bg-body-tertiary collapsed" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                        aria-expanded="false" aria-controls="collapseTwo">
-                                        Citizenship
-                                        Information</button>
-                                </h2>
-
-                                <div id="collapseTwo" class="accordion-collapse collapse"
-                                    data-bs-parent="#accordionExample">
-
+                                <div class="flatpickr col d-flex flex-column">
+                                    <label for="date_of_bs" class="fs-6 mb-1">Date of Birth
+                                        (BS):</label>
                                     <div
-                                        class=" accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
-                                        <div class="col">
-                                            <label for="natID" class="form-label fs-5">National Identify No.
-                                                (NIN-Only
-                                                Digits):</label>
-                                            <input type="text" class="form-control" id="natID"
-                                                placeholder="XXXXXXXXX"
-                                                aria-label="National Identify No(NIN-Only Digits)">
-                                        </div>
-                                        <div class="col">
-                                            <label for="ctznNo" class="form-label fs-5">Citizenship or Permit
-                                                Number:</label>
-                                            <input type="text" class="form-control" id="ctznNo"
-                                                placeholder="XXXXXXXX" aria-label="Citizenship or Permit Number">
-                                        </div>
-                                        <div class="flatpickr col d-flex flex-column">
-                                            <label for="datePicker3" class="fs-5 mb-1">Citizenship Date of
-                                                Issue(AD/BS):</label>
-                                            <div
-                                                class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
-                                                <input type="text" placeholder="1990-10-01" id="datePicker3"
-                                                    class="date-picker fs-6" style="outline: none;">
-                                                <!-- input is mandatory -->
-
-                                                <label for="datePicker3" class="input-button" title="toggle"
-                                                    data-toggle>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24">
-                                                        <path fill="#000"
-                                                            d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
-                                                    </svg>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="ctznPlace" class="form-label fs-5">Citizenship Place of
-                                                Issue(District):</label>
-                                            <input type="text" class="form-control" id="ctznPlace"
-                                                placeholder="Kaski"
-                                                aria-label="Citizenship Place of Issue(District)">
-                                        </div>
-                                        <div class="col">
-                                            <label for="ctznPlaceAbroad" class="form-label fs-5">Citizenship Place
-                                                of
-                                                Issue(Abroad):</label>
-                                            <input type="text" class="form-control" id="ctznPlaceAbroad"
-                                                placeholder="Texas" aria-label="Citizenship Place of Issue(Abroad)">
-                                        </div>
-
+                                        class=" d-flex border border-1 border-light-subtle justify-content-between align-items-center rounded-2 h-100 p-2 my-1">
+                                        <input type="text" placeholder="1990-10-01" id="date_of_bs" name="date_of_bs" value="{{ $passportRenewal->date_of_bs ?? '' }}"
+                                            class="date-picker fs-6">
+                                        <label for="date_of_bs" class="input-button" title="toggle" data-toggle>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="#000"
+                                                    d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
+                                            </svg>
+                                        </label>
                                     </div>
                                 </div>
+                                <div class="col">
+                                    <label for="birthplace" class="form-label fs-6">Birthplace
+                                        (District/
+                                        Country if
+                                        abroad):</label>
+                                    <input type="text" class="form-control" id="birthplace" name="birthplace" value="{{ $passportRenewal->birthplace ?? '' }}"
+                                        maxlength="255" placeholder="Kaski">
+                                </div>
+
+
+                                <div class="col">
+                                    <label for="gender" class="form-label fs-6">Gender:</label>
+                                    <select class="form-select fs-6" id="gender" name="gender">
+                                        <option value="">Select Gender</option>
+                                        <option value="Male" {{ $passportRenewal->gender == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ $passportRenewal->gender == 'Female' ? 'selected' : '' }}>Female</option>
+                                        <option value="Other" {{ $passportRenewal->gender == 'Other' ? 'selected' : '' }}>Other</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="age" class="form-label fs-6">Age:</label>
+                                    <input type="number" class="form-control" id="age" name="age" required value="{{ $passportRenewal->age ?? '' }}"
+                                        readonly>
+                                </div>
+                                <div class="col">
+                                    <label for="nationality" class="form-label fs-6 required">Nationality:</label>
+                                    <input type="text" class="form-control" id="nationality" name="nationality"
+                                        required maxlength="255" placeholder="Nepali" value="{{ $passportRenewal->nationality ?? '' }}">
+                                </div>
+
+                                <div class="col">
+                                    <label for="religion" class="form-label fs-6">Religion:</label>
+                                    <input type="text" class="form-control" id="religion" name="religion"
+                                        maxlength="255" placeholder="Hindu" value="{{ $passportRenewal->religion ?? '' }}">
+                                </div>
+                                <div class="col">
+                                    <label for="birth_country" class="form-label fs-6 required">Birth
+                                        Country:</label>
+                                    <input type="text" class="form-control" id="birth_country" name="birth_country"
+                                        required maxlength="255" placeholder="Nepal" value="{{ $passportRenewal->birth_country ?? '' }}">
+                                </div>
+                                <div class="col">
+                                    <label for="father_name" class="form-label fs-6 required">Father's
+                                        Name:</label>
+                                    <input type="text" class="form-control" id="father_name" name="father_name"
+                                        required maxlength="255" placeholder="Elon Doe" value="{{ $passportRenewal->father_name ?? '' }}">
+                                </div>
+
+                                <div class="col">
+                                    <label for="mother_name" class="form-label fs-6 required">Mother's
+                                        Name:</label>
+                                    <input type="text" class="form-control" id="mother_name" name="mother_name"
+                                        required maxlength="255" placeholder="Joana Doe" value="{{ $passportRenewal->mother_name ?? '' }}">
+                                </div>
+                                <div class="col">
+                                    <label for="marital_status" class="form-label fs-6 required">Marital
+                                        Status:</label>
+                                    <select class="form-select fs-6" id="marital_status" name="marital_status" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Unmarried" {{ $passportRenewal->marital_status == 'Unmarried' ? 'selected' : '' }}>Unmarried</option>
+                                        <option value="Married" {{ $passportRenewal->marital_status == 'Married' ? 'selected' : '' }}>Married</option>
+                                        <option value="Divorced" {{ $passportRenewal->marital_status == 'Divorced' ? 'selected' : '' }}>Divorced</option>
+                                        <option value="Widowed" {{ $passportRenewal->marital_status == 'Widowed' ? 'selected' : '' }}>Widowed</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="spouse_name" class="form-label fs-6">Spouse's
+                                        Name:</label>
+                                    <input type="text" class="form-control" id="spouse_name" name="spouse_name"
+                                        maxlength="255" placeholder="Jane Doe" value="{{ $passportRenewal->spouse_name ?? '' }}">
+                                </div>
+                                <div class="col">
+                                    <label for="no_of_children" class="form-label fs-6">No. of
+                                        Children:</label>
+                                    <input type="number" class="form-control" id="no_of_children" name="no_of_children"
+                                        placeholder="2" value="{{ $passportRenewal->no_of_children ?? '' }}">
+                                </div>
+                                <div class="col">
+                                    <label for="spouse_age" class="form-label fs-6">Spouse's
+                                        Age:</label>
+                                    <input type="text" class="form-control" id="spouse_age" name="spouse_age"
+                                        maxlength="255" placeholder="20" value="{{ $passportRenewal->spouse_age ?? '' }}">
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header d-inline py-2">
-                                    <button class="accordion-button fs-4 bg-body-tertiary collapsed" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapseThree"
-                                        aria-expanded="false" aria-controls="collapseThree">
-                                        Current
-                                        Passport
-                                        Details
-                                        </h4>
-                                        <div id="collapseThree" class="accordion-collapse collapse"
-                                            data-bs-parent="#accordionExample">
-                                            <div
-                                                class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
-                                                <div class="col">
-                                                    <label for="ppNo" class="form-label fs-5">Passport
-                                                        Number:</label>
-                                                    <input type="text" class="form-control" id="ppNo"
-                                                        placeholder="XXXXXXXXX" aria-label="Passport Number">
-                                                </div>
-                                                <div class="col">
-                                                    <label for="ppType" class="form-label fs-5">Pasport
-                                                        Type:</label>
-                                                    <select class="form-select fs-5" id="ppType"
-                                                        aria-label="Pasport Type">
-                                                        <option selected>Select Type</option>
-                                                        <option value="1">Type 1</option>
-                                                        <option value="2">Type 2</option>
-                                                        <option value="3">Type 3</option>
+                    <div class="accordion-item">
+                        <h4 class="accordion-header d-inline py-2">
+                            <button class="accordion-button fs-6 bg-body-tertiary collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false"
+                                aria-controls="collapseTwo">
+                                Citizenship
+                                Information</button>
+                        </h4>
 
-                                                    </select>
-                                                </div>
-                                                <div class="flatpickr col d-flex flex-column">
-                                                    <label for="datePicker4" class="fs-5 mb-1">Issue Date:</label>
-                                                    <div
-                                                        class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
-                                                        <input type="text" placeholder="1990-10-01" id="datePicker4"
-                                                            class="date-picker fs-6" style="outline: none;">
-                                                        <!-- input is mandatory -->
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
 
-                                                        <label for="datePicker4" class="input-button" title="toggle"
-                                                            data-toggle>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24">
-                                                                <path fill="#000"
-                                                                    d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
-                                                            </svg>
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="flatpickr col d-flex flex-column">
-                                                    <label for="datePicker5" class="fs-5 mb-1">Expiry Date:</label>
-                                                    <div
-                                                        class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
-                                                        <input type="text" placeholder="1990-10-01" id="datePicker5"
-                                                            class="date-picker fs-6" style="outline: none;">
-                                                        <!-- input is mandatory -->
-
-                                                        <label for="datePicker5" class="input-button" title="toggle"
-                                                            data-toggle>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24">
-                                                                <path fill="#000"
-                                                                    d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
-                                                            </svg>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="ppIssuePlace" class="form-label fs-5">Place of
-                                                        Issue:</label>
-                                                    <input type="text" class="form-control" id="ppIssuePlace"
-                                                        placeholder="Nepal" aria-label="Place of Issue">
-                                                </div>
-                                                <div class="col">
-                                                    <label for="issueAuth" class="form-label fs-5">Issuing
-                                                        Authority:</label>
-                                                    <input type="text" class="form-control" id="issueAuth"
-                                                        placeholder="DOP" aria-label="Issuing Authority">
-                                                </div>
-
-                                            </div>
-                                        </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button fs-4 bg-body-tertiary collapsed" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapseFour"
-                                        aria-expanded="false" aria-controls="collapseFour">
-                                        Contact Information
-                                    </button>
-                                </h2>
-                                <div id="collapseFour" class="accordion-collapse collapse"
-                                    data-bs-parent="#accordionExample">
+                            <div class=" accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                <div class="col">
+                                    <label for="national_identify_no" class="form-label fs-6">National
+                                        Identify No.
+                                        (NIN-Only
+                                        Digits):</label>
+                                    <input type="text" class="form-control" id="national_identify_no"
+                                        name="national_identify_no"  maxlength="255" placeholder="XXXXXXXXX" value="{{ $passportRenewal->national_identify_no ?? '' }}">
+                                </div>
+                                <div class="col">
+                                    <label for="citizenship_no" class="form-label fs-6 ">Citizenship
+                                        or
+                                        Permit
+                                        Number:</label>
+                                    <input type="text" class="form-control" id="citizenship_no" name="citizenship_no" value="{{ $passportRenewal->citizenship_no ?? '' }}"
+                                         maxlength="255" placeholder="XXXXXXXX">
+                                </div>
+                                <div class="flatpickr col d-flex flex-column">
+                                    <label for="citizenship_issue_date" class="fs-6 mb-1 ">Citizenship Date
+                                        of
+                                        Issue(AD/BS):</label>
                                     <div
-                                        class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
-                                        <div class="col">
-                                            <label for="emailAdd" class="form-label fs-5">Email Address:</label>
-                                            <input type="email" class="form-control" id="emailAdd"
-                                                placeholder="john.doe@gmail.com" aria-label="Email Address">
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="ciCountry" class="form-label fs-5">Country:</label>
-                                            <select class="form-select fs-5" id="ciCountry" aria-label="Country">
-                                                <option selected>Nepal</option>
-                                                <option value="1">USA</option>
-                                                <option value="2">Other</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="ciState" class="form-label fs-5">State/Province:</label>
-                                            <select class="form-select fs-5" id="ciState"
-                                                aria-label="State/Province">
-                                                <option selected>Gandaki</option>
-                                                <option value="1">Karnali</option>
-                                                <option value="2">Bagmati</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="ciDistrict" class="form-label fs-5">District:</label>
-                                            <select class="form-select fs-5" id="ciDistrict" aria-label="District">
-                                                <option selected>Kaski</option>
-                                                <option value="1">Etc</option>
-                                                <option value="2">Bagmati</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="ciCity" class="form-label fs-5">City:</label>
-                                            <input type="text" class="form-control" id="ciCity"
-                                                placeholder="Pokhara" aria-label="Place of Issue">
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="ciPhone" class="form-label fs-5">Phone Number:</label>
-                                            <input type="tel" class="form-control" id="ciPhone"
-                                                placeholder="98XXXXXXXX" aria-label="Phone">
-                                        </div>
+                                        class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
+                                        <input type="text" placeholder="1990-10-01" id="citizenship_issue_date" value="{{ $passportRenewal->citizenship_issue_date ?? '' }}"
+                                            name="citizenship_issue_date" class="date-picker fs-6" >
+                                        <label for="citizenship_issue_date" class="input-button" title="toggle"
+                                            data-toggle>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="#000"
+                                                    d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
+                                            </svg>
+                                        </label>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button fs-4 bg-body-tertiary collapsed" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapseFive"
-                                        aria-expanded="false" aria-controls="collapseFive">
-                                        Emergency Contact
-                                    </button>
-                                </h2>
-                                <div id="collapseFive" class="accordion-collapse collapse"
-                                    data-bs-parent="#accordionExample">
+                                <div class="col">
+                                    <label for="citizenship_issue_place" class="form-label fs-6 ">Citizenship
+                                        Place of
+                                        Issue(District):</label>
+                                    <input type="text" class="form-control" id="citizenship_issue_place" value="{{ $passportRenewal->citizenship_issue_place ?? '' }}"
+                                        name="citizenship_issue_place"  maxlength="255" placeholder="Kaski">
+                                </div>
+                                <div class="col">
+                                    <label for="citizenship_issue_place_abroad" class="form-label fs-6">Citizenship Place
+                                        of
+                                        Issue(Abroad):</label>
+                                    <input type="text" class="form-control" id="citizenship_issue_place_abroad" value="{{ $passportRenewal->citizenship_issue_place_abroad ?? '' }}"
+                                        name="citizenship_issue_place_abroad" maxlength="255" placeholder="Texas">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h4 class="accordion-header d-inline py-2">
+                            <button class="accordion-button fs-6 bg-body-tertiary collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false"
+                                aria-controls="collapseThree">
+                                Current
+                                Passport
+                                Details
+                        </h4>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                <div class="col">
+                                    <label for="passport_no" class="form-label fs-6 ">Passport
+                                        Number:</label>
+                                    <input type="text" class="form-control" id="passport_no" name="passport_no" value="{{ $passportRenewal->passport_no ?? '' }}"
+                                         maxlength="255" placeholder="XXXXXXXXX">
+                                </div>
+                                <div class="col">
+                                    <label for="passport_type" class="form-label fs-6 ">Pasport
+                                        Type:</label>
+                                    <select class="form-select fs-6" id="passport_type" name="passport_type" >
+                                        <option value="">Select Type</option>
+                                        <option value="Type 1">Type 1</option>
+                                        <option value="Type 2">Type 2</option>
+                                        <option value="Type 3">Type 3</option>
+                                    </select>
+                                </div>
+                                <div class="flatpickr col d-flex flex-column">
+                                    <label for="passport_issue_date" class="fs-6 mb-1 ">Issue
+                                        Date:</label>
                                     <div
-                                        class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
-                                        <div class="col">
-                                            <label for="ecFullName" class="form-label fs-5">Full Name:</label>
-                                            <input type="text" class="form-control" id="ecFullName"
-                                                placeholder="Jane Doe" aria-label="Full Name">
-                                        </div>
+                                        class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
+                                        <input type="text" placeholder="1990-10-01" id="passport_issue_date" value="{{ $passportRenewal->passport_issue_date ?? '' }}"
+                                            name="passport_issue_date" class="date-picker fs-6" >
+                                        <label for="passport_issue_date" class="input-button" title="toggle" data-toggle>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="#000"
+                                                    d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
+                                            </svg>
+                                        </label>
+                                    </div>
+                                </div>
 
-                                        <div class="col">
-                                            <label for="ecRelation" class="form-label fs-5">Relationship:</label>
-                                            <input type="text" class="form-control" id="ecRelation"
-                                                placeholder="Cousin" aria-label="Relationship">
-                                        </div>
+                                <div class="flatpickr col d-flex flex-column">
+                                    <label for="passport_expiry_date" class="fs-6 mb-1 ">Expiry
+                                        Date:</label>
+                                    <div
+                                        class=" d-flex border border-1 border-secondary-subtle justify-content-between align-items-center rounded-2 p-2 my-1">
+                                        <input type="text" placeholder="1990-10-01" id="passport_expiry_date" value="{{ $passportRenewal->passport_expiry_date ?? '' }}"
+                                            name="passport_expiry_date" class="date-picker fs-6" >
+                                        <label for="passport_expiry_date" class="input-button" title="toggle"
+                                            data-toggle>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="#000"
+                                                    d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
+                                            </svg>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label for="passport_issue_place" class="form-label fs-6 ">Place
+                                        of
+                                        Issue:</label>
+                                    <input type="text" class="form-control" id="passport_issue_place" value="{{ $passportRenewal->passport_issue_place ?? '' }}"
+                                        name="passport_issue_place"  maxlength="255" placeholder="Nepal">
+                                </div>
+                                <div class="col">
+                                    <label for="issuing_authority" class="form-label fs-6 ">Issuing
+                                        Authority:</label>
+                                    <input type="text" class="form-control" id="issuing_authority"
+                                        name="issuing_authority"  maxlength="255" placeholder="DOP">
+                                </div>
 
-                                        <div class="col">
-                                            <label for="ecCountry" class="form-label fs-5">Country:</label>
-                                            <select class="form-select fs-5" id="ecCountry" aria-label="Country">
-                                                <option selected>Nepal</option>
-                                                <option value="1">Other</option>
-                                                <option value="2">USA</option>
-                                            </select>
-                                        </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                        <div class="col">
-                                            <label for="ecState" class="form-label fs-5">State/Province:</label>
-                                            <select class="form-select fs-5" id="ecState"
-                                                aria-label="State/Province">
-                                                <option selected>Gandaki</option>
-                                                <option value="1">Karnali</option>
-                                                <option value="2">Bagmati</option>
-                                            </select>
-                                        </div>
+                    <div class="accordion-item">
+                        <h4 class="accordion-header">
+                            <button class="accordion-button fs-6 bg-body-tertiary collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false"
+                                aria-controls="collapseFour">
+                                Contact Information
+                            </button>
+                        </h4>
+                        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                <div class="col">
+                                    <label for="email" class="form-label fs-6 required">Email
+                                        Address:</label>
+                                    <input type="email" class="form-control" id="email" name="email" required
+                                        maxlength="255" placeholder="john.doe@gmail.com"
+                                        value="{{ $passportRenewal->email }}">
+                                </div>
 
-                                        <div class="col">
-                                            <label for="ecDistrict" class="form-label fs-5">District:</label>
-                                            <select class="form-select fs-5" id="ecDistrict" aria-label="District">
-                                                <option selected>Kaski</option>
-                                                <option value="1">Etc</option>
-                                                <option value="2">Bagmati</option>
-                                            </select>
-                                        </div>
+                                <div class="col">
+                                    <label for="country" class="form-label fs-6 ">Country:</label>
+                                    <input type="text" name="contact_country" class="form-control" value="{{ $passportRenewal->contact_country ?? '' }}" id="country">
+                                </div>
 
-                                        <div class="col">
-                                            <label for="ecCity" class="form-label fs-5">City:</label>
-                                            <input type="text" class="form-control" id="ecCity"
-                                                placeholder="Pokhara" aria-label="City">
-                                        </div>
+                                <div class="col">
+                                    <label for="state" class="form-label fs-6 ">State/Province:</label>
+                                    <input type="text" name="contact_state" class="form-control" value="{{ $passportRenewal->contact_state ?? '' }}" id="state">
+                                </div>
 
-                                        <div class="col">
-                                            <label for="ecEmail" class="form-label fs-5">Email:</label>
-                                            <input type="email" class="form-control" id="ecEmail"
-                                                placeholder="contact@gmail.com" aria-label="Contact Email">
-                                        </div>
+                                <div class="col">
+                                    <label for="district" class="form-label fs-6 ">District:</label>
+                                    <input type="text" name="contact_district" class="form-control" value="{{ $passportRenewal->contact_district ?? '' }}" id="district">
+                                </div>
 
-                                        <div class="col">
-                                            <label for="ecPhone" class="form-label fs-5">Phone Number:</label>
-                                            <input type="tel" class="form-control" id="ecPhone"
-                                                placeholder="98XXXXXXXX" aria-label="Phone">
-                                        </div>
+                                <div class="col">
+                                    <label for="city" class="form-label fs-6 ">City:</label>
+                                    <input type="text" class="form-control" id="city" name="contact_city" value="{{ $passportRenewal->contact_city ?? '' }}"
+                                         maxlength="255" placeholder="Pokhara">
+                                </div>
+
+                                <div class="col">
+                                    <label for="phone" class="form-label fs-6 required">Phone
+                                        Number:</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required
+                                        maxlength="255" placeholder="98XXXXXXXX" value="{{ $passportRenewal->phone }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h4 class="accordion-header">
+                            <button class="accordion-button fs-6 bg-body-tertiary collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false"
+                                aria-controls="collapseFive">
+                                Emergency Contact
+                            </button>
+                        </h4>
+                        <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                                <div class="col">
+                                    <label for="emergency_contact_name" class="form-label fs-6 ">Full
+                                        Name:</label>
+                                    <input type="text" class="form-control" id="emergency_contact_name"
+                                        name="emergency_contact_name"  maxlength="255" placeholder="Jane Doe"
+                                        value="{{ $passportRenewal->emergency_contact_name }}">
+                                </div>
+
+                                <div class="col">
+                                    <label for="emergency_contact_relation"
+                                        class="form-label fs-6 ">Relationship:</label>
+                                    <input type="text" class="form-control" id="emergency_contact_relation"
+                                        value="{{ $passportRenewal->emergency_contact_relation }}"
+                                        name="emergency_contact_relation"  maxlength="255" placeholder="Cousin">
+                                </div>
+
+                                <div class="col">
+                                    <label for="emergency_contact_country"
+                                        class="form-label fs-6 ">Country:</label>
+                                    <input type="text" name="emergency_contact_country" class="form-control" value="{{ $passportRenewal->emergency_contact_country ?? '' }}" id="">
+                                </div>
+
+                                <div class="col">
+                                    <label for="emergency_contact_state"
+                                        class="form-label fs-6 ">State/Province:</label>
+                                    <input type="text" name="emergency_contact_state" class="form-control" value="{{ $passportRenewal->emergency_contact_state ?? '' }}" id="">
+                                </div>
+
+                                <div class="col">
+                                    <label for="emergency_contact_district"
+                                        class="form-label fs-6 ">District:</label>
+                                    <input type="text" name="emergency_contact_district" class="form-control" value="{{ $passportRenewal->emergency_contact_district ?? '' }}" id="">
+                                </div>
+
+                                <div class="col">
+                                    <label for="emergency_contact_city" class="form-label fs-6 ">City:</label>
+                                    <input type="text" class="form-control" id="emergency_contact_city" value="{{ $passportRenewal->emergency_contact_city ?? '' }}"
+                                        name="emergency_contact_city"  maxlength="255" placeholder="Pokhara">
+                                </div>
+
+                                <div class="col">
+                                    <label for="emergency_contact_email" class="form-label fs-6 required">Email:</label>
+                                    <input type="email" class="form-control" id="emergency_contact_email"
+                                        value="{{ $passportRenewal->emergency_contact_email }}"
+                                        name="emergency_contact_email" required  maxlength="255"
+                                        placeholder="contact@gmail.com">
+                                </div>
+
+                                <div class="col">
+                                    <label for="emergency_contact_phone" class="form-label fs-6 ">Phone
+                                        Number:</label>
+                                    <input type="tel" class="form-control" id="emergency_contact_phone"
+                                        value="{{ $passportRenewal->emergency_contact_phone }}"
+                                        name="emergency_contact_phone" required maxlength="255" placeholder="98XXXXXXXX">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h4 class="accordion-header">
+                            <button class="accordion-button fs-6 bg-body-tertiary collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false"
+                                aria-controls="collapseSix">
+                                Required Documents
+                            </button>
+                        </h4>
+                        <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row py-3 row-cols-1 row-cols-lg-2 row-gap-4 gx-5">
+                                    <div class="col">
+                                        <label for="citizenship_front" class="form-label fs-6">Citizenship
+                                            Front:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png
+                                            or pdf
+                                            format)</label>
+                                        <input type="file" class="form-control" id="citizenship_front"
+                                            onchange="handleImagePreview(this)" name="citizenship_front"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->citizenship_front) }}"
+                                            alt="" class="img-fluid img mt-2 rounded w-100">
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="citizenship_back" class="form-label fs-6">Citizenship
+                                            Back:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png
+                                            or pdf
+                                            format)</label>
+                                        <input type="file" class="form-control" id="citizenship_back"
+                                            onchange="handleImagePreview(this)" name="citizenship_back"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->citizenship_back) }}"
+                                            alt="" class="img-fluid img mt-2 rounded w-100">
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="academic_certificate" class="form-label fs-6">Academic
+                                            Certificate:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png
+                                            or pdf
+                                            format)</label>
+                                        <input type="file" class="form-control" id="academic_certificate"
+                                            onchange="handleImagePreview(this)" name="academic_certificate"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->academic_certificate) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="marriage_registration" class="form-label fs-6">Marriage
+                                            Registration:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png
+                                            or pdf
+                                            format)</label>
+                                        <input type="file" class="form-control" id="marriage_registration"
+                                            onchange="handleImagePreview(this)" name="marriage_registration"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->marriage_registration) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="divorce_certificate" class="form-label fs-6">Divorce
+                                            Certificate:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png
+                                            or pdf
+                                            format)</label>
+                                        <input type="file" class="form-control" id="divorce_certificate"
+                                            onchange="handleImagePreview(this)" name="divorce_certificate"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->divorce_certificate) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="national_eid" class="form-label fs-6">National
+                                            eID:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png
+                                            or pdf
+                                            format)</label>
+                                        <input type="file" class="form-control" id="national_eid" name="national_eid"
+                                            onchange="handleImagePreview(this)" accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->national_eid) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="other_document" class="form-label fs-6">Any
+                                            Other
+                                            Supporting
+                                            Document:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png
+                                            or pdf
+                                            format)</label>
+                                        <input type="file" class="form-control" id="other_document"
+                                            onchange="handleImagePreview(this)" name="other_document"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->other_document) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="previous_passport" class="form-label fs-6">Previous
+                                            Passport:</label>
+                                        <br>
+                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png
+                                            or pdf
+                                            format)</label>
+                                        <input type="file" class="form-control" id="previous_passport"
+                                            onchange="handleImagePreview(this)" name="previous_passport"
+                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <img src="{{ asset('storage/' . $passportRenewal->previous_passport) }}"
+                                            class="img-fluid img mt-2 rounded w-100" alt="">
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button fs-4 bg-body-tertiary collapsed" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapseSix"
-                                        aria-expanded="false" aria-controls="collapseSix">
-                                        Required Documents
-                                    </button>
-                                </h2>
-                                <div id="collapseSix" class="accordion-collapse collapse"
-                                    data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <div class="row py-3 row-cols-1 row-cols-lg-2 row-gap-4 gx-5">
-                                            <div class="col">
-                                                <label for="upCitizenFront" class="form-label fs-5">Citizenship
-                                                    Front:</label>
-                                                <br>
-                                                <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf
-                                                    format)</label>
-                                                <input type="file" class="form-control" id="upCitizenFront">
-                                            </div>
-
-                                            <div class="col">
-                                                <label for="upCitizenBack" class="form-label fs-5">Citizenship
-                                                    Back:</label>
-                                                <br>
-                                                <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf
-                                                    format)</label>
-                                                <input type="file" class="form-control" id="upCitizenBack">
-                                            </div>
-
-                                            <div class="col">
-                                                <label for="upAcedemicCert" class="form-label fs-5">Academic
-                                                    Certificate:</label>
-                                                <br>
-                                                <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf
-                                                    format)</label>
-                                                <input type="file" class="form-control" id="upAcedemicCert">
-                                            </div>
-
-                                            <div class="col">
-                                                <label for="upMarriageRegistration" class="form-label fs-5">Marriage
-                                                    Registration:</label>
-                                                <br>
-                                                <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf
-                                                    format)</label>
-                                                <input type="file" class="form-control" id="upMarriageRegistration">
-                                            </div>
-
-                                            <div class="col">
-                                                <label for="upDivorceCert" class="form-label fs-5">Divorce
-                                                    Certificate:</label>
-                                                <br>
-                                                <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf
-                                                    format)</label>
-                                                <input type="file" class="form-control" id="upDivorceCert">
-                                            </div>
-
-                                            <div class="col">
-                                                <label for="upNatID" class="form-label fs-5">National eID:</label>
-                                                <br>
-                                                <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf
-                                                    format)</label>
-                                                <input type="file" class="form-control" id="upNatID">
-                                            </div>
-
-                                            <div class="col">
-                                                <label for="upOther" class="form-label fs-5">Any Other Supporting
-                                                    Document:</label>
-                                                <br>
-                                                <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf
-                                                    format)</label>
-                                                <input type="file" class="form-control" id="upOther">
-                                            </div>
-
-                                            <div class="col">
-                                                <label for="upPrevPP" class="form-label fs-5">Previous
-                                                    Passport:</label>
-                                                <br>
-                                                <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf
-                                                    format)</label>
-                                                <input type="file" class="form-control" id="upPrevPP">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="my-4 border border-1 border-secondary"></div>
-                            <div class="d-flex flex-column mx-3 mb-5">
-                                <div class="form-check">
-                                    <input class="form-check-input fs-5" type="checkbox" value="" id="checkCorrect"
-                                        required>
-                                    <label class="form-check-label fs-5" for="checkCorrect">
-                                        I confirm that all information provided is accurate and complete. I
-                                        understand
-                                        that providing false
-                                        information may result in the rejection of my application and
-                                        possible
-                                        legal
-                                        consequences.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input fs-5" type="checkbox" value="" id="checkTerms"
-                                        required>
-                                    <label class="form-check-label fs-5" for="checkTerms">
-                                        I agree to the Terms and Conditions and Privacy Policy of
-                                        Kamsansar's
-                                        passport
-                                        renewal service.
-                                    </label>
-                                </div>
-                            </div>
-                        </form> --}}
+                        </div>
+                    </div>
 
 
+                    <div class="text-secondary col-12 mt-2"><label class="form-label fs-6 mb-3 text-danger">*
+                            Files Should be in jpg, png
+                            or pdf format</label></div>
+
+                    <div class="my-4 border border-1 border-secondary"></div>
+                    <div class="d-flex flex-column mx-3 mb-5">
+
+                        <div class="form-check">
+                            <input class="form-check-input fs-5" type="checkbox" checked id="checkCorrect" required>
+                            <label class="form-check-label fs-5" for="checkCorrect">
+                                <span class="required"></span> I confirm that all information
+                                provided is accurate and complete. I
+                                understand
+                                that providing false
+                                information may result in the rejection of my application and
+                                possible
+                                legal
+                                consequences.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input fs-5" type="checkbox" checked id="checkTerms" required>
+                            <label class="form-check-label fs-5" for="checkTerms">
+                                <span class="required"></span> I agree to the Terms and Conditions
+                                and Privacy Policy of
+                                Kamsansar's
+                                passport
+                                renewal service.
+                            </label>
+                        </div>
+                        <div class="required-fields-message">* - Required fields - Please fill all
+                            required fields before proceeding.</div>
+                    </div>
 
 
-                        <form id="passportRenewalForm" enctype="multipart/form-data">
-                            @csrf
-                            <!-- Personal Information -->
-                            <div class="accordion-item">
-                                <h2 class="d-inline py-2 accordion-header">
-                                    <button class="accordion-button fs-4 bg-body-tertiary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Personal Information
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
-                                        <!-- First Name -->
-                                        <div class="col">
-                                            <label for="firstname" class="form-label fs-5">First Name:</label>
-                                            <input type="text" class="form-control required" id="firstname" name="first_name" placeholder="John">
-                                        </div>
-                                        <!-- Middle Name -->
-                                        <div class="col">
-                                            <label for="midname" class="form-label fs-5">Middle Name:</label>
-                                            <input type="text" class="form-control" id="midname" name="middle_name" placeholder="Bahadur">
-                                        </div>
-                                        <!-- Last Name -->
-                                        <div class="col">
-                                            <label for="lastname" class="form-label fs-5">Last Name:</label>
-                                            <input type="text" class="form-control required" id="lastname" name="last_name" placeholder="Doe">
-                                        </div>
-                                        <!-- Date of Birth (AD) -->
-                                        <div class="col">
-                                            <label for="dateOfBirth" class="form-label fs-5">Date of Birth (AD):</label>
-                                            <input type="date" class="form-control required" id="dateOfBirth" name="date_of_birth_ad">
-                                        </div>
-                                        <!-- Date of Birth (BS) -->
-                                        <div class="col">
-                                            <label for="datePicker2" class="form-label fs-5">Date of Birth (BS):</label>
-                                            <input type="date" class="form-control required" id="datePicker2" name="date_of_birth_bs">
-                                        </div>
-                                        <!-- Birthplace -->
-                                        <div class="col">
-                                            <label for="birthplace" class="form-label fs-5">Birthplace (District/Country if abroad):</label>
-                                            <input type="text" class="form-control required" id="birthplace" name="birthplace" placeholder="Kaski">
-                                        </div>
-                                        <!-- Gender -->
-                                        <div class="col">
-                                            <label for="gender" class="form-label fs-5">Gender:</label>
-                                            <select class="form-select required" id="gender" name="gender">
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <!-- Age -->
-                                        <div class="col">
-                                            <label for="age" class="form-label fs-5">Age:</label>
-                                            <input type="number" class="form-control required" id="age" name="age" readonly>
-                                        </div>
-                                        <!-- Nationality -->
-                                        <div class="col">
-                                            <label for="nationality" class="form-label fs-5">Nationality:</label>
-                                            <input type="text" class="form-control required" id="nationality" name="nationality" placeholder="Nepali">
-                                        </div>
-                                        <!-- Religion -->
-                                        <div class="col">
-                                            <label for="religion" class="form-label fs-5">Religion:</label>
-                                            <input type="text" class="form-control" id="religion" name="religion" placeholder="Hindu">
-                                        </div>
-                                        <!-- Birth Country -->
-                                        <div class="col">
-                                            <label for="birthCountry" class="form-label fs-5">Birth Country:</label>
-                                            <input type="text" class="form-control required" id="birthCountry" name="birth_country" placeholder="Nepal">
-                                        </div>
-                                        <!-- Father's Name -->
-                                        <div class="col">
-                                            <label for="fathername" class="form-label fs-5">Father's Name:</label>
-                                            <input type="text" class="form-control required" id="fathername" name="father_name" placeholder="Elon Doe">
-                                        </div>
-                                        <!-- Mother's Name -->
-                                        <div class="col">
-                                            <label for="mothername" class="form-label fs-5">Mother's Name:</label>
-                                            <input type="text" class="form-control required" id="mothername" name="mother_name" placeholder="Joana Doe">
-                                        </div>
-                                        <!-- Marital Status -->
-                                        <div class="col">
-                                            <label for="status" class="form-label fs-5">Marital Status:</label>
-                                            <select class="form-select required" id="status" name="marital_status">
-                                                <option value="Unmarried">Unmarried</option>
-                                                <option value="Married">Married</option>
-                                                <option value="Divorced">Divorced</option>
-                                                <option value="Widowed">Widowed</option>
-                                            </select>
-                                        </div>
-                                        <!-- Spouse's Name -->
-                                        <div class="col">
-                                            <label for="spousename" class="form-label fs-5">Spouse's Name:</label>
-                                            <input type="text" class="form-control" id="spousename" name="spouse_name" placeholder="Jane Doe">
-                                        </div>
-                                        <!-- Number of Children -->
-                                        <div class="col">
-                                            <label for="noOfChildren" class="form-label fs-5">No. of Children:</label>
-                                            <input type="number" class="form-control" id="noOfChildren" name="no_of_children" placeholder="2">
-                                        </div>
-                                        <!-- Spouse's Age -->
-                                        <div class="col">
-                                            <label for="spouseAge" class="form-label fs-5">Spouse's Age:</label>
-                                            <input type="number" class="form-control" id="spouseAge" name="spouse_age" placeholder="20">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <!-- Repeat similar structure for other sections (Citizenship Information, Current Passport Details, Contact Information, Emergency Contact, Required Documents) -->
-                        
-                            <!-- Validation Errors -->
-                            <div id="validationErrors" class="alert alert-danger" style="display:none;"></div>
-                        
-                            <!-- Form Buttons -->
-                            <div class="d-flex justify-content-between mt-2">
-                                <button class="btn btn-light btn-lg py-3 px-5" type="button" onclick="resetForm()">Cancel</button>
-                                <button class="btn btn-lg py-3 px-5 text-white btn-next" style="background-color: #0064a7;" type="button" onclick="submitForm()">Next</button>
-                            </div>
-                        </form>
-
-
-
-
-
-
-
-
-
-
-
-                        <div class="d-flex justify-content-between mt-2">
-                            <button class="btn btn-light btn-lg py-3 px-5">Cancel</button>
-                            <button class="btn btn-lg py-3 px-5 text-white btn-next"
-                                style="background-color: #0064a7;" type="button"
-                                onclick="showNextForm(4)">Next</button>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <button class="btn btn-light btn-lg py-2 px-4" type="button"
+                            onclick="goToForm('mainForm','secondForm')">Back</button>
+                        <div class="d-block">
+                            <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0"
+                                style="background-color: #0064a7;" type="submit" id="form3NextBtn">Update</button>
                         </div>
                     </div>
                 </div>
 
-
-            </div>
-
-            <!-- Form 4 -->
-            <div id="multiStepForm4" class="multi-step-form" style="display:none;">
-                <div class="d-flex">
-                    <div class="col-auto">
-                        <a onclick="showPreviousForm(4)" style="cursor: pointer;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="36" viewBox="0 0 12 24">
-                                <path fill="#000" fill-rule="evenodd"
-                                    d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="col text-center">
-                        <h2 style="color:#0064a7;">Passport Renewal Form</h2>
-                        <p class="fs-3">Complete the form below to start your passport renewal process</p>
-                    </div>
-
-
-                </div>
-                <div class="text-center my-4">
-                    <div class="d-lg-inline-flex justify-content-center align-items-center gap-3 bg-light fs-4">
-                        <p class="p-2 bg-light rounded-2 m-0">Select Service &
-                            Read
-                            Instructions
-                        </p>
-                        <p class="p-2 bg-light rounded-2 m-0">Book Appointment
-                        </p>
-                        <p class="p-2 bg-light rounded-2 m-0">Fill Application
-                        </p>
-                        <p class="p-2 rounded-2 text-white m-0" style="background-color: #0064a7;">Payment</p>
-                    </div>
-                </div>
-                <div class="mt-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
-                    <form>
-                        <div class="mb-2">
-                            <h4 class="d-inline py-2" style="border-bottom: 1px solid #0064a7;">Service Summary
-                            </h4>
-                        </div>
-                        <div class="p-lg-5">
-                            <table class="table table-borderless">
-
-                                <tbody>
-                                    <tr>
-                                        <td>Service Type:</td>
-                                        <td class="text-end">Passport Renewal</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Service Fee:</td>
-                                        <td class="text-end">NPR 5,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Government Fee:</td>
-                                        <td class="text-end">NPR 5,000</td>
-                                    </tr>
-                                    <tr class="table-bordered">
-                                        <td>Kamsansar Fee:</td>
-                                        <td class="text-end">NPR 5,000</td>
-                                    </tr>
-                                    <tr class="border-top">
-                                        <td>Total Amount:</td>
-                                        <td class="text-end fw-bold">NPR 15,000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="mb-2">
-                            <h4 class="d-inline py-2" style="border-bottom: 1px solid #0064a7;">Payment Method
-                            </h4>
-                        </div>
-
-                        <div class="row row-cols-auto gap-2 payment mt-5">
-                            <div class="col">
-                                <input type="radio" class="btn-check" name="options-pay" id="btn-pay-1"
-                                    autocomplete="off">
-                                <label class="btn btn-outline-secondary fs-5 p-2 pay_btn" for="btn-pay-1"><img
-                                        src="Images/esewa-logo-DA36F8FD2F-seeklogo.com 3.jpg"
-                                        class="img-fluid w-100 h-100 rounded-2"></label>
-                            </div>
-                            <div class="col">
-                                <input type="radio" class="btn-check" name="options-pay" id="btn-pay-2"
-                                    autocomplete="off">
-                                <label class="btn btn-outline-secondary fs-5 p-2 pay_btn" for="btn-pay-2"><img
-                                        src="Images/appstore.png" class="img-fluid w-100 h-100 rounded-2"></label>
-                            </div>
-                            <div class="col">
-                                <input type="radio" class="btn-check" name="options-pay" id="btn-pay-3"
-                                    autocomplete="off">
-                                <label class="btn btn-outline-secondary fs-5 p-2 pay_btn" for="btn-pay-3"><img
-                                        src="Images/logolast.png" class="img-fluid w-100 h-100 rounded-2"></label>
-                            </div>
-                            <div class="col">
-                                <input type="radio" class="btn-check" name="options-pay" id="btn-pay-4"
-                                    autocomplete="off">
-                                <label class="btn btn-outline-secondary fs-5 p-2 pay_btn" for="btn-pay-4"><img
-                                        src="Images/esewa-logo-DA36F8FD2F-seeklogo.com 3.jpg"
-                                        class="img-fluid w-100 h-100 rounded-2"></label>
-                            </div>
-                        </div>
-
-                    </form>
-
-                    <div class="d-flex justify-content-end mt-5">
-                        <button class="btn btn-lg py-3 px-5 text-white btn-next" style="background-color: #0064a7;"
-                            type="button">Process payment</button>
-                    </div>
-                </div>
-
-            </div>
+            </form>
         </div>
+    </div>
 
-
-</section>
-
-< <script src="JS/home.js"></script>
-<script src="JS/script.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/jquery-3.3.1.min.js"></script>
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/popper.min.js"></script>
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/bootstrap.min.js"></script>
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/rome.js"></script>
-
-<script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/main.js"></script>
-<script defer
-    src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
-    integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
-    data-cf-beacon='{"rayId":"91b7e635cdf99888","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.1.0","token":"cd0b4b3a733644fc843ef0b185f98241"}'
-    crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    function submitForm() {
-        if (!validateForm()) {
-            $('#validationErrors').html('Please fill all required fields.').show();
-            return;
+    <style>
+        .form-check-input:checked {
+            background-color: #0064A7;
+            border-color: #0064A7;
         }
 
-        const form = $('#passportRenewalForm');
-        const formData = new FormData(form[0]);
 
-        $.ajax({
-            url: '#',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if (response.success) {
-                    window.location.href = response.redirect;
-                }
-            },
-            error: function(xhr) {
-                const errors = xhr.responseJSON.errors;
-                let errorHtml = '<ul>';
-                $.each(errors, function(key, value) {
-                    errorHtml += '<li>' + value + '</li>';
-                });
-                errorHtml += '</ul>';
-                $('#validationErrors').html(errorHtml).show();
-            }
-        });
-    }
-
-    function validateForm() {
-        let isValid = true;
-        $('#passportRenewalForm .required').each(function() {
-            if ($(this).val() === '') {
-                isValid = false;
-                $(this).addClass('is-invalid');
-            } else {
-                $(this).removeClass('is-invalid');
-            }
-        });
-        return isValid;
-    }
-
-    function resetForm() {
-        $('#passportRenewalForm')[0].reset();
-        $('#validationErrors').hide();
-    }
-</script>
-
-
-
-
-
-<script>
-
-    // datepicker initializer 
-    document.addEventListener("DOMContentLoaded", function () {
-        flatpickr(".date-picker", {
-            dateFormat: "Y-m-d",
-            allowInput: true
-        });
-    });
-
-
-    // age calculator 
-    document.addEventListener("DOMContentLoaded", function () {
-        flatpickr("#dateOfBirth", {
-            dateFormat: "Y-m-d",
-            allowInput: true,
-            onChange: function (selectedDates, dateStr, instance) {
-                calculateAge(dateStr);
-            }
-        });
-    });
-
-    function calculateAge(dateOfBirth) {
-        const birthDate = new Date(dateOfBirth);
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
+        .error {
+            border: 1px solid rgb(255, 120, 120);
         }
-        document.getElementById("age").value = age;
-    }
+    </style>
 
-
-    // js for passport renewal form
-
-    function showNextForm(formNumber) {
-        console.log("showNextForm called with formNumber:", formNumber);
-
-        // Hide the current form
-        const currentForm = document.getElementById(
-            "multiStepForm" + (formNumber - 1)
-        );
-        if (currentForm) {
-            currentForm.style.display = "none";
-        }
-
-        // Show the next form
-        const nextForm = document.getElementById("multiStepForm" + formNumber);
-        if (nextForm) {
-            nextForm.style.display = "block";
-        } else {
-            console.error("Form with id 'multiStepForm" + formNumber + "' not found.");
-        }
-    }
-
-    function showPreviousForm(formNumber) {
-        console.log("showPreviousForm called with formNumber:", formNumber);
-
-        // Hide the current form
-        const currentForm = document.getElementById("multiStepForm" + formNumber);
-        if (currentForm) {
-            currentForm.style.display = "none";
-        }
-
-        // Show the previous form
-        const previousForm = document.getElementById(
-            "multiStepForm" + (formNumber - 1)
-        );
-        if (previousForm) {
-            previousForm.style.display = "block";
-        } else {
-            console.error(
-                "Form with id 'multiStepForm" + (formNumber - 1) + "' not found."
-            );
-        }
-    }
-
-</script>
 
 @endsection
+
+
+@push('scripts')
+    <script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/rome.js"></script>
+
+    <script src="https://preview.colorlib.com/theme/bootstrap/calendar-16/js/main.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+        integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+        data-cf-beacon='{"rayId":"91b7e635cdf99888","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.1.0","token":"cd0b4b3a733644fc843ef0b185f98241"}'
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <script>
+        function getBaseUrl() {
+            return window.location.protocol + "//" + window.location.host;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const countrySelect = document.getElementById('app_country');
+            const provinceSelect = document.getElementById('app_province');
+            const districtSelect = document.getElementById('app_district');
+            const locationSelect = document.getElementById('app_location');
+            const dateInput = document.getElementById('appointment_date');
+
+
+            // Populate dropdown helper
+            function populateSelect(selectElement, items, defaultText, labelKey = 'name') {
+                selectElement.innerHTML = `<option value="">${defaultText}</option>`;
+                let selectValue = selectElement.getAttribute('data-value');
+                items.forEach(item => {
+                    const option = document.createElement('option');
+                    option.setAttribute('data-id', item.id);
+
+                    if (item[labelKey] == selectValue) {
+                        option.selected = true;
+                    }
+                    option.value = item[labelKey];
+                    option.textContent = item[labelKey];
+                    selectElement.appendChild(option);
+                });
+            }
+
+            function getRelatedProviences(countryId) {
+                fetch(getBaseUrl() + `/passport/proviences/${countryId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status && data.proviences) {
+                            populateSelect(provinceSelect, data.proviences, 'Select Province',
+                                'provienceName');
+                            populateSelect(districtSelect, [], 'Select District');
+                            populateSelect(locationSelect, [], 'Select Location');
+                        }
+
+                    })
+                    .then(() => {
+                        getRelatedDistricts(provinceSelect[provinceSelect.selectedIndex].getAttribute(
+                            'data-id'))
+                    })
+            }
+
+            // Fetch countries on page load
+            fetch(getBaseUrl() + '/passport/countries')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status && data.countries) {
+                        populateSelect(countrySelect, data.countries, 'Select Country', 'countryName');
+
+                    }
+                })
+                .then(() => {
+                    getRelatedProviences(countrySelect[countrySelect.selectedIndex].getAttribute('data-id'))
+                })
+
+
+
+            // Fetch provinces on country change
+            countrySelect.addEventListener('change', function() {
+                console.log('country changed')
+                const countryId = this.options[this.selectedIndex].getAttribute('data-id');
+                if (!countryId) return;
+                getRelatedProviences(countryId);
+
+            });
+
+            function getRelatedDistricts(provinceId) {
+                fetch(getBaseUrl() + `/passport/districts/${provinceId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status && data.districts) {
+                            populateSelect(districtSelect, data.districts, 'Select District',
+                                'districtName');
+                            populateSelect(locationSelect, [], 'Select Location');
+                        }
+
+                    })
+                    .then(() => {
+                        getRelatedLocations(districtSelect[districtSelect.selectedIndex].getAttribute(
+                            'data-id'))
+                    })
+            }
+
+            // Fetch districts on province change
+            provinceSelect.addEventListener('change', function() {
+                const provinceId = this.options[this.selectedIndex].getAttribute('data-id');
+
+                if (!provinceId) return;
+                getRelatedDistricts(provinceId);
+
+            });
+
+            function getRelatedLocations(districtId) {
+                fetch(getBaseUrl() + `/passport/locations/${districtId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status && data.locations) {
+                            populateSelect(locationSelect, data.locations, 'Select Location',
+                                'locationName');
+                        }
+                    })
+                    .then(() => {
+                        console.log(dateInput.value)
+                        console.log(locationSelect[locationSelect.selectedIndex].getAttribute('data-id'))
+                        getTimes(dateInput.value, locationSelect[locationSelect.selectedIndex].getAttribute(
+                            'data-id'))
+                    })
+            }
+
+            // Fetch locations on district change
+            districtSelect.addEventListener('change', function() {
+                const districtId = this.options[this.selectedIndex].getAttribute('data-id');
+                if (!districtId) return;
+                getRelatedLocations(districtId);
+
+            });
+
+            locationSelect.addEventListener('change', function() {
+                const locationId = this.options[this.selectedIndex].getAttribute('data-id');
+                getTimes(dateInput.value, locationId);
+            })
+        });
+    </script>
+
+    <script>
+        // datepicker initializer 
+        document.addEventListener("DOMContentLoaded", function() {
+            flatpickr(".date-picker", {
+                dateFormat: "Y-m-d",
+                allowInput: true
+            });
+        });
+
+        // age calculator 
+        document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("#date_of_birth_ad", {
+                dateFormat: "Y-m-d",
+                allowInput: true,
+                onChange: function(selectedDates, dateStr, instance) {
+                    calculateAge(dateStr);
+                }
+            });
+        });
+
+        function calculateAge(date_of_birth_ad) {
+            const birthDate = new Date(date_of_birth_ad);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            document.getElementById("age").value = age;
+        }
+
+
+
+        const getTimes = (value, locationId) => {
+            const timeContainer = document.getElementById('appointment_time');
+            let prevTime = timeContainer.getAttribute('data-value');
+
+            timeContainer.innerHTML =
+                `<div class="col"><label class="border border-outline-secondary p-2 fs-6 rounded-2 w-auto h-auto">Loading...</label></div>`;
+
+            // console.log("Fetching Time: " + value);
+
+            if (!locationId) {
+
+                timeContainer.innerHTML =
+                    `<div class="col"><label class="border border-outline-secondary p-2 fs-6 rounded-2 w-auto h-auto">Select Location First</label></div>`;
+                return;
+
+            }
+
+            fetch(getBaseUrl() + `/passport/times/${locationId}/${value}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    if (!data.status) {
+                        timeContainer.innerHTML =
+                            `<div class="col"><label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto">No Available Times</label></div>`;
+                        return;
+                    }
+
+                    if (data.status && data.times) {
+
+                        if (data.times.time.length == 0) {
+                            timeContainer.innerHTML =
+                                `<div class="col">
+                                    <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto">No Available Times</label>
+                                </div>`;
+                            return;
+                        }
+
+                        timeContainer.innerHTML = '';
+                        data.times.time.forEach((t, index) => {
+                            const time = t.time;
+                            const id = `btn-check-${index + 1}`;
+
+
+                            let checked = prevTime.slice(0, 5) == time
+
+                            console.log(prevTime, time)
+
+                            console.log(checked)
+                            const col = document.createElement('div');
+                            col.className = 'col';
+
+                            col.innerHTML = `
+                                        <input type="radio" class="btn-check" name="appointment_time" autocomplete="off" id="${id}" value="${time}" ${checked ? 'checked' : ''}>
+                                        <label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto" for="${id}">${time}</label>
+                                    `;
+                            timeContainer.appendChild(col);
+                        });
+
+                    }
+
+                });
+
+        }
+
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var calendar = rome(inline_cal, {
+                time: false, // Only date
+                inputFormat: 'YYYY-MM-DD'
+            });
+
+            calendar.setValue(document.getElementById('appointment_date').value);
+
+            getTimes(document.getElementById('appointment_date').value, document.getElementById('app_location')
+                .options[document.getElementById('app_location').selectedIndex].getAttribute('data-id'));
+
+            // Listen for date change and update hidden input
+            calendar.on('data', function(value) {
+                console.log(value + "date changed")
+                document.getElementById('appointment_date').value = value;
+                getTimes(value, document.getElementById('app_location').options[document.getElementById(
+                    'app_location').selectedIndex].getAttribute('data-id'));
+
+            });
+        });
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('passportRenewalForm').addEventListener('submit', function(e) {
+                console.log("submitting")
+                const requiredFields = document.getElementById('passportRenewalForm').querySelectorAll(
+                    '[required]:not([type="checkbox"])');
+                let hasError = false;
+
+                requiredFields.forEach(field => {
+                    console.log(field)
+                    if (!field.value.trim()) {
+                        field.classList.add('error');
+                        hasError = true;
+                    } else {
+                        field.classList.remove('error');
+                    }
+                    console.log(hasError)
+                });
+
+                if (hasError) {
+                    e.preventDefault(); // Stop form submission
+                }
+            });
+
+            // Optional: remove error class on input
+            document.querySelectorAll('[required]').forEach(field => {
+                field.addEventListener('input', () => {
+                    if (field.value.trim()) {
+                        field.classList.remove('error');
+                    }
+                });
+            });
+        })
+        let checkTerms = document.getElementById('checkTerms');
+        let checkCorrect = document.getElementById('checkCorrect');
+
+        function handleImagePreview(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    let imageContainer = input.parentElement.querySelector('img');
+                    imageContainer.classList.remove('d-none');
+                    imageContainer.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        checkTerms.addEventListener('change', function() {
+            if (checkTerms.checked && checkCorrect.checked) {
+                document.getElementById('form3NextBtn').disabled = false;
+            } else {
+                document.getElementById('form3NextBtn').disabled = true;
+            }
+        })
+
+        checkCorrect.addEventListener('change', function() {
+            if (checkTerms.checked && checkCorrect.checked) {
+                document.getElementById('form3NextBtn').disabled = false;
+            } else {
+                document.getElementById('form3NextBtn').disabled = true;
+            }
+        })
+
+        function goToForm(current, next) {
+
+            let titles = document.querySelectorAll('.title')
+            titles.forEach(title => {
+                title.classList.remove('activeTitle');
+            })
+
+            document.getElementById(next + "Title").classList.add('activeTitle');
+
+            let sections = document.querySelectorAll('.form-section');
+
+            sections.forEach(section => {
+                section.classList.add('d-none');
+            })
+
+            document.getElementById(current).classList.add('d-none');
+            document.getElementById(next).classList.remove('d-none');
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+        }
+
+        function validateAppointmentForm() {
+            let hasError = false;
+
+            // Select the required fields
+            const requiredFields = [
+                document.getElementById('app_country'),
+                document.getElementById('app_province'),
+                document.getElementById('app_district'),
+                document.getElementById('app_location')
+            ];
+
+            // Validate each required select field
+            requiredFields.forEach(field => {
+                if (!field.value.trim() || field.value === "Other") {
+                    field.classList.add('error');
+                    hasError = true;
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+
+            // Validate appointment date
+            const appointmentDateField = document.getElementById('appointment_date');
+            if (!appointmentDateField.value.trim()) {
+                appointmentDateField.classList.add('error');
+                hasError = true;
+            } else {
+                appointmentDateField.classList.remove('error');
+            }
+
+            // Validate appointment time (radio group)
+            const timeSelected = document.querySelector('input[name="appointment_time"]:checked');
+            if (!timeSelected) {
+                document.querySelectorAll('input[name="appointment_time"]').forEach(el => {
+                    el.nextElementSibling.classList.add('error');
+                });
+                hasError = true;
+            } else {
+                document.querySelectorAll('input[name="appointment_time"]').forEach(el => {
+                    el.nextElementSibling.classList.remove('error');
+                });
+            }
+
+            if (hasError) {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                })
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+@endpush

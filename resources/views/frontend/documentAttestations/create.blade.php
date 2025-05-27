@@ -1,7 +1,8 @@
 @extends('frontend.layouts.main')
 
 @section('title', 'Broker Account')
-@push('head') <meta name="csrf-token" content="{{ csrf_token() }}">
+@push('head')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 @section('content')
 
@@ -13,7 +14,7 @@
     <div class="container-fluid container-lg">
         <div id="form-container"
             class="container-fluid container-lg border border-1 border-dark-subtle rounded-4 p-md-5 py-5 mb-5 mt-5">
-            <form id="form" method="POST" action="{{ route('documentAttestations.store') }}">
+            <form id="form" method="POST" action="{{ route('documentAttestations.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div id="multiStepForm1" class="multi-step-form" style="display:block;">
                     <div class="d-flex">
@@ -139,27 +140,23 @@
                     </div>
                     <div class="mt-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
                         <div>
-                            <h4 style="color:#0064a7;">Select Country for Attestation</h4>
-                            <p class="text-muted">First, please select the country where you live:</p>
+                            <p class="text-muted">First, please enter the country where you live:</p>
                         </div>
                         <div>
                             <div class="row row-cols-1">
                                 <div class="col">
-                                    <label for="applicantCountry">Select Country: <span class="text-danger">*</span></label>
-                                    <select id="applicantCountry" name="applicantCountry" class="form-select my-2 w-50" aria-label="Default select example" required>
-                                        <option selected>Nepal</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                    <p class="text-muted">Then, select the country where your documents to be attested:</p>
+                                    <label for="applicantCountry">Enter Country: <span class="text-danger">*</span></label>
+                                    <input type="text" id="applicantCountry" name="applicantCountry" class="form-control my-2 w-50" placeholder="Enter your country" required>
+
+                                    <p class="text-muted">Then, select the country where your documents are to be attested:</p>
                                 </div>
                                 <div class="col">
-                                    <label for="attestationCountry">Select Country: <span class="text-danger">*</span></label>
-                                    <select id="attestationCountry" name="attestationCountry" class="form-select w-50 my-2" aria-label="Default select example" required>
-                                        <option selected>USA</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                                    <label for="attestationCountry">Enter Country: <span class="text-danger">*</span></label>
+                                    <input type="text" id="attestationCountry" name="attestationCountry" class="form-control w-50 my-2" placeholder="Enter country name" required>
+
                                     <p class="text-muted">Also, enter the name of applicant.</p>
                                 </div>
+
                                 <div class="col">
                                     <label for="applicantName">Applicant Name: <span class="text-danger">*</span></label>
                                     <input id="applicantName" name="applicantName" type="text" class="form-control form-control-da fs-6 mt-2 my-0 w-50 text-muted" placeholder="Enter applicant Name" required>
@@ -168,7 +165,7 @@
                         </div>
                         <div class="d-flex justify-content-between mt-5">
                             <button class="btn btn-light">Cancel</button>
-                            <button class="btn text-white border-0" style="background-color: #0064a7;" type="button" onclick="showNextForm(3)">Next</button>
+                            <button class="btn text-white border-0" style="background-color: #0064a7;" type="button" onclick="if(validateForm2()) { showNextForm(3); }">Next</button>
                         </div>
                     </div>
                 </div>
@@ -286,46 +283,67 @@
                             <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block">Required Documents</h4>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-lg-2 row-gap-4 gx-5">
                                 <div class="col">
-                                    <label for="identification" class="form-label fs-6">Identification Document:</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="identification" name="identification" accept=".jpg,.jpeg,.png,.pdf">
+                                    <label for="identification" class="form-label fs-6">Identification Document:</label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="identification" name="identification" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="visa" class="form-label fs-6">Visa:</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="visa" name="visa" accept=".jpg,.jpeg,.png,.pdf">
+                                    <label for="visa" class="form-label fs-6">Visa:</label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="visa" name="visa" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="citizenshipFront" class="form-label fs-6">Citizenship Front: <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipFront" name="citizenshipFront" accept=".jpg,.jpeg,.png,.pdf" required>
+                                    <label for="citizenshipFront" class="form-label fs-6">Citizenship Front: <span class="text-danger">*</span></label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipFront" name="citizenshipFront" accept=".jpg,.jpeg,.png,.pdf" required onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="citizenshipBack" class="form-label fs-6">Citizenship Back: <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipBack" name="citizenshipBack" accept=".jpg,.jpeg,.png,.pdf" required>
+                                    <label for="citizenshipBack" class="form-label fs-6">Citizenship Back: <span class="text-danger">*</span></label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipBack" name="citizenshipBack" accept=".jpg,.jpeg,.png,.pdf" required onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="passport" class="form-label fs-6">Passport:</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="passport" name="passport" accept=".jpg,.jpeg,.png,.pdf">
+                                    <label for="passport" class="form-label fs-6">Passport:</label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="passport" name="passport" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="photo" class="form-label fs-6">Passport-size Photo:</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="photo" name="photo" accept=".jpg,.jpeg,.png,.pdf">
+                                    <label for="photo" class="form-label fs-6">Passport-size Photo:</label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="photo" name="photo" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="document1" class="form-label fs-6">Document 1:</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="document1" name="document1" accept=".jpg,.jpeg,.png,.pdf">
+                                    <label for="document1" class="form-label fs-6">Documentto be attestated I:</label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="document1" name="document1" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="document2" class="form-label fs-6">Document 2:</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="document2" name="document2" accept=".jpg,.jpeg,.png,.pdf">
+                                    <label for="document2" class="form-label fs-6">Documentto be attestated II:</label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="document2" name="document2" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="document3" class="form-label fs-6">Document 3:</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="document3" name="document3" accept=".jpg,.jpeg,.png,.pdf">
+                                    <label for="document3" class="form-label fs-6">Documentto be attestated III</label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="document3" name="document3" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
-                                    <label for="document4" class="form-label fs-6">Document 4:</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="document4" name="document4" accept=".jpg,.jpeg,.png,.pdf">
+                                    <label for="document4" class="form-label fs-6">Documentto be attestated IV</label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="document4" name="document4" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="my-4 border border-1 border-secondary"></div>
@@ -333,45 +351,26 @@
                         <div class="form-check">
                             <input class="form-check-input fs-6" type="checkbox" value="" id="checkCorrect" required>
                             <label class="form-check-label fs-6" for="checkCorrect">
-                                <span class="required"></span> I confirm that all
-                                information
-                                provided is accurate and complete. I
-                                understand
-                                that providing false
-                                information may result in the rejection of my
-                                application
-                                and
-                                possible
-                                legal
-                                consequences.
+                                <span class="required"></span> I confirm that all information provided is accurate and complete. I understand
+                                that providing false information may result in the rejection of my application and possible legal consequences.
                             </label>
                         </div>
+
                         <div class="form-check">
                             <input class="form-check-input fs-6" type="checkbox" value="" id="checkTerms" required>
                             <label class="form-check-label fs-6" for="checkTerms">
-                                <span class="required"></span> I agree to the Terms
-                                and
-                                Conditions
-                                and Privacy Policy of
-                                Kamsansar's
-                                passport
-                                renewal service.
+                                <span class="required"></span> I agree to the Terms and Conditions and Privacy Policy of Kamsansar's Document Attestaion service.
                             </label>
                         </div>
-                        <div class="required-fields-message">* - Required fields -
+                        <div class="required-fields-message text-danger fw-bold fw-bold">* - Required fields -
                             Please
                             fill all
                             required fields before proceeding.</div>
                     </div>
-
-                    <div class="d-flex justify-content-between align-items-center mt-2">
-                        <button class="btn btn-light" type="button">Cancel</button>
-                        <div class="d-block">
-                            <button class="btn text-white border-0 mt-0"
-                                style="background-color: #0064a7;"
-                                type="submit"
-                                id="form3NextBtn">Apply Now</button>
-                        </div>
+                    <div class="d-flex justify-content-end py-4">
+                        <button type="submit" class="btn btn" id="submitBtn" disabled style="background-color: #0064a7; color: white;">
+                            Submit Appication
+                        </button>
                     </div>
                 </div>
             </form>
@@ -390,43 +389,62 @@
         document.getElementById('multiStepForm' + (formNumber - 1)).style.display = 'block';
     }
 
-    document.getElementById('form').addEventListener('submit', function(e) {
-        e.preventDefault();
+ function validateForm2() {
+    const requiredFields = document.querySelectorAll('#multiStepForm2 [required]');
+    let isValid = true;
 
-        // Ensure checkboxes are checked
-        if (!document.getElementById('checkCorrect').checked ||
-            !document.getElementById('checkTerms').checked) {
-            return alert('Please agree to the terms and confirm the information is correct');
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('error');
+            
+            field.style.transition = 'border 0.3s ease';
+            field.style.border = '2px solid red';
+            
+            setTimeout(() => {
+                field.style.border = ''; 
+                field.style.transition = ''; 
+            }, 2000);
+            
+            isValid = false;
+        } else {
+            field.classList.remove('error');
+            field.style.border = ''; // Reset if valid
+            field.style.transition = ''; // Reset transition
+        }
+    });
+
+    return isValid;
+}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkCorrect = document.getElementById('checkCorrect');
+        const checkTerms = document.getElementById('checkTerms');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function toggleSubmitButton() {
+            submitBtn.disabled = !(checkCorrect.checked && checkTerms.checked);
         }
 
-        const formData = new FormData(this);
-
-        fetch(this.action, {
-            method: this.method,
-            credentials: 'same-origin',           // send cookies for CSRF
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
-                'X-Requested-With': 'XMLHttpRequest',  // mark as AJAX
-                'Accept': 'application/json'           // request JSON response
-            },
-            body: formData
-        })
-        .then(res => {
-            if (!res.ok) {
-                // if Laravel returns JSON errors
-                return res.json().then(err => Promise.reject(err));
-            }
-            return res.json();
-        })
-        .then(data => {
-            alert('Document Attestaion submitted Successfully! ');
-             window.location = '/documentAttestations/create';
-        })
-        .catch(err => {
-            console.error('Error response:', err);
-            alert(err.message || 'Something went wrong');
-        });
+        checkCorrect.addEventListener('change', toggleSubmitButton);
+        checkTerms.addEventListener('change', toggleSubmitButton);
     });
+
+    function handleImagePreview(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            const preview = input.nextElementSibling;
+
+            reader.onload = function(e) {
+                if (preview && preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                }
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
+
 
 @endsection

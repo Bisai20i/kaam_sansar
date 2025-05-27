@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('job_seekers')->onDelete('cascade');
             $table->foreignId('question_id')->constrained()->onDelete('cascade');
             $table->foreignId('answer_id')->constrained()->onDelete('cascade');
+            $table->integer('round')->default(0);
             $table->timestamps();
         });
     }

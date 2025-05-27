@@ -6,6 +6,12 @@ Resume Maker
 <main>
     <div>
         <style>
+            .custom-input {
+                background-color: #E6E7E7;
+                height: 50px;
+                cursor: pointer;
+            }
+
             .profile-picture {
                 width: 80px;
                 height: 80px;
@@ -33,6 +39,10 @@ Resume Maker
             .rating label:hover,
             .rating label:hover~label {
                 color: #FAAC24;
+            }
+
+            .active {
+                color: white !important;
             }
 
             .card-center .next-btn {
@@ -86,18 +96,30 @@ Resume Maker
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="container">
-                    <h5>Hi, Utsav Dhungana</h5>
-                    <img class="resume-img">
+                    <h5>Hi, {{ Auth::guard('job_seekers')->user()->firstName }} {{ Auth::guard('job_seekers')->user()->lastName }}</h5>
                     <p class="d-flex">
-                        <i class="fas fa-envelope  pt-1"></i> utsavdhungana2@gmail.com
-                        <i class="fas fa-phone-alt ps-4  pt-1"></i> 9856015044
+                        {{-- Email --}}
+                        @if (!empty(Auth::guard('job_seekers')->user()->emailAddress))
+                        <i class="fas fa-envelope pt-1 me-2"></i>
+                        {{ Auth::guard('job_seekers')->user()->emailAddress }}
+                        @endif
+
+                        {{-- Phone --}}
+                        @if (!empty(Auth::guard('job_seekers')->user()->phoneNumber))
+                        <i class="fas fa-phone ps-4 pt-1 me-2"></i>
+                        {{ Auth::guard('job_seekers')->user()->phoneNumber }}
+                        @endif
                     </p>
                     <h4>Create Your Resume Today and Find The Perfect Job for You</h4>
 
                     <!-- Add d-flex to align buttons in a row -->
                     <div class="d-flex gap-2">
-                        <button class="btn btn-edit">Edit <i class="fas fa-edit text-light ps-2"></i></button>
-                        <button class="btn btn-share">Share <i class="fas fa-share text-light ps-2"></i></button>
+                        <a href="{{ route('jobseeker.editProfile', Auth::guard('job_seekers')->user()->id) }}" class="btn btn-edit">
+                            Edit <i class="fas fa-edit text-light ps-2"></i>
+                        </a>
+                        <a href="{{ route('discussion.profile', Auth::guard('job_seekers')->user()->id) }}" class="btn btn-edit">
+                            share <i class="fas fa-share text-light ps-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -109,33 +131,42 @@ Resume Maker
                         <div class="card card-first border border-0">
                             <div class="sidebox">
                                 <ul class="nav flex-column">
-                                    <li><a href="#" class="profile-link active" id="profileLink" data-sectionId="profile">
+                                    <li><a href="#" class="profile-link active d-flex  align-items-center px-2 py-1" id="profileLink" data-sectionId="profile">
                                             <i class="bi bi-person"></i> Profile Information
                                             <i class="fas fa-angle-right arrow"></i></a></li>
-                                    <li><a href="#" class="profile-link" id="visaLink" data-sectionId="visa">
+                                    <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="visaLink" data-sectionId="visa">
                                             <i class="bi bi-credit-card"></i> Visa
                                             <i class="fas fa-angle-right arrow"></i></a></li>
-                                    <li><a href="#" class="profile-link" id="educationLink" data-sectionId="education">
-                                            <i class="bi bi-mortarboard"></i> Education
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
-                                    <li><a href="#" class="profile-link" id="projectLink" data-sectionId="project">
-                                            <i class="bi bi-clipboard-check"></i> Project
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
-                                    <li><a href="#" class="profile-link" id="skillLink" data-sectionId="skill">
-                                            <i class="bi bi-tools"></i> Skills
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
-                                    <li><a href="#" class="profile-link" id="achievementLink" data-sectionId="achievement">
-                                            <i class="bi bi-trophy"></i> Achievements
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
-                                    <li><a href="#" class="profile-link" id="experienceLink" data-sectionId="experience">
-                                            <i class="bi bi-briefcase"></i> Experience
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
-                                    <li><a href="#" class="profile-link" id="trainingLink" data-sectionId="training">
-                                            <i class="bi bi-journal"></i> Trainings
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
-                                    <li><a href="#" class="profile-link" id="languageLink" data-sectionId="language">
-                                            <i class="bi bi-globe"></i> Language
-                                            <i class="fas fa-angle-right arrow"></i></a></li>
+                                    <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="educationLink" data-sectionId="education">
+                                            <i class="bi bi-mortarboard"></i>
+                                            <span class="d-flex align-items-center justify-content-between w-100">Education
+                                                <i class="fas fa-angle-right"></i></span>
+                                    <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="projectLink" data-sectionId="project">
+                                            <i class="bi bi-clipboard-check"></i>
+                                            <span class="d-flex align-items-center justify-content-between w-100">Project
+                                                <i class="fas fa-angle-right"></i></span>
+                                    <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="skillLink" data-sectionId="skill">
+                                            <i class="bi bi-tools"></i>
+                                            <span class="d-flex align-items-center justify-content-between w-100">Skill
+                                                <i class="fas fa-angle-right"></i></span>
+                                    <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="achievementLink" data-sectionId="achievement">
+                                            <i class="bi bi-trophy"></i>
+                                            <span class="d-flex align-items-center justify-content-between w-100">Achievement
+                                                <i class="fas fa-angle-right"></i></span>
+                                    <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="experienceLink" data-sectionId="experience">
+                                            <i class="bi bi-briefcase"></i>
+                                            <span class="d-flex align-items-center justify-content-between w-100">Experience
+                                                <i class="fas fa-angle-right"></i></span>
+                                    <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="trainingLink" data-sectionId="training">
+                                            <i class="bi bi-journal"></i>
+                                            <span class="d-flex align-items-center justify-content-between w-100"> Trainings
+                                                <i class="fas fa-angle-right"></i></span>
+                                    <li><a href="#" class="profile-link d-flex  align-items-center px-2 py-1" id="languageLink" data-sectionId="language">
+                                            <i class="bi bi-globe"></i>
+                                            <span class="d-flex align-items-center justify-content-between w-100">Language
+                                                <i class="fas fa-angle-right"></i></span>
+                                        </a>
+                                    </li>
                                 </ul>
 
                             </div>
@@ -167,7 +198,7 @@ Resume Maker
                     </div>
 
                     <!-- Overview-->
-                    <div class="col-md-12 col-lg-3 col-sm-12 col-12">
+                    <div class="col-md-12 col-lg-3 col-sm-12 col-12" style="display: none;">
                         <div class="card card-last">
                             <div class="card card-in" id="overviewCard">
                                 <div class="overview-profile" id="overviewProfile" style="overflow-y: auto;">
@@ -189,104 +220,99 @@ Resume Maker
                                             <p id="overviewRole"></p>
                                         </div>
                                         <div class="right-section">
-                                        <img id="overviewImage" class="profile-picture rounded-circle img-fluid" style="width: 100px; height: 100px; object-fit: cover;">
+                                            <img id="overviewImage" class="profile-picture rounded-circle img-fluid" style="width: 100px; height: 100px; object-fit: cover;">
                                         </div>
                                     </div>
-                                    <div id="overviewContent">
-                                    </div>
+                                </div>
+                                <div>
                                     <div>
-                                        <div>
-                                            @foreach ( $educations as $education )
-                                            <p><strong>School:</strong>{{ $education->schoolName ?? '' }}</p>
-                                            <p><strong>Degree:</strong>{{ $education->degree ?? '' }}</p>
-                                            <p><strong>City:</strong>{{ $education->city ?? '' }}</p>
-                                            <p><strong>Dates:</strong> {{ $education->startDate ?? '' }}- {{ $education->graduationDate ?? '' }}</p>
-                                            <p><strong>Summary:</strong> {{ $education->educationDescription ?? '' }}</p>
-                                            @endforeach
-                                        </div>
-                                        <div id="overviewEducations"></div>
-                                        <div id="overviewEducation"></div>
+                                        @foreach ( $visas as $visa )
+                                        <p><strong>Visa Details:</strong>{{ $visa->visaDetails ?? '' }}</p>
+                                        <p><strong>Visa Expire:</strong>{{ $visa->visaExpire ?? '' }}</p>
+                                        <p><strong>Visa Country:</strong>{{ $visa->country }}</p>
+                                        @endforeach
                                     </div>
+                                </div>
+                                <div>
                                     <div>
-                                        <div>
-                                            @foreach ( $projects as $project )
-                                            <p><strong>projectTitle:</strong>{{ $project->projectTitle ?? '' }}</p>
-                                            <p><strong>projectLink:</strong>{{ $project->projectLink ?? '' }}</p>
-                                            <p><strong>projectDescription:</strong>{{ $project->projectDescription ?? '' }}</p>
-                                            @endforeach
-                                        </div>
-                                        <div id="overviewProjects"></div>
+                                        @foreach ( $educations as $education )
+                                        <p><strong>School:</strong>{{ $education->schoolName ?? '' }}</p>
+                                        <p><strong>Degree:</strong>{{ $education->degree ?? '' }}</p>
+                                        <p><strong>City:</strong>{{ $education->city ?? '' }}</p>
+                                        <p><strong>Dates:</strong> {{ $education->startDate ?? '' }}- {{ $education->graduationDate ?? '' }}</p>
+                                        <p><strong>Summary:</strong> {{ $education->educationDescription ?? '' }}</p>
+                                        @endforeach
                                     </div>
+                                </div>
+                                <div>
                                     <div>
-                                        <div>
-                                            @foreach ( $skills as $skill )
-                                            <p><strong>Skill Name:</strong>{{ $skill->skillName ?? '' }}</p>
-                                            <p><strong>Skill Proficiency:</strong>{{ $skill->skillProficiency ?? '' }}</p>
-                                            @endforeach
-                                        </div>
-                                        <div id="overviewSkills"></div>
-                                        <div id="overviewSkill"></div>
+                                        @foreach ( $projects as $project )
+                                        <p><strong>projectTitle:</strong>{{ $project->projectTitle ?? '' }}</p>
+                                        <p><strong>projectLink:</strong>{{ $project->projectLink ?? '' }}</p>
+                                        <p><strong>projectDescription:</strong>{{ $project->projectDescription ?? '' }}</p>
+                                        @endforeach
                                     </div>
+                                </div>
+                                <div>
                                     <div>
-                                        <div>
-                                            @foreach ( $achievements as $achievement)
-                                            <p><strong>achievement Title:</strong>{{ $achievement->achievementTitle ?? '' }}</p>
-                                            <p><strong>Skill Proficiency:</strong>{{ $achievement->achievementDescription ?? '' }}</p>
-                                            @endforeach
-                                        </div>
-                                        <div id="overviewAchievements"></div>
-                                        <div id="overviewAchievement"></div>
+                                        @foreach ( $skills as $skill )
+                                        <p><strong>Skill Name:</strong>{{ $skill->skillName ?? '' }}</p>
+                                        <p><strong>Skill Proficiency:</strong>{{ $skill->skillProficiency ?? '' }}</p>
+                                        @endforeach
+                                    </div>>
+                                </div>
+                                <div>
+                                    <div>
+                                        @foreach ( $achievements as $achievement)
+                                        <p><strong>achievement Title:</strong>{{ $achievement->achievementTitle ?? '' }}</p>
+                                        <p><strong>Skill Proficiency:</strong>{{ $achievement->achievementDescription ?? '' }}</p>
+                                        @endforeach
                                     </div>
+                                </div>
+                                <div>
                                     <div>
-                                        <div>
-                                            @foreach ($experiences as $experience)
-                                            <p><strong>Job Title:</strong> {{ $experience->jobTitle ?? '' }}</p>
-                                            <p><strong>Company Name:</strong> {{ $experience->companyName ?? '' }}</p>
-                                            <p><strong>Location:</strong> {{ $experience->location ?? '' }}</p>
-                                            <p><strong>Start Date:</strong> {{ $experience->startDate ?? '' }}</p>
-                                            <p><strong>End Date:</strong> {{ $experience->endDate ?? '' }}</p>
-                                            <p><strong>Description:</strong> {{ $experience->experienceDescription ?? '' }}</p>
-                                            <p><strong>Salary Rating:</strong> {{ $experience->salaryRating ?? '' }}</p>
-                                            <p><strong>Salary Feedback:</strong> {{ $experience->salaryFeedback ?? '' }}</p>
-                                            <p><strong>Working Environment Rating:</strong> {{ $experience->workingEnvironmentRating ?? '' }}</p>
-                                            <p><strong>Working Environment Feedback:</strong> {{ $experience->workingEnvironmentFeedback ?? '' }}</p>
-                                            <p><strong>Benefits Rating:</strong> {{ $experience->benefitsRating ?? '' }}</p>
-                                            <p><strong>Benefits Feedback:</strong> {{ $experience->benefitsFeedback ?? '' }}</p>
-                                            <hr>
-                                            @endforeach
-
-                                        </div>
-                                        <div id="overviewExperiences"></div>
-                                        <div id="overviewExperience"></div>
-                                    </div>
-                                    <div>
-                                        <div>
-                                            @foreach ($trainings as $training)
-                                            <p><strong>Training Title:</strong> {{ $training->trainingTitle ?? '' }}</p>
-                                            <p><strong>Institution Name:</strong> {{ $training->institutionName ?? '' }}</p>
-                                            <p><strong>Completion Date:</strong> {{ $training->completionDate ?? '' }}</p>
-                                            @endforeach
-
-                                        </div>
-                                        <div id="overviewTrainings"></div>
-                                        <div id="overviewTraining"></div>
-                                    </div>
-                                    <div>
-                                        @foreach ($languages as $language)
-                                        <p><strong>Language Name:</strong> {{ $language->languageName ?? '' }}</p>
-                                        <p><strong>Language Proficiency:</strong> {{ $language->languageProficiency ?? '' }}</p>
+                                        @foreach ($experiences as $experience)
+                                        <p><strong>Job Title:</strong> {{ $experience->jobTitle ?? '' }}</p>
+                                        <p><strong>Company Name:</strong> {{ $experience->companyName ?? '' }}</p>
+                                        <p><strong>Location:</strong> {{ $experience->location ?? '' }}</p>
+                                        <p><strong>Start Date:</strong> {{ $experience->startDate ?? '' }}</p>
+                                        <p><strong>End Date:</strong> {{ $experience->endDate ?? '' }}</p>
+                                        <p><strong>Description:</strong> {{ $experience->experienceDescription ?? '' }}</p>
+                                        <p><strong>Salary Rating:</strong> {{ $experience->salaryRating ?? '' }}</p>
+                                        <p><strong>Salary Feedback:</strong> {{ $experience->salaryFeedback ?? '' }}</p>
+                                        <p><strong>Working Environment Rating:</strong> {{ $experience->workingEnvironmentRating ?? '' }}</p>
+                                        <p><strong>Working Environment Feedback:</strong> {{ $experience->workingEnvironmentFeedback ?? '' }}</p>
+                                        <p><strong>Benefits Rating:</strong> {{ $experience->benefitsRating ?? '' }}</p>
+                                        <p><strong>Benefits Feedback:</strong> {{ $experience->benefitsFeedback ?? '' }}</p>
                                         <hr>
                                         @endforeach
-                                        <div id="overviewLanguages"></div>
-                                        <div id="overviewLanguage"></div>
+
                                     </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        @foreach ($trainings as $training)
+                                        <p><strong>Training Title:</strong> {{ $training->trainingTitle ?? '' }}</p>
+                                        <p><strong>Institution Name:</strong> {{ $training->institutionName ?? '' }}</p>
+                                        <p><strong>Completion Date:</strong> {{ $training->completionDate ?? '' }}</p>
+                                        @endforeach
+
+                                    </div>
+                                </div>
+                                <div>
+                                    @foreach ($languages as $language)
+                                    <p><strong>Language Name:</strong> {{ $language->languageName ?? '' }}</p>
+                                    <p><strong>Language Proficiency:</strong> {{ $language->languageProficiency ?? '' }}</p>
+                                    <hr>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+    </div>
+    </section>
 </main>
 @push('scripts')
 <script>

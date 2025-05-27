@@ -33,79 +33,82 @@
         </div>
 
         <!-- Pagination -->
-        <div class="row mt-3">
-            <nav>
-                <ul class="pagination justify-content-end converter">
-                    {{-- Previous Button --}}
-                    @if ($blogs->onFirstPage())
+       @if ($blogs->lastPage() > 1)
+    <div class="row mt-3">
+        <nav>
+            <ul class="pagination justify-content-end converter">
+                {{-- Previous Button --}}
+                @if ($blogs->onFirstPage())
                     <li class="page-item disabled">
                         <a class="page-link primary_color_text">&lt;</a>
                     </li>
-                    @else
+                @else
                     <li class="page-item">
                         <a class="page-link primary_color_text" href="{{ $blogs->previousPageUrl() }}">&lt;</a>
                     </li>
-                    @endif
+                @endif
 
-                    {{-- Pagination Numbers --}}
-                    @php
+                {{-- Pagination Numbers --}}
+                @php
                     $currentPage = $blogs->currentPage();
                     $lastPage = $blogs->lastPage();
                     $pageRange = 2; // Number of pages to show before/after current page
-                    @endphp
+                @endphp
 
-                    {{-- Show First Page --}}
-                    @if ($currentPage > $pageRange + 1)
+                {{-- Show First Page --}}
+                @if ($currentPage > $pageRange + 1)
                     <li class="page-item">
                         <a class="page-link primary_color_text" href="{{ $blogs->url(1) }}">1</a>
                     </li>
                     @if ($currentPage > $pageRange + 2)
-                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
                     @endif
-                    @endif
+                @endif
 
-                    {{-- Pages Before Current --}}
-                    @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
-                        <li class="page-item">
+                {{-- Pages Before Current --}}
+                @for ($i = max(1, $currentPage - $pageRange); $i < $currentPage; $i++)
+                    <li class="page-item">
                         <a class="page-link primary_color_text" href="{{ $blogs->url($i) }}">{{ $i }}</a>
-                        </li>
-                        @endfor
+                    </li>
+                @endfor
 
-                        {{-- Current Page --}}
-                        <li class="page-item active">
-                            <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
-                        </li>
+                {{-- Current Page --}}
+                <li class="page-item active">
+                    <span class="page-link" style="background: #196BA6;">{{ $currentPage }}</span>
+                </li>
 
-                        {{-- Pages After Current --}}
-                        @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
-                            <li class="page-item">
-                            <a class="page-link primary_color_text" href="{{ $blogs->url($i) }}">{{ $i }}</a>
-                            </li>
-                            @endfor
+                {{-- Pages After Current --}}
+                @for ($i = $currentPage + 1; $i <= min($lastPage, $currentPage + $pageRange); $i++)
+                    <li class="page-item">
+                        <a class="page-link primary_color_text" href="{{ $blogs->url($i) }}">{{ $i }}</a>
+                    </li>
+                @endfor
 
-                            {{-- Show Last Page --}}
-                            @if ($currentPage < $lastPage - $pageRange)
-                                @if ($currentPage < $lastPage - $pageRange - 1)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                                @endif
-                                <li class="page-item">
-                                    <a class="page-link primary_color_text" href="{{ $blogs->url($lastPage) }}">{{ $lastPage }}</a>
-                                </li>
-                                @endif
+                {{-- Show Last Page --}}
+                @if ($currentPage < $lastPage - $pageRange)
+                    @if ($currentPage < $lastPage - $pageRange - 1)
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    @endif
+                    <li class="page-item">
+                        <a class="page-link primary_color_text" href="{{ $blogs->url($lastPage) }}">{{ $lastPage }}</a>
+                    </li>
+                @endif
 
-                                {{-- Next Button --}}
-                                @if ($blogs->hasMorePages())
-                                <li class="page-item">
-                                    <a class="page-link primary_color_text" href="{{ $blogs->nextPageUrl() }}">&gt;</a>
-                                </li>
-                                @else
-                                <li class="page-item disabled">
-                                    <a class="page-link primary_color_text">&gt;</a>
-                                </li>
-                                @endif
-                </ul>
-            </nav>
-        </div>
+                {{-- Next Button --}}
+                @if ($blogs->hasMorePages())
+                    <li class="page-item">
+                        <a class="page-link primary_color_text" href="{{ $blogs->nextPageUrl() }}">&gt;</a>
+                    </li>
+                @else
+                    <li class="page-item disabled">
+                        <a class="page-link primary_color_text">&gt;</a>
+                    </li>
+                @endif
+            </ul>
+        </nav>
+    </div>
+@endif
+
 
 
     </div>
