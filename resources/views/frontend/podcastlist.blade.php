@@ -11,7 +11,7 @@
             <div class="row g-2 my-2">
                 <h4>Our Podcasts</h4>
             </div>
-            <div class="row">
+            <div class="row ">
                     @foreach ($podcasts as $item)
                         <div class="col-12  col-sm-6 col-md-4 col-lg-3">
                             <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}"
