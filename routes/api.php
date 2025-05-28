@@ -80,7 +80,7 @@ Route::middleware(['auth:sanctum', 'auth:api', 'check.request.type'])->group(fun
         Route::post('/send-message', [MessageController::class, 'sendMessage']);
         Route::get('/user-inbox', [MessageController::class, 'user_inbox']);
         Route::get('/sender-messages', [MessageController::class, 'sender_messages']);
-
+        Route::get('/search-user', [MessageController::class, 'search_user']);
         //discussion forum
 
         Route::apiResource('discussion-forum', DiscussionForumController::class)->except('index', 'create', 'edit'); // good

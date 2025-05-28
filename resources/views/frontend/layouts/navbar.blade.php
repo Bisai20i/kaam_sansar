@@ -757,7 +757,7 @@
                         alt="Profile Picture">
                     <h5 class="card-title">{{ @Auth::guard('job_seekers')->user()->firstName }}
                         {{ @Auth::guard('job_seekers')->user()->lastName }}
-                        <a href="{{ route('jobseeker.editProfile', ['user_id' => Auth::guard('job_seekers')->user()->id]) }}" class="d-block">
+                        <a href="{{ route('jobseeker.editProfile', ['user_id' => @Auth::guard('job_seekers')->user()->id]) }}" class="d-block">
                             <i class="fa fa-pen p-1 text-decoration-none"></i>
                         </a>
                     </h5>

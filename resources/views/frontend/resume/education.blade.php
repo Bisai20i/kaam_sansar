@@ -7,7 +7,7 @@
             <h3>School/Institution</h3>
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <label for="schoolName" class="form-label">School Name <span class="text-danger">*</span></label>
+                    <label for="schoolName" class="form-label">School Name</label>
                     <input type="text" class="form-control custom-input" id="schoolName" name="schoolName" placeholder="Enter school name" required />
                 </div>
             </div>

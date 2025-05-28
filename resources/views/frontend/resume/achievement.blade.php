@@ -7,7 +7,7 @@
             <h3>Achievements</h3>
             <div class="row mb-3">
                 <div class="col-md-12 mb-3">
-                    <label for="achievement-title" class="form-label">Achievement Title <span class="text-danger">*</span></label>
+                    <label for="achievement-title" class="form-label">Achievement Title</label>
                     <input type="text" class="form-control custom-input" name="achievementTitle"
                         id="achievement-title" placeholder="Enter Achievement Title" required>
                 </div>

@@ -166,6 +166,12 @@
                 </div>
             </div>
             <div class="text-black-50">
+                ${project.projectLink ? `
+                <p class="m-0">
+                    <a href="${project.projectLink}" target="_blank" style="color: #0064A7;">
+                        ${project.projectLink}
+                    </a>
+                </p>` : ''}
                 <p class="m-0">${project.projectDescription}</p>
             </div>`;
             return card;
@@ -175,7 +181,6 @@
         function updateProjectCard(project) {
             const card = document.getElementById(`project_card_${project.id}`);
             if (card) {
-                console.log(project)
                 card.innerHTML = `
                 <div class="d-flex justify-content-between">
                     <div><h5>${project.projectTitle}</h5></div>
@@ -185,7 +190,12 @@
                     </div>
                 </div>
                 <div class="text-black-50">
-                    
+                    ${project.projectLink ? `
+                    <p class="m-0">
+                        <a href="${project.pl}" target="_blank" style="color: #0064A7;">
+                            ${project.pl}
+                        </a>
+                    </p>` : ''}
                     <p class="m-0">${project.projectDescription}</p>
                 </div>`;
             }

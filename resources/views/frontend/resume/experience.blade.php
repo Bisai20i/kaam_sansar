@@ -8,7 +8,7 @@
       <h3>Job Title</h3>
       <div class="row mb-3">
         <div class="col-md-12">
-          <label for="jobTitle" class="form-label">Job Title <span class="text-danger">*</span></label>
+          <label for="jobTitle" class="form-label">Job Title</label>
           <input type="text" class="form-control custom-input"
             id="jobTitle" name="jobTitle"
             placeholder="enter job title" required />
@@ -116,7 +116,7 @@
   <div class="container mt-4 p-0">
     <div id="experienceList">
       @foreach($experiences as $experience)
-      <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="card_exp_id_{{ $experience->id }}">
+      <div class="card mb-3 mt-3 p-3 bg-light rounded w-100" id="card_id_{{ $experience->id }}">
         <div class="d-flex justify-content-between">
           <div>
             <h5>{{ $experience->jobTitle }}</h5>
@@ -314,7 +314,7 @@
 
         const json = await res.json();
         if (json.success) {
-          document.getElementById(`card_exp_id_${id}`).remove();
+          document.getElementById(`card_id_${id}`).remove();
           if (currentExperienceId === parseInt(id)) {
             resetForm();
           }
@@ -334,7 +334,7 @@
     function appendExperienceCard(exp) {
       const card = document.createElement('div');
       card.className = 'card mb-3 mt-3 p-3 bg-light rounded w-100';
-      card.id = `card_exp_id_${exp.id}`;
+      card.id = `card_id_${exp.id}`;
       card.innerHTML = `
       <div class="d-flex justify-content-between">
         <div><h5>${exp.jobTitle}</h5></div>
@@ -359,7 +359,7 @@
     }
 
     function updateExperienceCard(exp) {
-      const card = document.getElementById(`card_exp_id_${exp.id}`);
+      const card = document.getElementById(`card_id_${exp.id}`);
       if (!card) return;
       card.innerHTML = `
       <div class="d-flex justify-content-between">

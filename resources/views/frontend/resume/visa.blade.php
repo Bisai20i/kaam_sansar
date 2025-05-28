@@ -20,7 +20,7 @@
                     <input type="text" class="form-control custom-input" id="visa-country" name="country" placeholder="Enter Country" required>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label for="visaImage" class="form-label fs-6">Visa Photo<span class="text-danger">*</span></label><br>
+                    <label for="visaImage" class="form-label fs-6">Visa Photo</label><br>
                     <input type="file" class="form-control form-control-da fs-6 w-100" id="visaImage" name="visaImage" accept=".jpg,.jpeg,.png,.pdf">
                     <div id="visaPreview" class="d-flex mt-1"></div>
                 </div>

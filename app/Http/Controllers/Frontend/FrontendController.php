@@ -577,7 +577,7 @@ class FrontendController extends Controller
 
     public function newsDetail($slug)
     {
-        $news_detail = BlogsAndPodcast::where('slug', $slug)->first();
+        $news_detail = BlogsAndPodcast::where('slug', $slug)->where('publishStatus', 1)->first();
 
 
         // Increment the view count
@@ -586,6 +586,7 @@ class FrontendController extends Controller
         $similar_news = BlogsAndPodcast::where('blogOrPodcast', $news_detail->blogOrPodcast)
             ->where('slug', '!=', $slug)
             ->orderBy('created_at', 'desc')
+            ->where('publishStatus', 1)
             ->take(3)
             ->get();
 
@@ -721,6 +722,7 @@ class FrontendController extends Controller
         $similar_podcasts = BlogsAndPodcast::where('blogOrPodcast', $podcast_detail->blogOrPodcast)
             ->where('slug', '!=', $slug)
             ->orderBy('created_at', 'desc')
+            ->where('publishStatus', 1)
             ->take(3)
             ->get();
 

@@ -263,6 +263,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::get('passportProvience/{country_id}', [PassportProvienceController::class, 'index'])->name('passportProvienceList.index');
     Route::put('/passportProvienceList/publish/{id}', [PassportProvienceController::class, 'publish'])->name('passportProvienceList.publish');
     Route::put('/passportProvienceList/unpublish/{id}', [PassportProvienceController::class, 'unpublish'])->name('passportProvienceList.unpublish');
+    Route::get('/passport-renewal/{id}', [PassportRenewalController::class, 'setStatus'])->name('passport.renewal.setStatus');
 
     Route::put('/passportCountryList/publish/{id}', [PassportCountryListController::class, 'publish'])->name('passportCountryList.publish');
     Route::put('/passportCountryList/unpublish/{id}', [PassportCountryListController::class, 'unpublish'])->name('passportCountryList.unpublish');
@@ -424,7 +425,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
 
     //Messages Related routes
 
-    Route::get('/inbox', [MessageController::class, 'inbox'])->name('frontend.inbox');
+    // Route::get('/inbox', [MessageController::class, 'inbox'])->name('frontend.inbox');
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
     Route::get('/user-inbox', [MessageController::class, 'user_inbox'])->name('jobseeker.inbox');
     Route::post('/sender-messages', [MessageController::class, 'sender_messages']);

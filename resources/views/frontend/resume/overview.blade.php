@@ -33,9 +33,7 @@ Resume Maker
                             <ul class="nav flex-column">
                                 <li><a href="#" class="profile-link active" id="profileLink" data-sectionId="profile">
                                         <i class="bi bi-person"></i> Profile Information
-                                        <i class="fas fa-angle-right arrow"></i>
-                                    </a>
-                                </li>
+                                        <i class="fas fa-angle-right arrow"></i></a></li>
                                 <li><a href="#" class="profile-link" id="visaLink" data-sectionId="visa">
                                         <i class="bi bi-credit-card"></i> Visa
                                         <i class="fas fa-angle-right arrow"></i></a></li>

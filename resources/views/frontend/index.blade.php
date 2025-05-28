@@ -542,7 +542,7 @@
             {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
         @endif
 
-    @if ($podcasts->count() > 0)
+     @if ($podcasts->count() > 0)
     <section class="podcast">
         <div class="container my-5">
             <h3 class="mb-4">Podcast</h3>
@@ -553,9 +553,9 @@
                         <a href="{{ route('frontend.podcast-detail', ['slug' => $item->slug]) }}" style="text-decoration:none;">
                             <!-- Display Podcast Image -->
                             <div class="pi" style="height:150px;">
-                                <img src="{{ $item->imageUrl ? asset('storage/' . $item->imageUrl) : asset('frontend/assets/Images/default.png') }}"
-                                    class="h-100 w-100 card-img-top rounded-1" alt="..."
-                                    style="object-fit:cover;">
+                                <img src="{{ $item->imageUrl ?? asset('frontend/assets/Images/default.png') }}"
+                                    class="h-100 w-100 card-img-top rounded-1" alt="..." style="object-fit:cover;">
+
                                 <div class="pio">
                                     <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
                                 </div>

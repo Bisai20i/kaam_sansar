@@ -77,10 +77,11 @@
             padding: 10px;
             z-index: 99999;
         }
+        
     </style>
 </head>
 
-<body>
+<body class="min-vh-100">
 
     <!-- <div id="loader">
         <div class="spinner"></div>
