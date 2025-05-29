@@ -321,9 +321,12 @@
 
                     // Laravel validation errors (422 Unprocessable Entity)
                     if (response.status === 422) {
-                        alert('Validation failed: ' + Object.values(errorData.errors).join('\n'));
+                        jobApplicationsTable.innerHTML =
+                            `<tr><td colspan="5" class="text-center">Validation failed : ${Object.values(errorData.errors).join('\n')}</td></tr>`;
+                        
                     } else {
-                        alert('Something went wrong. Please try again.');
+                        jobApplicationsTable.innerHTML =
+                            `<tr><td colspan="5" class="text-center">Internal Server Error!</td></tr>`;
                     }
 
                     // Stop further execution
@@ -332,7 +335,7 @@
 
                 const data = await response.json();
 
-                console.log(data);
+                // console.log(data);
 
 
                 if (data.status) {
@@ -362,7 +365,6 @@
                                             data-bs-toggle="dropdown">
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
-
                                     </div>
                                 </td>
                             `;

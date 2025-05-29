@@ -31,7 +31,7 @@ class JobCompanyController extends Controller
     public function create()
     {
         return view(
-            'backend.JobCompany.create',
+            'backend.jobcompany.create',
             [
                 'selectedIndustry' => old('industry'),
                 'selectedIndustryId' => old('industry_id'),
@@ -138,7 +138,7 @@ class JobCompanyController extends Controller
         $links = json_encode($arrayLinks);
 
         // Pass the data to the view
-        return view('backend.jobCompany.edit', compact('jobCompany', 'selectedIndustry', 'selectedIndustryId', 'links'));
+        return view('backend.jobcompany.edit', compact('jobCompany', 'selectedIndustry', 'selectedIndustryId', 'links'));
     }
 
     /**

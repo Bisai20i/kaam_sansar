@@ -310,11 +310,12 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::put('/insurance/subcategory/unpublish/{id}', [InsuranceSubCategoryController::class, 'unpublish'])->name('insuranceSubCategory.unpublish');
 
     Route::get('/insurance/{id}/details', [InsuranceCategoryController::class, 'manage'])->name('insurance.manage');
+    Route::get('/job-post/applications/{id}', [JobApplyController::class, 'index']);
 });
 
 //get job applicants of the particular post
 
-Route::get('/job-post/applications/{id}', [JobApplyController::class, 'index']);
+
 
 //delete forum post by admin
 

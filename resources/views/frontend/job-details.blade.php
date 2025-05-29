@@ -17,7 +17,7 @@
                     <div class="px-2 px-md-4">
                         <div class="image-and-button px-0">
                             <div class="logo-container ">
-                                <img src="{{ $jobDetail->jobCompany->companyProfileImg ? asset('storage/' . $jobDetail->jobCompany->companyProfileImg) :  asset('frontend/assets/Images/jobdefault.png') }}"
+                                <img src="{{ $jobDetail->jobCompany->companyProfileImg ? asset('storage/' . $jobDetail->jobCompany->companyProfileImg) :  asset('frontend/assets/Images/company-default.png') }}"
                                     alt="Company Logo" class="company-logo rounded-2">
                             </div>
                             @auth('job_seekers')
@@ -37,6 +37,8 @@
                         </div>
                         <h1 class="job-title mb-1 d-inline-block">Job Information</h1>
                         <div class="job-meta px-0">
+                            <p class="meta-container"><span class="meta-label">Job Title:</span>
+                                {{ $jobDetail->jobTitle }}</p>
                             <p class="meta-container"><span class="meta-label">Company:</span>
                                 {{ $jobDetail->jobCompany->companyName }}</p>
                             <p class="meta-container"><span class="meta-label">Location:</span>

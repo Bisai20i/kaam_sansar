@@ -189,7 +189,7 @@
 
                     @foreach ($findJobs as $item)
                         <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card position-relative">
-                            @auth('job_seekers')
+                            {{-- @auth('job_seekers')
                                 <form action="{{ route('job.bookmark') }}" method="post"
                                     class="position-absolute end-0 me-4 mt-5" style="top:38%; z-index:15;">
                                     @csrf
@@ -208,7 +208,7 @@
                                         <img src="{{ asset('frontend/assets/Images/Vector.png') }}" alt="Favorite">
                                     </button>
                                 </div>
-                            @endauth
+                            @endauth --}}
 
 
                             <a href="{{ route('frontend.job-details', ['slug' => $item->jobSlug]) }}"

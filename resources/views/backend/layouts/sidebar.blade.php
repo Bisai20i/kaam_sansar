@@ -33,34 +33,34 @@
                 : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-briefcase-alt"></i>
-                <div data-i18n="Manage Job">Manage Job</div>
+                <div data-i18n="Job">Jobs</div>
             </a>
             <ul class="menu-sub">
                 <!-- Industry Categories -->
                 <li class="menu-item {{ request()->routeIs('industryCategory*') ? 'active' : '' }}">
                     <a href="{{ route('industryCategory.index') }}" class="menu-link">
-                        <div data-i18n="Industry Categories">Manage Industry Categories</div>
+                        <div data-i18n="Industry Categories">Industry List</div>
                     </a>
                 </li>
 
                 <!-- Job Categories -->
                 <li class="menu-item {{ request()->routeIs('jobCategory*') ? 'active' : '' }}">
                     <a href="{{ route('jobCategory.index') }}" class="menu-link">
-                        <div data-i18n="Job Categories">Manage Job Categories</div>
+                        <div data-i18n="Job Categories">Categories List</div>
                     </a>
                 </li>
 
                 <!-- Job Companies -->
                 <li class="menu-item {{ request()->routeIs('jobCompany*') ? 'active' : '' }}">
                     <a href="{{ route('jobCompany.index') }}" class="menu-link">
-                        <div data-i18n="Job Companies">Manage Job Companies</div>
+                        <div data-i18n="Job Companies">Company List</div>
                     </a>
                 </li>
 
                 <!-- Job Posts -->
                 <li class="menu-item {{ request()->routeIs('jobPost*') ? 'active' : '' }}">
                     <a href="{{ route('jobPost.index') }}" class="menu-link">
-                        <div data-i18n="Job Posts">Manage Job Posts</div>
+                        <div data-i18n="Job Posts">Post List</div>
                     </a>
                 </li>
             </ul>
@@ -72,22 +72,29 @@
             {{ request()->routeIs('advertisementcategory*') || request()->routeIs('ads-manager*') ? 'open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-bullseye"></i>
-                <div data-i18n="Manage Ads">Manage Ads</div>
+                <div data-i18n="Ads">Advertisement</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('advertisementcategory*') ? 'active' : '' }}">
                     <a href="{{ route('advertisementcategory.index') }}" class="menu-link">
-                        <div data-i18n="Ads Category">Manage Ads Category</div>
+                        <div data-i18n="Ads Category">List Category</div>
                     </a>
                 </li>
 
                 <li class="menu-item {{ request()->routeIs('ads-manager*') ? 'active' : '' }}">
                     <a href="{{ route('ads-manager.index') }}" class="menu-link">
-                        <div data-i18n="Ads Manager">Ads Manager</div>
+                        <div data-i18n="Ads Manager">List AdSense</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('productcategory*') ? 'active' : '' }}">
+                    <a href="{{ route('productcategory.index') }}" class="menu-link">
+                        <div data-i18n="Product">Abroad Deals Category</div>
                     </a>
                 </li>
             </ul>
         </li>
+
+        
         <!-- Users -->
 
         <li
@@ -103,28 +110,28 @@
 
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-menu-alt-right"></i>
-                <div data-i18n="Additional Management">Form List</div>
+                <div data-i18n="Additional Management">Applied Doc.</div>
             </a>
 
             <ul class="menu-sub">
                 <!-- Bank Accounts -->
                 <li class="menu-item {{ request()->routeIs('bankAccounts*') ? 'active' : '' }}">
                     <a href="{{ route('bankAccounts.index') }}" class="menu-link">
-                        <div data-i18n="Bank Accounts">Manage Bank Account</div>
+                        <div data-i18n="Bank Accounts">Bank Account</div>
                     </a>
                 </li>
 
                 <!-- Broker Accounts -->
                 <li class="menu-item {{ request()->routeIs('brokerAccounts*') ? 'active' : '' }}">
                     <a href="{{ route('brokerAccounts.index') }}" class="menu-link">
-                        <div data-i18n="Broker Accounts">Manage Broker Account</div>
+                        <div data-i18n="Broker Accounts">Broker Account</div>
                     </a>
                 </li>
 
                 <!-- Document Attestations -->
                 <li class="menu-item {{ request()->routeIs('documentAttestations*') ? 'active' : '' }}">
                     <a href="{{ route('documentAttestations.index') }}" class="menu-link">
-                        <div data-i18n="Document Attestations">Manage Document Attestations</div>
+                        <div data-i18n="Document Attestations">Document Attestations</div>
                     </a>
                 </li>
 
@@ -139,66 +146,63 @@
             </ul>
         </li>
         <!-- Aboard Deals -->
-        <li
+        {{-- <li
             class="menu-item {{ request()->routeIs('aboards*') || request()->routeIs('productcategory*') ? 'open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-cart "></i>
-                <div data-i18n="Manage Product">Manage Aboards Deals</div>
+                <div data-i18n="Product">Aboards Deals</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('aboards*') ? 'active' : '' }}">
                     <a href="#" class="menu-link">
-                        <div data-i18n="Landing">Manage Aboard Product</div>
+                        <div data-i18n="Landing">Aboard Product</div>
                     </a>
                 </li>
             </ul>
             <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('productcategory*') ? 'active' : '' }}">
-                    <a href="{{ route('productcategory.index') }}" class="menu-link">
-                        <div data-i18n="Product">Manage Product Category</div>
-                    </a>
-                </li>
+                
             </ul>
-        </li>
+        </li> --}}
 
-        <!--Manage Gift and Coupon-->
+        <!--Gift and Coupon-->
         <li class="menu-item {{ request()->routeIs('giftNcoupon*') ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-gift"></i>
-                <div data-i18n="Manage Horoscope">Manage Gift and Coupons</div>
+                <div data-i18n="Horoscope">Gift and Coupons</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('giftNcouponCategory*') ? 'active' : '' }}">
-                    <a href="{{ route('giftNcouponCategory.index') }}" class="menu-link">
-                        <div data-i18n="Horoscope">Manage Categories</div>
-                    </a>
-                </li>
-            </ul>
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('giftNcoupon.index') ? 'active' : '' }}">
                     <a href="{{ route('giftNcoupon.index') }}" class="menu-link">
-                        <div data-i18n="Kundali">Manage Gift and Coupon</div>
+                        <div data-i18n="Kundali">List</div>
                     </a>
                 </li>
             </ul>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('giftNcouponCategory*') ? 'active' : '' }}">
+                    <a href="{{ route('giftNcouponCategory.index') }}" class="menu-link">
+                        <div data-i18n="Horoscope">List Category</div>
+                    </a>
+                </li>
+            </ul>
+            
 
         </li>
         <li class="menu-item {{ request()->routeIs('horoscope*') ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-star"></i>
-                <div data-i18n="Manage Horoscope">Manage Horoscope & Kundali</div>
+                <div data-i18n="Horoscope">Horoscope </div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('horoscope*') ? 'active' : '' }}">
                     <a href="{{ route('horoscope.index') }}" class="menu-link">
-                        <div data-i18n="Horoscope">Manage Horoscopes</div>
+                        <div data-i18n="Horoscope">List</div>
                     </a>
                 </li>
             </ul>
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('kundalidetail*') ? 'active' : '' }}">
                     <a href="{{ route('kundalidetail.index') }}" class="menu-link">
-                        <div data-i18n="Kundali">Manage Kundali</div>
+                        <div data-i18n="Kundali">Kundali</div>
                     </a>
                 </li>
             </ul>
@@ -213,37 +217,37 @@
         </li>
 
 
-        <!-- Manage VISA HQ -->
+        <!-- VISA HQ -->
         <li
             class="menu-item {{ request()->routeIs('visaCountryList*') || request()->routeIs('VisaTypeList*') ? 'open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-store"></i>
-                <div data-i18n="Front Pages">Manage VISA HQ</div>
+                <div data-i18n="Front Pages">VISA HQ</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('visaCountryList*') ? 'active' : '' }}">
                     <a href="{{ route('visaCountryList.index') }}" class="menu-link">
-                        <div data-i18n="Landing">Manage Visa Countries</div>
+                        <div data-i18n="Landing"> Countries</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('VisaTypeList*') ? 'active' : '' }}">
                     <a href="{{ route('VisaTypeList.index') }}" class="menu-link">
-                        <div data-i18n="Pricing">Manage Visa Type</div>
+                        <div data-i18n="Pricing">Type</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('visadetails*') ? 'active' : '' }}">
                     <a href="{{ route('visadetails.index') }}" class="menu-link">
-                        <div data-i18n="Pricing">Manage Visa <br>Requirements</div>
+                        <div data-i18n="Pricing">Requirements</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('visadetails*') ? 'active' : '' }}">
                     <a href="{{ route('visadetails.index') }}" class="menu-link">
-                        <div class="text-truncate" data-i18n="Pricing">Manage Visa <br> Application </div>
+                        <div class="text-truncate" data-i18n="Pricing"> Application </div>
                     </a>
                 </li>
             </ul>
         </li>
-        <!-- Manage Insurance-->
+        <!-- Insurance-->
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
             <a href="{{ route('insurance.company') }}" class="menu-link">
@@ -263,53 +267,53 @@
 
 
 
-        <!-- Manage Workk Pemrit -->
+        <!-- Workk Pemrit -->
         <li
             class="menu-item {{ request()->routeIs('workPermits*') || request()->routeIs('workPermitDistricts*') ? 'open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-store"></i>
-                <div data-i18n="Front Pages">Manage Work Permit</div>
+                <div data-i18n="Front Pages">Work Permit</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('workPermitDistricts*') ? 'active' : '' }}">
                     <a href="{{ route('workPermitDistricts.index') }}" class="menu-link">
-                        <div data-i18n="Landing">Manage Work Permit Districts</div>
+                        <div data-i18n="Landing">Work Permit Districts</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('workPermitLocations*') ? 'active' : '' }}">
                     <a href="{{ route('workPermitLocations.index') }}" class="menu-link">
-                        <div data-i18n="Pricing">Manage Work Pemrit Location</div>
+                        <div data-i18n="Pricing">Work Pemrit Location</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('workPermits*') ? 'active' : '' }}">
                     <a href="{{ route('workPermits.index') }}" class="menu-link">
-                        <div data-i18n="Pricing">Manage Work Pemrit </div>
+                        <div data-i18n="Pricing">Work Pemrit </div>
                     </a>
                 </li>
             </ul>
         </li>
 
-        <!-- Manage Poll System-->
+        <!-- Poll System-->
         <li
             class="menu-item {{ request()->routeIs('polls*') || request()->routeIs('workPermitDistricts*') ? 'open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-store"></i>
-                <div data-i18n="Front Pages">Manage Polling System</div>
+                <div data-i18n="Front Pages">Polling System</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('pollingQestions*') ? 'active' : '' }}">
                     <a href="{{ route('pollingQuestions.index') }}" class="menu-link">
-                        <div data-i18n="Landing">Manage Questions</div>
+                        <div data-i18n="Landing">Questions</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('answers*') ? 'active' : '' }}">
                     <a href="{{ route('pollingAnswers.index') }}" class="menu-link">
-                        <div data-i18n="Pricing">Manage Answer</div>
+                        <div data-i18n="Pricing">Answer</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('polls*') ? 'active' : '' }}">
                     <a href="{{ route('polls.index') }}" class="menu-link">
-                        <div data-i18n="Pricing">Manage Poll</div>
+                        <div data-i18n="Pricing">Poll</div>
                     </a>
                 </li>
             </ul>
@@ -330,14 +334,14 @@
                 <!-- FAQs -->
                 <li class="menu-item {{ request()->routeIs('faqs*') ? 'active' : '' }}">
                     <a href="{{ route('faqs.index') }}" class="menu-link">
-                        <div data-i18n="FAQs">Manage FAQs</div>
+                        <div data-i18n="FAQs">FAQs</div>
                     </a>
                 </li>
 
                 <!-- Blogs and Podcasts -->
                 <li class="menu-item {{ request()->routeIs('blogsAndPodcast*') ? 'active' : '' }}">
                     <a href="{{ route('blogsAndPodcast.index') }}" class="menu-link">
-                        <div data-i18n="Blogs and Podcasts">Manage Blogs and Podcasts</div>
+                        <div data-i18n="Blogs and Podcasts">Blogs and Podcasts</div>
                     </a>
                 </li>
 
@@ -364,11 +368,11 @@
         <li class="menu-item {{ request()->routeIs('forex*') ? 'active' : '' }}">
             <a href="{{ route('forex.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-money"></i>
-                <div data-i18n="Forex">Manage Forex Exchanges</div>
+                <div data-i18n="Forex">Forex Exchanges</div>
             </a>
         </li>
 
-        <!-- Manage Insurance-->
+        <!-- Insurance-->
 
         <li class="menu-item {{ request()->routeIs('insurance*') ? 'active' : '' }}">
             <a href="{{ route('insurance.company') }}" class="menu-link">
@@ -388,7 +392,7 @@
         <li class="menu-item">
             <a href="{{ route('superadmin.details') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user-circle"></i>
-                <div data-i18n="Manage Users">Manage Users</div>
+                <div data-i18n="Users">Users</div>
             </a>
         </li>
 
@@ -396,14 +400,14 @@
         {{-- <li class="menu-item {{ request()->routeIs('ads*') ? 'active' : '' }}">
         <a href="{{ route('ads.index') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-rectangle"></i>
-            <div data-i18n="Manage Ads">Manage Ads</div>
+            <div data-i18n="Ads">Ads</div>
         </a>
         </li> --}}
 
         <li class="menu-item {{ request()->routeIs('resume-help*') ? 'active' : '' }}">
             <a href="{{ route('resume-help.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-file"></i>
-                <div data-i18n="Manage Resume">Manage Resume</div>
+                <div data-i18n="Resume">Resume</div>
             </a>
         </li>
 

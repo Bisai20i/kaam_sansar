@@ -112,7 +112,7 @@
                         <li>
                             <a class="dropdown-item"
                                 href="{{ url()->current() . '?' . http_build_query(request()->except('filtersite','page')) }}">
-                                Job Site
+                                All Sites
                             </a>
                         </li>
                         @foreach (['remote', 'onsite', 'hybrid'] as $site)
@@ -165,7 +165,7 @@
                         <li>
                             <a class="dropdown-item"
                                 href="{{ url()->current() . '?' . http_build_query(request()->except('filterfeature','page')) }}">
-                                All Jobs
+                                Any Jobs
                             </a>
                         </li>
                         @foreach (['normal' => 'Normal Jobs', 'premium' => 'Premium Jobs'] as $key => $label)
@@ -271,7 +271,7 @@
                             @foreach ($findJobs as $job)
                                 <div class="position-relative mx-0 px-0 mb-3">
 
-                                    @auth('job_seekers')
+                                    {{-- @auth('job_seekers')
                                         <form action="{{ route('job.bookmark') }}" method="post"
                                             class="position-absolute end-0 m-1" style="top:0%; z-index:99;">
                                             @csrf
@@ -285,7 +285,7 @@
                                                     alt="Favorite">
                                             </button>
                                         </form>
-                                    @endauth
+                                    @endauth --}}
 
                                     <a href="{{ route('frontend.job-details', ['slug' => $job->jobSlug]) }}"
                                         class="text-dark d-block text-decoration-none ">
