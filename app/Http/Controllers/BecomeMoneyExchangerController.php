@@ -16,7 +16,7 @@ class BecomeMoneyExchangerController extends Controller
             // Personal Info
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'phone' => 'required|string|max:255',
             'whatsapp_number' => 'nullable|string|max:255',
             'country' => 'required|string|max:255',
@@ -27,8 +27,8 @@ class BecomeMoneyExchangerController extends Controller
             'bank_account_number' => 'required|string|max:255',
             'iban_number' => 'nullable|string|max:255',
             'swift_code' => 'nullable|string|max:255',
-            'bank_country' => 'required|string|max:255',
-            'branch_location' => 'required|string|max:255',
+            'bank_country' => 'nullable|string|max:255',
+            'branch_location' => 'nullable|string|max:255',
 
             // Business Info
             'business_name' => 'required|string|max:255',
@@ -36,11 +36,11 @@ class BecomeMoneyExchangerController extends Controller
             'business_address' => 'required|string|max:255',
 
             // Documents
-            'citizen_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'passport_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'visa_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'resident_id_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'registration_doc1' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'citizen_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'passport_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'visa_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'resident_id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'registration_doc1' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'registration_doc2' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'registration_doc3' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
 
@@ -91,43 +91,40 @@ class BecomeMoneyExchangerController extends Controller
         return view('backend.moneyexchanger.index', compact('exchangers'));
     }
 
-    public function show($id)
-    {
-        $exchanger = BecomeMoneyExchanger::findOrFail($id);
-        return view('backend.moneyexchanger.show', compact('exchanger'));
-    }
+   public function show(BecomeMoneyExchanger $exchanger)
+{
+    return view('backend.moneyexchanger.show', compact('exchanger'));
+}
 
-    public function destroy($id)
-    {
-        try {
-            $exchanger = BecomeMoneyExchanger::findOrFail($id);
+public function destroy(BecomeMoneyExchanger $exchanger)
+{
+    try {
+        $fileFields = [
+            'citizen_document',
+            'passport_document',
+            'visa_document',
+            'resident_id_document',
+            'registration_doc1',
+            'registration_doc2',
+            'registration_doc3'
+        ];
 
-            $fileFields = [
-                'citizen_document',
-                'passport_document',
-                'visa_document',
-                'resident_id_document',
-                'registration_doc1',
-                'registration_doc2',
-                'registration_doc3'
-            ];
-
-            // Delete files from storage if they exist
-            foreach ($fileFields as $field) {
-                if ($exchanger->$field && Storage::disk('public')->exists($exchanger->$field)) {
-                    Storage::disk('public')->delete($exchanger->$field);
-                }
+        foreach ($fileFields as $field) {
+            if ($exchanger->$field && Storage::disk('public')->exists($exchanger->$field)) {
+                Storage::disk('public')->delete($exchanger->$field);
             }
-
-            $exchanger->forceDelete();
-
-            return redirect()->route('superadmin.moneyexchangers.index')->with('success', 'Application deleted successfully!');
-        } catch (\Exception $e) {
-            Log::error('Failed to delete money exchanger application', [
-                'error' => $e->getMessage(),
-                'id' => $id
-            ]);
-            return redirect()->back()->with('error', 'Failed to delete application.');
         }
+
+        $exchanger->forceDelete();
+
+        return redirect()->route('superadmin.moneyexchangers.index')->with('success', 'Application deleted successfully!');
+    } catch (\Exception $e) {
+        Log::error('Failed to delete money exchanger application', [
+            'error' => $e->getMessage(),
+            'id' => $exchanger->id
+        ]);
+        return redirect()->back()->with('error', 'Failed to delete application.');
     }
+}
+
 }

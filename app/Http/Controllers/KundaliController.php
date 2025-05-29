@@ -21,8 +21,8 @@ class KundaliController extends Controller
     public function index()
     {
         //Retrive all detail
-        $kundali = Kundali::orderBy('created_at','desc')->simplePaginate(10);
-        return view ('backend.kundali.lists',compact('kundali'));
+        $kundali = Kundali::orderBy('created_at', 'desc')->simplePaginate(10);
+        return view('backend.kundali.lists', compact('kundali'));
     }
 
     /**
@@ -46,7 +46,7 @@ class KundaliController extends Controller
         //check if the request is from mobile  using request_type
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
-        
+
         // Get the authenticated user
         $user = $isMobile ? $request->user() : Auth::guard('job_seekers')->user();
         if (!$user) {
@@ -69,33 +69,33 @@ class KundaliController extends Controller
             'personTimeOfBirth' => 'required|string|max:255',
         ]);
 
-         // Handle validation errors
-         if ($validator->fails()) {
+        // Handle validation errors
+        if ($validator->fails()) {
             Log::error('Validation errors: ', $validator->errors()->toArray());
             return $isMobile
                 ? $this->responseError('Validation failed. Please check your inputs.', 422, $validator->errors())
                 : redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
-           // Create new Kundali record
-           $kundali = new Kundali();
-           $kundali->jobSeekerId = $jobSeekerId;
-           $kundali->emailAddress = $emailAddress;
-           $kundali->phoneNumber = $phoneNumber;
-           $kundali->personName = $request->input('personName');
-           $kundali->personDateOfBirth = $request->input('personDateOfBirth');
-           $kundali->personPlaceOfBirth = $request->input('personPlaceOfBirth');
-           $kundali->personTimeOfBirth = $request->input('personTimeOfBirth');
-           $kundali->Query1 = $request->input('Query1');
-           $kundali->Query2 = $request->input('Query2');
-           $kundali->Query3 = $request->input('Query3');
-           // Save the record to the database
-           $kundali->save();
-           return $isMobile
-           ? $this->responseSuccess('kundali created successfully', $kundali)
-           : redirect()->back()->with('success', 'kundali created successfully');
-   }
-    
+        // Create new Kundali record
+        $kundali = new Kundali();
+        $kundali->jobSeekerId = $jobSeekerId;
+        $kundali->emailAddress = $emailAddress;
+        $kundali->phoneNumber = $phoneNumber;
+        $kundali->personName = $request->input('personName');
+        $kundali->personDateOfBirth = $request->input('personDateOfBirth');
+        $kundali->personPlaceOfBirth = $request->input('personPlaceOfBirth');
+        $kundali->personTimeOfBirth = $request->input('personTimeOfBirth');
+        $kundali->Query1 = $request->input('query1');
+        $kundali->Query2 = $request->input('query2');
+        $kundali->Query3 = $request->input('query3');
+        // Save the record to the database
+        $kundali->save();
+        return $isMobile
+            ? $this->responseSuccess('kundali created successfully', $kundali)
+            : $this->responseSuccess('kundali created successfully', $kundali);
+    }
+
 
     /**
      * Display the specified resource.
@@ -103,11 +103,11 @@ class KundaliController extends Controller
      * @param  \App\Models\Kundali  $kundali
      * @return \Illuminate\Http\Response
      */
-    public function show( Request $request , $id)
+    public function show(Request $request, $id)
     {
         $kundali = Kundali::findOrFail($id);
         $astrologer = Astrologer::where('kundaliId', $id)->first();
-    
+
         return view('backend.kundali.show', compact('kundali', 'astrologer'));
     }
 
@@ -129,41 +129,37 @@ class KundaliController extends Controller
      * @param  \App\Models\Kundali  $kundali
      * @return \Illuminate\Http\Response
      */
-  public function update(Request $request, $id)
-{
-   
+    public function update(Request $request, $id)
+    {
 
-    // Validate request data
-    $validator = Validator::make($request->all(), [
-        'personName' => 'required|string|max:255',
-        'personDateOfBirth' => 'required|date',
-        'personPlaceOfBirth' => 'required|string|max:255',
-        'personTimeOfBirth' => 'required|string|max:255',
-    ]);
 
-    if ($validator->fails()) {
-        Log::error('Validation errors: ', $validator->errors()->toArray());
-        return redirect()->back()->withErrors($validator->errors())->withInput();
+        // Validate request data
+        $validator = Validator::make($request->all(), [
+            'personName' => 'required|string|max:255',
+            'personDateOfBirth' => 'required|date',
+            'personPlaceOfBirth' => 'required|string|max:255',
+            'personTimeOfBirth' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation errors: ', $validator->errors()->toArray());
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+
+        // Update Kundali record
+        $kundali = Kundali::findOrFail($id);
+        $kundali->personName = $request->personName;
+        $kundali->personDateOfBirth = $request->personDateOfBirth;
+        $kundali->personPlaceOfBirth = $request->personPlaceOfBirth;
+        $kundali->personTimeOfBirth = $request->personTimeOfBirth;
+
+        $kundali->save();
+        return  redirect()->route('kundali.index')->with('success', 'Kundali updated successfully');
     }
 
-    // Update Kundali record
-    $kundali = Kundali::findOrFail($id);
-    $kundali->personName =$request->personName;
-    $kundali->personDateOfBirth =$request->personDateOfBirth;
-    $kundali->personPlaceOfBirth =$request->personPlaceOfBirth;
-    $kundali->personTimeOfBirth =$request->personTimeOfBirth;
-
-    $kundali->save();
-    return  redirect()->route('kundali.index')->with('success','Kundali updated successfully');
-
-    
 
 
-}
-
-
-    
-     /**
+    /**
      * Handle error response.
      */
     protected function responseError($message, $statusCode, $errors = [])

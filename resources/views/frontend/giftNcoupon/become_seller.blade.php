@@ -290,7 +290,7 @@
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6"
-                                        id="citizenship" name="citizen_document" accept=".jpg,.jpeg,.png,.pdf">
+                                      onchange="abc(this);" id="citizenship" onclick="validateFileSize(this)" name="citizen_document" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
 
                                 <div class="col">
@@ -298,7 +298,7 @@
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6"
-                                        id="passport" name="passport_document" accept=".jpg,.jpeg,.png,.pdf">
+                                      onchange="abc(this);"  id="passport" name="passport_document" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
 
                                 <div class="col">
@@ -306,7 +306,7 @@
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6"
-                                        id="visa" name="visa_document" accept=".jpg,.jpeg,.png,.pdf">
+                                       onchange="abc(this);" id="visa" name="visa_document" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
 
                                 <div class="col">
@@ -314,7 +314,7 @@
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6"
-                                        id="resident_id" name="resident_id_document" accept=".jpg,.jpeg,.png,.pdf">
+                                      onchange="abc(this);"  id="resident_id" name="resident_id_document" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                             </div>
                         </div>
@@ -328,21 +328,21 @@
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="reg_doc1"
-                                        name="registration_doc1" accept=".jpg,.jpeg,.png,.pdf">
+                                       onchange="abc(this);" name="registration_doc1" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                                 <div class="col">
                                     <label for="reg_doc2" class="form-label fs-6">Registration Document 2:</label>
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="reg_doc2"
-                                        name="registration_doc2" accept=".jpg,.jpeg,.png,.pdf">
+                                       onchange="abc(this);" name="registration_doc2" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                                 <div class="col">
                                     <label for="reg_doc3" class="form-label fs-6">Registration Document 3: </label>
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="reg_doc3"
-                                        name="registration_doc3" accept=".jpg,.jpeg,.png,.pdf">
+                                      onchange="abc(this);"  name="registration_doc3" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                             </div>
                         </div>
@@ -356,21 +356,21 @@
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="show_pic1"
-                                        name="show_pic1" accept=".jpg,.jpeg,.png,.pdf">
+                                     onchange="abc(this);"   name="show_pic1" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                                 <div class="col">
                                     <label for="show_pic2" class="form-label fs-6">Shop Pic 2: </label>
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="show_pic2"
-                                        name="show_pic2" accept=".jpg,.jpeg,.png,.pdf">
+                                     onchange="abc(this);"   name="show_pic2" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                                 <div class="col">
                                     <label for="show_pic3" class="form-label fs-6">Shop Pic 3: </label>
                                     <br>
                                     <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="show_pic3"
-                                        name="show_pic3" accept=".jpg,.jpeg,.png,.pdf">
+                                     onchange="abc(this);"   name="show_pic3" accept=".jpg,.jpeg,.png,.pdf">
                                 </div>
                             </div>
                         </div>
@@ -408,6 +408,29 @@
 
 @push('scripts')
 
+<script>
+    function abc(input) {
+        const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+        const maxSize = 2 * 1024 * 1024; // 2MB
+
+        const file = input.files[0];
+        const errorMsg = input.nextElementSibling; // assumes <small> follows input
+
+        errorMsg.style.display = "none";
+
+        if (file) {
+            if (!allowedTypes.includes(file.type)) {
+                errorMsg.textContent = "Invalid format. Only JPG, PNG, and PDF allowed.";
+                errorMsg.style.display = "block";
+                input.value = ""; // reset file
+            } else if (file.size > maxSize) {
+                errorMsg.textContent = "File must be less than 2MB.";
+                errorMsg.style.display = "block";
+                input.value = ""; // reset file
+            }
+        }
+    }
+</script>
 
 <script>
     // Form Navigation Functions

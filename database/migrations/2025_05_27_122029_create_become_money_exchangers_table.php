@@ -12,7 +12,7 @@ return new class extends Migration {
             // Personal Information
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('phone');
             $table->string('whatsapp_number')->nullable();
             $table->string('country');
@@ -23,8 +23,8 @@ return new class extends Migration {
             $table->string('bank_account_number');
             $table->string('iban_number')->nullable();
             $table->string('swift_code')->nullable();
-            $table->string('bank_country');
-            $table->string('branch_location');
+            $table->string('bank_country')->nullable();
+            $table->string('branch_location')->nullable();
 
             // Business Details
             $table->string('business_name');
@@ -33,11 +33,11 @@ return new class extends Migration {
             
 
             // Documents
-            $table->string('citizen_document');
-            $table->string('passport_document');
-            $table->string('visa_document');
-            $table->string('resident_id_document');
-            $table->string('registration_doc1');
+            $table->string('citizen_document')->nullable();
+            $table->string('passport_document')->nullable();
+            $table->string('visa_document')->nullable();
+            $table->string('resident_id_document')->nullable();
+            $table->string('registration_doc1')->nullable();
             $table->string('registration_doc2')->nullable();
             $table->string('registration_doc3')->nullable();
 

@@ -243,9 +243,10 @@ class BlogsAndPodcastController extends Controller
             }
             // Delete the record
             $blogOrPodcast->delete();
-            return redirect()->route('blogsAndPodcast.index')->with('success', 'Blog/Podcast deleted successfully.');
+
+            return redirect()->back()->with('success', 'Blog/Podcast deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('blogsAndPodcast.index')->with('error', $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete Blog/Podcast. ' . $e->getMessage());
         }
     }
 
@@ -256,7 +257,7 @@ class BlogsAndPodcastController extends Controller
 
         $blogsAndPodcast->publishStatus = '1';
         $blogsAndPodcast->save();
-        return redirect()->route('blogsAndPodcast.index')->with('success', 'Blog/Podcast published successfully.');
+        return redirect()->back()->with('success', 'Blog/Podcast published successfully.');
     }
 
     public function unpublish($id)
@@ -271,6 +272,6 @@ class BlogsAndPodcastController extends Controller
         $blogsAndPodcast->publishStatus = '0';
         $blogsAndPodcast->save();
 
-        return redirect()->route('blogsAndPodcast.index')->with('success', 'Blog/Podcast unpublished successfully.');
+        return redirect()->back()->with('success', 'Blog/Podcast unpublished successfully.');
     }
 }

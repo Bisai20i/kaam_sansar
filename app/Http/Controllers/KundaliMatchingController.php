@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Astrologer;
 use App\Models\KundaliMatching;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -97,9 +98,9 @@ class KundaliMatchingController extends Controller
         $kundali->boyDateOfBirth = $request->boyDateOfBirth;
         $kundali->boyPlaceOfBirth = $request->boyPlaceOfBirth;
         $kundali->boyTimeOfBirth = $request->boyTimeOfBirth;
-        $kundali->Query1 = $request->input('Query1', '');
-        $kundali->Query2 = $request->input('Query2', '');
-        $kundali->Query3 = $request->input('Query3', '');
+        $kundali->Query1 = $request->input('query1', '');
+        $kundali->Query2 = $request->input('query2', '');
+        $kundali->Query3 = $request->input('query3', '');
         $kundali->save();
     
         if ($request->ajax() || $mobile) {

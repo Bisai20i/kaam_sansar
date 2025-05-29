@@ -18,7 +18,7 @@ class BecomeMoneyExchanger extends Model
     'swift_code', 'bank_country', 'branch_location',
 
     // Business Details
-    'business_name', 'business_telephone', 
+    'business_name', 'business_telephone', 'business_address',
     // Uploaded Documents
     'citizen_document', 'passport_document', 'visa_document', 'resident_id_document',
     'registration_doc1', 'registration_doc2', 'registration_doc3',

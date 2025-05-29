@@ -26,8 +26,7 @@
                                 वैशाख
                             </h1>
                             <div class="d-flex gap-2 text-dark fs-5 user-select-none">
-                                <button id="prevMonth" class="btn btn-link p-0 text-dark"
-                                    aria-label="Previous month">
+                                <button id="prevMonth" class="btn btn-link p-0 text-dark" aria-label="Previous month">
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
                                 <button id="nextMonth" class="btn btn-link p-0 text-dark" aria-label="Next month">
@@ -122,7 +121,8 @@
                                         </td>
                                         <td><strong>११</strong><br><small class="d-block text-end">24</small>
                                         </td>
-                                        <td class="text-danger"><strong>१२</strong><br><small class="d-block text-end">25</small>
+                                        <td class="text-danger"><strong>१२</strong><br><small
+                                                class="d-block text-end">25</small>
                                         </td>
                                         <td><strong>१३</strong><br><small class="d-block text-end">26</small>
                                         </td>
@@ -193,9 +193,12 @@
                                 </thead>
                                 <tbody class="fw-normal">
                                     <tr>
-                                        <td class="text-secondary bg-light"><strong>२८</strong><br><small class="d-block text-end">11</small></td>
-                                        <td class="text-secondary bg-light"><strong>२९</strong><br><small class="d-block text-end">12</small></td>
-                                        <td class="text-secondary bg-light"><strong>३०</strong><br><small class="d-block text-end">13</small></td>
+                                        <td class="text-secondary bg-light"><strong>२८</strong><br><small
+                                                class="d-block text-end">11</small></td>
+                                        <td class="text-secondary bg-light"><strong>२९</strong><br><small
+                                                class="d-block text-end">12</small></td>
+                                        <td class="text-secondary bg-light"><strong>३०</strong><br><small
+                                                class="d-block text-end">13</small></td>
                                         <td><strong>१</strong><br><small class="d-block text-end">14</small></td>
                                         <td><strong>२</strong><br><small class="d-block text-end">15</small></td>
                                         <td><strong>३</strong><br><small class="d-block text-end">16</small></td>
@@ -235,7 +238,8 @@
                                         <td><strong>२९</strong><br><small class="d-block text-end">11</small></td>
                                         <td><strong>३०</strong><br><small class="d-block text-end">12</small></td>
                                         <td><strong>३१</strong><br><small class="d-block text-end">13</small></td>
-                                        <td class="text-secondary bg-light"><strong>१</strong><br><small class="d-block text-end">14</small></td>
+                                        <td class="text-secondary bg-light"><strong>१</strong><br><small
+                                                class="d-block text-end">14</small></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -288,7 +292,8 @@
             <h2 class="horoscope-title">Here's the horoscope for today</h2>
             <div class="button-container-horoscope">
                 <form id="horoscopeTypeForm" method="GET" action="{{ route('horoscope') }}">
-                    <input type="hidden" name="type" id="horoscopeTypeInput" value="{{ request('type', 'daily') }}">
+                    <input type="hidden" name="type" id="horoscopeTypeInput"
+                        value="{{ request('type', 'daily') }}">
 
                     <button type="button" id="dailyBtn"
                         class="btn {{ request('type', 'daily') == 'daily' ? 'btn-primary active' : 'btn-outline-primary' }}">Daily</button>
@@ -337,10 +342,10 @@
         <div id="daily" class="horoscope-section">
             <!-- English Section -->
             <div class="row g-3 mt-3">
-                @foreach($orderedHoroscopes as $sign)
+                @foreach ($orderedHoroscopes as $sign)
                 <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                    <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal" data-bs-target="#horoscopeModal"
-                        data-zodiac="{{ $sign->zodiacSignEnglish }}"
+                    <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
+                        data-bs-target="#horoscopeModal" data-zodiac="{{ $sign->zodiacSignEnglish }}"
                         data-symbol="{{ asset($sign->zodiacImgEnglish) }}"
                         data-description="{{ strip_tags($sign->contentEn) }}"
                         data-zodiac-nepali="{{ $sign->zodiacSignNepali }}"
@@ -348,7 +353,8 @@
                         data-birth-month="{{ $sign->birthMonth }}"
                         data-start-letter="{{ $sign->nameStartLetter }}">
                         <div class="horoscope-card">
-                            <img src="{{ asset($sign->zodiacImgEnglish) }}" alt="{{ $sign->zodiacSignEnglish }}" class="img-fluid">
+                            <img src="{{ asset($sign->zodiacImgEnglish) }}" alt="{{ $sign->zodiacSignEnglish }}"
+                                class="img-fluid">
                         </div>
                         <h1>{{ $sign->zodiacSignEnglish }}</h1>
                         <p>{{ $sign->birthMonth }}</p>
@@ -359,10 +365,10 @@
 
             <!-- Nepali Section -->
             <div class="row g-3 mt-3">
-                @foreach($orderedHoroscopes as $sign)
+                @foreach ($orderedHoroscopes as $sign)
                 <div class="col-lg-1 col-md-2 col-sm-2 col-4">
-                    <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal" data-bs-target="#horoscopeModal"
-                        data-zodiac="{{ $sign->zodiacSignNepali }}"
+                    <div class="horoscope-card-wrapper text-center" data-bs-toggle="modal"
+                        data-bs-target="#horoscopeModal" data-zodiac="{{ $sign->zodiacSignNepali }}"
                         data-symbol="{{ asset($sign->zodiacImgNepali) }}"
                         data-description="{{ strip_tags($sign->contentNp) }}"
                         data-zodiac-english="{{ $sign->zodiacSignEnglish }}"
@@ -370,7 +376,8 @@
                         data-birth-month="{{ $sign->birthMonth }}"
                         data-start-letter="{{ $sign->nameStartLetter }}">
                         <div class="horoscope-card">
-                            <img src="{{ asset($sign->zodiacImgNepali) }}" alt="{{ $sign->zodiacSignNepali }}" class="img-fluid">
+                            <img src="{{ asset($sign->zodiacImgNepali) }}" alt="{{ $sign->zodiacSignNepali }}"
+                                class="img-fluid">
                         </div>
                         <h1>{{ $sign->zodiacSignNepali }}</h1>
                         <p>{{ $sign->nameStartLetter }}</p>
@@ -381,14 +388,16 @@
         </div>
 
         <!-- Modal Structure -->
-        <div class="modal fade" id="horoscopeModal" tabindex="-1" aria-labelledby="horoscopeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal fade" id="horoscopeModal" tabindex="-1" aria-labelledby="horoscopeModalLabel"
+            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-white position-relative">
                         <div class="d-flex flex-column align-items-start w-100">
                             <div class="d-flex align-items-center">
                                 <div class="img-container me-2">
-                                    <img alt="Zodiac symbol" class="img-fluid" id="horoscopeSymbol" src="img/pic1.png" />
+                                    <img alt="Zodiac symbol" class="img-fluid" id="horoscopeSymbol"
+                                        src="img/pic1.png" />
                                 </div>
                                 <div>
                                     <h5 class="modal-title mb-0" id="horoscopeModalLabel">वृष - Taurus</h5>
@@ -396,7 +405,8 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <p class="text-muted-horoscope px-4" id="horoscopeDescription">
@@ -502,13 +512,16 @@
                                     <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                     <div class="row g-2">
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Day" name="day" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Day" name="day" required>
                                         </div>
                                         <div class="col">
-                                            <input type="text" class="form-control abroad-deal-1" placeholder="Month" name="month" required>
+                                            <input type="text" class="form-control abroad-deal-1"
+                                                placeholder="Month" name="month" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Year" name="year" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Year" name="year" required>
                                         </div>
                                     </div>
                                 </div>
@@ -517,13 +530,16 @@
                                     <label class="form-label">Time of Birth<span class="text-danger">*</span></label>
                                     <div class="row g-2">
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Hour" name="hour" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Hour" name="hour" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Minute" name="minute" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Minute" name="minute" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Second" name="second" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Second" name="second" required>
                                         </div>
                                     </div>
                                 </div>
@@ -531,9 +547,8 @@
                                 <div class="mb-3">
                                     <label for="place" class="form-label">Place of Birth<span
                                             class="text-danger">*</span></label>
-                                    <select class="form-select abroad-deal-1" id="place" name="personPlaceOfBirth" required>
-                                        <option selected disabled>Pokhara, Gandaki Zone</option>
-                                    </select>
+
+                                    <input type="text" class="form-control abroad-deal-1" name="personPlaceOfBirth" required>
                                 </div>
 
                                 <button type="button" class="btn next-match-btn float-end"
@@ -554,22 +569,55 @@
                             <form>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 1</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name" name="Query1"
-                                        placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query1" placeholder="Enter name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 2</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name" name="Query2"
-                                        placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query2" placeholder="Enter name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 3</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name" name="Query3"
-                                        placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query3" placeholder="Enter name" required>
                                 </div>
 
                                 <button type="button" class="btn next-match-btn float-end"
                                     id="payButton">Pay</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="Question-Section" id="Question-Section-kundali" style="display: none;">
+                    <h1 class="pb-3">Enter a Questions to ask</h1>
+                    <div class="card mb-5">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3"><i class="bi bi-chevron-left"
+                                    id="backButtonqen1"></i>Question you want to ask out Jyotish</h5>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Question 1</label>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query-1" placeholder="Enter name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Question 2</label>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query-2" placeholder="Enter name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Question 3</label>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query-3" placeholder="Enter name" required>
+                                </div>
+
+                                <button type="button" class="btn next-match-btn float-end"
+                                    id="payButton-kundali">Submit Kundali Question</button>
                             </form>
                         </div>
                     </div>
@@ -589,21 +637,24 @@
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name" name="girlName"
-                                        placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="girlName" placeholder="Enter name" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                     <div class="row g-2">
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Day" name="gday" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Day" name="gday" required>
                                         </div>
                                         <div class="col">
-                                            <input type="text" class="form-control abroad-deal-1" placeholder="Month" name="gmonth" required>
+                                            <input type="text" class="form-control abroad-deal-1"
+                                                placeholder="Month" name="gmonth" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Year" name="gyear" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Year" name="gyear" required>
                                         </div>
                                     </div>
                                 </div>
@@ -612,13 +663,16 @@
                                     <label class="form-label">Time of Birth<span class="text-danger">*</span></label>
                                     <div class="row g-2">
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Hour" name="ghour" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Hour" name="ghour" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Minute" name="gminute" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Minute" name="gminute" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Second" name="gsecond" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Second" name="gsecond" required>
                                         </div>
                                     </div>
                                 </div>
@@ -626,9 +680,9 @@
                                 <div class="mb-3">
                                     <label for="place" class="form-label">Place of Birth<span
                                             class="text-danger">*</span></label>
-                                    <select class="form-select abroad-deal-1" id="place" name="girlPlaceOfBirth" required>
-                                        <option selected disabled>Pokhara, Gandaki Zone</option>
-                                    </select>
+
+                                    <input type="text" name="girlPlaceOfBirth" class="form-control abroad-deal-1" required>
+
                                 </div>
 
                                 <button type="button" class="btn next-match-btn float-end"
@@ -649,42 +703,42 @@
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name" name="boyName"
-                                        placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="boyName" placeholder="Enter name" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Date of Birth<span class="text-danger">*</span></label>
                                     <div class="row g-2">
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Day" name="bday" required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Day" name="bday" required>
                                         </div>
                                         <div class="col">
-                                            <input type="text" class="form-control abroad-deal-1" placeholder="Month" name="bmonth"
-                                                required>
+                                            <input type="text" class="form-control abroad-deal-1"
+                                                placeholder="Month" name="bmonth" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Year" name="byear"
-                                                required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Year" name="byear" required>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Time of Birth<span
-                                            class="text-danger">*</span></label>
+                                    <label class="form-label">Time of Birth<span class="text-danger">*</span></label>
                                     <div class="row g-2">
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Hour" name="bhour"
-                                                required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Hour" name="bhour" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Minute" name="bminute"
-                                                required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Minute" name="bminute" required>
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="form-control abroad-deal-1" placeholder="Second" name="bsecond"
-                                                required>
+                                            <input type="number" class="form-control abroad-deal-1"
+                                                placeholder="Second" name="bsecond" required>
                                         </div>
                                     </div>
                                 </div>
@@ -692,9 +746,7 @@
                                 <div class="mb-3">
                                     <label for="place" class="form-label">Place of Birth<span
                                             class="text-danger">*</span></label>
-                                    <select class="form-select abroad-deal-1" id="place" name="boyPlaceOfBirth" required>
-                                        <option selected disabled>Pokhara, Gandaki Zone</option>
-                                    </select>
+                                    <input type="text" name="boyPlaceOfBirth" class="form-control abroad-deal-1" required>
                                 </div>
 
                                 <button type="button" class="btn next-match-btn float-end"
@@ -713,21 +765,21 @@
                             <form>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 1</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name" name="Query1"
-                                        placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query1" placeholder="Enter name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 2</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name" name="Query2"
-                                        placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query2" placeholder="Enter name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 3</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name" name="Query3"
-                                        placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" id="name"
+                                        name="Query3" placeholder="Enter name" required>
                                 </div>
-                                <button type="button" class="btn next-match-btn float-end"
-                                    id="payButton">Pay</button>
+                                <button type="button" class="btn next-match-btn float-end" id="payButton">Submit
+                                    Question</button>
                             </form>
                         </div>
                     </div>
@@ -738,8 +790,8 @@
 
                 <!-- payment-section -->
                 <div id="payment-section" class="payment-section" style="display: none;">
-                    <h5 class="mb-4"><i id="back-btn" class="bi bi-chevron-left"
-                            style="cursor: pointer;"></i> Payment</h5>
+                    <h5 class="mb-4"><i id="back-btn" class="bi bi-chevron-left" style="cursor: pointer;"></i>
+                        Payment</h5>
                     <h6>Review:</h6>
                     <table class="table table-bordered table-sm">
                         <tbody>
@@ -793,29 +845,37 @@
 
                 <h3 class="mb-4 mt-5">Our Jyotish</h3>
 
-                @if($jyotishs->isEmpty())
+                @if ($jyotishs->isEmpty())
                 <p>No Jyotish available at the moment.</p>
                 @else
                 <div class="carousel-inner">
 
-                    @foreach($jyotishs as $index => $jyotish)
-
+                    @foreach ($jyotishs as $index => $jyotish)
                     <div class="carousel-item {{ $index == 0 ? 'active' : '' }}" style="height: 280px; ">
                         <div class="card h-100 mb-4" style=" border-radius: 0;">
                             <br>
-                            @if($jyotish->photo)
-                            <img src="{{ asset('storage/' . $jyotish->photo) }}" alt="{{ $jyotish->name }}" class="card-img-top rounded-circle mx-auto d-block" style="height: 150px; width:150px; object-fit: cover;">
+                            @if ($jyotish->photo)
+                            <img src="{{ asset('storage/' . $jyotish->photo) }}"
+                                alt="{{ $jyotish->name }}"
+                                class="card-img-top rounded-circle mx-auto d-block"
+                                style="height: 150px; width:150px; object-fit: cover;">
                             @else
-                            <img src="{{ asset('images/default-image.jpg') }}" alt="No Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            <img src="{{ asset('images/default-image.jpg') }}" alt="No Image"
+                                class="card-img-top" style="height: 200px; object-fit: cover;">
                             @endif
                             <div class="card-body">
                                 <h5 class="card-title">{{ $jyotish->name }}</h5>
-                                <p class="card-text" style="color:rgb(114, 116, 120);">Phone: {{ $jyotish->phone ?? 'N/A' }}</p>
-                                <p class="card-text" style="color:rgb(114, 116, 120);">Email: {{ $jyotish->email ?? 'N/A' }}</p>
+                                <p class="card-text" style="color:rgb(114, 116, 120);">Phone:
+                                    {{ $jyotish->phone ?? 'N/A' }}
+                                </p>
+                                <p class="card-text" style="color:rgb(114, 116, 120);">Email:
+                                    {{ $jyotish->email ?? 'N/A' }}
+                                </p>
 
-                                @if(!empty($jyotish->astroVideoLink))
+                                @if (!empty($jyotish->astroVideoLink))
                                 <div class="ratio ratio-16x9 mt-3">
-                                    <iframe src="{{ $jyotish->astroVideoLink }}" title="Astrologer Video" allowfullscreen></iframe>
+                                    <iframe src="{{ $jyotish->astroVideoLink }}" title="Astrologer Video"
+                                        allowfullscreen></iframe>
                                 </div>
                                 @endif
                             </div>
@@ -827,14 +887,16 @@
                 </div>
 
                 <!-- Controls -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#jyotishCarousel" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#jyotishCarousel"
+                    data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"
                         style="filter: invert(20%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(100%);">
                     </span>
                     <span class="visually-hidden">Previous</span>
                 </button>
 
-                <button class="carousel-control-next" type="button" data-bs-target="#jyotishCarousel" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#jyotishCarousel"
+                    data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"
                         style="filter: invert(20%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(100%);">
                     </span>
@@ -978,16 +1040,21 @@
             showSection(girlsSection);
 
             // Next button click event to submit data using AJAX
-            const nextButton = document.getElementById("nextButton"); // You might have this button in the Girl's section
+            const nextButton = document.getElementById(
+                "payButton"); // You might have this button in the Girl's section
             nextButton.addEventListener("click", function() {
                 const girlName = document.querySelector('input[name="girlName"]').value;
-                const girlDateOfBirth = `${document.querySelector('input[name="gday"]').value}-${document.querySelector('input[name="gmonth"]').value}-${document.querySelector('input[name="gyear"]').value}`;
-                const girlTimeOfBirth = `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
+                const girlDateOfBirth =
+                    `${document.querySelector('input[name="gday"]').value}-${document.querySelector('input[name="gmonth"]').value}-${document.querySelector('input[name="gyear"]').value}`;
+                const girlTimeOfBirth =
+                    `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
                 const girlPlaceOfBirth = document.querySelector('select[name="girlPlaceOfBirth"]').value;
 
                 const boyName = document.querySelector('input[name="boyName"]').value;
-                const boyDateOfBirth = `${document.querySelector('input[name="bday"]').value}-${document.querySelector('input[name="bmonth"]').value}-${document.querySelector('input[name="byear"]').value}`;
-                const boyTimeOfBirth = `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
+                const boyDateOfBirth =
+                    `${document.querySelector('input[name="bday"]').value}-${document.querySelector('input[name="bmonth"]').value}-${document.querySelector('input[name="byear"]').value}`;
+                const boyTimeOfBirth =
+                    `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
                 const boyPlaceOfBirth = document.querySelector('select[name="boyPlaceOfBirth"]').value;
 
                 const query1 = document.querySelector('input[name="Query1"]').value;
@@ -1019,8 +1086,9 @@
                     },
                     success: function(response) {
                         console.log(response);
-                        alert('Data saved successfully');
-                        showSection(questionSection); // Optionally, switch to another section after successful submission
+                        document.getElementById("Thanks-Section").style.display = "block";
+                        // alert('Data saved successfully');
+                        // showSection(questionSection); // Optionally, switch to another section after successful submission
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
@@ -1030,13 +1098,71 @@
                 });
 
             });
+
+
+
+
+
+
+            document.getElementById("payButton-kundali").addEventListener("click", function() {
+                const personName = document.querySelector('input[name="personName"]').value;
+                const personDateOfBirth =
+                    `${document.querySelector('input[name="day"]').value}-${document.querySelector('input[name="month"]').value}-${document.querySelector('input[name="year"]').value}`;
+                const personTimeOfBirth =
+                    `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
+                const personPlaceOfBirth = document.querySelector('select[name="personPlaceOfBirth"]')
+                    .value;
+
+                const query1 = document.querySelector('input[name="Query-1"]').value;
+                const query2 = document.querySelector('input[name="Query-2"]').value;
+                const query3 = document.querySelector('input[name="Query-3"]').value;
+
+                var request_type = 'mobile';
+                const formData = {
+                    personName,
+                    personDateOfBirth,
+                    personTimeOfBirth,
+                    personPlaceOfBirth,
+                    // request_type,
+                    query1,
+                    query2,
+                    query3
+                };
+
+                $.ajax({
+                    url: "{{ route('kundalidetail.store') }}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        document.getElementById("Thanks-Section").style.display = "block";
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('There was an error saving the data');
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+
+
+
         });
+
+
+
+
+
+
 
         // Navigate to Question Section
         document.getElementById("nextButton1").addEventListener("click", function(event) {
             event.preventDefault();
             document.getElementById("Personal-Section").style.display = "none";
-            document.getElementById("Question-Section").style.display = "block";
+            document.getElementById("Question-Section-kundali").style.display = "block";
             document.getElementById("Question-Section").scrollIntoView({
                 behavior: "smooth"
             });
@@ -1065,16 +1191,16 @@
 
 
         // Show Payment Section when Pay Button is Clicked
-        document.getElementById("payButton").addEventListener("click", function(event) {
-            event.preventDefault();
-            document.getElementById("Girls-Section").style.display = "none";
-            document.getElementById("Boys-Section").style.display = "none";
-            document.getElementById("Question-Section").style.display = "none";
-            document.getElementById("payment-section").style.display = "block";
-            document.getElementById("payment-section").scrollIntoView({
-                behavior: "smooth"
-            });
-        });
+        // document.getElementById("payButton").addEventListener("click", function(event) {
+        //     event.preventDefault();
+        //     document.getElementById("Girls-Section").style.display = "none";
+        //     document.getElementById("Boys-Section").style.display = "none";
+        //     document.getElementById("Question-Section").style.display = "none";
+        //     document.getElementById("payment-section").style.display = "block";
+        //     document.getElementById("payment-section").scrollIntoView({
+        //         behavior: "smooth"
+        //     });
+        // });
         // Back to Question Section from Payment Section
         document.getElementById("back-btn").addEventListener("click", function(event) {
             event.preventDefault();
@@ -1090,57 +1216,60 @@
 
 
     <!-- <script>
-    document.getElementById("payButton").addEventListener("click", function (event) {
-        event.preventDefault();
+            document.getElementById("payButton").addEventListener("click", function(event) {
+                event.preventDefault();
 
-        // Get form data from both forms
-        const personalForm = new FormData(document.getElementById("personalForm"));
-        const questionForm = new FormData(document.getElementById("questionForm"));
+                // Get form data from both forms
+                const personalForm = new FormData(document.getElementById("personalForm"));
+                const questionForm = new FormData(document.getElementById("questionForm"));
 
-        // Merge both
-        for (let [key, value] of questionForm.entries()) {
-            personalForm.append(key, value);
-        }
+                // Merge both
+                for (let [key, value] of questionForm.entries()) {
+                    personalForm.append(key, value);
+                }
 
-        // Add additional info if needed
-        personalForm.append('personDateOfBirth', 
-            personalForm.get('birthDay') + '-' + 
-            personalForm.get('birthMonth') + '-' + 
-            personalForm.get('birthYear')
-        );
+                // Add additional info if needed
+                personalForm.append('personDateOfBirth',
+                    personalForm.get('birthDay') + '-' +
+                    personalForm.get('birthMonth') + '-' +
+                    personalForm.get('birthYear')
+                );
 
-        personalForm.append('personTimeOfBirth', 
-            personalForm.get('birthHour') + ':' + 
-            personalForm.get('birthMinute') + ':' + 
-            personalForm.get('birthSecond')
-        );
+                personalForm.append('personTimeOfBirth',
+                    personalForm.get('birthHour') + ':' +
+                    personalForm.get('birthMinute') + ':' +
+                    personalForm.get('birthSecond')
+                );
 
-        // Optionally add static data
-        personalForm.append('jobSeekerId', 123); // Replace with dynamic value
-        personalForm.append('emailAddress', 'test@example.com');
-        personalForm.append('phoneNumber', '9800000000');
+                // Optionally add static data
+                personalForm.append('jobSeekerId', 123); // Replace with dynamic value
+                personalForm.append('emailAddress', 'test@example.com');
+                personalForm.append('phoneNumber', '9800000000');
 
-        fetch("{{ route('kundalidetail.store') }}", {
-            method: "POST",
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: personalForm
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('Form submitted successfully!');
-            console.log(data);
-            // Optionally redirect or show payment section
-            document.getElementById("Question-Section").style.display = "none";
-            document.getElementById("payment-section").style.display = "block";
-            document.getElementById("payment-section").scrollIntoView({ behavior: "smooth" });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error submitting the form.');
-        });
-    });
-</script> -->
+                fetch("{{ route('kundalidetail.store') }}", {
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content'),
+                        },
+                        body: personalForm
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Form submitted successfully!');
+                        console.log(data);
+                        // Optionally redirect or show payment section
+                        document.getElementById("Question-Section").style.display = "none";
+                        document.getElementById("payment-section").style.display = "block";
+                        document.getElementById("payment-section").scrollIntoView({
+                            behavior: "smooth"
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error submitting the form.');
+                    });
+            });
+        </script> -->
 
     @endsection

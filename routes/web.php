@@ -632,6 +632,20 @@ Route::get('/become_seller', function () {
 // Handle the form submission from the frontend
 Route::post('/become_seller', [BecomeSellerController::class, 'store'])->name('become.seller.store');
 
+// Frontend route for becoming a money exchanger
+
+Route::get('/become_money_exchanger', function () {
+    return view('frontend.giftNcoupon.become_money_exchanger');
+})->name('become.money_exchanger');
+
+// Handle the form submission from the frontend
+Route::post('/become_money_exchanger', [BecomeMoneyExchangerController::class, 'store'])->name('become.money_exchanger.store');
+
+
+
+
+
+
 // Superadmin routes grouped under /superadmin
 Route::prefix('superadmin')
     ->middleware(['auth:admin', 'role:superAdmin'])
