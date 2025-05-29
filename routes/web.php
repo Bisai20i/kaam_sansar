@@ -7,6 +7,7 @@ use App\Http\Controllers\AdsManagerController;
 use App\Http\Controllers\AdvertisementCategoryController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\AstrologerController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\BecomeSellerController;
 use App\Http\Controllers\BlogsAndPodcastController;
@@ -14,6 +15,10 @@ use App\Http\Controllers\BrokerAccountController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DiscussionForumController;
 use App\Http\Controllers\DocumentationAttestationController;
+use App\Http\Controllers\DocumentPurposeController;
+use App\Http\Controllers\DocumentSubtype;
+use App\Http\Controllers\DocumentSubtypeController;
+use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\ForeignExchangeDetailController;
@@ -37,6 +42,7 @@ use App\Http\Controllers\JobCompanyController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\JobSeekerDashboardController;
+use App\Http\Controllers\JyotishController;
 use App\Http\Controllers\KundaliController;
 use App\Http\Controllers\KundaliMatchingController;
 use App\Http\Controllers\LanguageController;
@@ -70,11 +76,11 @@ use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\WorkPermitController;
 use App\Http\Controllers\WorkPermitDistrictController;
 use App\Http\Controllers\WorkPermitLocationController;
+use App\Models\DocumentPurpose;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\JyotishController;
-use App\Http\Controllers\Auth\GoogleController;
+
 
 
 
@@ -102,7 +108,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     //quize routes
     Route::resource('questions', QuestionController::class);
-  Route::post('/questions/{id}/update-status', [QuestionController::class, 'updateStatus'])
+    Route::post('/questions/{id}/update-status', [QuestionController::class, 'updateStatus'])
         ->name('question.updateStatus');
     Route::resource('jyotishs', JyotishController::class);
 
@@ -214,6 +220,9 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     //work permit
     Route::resource('workPermitDistricts', WorkPermitDistrictController::class);
     Route::resource('workPermitLocations', WorkPermitLocationController::class);
+    Route::resource('document-types', DocumentTypeController::class);
+    Route::resource('document-subtypes', DocumentSubtypeController::class);
+    Route::resource('document-purposes', DocumentPurposeController::class);
 
     //Polling System
     Route::resource('pollingQuestions', PollingQuestionController::class);
@@ -227,7 +236,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::get('/bankAccounts/{id}', [BankAccountController::class, 'show'])->name('bankAccounts.show');
     Route::delete('/bankAccounts/{bankAccount}', [BankAccountController::class, 'destroy'])->name('bankAccounts.destroy');
 
-                                                                                                                                   //broker account
+    //broker account
     Route::get('/brokerAccounts/{brokerAccount}', [BrokerAccountController::class, 'show'])->name('brokerAccounts.show');          // Show specific broker account
     Route::delete('/brokerAccounts/{brokerAccount}', [BrokerAccountController::class, 'destroy'])->name('brokerAccounts.destroy'); // Delete broker account
     Route::get('/brokerAccounts', [BrokerAccountController::class, 'index'])->name('brokerAccounts.index');                        // List all broker accounts
@@ -240,6 +249,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::delete('/documentAttestations/{documentAttestation}', [DocumentationAttestationController::class, 'destroy'])->name('documentAttestations.destroy');
     Route::post('/documentAttestations/{id}/update-status', [DocumentationAttestationController::class, 'updateStatus'])
         ->name('documentAttestation.updateStatus');
+
 
     //work permit
     Route::get('/workPermits', [WorkPermitController::class, 'index'])->name('workPermits.index');
@@ -325,7 +335,7 @@ Route::prefix('jobseeker')->group(function () {
     Route::get('/reset-password', [JobSeekerController::class, 'resetPasswordPage'])->name('jobseeker.password_reset_page');
     Route::patch('reset-password', [JobSeekerController::class, 'resetPassword'])->name('jobseeker.password-reset');
     Route::post('/register', [JobSeekerController::class, 'register'])->name('jobseeker.register');
-    Route::match(['get', 'post'],'/login', [JobSeekerController::class, 'login'])->name('jobseeker.login');
+    Route::match(['get', 'post'], '/login', [JobSeekerController::class, 'login'])->name('jobseeker.login');
 });
 
 Route::post('/clear-session-flag', [JobSeekerController::class, 'clearSessionFlag'])->name('clear.session.flag');
@@ -621,7 +631,7 @@ Route::get('/passport/times/{id}/{date}', [PassportRenewalController::class, 'pa
 Route::middleware(['auth:job_seekers'])->group(function () {
     Route::get('/quiz', [QuestionController::class, 'quiz'])->name('quiz.frontend');
     Route::post('/quiz/submit', [QuestionController::class, 'submitQuiz'])->name('quiz.submit');
-    
+
     // Change this line to use the controller method, NOT a closure returning the view
     Route::get('/quiz/thankyou', [QuestionController::class, 'thankYou'])->name('quiz.thankyou');
 });

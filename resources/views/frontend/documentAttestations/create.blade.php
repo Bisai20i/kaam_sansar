@@ -12,18 +12,29 @@
 
 <section class="daform">
     <div class="container-fluid container-lg">
-        <div id="form-container"
-            class="container-fluid container-lg border border-1 border-dark-subtle rounded-4 p-md-5 py-5 mb-5 mt-5">
+        <div id="form-container" class="container-fluid container-lg border border-1 border-dark-subtle rounded-4 p-md-5 py-5 mb-5 mt-5">
             <form id="form" method="POST" action="{{ route('documentAttestations.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div id="multiStepForm1" class="multi-step-form" style="display:block;">
+                    @if ($errors->any())
+                    <div class="alert alert-danger" id="error-alert">
+                        <strong>Please fix the following errors:</strong>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <div class="d-flex">
                         <div class="col-auto">
                             <a href="#" class="">
                                 <i class="fa fa-chevron-left text-black fs-4 ms-2" aria-hidden="true"></i>
                             </a>
                         </div>
+
                         <div class="col text-center">
+
                             <h3 style="color:#0064a7;">Documentation Attestaion</h3>
                         </div>
                     </div>
@@ -46,77 +57,73 @@
                         <div class="mb-3">
                             <label for="documentType" class="form-label">Select Type <span class="text-danger">*</span></label>
                             <select id="documentType" name="documentType" class="form-select w-50" aria-label="Default select example" required>
-                                <option selected>Nagrita</option>
+                                <option value="" disabled {{ old('purpose') ? '' : 'selected' }}>Select purpose</option>
+                                @forelse ($documentTypes as $documentType)
+                                <option value="{{ $documentType->documentType }}" {{ old('documentType') == $documentType->documentType ? 'selected' : '' }}>
+                                    {{ $documentType->documentType }}
+                                </option>
+                                @empty
+                                <option disabled>No data available</option>
+                                @endforelse
                             </select>
+
                         </div>
                         <div class="mb-3">
                             <label for="subType" class="form-label">Select Sub-type <span class="text-danger">*</span></label>
                             <select id="subType" name="subType" class="form-select w-50" aria-label="Default select example" required>
-                                <option selected>Photocopy</option>
+                                <option value="" disabled {{ old('purpose') ? '' : 'selected' }}>Select purpose</option>
+                                @forelse ($documentSubtypes as $documentSubtype)
+                                <option value="{{ $documentSubtype->documentSubtype }}" {{ old('subType') == $documentSubtype->documentSubtype ? 'selected' : '' }}>
+                                    {{ $documentSubtype->documentSubtype }}
+                                </option>
+                                @empty
+                                <option disabled>No data available</option>
+                                @endforelse
                             </select>
+
                         </div>
                         <div class="mt-5">
                             <h5 style="color:#0064a7;">Conditions of Use</h5>
                             <p class="fs-5 my-3">Read before pre-enrollment</p>
-                            <p class="fs-6 text-black-50">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Inventore
-                                libero
-                                repellendus quo.
-                                Consectetur vel placeat sit temporibus ab ex explicabo, dicta officia, pariatur
-                                aspernatur,
-                                eos expedita. Enim officiis eaque vel esse ab eos, debitis nesciunt accusantium in ea
-                                voluptate ipsa. Laboriosam vero repudiandae magnam eum expedita? Expedita ab corrupti
-                                minus
-                                voluptates aspernatur laboriosam libero iure illum? Totam debitis dicta voluptas
-                                voluptatem
-                                esse iste beatae incidunt officia consequatur. Natus omnis excepturi praesentium,
-                                aliquid
-                                officia, a porro aspernatur officiis ullam quasi sapiente debitis quidem eligendi sequi
-                                distinctio esse laboriosam illo dignissimos nostrum minima dolorum eos. Accusamus est,
-                                sequi
-                                sapiente at sunt ut. Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro
-                                excepturi iusto, placeat deleniti, molestias repudiandae sed officiis dolorum optio illo
-                                rem
-                                iure voluptate nisi nostrum libero consequatur. A molestias blanditiis dignissimos
-                                voluptates neque provident possimus non alias consequatur. Facilis vitae soluta, debitis
-                                ex
-                                incidunt dicta eos officiis blanditiis rerum non iste quod dolores atque cupiditate. Nam
-                                incidunt porro saepe debitis quibusdam laboriosam vero maiores enim labore eveniet
-                                aliquid
-                                inventore officiis libero ullam sit sapiente illum adipisci dicta, qui blanditiis?
-                                Voluptate
-                                minima vel qui quisquam, cupiditate consequatur ratione voluptatem minus numquam quos!
-                                Rem
-                                atque, quidem ipsam corporis deserunt veniam possimus facilis.</p>
+                            <p class="fs-6 text-black-50">
+                                By requesting document attestation services, you agree to provide accurate and verifiable information.
+                                The documents submitted must be authentic, legible, and free from tampering or falsification.
+                                The attestation process may involve verification with issuing authorities, and any discrepancies can result
+                                in service rejection without refund. It is the applicant’s responsibility to ensure all forms and
+                                supporting documents are properly filled out and submitted within the stated deadlines.
+                                <br><br>
+                                The service is intended strictly for personal, academic, or professional purposes. Misuse of attested documents
+                                for fraudulent activities may lead to legal consequences. By proceeding, you consent to data processing for
+                                verification purposes under our privacy policy.
+                            </p>
                         </div>
 
                         <div class="mt-5">
                             <h5 style="color:#0064a7;">Required Documents</h5>
                             <li class="ms-3 text-justify text-secondary">
-                                Lorem ipsum dolor sit amet. Inventore libero repellendus quo. Consectetur vel placeat
-                                sit temporibus ab ex explicabo, dicta officia, pariatur aspernatur.
+                                Original and photocopy of the citizenship certificate requiring attestation.
                             </li>
                             <li class="ms-3 text-justify text-secondary">
-                                Lorem ipsum dolor sit amet. Inventore libero repellendus quo. Consectetur vel placeat
-                                sit temporibus ab ex explicabo, dicta officia, pariatur aspernatur.
+                                Valid government-issued document to be attestated.
                             </li>
                         </div>
+
                         <div class="mt-5">
                             <h5 style="color:#0064a7;">Service Completion Duration</h5>
-
                             <div class="mb-3 text-secondary">
-                                Lorem ipsum dolor sit amet. Inventore libero repellendus quo. Consectetur vel
-                                placeat sit temporibus ab ex explicabo, dicta officia, pariatur aspernatur.
+                                The document attestation process typically takes between 3 to 7 working days from the date of submission.
+                                Delays may occur in cases where additional verification is required or during public holidays.
                             </div>
-                            <div class="d-flex justify-content-between mt-5">
-                                <button class="btn btn-light">Cancel</button>
-                                <button class="btn text-white border-0"
-                                    style="background-color: #0064a7;" type="button"
-                                    onclick="showNextForm(2)">Next</button>
-                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-5">
+                            <button class="btn btn-light">back</button>
+                            <button class="btn text-white border-0"
+                                style="background-color: #0064a7;" type="button"
+                                onclick="if(validateForm1())showNextForm(2)">Next</button>
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Form 2 -->
                 <div id="multiStepForm2" class="multi-step-form" style="display:none;">
@@ -140,31 +147,35 @@
                     </div>
                     <div class="mt-5 border border-1 border-dark-subtle rounded-4 p-3 p-md-5">
                         <div>
-                            <p class="text-muted">First, please enter the country where you live:</p>
-                        </div>
-                        <div>
                             <div class="row row-cols-1">
+                                <div>
+                                    <p class="text-muted">First, please enter the country where you live:</p>
+                                </div>
                                 <div class="col">
-                                    <label for="applicantCountry">Enter Country: <span class="text-danger">*</span></label>
-                                    <input type="text" id="applicantCountry" name="applicantCountry" class="form-control my-2 w-50" placeholder="Enter your country" required>
+                                    <label for="applicantCountry">Select Country: <span class="text-danger">*</span></label>
+                                    <select id="applicantCountry" name="applicantCountry" class="form-control my-2 w-50" required>
+                                        <option value="">-- Select Country --</option>
+                                    </select>
+                                </div>
 
+                                <div class="col">
                                     <p class="text-muted">Then, select the country where your documents are to be attested:</p>
+                                    <label for="attestationCountry">Select Country: <span class="text-danger">*</span></label>
+                                    <select id="attestationCountry" name="attestationCountry" class="form-control my-2 w-50" required>
+                                        <option value="">-- Select Country --</option>
+                                    </select>
                                 </div>
-                                <div class="col">
-                                    <label for="attestationCountry">Enter Country: <span class="text-danger">*</span></label>
-                                    <input type="text" id="attestationCountry" name="attestationCountry" class="form-control w-50 my-2" placeholder="Enter country name" required>
 
+
+                                <div class="col">
                                     <p class="text-muted">Also, enter the name of applicant.</p>
-                                </div>
-
-                                <div class="col">
                                     <label for="applicantName">Applicant Name: <span class="text-danger">*</span></label>
-                                    <input id="applicantName" name="applicantName" type="text" class="form-control form-control-da fs-6 mt-2 my-0 w-50 text-muted" placeholder="Enter applicant Name" required>
+                                    <input id="applicantName" name="applicantName" value="{{ old('applicantName') }}" type="text" class="form-control form-control-da fs-6 mt-2 my-0 w-50 text-muted" placeholder="Enter applicant Name" required>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-5">
-                            <button class="btn btn-light">Cancel</button>
+                            <button class="btn btn-light">back</button>
                             <button class="btn text-white border-0" style="background-color: #0064a7;" type="button" onclick="if(validateForm2()) { showNextForm(3); }">Next</button>
                         </div>
                     </div>
@@ -197,55 +208,63 @@
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
                                 <div class="col">
                                     <label for="countryAttestation" class="form-label fs-6">Country for Attestation: <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="countryAttestation" name="countryAttestation" required maxlength="255" placeholder="Enter country where attestation is required">
+                                    <input type="text" class="form-control form-control-da fs-6" id="countryAttestation" name="countryAttestation" value="{{ old('countryAttestation') }}" required maxlength="255" placeholder="Enter country where attestation is required">
                                 </div>
                                 <div class="col">
                                     <label for="purpose" class="form-label fs-6">Purpose of Attestation: <span class="text-danger">*</span></label>
-                                    <select class="form-select text-muted fs-6" id="purpose" name="purpose" required>
-                                        <option value="">Select Purpose</option>
-                                        <option value="something">Something</option>
+                                    <select class="form-select text-muted fs-6 " id="purpose" name="purpose" required>
+                                        <option value="" disabled {{ old('purpose') ? '' : 'selected' }}>Select purpose</option>
+                                        @forelse ($documentPurposes as $documentPurpose)
+                                        <option value="{{ $documentPurpose->documentPurpose }}"
+                                            {{ old('purpose') == $documentPurpose->documentPurpose ? 'selected' : '' }}>
+                                            {{ $documentPurpose->documentPurpose }}
+                                        </option>
+                                        @empty
+                                        <option disabled>No data available</option>
+                                        @endforelse
                                     </select>
                                 </div>
+
                             </div>
                         </div>
-
                         <div class="Delivery Address">
                             <h4 class="pt-4 pb-1 border-bottom border-2 border-primary d-inline-block">Delivery Address Details</h4>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                 <div class="col">
                                     <label for="deliveryCountry" class="form-label fs-6">Country Name: <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryCountry" name="deliveryCountry" required maxlength="255" placeholder="Enter Country Name">
+                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryCountry" name="deliveryCountry" required maxlength="255" placeholder="Enter Country Name" value="{{ old('deliveryCountry') }}">
                                 </div>
                                 <div class="col">
                                     <label for="deliveryCity" class="form-label fs-6">City: <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryCity" name="deliveryCity" required maxlength="255" placeholder="Enter city Name">
+                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryCity" name="deliveryCity" required maxlength="255" placeholder="Enter city Name" value="{{ old('deliveryCity') }}">
                                 </div>
                                 <div class="col">
                                     <label for="deliveryStreet" class="form-label fs-6">Street Name: <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryStreet" name="deliveryStreet" required maxlength="255" placeholder="Enter Street Name">
+                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryStreet" name="deliveryStreet" required maxlength="255" placeholder="Enter Street Name" value="{{ old('deliveryStreet') }}">
                                 </div>
                                 <div class="col">
                                     <label for="deliveryApartment" class="form-label fs-6">Apartment Number:</label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryApartment" name="deliveryApartment" maxlength="255" placeholder="Enter Apartment Number">
+                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryApartment" name="deliveryApartment" maxlength="255" placeholder="Enter Apartment Number" value="{{ old('deliveryApartment') }}">
                                 </div>
                                 <div class="col">
                                     <label for="deliveryLandmark" class="form-label fs-6">Landmark:</label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryLandmark" name="deliveryLandmark" maxlength="255" placeholder="Enter Landmark">
+                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryLandmark" name="deliveryLandmark" maxlength="255" placeholder="Enter Landmark" value="{{ old('deliveryLandmark') }}">
                                 </div>
                                 <div class="col">
                                     <label for="primaryContact" class="form-label fs-6">Primary Contact Number: <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="primaryContact" name="primaryContact" required maxlength="255" placeholder="Enter Contact Number">
+                                    <input type="text" class="form-control form-control-da fs-6" id="primaryContact" name="primaryContact" required maxlength="255" placeholder="Enter Contact Number" value="{{ old('primaryContact') }}">
                                 </div>
                                 <div class="col">
                                     <label for="secondaryContact" class="form-label fs-6">Alternative Contact Number:</label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="secondaryContact" name="secondaryContact" maxlength="255" placeholder="Enter Contact Number">
+                                    <input type="text" class="form-control form-control-da fs-6" id="secondaryContact" name="secondaryContact" maxlength="255" placeholder="Enter Contact Number" value="{{ old('secondaryContact') }}">
                                 </div>
                                 <div class="col">
                                     <label for="email" class="form-label fs-6">Email Address: <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control form-control-da fs-6" id="email" name="email" required maxlength="255" placeholder="Enter email address">
+                                    <input type="email" class="form-control form-control-da fs-6" id="email" name="email" required maxlength="255" placeholder="Enter email address" value="{{ old('email') }}">
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="workaddress">
                             <div class="">
@@ -256,121 +275,132 @@
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                 <div class="col">
                                     <label for="workCountry" class="form-label fs-6">Country Name: </label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="workCountry" name="workCountry" maxlength="255" placeholder="Enter country Name">
+                                    <input type="text" class="form-control form-control-da fs-6" id="workCountry" name="workCountry" maxlength="255" placeholder="Enter country Name" value="{{ old('workCountry') }}">
                                 </div>
                                 <div class="col">
                                     <label for="workCity" class="form-label fs-6">City: </label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="workCity" name="workCity" maxlength="255" placeholder="Enter city name">
+                                    <input type="text" class="form-control form-control-da fs-6" id="workCity" name="workCity" maxlength="255" placeholder="Enter city name" value="{{ old('workCity') }}">
                                 </div>
-
                                 <div class="col">
                                     <label for="workStreet" class="form-label fs-6">Street Name: </label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="workStreet" name="workStreet" maxlength="255" placeholder="Enter Street Name">
+                                    <input type="text" class="form-control form-control-da fs-6" id="workStreet" name="workStreet" maxlength="255" placeholder="Enter Street Name" value="{{ old('workStreet') }}">
                                 </div>
-
                                 <div class="col">
                                     <label for="workApartment" class="form-label fs-6">Apartment Number: </label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="workApartment" name="workApartment" maxlength="255" placeholder="Enter Apartment Number">
+                                    <input type="text" class="form-control form-control-da fs-6" id="workApartment" name="workApartment" maxlength="255" placeholder="Enter Apartment Number" value="{{ old('workApartment') }}">
                                 </div>
-
                                 <div class="col">
                                     <label for="workLandmark" class="form-label fs-6">Landmark: </label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="workLandmark" name="workLandmark" maxlength="255" placeholder="Enter Landmark">
+                                    <input type="text" class="form-control form-control-da fs-6" id="workLandmark" name="workLandmark" maxlength="255" placeholder="Enter Landmark" value="{{ old('workLandmark') }}">
                                 </div>
                             </div>
                         </div>
+
                         <div class="attestation">
                             <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block">Required Documents</h4>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-lg-2 row-gap-4 gx-5">
                                 <div class="col">
                                     <label for="identification" class="form-label fs-6">Identification Document:</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="identification" name="identification" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="identification" name="identification" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
+
                                 </div>
                                 <div class="col">
                                     <label for="visa" class="form-label fs-6">Visa:</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="visa" name="visa" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="visa" name="visa" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
                                     <label for="citizenshipFront" class="form-label fs-6">Citizenship Front: <span class="text-danger">*</span></label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipFront" name="citizenshipFront" accept=".jpg,.jpeg,.png,.pdf" required onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipFront" name="citizenshipFront" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)" required>
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
                                     <label for="citizenshipBack" class="form-label fs-6">Citizenship Back: <span class="text-danger">*</span></label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipBack" name="citizenshipBack" accept=".jpg,.jpeg,.png,.pdf" required onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipBack" name="citizenshipBack" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)" required>
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
                                     <label for="passport" class="form-label fs-6">Passport:</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="passport" name="passport" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="passport" name="passport" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
                                     <label for="photo" class="form-label fs-6">Passport-size Photo:</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="photo" name="photo" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="photo" name="photo" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
                                     <label for="document1" class="form-label fs-6">Documentto be attestated I:</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="document1" name="document1" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="document1" name="document1" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
                                     <label for="document2" class="form-label fs-6">Documentto be attestated II:</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="document2" name="document2" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="document2" name="document2" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
                                     <label for="document3" class="form-label fs-6">Documentto be attestated III</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="document3" name="document3" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="document3" name="document3" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                                 <div class="col">
                                     <label for="document4" class="form-label fs-6">Documentto be attestated IV</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="document4" name="document4" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                    <input type="file" class="form-control form-control-da fs-6" id="document4" name="document4" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                    <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
                             </div>
 
                         </div>
-                    </div>
-                    <div class="my-4 border border-1 border-secondary"></div>
-                    <div class="d-flex flex-column mx-3 mb-5">
-                        <div class="form-check">
-                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkCorrect" required>
-                            <label class="form-check-label fs-6" for="checkCorrect">
-                                <span class="required"></span> I confirm that all information provided is accurate and complete. I understand
-                                that providing false information may result in the rejection of my application and possible legal consequences.
-                            </label>
-                        </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkTerms" required>
-                            <label class="form-check-label fs-6" for="checkTerms">
-                                <span class="required"></span> I agree to the Terms and Conditions and Privacy Policy of Kamsansar's Document Attestaion service.
-                            </label>
+                        <div class="my-4 border border-1 border-secondary"></div>
+                        <div class="d-flex flex-column mx-3 mb-5">
+                            <div class="form-check">
+                                <input class="form-check-input fs-6" type="checkbox" id="checkCorrect" required>
+                                <label class="form-check-label fs-6" for="checkCorrect">
+                                    <span class="required"></span> I confirm that all information provided is accurate and complete. I understand
+                                    that providing false information may result in the rejection of my application and possible legal consequences.
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input fs-6" type="checkbox" id="checkTerms" required>
+                                <label class="form-check-label fs-6" for="checkTerms">
+                                    <span class="required"></span> I agree to the Terms and Conditions and Privacy Policy of Kamsansar's Document Attestaion service.
+                                </label>
+                            </div>
+                            <div class="required-fields-message text-danger fw-bold fw-bold">* - Required fields -
+                                Please
+                                fill all
+                                required fields before proceeding.</div>
                         </div>
-                        <div class="required-fields-message text-danger fw-bold fw-bold">* - Required fields -
-                            Please
-                            fill all
-                            required fields before proceeding.</div>
-                    </div>
-                    <div class="d-flex justify-content-end py-4">
-                        <button type="submit" class="btn btn" id="submitBtn" disabled style="background-color: #0064a7; color: white;">
-                            Submit Appication
-                        </button>
+                        <div class="d-flex justify-content-between mt-5">
+                            <button class="btn btn-light">back</button>
+                            <button type="submit" class="btn btn" id="submitBtn" disabled style="background-color: #0064a7; color: white;">
+                                Submit Appication
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -389,32 +419,108 @@
         document.getElementById('multiStepForm' + (formNumber - 1)).style.display = 'block';
     }
 
- function validateForm2() {
-    const requiredFields = document.querySelectorAll('#multiStepForm2 [required]');
-    let isValid = true;
+    function handleForm1Next() {
+        const isValid = validateForm1();
+        if (isValid) {
+            showNextForm(2);
+        }
+    }
 
-    requiredFields.forEach(field => {
-        if (!field.value.trim()) {
-            field.classList.add('error');
-            
-            field.style.transition = 'border 0.3s ease';
-            field.style.border = '2px solid red';
-            
-            setTimeout(() => {
-                field.style.border = ''; 
-                field.style.transition = ''; 
-            }, 2000);
-            
-            isValid = false;
-        } else {
-            field.classList.remove('error');
-            field.style.border = ''; // Reset if valid
-            field.style.transition = ''; // Reset transition
+    function validateForm1() {
+        const requiredFields = document.querySelectorAll('#multiStepForm1 [required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('error');
+
+                field.style.transition = 'border 0.3s ease';
+                field.style.border = '2px solid red';
+                window.scrollTo({
+                    top: 10,
+                    behavior: 'smooth'
+                })
+                setTimeout(() => {
+                    field.style.border = '';
+                    field.style.transition = '';
+                }, 4000);
+
+                isValid = false;
+            } else {
+                field.classList.remove('error');
+                field.style.border = '';
+                field.style.transition = '';
+            }
+        });
+
+        return isValid;
+    }
+
+    function handleForm2Next() {
+        const isValid = validateForm2();
+        if (isValid) {
+            showNextForm(3);
+        }
+    }
+
+    function validateForm2() {
+        const requiredFields = document.querySelectorAll('#multiStepForm2 [required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('error');
+
+                field.style.transition = 'border 0.3s ease';
+                field.style.border = '2px solid red';
+
+                setTimeout(() => {
+                    field.style.border = '';
+                    field.style.transition = '';
+                }, 2000);
+
+                isValid = false;
+            } else {
+                field.classList.remove('error');
+                field.style.border = '';
+                field.style.transition = '';
+            }
+        });
+
+        return isValid;
+    }
+
+
+
+    document.getElementById('submitBtn').addEventListener('click', function(e) {
+
+        let hasError = false;
+
+        // Check all required fields
+        const fields = document.getElementById('multiStepForm3').querySelectorAll('[required]');
+
+        fields.forEach(field => {
+            //field.style.transition = 'border 0.3s ease';
+
+            if (!field.value.trim()) {
+                // field.classList.add('is-invalid')
+                field.classList.add('error');
+                field.style.transition = 'border 0.3s ease';
+                field.style.border = '2px solid red';
+                window.scrollTo({
+                    top: 100,
+                    behavior: 'smooth'
+                })
+                hasError = true;
+            } else {
+                field.style.border = '';
+            }
+        });
+
+        if (hasError) {
+            e.preventDefault();
         }
     });
-
-    return isValid;
-}
 
     document.addEventListener('DOMContentLoaded', function() {
         const checkCorrect = document.getElementById('checkCorrect');
@@ -427,24 +533,67 @@
 
         checkCorrect.addEventListener('change', toggleSubmitButton);
         checkTerms.addEventListener('change', toggleSubmitButton);
+
+        const applicantCountrySelect = document.getElementById("applicantCountry");
+        const attestationCountrySelect = document.getElementById("attestationCountry");
+
+        fetch("https://restcountries.com/v3.1/all")
+            .then(response => response.json())
+            .then(countries => {
+                // Sort countries alphabetically by name
+                countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+                countries.forEach(country => {
+                    const option1 = document.createElement("option");
+                    option1.value = country.name.common;
+                    option1.textContent = country.name.common;
+
+                    const option2 = option1.cloneNode(true); // Clone for second dropdown
+
+                    applicantCountrySelect.appendChild(option1);
+                    attestationCountrySelect.appendChild(option2);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching countries:", error);
+            });
     });
+
+
 
     function handleImagePreview(input) {
         if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            const preview = input.nextElementSibling;
-
+            var reader = new FileReader();
             reader.onload = function(e) {
-                if (preview && preview.tagName === 'IMG') {
-                    preview.src = e.target.result;
-                    preview.classList.remove('d-none');
-                }
+                let imageContainer = input.parentElement.querySelector('img');
+                imageContainer.classList.remove('d-none');
+                imageContainer.src = e.target.result;
             }
-
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    function validateFileSize(input) {
+        const file = input.files[0];
+        const maxSize = 2 * 1024 * 1024;
+        const parent = input.parentNode;
+
+        const existingAlert = parent.querySelector('.file-size-error');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+
+        if (file && file.size > maxSize) {
+            input.value = '';
+            input.parentElement.querySelector('img').classList.add('d-none');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'text-danger mt-2 file-size-error';
+            errorDiv.textContent = 'File size must be less than 2 MB.';
+
+            parent.appendChild(errorDiv);
+        } else {
+            handleImagePreview(input)
+        }
+    }
 </script>
-
-
 @endsection

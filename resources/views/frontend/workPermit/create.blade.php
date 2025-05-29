@@ -105,36 +105,14 @@
                 <div class="mt-5">
                     <h4 style="color:#0064a7;">Read Instructions</h4>
                     <p class="fs-6 my-3">Read before pre-enrollment</p>
-                    <p class="fs-6 text-black-50">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Inventore
-                        libero
-                        repellendus quo.
-                        Consectetur vel placeat sit temporibus ab ex explicabo, dicta officia, pariatur
-                        aspernatur,
-                        eos expedita. Enim officiis eaque vel esse ab eos, debitis nesciunt accusantium in ea
-                        voluptate ipsa. Laboriosam vero repudiandae magnam eum expedita? Expedita ab corrupti
-                        minus
-                        voluptates aspernatur laboriosam libero iure illum? Totam debitis dicta voluptas
-                        voluptatem
-                        esse iste beatae incidunt officia consequatur. Natus omnis excepturi praesentium,
-                        aliquid
-                        officia, a porro aspernatur officiis ullam quasi sapiente debitis quidem eligendi sequi
-                        distinctio esse laboriosam illo dignissimos nostrum minima dolorum eos. Accusamus est,
-                        sequi
-                        sapiente at sunt ut. Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro
-                        excepturi iusto, placeat deleniti, molestias repudiandae sed officiis dolorum optio illo
-                        rem
-                        iure voluptate nisi nostrum libero consequatur. A molestias blanditiis dignissimos
-                        voluptates neque provident possimus non alias consequatur. Facilis vitae soluta, debitis
-                        ex
-                        incidunt dicta eos officiis blanditiis rerum non iste quod dolores atque cupiditate. Nam
-                        incidunt porro saepe debitis quibusdam laboriosam vero maiores enim labore eveniet
-                        aliquid
-                        inventore officiis libero ullam sit sapiente illum adipisci dicta, qui blanditiis?
-                        Voluptate
-                        minima vel qui quisquam, cupiditate consequatur ratione voluptatem minus numquam quos!
-                        Rem
-                        atque, quidem ipsam corporis deserunt veniam possimus facilis.</p>
+                    <p>
+                    <ul class="fs-6 " style="color:gray">
+                        <li>You can renew your work permit only if it is still valid or has recently expired, and your employment details remain unchanged.</li>
+                        <li>Submit your renewal application before the permit expires or within 30 days after expiration to avoid penalties.</li>
+                        <li>Prepare all required documents including your current work permit, passport, visa, employment contract, recent photo, and tax clearance if needed.</li>
+                        <li>Ensure all information provided matches your documents exactly to prevent rejection or processing delays.</li>
+                    </ul>
+                    </p>
                 </div>
                 <div class="mt-5">
 

@@ -147,7 +147,6 @@
                         localStorage.removeItem('tempProfileImage');
                         // Show success message
                     }
-                })
                 .catch(error => {
                     console.error(error);
                     console.error('something wents worng')

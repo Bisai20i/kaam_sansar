@@ -240,7 +240,7 @@ class BrokerAccountController extends Controller
 
         // Validation rules
         $validator = Validator::make($request->all(), [
-            'boid' => 'required|numeric|unique:broker_accounts,boid,' . $brokerAccount->id,
+            'boid' => 'required|string|unique:broker_accounts,boid,' . $brokerAccount->id,
             'referralCode' => 'nullable|string|max:255',
             'clientType' => 'required|in:individual,institutional,minor,foreign',
             'mobileNumber' => 'required|string|max:255',

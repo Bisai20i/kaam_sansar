@@ -14,19 +14,17 @@
             class="container-fluid container-lg border border-1 border-dark-subtle rounded-4 p-md-5 py-5">
 
             <!-- Form 1 - Personal Information -->
-            <div id="moneyexchangeForm1" class="multi-step-form">
+            <div id="bankForm" class="multi-step-form">
                 <div class="d-flex">
                     <div class="col text-center">
                         <h3 style="color:#0064a7;">{{ isset($bankAccount) ? 'Edit Account' : 'Account Opening Form' }}</h3>
                     </div>
                 </div>
                 <div class="pt-5 pb-2">
-                    <h1 style="font-size: 20px; font-weight: 500;">Dear ABZ Bank,</h1>
-                    <p class="fw-normal" style="font-size: 18px;">Quo impedit dolores alias sunt corporis
-                        voluptatibus necessitatibus laudantium. A sit reprehenderit quasi
-                        quis tenetur consequatur accusantium eos. Delectus aperiam aperiam deserunt reprehenderit.
-                        Magnam
-                        cum labore sit inventore nobis doloribus. </p>
+                    <h1 style="font-size: 20px; font-weight: 500;">Dear Bank,</h1>
+                    <p class="fw-normal" style="font-size: 18px;">I am writing to formally request the opening of a new bank account . After thoroughly reviewing your range of services, I am confident that Capital Harbor Bank aligns perfectly with my financial objectives and needs.
+
+                    </p>
                 </div>
 
                 <div class="mt-4">
@@ -39,17 +37,7 @@
                             @endforeach
                         </ul>
                     </div>
-
-                    <script>
-                        // Automatically hide the error message after 10 seconds (10000 milliseconds)
-                        setTimeout(function() {
-                            let alert = document.getElementById('error-alert');
-                            if (alert) {
-                                alert.style.display = 'none';
-                            }
-                        }, 10000);
-                    </script>
-
+                    @endif
                     <!-- Form 1 Content -->
                     <form id="bankAccount" action="{{ isset($bankAccount) ? route('bankAccounts.update', $bankAccount->id) : route('bankAccounts.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
@@ -155,10 +143,10 @@
                                     </div>
 
                                     <div class="col">
-                                        <label for="nepaliDob" class="fs-6 mb-1">Date of Birth (BS):</label>
-                                        <input type="text" placeholder="2050-06-15" id="nepaliDob" name="nepaliDob"
+                                        <label for="nepaliDob" class="fs-6 mb-1">Date of Birth (BS)<span class="text-danger fw-bold">*</span>:</label>
+                                        <input type="text" placeholder="enter nepali date" id="nepaliDob" name="nepaliDob"
                                             class="fs-6 form-control"
-                                            value="{{ old('nepaliDob', $bankAccount->nepaliDob ?? '') }}">
+                                            value="{{ old('nepaliDob', $bankAccount->nepaliDob ?? '') }}" required>
                                     </div>
 
                                     <div class="col">
@@ -169,9 +157,10 @@
                                         <label for="contactMedium" class="form-label fs-6">Contact Medium:</label>
                                         <select class="form-select form-control-da fs-6" id="contactMedium" name="contactMedium">
                                             <option value="">-- Select Medium --</option>
-                                            <option value="Email" {{ old('contactMedium', $bankAccount->contactMedium ?? '') == 'Email' ? 'selected' : '' }}>Email</option>
-                                            <option value="Phone" {{ old('contactMedium', $bankAccount->contactMedium ?? '') == 'Phone' ? 'selected' : '' }}>Phone</option>
-                                            <option value="Mobile" {{ old('contactMedium', $bankAccount->contactMedium ?? '') == 'Mobile' ? 'selected' : '' }}>Mobile</option>
+                                            <option value="Email" {{ old('contactMedium', $bankAccount->contactMedium ?? '') == 'Email' ? 'selected' : '' }}>whatsapp</option>
+                                            <option value="Phone" {{ old('contactMedium', $bankAccount->contactMedium ?? '') == 'Phone' ? 'selected' : '' }}>facebook</option>
+                                            <option value="Mobile" {{ old('contactMedium', $bankAccount->contactMedium ?? '') == 'Mobile' ? 'selected' : '' }}>email</option>
+                                            <option value="Mobile" {{ old('contactMedium', $bankAccount->contactMedium ?? '') == 'Mobile' ? 'selected' : '' }}>instagram</option>
                                             <option value="Other" {{ old('contactMedium', $bankAccount->contactMedium ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
                                         </select>
                                     </div>
@@ -353,6 +342,7 @@
                                 <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
 
                                     {{-- Signature Photo --}}
+                                    {{-- Signature Photo --}}
                                     <div class="col">
                                         <label for="signature" class="form-label fs-6">
                                             Signature Photo :<span class="text-danger fw-bold">*</span>
@@ -361,23 +351,26 @@
                                         <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control" id="signature" name="signature"
                                             accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="previewImage(this, 'signaturePreview')"
+                                            onchange="validateFileSize(this)"
                                             @if(!isset($bankAccount)) required @endif>
 
                                         @if(isset($bankAccount) && $bankAccount->signature)
-                                        <div class="mt-2">
-                                            <img id="signaturePreview" src="{{ asset($bankAccount->signature) }}"
-                                                alt="Signature Preview"
-                                                class="img-fluid rounded"
-                                                style="max-width: 300px; max-height: 200px;">
-                                        </div>
+                                        @php
+                                        $signatureExt = strtolower(pathinfo($bankAccount->signature, PATHINFO_EXTENSION));
+                                        @endphp
+
+                                        @if(in_array($signatureExt, ['jpg', 'jpeg', 'png']))
+                                        <img id="signaturePreview" src="{{ asset($bankAccount->signature) }}"
+                                            alt="Signature Preview"
+                                            class="img-fluid rounded"
+                                            style="max-width: 300px; max-height: 200px;">
+                                        @elseif($signatureExt === 'pdf')
+                                        <a href="{{ asset($bankAccount->signature) }}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                                            View PDF
+                                        </a>
+                                        @endif
                                         @else
-                                        <div class="mt-2">
-                                            <img id="signaturePreview" src=""
-                                                alt="Signature Preview"
-                                                class="img-fluid rounded d-none"
-                                                style="max-width: 300px; max-height: 200px;">
-                                        </div>
+                                        <img id="signaturePreview" class="img-fluid rounded d-none" style="max-width: 300px; max-height: 200px;">
                                         @endif
                                     </div>
 
@@ -390,26 +383,28 @@
                                         <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                         <input type="file" class="form-control" id="fingerPrint" name="fingerPrint"
                                             accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="previewImage(this, 'fingerPrintPreview')"
+                                            onchange="validateFileSize(this)"
                                             @if(!isset($bankAccount)) required @endif>
 
                                         @if(isset($bankAccount) && $bankAccount->fingerPrint)
-                                        <div class="mt-2">
-                                            <img id="fingerPrintPreview" src="{{ asset($bankAccount->fingerPrint) }}"
-                                                alt="Thumb Print Preview"
-                                                class="img-fluid rounded"
-                                                style="max-width: 300px; max-height: 200px;">
-                                        </div>
+                                        @php
+                                        $fingerExt = strtolower(pathinfo($bankAccount->fingerPrint, PATHINFO_EXTENSION));
+                                        @endphp
+
+                                        @if(in_array($fingerExt, ['jpg', 'jpeg', 'png']))
+                                        <img id="fingerPrintPreview" src="{{ asset($bankAccount->fingerPrint) }}"
+                                            alt="Thumb Print Preview"
+                                            class="img-fluid rounded"
+                                            style="max-width: 300px; max-height: 200px;">
+                                        @elseif($fingerExt === 'pdf')
+                                        <a href="{{ asset($bankAccount->signature) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
                                         @else
-                                        <div class="mt-2">
-                                            <img id="fingerPrintPreview" src=""
-                                                alt="Thumb Print Preview"
-                                                class="img-fluid rounded d-none"
-                                                style="max-width: 300px; max-height: 200px;">
-                                        </div>
+                                        <img id="fingerPrintPreview" class="img-fluid rounded d-none" style="max-width: 300px; max-height: 200px;">
                                         @endif
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -509,16 +504,64 @@
 
     function handleImagePreview(input) {
         if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            const preview = input.nextElementSibling;
-
+            var reader = new FileReader();
             reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.remove('d-none');
+                let imageContainer = input.parentElement.querySelector('img');
+                imageContainer.classList.remove('d-none');
+                imageContainer.src = e.target.result;
             }
-
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    function validateFileSize(input) {
+        const file = input.files[0];
+        const maxSize = 2 * 1024 * 1024;
+        const parent = input.parentNode;
+
+        const existingAlert = parent.querySelector('.file-size-error');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+
+        if (file && file.size > maxSize) {
+            input.value = '';
+            input.parentElement.querySelector('img').classList.add('d-none');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'text-danger mt-2 file-size-error';
+            errorDiv.textContent = 'File size must be less than 2 MB.';
+
+            parent.appendChild(errorDiv);
+        } else {
+            handleImagePreview(input)
+        }
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', function(e) {
+
+        let hasError = false;
+
+        const fields = document.getElementById('bankForm').querySelectorAll('[required]');
+
+        fields.forEach(field => {
+
+            if (!field.value.trim()) {
+                field.classList.add('error');
+                field.style.transition = 'border 0.3s ease';
+                field.style.border = '2px solid red';
+                window.scrollTo({
+                    top: 100,
+                    behavior: 'smooth'
+                })
+                hasError = true;
+            } else {
+                field.style.border = '';
+            }
+        });
+
+        if (hasError) {
+            e.preventDefault();
+        }
+    });
 </script>
 @endsection

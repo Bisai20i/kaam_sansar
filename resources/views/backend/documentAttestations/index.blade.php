@@ -5,17 +5,38 @@
 @section('content')
 <div class="container">
     <h4 class="fw-bold mb-4"><span class="text-muted fw-light">
-        
-    </span></h4>
+
+        </span></h4>
     <div class="card shadow">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="card-title">Document Attestation Applications</h4>
                 </div>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary btn-sm text-white" data-bs-toggle="dropdown">
+                        <span style="font-size:15px;">Document</span></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('document-types.index',) }}">
+                                <i class="bx bx-plus me-1"></i> Document Type
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('document-subtypes.index',) }}">
+                                <i class="bx bx-plus me-1"></i> Document Subtype
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('document-purposes.index',) }}">
+                                <i class="bx bx-plus me-1"></i> Document Purposes
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-
         <div class="card-body">
             <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                 <table class="table table-bordered">
@@ -103,8 +124,8 @@
                                 </div>
 
                             </td>
-                        
-                            </tr>
+
+                        </tr>
                         @endforeach
                         @if ($documentAttestations->isEmpty())
                         <tr>
@@ -119,27 +140,27 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
- <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="deleteForm" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this Document Attestation?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                    </div>
-                </form>
-            </div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deleteForm" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this Document Attestation?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 <!-- Font Awesome for icons -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">

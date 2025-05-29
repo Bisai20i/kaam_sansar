@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DocumentationAttestation;
+use App\Models\DocumentPurpose;
+use App\Models\DocumentSubtype;
+use App\Models\DocumentType;
 use App\Models\FormSubmission;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -31,7 +34,10 @@ class DocumentationAttestationController extends Controller
      */
     public function create()
     {
-        return view('frontend.documentAttestations.create');
+        $documentTypes=DocumentType::all();
+        $documentSubtypes=DocumentSubtype::all();
+        $documentPurposes=DocumentPurpose::all();
+        return view('frontend.documentAttestations.create', compact('documentTypes','documentSubtypes', 'documentPurposes'));
     }
 
     /**
@@ -169,11 +175,15 @@ class DocumentationAttestationController extends Controller
     {
         $user=Auth::guard('job_seekers')->user();
         $attestation = DocumentationAttestation::findOrFail($id);
+        
+        $documentTypes=DocumentType::all();
+        $documentSubtypes=DocumentSubtype::all();
+        $documentPurposes=DocumentPurpose::all();
         if($user->id !== $attestation->jobSeekerId)
         {
             abort(403,'unauthorized action');
         }
-        return view('frontend.documentAttestations.edit', compact('attestation'));
+        return view('frontend.documentAttestations.edit', compact('attestation','documentTypes' ,'documentSubtypes','documentPurposes'));
     }
 
     /**

@@ -129,8 +129,8 @@ class QuestionController extends Controller
 
         return redirect()->route('questions.index')->with('success', 'Question updated successfully!');
     }
-    
-     public function updateStatus($id)
+
+    public function updateStatus($id)
     {
         $question = Question::findOrFail($id);
         $question->publishStauts = $question->publishStauts === 'publish' ? 'unpublish' : 'publish';
@@ -153,29 +153,29 @@ class QuestionController extends Controller
         return redirect()->route('questions.index')->with('success', 'Question deleted successfully!');
     }
 
-public function quiz()
-{
-    $jobseeker = Auth::guard('job_seekers')->user();
+    public function quiz()
+    {
+        $jobseeker = Auth::guard('job_seekers')->user();
 
-    if (!$jobseeker) {
-        abort(403, 'Unauthorized');
+        if (!$jobseeker) {
+            abort(403, 'Unauthorized');
+        }
+
+        $answeredQuestionIds = UserAnswer::where('user_id', $jobseeker->id)->pluck('question_id')->toArray();
+
+        $questions = Question::with('answers')
+            ->where('publishStauts', 'publish')
+            ->whereNotIn('id', $answeredQuestionIds)
+            ->get();
+
+        if ($questions->isEmpty()) {
+            return redirect()->route('quiz.thankyou')->with('error', 'You have already taken all available questions.');
+        }
+
+        return view('frontend.quiz.show', compact('questions'));
     }
 
-    $answeredQuestionIds = UserAnswer::where('user_id', $jobseeker->id)->pluck('question_id')->toArray();
-
-    $questions = Question::with('answers')
-        ->where('publishStauts', 'publish')
-        ->whereNotIn('id', $answeredQuestionIds)
-        ->get();
-
-    if ($questions->isEmpty()) {
-        return redirect()->route('quiz.thankyou')->with('error', 'You have already taken all available questions.');
-    }
-
-    return view('frontend.quiz.show', compact('questions'));
-}
-
-public function submitQuiz(Request $request)
+    public function submitQuiz(Request $request)
     {
         $jobseeker = Auth::guard('job_seekers')->user();
 
@@ -218,59 +218,61 @@ public function submitQuiz(Request $request)
     }
 
     public function thankYou()
-{
-    $jobseeker = Auth::guard('job_seekers')->user();
+    {
+        $jobseeker = Auth::guard('job_seekers')->user();
 
-    // Get the latest round number for this user
-    $latestRound = UserAnswer::where('user_id', $jobseeker->id)->max('round');
+        // Get latest round for this user
+        $latestRound = UserAnswer::where('user_id', $jobseeker->id)->max('round');
 
-    // Get total answered in the latest round
-    $totalQuestions = UserAnswer::where('user_id', $jobseeker->id)
-        ->where('round', $latestRound)
-        ->count();
+        // Total questions answered by this user in latest round
+        $totalQuestions = UserAnswer::where('user_id', $jobseeker->id)
+            ->where('round', $latestRound)
+            ->count();
 
-    // Get number of correct answers in latest round
-    $correctAnswers = UserAnswer::join('answers', 'user_answers.answer_id', '=', 'answers.id')
-        ->where('user_answers.user_id', $jobseeker->id)
-        ->where('user_answers.round', $latestRound)
-        ->where('answers.is_correct', true)
-        ->count();
+        // Number of correct answers by this user in latest round
+        $correctAnswers = UserAnswer::join('answers', 'user_answers.answer_id', '=', 'answers.id')
+            ->where('user_answers.user_id', $jobseeker->id)
+            ->where('user_answers.round', $latestRound)
+            ->where('answers.is_correct', true)
+            ->count();
 
-    // Build leaderboard
-    $leaderboard = JobSeeker::join('user_answers', 'job_seekers.id', '=', 'user_answers.user_id')
-        ->join('answers', 'user_answers.answer_id', '=', 'answers.id')
-        ->where('answers.is_correct', true)
-        ->groupBy('job_seekers.id', 'job_seekers.firstName', 'job_seekers.lastName')
-        ->selectRaw('job_seekers.id as user_id, job_seekers.firstName, job_seekers.lastName, COUNT(*) as total_points')
-        ->orderByDesc('total_points')
-        ->get();
+        // 🟢 Build leaderboard for ALL participants in this round
+        $leaderboard = JobSeeker::join('user_answers', function ($join) use ($latestRound) {
+            $join->on('job_seekers.id', '=', 'user_answers.user_id')
+                ->where('user_answers.round', '=', $latestRound);
+        })
+            ->leftJoin('answers', 'user_answers.answer_id', '=', 'answers.id')
+            ->selectRaw('job_seekers.id as user_id, job_seekers.firstName, job_seekers.lastName, COUNT(CASE WHEN answers.is_correct = 1 THEN 1 END) as correctAnswers')
+            ->groupBy('job_seekers.id', 'job_seekers.firstName', 'job_seekers.lastName')
+            ->orderByDesc('correctAnswers')
+            ->get();
 
-    // Get user answers from latest round with related question and answer
-    $userAnswers = UserAnswer::with(['question.answers', 'answer'])
-        ->where('user_id', $jobseeker->id)
-        ->where('round', $latestRound)
-        ->get();
+        // 🟢 Get detailed answers for current user in this round
+        $userAnswers = UserAnswer::with(['question.answers', 'answer'])
+            ->where('user_id', $jobseeker->id)
+            ->where('round', $latestRound)
+            ->get();
 
-    $questions = [];
+        $questions = [];
 
-    foreach ($userAnswers as $userAnswer) {
-        $question = $userAnswer->question;
-        $selectedAnswer = $userAnswer->answer;
-        $correctAnswer = $question->answers->firstWhere('is_correct', true);
+        foreach ($userAnswers as $userAnswer) {
+            $question = $userAnswer->question;
+            $selectedAnswer = $userAnswer->answer;
+            $correctAnswer = $question->answers->firstWhere('is_correct', true);
 
-        $questions[] = [
-            'text' => $question->question,
-            'user_answer' => $selectedAnswer->answer ?? 'N/A',
-            'correct_answer' => $correctAnswer->answer ?? 'N/A',
-            'is_correct' => $selectedAnswer->is_correct ?? false,
-        ];
+            $questions[] = [
+                'text' => $question->question,
+                'user_answer' => $selectedAnswer->answer ?? 'N/A',
+                'correct_answer' => $correctAnswer->answer ?? 'N/A',
+                'is_correct' => $selectedAnswer->is_correct ?? false,
+            ];
+        }
+
+        return view('frontend.quiz.thankyou', [
+            'leaderboard' => $leaderboard,
+            'totalQuestions' => $totalQuestions,
+            'correctAnswers' => $correctAnswers,
+            'questions' => $questions,
+        ]);
     }
-
-    return view('frontend.quiz.thankyou', [
-        'leaderboard' => $leaderboard,
-        'totalQuestions' => $totalQuestions,
-        'correctAnswers' => $correctAnswers,
-        'questions' => $questions,
-    ]);
-}
 }
