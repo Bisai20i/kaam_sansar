@@ -17,7 +17,7 @@
                         <!-- Profile & Price Section -->
                         <div class="profile-price d-flex align-items-center justify-content-between">
                             <div
-                                class="d-flex justify-content-start justify-content-md-between align-items-center px-0 w-100">
+                                class="d-flex justify-content-start align-items-center px-0 w-100 flex-grow-1" style="width: min-content;">
                                 @if (!empty($ads->jobSeeker->userThumbnail) && is_array($ads->jobSeeker->userThumbnail))
                                     <img src="{{ asset('storage/' . $ads->jobSeeker->userThumbnail[0]) }}"
                                         class="rounded-circle abroad-chat" alt="Profile picture">
@@ -31,7 +31,7 @@
                                     <p class="text-muted mb-0 mt-0">{{ $ads->contactNumber }}</p>
                                 </div>
                             </div>
-                            <h3 class="w-100 mt-2 mt-md-0 text-end price-text">Rs. {{ $ads->pricing }}</h3>
+                            <h3 class="mt-2 mt-md-0 text-end price-text text-nowrap" style="width: min-content;">Rs. {{ $ads->pricing }}</h3>
                         </div>
 
                         <div class="mt-3 mb-3 d-flex flex-wrap justify-content-center gap-2">

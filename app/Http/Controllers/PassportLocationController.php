@@ -70,7 +70,7 @@ class PassportLocationController extends Controller
         // Prepare the success message
         $message = '';
         if (!empty($stored)) {
-            $message .= 'The following Locations were added successfully';
+            $message .= 'The following Locations were added successfully:'.implode(', ', $stored) . ' .';
         }
         if (!empty($skipped)) {
             $message .= 'The following Locations were skipped as they already exist: ' . implode(', ', $skipped) . '.';

@@ -84,7 +84,7 @@
                                 <label for="forumImages" class="mb-2">Upload Images (Max 2MB each, 5 images)</label>
                                 <input id="forumImages" class="form-control py-2" type="file" multiple accept="image/*"
                                     onchange="handleFiles(this.files)" name="images[]">
-                                <small>You can upload up to 5 images, each with a maximum size of 2MB.</small>
+                                <small>You can upload up to 5 images, each with a maximum size of 2MB.</small><br>
 
                             </div>
                             <div id="forumPreviewImages" class="row flex-wrap mt-4">
@@ -208,23 +208,26 @@
                             </div>
                         </div>
 
-                        <hr>
+                        
 
                         <!-- Leave New Comment Form -->
-                        <div
-                            class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2 mt-2">
 
-                            <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail"
-                                src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : 'https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg' }}"
-                                style="width: 50px; height:50px;" />
-                            <input class="form-control w-100 p-2" name="comment" id="commentInput"
-                                placeholder="Write a comment...." type="text" required />
-                            <button type="submit" class="border bg-white p-2 border-0 m-0" id="forumCommentButton"
-                                data-forum-id="0" onclick="addComment(this)">
-                                <i class="bi bi-send" style="color:#0064a7;"></i>
-                            </button>
+                        @auth('job_seekers')
+                            <hr>
+                            <div class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2 mt-2">
 
-                        </div>
+                                <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail"
+                                    src="{{ @Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . @Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}"
+                                    style="width: 50px; height:50px;" />
+                                <input class="form-control w-100 p-2" name="comment" id="commentInput"
+                                    placeholder="Write a comment...." type="text" required />
+                                <button type="submit" class="border bg-white p-2 border-0 m-0" id="forumCommentButton"
+                                    data-forum-id="0" onclick="addComment(this)">
+                                    <i class="bi bi-send" style="color:#0064a7;"></i>
+                                </button>
+
+                            </div>
+                        @endauth
 
                     </div>
                 </div>
@@ -244,145 +247,113 @@
             {{-- <h1 class="d-flex justify-content-center mt-5 mb-5">Advertisement Banner</h1> --}}
         @endif
 
-        <style>
-            .scrolling-container {
-                overflow: hidden;
-                background-color: #e9f1f7;
-                white-space: nowrap;
-            }
-
-            .scrolling-wrapper {
-                display: flex;
-                width: max-content;
-                animation: scrollLeft 30s linear infinite;
-            }
-
-            @keyframes scrollLeft {
-                0% {
-                    transform: translateX(0%);
+        @if (isset($consultants) && count($consultants) > 0)
+            <style>
+                .scrolling-container {
+                    overflow: hidden;
+                    background-color: #e9f1f7;
+                    white-space: nowrap;
                 }
 
-                100% {
-                    transform: translateX(-50%);
+                .scrolling-wrapper {
+                    display: flex;
+                    width: max-content;
+                    animation: scrollLeft 30s linear infinite;
                 }
-            }
 
-            .profile-item {
-                display: flex;
-                align-items: center;
-                margin-right: 15px;
-                gap: 15px;
-                flex-shrink: 0;
-                min-width: 200px;
-                /* Make all profile items uniform */
-            }
-        </style>
+                @keyframes scrollLeft {
+                    0% {
+                        transform: translateX(0%);
+                    }
 
-        <div class="scrolling-container p-4 mb-4">
-            <div class="scrolling-wrapper" id="profile-wrapper">
-                <!-- Original profile items -->
-                <div class="profile-item mx-3">
-                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
-                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
-                    <div>
-                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Bsai Raj Doe</p>
-                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
-                    </div>
-                </div>
-                <div class="profile-item mx-3">
-                    <img src="https://storage.googleapis.com/a1aa/image/4eec1808-d6d9-457b-1a6e-4fc46b86f8b9.jpg"
-                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
-                    <div>
-                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Kabita Subedi</p>
-                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
-                    </div>
-                </div>
-                <div class="profile-item mx-3">
-                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
-                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
-                    <div>
-                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Sangam Doe</p>
-                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
-                    </div>
-                </div>
-                <div class="profile-item mx-3">
-                    <img src="https://storage.googleapis.com/a1aa/image/d902be3e-4448-4664-ad49-1f5da29f9e18.jpg"
-                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
-                    <div>
-                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Nirmal Roy</p>
-                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
-                    </div>
-                </div>
+                    100% {
+                        transform: translateX(-50%);
+                    }
+                }
 
-                <!-- Clones of the same items for seamless loop -->
-                <div class="profile-item mx-3">
-                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
-                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
-                    <div>
-                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Bsai Raj Doe</p>
-                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
-                    </div>
-                </div>
-                <div class="profile-item mx-3">
-                    <img src="https://storage.googleapis.com/a1aa/image/4eec1808-d6d9-457b-1a6e-4fc46b86f8b9.jpg"
-                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
-                    <div>
-                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Kabita Subedi</p>
-                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
-                    </div>
-                </div>
-                <div class="profile-item mx-3">
-                    <img src="https://storage.googleapis.com/a1aa/image/8d0e06bf-119d-412e-c9b9-9f3de89f9bc9.jpg"
-                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
-                    <div>
-                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Sangam Doe</p>
-                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
-                    </div>
-                </div>
-                <div class="profile-item mx-3">
-                    <img src="https://storage.googleapis.com/a1aa/image/d902be3e-4448-4664-ad49-1f5da29f9e18.jpg"
-                        alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
-                    <div>
-                        <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">Nirmal Roy</p>
-                        <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">Lawyer</p>
-                    </div>
+                .profile-item {
+                    display: flex;
+                    align-items: center;
+                    margin-right: 15px;
+                    gap: 15px;
+                    flex-shrink: 0;
+                    min-width: 200px;
+                    /* Make all profile items uniform */
+                }
+            </style>
+
+            <div class="scrolling-container p-4 mb-4">
+                <div class="scrolling-wrapper" id="profile-wrapper">
+                    <!-- Original profile items -->
+
+                    @foreach ($consultants as $consultant)
+                        <div class="profile-item mx-3">
+                            <img src="{{ $consultant->userThumbnail }}" alt="Profile"
+                                style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                            <div>
+                                <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">
+                                    {{ $consultant->firstName . ' ' . $consultant->lastName }}
+                                </p>
+                                <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">
+                                    {{ $consultant->profession }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    @foreach ($consultants as $consultant)
+                        <div class="profile-item mx-3">
+                            <img src="{{ $consultant->userThumbnail }}" alt="Profile"
+                                style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                            <div>
+                                <p class="m-0" style="font-size: 20px; font-weight: 500; color: #1f2937;">
+                                    {{ $consultant->firstName . ' ' . $consultant->lastName }}
+                                </p>
+                                <p class="m-0" style="font-size: 18px; font-weight: 400; color: #1f2937;">
+                                    {{ $consultant->profession }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+
+
+
+
                 </div>
             </div>
-        </div>
 
-        <script>
-            const wrapper = document.getElementById('profile-wrapper');
-            let profiles = Array.from(wrapper.children); // Get all the profile items
-            const container = document.querySelector('.scrolling-container');
-            let profileWidth = profiles[0].offsetWidth + 15; // Profile width + margin-right
-            let scrollSpeed = 2; // Adjust the speed of scroll (higher is slower)
+            <script>
+                const wrapper = document.getElementById('profile-wrapper');
+                let profiles = Array.from(wrapper.children); // Get all the profile items
+                const container = document.querySelector('.scrolling-container');
+                let profileWidth = profiles[0].offsetWidth + 15; // Profile width + margin-right
+                let scrollSpeed = 2; // Adjust the speed of scroll (higher is slower)
 
-            // Clone and append profiles to ensure infinite scrolling
-            profiles.forEach(profile => {
-                const clone = profile.cloneNode(true);
-                wrapper.appendChild(clone);
-            });
+                // Clone and append profiles to ensure infinite scrolling
+                profiles.forEach(profile => {
+                    const clone = profile.cloneNode(true);
+                    wrapper.appendChild(clone);
+                });
 
-            function scroll() {
-                const maxScrollWidth = wrapper.scrollWidth; // The total scrollable width of all profiles
+                function scroll() {
+                    const maxScrollWidth = wrapper.scrollWidth; // The total scrollable width of all profiles
 
-                // Scroll the profiles by shifting them left
-                wrapper.style.transform = `translateX(-${scrollSpeed}px)`;
+                    // Scroll the profiles by shifting them left
+                    wrapper.style.transform = `translateX(-${scrollSpeed}px)`;
 
-                // If the leftmost profile is fully out of view, move it to the right end
-                if (parseFloat(wrapper.style.transform.replace('translateX(', '').replace('px)', '')) <= -profileWidth) {
-                    const firstItem = wrapper.firstElementChild;
-                    wrapper.appendChild(firstItem); // Move the first item to the end of the list
-                    wrapper.style.transform = 'translateX(0)'; // Reset the position
+                    // If the leftmost profile is fully out of view, move it to the right end
+                    if (parseFloat(wrapper.style.transform.replace('translateX(', '').replace('px)', '')) <= -profileWidth) {
+                        const firstItem = wrapper.firstElementChild;
+                        wrapper.appendChild(firstItem); // Move the first item to the end of the list
+                        wrapper.style.transform = 'translateX(0)'; // Reset the position
+                    }
+
+                    // Continue the scroll animation
+                    requestAnimationFrame(scroll);
                 }
 
-                // Continue the scroll animation
-                requestAnimationFrame(scroll);
-            }
-
-            // Start scrolling
-            scroll();
-        </script>
+                // Start scrolling
+                scroll();
+            </script>
+        @endif
 
         <div class="container position-relative">
             <div class="row mb-3">
@@ -453,7 +424,7 @@
                             <h4 class="card-title mb-3">Hot Topics</h4>
                             @if ($hot_topics->count() > 0)
                                 @foreach ($hot_topics as $forumPost)
-                                    <div class="card mb-3">
+                                    <a class="card mb-3 d-block text-decoration-none" href="{{ route('discussion.profile', ['id' => $forumPost->jobSeeker->id]) }}">
                                         @if ($forumPost->images)
                                             <img src="{{ $forumPost->images }}" class="card-img-top" alt="...">
                                         @endif
@@ -467,7 +438,7 @@
                                                     class="text-body-secondary">{{ $forumPost->updated_at->diffForHumans() }}</small>
                                             </p>
                                         </div>
-                                    </div>
+                                    </a>
                                 @endforeach
                             @else
                                 <p class="text-center my-2 text-secondary">No Hot Topics</p>
@@ -629,9 +600,13 @@
                                 <div
                                     class="d-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3 align-items-center">
 
-                                    <button style="all:unset; cursor: pointer;" onclick="interact(this)"
+                                    <button style="all:unset; cursor: pointer;" 
                                         class="text-decoration-none text-black d-flex align-items-center gap-1"
-                                        data-type='like' data-forum-id = "{{ $forumPost->id }}">
+                                        @auth('job_seekers')
+                                            data-type='like' data-forum-id = "{{ $forumPost->id }}" onclick="interact(this)"
+                                        @else
+                                            data-bs-target="#loginModal" data-bs-toggle="modal" onclick="setRedirectUrl()"
+                                        @endauth>
 
                                         <i class="fa-{{ $forumPost->interaction ? ($forumPost->interaction->type == 'like' ? 'solid' : 'regular') : 'regular' }} fa-thumbs-up fs-5"
                                             style="color: #0064a7;"></i>
@@ -641,9 +616,12 @@
                                         </span>
                                     </button>
 
-                                    <button style="all:unset; cursor: pointer;" onclick="interact(this)"
-                                        class="text-decoration-none text-black d-flex align-items-center gap-1"
-                                        data-type='dislike' data-forum-id="{{ $forumPost->id }}">
+                                    <button style="all:unset; cursor: pointer;" class="text-decoration-none text-black d-flex align-items-center gap-1"
+                                        @auth('job_seekers')
+                                            data-type='dislike' data-forum-id="{{ $forumPost->id }}" onclick="interact(this)"
+                                        @else
+                                            data-bs-target="#loginModal" data-bs-toggle="modal" onclick="setRedirectUrl()"
+                                        @endauth>
 
                                         <i class="fa-{{ $forumPost->interaction ? ($forumPost->interaction->type == 'dislike' ? 'solid' : 'regular') : 'regular' }} fa-thumbs-down fs-5"
                                             style="color: #0064a7;"></i>
@@ -651,6 +629,7 @@
                                         <span>
                                             {{ $forumPost->dislikes > 999 ? round($forumPost->dislikes / 1000, 1) . ' K' : $forumPost->dislikes }}</span>
                                     </button>
+
 
                                     <span class="text-decoration-none text-black d-flex align-items-center gap-1"
                                         style = "cursor: pointer;" data-bs-toggle="modal" data-bs-target="#commentModal"
@@ -1103,12 +1082,31 @@
         let forumPostImages = [];
 
         function handleFiles(files) {
+            let parent = document.getElementById('forumImages').parentElement
             for (let i = 0; i < files.length; i++) {
                 if (forumPostImages.length >= 5)
                     break; // Limit to 5 images
-                forumPostImages.push(files[i]);
+                if(validateFileSize(files[i])){
+                    forumPostImages.push(files[i]);
+                    if(parent.querySelector('.file-size-error'))
+                        parent.querySelector('.file-size-error').remove();
+                    document.getElementById('forumImages').classList.remove('is-invalid');
+                    updatePhotoDisplay();
+                }
+                else{
+                    
+                    if(parent.querySelector('.file-size-error'))
+                        parent.querySelector('.file-size-error').remove();
+                    let errorElement = document.createElement('small');
+                    errorElement.classList.add('text-danger','file-size-error', 'w-100');
+                    errorElement.innerHTML = 'File size must be less than 2MB';
+                    parent.appendChild(errorElement);
+                    document.getElementById('forumImages').classList.add('is-invalid');
+                    document.getElementById('forumImages').value = '';
+                }
+                
             }
-            updatePhotoDisplay();
+            
         }
 
         function updatePhotoDisplay() {
@@ -1151,12 +1149,26 @@
             } else {
                 // primaryPhoto.src = 'https://placehold.co/100x100';
                 forumPreviewImages.classList.add('hidden');
+                document.getElementById('forumImages').classList.remove('is-invalid');
+                document.getElementById('forumImages').value = '';
             }
         }
 
         function deletePhoto(index) {
             forumPostImages.splice(index, 1);
             updatePhotoDisplay();
+        }
+        function validateFileSize(file) {
+            const maxSize = 2 * 1024 * 1024;
+            console.log("reaced here")
+            if (file.size > maxSize) {
+
+                return false
+               
+            }
+            else{
+                return true
+            }
         }
     </script>
 
@@ -1508,6 +1520,7 @@
                 beforeSend: function() {
                     e.innerHtml =
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+                    e.disabled = true
 
                 },
                 success: function(response) {
@@ -1555,6 +1568,8 @@
                     }
                 }
             });
+
+            e.disabled = false
         }
     </script>
 
@@ -1566,6 +1581,7 @@
             console.log(type, postId)
 
             try {
+                e.disabled = true
                 const response = await fetch(getBaseUrl() + '/discussion/interact', {
                     method: 'POST',
                     headers: {
@@ -1642,6 +1658,7 @@
                 e.style.transform = 'scale(1)';
                 alert('Network error. Please check your connection.');
             }
+            e.disabled = false
 
         }
 

@@ -622,39 +622,48 @@ public function destroy(Request $request, $id)
 
     public function search(Request $request)
     {
+
+        // dd($request->all());
         // Check if the request is from mobile (using 'request_type' parameter)
         $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
 
         // Define allowed types
         $validTypes = ['Buy', 'Sell', 'Rent'];
         $ad = Advertisement::all();
-        $categories = AdvertisementCategory::all();
-        $all = AdvertisementCategory::all();
+                $all = AdvertisementCategory::all();
         // Set default type to 'Sell' if not provided or invalid
         $type = $request->has('type') && in_array($request->input('type'), $validTypes)
             ? $request->input('type')
-            : 'Sell';
-
+            : null;
+        if(!empty($type)){
+            $categoryIds = Advertisement::where('type', $type)->pluck('adsCategoryId')->unique();
+            $categories = AdvertisementCategory::whereIn('id', $categoryIds)->get();
+        }else{
+            $categories = AdvertisementCategory::all();
+        }
+        
         // Build the query for ads search
         try {
             $ads = Advertisement::when($request->filled('adsTitle'), function ($query) use ($request) {
-                $query->where('adsTitle', 'like', '%' . $request->adsTitle . '%');
-            })
+                    $query->where('adsTitle', 'like', '%' . $request->adsTitle . '%');
+                })
                 ->when($request->filled('location'), function ($query) use ($request) {
                     $query->where('location', 'like', '%' . $request->location . '%');
                 })
                 ->when($request->filled('country'), function ($query) use ($request) {
                     $query->where('country', 'like', '%' . $request->country . '%');
                 })
-                ->when($request->filled('adsCategoryId'), function ($query) use ($request) {
-                    $query->where('adsCategoryId', $request->adsCategoryId);
-                })
                 ->when(!empty($type), function ($query) use ($type) {
                     $query->where('type', $type);
                 })
+                ->when($request->filled('categoryId'), function ($query) use ($request) {
+                    $query->where('adsCategoryId', $request->categoryId);
+                })
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
-
+                ->paginate(10)
+                ->withQueryString();
+            
+            // return $ads;
             // Return the results in a format based on the request type (mobile/web)
             if ($isMobile) {
                 if ($ads->isEmpty()) {
@@ -673,7 +682,7 @@ public function destroy(Request $request, $id)
             }
 
             // For web, return the search results in a view
-            return view('frontend.advertisements.index', compact('ads', 'categories', 'all', 'ad'))->with('success', 'Advertisements fetched successfully!');
+            return view('frontend.advertisements.index', compact('ads', 'categories', 'all', 'ad', 'type'))->with('success', 'Advertisements fetched successfully!');
         } catch (\Exception $e) {
             Log::error("Error during advertisement search: " . $e->getMessage());
 

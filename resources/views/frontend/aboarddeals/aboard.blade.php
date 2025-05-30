@@ -34,6 +34,14 @@
                 </div>
                 <!-- Type Filter Section -->
 
+                @if(session('type')=='want_to_buy')
+
+                    <script>
+                        window.addEventListener('DOMContentLoaded', function () {
+                            document.getElementById('wantToBuy').click();
+                        });
+                    </script>
+                @endif
 
                 <!-- Right Side Add Item / Add Post Button -->
                 @if (Auth::guard('job_seekers')->check())
@@ -201,7 +209,7 @@
 
                             <!-- Category Select with Floating Label -->
                             <div class="mb-3 form-floating">
-                                <select class="form-select abroad-deal-1 fw-semibold" id="categorySelect"
+                                <select class="form-select abroad-deal-1 fw-semibold" 
                                     name="productCategoryId" aria-label="Category" required>
                                     <option value="" disabled selected>Choose a Category</option>
                                     @foreach ($categories as $category)
@@ -211,7 +219,7 @@
                                 </select>
                                 <label for="categorySelect">Category</label>
                             </div>
-                            <input type="hidden" id="type" name ="type" value="Item">
+                            <input type="hidden" name ="type" value="Item">
 
                             <!-- Title Input with Floating Label -->
                             <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
@@ -410,28 +418,7 @@
             });
 
             // Function to handle item submission and dynamically add it to the product list
-            document.getElementById('submitItemButton').addEventListener('click', function() {
-                // Get the input values
-                const category = document.getElementById('categorySelect').value;
-                const title = document.getElementById('titleInput').value;
-                const price = document.getElementById('priceInput').value;
-                const description = document.getElementById('descriptionInput').value;
-                const imageInput = document.getElementById('imageInput').files[0]; // Get the image file
-                const imageURL = imageInput ? URL.createObjectURL(imageInput) :
-                    'Images/default-image.png'; // Default image if no file selected
-
-
-
-                // Add the new product card to the product list
-                document.getElementById('product-list').appendChild(productCard);
-
-                // Close the modal
-                $('#addItemModal').modal('hide');
-
-                // Reset form fields and image preview
-                document.getElementById('addItemForm').reset();
-                document.getElementById('imagePreviewContainer').style.display = 'none';
-            });
+            
         </script>
 
         <!-- Add Post Modal -->
@@ -470,7 +457,7 @@
                             </div>
                             <!-- Category Select with Floating Label -->
                             <div class="mb-3 form-floating">
-                                <select class="form-select abroad-deal-1 fw-semibold" id="categorySelect"
+                                <select class="form-select abroad-deal-1 fw-semibold" 
                                     name="productCategoryId" aria-label="Category" required>
                                     <option value="" disabled selected>Choose a Category</option>
                                     @foreach ($categories as $category)
@@ -480,7 +467,7 @@
                                 </select>
                                 <label for="categorySelect">Category</label>
                             </div>
-                            <input type="hidden" id="type" name ="type" value="Buy">
+                            <input type="hidden" name ="type" value="Buy">
 
                             <div class="mb-3 form-floating abroad-deal-1 fw-semibold">
                                 <textarea class="form-control abroad-deal-1 fw-semibold" id="newDescriptionInput" rows="4"
@@ -543,29 +530,7 @@
                                 });
                             </script>
 
-                            <!-- <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    const uploadImageButton = document.getElementById('newAddToPostInput');
-                                    const imageInput = document.getElementById('imageInput');
-
-                                    uploadImageButton.addEventListener('click', function() {
-                                        imageInput.click();
-                                    });
-
-                                    imageInput.addEventListener('change', function() {
-                                        const file = imageInput.files[0];
-                                        if (file) {
-                                            const reader = new FileReader();
-                                            reader.onload = function(e) {
-                                                const preview = document.getElementById('imagePreview');
-                                                preview.src = e.target.result;
-                                                document.getElementById('imagePreviewContainer').style.display = 'block';
-                                            };
-                                            reader.readAsDataURL(file);
-                                        }
-                                    });
-                                });
-                            </script> -->
+                           
 
                             <!-- Dynamically Display Image Here -->
                             <div id="imagePreviewContainer" class="mb-3" style="display: none;">
@@ -737,16 +702,15 @@
                                                         <hr>
 
                                                         <!-- Comment Form -->
-                                                        <form id="commentForm" class="d-flex align-items-start gap-2">
+                                                        <form class="d-flex align-items-start gap-2" onsubmit="handleCommentSubmit()">
                                                             @csrf
-                                                            <input type="hidden" name="productId" id="productId"
+                                                            <input type="hidden" name="productId"
                                                                 value="{{ $ad->id }}">
 
                                                             <input name="comment" class="form-control rounded-3 py-2"
                                                                 placeholder="Write a comment..." required>
                                                             <button type="submit"
-                                                                class="btn btn-send rounded mb-0 text-primary"
-                                                                id="sendMessageButton">
+                                                                class="btn btn-send rounded mb-0 text-primary">
                                                                 <i class="fas fa-paper-plane"></i>
                                                             </button>
 
@@ -789,7 +753,7 @@
                                         @endforeach
                                         <script>
                                             function loadComments(productId) {
-                                                $('#productId').val(productId); // set productId for form
+                                                 // set productId for form
 
                                                 $.ajax({
                                                     url: `/aboardcomment/${productId}`, // hit the show() route
@@ -836,6 +800,7 @@
                                         <script>
                                             // Load comments dynamically when the modal is shown
                                             $('#commentModal').on('show.bs.modal', function(e) {
+                                                console.log(e)
                                                 var productId = $('#productId').val(); // Get product ID dynamically
 
                                                 $.ajax({
@@ -877,7 +842,7 @@
 
                                             $(document).ready(function() {
                                                 // Unbind previous submit handler and bind a new one
-                                                $(document).off('submit', '#commentForm').on('submit', '#commentForm', function(e) {
+                                                function handleCommentSubmit(e) {
                                                     e.preventDefault();
 
                                                     $.ajax({
@@ -889,14 +854,14 @@
 
                                                             if (response && response.message) {
                                                                 alert(response.message);
-                                                                $('#commentForm')[0].reset();
+                                                                e.target.reset();
 
                                                                 // Prepend the new comment in the UI
                                                                 $('#commentsSection').prepend(`
-                        <div class="comment">
-                            <p><strong>${response.data.jobSeeker.firstName} ${response.data.jobSeeker.lastName}</strong>: ${response.data.comment}</p>
-                        </div>
-                    `);
+                                                                    <div class="comment">
+                                                                        <p><strong>${response.data.jobSeeker.firstName} ${response.data.jobSeeker.lastName}</strong>: ${response.data.comment}</p>
+                                                                    </div>
+                                                                `);
                                                                 let productId = $('#productId').val(); // from hidden input
                                                                 let countElement = $('#commentCount-' + productId);
                                                                 let currentCount = parseInt(countElement.text());
@@ -916,8 +881,8 @@
                                                             alert('An error occurred. Please try again.');
                                                         }
                                                     });
-                                                });
-                                            });
+                                                }
+                                            })
                                         </script>
 
 

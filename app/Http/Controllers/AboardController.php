@@ -142,7 +142,9 @@ class AboardController extends Controller
         $aboard->save();
 
         Log::info('Product Created:', $aboard->toArray());
-
+        if($request->input('type')=='Buy'){
+            $request->session()->flash('type', 'want_to_buy'); 
+        }
         return $isMobile
         ? response()->json(['status' => 'success', 'message' => 'Product created successfully.', 'data' => $aboard], 201)
         : redirect()->back()->with('success', 'Product created successfully.');

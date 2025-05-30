@@ -84,14 +84,14 @@
 
 
                         <div class="mb-3">
-                            <label for="thumbnail" class="form-label">Thumbnail</label>
+                            <label for="thumbnail" class="form-label">Thumbnail ( Prefered Ratio: 16:9 | MAX: 2MB )</label>
                             <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
                             <div class="mt-2" id="thumbnailPreviewContainer"
                                 style="display: {{ isset($detail) && $detail->thumbnail ? 'block' : 'none' }};">
 
                                 <img id="thumbnailPreview"
                                     src="{{ isset($detail) && $detail->thumbnail ? asset('storage/' . $detail->thumbnail) : '' }}"
-                                    class="img-thumbnail" style="max-width: 200px;">
+                                    class="img-thumbnail" style="max-height: 200px;" >
                             </div>
                         </div>
 
@@ -237,6 +237,21 @@
         // Preview thumbnail when file is selected
         document.getElementById('thumbnail').addEventListener('change', function(e) {
             if (this.files && this.files[0]) {
+
+                if(this.files[0].size > 2* 1024 * 1024){
+                    this.classList.add('is-invalid');
+                    this.value = '';
+                    if(this.parentElement.querySelector('.invalid-feedback')){
+                        this.parentElement.querySelector('.invalid-feedback').remove();
+                    }
+                    let feedback = document.createElement('small');
+                    feedback.classList.add('invalid-feedback', 'text-danger');
+                    feedback.textContent = 'File size should be less than 2MB';
+                    this.parentElement.appendChild(feedback);
+                    document.getElementById('thumbnailPreviewContainer').style.display = 'none'
+                    return;
+                }
+                this.classList.remove('is-invalid');
                 let reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('thumbnailPreview').src = e.target.result;

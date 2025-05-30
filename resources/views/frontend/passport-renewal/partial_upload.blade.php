@@ -461,7 +461,7 @@
                             onclick="goToForm('mainForm','secondForm')">Back</button>
                         <div class="d-block">
                             <button class="btn btn-lg py-2 px-4 text-white btn-next mt-0"
-                                style="background-color: #0064a7;" type="submit" id="form3NextBtn"
+                                style="background-color: #0064a7;" onclick="validateMainForm()" id="form3NextBtn"
                                 disabled>Renew</button>
                         </div>
                     </div>
@@ -475,11 +475,6 @@
         .form-check-input:checked {
             background-color: #0064A7;
             border-color: #0064A7;
-        }
-
-
-        .error {
-            border: 1px solid rgb(255, 120, 120);
         }
     </style>
 
@@ -689,38 +684,33 @@
 
 
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('passportRenewalForm').addEventListener('submit', function(e) {
-                console.log("submitting")
-                const requiredFields = document.getElementById('passportRenewalForm').querySelectorAll(
-                    '[required]:not([type="checkbox"])');
-                let hasError = false;
 
-                requiredFields.forEach(field => {
-                    console.log(field)
-                    if (!field.value.trim()) {
-                        field.classList.add('error');
-                        hasError = true;
-                    } else {
-                        field.classList.remove('error');
-                    }
-                    console.log(hasError)
-                });
 
-                if (hasError) {
-                    e.preventDefault(); // Stop form submission
+        function validateMainForm() {
+            const requiredFields = document.querySelectorAll('[required]:not(input[type="checkbox"])');
+            let hasError = false
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    hasError = true
+
+                } else {
+                    field.classList.remove('is-invalid');
                 }
             });
 
-            // Optional: remove error class on input
-            document.querySelectorAll('[required]').forEach(field => {
-                field.addEventListener('input', () => {
-                    if (field.value.trim()) {
-                        field.classList.remove('error');
-                    }
-                });
-            });
-        })
+            if(hasError){
+                window.scrollTo({
+                    top: 100,
+                    behavior: 'smooth'
+                })
+
+                return false;
+            }
+            document.getElementById('passportRenewalForm').submit();
+        }
+
+
         let checkTerms = document.getElementById('checkTerms');
         let checkCorrect = document.getElementById('checkCorrect');
 
@@ -790,10 +780,10 @@
             // Validate each required select field
             requiredFields.forEach(field => {
                 if (!field.value.trim() || field.value === "Other") {
-                    field.classList.add('error');
+                    field.classList.add('is-invalid');
                     hasError = true;
                 } else {
-                    field.classList.remove('error');
+                    field.classList.remove('is-invalid');
                 }
             });
 
@@ -848,8 +838,7 @@
                 errorDiv.textContent = 'File size must be less than 2 MB.';
 
                 parent.appendChild(errorDiv);
-            }
-            else{
+            } else {
                 handleImagePreview(input)
             }
         }

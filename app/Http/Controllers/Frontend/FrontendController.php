@@ -1238,9 +1238,17 @@ class FrontendController extends Controller
             $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
         }
 
-        // return $hot_topics;
+        $consultants = JobSeeker::where('whoAmI', 'consultant')->get(['firstName','lastName','userThumbnail','profession']);
 
-        return view('frontend.discussion.index', compact('forumPosts', 'hot_topics', 'ad_banners'));
+        $consultants->transform(function ($consultant){
+            $consultant->userThumbnail ? $consultant->userThumbnail = asset('storage/' . $consultant->userThumbnail[0]) : $consultant->userThumbnail = asset('frontend/assets/Images/profile.jpg');
+            $consultant->profession ? null: $consultant->profession = 'Consultant';
+            return $consultant;
+        });
+
+        // return $consultants;
+
+        return view('frontend.discussion.index', compact('forumPosts', 'hot_topics', 'ad_banners', 'consultants'));
     }
 
     public function forumProfile($id)

@@ -89,14 +89,17 @@
             <h5 class="mb-1">Find what you are looking for ?</h5>
             <div class="mb-3">
                 <form action="{{ route('ads.search') }}" method="GET" class="row mt-2 align-items-center justify-content-center">
+
+                    <input type="hidden" name="type" value="{{ $type ?? '' }}">
+                    <input type="hidden" name="categoryId" value="{{ request('categoryId') ?? '' }}">
                     <!-- Search Input -->
                     <div class="col-lg mb-2">
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0" style="height: 42px;">
                                 <i class="fas fa-search text-muted"></i>
                             </span>
-                            <input type="text" class="form-control border-start-0 ps-0 py-2" style="height: 42px;"
-                                name="adsTitle" placeholder="What are you looking for..." aria-label="Search">
+                            <input type="text" class="form-control border-start-0 p-2" style="height: 42px;"
+                                name="adsTitle" placeholder="What are you looking for..." aria-label="Search" value="{{ request('adsTitle') }}">
                         </div>
                     </div>
 
@@ -106,7 +109,7 @@
                             aria-label="">
                             <option value="" selected>Select Country</option>
                             @foreach ($ad as $a)
-                                <option value="{{ $a->country }}">{{ $a->country }}</option>
+                                <option value="{{ $a->country }}" {{ $a->country == request('country') ? 'selected' : '' }}>{{ $a->country }}</option>
                             @endforeach
 
                         </select>
@@ -118,7 +121,7 @@
                             aria-label="">
                             <option value="" selected>Select City</option>
                             @foreach ($ad as $a)
-                                <option value="{{ $a->location }}">{{ $a->location }}</option>
+                                <option value="{{ $a->location }}" {{ $a->location == request('location') ? 'selected' : '' }}>{{ $a->location }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -169,7 +172,7 @@
                                     class="card-img-top rounded" alt="Ad Image"
                                     style="height: 131px; width: 100%; object-fit:cover;">
                                 <div class="card-body p-1 mt-1">
-                                    <h6 class="card-title text-black mb-0">{{ $ad->adsTitle }}</h6>
+                                    <h6 class="card-title text-black mb-0">{{ ucfirst($ad->adsTitle) }}</h6>
                                     <p class="card-text text-muted mb-0">{{ $ad->location }}</p>
                                     <p class="card-text text-muted">
                                         <small class="text-body-secondary">{{ $ad->postedDuration }}</small>
@@ -181,30 +184,7 @@
                 @endforeach
             @else
                 <!-- error shown -->
-                <main
-                    class="d-flex flex-column flex-grow-1 justify-content-center align-items-center bg-white text-center py-5">
-                    <div class="text-primary display-3 mb-4 mt-5">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <h1 class="fs-2 fw-semibold mb-3">Result Not Found</h1>
-                    <p class="text-secondary">We couldn’t find the result you are searching.</p>
-                    <p class="text-secondary mb-4">Please try navigating using the options below.</p>
-                    <div class="d-flex gap-3">
-                        <a href="{{ route('ads.index') }}"
-                            class="btn-create d-flex align-items-center justify-content-center gap-3"
-                            style="text-decoration: none;">
-                            <i class="fas fa-arrow-left ms-2"></i>
-                            <span class="me-1 fw-semibold">Go Back</span>
-                        </a>
-
-                        <a href="{{ route('index') }}"
-                            class="btn-create d-flex align-items-center justify-content-center gap-2"
-                            style="text-decoration: none;">
-                            <i class="fas fa-home ms-2"></i>
-                            <span class="me-1 fw-semibold">Homepage</span>
-                        </a>
-                    </div>
-                </main>
+                @include('frontend.notFound')
             @endif
         </div>
 

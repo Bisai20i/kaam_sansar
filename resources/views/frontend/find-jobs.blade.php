@@ -359,7 +359,7 @@
                                 <form action="{{ route('frontend.job-search') }}">
 
                                     <input type="hidden" name="jobsby" value="skill">
-                                    <input type="hidden" name="searchstr" value="{{ $item }}">
+                                    <input type="hidden" name="skill" value="{{ $item }}">
                                     <button type="submit"
                                         style="all: unset; cursor: pointer;">{{ $item }}</button>
                                 </form>

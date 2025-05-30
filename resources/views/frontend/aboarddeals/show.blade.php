@@ -6,6 +6,14 @@
 
     <div class="container mb-5">
 
+        <style>
+            .comment-button:hover {
+                outline: 1px solid #0064a7;
+                background: white !important;
+                color: #0064a7 !important;
+            }
+        </style>
+
         <section class="abroads">
             <div class="container mt">
                 <div class="row mt">
@@ -38,12 +46,14 @@
 
                             @if (Auth::guard('job_seekers')->check())
                                 <!-- If user is logged in, open chat -->
-                                <button class="btn custom-outline-btn flex-grow-1" data-user-id="{{ $aboard->jobSeekerId }}"
-                                    onclick="openChat(this)"
-                                    data-user-name="{{ $aboard->jobSeeker->firstName . ' ' . $aboard->jobSeeker->lastName }}">
-                                    <i class="fas fa-comment-alt me-2"></i>
-                                    <span class="d-none d-md-inline">Chat</span>
-                                </button>
+                                @if (Auth::guard('job_seekers')->id() !== $aboard->jobSeekerId)
+                                    <button class="btn custom-outline-btn flex-grow-1"
+                                        data-user-id="{{ $aboard->jobSeekerId }}" onclick="openChat(this)"
+                                        data-user-name="{{ $aboard->jobSeeker->firstName . ' ' . $aboard->jobSeeker->lastName }}">
+                                        <i class="fas fa-comment-alt me-2"></i>
+                                        <span class="d-none d-md-inline">Chat</span>
+                                    </button>
+                                @endif
                             @else
                                 <!-- If user is not logged in, open login modal -->
                                 <button class="btn custom-outline-btn flex-grow-1" data-bs-toggle="modal"
@@ -144,10 +154,10 @@
                                                 class="d-flex align-items-start p-1 bg-white rounded mb-2 comment-box w-100">
                                                 <img alt="Profile picture of Carrie Bradshaw" class="rounded-circle me-3"
                                                     height="50" width="50"
-                                                    src="https://storage.googleapis.com/a1aa/image/ThNp8APQMIPaFZUmVLK-cOT1kYH9Ca9IxDVxpTDWa78.jpg" />
+                                                    src="{{ $cmt->jobSeeker->userThumbnail ? asset('storage/' . $cmt->jobSeeker->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}" />
                                                 <div class="comment-text">
                                                     <h6 class="fw-semibold mb-0 mb-0">
-                                                        {{ $cmt->jobSeeker->firstName }}{{ $cmt->jobSeeker->lastName }}
+                                                        {{ $cmt->jobSeeker->firstName }} {{ $cmt->jobSeeker->lastName }}
                                                     </h6>
                                                     <p class="mb-0">{{ $cmt->comment }}</p>
                                                 </div>
@@ -161,29 +171,39 @@
                                                         tabindex="-1"
                                                         aria-labelledby="deleteModalLabel{{ $cmt->id }}"
                                                         aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title"
-                                                                        id="deleteModalLabel{{ $cmt->id }}">Confirm
-                                                                        Delete</h5>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div
+                                                                class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                                                                <button type="button" class="btn-close ms-auto"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <div class="mb-3">
+                                                                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center"
+                                                                        style="width: 64px; height: 64px;">
+                                                                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="modal-body">
-                                                                    Are you sure you want to delete this comment?
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
+                                                                <h4 class="fw-bold text-dark">Are you sure?</h4>
+                                                                <p class="text-secondary mb-4">Are you sure you want to
+                                                                    delete this comment?</p>
+                                                                <div class="d-flex justify-content-center align-items-center"
+                                                                    style="box-sizing: border-box;">
+                                                                    <button type="button"
+                                                                        class="btn border-secondary col-6 me-1"
                                                                         data-bs-dismiss="modal">Cancel</button>
-                                                                    <form
+
+                                                                    {{-- <button id="deleteCommentButton" data-comment-id="0"
+                                                                        onclick="deleteComment(this)" data-forum-id="0"
+                                                                        class="btn btn-danger w-100 ms-1">Delete</button> --}}
+
+                                                                    <form class="w-100"
                                                                         action="{{ route('aboardcomment.destroy', $cmt->id) }}"
                                                                         method="POST">
                                                                         @csrf
                                                                         @method('DELETE')
                                                                         <button type="submit"
-                                                                            class="btn btn-danger">Delete</button>
+                                                                            class="btn btn-danger w-100 ms-1">Delete</button>
                                                                     </form>
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -211,16 +231,27 @@
                                         class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2">
                                         <!-- Image on the left side of the input field -->
                                         <img alt="Profile picture of user" class="rounded-circle abroad-chat me-2"
-                                            src="https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg" />
+                                            src="{{ Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}" />
 
                                         <!-- Input Box with full width -->
-                                        <input class="form-control w-100 p-1" id="commentInput"
+                                        <input class="form-control w-100 p-2" id="commentInput"
                                             placeholder="Write a comment...." name="comment" type="text" />
 
                                         <!-- Send Button -->
-                                        <button class="btn btn-outline-primary border border-0 w-10 ms-2" type="submit">
-                                            <i class="bi bi-send"></i>
+                                        <button type="submit" class="btn w-10 ms-2 comment-button"
+                                            style="background-color: #0064a7; color: #fff;" onclick="sendCommet(this)">
+                                            <i class="bi bi-send" style="max: max-content;"></i>
                                         </button>
+
+                                        <script>
+                                            const sendCommet = (btn) => {
+                                                if (document.getElementById('commentInput').value.trim() == '') return
+                                                btn.innerHTML = `<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>`
+                                                this.submit()
+                                                btn.disabled = true
+
+                                            }
+                                        </script>
                                     </div>
                                 </form>
                             @endif
@@ -241,7 +272,8 @@
                             <div class="card-bdy-packages">
                                 <a href="{{ route('aboards.show', $product->id) }}"
                                     class="text-decoration-none text-black">
-                                    <img src="{{ $product->productThumbnail ? asset($product->productThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg') }}" class="bdy-packages-img mb-2"
+                                    <img src="{{ $product->productThumbnail ? asset($product->productThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg') }}"
+                                        class="bdy-packages-img mb-2"
                                         style="width: 100%; height: 180px; object-fit:auto;">
                                     <div class="card-body">
                                         <h6 class="card-title text-black mb-0">{{ $product->productTitle }}</h6>

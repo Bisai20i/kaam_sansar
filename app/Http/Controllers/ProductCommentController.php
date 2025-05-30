@@ -81,6 +81,8 @@ class ProductCommentController extends Controller
             'data' => $comment
         ], 200);
     }
+
+    return redirect()->back()->with('success', 'Comment created successfully.');
 }
 
     /**

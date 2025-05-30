@@ -6,7 +6,7 @@
 
     <!-- Delete Confirmation Modal -->
 
-    <div class="modal fade" id="deleteImageModal" tabindex="-1" aria-labelledby="deleteImageModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteImageModal" tabindex="-1" aria-labelledby="deleteImageModalLabel" aria-hidden="true" style="z-index: 3000;">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
                 <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -35,6 +35,8 @@
 
 
     <!-- Delete Confirmation Modal -->
+
+
     <div class="modal fade" id="deleteForumModal" tabindex="-1" aria-labelledby="deleteForumModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
@@ -58,29 +60,7 @@
             </div>
         </div>
     </div>
-    {{-- <div class="modal fade" id="deleteForumModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteImageModalLabel">Confirm
-                        Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this forum post?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form action="#" method="POST" id="deleteForumForm">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
 
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     <!-- Edit Modal -->
     <div class="modal fade" id="createPost" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createPostLabel"
@@ -154,18 +134,21 @@
                                 placeholder="Person Name">
                             <label for="person Name">Person Name</label>
                         </div>
-                        <div class="">
-                            <label for="forumImages" class="mb-2">Upload Images (Max 2MB each, 5 images)</label>
+                        <div>
+                            <label for="forumImages px-0" class="mb-2">Upload Images</label>
                             <input id="forumImages" class="form-control py-2" type="file" multiple accept="image/*"
                                 onchange="handleFiles(this.files)" name="images[]">
-                            <small>You can upload up to 5 images, each with a maximum size of 2MB.</small>
+                            <small id="forumImageHelp">You can upload up to 5 images, each with a maximum size of 2MB.</small><br>
                         </div>
                         <div id="forumPreviewImages" class="row flex-wrap mt-2">
+                        </div>
 
+                        <div id="currentForumImages" class="row flex-wrap mt-2 d-none px-2">
+                            <label for="forumImages">Post Images:</label>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
                             <button type="submit" class="btn btn-primary mx-auto"
-                                style="background-color: #0064a7;">Post</button>
+                                style="background-color: #0064a7;">Update</button>
                         </div>
 
                     </form>
@@ -256,30 +239,55 @@
                         </div>
                     </div>
 
-                    <hr>
+                    @auth('job_seekers')
+                        <hr>
 
-                    <!-- Leave New Comment Form -->
-                    <div
-                        class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2 mt-2">
+                        <!-- Leave New Comment Form -->
+                        <div
+                            class="col-12 d-flex align-items-center bg-white rounded shadow-sm position-sticky bottom-0 w-100 p-2 mt-2">
 
-                        <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail"
-                            src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : 'https://storage.googleapis.com/a1aa/image/3CpUMtugubz8I1SyWiQoLgE520O4UxkZW02TXnQ0WU4.jpg' }}"
-                            style="width: 50px; height:50px;" />
-                        <input class="form-control w-100 p-2" name="comment" id="commentInput"
-                            placeholder="Write a comment...." type="text" required />
-                        <button type="submit" class="border bg-white p-2 border-0 m-0" id="forumCommentButton"
-                            data-forum-id="0" onclick="addComment(this)">
-                            <i class="bi bi-send" style="color:#0064a7;"></i>
-                        </button>
+                            <img alt="Profile picture of user" class="rounded-circle gifts-chat me-2 img-thumbnail"
+                                src="{{ Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->userThumbnail ? asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}"
+                                style="width: 50px; height:50px;" />
+                            <input class="form-control w-100 p-2" name="comment" id="commentInput"
+                                placeholder="Write a comment...." type="text" required />
+                            <button type="submit" class="border bg-white p-2 border-0 m-0" id="forumCommentButton"
+                                data-forum-id="0" onclick="addComment(this)">
+                                <i class="bi bi-send" style="color:#0064a7;"></i>
+                            </button>
 
-                    </div>
+                        </div>
+                    @endauth
 
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModallLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="mb-3">
+                    <div class="mx-auto rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center"
+                        style="width: 64px; height: 64px;">
+                        <i class="bi bi-trash-fill text-danger fs-3"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold">Are you sure?</h4>
+                <p class="text-secondary mb-4">Are you sure you want to delete this comment?</p>
+                <div class="d-flex justify-content-center align-items-center" style="box-sizing: border-box;">
+                    <button type="button" class="btn border-secondary col-6 me-1"
+                        data-bs-dismiss="modal">Cancel</button>
+
+                    <button id="deleteCommentButton" data-comment-id="0" onclick="deleteComment(this)" data-forum-id="0"
+                        class="btn btn-danger w-100 ms-1">Delete</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -298,7 +306,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <section class="main  container-fluid pt-5 pb-2">
 
@@ -348,12 +356,14 @@
                                     </button>
                                 @endif
                             @else
-                                <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2"
-                                    style="background-color: #0064a7;" onclick="setRedirectUrl()">+
+                                <button class="btn rounded-5 px-4 text-white text-nowrap m-auto me-2" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal" style="background-color: #0064a7;"
+                                    onclick="setRedirectUrl()">+
                                     <span class="d-none d-md-inline">Follow</span></button>
 
-                                <button class="btn rounded-5 px-4 text-white text-nowrap m-auto"
-                                    style="background-color: #0064a7;" onclick="setRedirectUrl()">
+                                <button class="btn rounded-5 px-4 text-white text-nowrap m-auto" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal" style="background-color: #0064a7;"
+                                    onclick="setRedirectUrl()">
                                     <i class="bi bi-chat-left-text me-1 align-content-center"></i>
                                     <span class="d-none d-md-inline">Chat</span>
                                 </button>
@@ -471,13 +481,13 @@
                                     <small>{{ $forumPost->description }}</small>
                                 </div>
                                 @if (count($forumPost->images) > 0)
-                                    <div
+                                    <div id="forumPostImages_{{ $forumPost->id }}"
                                         class="mt-2 text-center g-2 row {{ count($forumPost->images) === 1 ? 'row-cols-1' : 'row-cols-md-2 row-cols-1' }}">
 
                                         @for ($i = 0; $i < count($forumPost->images); $i++)
                                             <div class="col position-relative" style="max-width:600px;">
                                                 @if (Auth::guard('job_seekers')->check() && Auth::guard('job_seekers')->user()->id === $forumPost->jobSeekerId)
-                                                    <span
+                                                    <span style="cursor: pointer;"
                                                         class="position-absolute top-0 end-0 text-danger py-1 px-2 m-2 rounded-circle bg-white"
                                                         data-forum-id="{{ $forumPost->id }}"
                                                         data-image-index="{{ $i }}"
@@ -505,9 +515,13 @@
                                 <div
                                     class="d-inline-flex border border-2 border-start-0 border-end-0 px-0 py-1 mt-2 gap-3">
 
-                                    <button style="all:unset; cursor: pointer;" onclick="interact(this)"
+                                    <button style="all:unset; cursor: pointer;"
                                         class="text-decoration-none text-black d-flex align-items-center gap-1"
-                                        data-type='like' data-forum-id = "{{ $forumPost->id }}">
+                                        @auth('job_seekers')
+                                            data-type='like' data-forum-id = "{{ $forumPost->id }}" onclick="interact(this)"
+                                        @else
+                                            data-bs-target="#loginModal" data-bs-toggle="modal" onclick="setRedirectUrl()"
+                                        @endauth>
 
                                         <i class="fa-{{ $forumPost->interaction ? ($forumPost->interaction->type == 'like' ? 'solid' : 'regular') : 'regular' }} fa-thumbs-up fs-5"
                                             style="color: #0064a7;"></i>
@@ -517,9 +531,13 @@
                                         </span>
                                     </button>
 
-                                    <button style="all:unset; cursor: pointer;" onclick="interact(this)"
+                                    <button style="all:unset; cursor: pointer;"
                                         class="text-decoration-none text-black d-flex align-items-center gap-1"
-                                        data-type='dislike' data-forum-id="{{ $forumPost->id }}">
+                                        @auth('job_seekers')
+                                            data-type='dislike' data-forum-id="{{ $forumPost->id }}" onclick="interact(this)"
+                                        @else
+                                            data-bs-target="#loginModal" data-bs-toggle="modal" onclick="setRedirectUrl()"
+                                        @endauth>
 
                                         <i class="fa-{{ $forumPost->interaction ? ($forumPost->interaction->type == 'dislike' ? 'solid' : 'regular') : 'regular' }} fa-thumbs-down fs-5"
                                             style="color: #0064a7;"></i>
@@ -869,15 +887,33 @@
     </script>
     <script>
         let forumPostImages = [];
+        let noOfImages = 0;
 
         function handleFiles(files) {
-            let currentImageCount = parseInt(document.getElementById('currentPostImageCount').value)
+            let parent = document.getElementById('forumImages').parentElement
             for (let i = 0; i < files.length; i++) {
-                if (forumPostImages.length >= 5 - currentImageCount)
+                if (forumPostImages.length >= 5 - noOfImages)
                     break; // Limit to 5 images
-                forumPostImages.push(files[i]);
+                if (validateFileSize(files[i])) {
+                    forumPostImages.push(files[i]);
+                    if (parent.querySelector('.file-size-error'))
+                        parent.querySelector('.file-size-error').remove();
+                    document.getElementById('forumImages').classList.remove('is-invalid');
+                    updatePhotoDisplay();
+                } else {
+
+                    if (parent.querySelector('.file-size-error'))
+                        parent.querySelector('.file-size-error').remove();
+                    let errorElement = document.createElement('small');
+                    errorElement.classList.add('text-danger', 'file-size-error', 'w-100');
+                    errorElement.innerHTML = 'File size must be less than 2MB';
+                    parent.appendChild(errorElement);
+                    document.getElementById('forumImages').classList.add('is-invalid');
+                    document.getElementById('forumImages').value = '';
+                }
+
             }
-            updatePhotoDisplay();
+
         }
 
         function updatePhotoDisplay() {
@@ -920,6 +956,8 @@
             } else {
                 // primaryPhoto.src = 'https://placehold.co/100x100';
                 forumPreviewImages.classList.add('hidden');
+                document.getElementById('forumImages').classList.remove('is-invalid');
+                document.getElementById('forumImages').value = '';
             }
         }
 
@@ -928,17 +966,16 @@
             updatePhotoDisplay();
         }
 
-        function setRedirectUrl() {
-            fetch('/set-redirect', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    redirect_url: window.location.href
-                })
-            });
+        function validateFileSize(file) {
+            const maxSize = 2 * 1024 * 1024;
+            console.log("reaced here")
+            if (file.size > maxSize) {
+
+                return false
+
+            } else {
+                return true
+            }
         }
     </script>
 
@@ -1009,8 +1046,10 @@
 
         function handleDelete(e) {
             let commentId = e.getAttribute('data-comment-id')
+            let forumId = e.getAttribute('data-forum-id')
 
             $('#deleteCommentButton').attr('data-comment-id', commentId)
+            $('#deleteCommentButton').attr('data-forum-id', forumId)
 
 
         }
@@ -1028,15 +1067,22 @@
                     'X-HTTP-Method-Override': 'DELETE'
                 },
                 success: function(response) {
-                    // ✅ What to do on success
-                    console.log('Success:', response);
+
                     if (response.status) {
                         $('#deleteModal').modal('hide');
                         $('#commentModal').modal('show');
                         loadComments(document.getElementById('commentModal'))
-                        document.getElementById('commentCount_' + e.getAttribute('data-forum-id')).textContent =
-                            parseInt(document.getElementById('commentCount_' + e.getAttribute('data-forum-id'))
-                                .textContent) - 1
+                        let postId = e.getAttribute('data-forum-id')
+                        console.log('commentCount_' + postId)
+                        console.log(document.getElementById('commentCount_' + postId))
+                        if (parseInt(document.getElementById('commentCount_' + postId).textContent) <= 999) {
+                            document.getElementById('commentCount_' + postId).textContent = parseInt(document
+                                .getElementById('commentCount_' + postId).textContent) - 1
+                        } else {
+                            document.getElementById('commentCount_' + postId).textContent = ((parseInt(document
+                                .getElementById('commentCount_' + postId).textContent) - 1) / 1000).toFixed(
+                                1) + 'K'
+                        }
                     } else {
                         alert('Something went wrong!')
                     }
@@ -1061,7 +1107,7 @@
             $('#commentModal').attr('data-forum-id', postId);
 
             $('#forumCommentButton').attr('data-forum-id', postId)
-            console.log(postId)
+
 
             $.ajax({
                 url: getBaseUrl() + '/discussion/comments/' + postId,
@@ -1097,7 +1143,7 @@
                                         <small class="text-muted">${formatDateWithComma(comment.created_at)}</small>
                                         </div>
                                         <button class="btn btn-danger rounded-circle" data-bs-toggle="modal" data-comment-id="${comment.id}"
-                                            data-bs-target="#deleteModal" onclick="handleDelete(this)">
+                                            data-bs-target="#deleteModal" data-forum-id="${postId}" onclick="handleDelete(this)">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
@@ -1147,7 +1193,8 @@
             if (!comment.trim()) {
                 return;
             }
-            console.log(postId, comment)
+
+            // console.log(postId, comment)
             $.ajax({
                 url: getBaseUrl() + '/discussion/add-comment',
                 method: 'POST',
@@ -1162,12 +1209,19 @@
                 beforeSend: function() {
                     e.innerHtml =
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+                    e.disabled = true
 
                 },
                 success: function(response) {
                     // ✅ What to do on success
+                    // console.log(response)
                     if (response.status) {
+                        console.log(response)
                         $('#commentInput').val('')
+                        if ($('#commentsList').html() ==
+                            '<p class="text-center my-2 text-secondary">No Comments yet !</p>') {
+                            $('#commentsList').html('')
+                        }
                         $('#commentsList').append(`
                             <div class="mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
                                 <div>
@@ -1175,12 +1229,14 @@
                                     ? '<img class="rounded-circle me-1" src="' .
                                         asset('storage/' . Auth::guard('job_seekers')->user()->userThumbnail[0]) .
                                         '" width="30" height="30"/>'
-                                    : '' !!} {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName : 'User' }}</strong>
+                                    : '<img class="rounded-circle me-1" src="' .
+                                        asset('frontend/assets/Images/profile.jpg') .
+                                        '" width="30" height="30"/>' !!} {{ Auth::guard('job_seekers')->check() ? Auth::guard('job_seekers')->user()->firstName . ' ' . Auth::guard('job_seekers')->user()->lastName : 'User' }}</strong>
                                 <p class="mb-1">${response.data.comment}</p>
                                 <small class="text-muted">${formatDateWithComma(response.data.created_at)}</small>
                                 </div>
                                 <button class="btn btn-danger rounded-circle" data-bs-toggle="modal" data-comment-id="${response.data.id}"
-                                    data-bs-target="#deleteModal" onclick="handleDelete(this)">
+                                    data-bs-target="#deleteModal" data-forum-id="${response.data.forum_id}" onclick="handleDelete(this)">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -1215,6 +1271,8 @@
                     }
                 }
             });
+
+            e.disabled = false
         }
     </script>
 
@@ -1226,6 +1284,7 @@
             console.log(type, postId)
 
             try {
+                e.disabled = true
                 const response = await fetch(getBaseUrl() + '/discussion/interact', {
                     method: 'POST',
                     headers: {
@@ -1302,6 +1361,7 @@
                 e.style.transform = 'scale(1)';
                 alert('Network error. Please check your connection.');
             }
+            e.disabled = false
 
         }
 
@@ -1325,6 +1385,44 @@
 
             console.log("Images: ", imageCount)
 
+            noOfImages = imageCount
+
+            $('#forumImageHelp').html('You can upload up to ' + (5 -noOfImages) + ' images, each with a maximum size of 2MB.')
+
+            if(imageCount > 0){
+
+                document.getElementById('currentForumImages').innerHTML = '<label for="forumImages">Post Images:</label>'
+                document.getElementById('forumPostImages_' + postId).querySelectorAll('img').forEach(image => {
+                    console.log(image)
+                    
+
+                    const container = document.createElement("div");
+                    container.classList.add("uploaded-photo-container", "col-6", "col-md-4", "col-lg-4",
+                        "position-relative", "mb-2", "px-0");
+
+                    const img = document.createElement('img');
+                    img.className = 'profile-photo w-100 h-auto ';
+                    img.src = image.getAttribute('src');
+                    img.alt = `Additional photo`;
+                    container.appendChild(image.parentElement.querySelector('span').cloneNode(true))
+                    container.appendChild(img);
+
+                    document.getElementById('currentForumImages').appendChild(container);
+                    document.getElementById('currentForumImages').classList.remove('d-none')
+
+                })
+
+            }
+            else{
+                document.getElementById('currentForumImages').innerHTML = '<label for="forumImages">Post Images:</label>'
+                document.getElementById('currentForumImages').classList.add('d-none')
+            }
+
+            
+            // $('#editPostForm').append(document.getElementById('forumPostImages_' + postId))
+
+
+
             $("#currentPostImageCount").val(imageCount)
 
             $('#titleInput').val(postTopic)
@@ -1338,8 +1436,6 @@
 
             $("#editPostForm").attr('action', getBaseUrl() + '/discussion/discussion_forum/' + postId)
 
-
-            console.log(postId, postTopic, postDescription, postCategory)
             $('#createPost').modal('show');
         }
 
@@ -1354,7 +1450,8 @@
 
         function handleForumDelete(e) {
             let postId = e.getAttribute('data-forum-id')
-            document.getElementById('deleteForumForm').action = "{{ route('discussion_forum.destroy', ':id') }}".replace(':id', postId);
+            document.getElementById('deleteForumForm').action = "{{ route('discussion_forum.destroy', ':id') }}".replace(
+                ':id', postId);
             $("#deleteForumForm input[name='forum_id']").val(postId)
             $('#deleteForumModal').modal('show');
         }

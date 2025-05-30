@@ -67,11 +67,11 @@ class PassportDistrictController extends Controller
 
         // Prepare the success message
         $message = '';
-        if (!empty($storedProviences)) {
-            $message .= 'The following countries were added successfully';
+        if (!empty($stored)) {
+            $message .= 'The following districts were added successfully: ' . implode(', ', $stored) . '.';
         }
         if (!empty($skipped)) {
-            $message .= 'The following countries were skipped as they already exist: ' . implode(', ', $skipped) . '.';
+            $message .= 'Entered Districts were skipped as they already exist: ' . implode(', ', $skipped) . '.';
         }
 
         return redirect()->back()->with('success', $message);

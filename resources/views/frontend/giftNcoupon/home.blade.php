@@ -86,12 +86,12 @@
 
                     <form action="" class="row g-2 mt-2 mb-1">
 
-                        <div class="col-md-4">
+                        <div class="col-md-4 ">
 
                             <input type="text" class="form-control py-2" name="searchstr"
                                 placeholder="What are you looking for?" value="{{ request('searchstr') }}">
                         </div>
-                        <div class="col-md-3 px-2">
+                        <div class="col-md-3 ">
                             <select class="form-select py-2" name="country">
                                 <option value="">Select Country</option>
                                 @foreach ($countries as $cty)
@@ -126,13 +126,13 @@
 
                     <div class="d-flex flex-wrap gap-2 pt-3 mb-3">
                         <a href="{{ route('gift.home', ['type' => $type]) }}"
-                            class="btn btn-outline-secondary btn-sm rounded-pill category-btn flex-grow-1 flex-md-grow-0 {{ in_array(request('giftCategoryId'), [null, '', 'all']) ? 'active-btn' : '' }}">
+                            class="btn btn-sm rounded-pill border border-secondary-subtle category-btn flex-grow-1 flex-md-grow-0 {{ in_array(request('giftCategoryId'), [null, '', 'all']) ? 'active-btn' : '' }}">
                             All</a>
 
                         @if ($giftcategories)
                             @foreach ($giftcategories as $category)
                                 <a href="{{ route('gift.home', ['type' => $type, 'giftCategoryId' => $category->id, 'searchstr' => request('searchstr'), 'country' => request('country'), 'city' => request('city')]) }}"
-                                    class="btn btn-outline-secondary btn-sm rounded-pill category-btn text-truncate flex-grow-1 flex-md-grow-0 {{ request('giftCategoryId') == $category->id ? 'active-btn' : '' }}">
+                                    class="btn border border-secondary-subtle  btn-sm rounded-pill category-btn text-truncate flex-grow-1 flex-md-grow-0 {{ request('giftCategoryId') == $category->id ? 'active-btn' : '' }}">
                                     {{ $category->giftCategoryTitle }}</a>
                             @endforeach
                         @endif
@@ -154,8 +154,8 @@
                                         <img src="{{ $gNc->thumbnail ? asset('storage/' . $gNc->thumbnail) : asset('frontend/assets/Images/giftandcoupon.png') }}"
                                             class="bdy-packages-img product-image-gifts" id="product-image-gift"
                                             style="height: 200px;">
-                                        <div class="card-body d-flex justify-content-between align-items-center ">
-                                            <p class="text-truncate my-2">{{ $gNc->title }}</p>
+                                        <div class="card-body d-flex justify-content-between align-items-center mt-2">
+                                            <p class="text-truncate mb-0">{{ $gNc->title }}</p>
 
                                             @if (Auth::guard('job_seekers')->check())
                                                 <form action="{{ route('addtocart') }}" class="d-inline" method="post">
@@ -180,7 +180,7 @@
                                             </form>
 
                                         </div>
-                                        <div class="price-gift mb-3">
+                                        <div class="price-gift mb-1">
                                             @if ($gNc->discount > 0)
                                                 <del>Nrs. {{ $gNc->price }}</del>
                                             @endif
