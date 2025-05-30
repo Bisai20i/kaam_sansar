@@ -172,12 +172,11 @@
 
 
                 <!-- Right: Order Summary -->
-                <div class="col-md-4 ">
-                    <div class="card cart-location p-2">
-                        <h4> Location</h4>
-                        <p class="pt-1"><i class="bi bi-geo-alt "></i>
-                            {{ Auth::guard('job_seekers')->user()->permanentLocation }}</p>
-                        <hr class="mb-3 mt-2">
+                <div class="col-md-4 my-2">
+                    <div class="card cart-location p-2" >
+                        <h4 class="mb-1"> Location</h4>
+                        <p class="pt-1 mb-0"><i class="bi bi-geo-alt "></i>{{ Auth::guard('job_seekers')->user()->permanentLocation }}</p>
+                        <hr class="my-2">
                         <h3>Order Summary</h3>
 
                         @php

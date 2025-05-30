@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -7,22 +6,28 @@ use App\Models\Achievement;
 use App\Models\Admin;
 use App\Models\AdsManager;
 use App\Models\Advertisement;
-use App\Models\Astrologer;
 use App\Models\AdvertisementCategory;
+use App\Models\Astrologer;
 use App\Models\BlogsAndPodcast;
+use App\Models\BlogsAndPodcastsBookmark;
 use App\Models\DiscussionForum;
 use App\Models\Education;
 use App\Models\Experience;
 use App\Models\Follower;
+use App\Models\ForexCalculator;
 use App\Models\ForumInteraction;
 use App\Models\FrequentlyAskedQuestion;
 use App\Models\GiftCategory;
 use App\Models\GiftCoupon;
+use App\Models\Horoscope;
 use App\Models\IndustryCategory;
+use App\Models\InsuranceCategory;
+use App\Models\InsuranceCompany;
 use App\Models\JobBookmark;
 use App\Models\JobCategory;
 use App\Models\JobPost;
 use App\Models\JobSeeker;
+use App\Models\Jyotish;
 use App\Models\Language;
 use App\Models\Profile;
 use App\Models\Project;
@@ -33,20 +38,12 @@ use App\Models\UserComment;
 use App\Models\Visa;
 use App\Models\VisaCountryList;
 use App\Models\VisaDetails;
-use App\Models\Horoscope;
-use App\Models\Jyotish;
 use App\Models\VisaType;
-use App\Models\InsuranceCompany;
-use App\Models\InsuranceCategory;
-use App\Models\InsuranceCategoryDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-use App\Models\ForexCalculator;
-use App\Models\BlogsAndPodcastsBookmark;
-
-
+use App\Models\GiftCart;
 
 class FrontendController extends Controller
 {
@@ -69,7 +66,6 @@ class FrontendController extends Controller
                 ->pluck('blogs_and_podcasts_id')
                 ->toArray();
         }
-
 
         $podcasts = BlogsAndPodcast::orderBy('created_at', 'desc')
             ->where('blogOrPodcast', 'podcast')
@@ -113,7 +109,7 @@ class FrontendController extends Controller
             ->where('publishStatus', 1)
             ->take(12)
             ->get();
-        $faqs = FrequentlyAskedQuestion::all();
+        $faqs                 = FrequentlyAskedQuestion::all();
         $ad_banners           = [];
         $ad_banners['middle'] = AdsManager::where('which_page', 'home')
             ->where('publish_or_not', 1)
@@ -128,7 +124,7 @@ class FrontendController extends Controller
         }
 
         // dd($giftCoupons);
-        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
+        return view('frontend.index', compact('blogs', 'podcasts', 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners', 'faqs'));
         // return view('frontend.index', compact( 'findJobs', 'ads', 'post', 'categories', 'giftCoupons', 'ad_banners','faqs'));
     }
 
@@ -203,7 +199,7 @@ class FrontendController extends Controller
             ->where('jobStatus', 'published')
             ->get();
 
-        // Get the category_id of the job
+                                             // Get the category_id of the job
         $category_id = $jobs->jobCategoryId; // Assuming `category_id` is the field
 
         // Fetch jobs in the same category
@@ -223,6 +219,12 @@ class FrontendController extends Controller
             ->where('jobStatus', 'published')
             ->where('jobSlug', $slug)
             ->first();
+
+        if (Auth::guard('job_seekers')->check()) {
+            $jobDetail->hasBookmarked = JobBookmark::where('jobSeekerId', Auth::guard('job_seekers')->id())
+                ->where('jobPostId', $jobDetail->id)
+                ->exists();
+        }
         // return $jobDetail;
 
         $jobDetail->increment('jobViewerCount');
@@ -424,7 +426,7 @@ class FrontendController extends Controller
             })
             ->unique()  // Remove duplicate skills
             ->values(); // Reindex collection
-        // dd($similar_jobs);
+                    // dd($similar_jobs);
         $ad_banners = [];
 
         $ad_banners['bottom'] = AdsManager::where('which_page', 'jobs')
@@ -454,22 +456,23 @@ class FrontendController extends Controller
                 ->where('jobPostId', $request->jobPostId)
                 ->first();
 
-            if (! $existingBookmark) {
-                $bookmark = JobBookmark::create([
-                    'jobSeekerId' => $request->jobSeekerId,
-                    'jobPostId'   => $request->jobPostId,
-                ]);
+            if ($existingBookmark) {
+                $existingBookmark->delete();
+                return redirect()->back()->with('success', 'Job Bookmark removed successfully.');
             }
+            $bookmark = JobBookmark::create([
+                'jobSeekerId' => $request->jobSeekerId,
+                'jobPostId'   => $request->jobPostId,
+            ]);
 
             if (! empty($bookmark)) {
                 return redirect()->back()->with('success', 'Job Bookmark added successfully.');
             }
-            return redirect()->back()->with('info', 'The post is already added to your jobs.');
+
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Some error occured!');
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
 
     public function bookmarkedPodcasts()
     {
@@ -478,7 +481,7 @@ class FrontendController extends Controller
 
             $bookmarks = BlogsAndPodcastsBookmark::with('blogsAndPodcasts')
                 ->where('job_seeker_id', $jobSeekerId)
-                ->where('type', 'podcast')  // filter by podcast type in bookmarks table
+                ->where('type', 'podcast') // filter by podcast type in bookmarks table
                 ->whereHas('blogsAndPodcasts', function ($query) {
                     $query->where('blogOrPodcast', 'podcast'); // extra safety check, optional
                 })
@@ -489,7 +492,7 @@ class FrontendController extends Controller
             // Log::info('Bookmarked Podcasts:', $podcasts->toArray());
 
             return view('frontend.profile.partials.my-podcast', [
-                'podcasts' => $podcasts
+                'podcasts' => $podcasts,
             ]);
         } catch (\Exception $e) {
             Log::error('Bookmarked Podcasts Error: ' . $e->getMessage());
@@ -501,12 +504,12 @@ class FrontendController extends Controller
     {
         $request->validate([
             'blogs_and_podcasts_id' => 'required|integer|exists:blogs_and_podcasts,id',
-            'type' => 'required|in:podcast,article',  // force required type for clarity
+            'type'                  => 'required|in:podcast,article', // force required type for clarity
         ]);
 
         $jobSeekerId = auth()->id();
-        $contentId = $request->input('blogs_and_podcasts_id');
-        $type = $request->input('type');
+        $contentId   = $request->input('blogs_and_podcasts_id');
+        $type        = $request->input('type');
 
         // Check that the content type in blogs_and_podcasts matches the requested type
         $content = \App\Models\BlogsAndPodcast::findOrFail($contentId);
@@ -528,9 +531,9 @@ class FrontendController extends Controller
 
         // Create new bookmark with correct type
         BlogsAndPodcastsBookmark::create([
-            'job_seeker_id' => $jobSeekerId,
+            'job_seeker_id'         => $jobSeekerId,
             'blogs_and_podcasts_id' => $contentId,
-            'type' => $type,
+            'type'                  => $type,
         ]);
 
         return redirect()->back()->with('success', ucfirst($type) . ' bookmarked successfully.');
@@ -558,12 +561,6 @@ class FrontendController extends Controller
         }
     }
 
-
-
-
-
-
-
     public function newsAndBlogs()
     {
         $blogs = BlogsAndPodcast::where('blogOrPodcast', 'blog')
@@ -574,11 +571,9 @@ class FrontendController extends Controller
         return view('frontend.blogs', compact('blogs'));
     }
 
-
     public function newsDetail($slug)
     {
         $news_detail = BlogsAndPodcast::where('slug', $slug)->where('publishStatus', 1)->first();
-
 
         // Increment the view count
         $news_detail->increment('views_count');
@@ -601,7 +596,6 @@ class FrontendController extends Controller
         return view('frontend.blog-details', compact('news_detail', 'similar_news', 'isBookmarked'));
     }
 
-
     public function bookmarkedBlogs()
     {
         try {
@@ -618,7 +612,7 @@ class FrontendController extends Controller
             $blogs = $bookmarks->pluck('blogsAndPodcasts')->filter();
 
             return view('frontend.profile.partials.my-articles', [
-                'blogs' => $blogs
+                'blogs' => $blogs,
             ]);
         } catch (\Exception $e) {
             Log::error('Bookmarked Blogs Error: ' . $e->getMessage());
@@ -630,11 +624,11 @@ class FrontendController extends Controller
     {
         $request->validate([
             'blogs_and_podcasts_id' => 'required|integer|exists:blogs_and_podcasts,id',
-            'type' => 'required|in:podcast,blog',
+            'type'                  => 'required|in:podcast,blog',
         ]);
 
-        $jobSeekerId = auth()->id();
-        $contentId = $request->input('blogs_and_podcasts_id');
+        $jobSeekerId  = auth()->id();
+        $contentId    = $request->input('blogs_and_podcasts_id');
         $originalType = $request->input('type');
 
         $content = BlogsAndPodcast::findOrFail($contentId);
@@ -658,9 +652,9 @@ class FrontendController extends Controller
         }
 
         BlogsAndPodcastsBookmark::create([
-            'job_seeker_id' => $jobSeekerId,
+            'job_seeker_id'         => $jobSeekerId,
             'blogs_and_podcasts_id' => $contentId,
-            'type' => $type,
+            'type'                  => $type,
         ]);
 
         return back()->with('success', ucfirst($originalType) . ' bookmarked successfully.');
@@ -687,12 +681,6 @@ class FrontendController extends Controller
             return redirect()->back()->with('error', 'Something went wrong!');
         }
     }
-
-
-
-
-
-
 
     public function podcasts()
     {
@@ -744,7 +732,6 @@ class FrontendController extends Controller
         return view('frontend.podcastdetails', compact('podcast_detail', 'similar_podcasts', 'bookmarkedPodcastIds'));
     }
 
-
     public function forex_calculator()
     {
 
@@ -754,9 +741,9 @@ class FrontendController extends Controller
     public function select_exchanger(Request $request)
     {
 
-        $base_currency = $request->query('base_currency');
+        $base_currency   = $request->query('base_currency');
         $target_currency = $request->query('target_currency');
-        $amount = $request->query('amount') ?? 1;
+        $amount          = $request->query('amount') ?? 1;
         // dd($request->all());
 
         $exchange_rates = ForexCalculator::where('base_currency', $base_currency)
@@ -775,7 +762,7 @@ class FrontendController extends Controller
 
         // return $exchange_rates;
 
-        return view('frontend.ForexChanger.select-exchanger', compact('exchange_rates','amount', 'base_currency', 'target_currency'));
+        return view('frontend.ForexChanger.select-exchanger', compact('exchange_rates', 'amount', 'base_currency', 'target_currency'));
     }
 
     public function exchange_bank_details()
@@ -867,8 +854,8 @@ class FrontendController extends Controller
         $date = Carbon::today();
 
         $horoscopes = Horoscope::where('type', $type);
-        $startDate = null;
-        $endDate = null;
+        $startDate  = null;
+        $endDate    = null;
 
         switch ($type) {
             case 'daily':
@@ -877,29 +864,28 @@ class FrontendController extends Controller
                 break;
 
             case 'weekly':
-                $startDate = $date->startOfWeek(); // Sunday as default start
-                $endDate = $startDate->copy()->addDays(6); // Next 6 days
+                $startDate = $date->startOfWeek();           // Sunday as default start
+                $endDate   = $startDate->copy()->addDays(6); // Next 6 days
                 break;
 
             case 'monthly':
                 $startDate = $date->startOfMonth();
-                $endDate = $date->endOfMonth();
+                $endDate   = $date->endOfMonth();
                 break;
 
             case 'yearly':
                 $startDate = $date->startOfYear();
-                $endDate = $date->endOfYear();
+                $endDate   = $date->endOfYear();
                 break;
         }
         Log::info('Weekly range', ['startDate' => $startDate, 'endDate' => $endDate]);
-
 
         $horoscopes = $horoscopes->get();
 
         if ($startDate && $endDate) {
             Log::info('Fetching horoscope from-to', [
                 'startDate' => $startDate->toDateString(),
-                'endDate' => $endDate->toDateString()
+                'endDate'   => $endDate->toDateString(),
             ]);
         }
 
@@ -915,7 +901,7 @@ class FrontendController extends Controller
             'sagittarius',
             'capricorn',
             'aquarius',
-            'pisces'
+            'pisces',
         ];
         Log::info('Zodiac order', ['zodiac_order' => $zodiacOrder]);
 
@@ -938,16 +924,10 @@ class FrontendController extends Controller
             Log::warning('No horoscopes found for the specified date and type');
         }
 
-
-
         $jyotishs = Jyotish::all();
 
         return view('frontend.horoscope.horoscope', compact('astrologer', 'orderedHoroscopes', 'type', 'jyotishs'));
     }
-
-
-
-
 
     public function giftNcoupon(Request $request, $type = null, $giftCategoryId = null)
     {
@@ -993,6 +973,14 @@ class FrontendController extends Controller
 
             $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
         }
+
+        $cartItems = 0;
+        if(Auth::guard('job_seekers')->check()){
+            $cartItems = GiftCart::where('jobSeekerId', Auth::guard('job_seekers')->user()->id)
+            ->count();
+        }
+        
+        $giftNcoupons->cartItems = $cartItems;
 
         // dd($giftNcoupons);
         return view('frontend.giftNcoupon.home', compact(['giftcategories', 'type', 'giftNcoupons', 'giftCategoryId', 'cities', 'countries', 'ad_banners']));
@@ -1075,9 +1063,16 @@ class FrontendController extends Controller
             ->paginate(8)
             ->withQueryString();
 
+        $cartItems = 0;
+        if(Auth::guard('job_seekers')->check()){
+            $cartItems = GiftCart::where('jobSeekerId', Auth::guard('job_seekers')->user()->id)
+            ->count();
+        }
+        
+
         // return $seller;
 
-        return view('frontend.giftNcoupon.sellerProfile', compact(['seller', 'sellerGifts']));
+        return view('frontend.giftNcoupon.sellerProfile', compact(['seller', 'sellerGifts','cartItems']));
     }
 
     public function resumeHelp()
@@ -1296,13 +1291,13 @@ class FrontendController extends Controller
     public function advertisements()
     {
         // Fetch unique categories under the given type
-        $ads = Advertisement::paginate(8);
-        $ad       = Advertisement::all();
+        $ads        = Advertisement::paginate(8);
+        $ad         = Advertisement::all();
         $all        = AdvertisementCategory::all();
         $category   = AdvertisementCategory::all();
         $categories = AdvertisementCategory::all();
 
-        $ad_banners = [];
+        $ad_banners        = [];
         $ad_banners['top'] = AdsManager::where('which_page', 'advertisement')
             ->where('publish_or_not', 1)
             ->where('active', 1)
@@ -1312,7 +1307,6 @@ class FrontendController extends Controller
         if ($ad_banners) {
             $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
         }
-
 
         return view('frontend.advertisements.index', compact('all', 'category', 'ads', 'ad', 'categories', 'ad_banners'))
             ->with('success', 'Advertisements retrieved successfully!');
@@ -1352,8 +1346,8 @@ class FrontendController extends Controller
             ->findOrFail($id);
         // $category = InsuranceCategoryDetail::with('insuranceDetail')->findOrFail($id);
         $category->insuranceDetail->thumbnail = $category->insuranceDetail->thumbnail ?
-            asset('storage/' . $category->insuranceDetail->thumbnail) :
-            asset('frontend/assets/Images/job.png');
+        asset('storage/' . $category->insuranceDetail->thumbnail) :
+        asset('frontend/assets/Images/job.png');
 
         // $category->insuranceDetail->transform(function ($detail) {
         //     if($detail->thumbnail)

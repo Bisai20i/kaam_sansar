@@ -508,7 +508,7 @@
                     @foreach ($ads as $ad)
                         <div class="col-md-6 col-lg-3 col-12 col-sm-12 job-card">
                             <div class="card">
-                                <a href="{{ route('frontend.advertisements') }}" class="text-decoration-none">
+                                <a href="{{ route('ads.show', $ad->id) }}" class="text-decoration-none">
                                     <img src="{{ $ad->adsThumbnail ? asset($ad->adsThumbnail) : asset('frontend/assets/Images/teddy-bear.jpg') }}"
                                         class="card-img-top rounded-1" alt="adsThumbnail">
                                     <div class="card-body p-2">

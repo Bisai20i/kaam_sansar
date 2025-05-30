@@ -21,7 +21,7 @@
             <div class="col-lg-12">
                 <div class="row">
                     <div class="container d-flex justify-content-end">
-                        <button class="bg-white border-0 border-bottom border-primary mt-2"><a href="#"
+                        <button class="bg-white border-0 border-bottom border-primary mt-2"><a href="{{ route('become.money_exchanger') }}"
                                 class="text-decoration-none text-primary fw-semibold fs-6">Become a Money Exchanger<i
                                     class="bi bi-arrow-right ms-2"></i></a></button>
                     </div>

@@ -244,7 +244,7 @@
             @else
             <!-- If user is completely unauthenticated, show Login/Register buttons -->
             <div class="d-flex align-items-center gap-2">
-                <button class="btn-login mt-0" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                <button class="btn-login my-0" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
                 <button class="btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
             </div>
             <!-- If user is completely unauthenticated, show Login/Register buttons -->

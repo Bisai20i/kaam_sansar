@@ -571,7 +571,7 @@
                                                         data-user-id="{{ $forumPost->jobSeeker->id }}"
                                                         onclick="follow(this)">
                                                         {!! $forumPost->followed
-                                                            ? '- <span class="d-none d-md-inline">Unfollow</span>'
+                                                            ? '<span class="d-none d-md-inline">Unfollow</span>'
                                                             : '+ <span class="d-none d-md-inline">Follow</span>' !!}
 
                                                     </button>
@@ -1164,18 +1164,18 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function setRedirectUrl() {
-            fetch('/set-redirect', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    redirect_url: window.location.href
-                })
-            });
-        }
+        // function setRedirectUrl() {
+        //     fetch('/set-redirect', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        //         },
+        //         body: JSON.stringify({
+        //             redirect_url: window.location.href
+        //         })
+        //     });
+        // }
         // Function to get the base URL of your application
         function getBaseUrl() {
             return window.location.protocol + "//" + window.location.host;
@@ -1319,7 +1319,7 @@
 
                             } else {
                                 btn.innerHTML =
-                                    '- <span class="d-none d-md-inline">Unfollow</span>'
+                                    '<span class="d-none d-md-inline">Unfollow</span>'
                             }
                         })
 

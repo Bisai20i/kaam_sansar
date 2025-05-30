@@ -38,7 +38,7 @@
                 <!-- Right Side Add Item / Add Post Button -->
                 @if (Auth::guard('job_seekers')->check())
                     <!-- If user is logged in, show the Post Ad button -->
-
+                    
                     <button class="btn  bg-primary text-white" id="addItemBtn" data-bs-toggle="modal"
                         data-bs-target="#addItemModal">
                         + Add Item
@@ -155,7 +155,7 @@
                                             class="bdy-packages-img" alt="Product Image"
                                             style="width: 100%; height: 180px; object-fit: auto;">
                                         <div class="card-body p-2">
-                                            <p class="my-0 text-secondary fw-semibold">{{ $ad->productTitle }}</p>
+                                            <p class="my-0 text-secondary fw-semibold text-truncate">{{ $ad->productTitle }}</p>
                                             <p class="price fs-5 fw-semibold mb-0">NRs. {{ $ad->pricing }}</p>
                                         </div>
                                     </a>
@@ -339,10 +339,15 @@
                 const addBtn = document.getElementById('addItemBtn');
                 if (type === 'Buy') {
                     addBtn.textContent = '+ Add Post';
-                    addBtn.setAttribute('data-bs-target', '#addPostModal');
+                    @auth('job_seekers')
+                        addBtn.setAttribute('data-bs-target', '#addPostModal');
+                    @endauth
+                    
                 } else {
                     addBtn.textContent = '+ Add Item';
+                    @auth('job_seekers')
                     addBtn.setAttribute('data-bs-target', '#addItemModal');
+                    @endauth
                 }
 
                 updateFilters(); // ✅ This keeps the category section logic working
@@ -642,7 +647,7 @@
                                     <p class="abroad-p">{{ $ad->productDescription }}</p>
 
                                     <div class="mt-3">
-                                        <a href="{{ $ad->urlLink }}" class="text-primary" target="_blank">Link</a>
+                                        <a href="{{ $ad->urlLink }}" class="text-primary" target="_blank">{{ $ad->urlLink }}</a>
                                     </div>
 
                                     @if (!empty($ad->productThumbnail))
@@ -701,7 +706,7 @@
                                                             <!-- Comments will be loaded here dynamically -->
                                                             @foreach ($comments as $cmt)
                                                                 <div class="d-flex align-items-start mb-3">
-                                                                    <img src="{{ asset('storage/' . $cmt->jobSeeker->userThumbnail[0]) ?? 'https://via.placeholder.com/40' }}"
+                                                                    <img src="{{ $cmt->jobSeeker->userThumbnail ? asset('storage/' . $cmt->jobSeeker->userThumbnail[0]) : asset('frontend/assets/Images/profile.jpg') }}"
                                                                         class="rounded-circle me-2"
                                                                         style="width: 40px; height: 40px; object-fit: cover;"
                                                                         alt="User">

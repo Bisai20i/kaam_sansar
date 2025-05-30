@@ -28,8 +28,8 @@
             }
         </style>
 
-        <div class="d-flex justify-content-center justify-content-md-between flex-wrap-reverse row-gap-3 ">
-            <div class="btn-group  mb-3 gap-lg-1 ads_type" role="group" aria-label="Basic radio toggle button group">
+        <div class="d-flex justify-content-center justify-content-md-between flex-wrap-reverse align-items-center gap-3 ">
+            <div class="flex-grow-1 flex-md-grow-0 flex-wrap gap-2 btn-group  mb-3 gap-lg-1 ads_type" role="group" aria-label="Basic radio toggle button group">
                 <a href="{{ route('frontend.advertisements') }}"
                     class="btn btn-outline-custom {{ empty($type) ? 'active' : '' }} rounded-2 mx-1 px-4 border border-2 ">
                     All
@@ -86,11 +86,11 @@
 
 
         <div>
-            <h5>Find what you are looking for ?</h5>
-            <div class=" g-3 mb-3">
-                <form action="{{ route('ads.search') }}" method="GET" class="row mt-4 align-items-center">
+            <h5 class="mb-1">Find what you are looking for ?</h5>
+            <div class="mb-3">
+                <form action="{{ route('ads.search') }}" method="GET" class="row mt-2 align-items-center justify-content-center">
                     <!-- Search Input -->
-                    <div class="col-lg">
+                    <div class="col-lg mb-2">
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0" style="height: 42px;">
                                 <i class="fas fa-search text-muted"></i>
@@ -101,7 +101,7 @@
                     </div>
 
                     <!-- Country Select -->
-                    <div class="col-md-6 col-lg-3">
+                    <div class="col-md-6 col-lg-3 mb-2">
                         <select class="form-select py-2 bg-white text-secondary" id="countrySelect" name="country"
                             aria-label="">
                             <option value="" selected>Select Country</option>
@@ -113,7 +113,7 @@
                     </div>
 
                     <!-- City Select -->
-                    <div class="col-md-6 col-lg-3">
+                    <div class="col-md-6 col-lg-3 mb-2">
                         <select class="form-select py-2 bg-white text-secondary" id="citySelect" name="location"
                             aria-label="">
                             <option value="" selected>Select City</option>
@@ -124,7 +124,7 @@
                     </div>
 
                     <!-- Search Button -->
-                    <div class="col-4 col-lg-2 mx-auto">
+                    <div class="col col-md-4 col-lg-2 mb-2">
                         <button class="btn text-white w-100 py-2" type="submit" style="background-color: #0064a7;">
                             Search
                         </button>
@@ -137,19 +137,19 @@
 
         <div class="nav nav-pills gap-1 justify-content-center justify-content-md-start">
             {{-- Show All --}}
-            <a class="btn btn-outline-custom {{ !request('categoryId') ? 'active' : '' }} border border-2  rounded-pill px-3 py-1 d-flex align-items-center"
+            <a class="btn flex-grow-1 text-center flex-md-grow-0 btn-outline-custom {{ !request('categoryId') ? 'active' : '' }} border border-2  rounded-pill px-3 py-1 "
                 href="{{ request('type') ? route('Ads.showByTypeCategory', ['type' => request('type')]) : route('frontend.advertisements') }}">All</a>
             @if (request('type'))
                 @foreach ($categories as $categoryItem)
                     <a href="{{ route('Ads.showByTypeCategory', ['type' => request('type'), 'categoryId' => $categoryItem->id]) }}"
-                        class="btn btn-outline-custom {{ request('categoryId') && request('categoryId') == $categoryItem->id ? 'active' : '' }} rounded-pill mx-1 px-3 py-1 border border-2">
+                        class="btn flex-grow-1 text-center flex-md-grow-0 btn-outline-custom {{ request('categoryId') && request('categoryId') == $categoryItem->id ? 'active' : '' }} rounded-pill mx-1 px-3 py-1 border border-2">
                         {{ $categoryItem->adsCategoryTitle }}
                     </a>
                 @endforeach
             @else
                 @foreach ($categories as $categoryItem)
                     <a href="{{ route('Ads.showByCategory', ['categoryId' => $categoryItem->id]) }}"
-                        class="btn btn-outline-custom rounded-pill mx-1 px-3 py-1 border border-2 {{ request('categoryId') && request('categoryId') == $categoryItem->id ? 'active' : '' }}">
+                        class="btn flex-grow-1 text-center flex-md-grow-0 btn-outline-custom rounded-pill px-3 py-1 border border-2 {{ request('categoryId') && request('categoryId') == $categoryItem->id ? 'active' : '' }}">
                         {{ $categoryItem->adsCategoryTitle }}
                     </a>
                 @endforeach
@@ -159,7 +159,7 @@
         </div>
 
 
-        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1">
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-1 g-4 mt-1 mb-4">
             @if ($ads->count() > 0)
                 @foreach ($ads as $ad)
                     <div class="col">
@@ -356,9 +356,17 @@
                                 style="height: 100px"></textarea>
                             <label for="floatingTextarea">Describe...</label>
                         </div>
+
                         <div class="d-flex flex-column abroad-deal-1 p-2 gap-2 rounded" style="max-width: 100%;">
+                            <div class="mb-1">
+                                <label for="fileInput" class="mb-2">Upload Images (Max 2MB)</label>
+                                <input class="form-control py-2" type="file" accept="image/*" accept="image/*"
+                                    id="fileInput" name="adsThumbnail" onchange="validateFileSize(this)">
+
+
+                            </div>
                             <!-- Top row -->
-                            <div class="d-flex align-items-center gap-3">
+                            {{-- <div class="d-flex align-items-center gap-3">
                                 <p class="flex-grow-1 my-auto text-black-5 mb-0" style="font-size: 0.9rem;">Add to your
                                     post</p>
 
@@ -369,36 +377,15 @@
                                     <input type="file" id="fileInput" name="adsThumbnail" accept="image/*"
                                         class="d-none">
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- Image Preview (small) -->
                         </div>
-                        <div id="imagePreview" class="d-flex mt-1" style="height: 60px;"></div>
-
-
-                        <script>
-                            const fileInput = document.getElementById('fileInput');
-                            const imagePreview = document.getElementById('imagePreview');
-
-                            fileInput.addEventListener('change', (event) => {
-                                const file = event.target.files[0];
-                                if (file && file.type.startsWith('image/')) {
-                                    const reader = new FileReader();
-                                    reader.onload = function(e) {
-                                        imagePreview.innerHTML = `
-                                        <img src="${e.target.result}" alt="Preview" style="height: 100%; width:30%; border-radius: 6px; object-fit: cover;">
-                                        `;
-                                    };
-                                    reader.readAsDataURL(file);
-                                } else {
-                                    imagePreview.innerHTML = '';
-                                }
-                            });
-                        </script>
+                        <div id="imagePreview" class="d-flex mt-1"></div>
 
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                    <button type="submit" class="btn btn-primary " style="background-color: #0064a7;">Submit</button>
+                    <button type="submit" class="btn btn-primary px-4" style="background-color: #0064a7;">Submit</button>
                 </div>
                 </form>
                 <script>
@@ -414,3 +401,44 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function validateFileSize(input) {
+            const file = input.files[0];
+            const maxSize = 2 * 1024 * 1024;
+            const parent = input.parentNode;
+
+            const existingAlert = parent.querySelector('.file-size-error');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            if (file && file.size > maxSize) {
+                input.value = '';
+                document.getElementById('imagePreview').classList.add('d-none');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'text-danger mt-2 file-size-error';
+                errorDiv.textContent = 'File size must be less than 2 MB.';
+
+                parent.appendChild(errorDiv);
+            } else {
+
+                const file = input.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('imagePreview').classList.remove('d-none');
+                        document.getElementById('imagePreview').innerHTML = `
+                                        <img src="${e.target.result}" alt="Preview" style="height: 60px; width:30%; border-radius: 6px; object-fit: cover;">
+                                        `;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    document.getElementById('imagePreview').innerHTML = '';
+                }
+            }
+ 
+        }
+    </script>
+@endpush

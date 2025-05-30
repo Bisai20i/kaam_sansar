@@ -32,22 +32,32 @@
                 <div class="d-flex justify-content-between align-items-center mt-4">
                     <h4 class="mt-2">Gifts and Coupons</h4>
                     @auth('job_seekers')
-                        <a href="{{ route('giftcart') }}" class="btn btn-cart cart-gift" id="cartButton"><i
-                                class="bi bi-cart3"></i>Cart</a>
+                        <a href="{{ route('giftcart') }}" class="btn btn-cart cart-gift position-relative" id="cartButton">
+
+                            @if (@$cartItems > 0)
+                                <small class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ @$cartItems }}
+                                    <span class="visually-hidden">Number of cart items</span>
+                                </small>
+                            @endif
+
+
+                            <i class="bi bi-cart3"></i> Cart
+                        </a>
                     @endauth
 
                 </div>
 
                 <div class="d-flex gap-3 mt-2  ">
-                    <a href="{{ route('gift.seller', ['id' => $seller->id])}}"
+                    <a href="{{ route('gift.seller', ['id' => $seller->id]) }}"
                         class="btn btn-toggle btn-all-categories {{ request('type') == null ? 'active' : '' }}"
                         onclick="toggleActive(this)">All</a>
 
-                    <a href="{{ route('gift.seller', ['id' => $seller->id, 'type'=>'0' ]) }}"
+                    <a href="{{ route('gift.seller', ['id' => $seller->id, 'type' => '0']) }}"
                         class="btn btn-toggle {{ request('type') == '0' ? 'active' : '' }}"
                         onclick="toggleActive(this)">Gifts</a>
 
-                    <a href="{{ route('gift.seller', ['id' => $seller->id ,  'type'=>'1' ]) }}"
+                    <a href="{{ route('gift.seller', ['id' => $seller->id, 'type' => '1']) }}"
                         class="btn btn-toggle {{ request('type') == '1' ? 'active' : '' }}">Coupons</a>
                 </div>
 
@@ -78,7 +88,9 @@
                                                     <i class="bi bi-plus-lg ms-auto gift-cart"></i>
                                                 </button>
                                             @else
-                                                <button data-bs-toggle="modal" data-bs-target="#loginModal" type="submit" style="all: unset; cursor: pointer;">
+                                                <button type="button" style="all: unset; cursor: pointer;"
+                                                    data-bs-toggle="modal" data-bs-target="#loginModal"
+                                                    onclick="setRedirectUrl()" class="position-relative">
                                                     <i class="bi bi-plus-lg ms-auto gift-cart"></i>
                                                 </button>
                                             @endif
@@ -106,13 +118,15 @@
 
                             </div>
                         @endforeach
+                    @else
+                        @include('frontend.notFound')
                     @endif
 
 
 
                 </div>
 
-                @if ($sellerGifts->hasMorePages() || $sellerGifts->currentPage() !=1)
+                @if ($sellerGifts->hasMorePages() || $sellerGifts->currentPage() != 1)
 
                     <div class="row mt-3">
                         <nav>

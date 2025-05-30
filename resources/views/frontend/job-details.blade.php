@@ -17,25 +17,44 @@
                     <div class="px-2 px-md-4">
                         <div class="image-and-button px-0">
                             <div class="logo-container ">
-                                <img src="{{ $jobDetail->jobCompany->companyProfileImg ? asset('storage/' . $jobDetail->jobCompany->companyProfileImg) :  asset('frontend/assets/Images/company-default.png') }}"
+                                <img src="{{ $jobDetail->jobCompany->companyProfileImg ? asset('storage/' . $jobDetail->jobCompany->companyProfileImg) : asset('frontend/assets/Images/company-default.png') }}"
                                     alt="Company Logo" class="company-logo rounded-2">
                             </div>
                             @auth('job_seekers')
                                 <a href="{{ route('frontend.apply', $jobDetail->jobSlug) }}"
                                     class="apply-button text-center">Apply</a>
                             @else
-                                <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="redirect_url" value="{{ url()->current() }}">
-                                </form>
-
-                                <a href="#" onclick="document.getElementById('redirectForm').submit(); "
-                                    class="apply-button">
+                                <button data-bs-toggle="modal" data-bs-target="#loginModal" onclick="setRedirectUrl()"
+                                    class="apply-button text-center" style="background-color: #0064a7;">
                                     Apply
-                                </a>
+                                </button>
                             @endauth
                         </div>
-                        <h1 class="job-title mb-1 d-inline-block">Job Information</h1>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h1 class="job-title mb-1 d-inline-block">Job Information</h1>
+                            @auth('job_seekers')
+                                <form action="{{ route('job.bookmark') }}" method="post" class="d-inline">
+                                    @csrf
+                                    <input type="hidden" name="jobSeekerId"
+                                        value="{{ Auth::guard('job_seekers')->user()->id }}">
+                                    <input type="hidden" name="jobPostId" value="{{ $jobDetail->id }}" />
+
+                                    <button type="submit" class="btn rounded-circle px-3 py-2">
+                                        <i
+                                            class="{{ $jobDetail->hasBookmarked ? 'fas' : 'far' }} fa-bookmark bookmark-icon text-primary"></i>
+                                    </button>
+                                </form>
+                            @else
+                                
+                                <button type="submit" class="btn rounded-circle px-3 py-2" data-bs-toggle="modal" data-bs-target="#loginModal"
+                                            onclick="setRedirectUrl()">
+                                    <i
+                                        class="far fa-bookmark bookmark-icon text-primary"></i>
+                                </button>
+                            @endauth
+
+                        </div>
+
                         <div class="job-meta px-0">
                             <p class="meta-container"><span class="meta-label">Job Title:</span>
                                 {{ $jobDetail->jobTitle }}</p>
@@ -129,10 +148,11 @@
                     </ul>
                 </div>
                 @if ($ad_banners['right'])
-                    <a href="{{ isset($ad_banners['right']) ? $ad_banners['right']->link : '#' }}" target="_blank" href="{{ $ad_banners['right']->link }}" class="d-block mt-3"
+                    <a href="{{ isset($ad_banners['right']) ? $ad_banners['right']->link : '#' }}" target="_blank"
+                        href="{{ $ad_banners['right']->link }}" class="d-block mt-3"
                         style="text-decoration: none; cursor: pointer; object-fit: contain;">
-                        <img src="{{ isset($ad_banners['right']) ? $ad_banners['right']->image : '#' }}" class="w-100 rounded-2" style="aspect-ratio: 1/3;"
-                            alt="img-fluid">
+                        <img src="{{ isset($ad_banners['right']) ? $ad_banners['right']->image : '#' }}"
+                            class="w-100 rounded-2" style="aspect-ratio: 1/3;" alt="img-fluid">
                     </a>
 
 

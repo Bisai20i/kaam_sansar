@@ -4351,6 +4351,7 @@ max-width: 900px;
 
 .giftcart .cart-item {
   max-height: 506px;
+  overflow-x: auto;
   width: 100%;
   border: 1px solid #9D9999;
   border-radius: 3px;
@@ -4397,7 +4398,7 @@ max-width: 900px;
 
 .giftcart .cart-location {
   width: 100%;
-  max-height: 428px;
+  /* max-height: 428px; */
   border: 1px solid #9D9999;
   border-radius: 5px;
 }

@@ -76,6 +76,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\JyotishController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\AdminMessageController;
+use App\Http\Controllers\BecomeMoneyExchangerController;
 
 
 
@@ -628,6 +629,15 @@ Route::get('/become_seller', function () {
     return view('frontend.giftNcoupon.become_seller');
 })->name('become.seller');
 
+// Frontend route for becoming a money exchanger
+
+Route::get('/become_money_exchanger', function () {
+    return view('frontend.giftNcoupon.become_money_exchanger');
+})->name('become.money_exchanger');
+
+// Handle the form submission from the frontend
+Route::post('/become_money_exchanger', [BecomeMoneyExchangerController::class, 'store'])->name('become.money_exchanger.store');
+
 // Handle the form submission from the frontend
 Route::post('/become_seller', [BecomeSellerController::class, 'store'])->name('become.seller.store');
 
@@ -637,6 +647,7 @@ Route::prefix('superadmin')->middleware(['auth:admin', 'role:superAdmin'])->grou
     Route::post('/becomeseller', [BecomeSellerController::class, 'store'])->name('superadmin.becomeseller.store');
     Route::get('/becomeseller/{id}', [BecomeSellerController::class, 'show'])->name('superadmin.becomeseller.show');
     Route::delete('/becomeseller/{id}', [BecomeSellerController::class, 'destroy'])->name('superadmin.becomeseller.destroy');
+    Route::resource('moneyexchangers', BecomeMoneyExchangerController::class);
 });
 
 Route::get('/passport/countries', [PassportRenewalController::class, 'passport_countries'])->name('passport.countries');

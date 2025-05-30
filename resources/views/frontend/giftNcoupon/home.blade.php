@@ -38,14 +38,13 @@
                     .become-seller:hover span {
                         transform: translateX(6px);
                     }
-                    
                 </style>
 
                 <div class="container mt-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="mt-2 text-nowrap">Most Popular Gifts</h4>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <h4 class="mt-2 text-nowrap fs-3 fs-md-1">Most Popular Gifts</h4>
 
-                        <div class="container d-flex justify-content-end mb-4">
+                        <div class="mb-1 mb-md-3 ">
                             <button class="bg-white border-0 border-bottom border-primary">
                                 <a href="{{ route('become.seller') }}"
                                     class="become-seller text-primary text-decoration-none">Become a Seller
@@ -55,21 +54,31 @@
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2 mb-4 mt-4 flex-wrap justify-content-between align-items-center">
-                        <div class="d-flex gap-3">
+                    <div class="d-flex gap-2 mb-4 mt-4 flex-wrap justify-content-between align-items-center flex-wrap">
+                        <div class="d-flex gap-2 flex-wrap ">
                             <a href="{{ route('gift.home', ['type' => 'all']) }}"
-                                class="btn btn-toggle btn-all-categories {{ request('type') == 'all' ? 'active' : '' }}"
+                                class="btn btn-toggle btn-all-categories flex-grow-1 flex-md-grow-0 {{ request('type') == 'all' ? 'active' : '' }}"
                                 onclick="toggleActive(this)">All</a>
 
                             <a href="{{ route('gift.home', ['type' => '0']) }}"
-                                class="btn btn-toggle {{ request('type') == '0' ? 'active' : '' }}"
+                                class="btn btn-toggle flex-grow-1 flex-md-grow-0 {{ request('type') == '0' ? 'active' : '' }}"
                                 onclick="toggleActive(this)">Gifts</a>
                             <a href="{{ route('gift.home', ['type' => '1']) }}"
-                                class="btn btn-toggle {{ request('type') == '1' ? 'active' : '' }}">Coupons</a>
+                                class="btn btn-toggle flex-grow-1 flex-md-grow-0 {{ request('type') == '1' ? 'active' : '' }}">Coupons</a>
                         </div>
                         @auth('job_seekers')
-                            <a href="{{ route('giftcart') }}" class="btn btn-cart cart-gift" id="cartButton"><i
-                                    class="bi bi-cart3"></i>Cart</a>
+                            <a href="{{ route('giftcart') }}" class="btn btn-cart cart-gift position-relative" id="cartButton">
+                                @if (@$giftNcoupons->cartItems > 0)
+                                    <small
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ @$giftNcoupons->cartItems }}
+                                        <span class="visually-hidden">Number of cart items</span>
+                                    </small>
+                                @endif
+
+
+                                <i class="bi bi-cart3"></i> Cart
+                            </a>
                         @endauth
 
                     </div>
@@ -154,13 +163,16 @@
                                                     <input type="hidden" name="couponId" value="{{ $gNc->id }}">
                                                     <input type="hidden" name="jobSeekerId"
                                                         value="{{ Auth::guard('job_seekers')->user()->id }}">
-                                                    <button type="submit" style="all: unset; cursor: pointer;">
+                                                    <button type="submit" style="all: unset; cursor: pointer;"
+                                                        class="gift-cart-button">
                                                         <i class="bi bi-plus-lg ms-auto gift-cart"></i>
                                                     </button>
                                                 </form>
                                             @else
-                                                <button type="submit" style="all: unset; cursor: pointer;"
-                                                    data-bs-toggle="modal" data-bs-target="#loginModal">
+                                                <button type="button" style="all: unset; cursor: pointer;"
+                                                    class="gift-cart-button" data-bs-toggle="modal"
+                                                    data-bs-target="#loginModal" onclick="setRedirectUrl()"
+                                                    class="position-relative">
                                                     <i class="bi bi-plus-lg ms-auto gift-cart"></i>
                                                 </button>
                                             @endif
@@ -198,7 +210,6 @@
                             @endforeach
                         @else
                             @include('frontend.notFound')
-                            
                         @endif
 
 

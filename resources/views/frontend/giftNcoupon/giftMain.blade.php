@@ -29,7 +29,16 @@
             </div>
         </section> --}}
 
-
+        <style>
+            .gift-cart{
+                transition: 0.3s ease;
+            }
+            .gift-cart:hover{
+                background-color: white !important;
+                color: #0064A7 !important;
+                outline:1px solid #0064A7 !important;
+            }
+        </style>
 
         @yield('giftContent')
 
@@ -44,8 +53,8 @@
 
 
 
-        <form action="{{route('gift.details')}}" id="giftNcouponDescription">
-            <input type="hidden" name="id" id="giftNcouponDescriptionId"/>
+        <form action="{{ route('gift.details') }}" id="giftNcouponDescription">
+            <input type="hidden" name="id" id="giftNcouponDescriptionId" />
         </form>
 
     </main>
@@ -53,81 +62,14 @@
 
 @push('scripts')
     <script>
-        //popup
-        // document.addEventListener("DOMContentLoaded", function() {
-        //     const popup = document.getElementById("popup");
-
-        // });
-
-        //manupulate gift selection
-        // let giftImages = document.querySelectorAll(".gift-coupon-card img");
-
-        // // Select the sections
-        // let giftCouponSection = document.querySelector(".giftandcoupon");
-        // let giftPackageSection = document.querySelector(".giftpackage");
-
-        // // Add click event listener to each image
-        // giftImages.forEach(image => {
-        //     image.addEventListener("click", function() {
-
-        //         // Hide the gift coupon section
-        //         if (giftCouponSection) {
-        //             giftCouponSection.style.display = "none";
-        //         }
-
-        //         // Show the gift package section
-        //         if (giftPackageSection) {
-        //             giftPackageSection.style.display = "block";
-        //             giftPackageSection.scrollIntoView({
-        //                 behavior: "smooth"
-        //             });
-        //         }
-        //     });
-        // });
-
-
-        // const selectAllCheckbox = document.getElementById("selectAll");
-        // const itemCheckboxes = document.querySelectorAll(".item-checkbox");
-        // const cartItems = document.querySelectorAll(".cart-item");
-
-        // // Select All Functionality
-        // selectAllCheckbox.addEventListener("change", function() {
-        //     itemCheckboxes.forEach((checkbox, index) => {
-        //         checkbox.checked = selectAllCheckbox.checked;
-        //         if (selectAllCheckbox.checked) {
-        //             cartItems[index].classList.add("selected");
-        //         } else {
-        //             cartItems[index].classList.remove("selected");
-        //         }
-        //     });
-        // });
-
-        // // Individual Item Selection
-        // itemCheckboxes.forEach((checkbox, index) => {
-        //     checkbox.addEventListener("change", function() {
-        //         if (checkbox.checked) {
-        //             cartItems[index].classList.add("selected");
-        //         } else {
-        //             cartItems[index].classList.remove("selected");
-        //         }
-        //     });
-        // });
-
-
-        // const cartButtons = document.querySelectorAll(".gift-cart"); // Select all cart buttons
-        // const giftPackageSection = document.getElementById("giftpackage");
-        // const giftCartSection = document.getElementById("giftcart");
-
-        // // Initially, show only the gift package section
-        // giftCartSection.style.display = "none";
-
-        // cartButtons.forEach(button => {
-        //     button.addEventListener("click", function() {
-        //         console.log("Clicked")
-        //         giftPackageSection.style.display = "none"; // Hide gift packages
-        //         giftCartSection.style.display = "block"; // Show cart section
-        //     });
-        // });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevent parent click on cart button click
+            document.querySelectorAll('.gift-cart').forEach(function(icon) {
+                icon.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent triggering parent click
+                });
+            });
+        });
     </script>
     <script>
         // let giftDetailPage = @json(route('gift.details', ['id' => '__ID__']));
@@ -136,7 +78,7 @@
         gNcItems.forEach(item => {
             item.addEventListener('click', () => {
                 let gNcId = item.getAttribute('data-gNcId');
-                console.log(gNcId);
+                // console.log(gNcId);
                 document.getElementById('giftNcouponDescriptionId').value = gNcId
                 nextPageForm.submit()
             });

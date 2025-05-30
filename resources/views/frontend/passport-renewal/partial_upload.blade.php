@@ -377,7 +377,7 @@
 
                             <input type="file" class="form-control" id="citizenship_front" name="citizenship_front"
                                 accept=".jpg,.jpeg,.png,.pdf" required accept=".jpg,.jpeg,.png,.pdf"
-                                onchange="handleImagePreview(this)">
+                                onchange="validateFileSize(this)">
                             <img src="#" alt="preview Image" class="img img-fluid my-2 d-none">
                         </div>
 
@@ -387,7 +387,7 @@
                             <br>
 
                             <input type="file" class="form-control" id="citizenship_back" name="citizenship_back"
-                                required accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                required accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                             <img src="#" alt="preview Image" class="img img-fluid my-2 d-none">
                         </div>
 
@@ -397,7 +397,7 @@
                             <br>
 
                             <input type="file" class="form-control" id="previous_passport" name="previous_passport"
-                                accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)" required>
+                                accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)" required>
                             <img src="#" alt="preview Image" class="img img-fluid my-2 d-none">
                         </div>
 
@@ -409,7 +409,7 @@
                             <br>
 
                             <input type="file" class="form-control" id="other_document" name="other_document"
-                                accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
 
                             <img src="#" alt="preview Image" class="img img-fluid my-2 d-none">
                         </div>
@@ -535,7 +535,7 @@
 
 
 
-                
+
 
             // Fetch provinces on country change
             countrySelect.addEventListener('change', function() {
@@ -609,7 +609,7 @@
             const timeContainer = document.getElementById('appointment_time');
 
             timeContainer.innerHTML =
-                    `<div class="col"><label class="border border-outline-secondary p-2 fs-6 rounded-2 w-auto h-auto">Loading...</label></div>`;
+                `<div class="col"><label class="border border-outline-secondary p-2 fs-6 rounded-2 w-auto h-auto">Loading...</label></div>`;
 
             // console.log("Fetching Time: " + value);
 
@@ -626,10 +626,10 @@
                 .then(data => {
 
                     if (!data.status) {
-                            timeContainer.innerHTML =
-                                `<div class="col"><label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto">No Available Times</label></div>`;
-                            return;
-                        }
+                        timeContainer.innerHTML =
+                            `<div class="col"><label class="btn btn-outline-secondary fs-6 pt-2 w-auto h-auto">No Available Times</label></div>`;
+                        return;
+                    }
 
                     if (data.status && data.times) {
 
@@ -679,7 +679,7 @@
 
             // Listen for date change and update hidden input
             calendar.on('data', function(value) {
-                console.log(value+"date changed")
+                console.log(value + "date changed")
                 document.getElementById('appointment_date').value = value;
                 getTimes(value, document.getElementById('app_location').options[document.getElementById(
                     'app_location').selectedIndex].getAttribute('data-id'));
@@ -830,7 +830,28 @@
             return true;
         }
 
+        function validateFileSize(input) {
+            const file = input.files[0];
+            const maxSize = 2 * 1024 * 1024;
+            const parent = input.parentNode;
 
-        
+            const existingAlert = parent.querySelector('.file-size-error');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            if (file && file.size > maxSize) {
+                input.value = '';
+                input.parentElement.querySelector('img').classList.add('d-none');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'text-danger mt-2 file-size-error';
+                errorDiv.textContent = 'File size must be less than 2 MB.';
+
+                parent.appendChild(errorDiv);
+            }
+            else{
+                handleImagePreview(input)
+            }
+        }
     </script>
 @endpush

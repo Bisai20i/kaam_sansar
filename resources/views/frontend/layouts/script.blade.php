@@ -10,6 +10,18 @@
 <script src="{{ asset('frontend/assets/JS/loader.js') }}"></script>
 
 <script>
+    function setRedirectUrl() {
+            fetch('/set-redirect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    redirect_url: window.location.href
+                })
+            });
+        }
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize modals only once
         const loginModalElement = document.getElementById('loginModal');

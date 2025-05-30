@@ -63,7 +63,9 @@ class CommentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return $isMobile ?
+             response()->json(['errors' => $validator->errors()], 422)
+             : redirect()->back()->with('error', 'Comment Field cannot be empty.');
         }
         // Create a new comment
         $comment = new Comment();
