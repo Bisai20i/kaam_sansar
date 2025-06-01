@@ -39,7 +39,7 @@
 
                     <div class="mt-4">
                         @if ($errors->any())
-                        <div class="alert alert-danger" id="error-alert">
+                        <div class="text-danger" id="error-alert">
                             <strong>Please fix the following errors:</strong>
                             <ul>
                                 @foreach ($errors->all() as $error)
@@ -47,15 +47,6 @@
                                 @endforeach
                             </ul>
                         </div>
-
-                        <script>
-                            // Automatically hide the error message after 10 seconds (10000 milliseconds)
-                            setTimeout(function() {
-                                let alert = document.getElementById('error-alert');
-                                if (alert) {
-                                    alert.style.display = 'none';
-                                }
-                            }, 10000);
                         </script>
                         @endif
                         <form id="brokerAccount" action="{{ isset($brokerAccount) ? route('brokerAccounts.update', $brokerAccount->id) : route('brokerAccounts.store') }}" method="post" enctype="multipart/form-data">
@@ -72,11 +63,31 @@
                                 </div>
                                 <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                                     <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+
                                         <div class="col">
                                             <label for="boid" class="form-label fs-6">
-                                                BOID: <span class="text-danger fw-bold">*</span></label>
-                                            <input type="text" class="form-control form-control-da fs-6" id="boid" name="boid" required maxlength="255" value="{{ $brokerAccount->boid ?? old('boid') }}" placeholder="Enter your 16-digit BOID number">
+                                                BOID: <span class="text-danger fw-bold">*</span>
+                                            </label>
+                                            <input type="number"
+                                                class="form-control form-control-da fs-6"
+                                                id="boid" name="boid" required
+                                                min="1000000000000000" max="9999999999999999" oninput="validateBOID(this)" value="{{ $brokerAccount->boid ?? old('boid') }}"
+                                                placeholder="Enter your 16-digit BOID number">
+                                            <div id="boidError" class="text-danger small m-2 d-none">BOID must be exactly 16 digits</div>
                                         </div>
+
+                                        <script>
+                                            function validateBOID(input) {
+                                                const boidError = document.getElementById('boidError');
+                                                if (input.value.length !== 16) {
+                                                    input.setCustomValidity("BOID must be exactly 16 digits");
+                                                    boidError.classList.remove('d-none');
+                                                } else {
+                                                    input.setCustomValidity("");
+                                                    boidError.classList.add('d-none');
+                                                }
+                                            }
+                                        </script>
 
                                     </div>
 
@@ -109,7 +120,7 @@
                                         </div>
                                         <div class="col">
                                             <label for="panNumber" class="form-label fs-6">PAN Number:</label>
-                                            <input type="text" class="form-control form-control-da fs-6" id="panNumber" name="panNumber" maxlength="255" value="{{ $brokerAccount->panNumber ?? old('panNumber') }}" placeholder="Enter PAN number if available">
+                                            <input type="number" class="form-control form-control-da fs-6" id="panNumber" name="panNumber" maxlength="255" value="{{ $brokerAccount->panNumber ?? old('panNumber') }}" placeholder="Enter PAN number if available">
                                         </div>
                                         <div class="col">
                                             <label for="emailAddress" class="form-label fs-6">Email Address <span class="text-danger fw-bold">*</span>:</label>
@@ -301,35 +312,81 @@
                                         <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block">Required Documents</h4>
                                     </div>
                                     <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
-
                                         <div class="col">
-                                            <label for="kycForm" class="form-label fs-6">Clienr Registration Form KYC:</label><br>
-                                            <label class="form-label  mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="kycForm" name="kycForm" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
-                                            @if(isset($brokerAccount) && $brokerAccount->kycForm)
-                                            <img src="{{ asset($brokerAccount->kycForm) }}" alt="KYC Form" class="img-fluid img mt-2 rounded w-100">
+                                            <label for="ppSizePhoto" class="form-label fs-6">Passport Size Photo <span class="text-danger fw-bold">*</span>:</label><br>
+                                            <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                            <input type="file" class="form-control form-control-da fs-6" id="ppSizePhoto" name="ppSizePhoto" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="validateFileSize(this)">
+                                            @if(isset($brokerAccount) && $brokerAccount->ppSizePhoto)
+                                            @php
+                                            $ppExt = strtolower(pathinfo($brokerAccount->ppSizePhoto, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($ppExt, ['jpg', 'jpeg', 'png']))
+                                            <img src="{{ asset($brokerAccount->ppSizePhoto) }}" alt="Passport Size Photo" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($ppExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->ppSizePhoto) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
                                             @else
-                                            <img src="#" alt="KYC Form Preview" class="img-fluid img mt-2 rounded w-100 d-none">
+                                            <img src="#" alt="Passport Size Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
                                         </div>
 
                                         <div class="col">
                                             <label for="citizenCertificate" class="form-label fs-6">Citizenship Certificate <span class="text-danger fw-bold">*</span>:</label><br>
-                                            <label class="form-label  mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="citizenCertificate" name="citizenCertificate" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="handleImagePreview(this)">
+                                            <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                            <input type="file" class="form-control form-control-da fs-6" id="citizenCertificate" name="citizenCertificate" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="validateFileSize(this)">
                                             @if(isset($brokerAccount) && $brokerAccount->citizenCertificate)
+                                            @php
+                                            $citizenExt = strtolower(pathinfo($brokerAccount->citizenCertificate, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($citizenExt, ['jpg', 'jpeg', 'png']))
                                             <img src="{{ asset($brokerAccount->citizenCertificate) }}" alt="Citizenship Certificate" class="img-fluid img mt-2 rounded w-100 h-100">
+                                            @elseif($citizenExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->citizenCertificate) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
                                             @else
                                             <img src="#" alt="Citizenship Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
                                         </div>
 
                                         <div class="col">
+                                            <label for="kycForm" class="form-label fs-6">Client Registration Form KYC:</label><br>
+                                            <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                            <input type="file" class="form-control form-control-da fs-6" id="kycForm" name="kycForm" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                            @if(isset($brokerAccount) && $brokerAccount->kycForm)
+                                            @php
+                                            $kycExt = strtolower(pathinfo($brokerAccount->kycForm, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($kycExt, ['jpg', 'jpeg', 'png']))
+                                            <img src="{{ asset($brokerAccount->kycForm) }}" alt="KYC Form" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($kycExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->kycForm) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
+                                            @else
+                                            <img src="#" alt="KYC Form Preview" class="img-fluid img mt-2 rounded w-100 d-none">
+                                            @endif
+                                        </div>
+
+                                        <div class="col">
                                             <label for="birthCertificate" class="form-label fs-6">Birth Certificate Incase of Minor:</label><br>
-                                            <label class="form-label  mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="birthCertificate" name="birthCertificate" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                            <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                            <input type="file" class="form-control form-control-da fs-6" id="birthCertificate" name="birthCertificate" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                             @if(isset($brokerAccount) && $brokerAccount->birthCertificate)
+                                            @php
+                                            $birthExt = strtolower(pathinfo($brokerAccount->birthCertificate, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($birthExt, ['jpg', 'jpeg', 'png']))
                                             <img src="{{ asset($brokerAccount->birthCertificate) }}" alt="Birth Certificate" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($birthExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->birthCertificate) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
                                             @else
                                             <img src="#" alt="Birth Certificate Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
@@ -338,9 +395,18 @@
                                         <div class="col">
                                             <label for="visaPassport" class="form-label fs-6">Visa/Passport incase of Foreign Emp.:</label><br>
                                             <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="visaPassport" name="visaPassport" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                            <input type="file" class="form-control form-control-da fs-6" id="visaPassport" name="visaPassport" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                             @if(isset($brokerAccount) && $brokerAccount->visaPassport)
+                                            @php
+                                            $visaExt = strtolower(pathinfo($brokerAccount->visaPassport, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($visaExt, ['jpg', 'jpeg', 'png']))
                                             <img src="{{ asset($brokerAccount->visaPassport) }}" alt="Visa/Passport" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($visaExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->visaPassport) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
                                             @else
                                             <img src="#" alt="Visa/Passport Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
@@ -348,10 +414,19 @@
 
                                         <div class="col">
                                             <label for="selfieWithId" class="form-label fs-6">Selfie with carrying any Gov issued ID:</label><br>
-                                            <label class="form-label  mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="selfieWithId" name="selfieWithId" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                            <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                            <input type="file" class="form-control form-control-da fs-6" id="selfieWithId" name="selfieWithId" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                             @if(isset($brokerAccount) && $brokerAccount->selfieWithId)
+                                            @php
+                                            $selfieExt = strtolower(pathinfo($brokerAccount->selfieWithId, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($selfieExt, ['jpg', 'jpeg', 'png']))
                                             <img src="{{ asset($brokerAccount->selfieWithId) }}" alt="Selfie with ID" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($selfieExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->selfieWithId) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
                                             @else
                                             <img src="#" alt="Selfie ID Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
@@ -360,31 +435,40 @@
                                         <div class="col">
                                             <label for="guardianCitizenship" class="form-label fs-6">Guardian Citizenship Incase of Minor:</label><br>
                                             <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="guardianCitizenship" name="guardianCitizenship" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                            <input type="file" class="form-control form-control-da fs-6" id="guardianCitizenship" name="guardianCitizenship" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                             @if(isset($brokerAccount) && $brokerAccount->guardianCitizenship)
+                                            @php
+                                            $guardianExt = strtolower(pathinfo($brokerAccount->guardianCitizenship, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($guardianExt, ['jpg', 'jpeg', 'png']))
                                             <img src="{{ asset($brokerAccount->guardianCitizenship) }}" alt="Guardian Citizenship" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($guardianExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->guardianCitizenship) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
                                             @else
                                             <img src="#" alt="Guardian Citizenship Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
                                         </div>
 
-                                        <div class="col">
-                                            <label for="ppSizePhoto" class="form-label fs-6">Passport Size Photo <span class="text-danger fw-bold">*</span>:</label><br>
-                                            <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="ppSizePhoto" name="ppSizePhoto" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="handleImagePreview(this)">
-                                            @if(isset($brokerAccount) && $brokerAccount->ppSizePhoto)
-                                            <img src="{{ asset($brokerAccount->ppSizePhoto) }}" alt="Passport Size Photo" class="img-fluid img mt-2 rounded w-100">
-                                            @else
-                                            <img src="#" alt="Passport Size Preview" class="img-fluid img mt-2 rounded w-100 d-none">
-                                            @endif
-                                        </div>
+
 
                                         <div class="col">
                                             <label for="tradingAgreement" class="form-label fs-6">Online Trading Agreement Form:</label><br>
                                             <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="tradingAgreement" name="tradingAgreement" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                            <input type="file" class="form-control form-control-da fs-6" id="tradingAgreement" name="tradingAgreement" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                             @if(isset($brokerAccount) && $brokerAccount->tradingAgreement)
+                                            @php
+                                            $tradingExt = strtolower(pathinfo($brokerAccount->tradingAgreement, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($tradingExt, ['jpg', 'jpeg', 'png']))
                                             <img src="{{ asset($brokerAccount->tradingAgreement) }}" alt="Trading Agreement" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($tradingExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->tradingAgreement) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
                                             @else
                                             <img src="#" alt="Trading Agreement Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
@@ -393,14 +477,22 @@
                                         <div class="col">
                                             <label for="idCard" class="form-label fs-6">ID Card:</label><br>
                                             <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="idCard" name="idCard" accept=".jpg,.jpeg,.png,.pdf" onchange="handleImagePreview(this)">
+                                            <input type="file" class="form-control form-control-da fs-6" id="idCard" name="idCard" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                             @if(isset($brokerAccount) && $brokerAccount->idCard)
+                                            @php
+                                            $idExt = strtolower(pathinfo($brokerAccount->idCard, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($idExt, ['jpg', 'jpeg', 'png']))
                                             <img src="{{ asset($brokerAccount->idCard) }}" alt="ID Card" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($idExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->idCard) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
                                             @else
                                             <img src="#" alt="ID Card Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
                                         </div>
-
                                     </div>
 
                                 </div>
@@ -409,7 +501,7 @@
                             <div class="my-4 border border-1 border-secondary"></div>
                             <div class="d-flex flex-column mx-3 mb-5">
                                 <div class="form-check">
-                                    <input class="form-check-input fs-6" type="checkbox" value="" id="checkCorrect" required>
+                                    <input class="form-check-input fs-6" type="checkbox" id="checkCorrect" required>
                                     <label class="form-check-label fs-6" for="checkCorrect">
                                         <span class="required"></span> I confirm that all information provided is accurate and complete. I understand
                                         that providing false information may result in the rejection of my application and possible legal consequences.
@@ -417,7 +509,7 @@
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input fs-6" type="checkbox" value="" id="checkTerms" required>
+                                    <input class="form-check-input fs-6" type="checkbox" id="checkTerms" required>
                                     <label class="form-check-label fs-6" for="checkTerms">
                                         <span class="required"></span> I agree to the Terms and Conditions and Privacy Policy of Kamsansar's Brokers Account service.
                                     </label>
@@ -501,18 +593,66 @@
 
     function handleImagePreview(input) {
         if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            const preview = input.nextElementSibling;
-
+            var reader = new FileReader();
             reader.onload = function(e) {
-                if (preview && preview.tagName === 'IMG') {
-                    preview.src = e.target.result;
-                    preview.classList.remove('d-none');
-                }
+                let imageContainer = input.parentElement.querySelector('img');
+                imageContainer.classList.remove('d-none');
+                imageContainer.src = e.target.result;
             }
-
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    function validateFileSize(input) {
+        const file = input.files[0];
+        const maxSize = 2 * 1024 * 1024;
+        const parent = input.parentNode;
+
+        const existingAlert = parent.querySelector('.file-size-error');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+
+        if (file && file.size > maxSize) {
+            input.value = '';
+            input.parentElement.querySelector('img').classList.add('d-none');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'text-danger mt-2 file-size-error';
+            errorDiv.textContent = 'File size must be less than 2 MB.';
+
+            parent.appendChild(errorDiv);
+        } else {
+            handleImagePreview(input)
+        }
+    }
+
+
+
+    document.getElementById('submitBtn').addEventListener('click', function(e) {
+
+        let hasError = false;
+
+        const fields = document.getElementById('brokerAccountForm').querySelectorAll('[required]');
+
+        fields.forEach(field => {
+
+            if (!field.value.trim()) {
+                field.classList.add('error');
+                field.style.transition = 'border 0.3s ease';
+                field.style.border = '2px solid red';
+                window.scrollTo({
+                    top: 100,
+                    behavior: 'smooth'
+                })
+                hasError = true;
+            } else {
+                field.style.border = '';
+            }
+        });
+
+        if (hasError) {
+            e.preventDefault();
+        }
+    });
 </script>
 @endsection

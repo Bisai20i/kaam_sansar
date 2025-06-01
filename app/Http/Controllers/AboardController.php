@@ -44,8 +44,10 @@ class AboardController extends Controller
         $cmt           = Aboard::where('publishStatus', 'publish')->where('status', 'Available')->get();
         $items         = Aboard::orderBy('created_at', 'desc')->get();
         $uniqueAboards = Aboard::select('country')->distinct()->get();
-        $uniqueCity    = Aboard::select('location')->distinct()->get();
-        $comments      = ProductComment::all();
+        $uniqueCity    = Aboard::select('location')
+            ->where('location', '!=', '')
+            ->distinct()->get();
+        $comments = ProductComment::all();
 
         $type = $request->has('type') && in_array($request->input('type'), $validTypes)
         ? $request->input('type')
@@ -65,7 +67,7 @@ class AboardController extends Controller
             $ad_banners['right']->image = asset('storage/' . $ad_banners['right']->image) ?? null;
 
         }
-
+        // return $uniqueCity;
         // return $ad_banners;
 
         return view('frontend.aboarddeals.aboard', compact('categories', 'ads', 'type', 'uniqueAboards', 'uniqueCity', 'items', 'comments', 'cmt', 'ad_banners'));
@@ -142,8 +144,8 @@ class AboardController extends Controller
         $aboard->save();
 
         Log::info('Product Created:', $aboard->toArray());
-        if($request->input('type')=='Buy'){
-            $request->session()->flash('type', 'want_to_buy'); 
+        if ($request->input('type') == 'Buy') {
+            $request->session()->flash('type', 'want_to_buy');
         }
         return $isMobile
         ? response()->json(['status' => 'success', 'message' => 'Product created successfully.', 'data' => $aboard], 201)
@@ -299,5 +301,133 @@ class AboardController extends Controller
             // For normal redirect
             return redirect()->route('aboards.index')->with('error', 'Failed to delete product.');
         }
+    }
+
+    public function search(Request $request)
+    {
+        // Check if the request is from mobile (using 'request_type' parameter)
+        $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+
+        // Define allowed types
+        $validTypes = ['Item', 'Buy'];
+
+        $categories = ProductCategory::all();
+
+        $all           = Aboard::all();
+        $items         = Aboard::all();
+        $uniqueAboards = $all->unique('country');
+        $uniqueCity    = $all->where('location', '!=', '')->unique('location');
+        $comments      = ProductComment::all();
+        // Set default type to 'Sell' if not provided or invalid
+        $type = in_array($request->input('type'), ['Item', 'Buy']) ? $request->input('type') : 'Item';
+
+        // Build the query for ads search
+        try {
+            $ads = Aboard::when($request->filled('productTitle'), function ($query) use ($request) {
+                $query->where('productTitle', 'like', '%' . $request->productTitle . '%');
+            })
+                ->when($request->filled('location'), function ($query) use ($request) {
+                    $query->where('location', 'like', '%' . $request->location . '%');
+                })
+                ->when($request->filled('country'), function ($query) use ($request) {
+                    $query->where('country', 'like', '%' . $request->country . '%');
+                })
+                ->when($request->filled('productCategoryId'), function ($query) use ($request) {
+                    $query->where('productCategoryId', $request->productCategoryId);
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+
+            // Return the results in a format based on the request type (mobile/web)
+            if ($isMobile) {
+                if ($ads->isEmpty()) {
+                    return response()->json([
+                        'status'  => false,
+                        'message' => 'No aboards deals found.',
+                        'data'    => null,
+                    ], 404);
+                }
+
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'Aboard Deals fetched successfully.',
+                    'data'    => $ads,
+                ], 200);
+
+            }
+
+            if ($request->input('type') === 'Buy') {
+                
+                $request->session()->flash('type', 'want_to_buy');
+            }else{
+                $request->session()->flash('type', 'want_to_sell');
+            }
+
+            return view('frontend.aboarddeals.aboard', compact('ads', 'all', 'items', 'type', 'uniqueAboards', 'uniqueCity', 'categories', 'comments'));
+        } catch (\Exception $e) {
+            Log::error("Error during advertisement search: " . $e->getMessage());
+
+            return $isMobile
+            ? response()->json([
+                'status'  => false,
+                'message' => 'Something went wrong while fetching advertisements.',
+                'data'    => null,
+            ], 500)
+            : redirect()->back()->with('error', 'Something went wrong while fetching advertisements.');
+        }
+    }
+
+    public function want_to_buy(Request $request)
+    {
+        $categories    = ProductCategory::all();
+        $ads           = Aboard::where('publishStatus', 'publish')
+                        ->where('status', 'Available')
+                        ->where('type', 'Buy')
+                        ->when($request->filled('productTitle'), function ($query) use ($request) {
+                            $query->where('productTitle', 'like', $request->productTitle . '%');
+                        })
+                        ->when($request->filled('location'), function ($query) use ($request) {
+                            $query->where('location', 'like', $request->location . '%');
+                        })
+                        ->when($request->filled('country'), function ($query) use ($request) {
+                            $query->where('country', 'like', $request->country . '%');
+                        })
+                        ->when($request->filled('categoryId'), function ($query) use ($request) {
+                            $query->where('productCategoryId', $request->categoryId);
+                        })
+                        
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+        
+
+        $countries = Aboard::select('country')->distinct()->get();
+        $cities    = Aboard::select('location')
+            ->where('location', '!=', '')
+            ->distinct()->get();
+
+        $ad_banners          = [];
+        $ad_banners['right'] = AdsManager::where('which_page', 'abroad')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'right')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        // return $ad_banners;
+        if ($ad_banners && $ad_banners['right']) {
+
+            $ad_banners['right']->image = asset('storage/' . $ad_banners['right']->image) ?? null;
+
+        }
+
+        // return $ads;
+        $ads->transform(function ($ad) {
+            $ad->productThumbnail = $ad->productThumbnail ? asset($ad->productThumbnail) : null;
+            $ad->comment_count = ProductComment::where('productId', $ad->id)->count();
+            return $ad;
+        });
+        
+        return view('frontend.aboarddeals.want_to_buy', compact('ads', 'countries', 'cities', 'categories', 'ad_banners'));
+
     }
 }

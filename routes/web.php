@@ -535,6 +535,7 @@ Route::get('visa-HQ/details', [FrontendController::class, 'visaDetails'])->name(
 // Route::get('/search', [FrontendController::class, 'Search'])->name('frontend.search');
 
 Route::get('aboardsdeals', [AboardController::class, 'aboard'])->name('aboarddeals');
+Route::get('aboard/buy', [AboardController::class, 'want_to_buy'])->name('aboard.buy');
 
 Route::resource('aboards', AboardController::class);
 Route::get('/searchaboard', [AboardController::class, 'search'])->name('aboard.search');

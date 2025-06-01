@@ -58,7 +58,7 @@ class DiscussionForumController extends Controller
 
                         $comment->jobSeeker->userThumbnail = asset('storage/' . $path);
                     } else {
-                        $comment->jobSeeker->userThumbnail = null;
+                        $comment->jobSeeker->userThumbnail = asset('frontend/assets/Images/profile.jpg');
                     }
                 }
 

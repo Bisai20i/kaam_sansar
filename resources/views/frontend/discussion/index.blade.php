@@ -1518,7 +1518,7 @@
                     'X-Requested-With': 'XMLHttpRequest' //  Tell Laravel it's AJAX
                 },
                 beforeSend: function() {
-                    e.innerHtml =
+                    e.innerHTML =
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
                     e.disabled = true
 
@@ -1568,7 +1568,7 @@
                     }
                 }
             });
-
+            e.innerHTML = '<i class="bi bi-send" style="color:#0064a7;"></i>'
             e.disabled = false
         }
     </script>

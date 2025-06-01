@@ -345,21 +345,7 @@
 
 
                             </div>
-                            <!-- Top row -->
-                            {{-- <div class="d-flex align-items-center gap-3">
-                                <p class="flex-grow-1 my-auto text-black-5 mb-0" style="font-size: 0.9rem;">Add to your
-                                    post</p>
 
-                                <div class="d-flex align-items-center gap-2">
-                                    <label for="fileInput" class="primary_color_text m-0" style="cursor: pointer;">
-                                        <i class="fa-solid fa-image fa-lg"></i>
-                                    </label>
-                                    <input type="file" id="fileInput" name="adsThumbnail" accept="image/*"
-                                        class="d-none">
-                                </div>
-                            </div> --}}
-
-                            <!-- Image Preview (small) -->
                         </div>
                         <div id="imagePreview" class="d-flex mt-1"></div>
 

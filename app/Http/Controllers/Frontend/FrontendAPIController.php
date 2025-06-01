@@ -126,6 +126,11 @@ class FrontendAPIController extends Controller
                 ->get();
         }
 
+        $findJobs->transform(function ($job) {
+            $job->jobBanner = $job->jobBanner ? asset('storage/' . $job->jobBanner): null;
+            return $job;
+        });
+
         // Fetch industries
         $industries = IndustryCategory::all();
 
@@ -234,7 +239,8 @@ class FrontendAPIController extends Controller
         $jobLocation = JobPost::where('jobLocation', '!=', '')
             ->where('jobStatus', 'published')
             ->pluck('jobLocation')
-            ->unique();
+            ->unique()
+            ->values();
 
         $skills = JobPost::whereNotNull('skills')
             ->where('skills', '!=', '')
@@ -318,7 +324,8 @@ class FrontendAPIController extends Controller
         $skills = JobPost::where('skills', '!=', '')
             ->where('jobStatus', 'published')
             ->pluck('skills')
-            ->unique();
+            ->unique()
+            ->values();
 
                                              // Fetch jobs in the same category as the current job (excluding the current job itself)
         $category_id = $jobs->jobCategoryId; // Assuming `category_id` is the field
@@ -381,13 +388,15 @@ class FrontendAPIController extends Controller
         $skills = JobPost::where('skills', '!=', '')
             ->where('jobStatus', 'published')
             ->pluck('skills')
-            ->unique();
+            ->unique()
+            ->values();
 
         // Fetch unique job locations
         $jobLocation = JobPost::where('jobLocation', '!=', '')
             ->where('jobStatus', 'published')
             ->pluck('jobLocation')
-            ->unique();
+            ->unique()
+            ->values();
 
         // Return mobile-friendly JSON response
         return response()->json([
@@ -439,7 +448,8 @@ class FrontendAPIController extends Controller
         $jobLocation = JobPost::where('jobLocation', '!=', '')
             ->where('jobStatus', 'published')
             ->pluck('jobLocation')
-            ->unique();
+            ->unique()
+            ->values();
 
         // Fetch similar jobs based on the job title, excluding the current job
         $similar_jobs = JobPost::where('jobTitle', $job_detail->jobTitle)
@@ -464,7 +474,8 @@ class FrontendAPIController extends Controller
         $skills = JobPost::where('skills', '!=', '')
             ->where('jobStatus', 'published')
             ->pluck('skills')
-            ->unique();
+            ->unique()
+            ->values();
 
         // Return data as a mobile-friendly JSON response
         return response()->json([
@@ -481,88 +492,189 @@ class FrontendAPIController extends Controller
         ], 200);
     }
 
-    public function jobSearch(Request $request)
-    {
-        // Check if the request is from mobile
-        // $isMobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
+    public function jobSearch(Request $request){
 
-        // if (!$isMobile) {
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'This endpoint is for mobile requests only.'
-        //     ], 400);
-        // }
-
-        // Get the authenticated user
-        $user   = $request->user();
-        $whoAmI = $user ? $user->whoAmI : 'worker'; // Default to 'worker' if user is not authenticated
-
-        // Define allowed job types based on whoAmI
-        $allowedJobTypes = match ($whoAmI) {
-            'student' => ['trainee', 'parttime'],
-            'worker' => ['fulltime', 'parttime'],
-            'consultant' => ['fulltime', 'parttime'],
-            default => ['user']// If 'whoAmI' is not recognized, return an empty list
-        };
-
-        // Fetch jobs
-        $jobs = JobPost::with('jobCompany');
-
-        // Apply job types filter based on whoAmI
-        if ($allowedJobTypes) {
-            $jobs = $jobs->whereIn('jobType', $allowedJobTypes);
-        }
-
-                                            // Apply other filters as needed
-        $jobBy = $request->input('jobsby'); // If you still want to use 'jobsby' filter
-
-        if ($request->filled('jobIndustry') && $request->filled('jobLocation')) {
-            // Strict Industry + Location filtering
-            $jobs = $jobs->whereHas('jobCompany.industryCategory', function ($q) use ($request) {
-                $q->where('industryName', 'LIKE', "%{$request->input('jobIndustry')}%");
+        $findJobs = JobPost::with('jobCompany')
+            ->orderBy('created_at', 'desc')
+            ->where('jobStatus', 'published')
+            ->when(! empty($request->input('searchstr')), function ($q) use ($request) {
+                $q->where('jobDescription', 'LIKE', "{$request->input('searchstr')}%")
+                    ->orWhere('jobTitle', 'LIKE', "%{$request->input('searchstr')}%");
             })
-                ->where('jobLocation', 'LIKE', "%{$request->input('jobLocation')}%");
-        } elseif ($jobBy == 'category' && $request->filled('searchcategoryid')) {
-            // Strict category-based filtering
-            $jobs = $jobs->where('jobCategoryId', $request->input('searchcategoryid'));
-        } elseif ($jobBy == 'skill' && $request->filled('searchstr')) {
-            // Strict skill-based filtering
-            $jobs = $jobs->where('skills', 'LIKE', "%{$request->input('searchstr')}");
-        } elseif ($jobBy == 'location' && $request->filled('location')) {
-            // Strict location-based filtering
-            $jobs = $jobs->where('jobLocation', 'LIKE', "%{$request->input('location')}%");
-        }
+            ->when(! empty($request->input('location')), function ($q) use ($request) {
+                return $q->where('jobLocation', 'LIKE', "%{$request->input('location')}%");
+            })
+            ->when(
+                ! empty($request->query('filtersite') && in_array($request->query('filtersite'), ['remote', 'onsite', 'hybrid'])),
+                function ($q) use ($request) {
+                    return $q->where('jobSite', $request->query('filtersite'));
+                }
+            )
+            ->when(
+                ! empty($request->query('filtertype') && in_array($request->query('filtertype'), ['trainee', 'parttime', 'fulltime', 'casual'])),
+                function ($q) use ($request) {
+                    return $q->where('jobType', $request->query('filtertype'));
+                }
+            )
+            ->when(
+                ! empty($request->query('filterdate') && in_array($request->query('filterdate'), ['1', '5', '15', '30'])),
+                function ($q) use ($request) {
+                    return $q->where('created_at', '>=', Carbon::now()->subDays($request->query('filterdate')));
+                }
+            )
+            ->when(
+                ! empty($request->query('filterlevel') && in_array($request->query('filterlevel'), ['entry', 'mid', 'senior'])),
+                function ($q) use ($request) {
+                    return $q->where('jobLevel', 'LIKE', "%{$request->query('filterlevel')}%");
+                }
+            )
+            ->when(
+                ! empty($request->query('filterfeature') && in_array($request->query('filterfeature'), ['normal', 'premium'])),
+                function ($q) use ($request) {
+                    return $q->where('jobFeature', $request->query('filterfeature'));
+                }
+            )
+            ->when(
+                ! empty($request->input('jobsby')) && in_array($request->input('jobsby'), ['category', 'skill', 'location']),
+                function ($q) use ($request) {
+                    $q->when($request->input('jobsby') == 'category', fn($query) => $query->where('jobCategoryId', $request->input('searchcategoryid')))
+                        ->when($request->input('jobsby') == 'skill', fn($query) => $query->where('skills', 'LIKE', "%{$request->input('skill')}%"))
+                        ->when($request->input('jobsby') == 'location', fn($query) => $query->where('jobLocation', 'LIKE', "%{$request->input('location')}%"));
+                })
+            ->where('jobDeadline', '>=', date('Y-m-d'))
+            ->paginate(8)
+            ->withQueryString();
 
-        // Order the jobs
-        $jobs = $jobs->orderBy('created_at', 'desc')->get();
+        // return $findJobs;
 
-        // Additional data for the response
         $jobLocation = JobPost::where('jobLocation', '!=', '')
             ->where('jobStatus', 'published')
             ->pluck('jobLocation')
             ->unique();
 
+        $categories = JobCategory::orderBy('created_at', 'desc')
+            ->where('publishStatus', 1)
+            ->get();
+
         $skills = JobPost::where('skills', '!=', '')
             ->where('jobStatus', 'published')
-            ->pluck('skills')
-            ->unique();
+            ->pluck('skills') // Get all skill strings
+            ->flatMap(function ($skills) {
+                return array_map('trim', explode(',', $skills)); // Split into individual skills
+            })
+            ->unique()  // Remove duplicate skills
+            ->values(); // Reindex collection
+        $skillsChunks = $skills->chunk(ceil($skills->count() / 3));
+        // $relatedJobs = JobPost::with('jobCompany')->orderBy('created_at', 'desc')
+        //     ->where('jobStatus', 'published')
+        //     ->where('jobCategoryId', $category_id) // Matching the category_id
+        //     ->where('jobSlug', '!=', $slug) // Exclude the current job
+        //     ->get();
 
-        $categories = JobCategory::where('publishStatus', 1)->orderBy('created_at', 'desc')->get();
-        $industries = IndustryCategory::all();
+        $ad_banners = [];
 
-        // Return the response as JSON for mobile
+        $ad_banners['top'] = AdsManager::where('which_page', 'jobs')
+            ->where('publish_or_not', 1)
+            ->where('active', 1)
+            ->where('position', 'top')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($ad_banners) {
+
+            $ad_banners['top'] ? $ad_banners['top']->image = asset('storage/' . $ad_banners['top']->image) : null;
+        }
+
         return response()->json([
             'status'  => true,
-            'message' => 'Job search results fetched successfully.',
+            'message' => 'Data fetched successfully',
             'data'    => [
-                'categories'  => $categories,
-                'skills'      => $skills,
-                'jobs'        => $jobs,
-                'jobLocation' => $jobLocation,
-                'industries'  => $industries,
-            ],
-        ], 200);
+                'jobs'           => $findJobs,
+                'jobLocation'    => $jobLocation,
+                'categories'     => $categories,
+                'skills'         => $skillsChunks,
+                'ad_banners'     => $ad_banners
+            ]
+        ]);
+
     }
+    // public function jobSearch(Request $request)
+    // {
+
+    //     // Get the authenticated user
+    //     $user   = $request->user();
+    //     $whoAmI = $user ? $user->whoAmI : 'worker'; // Default to 'worker' if user is not authenticated
+
+    //     // Define allowed job types based on whoAmI
+    //     $allowedJobTypes = match ($whoAmI) {
+    //         'student' => ['trainee', 'parttime'],
+    //         'worker' => ['fulltime', 'parttime'],
+    //         'consultant' => ['fulltime', 'parttime'],
+    //         default => ['user']// If 'whoAmI' is not recognized, return an empty list
+    //     };
+
+    //     // Fetch jobs
+    //     $jobs = JobPost::with('jobCompany');
+
+    //     // Apply job types filter based on whoAmI
+    //     if ($allowedJobTypes) {
+    //         $jobs = $jobs->whereIn('jobType', $allowedJobTypes);
+    //     }
+
+    //                                         // Apply other filters as needed
+    //     $jobBy = $request->input('jobsby'); // If you still want to use 'jobsby' filter
+
+    //     if ($request->filled('jobIndustry') && $request->filled('jobLocation')) {
+    //         // Strict Industry + Location filtering
+    //         $jobs = $jobs->whereHas('jobCompany.industryCategory', function ($q) use ($request) {
+    //             $q->where('industryName', 'LIKE', "%{$request->input('jobIndustry')}%");
+    //         })
+    //             ->where('jobLocation', 'LIKE', "%{$request->input('jobLocation')}%");
+    //     } elseif ($jobBy == 'category' && $request->filled('searchcategoryid')) {
+    //         // Strict category-based filtering
+    //         $jobs = $jobs->where('jobCategoryId', $request->input('searchcategoryid'));
+    //     } elseif ($jobBy == 'skill' && $request->filled('searchstr')) {
+    //         // Strict skill-based filtering
+    //         $jobs = $jobs->where('skills', 'LIKE', "%{$request->input('searchstr')}");
+    //     } elseif ($jobBy == 'location' && $request->filled('location')) {
+    //         // Strict location-based filtering
+    //         $jobs = $jobs->where('jobLocation', 'LIKE', "%{$request->input('location')}%");
+    //     }
+
+    //     // Order the jobs
+    //     $jobs = $jobs->orderBy('created_at', 'desc')->get();
+
+    //     // Additional data for the response
+    //     $jobLocation = JobPost::where('jobLocation', '!=', '')
+    //         ->where('jobStatus', 'published')
+    //         ->pluck('jobLocation')
+    //         ->unique()
+    //         ->values();
+
+    //     $skills = JobPost::where('skills', '!=', '')
+    //         ->where('jobStatus', 'published')
+    //         ->pluck('skills')
+    //         ->unique()
+    //         ->values();
+        
+    //     // return $skills;
+
+    //     $categories = JobCategory::where('publishStatus', 1)->orderBy('created_at', 'desc')->get();
+    //     $industries = IndustryCategory::all();
+
+    //     // Return the response as JSON for mobile
+    //     return response()->json([
+    //         'status'  => true,
+    //         'message' => 'Job search results fetched successfully.',
+    //         'data'    => [
+    //             'categories'  => $categories,
+    //             'skills'      => $skills,
+    //             'jobs'        => $jobs,
+    //             'jobLocation' => $jobLocation,
+    //             'industries'  => $industries,
+    //         ],
+    //     ], 200);
+    // }
 
     //for search bar
     public function Search(Request $request)
@@ -600,7 +712,8 @@ class FrontendAPIController extends Controller
         $jobLocation = JobPost::where('jobLocation', '!=', '')
             ->where('jobStatus', 'published')
             ->pluck('jobLocation')
-            ->unique();
+            ->unique()
+            ->values();
 
         $skills = JobPost::whereNotNull('skills')
             ->where('skills', '!=', '')
