@@ -108,7 +108,7 @@
                 @else
                 <li class="nav-item">
                     <button class="nav-link" aria-current="page" data-bs-toggle="modal"
-                        data-bs-target="#loginModal">Forms</button>
+                        data-bs-target="#loginModal">Games</button>
                 </li>
                 @endif
 

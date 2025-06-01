@@ -20,17 +20,17 @@
                     <input type="text" class="form-control custom-input" id="visa-country" name="country" placeholder="Enter Country" required>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label for="visaImage" class="form-label fs-6">Visa Photo</label><br>
-                    <input type="file" class="form-control form-control-da fs-6 w-100" id="visaImage" name="visaImage" accept=".jpg,.jpeg,.png,.pdf">
+                    <label for="visaImage" class="form-label fs-6">Visa Photo  <span class="text-danger">*</span></label><br>
+                    <input type="file" class="form-control form-control-da fs-6 w-100" id="visaImage" name="visaImage" accept=".jpg,.jpeg,.png,.pdf" required>
                     <div id="visaPreview" class="d-flex mt-1" style="height: 80px;"></div>
                 </div>
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addVisa">+Add Visa</button>
                 <div class="text-end">
                     <button type="button" class="btn text-center skip-btn mx-2" data-current="visa" data-next="education" data-link="educationLink">skip</button>
                 </div>
+                <button type="button" class="btn add-project float-start" id="addVisa">+Add Visa</button>
             </div>
         </form>
     </div>

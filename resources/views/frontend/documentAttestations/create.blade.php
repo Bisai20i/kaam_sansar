@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Broker Account')
+@section('title', 'Document Attestation')
 @push('head')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
@@ -28,7 +28,7 @@
                     @endif
                     <div class="d-flex">
                         <div class="col-auto">
-                            <a href="#" class="">
+                            <a href="{{ route('index') }}" class="">
                                 <i class="fa fa-chevron-left text-black fs-4 ms-2" aria-hidden="true"></i>
                             </a>
                         </div>
@@ -116,7 +116,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-5">
-                            <button class="btn btn-light">back</button>
+                            <a href="{{ route('index') }}" class="btn btn-light">Back</a>
                             <button class="btn text-white border-0"
                                 style="background-color: #0064a7;" type="button"
                                 onclick="if(validateForm1())showNextForm(2)">Next</button>
@@ -175,7 +175,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-5">
-                            <button class="btn btn-light">back</button>
+                            <button class="btn btn-light" onclick="showPreviousForm(2)">back</button>
                             <button class="btn text-white border-0" style="background-color: #0064a7;" type="button" onclick="if(validateForm2()) { showNextForm(3); }">Next</button>
                         </div>
                     </div>
@@ -206,9 +206,11 @@
                         <div class="attestation">
                             <h4 class="pt-3 pb-1 border-bottom border-2 border-primary d-inline-block">Attestation Requirement</h4>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
-                                <div class="col">
-                                    <label for="countryAttestation" class="form-label fs-6">Country for Attestation: <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="countryAttestation" name="countryAttestation" value="{{ old('countryAttestation') }}" required maxlength="255" placeholder="Enter country where attestation is required">
+                                 <div class="col">
+                                    <label for="countryAttestation">Country for Attestaion: <span class="text-danger">*</span></label>
+                                    <select id="countryAttestation" name="countryAttestation" class="form-control form-control-da fs-6 mt-2" required>
+                                        <option value="">-- Select Country --</option>
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <label for="purpose" class="form-label fs-6">Purpose of Attestation: <span class="text-danger">*</span></label>
@@ -230,10 +232,12 @@
                         <div class="Delivery Address">
                             <h4 class="pt-4 pb-1 border-bottom border-2 border-primary d-inline-block">Delivery Address Details</h4>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
-                                <div class="col">
-                                    <label for="deliveryCountry" class="form-label fs-6">Country Name: <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryCountry" name="deliveryCountry" required maxlength="255" placeholder="Enter Country Name" value="{{ old('deliveryCountry') }}">
-                                </div>
+                                 <div class="col">
+                                    <label for="deliveryCountry">Country Name: <span class="text-danger">*</span></label>
+                                    <select id="deliveryCountry" name="deliveryCountry" class="form-control form-control-da fs-6 mt-2" required>
+                                        <option value="">-- Select Country --</option>
+                                    </select>
+                                </div>                                
                                 <div class="col">
                                     <label for="deliveryCity" class="form-label fs-6">City: <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control form-control-da fs-6" id="deliveryCity" name="deliveryCity" required maxlength="255" placeholder="Enter city Name" value="{{ old('deliveryCity') }}">
@@ -272,10 +276,12 @@
                                     Work Address (If Different from Delivery Address)
                                 </h4>
                             </div>
-                            <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
+                            <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3"> 
                                 <div class="col">
-                                    <label for="workCountry" class="form-label fs-6">Country Name: </label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="workCountry" name="workCountry" maxlength="255" placeholder="Enter country Name" value="{{ old('workCountry') }}">
+                                    <label for="workCountry">Country Name</label>
+                                    <select id="workCountry" name="workCountry" class="form-control form-control-da fs-6 mt-2">
+                                        <option value="">-- Select Country --</option>
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <label for="workCity" class="form-label fs-6">City: </label>
@@ -300,6 +306,20 @@
                             <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block">Required Documents</h4>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-lg-2 row-gap-4 gx-5">
                                 <div class="col">
+                                    <label for="citizenshipFront" class="form-label fs-6">Citizenship Front: <span class="text-danger">*</span></label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipFront" name="citizenshipFront" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)" required>
+                                    <small id="fileError" style="color: red; display: none;"></small>
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
+                                </div>
+                                <div class="col">
+                                    <label for="citizenshipBack" class="form-label fs-6">Citizenship Back: <span class="text-danger">*</span></label><br>
+                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipBack" name="citizenshipBack" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)" required>
+                                    <small id="fileError" style="color: red; display: none;"></small>
+                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
+                                </div>
+                                <div class="col">
                                     <label for="identification" class="form-label fs-6">Identification Document:</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="identification" name="identification" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
@@ -311,20 +331,6 @@
                                     <label for="visa" class="form-label fs-6">Visa:</label><br>
                                     <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
                                     <input type="file" class="form-control form-control-da fs-6" id="visa" name="visa" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
-                                    <small id="fileError" style="color: red; display: none;"></small>
-                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
-                                </div>
-                                <div class="col">
-                                    <label for="citizenshipFront" class="form-label fs-6">Citizenship Front: <span class="text-danger">*</span></label><br>
-                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipFront" name="citizenshipFront" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)" required>
-                                    <small id="fileError" style="color: red; display: none;"></small>
-                                    <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
-                                </div>
-                                <div class="col">
-                                    <label for="citizenshipBack" class="form-label fs-6">Citizenship Back: <span class="text-danger">*</span></label><br>
-                                    <label class="form-label fs-6 mb-3">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                    <input type="file" class="form-control form-control-da fs-6" id="citizenshipBack" name="citizenshipBack" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)" required>
                                     <small id="fileError" style="color: red; display: none;"></small>
                                     <img src="#" alt="Preview" class="img-preview d-none mt-2" style="max-width: 200px; max-height: 150px;">
                                 </div>
@@ -396,7 +402,7 @@
                                 required fields before proceeding.</div>
                         </div>
                         <div class="d-flex justify-content-between mt-5">
-                            <button class="btn btn-light">back</button>
+                            <button class="btn btn-light" onclick="showPreviousForm(3)">back</button>
                             <button type="submit" class="btn btn" id="submitBtn" disabled style="background-color: #0064a7; color: white;">
                                 Submit Appication
                             </button>
@@ -523,77 +529,83 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-        const checkCorrect = document.getElementById('checkCorrect');
-        const checkTerms = document.getElementById('checkTerms');
-        const submitBtn = document.getElementById('submitBtn');
+                const checkCorrect = document.getElementById('checkCorrect');
+                const checkTerms = document.getElementById('checkTerms');
+                const submitBtn = document.getElementById('submitBtn');
 
-        function toggleSubmitButton() {
-            submitBtn.disabled = !(checkCorrect.checked && checkTerms.checked);
-        }
+                function toggleSubmitButton() {
+                    submitBtn.disabled = !(checkCorrect.checked && checkTerms.checked);
+                }
 
-        checkCorrect.addEventListener('change', toggleSubmitButton);
-        checkTerms.addEventListener('change', toggleSubmitButton);
+                checkCorrect.addEventListener('change', toggleSubmitButton);
+                checkTerms.addEventListener('change', toggleSubmitButton);
 
-        const applicantCountrySelect = document.getElementById("applicantCountry");
-        const attestationCountrySelect = document.getElementById("attestationCountry");
+                const applicantCountrySelect = document.getElementById("applicantCountry");
+                const attestationCountrySelect = document.getElementById("attestationCountry");
+                const countryAttestationSelect = document.getElementById("countryAttestation");
+                const deliveryCountrySelect = document.getElementById("deliveryCountry");
+                const workCountrySelect = document.getElementById("workCountry");
 
-        fetch("https://restcountries.com/v3.1/all")
-            .then(response => response.json())
-            .then(countries => {
-                // Sort countries alphabetically by name
-                countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
+                fetch("https://restcountries.com/v3.1/all")
+                    .then(response => response.json())
+                    .then(countries => {
+                        // Sort countries alphabetically by name
+                        countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
 
-                countries.forEach(country => {
-                    const option1 = document.createElement("option");
-                    option1.value = country.name.common;
-                    option1.textContent = country.name.common;
+                        countries.forEach(country => {
+                            const countryName = country.name.common;
 
-                    const option2 = option1.cloneNode(true); // Clone for second dropdown
+                            const option1 = new Option(countryName, countryName);
+                            const option2 = new Option(countryName, countryName);
+                            const option3 = new Option(countryName, countryName);
+                            const option4 = new Option(countryName, countryName);
+                            const option5 = new Option(countryName, countryName);
 
-                    applicantCountrySelect.appendChild(option1);
-                    attestationCountrySelect.appendChild(option2);
+                            applicantCountrySelect.appendChild(option1);
+                            attestationCountrySelect.appendChild(option2);
+                            countryAttestationSelect.appendChild(option3);
+                            deliveryCountrySelect.appendChild(option4);
+                            workCountrySelect.appendChild(option5);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching countries:", error);
+                    });
+
                 });
-            })
-            .catch(error => {
-                console.error("Error fetching countries:", error);
-            });
-    });
+                function handleImagePreview(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            let imageContainer = input.parentElement.querySelector('img');
+                            imageContainer.classList.remove('d-none');
+                            imageContainer.src = e.target.result;
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
 
+                function validateFileSize(input) {
+                    const file = input.files[0];
+                    const maxSize = 2 * 1024 * 1024;
+                    const parent = input.parentNode;
 
+                    const existingAlert = parent.querySelector('.file-size-error');
+                    if (existingAlert) {
+                        existingAlert.remove();
+                    }
 
-    function handleImagePreview(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                let imageContainer = input.parentElement.querySelector('img');
-                imageContainer.classList.remove('d-none');
-                imageContainer.src = e.target.result;
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+                    if (file && file.size > maxSize) {
+                        input.value = '';
+                        input.parentElement.querySelector('img').classList.add('d-none');
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'text-danger mt-2 file-size-error';
+                        errorDiv.textContent = 'File size must be less than 2 MB.';
 
-    function validateFileSize(input) {
-        const file = input.files[0];
-        const maxSize = 2 * 1024 * 1024;
-        const parent = input.parentNode;
-
-        const existingAlert = parent.querySelector('.file-size-error');
-        if (existingAlert) {
-            existingAlert.remove();
-        }
-
-        if (file && file.size > maxSize) {
-            input.value = '';
-            input.parentElement.querySelector('img').classList.add('d-none');
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'text-danger mt-2 file-size-error';
-            errorDiv.textContent = 'File size must be less than 2 MB.';
-
-            parent.appendChild(errorDiv);
-        } else {
-            handleImagePreview(input)
-        }
-    }
+                        parent.appendChild(errorDiv);
+                    } else {
+                        handleImagePreview(input)
+                    }
+                }
 </script>
 @endsection

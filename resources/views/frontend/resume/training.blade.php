@@ -27,10 +27,11 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addTraining">+ Add Training</button>
                 <div class="text-end">
                     <button type="button" class="btn text-center skip-btn mx-2" data-current="training" data-next="language" data-link="languageLink">Skip</button>
                 </div>
+                <button type="button" class="btn add-project float-start" id="addTraining">+ Add Training</button>
+
             </div>
         </form>
     </div>

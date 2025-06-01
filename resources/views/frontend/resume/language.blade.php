@@ -19,10 +19,10 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addLanguage">+ Add Language</button>
                 <div class="text-end">
                     <button type="button" class="btn text-center skip-btn mx-2" data-current="language" data-next="certification" data-link="certificationLink">Submit</button>
                 </div>
+                <button type="button" class="btn add-project float-start" id="addLanguage">+ Add Language</button>
             </div>
         </form>
     </div>

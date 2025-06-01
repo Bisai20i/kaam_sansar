@@ -26,7 +26,7 @@
                 <div id="multiStepForm1" class="multi-step-form" style="display:block;">
                     <div class="d-flex">
                         <div class="col-auto">
-                            <a href="#" class="">
+                            <a href="{{ route('jobseeker.forms') }}" class="">
                                 <i class="fa fa-chevron-left text-black fs-4 ms-2" aria-hidden="true"></i>
                             </a>
                         </div>
@@ -52,10 +52,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="documentType" class="form-label">Select Type <span class="text-danger">*</span></label>
+
                             <select id="documentType" name="documentType" class="form-select w-50" aria-label="Default select example" required>
                                 @forelse ($documentTypes as $documentType)
                                 <option value="{{ $documentType->documentType }}"
-                                    {{ old('documentType', $document->documentType ?? '') == $documentType->documentType ? 'selected' : '' }}>
+                                    {{ old('documentType', $attestation->documentType ?? '') == $documentType->documentType ? 'selected' : '' }}>
                                     {{ $documentType->documentType }}
                                 </option>
                                 @empty
@@ -69,7 +70,7 @@
                             <select id="subType" name="subType" class="form-select w-50" aria-label="Default select example" required>
                                 @forelse ($documentSubtypes as $documentSubtype)
                                 <option value="{{ $documentSubtype->documentSubtype }}"
-                                    {{ old('subType', $document->subType ?? '') == $documentSubtype->documentSubtype ? 'selected' : '' }}>
+                                    {{ old('subType', $attestation->subType ?? '') == $documentSubtype->documentSubtype ? 'selected' : '' }}>
                                     {{ $documentSubtype->documentSubtype }}
                                 </option>
                                 @empty
@@ -112,7 +113,7 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between mt-5">
-                                <button class="btn btn-light">Cancel</button>
+                                <a href="{{ route('jobseeker.forms') }}" class="btn btn-light">Back</a>
                                 <button class="btn text-white border-0"
                                     style="background-color: #0064a7;" type="button"
                                     onclick="if(validateForm1())showNextForm(2)">Next</button>
@@ -148,32 +149,32 @@
                         <div>
                             <div class="row row-cols-1">
                                 <div class="col">
-                                    <label for="applicantCountry">Enter Country: <span class="text-danger fw-bold">*</span></label>
+                                    <label for="applicantCountry">Select Country: <span class="text-danger">*</span></label>
+
                                     <select id="applicantCountry" name="applicantCountry" class="form-control my-2 w-50" required
                                         data-selected="{{ $attestation->applicantCountry }}">
                                         <option value="">Select your country</option>
                                     </select>
-                                    <p class="text-muted">Then, select the country where your documents are to be attested:</p>
                                 </div>
-
                                 <div class="col">
-                                    <label for="attestationCountry">Enter Country: <span class="text-danger fw-bold">*</span></label>
+                                    <p class="text-muted">Then, select the country where your documents are to be attested:</p>
+                                    <label for="attestationCountry">Select Country: <span class="text-danger">*</span></label>
                                     <select id="attestationCountry" name="attestationCountry" class="form-control my-2 w-50" required
                                         data-selected="{{ $attestation->attestationCountry }}">
                                         <option value="">Select attestation country</option>
                                     </select>
-                                    <p class="text-muted">Also, enter the name of applicant.</p>
                                 </div>
 
-
                                 <div class="col">
+                                    <p class="text-muted">Also, enter the name of applicant.</p>
+
                                     <label for="applicantName">Applicant Name: <span class="text-danger fw-bold">*</span></label>
                                     <input id="applicantName" name="applicantName" type="text" class="form-control form-control-da fs-6 mt-2 my-0 w-50 text-muted" placeholder="Enter applicant Name" required value="{{ $attestation->applicantName }}">
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-5">
-                            <button class="btn btn-light">Cancel</button>
+                            <a onclick="showPreviousForm(2)" class="btn btn-light">Back</a>
                             <button class="btn text-white border-0" style="background-color: #0064a7;" type="button" onclick="if(validateForm2())showNextForm(3)">Next</button>
                         </div>
                     </div>
@@ -205,16 +206,18 @@
                             <h4 class="pt-3 pb-1 border-bottom border-2 border-primary d-inline-block">Attestation Requirement</h4>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
                                 <div class="col">
-                                    <label for="countryAttestation" class="form-label fs-6">Country for Attestation: <span class="text-danger fw-bold">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="countryAttestation" name="countryAttestation" required maxlength="255" placeholder="Enter country where attestation is required" value="{{ $attestation->countryAttestation }}">
+                                    <label for="countryAttestation">Country For Attestaion:<span class="text-danger">*</span></label>
+                                    <select id="countryAttestation" name="countryAttestation" class="form-control form-control-da fs-6 mt-2" required
+                                        data-selected="{{ $attestation->countryAttestation }}">
+                                        <option value="">Select your country</option>
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <label for="purpose" class="form-label fs-6">Purpose of Attestation: <span class="text-danger fw-bold">*</span></label>
-                                    <select id="purpose" name="purpose" class="form-select w-50" aria-label="Default select example" required>
-                                        <option value="" disabled {{ old('purpose', $document->purpose ?? '') == '' ? 'selected' : '' }}>Select purpose</option>
+                                    <select id="purpose" name="purpose" class="form-control form-control-da fs-6" aria-label="Default select example" required>
                                         @forelse ($documentPurposes as $documentPurpose)
                                         <option value="{{ $documentPurpose->documentPurpose }}"
-                                            {{ old('purpose', $document->purpose ?? '') == $documentPurpose->documentPurpose ? 'selected' : '' }}>
+                                            {{ old('purpose', $attestation->purpose ?? '') == $documentPurpose->documentPurpose ? 'selected' : '' }}>
                                             {{ $documentPurpose->documentPurpose }}
                                         </option>
                                         @empty
@@ -230,8 +233,11 @@
                             <h4 class="pt-4 pb-1 border-bottom border-2 border-primary d-inline-block">Delivery Address Details</h4>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                 <div class="col">
-                                    <label for="deliveryCountry" class="form-label fs-6">Country Name: <span class="text-danger fw-bold">*</span></label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="deliveryCountry" name="deliveryCountry" required maxlength="255" placeholder="Enter Country Name" value="{{ $attestation->deliveryCountry }}">
+                                    <label for="deliveryCountry">Delivery Country<span class="text-danger">*</span></label>
+                                    <select id="deliveryCountry" name="deliveryCountry" class="form-control form-control-da fs-6 mt-2" required
+                                        data-selected="{{ $attestation->deliveryCountry }}">
+                                        <option value="">Select your country</option>
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <label for="deliveryCity" class="form-label fs-6">City: <span class="text-danger fw-bold">*</span></label>
@@ -272,8 +278,10 @@
                             </div>
                             <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
                                 <div class="col">
-                                    <label for="workCountry" class="form-label fs-6">Country Name: </label>
-                                    <input type="text" class="form-control form-control-da fs-6" id="workCountry" name="workCountry" maxlength="255" placeholder="Enter country Name" value="{{ $attestation->workCountry }}">
+                                    <label for="workcountry">Work Country:</label>
+                                    <select id="workCountry" name="workCountry" class="form-control form-control-da fs-6 mt-2" data-selected="{{ $attestation->workCountry }}">
+                                        <option value="">Select your country</option>
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <label for="workCity" class="form-label fs-6">City: </label>
@@ -301,139 +309,210 @@
                             <div class="accordion-body">
                                 <div class="row py-3 row-cols-1 row-cols-lg-2 row-gap-4 gx-5">
                                     <!-- Identification Document -->
+                                    <!-- Identification Document -->
                                     <div class="col">
-                                        <label for="identification" class="form-label fs-6">Identification Document:</label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="identification"
-                                            name="identification" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="identification" class="form-label fs-6">Identification Document:</label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="identification" name="identification" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->identification))
-                                        <img src="{{ asset($attestation->identification) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $identificationExt = strtolower(pathinfo($attestation->identification, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($identificationExt, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->identification) }}" alt="Identification Document" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($identificationExt === 'pdf')
+                                        <a href="{{ asset($attestation->identification) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Identification Document Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <!-- Visa -->
                                     <div class="col">
-                                        <label for="visa" class="form-label fs-6">Visa:</label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="visa"
-                                            name="visa" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="visa" class="form-label fs-6">Visa:</label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="visa" name="visa" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->visa))
-                                        <img src="{{ asset($attestation->visa) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $visaExt = strtolower(pathinfo($attestation->visa, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($visaExt, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->visa) }}" alt="Visa" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($visaExt === 'pdf')
+                                        <a href="{{ asset($attestation->visa) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Visa Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <!-- Citizenship Front -->
                                     <div class="col">
-                                        <label for="citizenshipFront" class="form-label fs-6">Citizenship Front:<span class="text-danger  fw-bold">*</span></label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="citizenshipFront"
-                                            name="citizenshipFront" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="citizenshipFront" class="form-label fs-6">Citizenship Front:<span class="text-danger fw-bold">*</span></label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="citizenshipFront" name="citizenshipFront" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->citizenshipFront))
-                                        <img src="{{ asset($attestation->citizenshipFront) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $citizenshipFrontExt = strtolower(pathinfo($attestation->citizenshipFront, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($citizenshipFrontExt, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->citizenshipFront) }}" alt="Citizenship Front" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($citizenshipFrontExt === 'pdf')
+                                        <a href="{{ asset($attestation->citizenshipFront) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Citizenship Front Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <!-- Citizenship Back -->
                                     <div class="col">
-                                        <label for="citizenshipBack" class="form-label fs-6">Citizenship Back:<span class="text-danger  fw-bold">*</span></label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="citizenshipBack"
-                                            name="citizenshipBack" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="citizenshipBack" class="form-label fs-6">Citizenship Back:<span class="text-danger fw-bold">*</span></label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="citizenshipBack" name="citizenshipBack" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->citizenshipBack))
-                                        <img src="{{ asset($attestation->citizenshipBack) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $citizenshipBackExt = strtolower(pathinfo($attestation->citizenshipBack, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($citizenshipBackExt, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->citizenshipBack) }}" alt="Citizenship Back" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($citizenshipBackExt === 'pdf')
+                                        <a href="{{ asset($attestation->citizenshipBack) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Citizenship Back Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <!-- Passport -->
                                     <div class="col">
-                                        <label for="passport" class="form-label fs-6">Passport:</label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="passport"
-                                            name="passport" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="passport" class="form-label fs-6">Passport:</label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="passport" name="passport" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->passport))
-                                        <img src="{{ asset($attestation->passport) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $passportExt = strtolower(pathinfo($attestation->passport, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($passportExt, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->passport) }}" alt="Passport" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($passportExt === 'pdf')
+                                        <a href="{{ asset($attestation->passport) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Passport Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <!-- Photo -->
                                     <div class="col">
-                                        <label for="photo" class="form-label fs-6">Passport-size Photo:</label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="photo"
-                                            name="photo" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="photo" class="form-label fs-6">Passport-size Photo:</label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="photo" name="photo" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->photo))
-                                        <img src="{{ asset($attestation->photo) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $photoExt = strtolower(pathinfo($attestation->photo, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($photoExt, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->photo) }}" alt="Photo" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($photoExt === 'pdf')
+                                        <a href="{{ asset($attestation->photo) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Photo Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <!-- Documents 1-4 -->
                                     <div class="col">
-                                        <label for="document1" class="form-label fs-6">Document to be attestated I:</label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="document1"
-                                            name="document1" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="document1" class="form-label fs-6">Document to be attested I:</label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="document1" name="document1" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->document1))
-                                        <img src="{{ asset($attestation->document1) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $document1Ext = strtolower(pathinfo($attestation->document1, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($document1Ext, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->document1) }}" alt="Document 1" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($document1Ext === 'pdf')
+                                        <a href="{{ asset($attestation->document1) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Document 1 Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <div class="col">
-                                        <label for="document2" class="form-label fs-6">Document to be attestated II>:</label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="document2"
-                                            name="document2" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="document2" class="form-label fs-6">Document to be attested II:</label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="document2" name="document2" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->document2))
-                                        <img src="{{ asset($attestation->document2) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $document2Ext = strtolower(pathinfo($attestation->document2, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($document2Ext, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->document2) }}" alt="Document 2" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($document2Ext === 'pdf')
+                                        <a href="{{ asset($attestation->document2) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Document 2 Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <div class="col">
-                                        <label for="document3" class="form-label fs-6">Document to be attestated III:</label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="document3"
-                                            name="document3" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="document3" class="form-label fs-6">Document to be attested III:</label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="document3" name="document3" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->document3))
-                                        <img src="{{ asset($attestation->document3) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $document3Ext = strtolower(pathinfo($attestation->document3, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($document3Ext, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->document3) }}" alt="Document 3" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($document3Ext === 'pdf')
+                                        <a href="{{ asset($attestation->document3) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Document 3 Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
 
                                     <div class="col">
-                                        <label for="document4" class="form-label fs-6">Document to be attestated IV:</label>
-                                        <br>
-                                        <label class="form-label fs-6 mb-3">(Should be in jpg, png or pdf format)</label>
-                                        <input type="file" class="form-control" id="document4"
-                                            name="document4" accept=".jpg,.jpeg,.png,.pdf"
-                                            onchange="handleImagePreview(this)">
+                                        <label for="document4" class="form-label fs-6">Document to be attested IV:</label><br>
+                                        <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                        <input type="file" class="form-control form-control-da fs-6" id="document4" name="document4" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
                                         @if(!empty($attestation->document4))
-                                        <img src="{{ asset($attestation->document4) }}" alt=""
-                                            class="img-fluid img mt-2 rounded" style="width:250px; height:250px; object-fit:contain;">
+                                        @php
+                                        $document4Ext = strtolower(pathinfo($attestation->document4, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if(in_array($document4Ext, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ asset($attestation->document4) }}" alt="Document 4" class="img-fluid img mt-2 rounded w-50">
+                                        @elseif($document4Ext === 'pdf')
+                                        <a href="{{ asset($attestation->document4) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            View PDF
+                                        </a>
+                                        @endif
+                                        @else
+                                        <img src="#" alt="Document 4 Preview" class="img-fluid img mt-2 rounded w-50 d-none">
                                         @endif
                                     </div>
                                 </div>
@@ -444,7 +523,7 @@
                     <div class="my-4 border border-1 border-secondary"></div>
                     <div class="d-flex flex-column mx-3 mb-5">
                         <div class="form-check">
-                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkCorrect" required>
+                            <input class="form-check-input fs-6" type="checkbox" id="checkCorrect" required>
                             <label class="form-check-label fs-6" for="checkCorrect">
                                 <span class="required"></span> I confirm that all information provided is accurate and complete. I understand
                                 that providing false information may result in the rejection of my application and possible legal consequences.
@@ -452,7 +531,7 @@
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input fs-6" type="checkbox" value="" id="checkTerms" required>
+                            <input class="form-check-input fs-6" type="checkbox" id="checkTerms" required>
                             <label class="form-check-label fs-6" for="checkTerms">
                                 <span class="required"></span> I agree to the Terms and Conditions and Privacy Policy of Kamsansar's Document Attestaion service.
                             </label>
@@ -462,7 +541,8 @@
                             fill all
                             required fields before proceeding.</div>
                     </div>
-                    <div class="d-flex justify-content-end py-4">
+                    <div class="d-flex justify-content-between mt-5">
+                        <button class="btn btn-light" onclick="showPreviousForm(3)">back</button>
                         <button type="submit" class="btn btn" id="submitBtn" disabled style="background-color: #0064a7; color: white;">
                             Update Appication
                         </button>
@@ -600,30 +680,51 @@
 
         const applicantCountrySelect = document.getElementById("applicantCountry");
         const attestationCountrySelect = document.getElementById("attestationCountry");
+        const countryAttestationSelect = document.getElementById("countryAttestation");
+        const deliveryCountrySelect = document.getElementById("deliveryCountry");
+        const workCountrySelect = document.getElementById("workCountry");
+
+        const selectedApplicantCountry = applicantCountrySelect.getAttribute("data-selected");
+        const selectedAttestationCountry = attestationCountrySelect.getAttribute("data-selected");
+        const selectedCountryAttestation = countryAttestationSelect.getAttribute("data-selected");
+        const selectedDeliveryCountry = deliveryCountrySelect.getAttribute("data-selected");
+        const selectedWorkCountry = workCountrySelect.getAttribute("data-selected");
 
         fetch("https://restcountries.com/v3.1/all")
             .then(response => response.json())
             .then(countries => {
-                // Sort countries alphabetically by name
                 countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
 
                 countries.forEach(country => {
-                    const option1 = document.createElement("option");
-                    option1.value = country.name.common;
-                    option1.textContent = country.name.common;
+                    const countryName = country.name.common;
 
-                    const option2 = option1.cloneNode(true); // Clone for second dropdown
-
+                    // Applicant Country
+                    const option1 = new Option(countryName, countryName, false, countryName === selectedApplicantCountry);
                     applicantCountrySelect.appendChild(option1);
+
+                    // Attestation Country
+                    const option2 = new Option(countryName, countryName, false, countryName === selectedAttestationCountry);
                     attestationCountrySelect.appendChild(option2);
+
+                    // Country Attestation
+                    const option3 = new Option(countryName, countryName, false, countryName === selectedCountryAttestation);
+                    countryAttestationSelect.appendChild(option3);
+
+                    // Delivery Country
+                    const option4 = new Option(countryName, countryName, false, countryName === selectedDeliveryCountry);
+                    deliveryCountrySelect.appendChild(option4);
+
+                    // Work Country
+                    const option5 = new Option(countryName, countryName, false, countryName === selectedWorkCountry);
+                    workCountrySelect.appendChild(option5);
                 });
             })
             .catch(error => {
                 console.error("Error fetching countries:", error);
             });
+
+
     });
-
-
 
     function handleImagePreview(input) {
         if (input.files && input.files[0]) {

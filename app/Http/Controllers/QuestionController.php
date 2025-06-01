@@ -156,20 +156,17 @@ class QuestionController extends Controller
     public function quiz()
     {
         $jobseeker = Auth::guard('job_seekers')->user();
-
         if (!$jobseeker) {
             abort(403, 'Unauthorized');
         }
-
         $answeredQuestionIds = UserAnswer::where('user_id', $jobseeker->id)->pluck('question_id')->toArray();
-
         $questions = Question::with('answers')
             ->where('publishStauts', 'publish')
             ->whereNotIn('id', $answeredQuestionIds)
             ->get();
 
         if ($questions->isEmpty()) {
-            return redirect()->route('quiz.thankyou')->with('error', 'You have already taken all available questions.');
+            return redirect()->route('quiz.thankyou');
         }
 
         return view('frontend.quiz.show', compact('questions'));
@@ -221,7 +218,13 @@ class QuestionController extends Controller
     {
         $jobseeker = Auth::guard('job_seekers')->user();
 
-        // Get latest round for this user
+        // Check if user has any answers at all (first time or not)
+        $hasAnyAnswers = UserAnswer::where('user_id', $jobseeker->id)->exists();
+
+        if (!$hasAnyAnswers) {
+            return view('frontend.resultnotfound', ['message' => 'quiz']);
+        }
+
         $latestRound = UserAnswer::where('user_id', $jobseeker->id)->max('round');
 
         // Total questions answered by this user in latest round

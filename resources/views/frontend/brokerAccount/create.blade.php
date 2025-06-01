@@ -73,7 +73,7 @@
                                                 id="boid" name="boid" required
                                                 min="1000000000000000" max="9999999999999999" oninput="validateBOID(this)" value="{{ $brokerAccount->boid ?? old('boid') }}"
                                                 placeholder="Enter your 16-digit BOID number">
-                                            <div id="boidError" class="text-danger small d-none">BOID must be exactly 16 digits</div>
+                                            <div id="boidError" class="text-danger small m-2 d-none">BOID must be exactly 16 digits</div>
                                         </div>
 
                                         <script>
@@ -312,24 +312,23 @@
                                         <h4 class="pt-5 pb-1 border-bottom border-2 border-primary d-inline-block">Required Documents</h4>
                                     </div>
                                     <div class="accordion-body row py-3 row-cols-1 row-cols-md-2 row-cols-lg-2 row-gap-3">
-
                                         <div class="col">
-                                            <label for="kycForm" class="form-label fs-6">Client Registration Form KYC:</label><br>
+                                            <label for="ppSizePhoto" class="form-label fs-6">Passport Size Photo <span class="text-danger fw-bold">*</span>:</label><br>
                                             <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="kycForm" name="kycForm" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
-                                            @if(isset($brokerAccount) && $brokerAccount->kycForm)
+                                            <input type="file" class="form-control form-control-da fs-6" id="ppSizePhoto" name="ppSizePhoto" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="validateFileSize(this)">
+                                            @if(isset($brokerAccount) && $brokerAccount->ppSizePhoto)
                                             @php
-                                            $kycExt = strtolower(pathinfo($brokerAccount->kycForm, PATHINFO_EXTENSION));
+                                            $ppExt = strtolower(pathinfo($brokerAccount->ppSizePhoto, PATHINFO_EXTENSION));
                                             @endphp
-                                            @if(in_array($kycExt, ['jpg', 'jpeg', 'png']))
-                                            <img src="{{ asset($brokerAccount->kycForm) }}" alt="KYC Form" class="img-fluid img mt-2 rounded w-100">
-                                            @elseif($kycExt === 'pdf')
-                                            <a href="{{ asset($brokerAccount->kycForm) }}" target="_blank" class="text-decoration-underline text-primary">
+                                            @if(in_array($ppExt, ['jpg', 'jpeg', 'png']))
+                                            <img src="{{ asset($brokerAccount->ppSizePhoto) }}" alt="Passport Size Photo" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($ppExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->ppSizePhoto) }}" target="_blank" class="text-decoration-underline text-primary">
                                                 View PDF
                                             </a>
                                             @endif
                                             @else
-                                            <img src="#" alt="KYC Form Preview" class="img-fluid img mt-2 rounded w-100 d-none">
+                                            <img src="#" alt="Passport Size Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
                                         </div>
 
@@ -350,6 +349,26 @@
                                             @endif
                                             @else
                                             <img src="#" alt="Citizenship Preview" class="img-fluid img mt-2 rounded w-100 d-none">
+                                            @endif
+                                        </div>
+
+                                        <div class="col">
+                                            <label for="kycForm" class="form-label fs-6">Client Registration Form KYC:</label><br>
+                                            <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
+                                            <input type="file" class="form-control form-control-da fs-6" id="kycForm" name="kycForm" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this)">
+                                            @if(isset($brokerAccount) && $brokerAccount->kycForm)
+                                            @php
+                                            $kycExt = strtolower(pathinfo($brokerAccount->kycForm, PATHINFO_EXTENSION));
+                                            @endphp
+                                            @if(in_array($kycExt, ['jpg', 'jpeg', 'png']))
+                                            <img src="{{ asset($brokerAccount->kycForm) }}" alt="KYC Form" class="img-fluid img mt-2 rounded w-100">
+                                            @elseif($kycExt === 'pdf')
+                                            <a href="{{ asset($brokerAccount->kycForm) }}" target="_blank" class="text-decoration-underline text-primary">
+                                                View PDF
+                                            </a>
+                                            @endif
+                                            @else
+                                            <img src="#" alt="KYC Form Preview" class="img-fluid img mt-2 rounded w-100 d-none">
                                             @endif
                                         </div>
 
@@ -433,25 +452,7 @@
                                             @endif
                                         </div>
 
-                                        <div class="col">
-                                            <label for="ppSizePhoto" class="form-label fs-6">Passport Size Photo <span class="text-danger fw-bold">*</span>:</label><br>
-                                            <label class="form-label mb-3" style="font-size: 14px">(Should be in .jpg, .jpeg, .png, .pdf format)</label>
-                                            <input type="file" class="form-control form-control-da fs-6" id="ppSizePhoto" name="ppSizePhoto" accept=".jpg,.jpeg,.png,.pdf" {{ !isset($brokerAccount) ? 'required' : '' }} onchange="validateFileSize(this)">
-                                            @if(isset($brokerAccount) && $brokerAccount->ppSizePhoto)
-                                            @php
-                                            $ppExt = strtolower(pathinfo($brokerAccount->ppSizePhoto, PATHINFO_EXTENSION));
-                                            @endphp
-                                            @if(in_array($ppExt, ['jpg', 'jpeg', 'png']))
-                                            <img src="{{ asset($brokerAccount->ppSizePhoto) }}" alt="Passport Size Photo" class="img-fluid img mt-2 rounded w-100">
-                                            @elseif($ppExt === 'pdf')
-                                            <a href="{{ asset($brokerAccount->ppSizePhoto) }}" target="_blank" class="text-decoration-underline text-primary">
-                                                View PDF
-                                            </a>
-                                            @endif
-                                            @else
-                                            <img src="#" alt="Passport Size Preview" class="img-fluid img mt-2 rounded w-100 d-none">
-                                            @endif
-                                        </div>
+
 
                                         <div class="col">
                                             <label for="tradingAgreement" class="form-label fs-6">Online Trading Agreement Form:</label><br>

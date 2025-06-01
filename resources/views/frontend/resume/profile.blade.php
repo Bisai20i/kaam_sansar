@@ -10,12 +10,12 @@
                 <img id="profilePreview" src="{{ asset($profile->profileImg) }}"
                     class="img-fluid rounded-circle overflow-hidden"
                     style="aspect-ratio: 1; width:5rem; object-fit: cover;" alt="Profile Picture">
-                @elseif(Auth::guard('job_seekers')->user()->profileImg)
-                <img id="profilePreview" src="{{ asset( Auth::guard('job_seekers')->user()->profileImg) }}"
+                @elseif(Auth::guard('job_seekers')->user()->userThumbnail)
+                <img id="profilePreview" src="{{ asset( 'storage/'. Auth::guard('job_seekers')->user()->userThumbnail[0]) }}"
                     class="img-fluid rounded-circle overflow-hidden"
                     style="aspect-ratio: 1; width:5rem; object-fit: cover;" alt="Profile Picture">
                 @else
-                <img id="profilePreview" src="{{ asset('images/default-profile.png') }}"
+                <img id="profilePreview" src="{{ asset('frontend/assets/Images/profile.jpg') }}"
                     class="img-fluid rounded-circle overflow-hidden"
                     style="aspect-ratio: 1; width:5rem; object-fit: cover;" alt="Profile Picture">
                 @endif
@@ -147,6 +147,7 @@
                         localStorage.removeItem('tempProfileImage');
                         // Show success message
                     }
+                })
                 .catch(error => {
                     console.error(error);
                     console.error('something wents worng')

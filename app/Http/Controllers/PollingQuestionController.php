@@ -46,7 +46,7 @@ class PollingQuestionController extends Controller
         PollingQuestion::create([
             'admin_id' => $adminId,
             'question' => $request->question,
-            'publishStatus' =>$request->publishStatus,
+            'publishStatus' => $request->publishStatus,
         ]);
         return redirect()->back()->with('success', 'Question added successfully.');
     }
@@ -106,8 +106,17 @@ class PollingQuestionController extends Controller
     public function publishStatus($id)
     {
         $question = PollingQuestion::findOrFail($id);
-        $question->publishStatus = $question->publishStatus === 'publish' ? 'unpublish' : 'publish';
-        $question->save();
+
+        if ($question->publishStatus === 'publish') {
+            $question->publishStatus = 'unpublish';
+            $question->save();
+        } else {
+            PollingQuestion::where('publishStatus', 'publish')
+                ->update(['publishStatus' => 'unpublish']);
+            $question->publishStatus = 'publish';
+            $question->save();
+        }
+
         return redirect()->back()->with('success', 'Question status updated.');
     }
 }
