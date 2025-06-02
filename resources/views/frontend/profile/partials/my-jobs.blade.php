@@ -36,7 +36,7 @@
             <div class="jobs-card jobs-job px-2 px-lg-5 w-100">
 
 
-                @if (!empty($jobs))
+                @if($jobs->count() > 0)
                     @foreach ($jobs as $job)
                         <div class="position-relative w-100">
                             <button type="button"
@@ -99,6 +99,8 @@
                             </a>
                         </div>
                     @endforeach
+                @else
+                    <p class="text-center text-secondary">You havent applied or bookmarked any jobs</p>
                 @endif
 
             </div>

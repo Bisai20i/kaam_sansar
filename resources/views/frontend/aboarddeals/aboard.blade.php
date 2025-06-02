@@ -33,15 +33,7 @@
 
 
                 </div>
-                <!-- Type Filter Section -->
-                {{ session('type') }}
-                @if (session('type') == 'want_to_buy')
-                    <script>
-                        window.addEventListener('DOMContentLoaded', function() {
-                            document.getElementById('wantToBuy').click();
-                        });
-                    </script>
-                @endif
+
 
                 <!-- Right Side Add Item / Add Post Button -->
                 @if (Auth::guard('job_seekers')->check())

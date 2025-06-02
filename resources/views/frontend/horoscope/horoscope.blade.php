@@ -841,7 +841,7 @@
                                 class="card-img-top rounded-circle mx-auto d-block"
                                 style="height: 150px; width:150px; object-fit: cover;">
                             @else
-                            <img src="{{ asset('images/default-image.jpg') }}" alt="No Image"
+                            <img src="{{ asset('frontend/assets/Images/profile.jpg') }}" alt="No Image"
                                 class="card-img-top" style="height: 200px; object-fit: cover;">
                             @endif
                             <div class="card-body">

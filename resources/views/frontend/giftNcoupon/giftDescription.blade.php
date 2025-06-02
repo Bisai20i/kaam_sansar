@@ -148,7 +148,6 @@
                                                             </div>
                                                         </div>
                                                         <!-- Bootstrap Delete Confirmation Modal -->
-                                                        
                                                     @endif
 
 
@@ -158,11 +157,11 @@
                                             @endforeach
                                         @else
                                             @auth('job_seekers')
-                                                <small class="text-secondary"> Please login first to add a comment! </small>
-                                            @else
                                                 <small class="text-secondary">No comments Yet! <span class="text-success">Be
                                                         the
                                                         first one to comment.</span> </small>
+                                            @else
+                                                <small class="text-secondary"> Please login first to add a comment! </small>
                                             @endauth
                                         @endif
 

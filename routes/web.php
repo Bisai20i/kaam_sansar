@@ -3,12 +3,14 @@
 use App\Http\Controllers\AboardController;
 use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminMessageController;
 use App\Http\Controllers\AdsManagerController;
 use App\Http\Controllers\AdvertisementCategoryController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\AstrologerController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\BecomeMoneyExchangerController;
 use App\Http\Controllers\BecomeSellerController;
 use App\Http\Controllers\BlogsAndPodcastController;
 use App\Http\Controllers\BrokerAccountController;
@@ -16,7 +18,6 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DiscussionForumController;
 use App\Http\Controllers\DocumentationAttestationController;
 use App\Http\Controllers\DocumentPurposeController;
-use App\Http\Controllers\DocumentSubtype;
 use App\Http\Controllers\DocumentSubtypeController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EducationController;
@@ -76,16 +77,9 @@ use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\WorkPermitController;
 use App\Http\Controllers\WorkPermitDistrictController;
 use App\Http\Controllers\WorkPermitLocationController;
-use App\Models\DocumentPurpose;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-
-use App\Http\Controllers\AdminMessageController;
-use App\Http\Controllers\BecomeMoneyExchangerController;
-
-
-
 
 Route::get('/horoscope', [JyotishController::class, 'showJyotishPage'])->name('frontend.horoscope');
 
@@ -116,7 +110,6 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     Route::post('/questions/{id}/update-status', [QuestionController::class, 'updateStatus'])
         ->name('question.updateStatus');
-
 
     Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
     // Route::post('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
@@ -241,7 +234,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::get('/bankAccounts/{id}', [BankAccountController::class, 'show'])->name('bankAccounts.show');
     Route::delete('/bankAccounts/{bankAccount}', [BankAccountController::class, 'destroy'])->name('bankAccounts.destroy');
 
-    //broker account
+                                                                                                                                   //broker account
     Route::get('/brokerAccounts/{brokerAccount}', [BrokerAccountController::class, 'show'])->name('brokerAccounts.show');          // Show specific broker account
     Route::delete('/brokerAccounts/{brokerAccount}', [BrokerAccountController::class, 'destroy'])->name('brokerAccounts.destroy'); // Delete broker account
     Route::get('/brokerAccounts', [BrokerAccountController::class, 'index'])->name('brokerAccounts.index');                        // List all broker accounts
@@ -254,7 +247,6 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
     Route::delete('/documentAttestations/{documentAttestation}', [DocumentationAttestationController::class, 'destroy'])->name('documentAttestations.destroy');
     Route::post('/documentAttestations/{id}/update-status', [DocumentationAttestationController::class, 'updateStatus'])
         ->name('documentAttestation.updateStatus');
-
 
     //work permit
     Route::get('/workPermits', [WorkPermitController::class, 'index'])->name('workPermits.index');
@@ -326,8 +318,6 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
 //get job applicants of the particular post
 
-
-
 //delete forum post by admin
 
 Route::delete('discussion_forum/{id}', [DiscussionForumController::class, 'destroy'])->name('forum.delete');
@@ -366,7 +356,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('change-password', [JobSeekerController::class, 'changePassword'])->name('jobseeker.change-password');
     Route::patch('deactivate', [JobSeekerController::class, 'deactivate']);
     Route::patch('delete', [JobSeekerController::class, 'delete']);
-    
+
     Route::get('getProfile/{user_id?}', [JobSeekerController::class, 'getProfile'])->name('jobseeker.getProfile');
 
     Route::get('getAbroadDeals', [JobSeekerController::class, 'getAbroadDeals'])->name('jobseeker.getAbroadDeals');
@@ -386,7 +376,6 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
     Route::get('jobseeker/getAbroadDeals', [JobSeekerController::class, 'getAbroadDeals']);
 
-
     Route::resource('profiles', ProfileController::class);
     Route::resource('visas', VisaController::class);
     Route::resource('educations', EducationController::class);
@@ -396,7 +385,6 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::resource('experiences', ExperienceController::class);
     Route::resource('trainings', TrainingController::class);
     Route::resource('languages', LanguageController::class);
-
 
     //bank account
     Route::get('bankAccounts/create', [BankAccountController::class, 'create'])->name('bankAccounts.create');
@@ -491,14 +479,11 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::post('/bookmark/podcast/remove/{podcastId}', [FrontendController::class, 'remove'])
         ->name('podcastBookmark.remove');
 
-
     //news-article//
 
     Route::post('/bookmark/blog', [FrontendController::class, 'bookmarkBlog'])->name('bookmark.blog');
     Route::get('/profile/bookmarked-blogs', [FrontendController::class, 'bookmarkedBlogs'])->name('jobseeker.myblogs');
     Route::post('/bookmark/blog/remove/{blogId}', [FrontendController::class, 'removeBlogBookmark'])->name('blogBookmark.remove');
-
-
 
     /* Visa HQ */
     Route::post('visa-HQ/apply', [FrontendController::class, 'visaDetails_apply'])->name('visaDetails.apply');
@@ -520,6 +505,17 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     //forex details
     Route::get('/exchange/currency', [ForeignExchangeDetailController::class, 'index'])->name('exchange.currency');
     Route::post('/exchange/currency', [ForeignExchangeDetailController::class, 'store'])->name('exchange.currency.store');
+
+    //Kundali Profile routes
+    Route::get('/profile/kundali', [KundaliController::class, 'frontendKundaliList'])->name('jobseeker.kundali');
+    Route::get('/profile/kundali/edit/{id}', [KundaliController::class, 'frontendKundaliEdit'])->name('jobseeker.kundali.edit');
+    Route::put('/profile/kundali/update/{id}', [KundaliController::class, 'frontendUpdate'])->name('jobseeker.kundali.update');
+    Route::delete('/profile/kundali/delete/{id}', [KundaliController::class, 'frontendDelete'])->name('jobseeker.kundali.delete');
+    // Route::get('/kundalimatching', [KundaliMatchingController::class, 'index'])->name('jobseeker.kundalimatching');
+    Route::get('/profile/kundalimatching', [KundaliMatchingController::class, 'frontendKundaliMatchingList'])->name('jobseeker.kundalimatching.list');
+    Route::get('/profile/kundalimatching/edit/{id}', [KundaliMatchingController::class, 'frontendKundaliMatchingEdit'])->name('jobseeker.kundalimatching.edit');
+    Route::put('/profile/kundalimatching/update/{id}', [KundaliMatchingController::class, 'frontendKundaliMatchingUpdate'])->name('jobseeker.kundalimatching.update');
+    Route::delete('/profile/kundalimatching/delete/{id}', [KundaliMatchingController::class, 'frontendKundaliMatchingDelete'])->name('jobseeker.kundalimatching.delete');
 });
 
 /* Frontend routes */
@@ -677,6 +673,5 @@ Route::middleware(['auth:job_seekers'])->group(function () {
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
-
 
 Route::post('/forgot-password/resend-otp', [JobSeekerController::class, 'forgotResendOtp'])->name('jobseeker.forgot-password.resend-otp');
