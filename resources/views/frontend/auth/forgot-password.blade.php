@@ -26,10 +26,10 @@
             }
         </style>
     @endif
-    <div class="container">
+    <div class="container my-5 pt-3">
         <div class="password-card forgot-password">
             <div class="text-center">
-                <div class="bg-primary text-white rounded-circle p-3 mb-3 d-inline-block">
+                <div class="bg-primary text-white rounded-circle px-3 py-2 mb-3 d-inline-block">
                     <i class="fas fa-question fa-2x"></i>
                 </div>
                 <h2 class="mb-1">Forget Password?</h2>
@@ -43,7 +43,7 @@
                 </div>
             @endif
 
-            <div class="d-flex justify-content-center mb-3">
+            <div class="d-flex justify-content-center w-100 mb-3">
                 <button type="button" class="btn-outline-secondary border-email active" id="email-btn-forgot">
                     <i class="fa fa-envelope"></i> Email
                 </button>
@@ -52,7 +52,7 @@
                 </button>
             </div>
 
-            <form action="{{ route('jobseeker.verify-phone') }}" method="POST" class="row g-3" id="forgotPasswordForm">
+            <form action="{{ route('jobseeker.verify-phone') }}" method="POST" class="row g-3 w-100" id="forgotPasswordForm">
                 @csrf
                 <!-- Hidden input to store email_or_phone value -->
                 <input type="hidden" name="email_or_phone" id="email_or_phone" value="email">
@@ -64,7 +64,7 @@
                                 <i class="fas fa-envelope"></i>
                             </span>
                             <input type="email" name="forgot_email" id="loginEmail"
-                                class="form-control @error('forgot_email') is-invalid @enderror" placeholder="Enter Your Email"
+                                class="form-control @error('forgot_email') is-invalid @enderror py-2" placeholder="Enter Your Email"
                                 autocomplete="off" value="{{ old('forgot_email') }}">
                             @error('forgot_email')
                                 <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
@@ -86,7 +86,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-create w-100">Verify</button>
+                <button type="submit" class="btn-create w-100 mt-2">Verify</button>
             </form>
         </div>
     </div>

@@ -1599,6 +1599,7 @@ return $request->all();
             'whoAmI'            => 'nullable|in:student,worker,consultant',
             'profession'        => 'nullable|string',
             'country'           => 'nullable|string',
+            'phoneNumber'       => 'nullable|string',
         ]);
 
         // return $request->all();
@@ -1710,6 +1711,10 @@ return $request->all();
 
             if ($request->input('country')) {
                 $user->country = $request->input('country');
+            }
+
+            if($request->input('phoneNumber')) {
+                $user->phoneNumber = $request->input('phoneNumber');
             }
 
             // Save updates

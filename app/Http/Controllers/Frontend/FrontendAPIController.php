@@ -90,7 +90,7 @@ class FrontendAPIController extends Controller
             ], 400);
         }
 
-                                            // Check if the user is logged in (authenticated)
+         // Check if the user is logged in (authenticated)
         $isAuthenticated = auth()->check(); // This checks if the user is authenticated
 
         if ($isAuthenticated) {
@@ -141,6 +141,11 @@ class FrontendAPIController extends Controller
             ->take(4)
             ->get();
 
+        $blogs->transform(function ($blog) {
+            $blog->imageUrl = $blog->imageUrl ? asset('storage/' . $blog->imageUrl): null;
+            return $blog;
+        });
+
         $podcasts = BlogsAndPodcast::where('blogOrPodcast', 'podcast')
             ->where('publishStatus', 1)
             ->orderBy('created_at', 'desc')
@@ -150,12 +155,19 @@ class FrontendAPIController extends Controller
         $giftNcoupon = GiftCoupon::orderBy('created_at', 'desc')
             ->take(4)
             ->get();
+        $giftNcoupon->transform(function ($gift) {
+            $gift->thumbnail = $gift->thumbnail ? asset('storage/' . $gift->thumbnail): null;
+            return $gift;
+        });
 
         // Fetch ads and categories
         $ads = Advertisement::orderBy('created_at', 'desc')
             ->take(4)
             ->get();
-
+        $ads->transform(function ($ad) {
+            $ad->adsThumbnail = $ad->adsThumbnail ? asset($ad->adsThumbnail): null;
+            return $ad;
+        });
         $adsCategory = AdvertisementCategory::all();
 
         $categories = JobCategory::where('publishStatus', 1)

@@ -121,6 +121,7 @@ class AdminController extends Controller
 
             // Send verification email
             Mail::to($admin->email)->send(new VerificationMail($admin, $randomPassword));
+            
 
             // Check request type for response
 

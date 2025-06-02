@@ -4,10 +4,10 @@
 
 
 
-    <div class="container">
+    <div class="container my-5 pt-3">
         <div class="password-card">
             <div class="text-center">
-                <div class="fs-1 text-primary mb-3">
+                <div class="fs-1 text-primary mb-2">
                     <i class="fas fa-lock"></i>
                 </div>
                 <h2 class="mb-2">Reset Password</h2>
@@ -60,18 +60,18 @@
                     }, 5000); // 5000ms = 5 seconds
                 </script>
             @endif
-            <form action="{{ route('jobseeker.password-reset') }}" method="POST" id="changePasswordForm">
+            <form action="{{ route('jobseeker.password-reset') }}" method="POST" id="changePasswordForm" class="w-100">
                 @csrf
                 @method('PATCH')
 
                 <!-- Hidden username field to prevent browser warnings -->
                 <input type="text" name="username" autocomplete="username" value="dummy_user" style="display: none;">
 
-                <input type="hidden" name="phone_number" value="{{ session('phone_number') }}">
-                <input type="hidden" name="country_code" value="{{ session('country_code') }}">
+                <input type="hidden" name="phone_number" value="{{ session('phone_number') }}" class="py-2">
+                <input type="hidden" name="country_code" value="{{ session('country_code') }}" class="py-2">
 
                 <div class="mb-3">
-                    <label class="form-label">New Password</label>
+                    <label class="form-label text-secondary">New Password</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input type="password" name="new_password" id="new_password"
@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Confirm New Password</label>
+                    <label class="form-label text-secondary">Confirm New Password</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input type="password" name="confirmation_password" id="password_confirmation"
@@ -103,7 +103,7 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="btn-create w-100">Change Password</button>
+                <button type="submit" class="btn-create w-100 mt-2">Change Password</button>
             </form>
 
 

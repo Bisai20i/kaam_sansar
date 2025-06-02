@@ -366,6 +366,7 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('change-password', [JobSeekerController::class, 'changePassword'])->name('jobseeker.change-password');
     Route::patch('deactivate', [JobSeekerController::class, 'deactivate']);
     Route::patch('delete', [JobSeekerController::class, 'delete']);
+    
     Route::get('getProfile/{user_id?}', [JobSeekerController::class, 'getProfile'])->name('jobseeker.getProfile');
 
     Route::get('getAbroadDeals', [JobSeekerController::class, 'getAbroadDeals'])->name('jobseeker.getAbroadDeals');
@@ -677,3 +678,6 @@ Route::middleware(['auth:job_seekers'])->group(function () {
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+Route::post('/forgot-password/resend-otp', [JobSeekerController::class, 'forgotResendOtp'])->name('jobseeker.forgot-password.resend-otp');
