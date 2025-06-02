@@ -142,6 +142,14 @@
                     </a>
                 </li>
 
+                <!-- money exchanger -->
+                <li class="menu-item {{ request()->routeIs('superadmin.moneyexchangers.index') ? 'active' : '' }}">
+                    <a href="{{ route('superadmin.moneyexchangers.index') }}" class="menu-link">
+                        <div data-i18n="Become Money Exchanger">Become Money Exchanger</div>
+                    </a>
+                </li>
+
+
 
             </ul>
         </li>
@@ -364,7 +372,7 @@
                 </li>
             </ul>
         </li>
-            <!-- Forex -->
+        <!-- Forex -->
         <li class="menu-item {{ request()->routeIs('forex*') ? 'active' : '' }}">
             <a href="{{ route('forex.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-money"></i>

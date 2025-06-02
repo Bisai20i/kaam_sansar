@@ -343,7 +343,8 @@ class FrontendController extends Controller
                     $q->when($request->input('jobsby') == 'category', fn($query) => $query->where('jobCategoryId', $request->input('searchcategoryid')))
                         ->when($request->input('jobsby') == 'skill', fn($query) => $query->where('skills', 'LIKE', "%{$request->input('skill')}%"))
                         ->when($request->input('jobsby') == 'location', fn($query) => $query->where('jobLocation', 'LIKE', "%{$request->input('location')}%"));
-                })
+                }
+            )
             ->where('jobDeadline', '>=', date('Y-m-d'))
             ->paginate(8)
             ->withQueryString();
@@ -762,6 +763,7 @@ class FrontendController extends Controller
 
         // return $exchange_rates;
 
+        return view('frontend.ForexChanger.select-exchanger', compact('exchange_rates', 'amount', 'base_currency', 'target_currency'));
         return view('frontend.ForexChanger.select-exchanger', compact('exchange_rates', 'amount', 'base_currency', 'target_currency'));
     }
 

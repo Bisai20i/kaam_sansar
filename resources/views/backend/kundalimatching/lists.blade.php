@@ -10,7 +10,7 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="card-title">Kundali Entries</h4>
-                <a href="{{ route('kundalidetail.create') }}" class="btn btn-primary btn-sm text-white">Create Kundali</a>
+                <!-- <a href="{{ route('kundalidetail.create') }}" class="btn btn-primary btn-sm text-white">Create Kundali</a> -->
             </div>
         </div>
 
@@ -50,13 +50,13 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ route('astrologer.view', ['type' => 'matching', 'id' => $post->id]) }}">
-    <i class="bx bx-reply me-1"></i> Reply
-</a>
-
-                                        <a class="dropdown-item" href="{{ route('kundalimatching.edit', $post->id) }}">
-                                            <i class="bx bx-edit-alt me-1"></i> Edit
+                                        <a class="dropdown-item" href="{{ route('astrologer.view', ['type' => 'matching', 'id' => $post->id]) }}">
+                                            <i class="bx bx-reply me-1"></i> Reply
                                         </a>
+
+                                        <!-- <a class="dropdown-item" href="{{ route('kundalimatching.edit', $post->id) }}">
+                                            <i class="bx bx-edit-alt me-1"></i> Edit
+                                        </a> -->
                                         <a class="dropdown-item text-danger" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $post->id }}">
                                             <i class="bx bx-trash me-1"></i> Delete
                                         </a>

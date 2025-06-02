@@ -671,7 +671,6 @@ Route::get('/passport/times/{id}/{date}', [PassportRenewalController::class, 'pa
 Route::middleware(['auth:job_seekers'])->group(function () {
     Route::get('/quiz', [QuestionController::class, 'quiz'])->name('quiz.frontend');
     Route::post('/quiz/submit', [QuestionController::class, 'submitQuiz'])->name('quiz.submit');
-
     // Change this line to use the controller method, NOT a closure returning the view
     Route::get('/quiz/thankyou', [QuestionController::class, 'thankYou'])->name('quiz.thankyou');
 });

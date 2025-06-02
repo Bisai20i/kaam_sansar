@@ -760,6 +760,7 @@
                         <a href="{{ route('jobseeker.editProfile', ['user_id' => @Auth::guard('job_seekers')->user()->id]) }}" class="d-block">
                             <i class="fa fa-pen p-1 text-decoration-none"></i>
                         </a>
+                        @endauth
                     </h5>
                     <p class="text-muted"><i class="fas fa-award"></i> Reward Points <br>272.38</p>
                 </div>
