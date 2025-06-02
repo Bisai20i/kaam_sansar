@@ -15,9 +15,9 @@
                     <div>
                         <h4 class="card-title">kundali Details</h4>
                     </div>
-                    <div>
+                    <!-- <div>
                         <a href="" class="btn btn-primary btn-sm text-white">Create Kundali</a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -58,9 +58,9 @@
                                                 <a class="dropdown-item" href="{{ route('astrologer.show', $post->id) }}">
                                                     <i class="bx bx-reply me-1"></i> Reply
                                                 </a>
-                                                <a class="dropdown-item" href="{{ route('kundalidetail.edit', $post->id) }}">
+                                                <!-- <a class="dropdown-item" href="{{ route('kundalidetail.edit', $post->id) }}">
                                                     <i class="bx bx-edit-alt me-1"></i> Edit
-                                                </a>
+                                                </a> -->
                                                 
                                                 <a class="dropdown-item text-danger" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $post->id }}">
                                                     <i class="bx bx-trash me-1"></i> Delete

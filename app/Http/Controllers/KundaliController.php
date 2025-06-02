@@ -194,4 +194,77 @@ class KundaliController extends Controller
         $kundali->Delete();
         return redirect()->route('kundalidetail.index')->with('success', 'kundali deleted successfully');
     }
+
+
+    public function frontendKundaliList($id = null)
+    {
+        $user = Auth::guard('job_seekers')->user();
+        $kundali = Kundali::where('jobSeekerId', $user->id)->orderBy('created_at', 'desc')->get();
+        $editKundali = $id ? Kundali::where('jobSeekerId', $user->id)->findOrFail($id) : null;
+
+        return view('frontend.profile.partials.my-kundali', compact('kundali', 'editKundali'));
+    }
+
+    public function frontendKundaliEdit($id)
+    {
+        $kundali = Kundali::findOrFail($id);  // Get the record by ID
+        return view('kundali.edit', compact('kundali')); // Send data to the edit view
+    }
+    public function frontendUpdate(Request $request, $id)
+    {
+
+
+
+        $request->validate([
+            'personName' => 'required|string|max:255',
+            'day' => 'required|numeric|min:1|max:31',
+            'month' => 'required|string|max:20', // you might want to validate month differently
+            'year' => 'required|numeric|min:1900|max:' . date('Y'),
+            'personPlaceOfBirth' => 'required|string|max:255',
+            'hour' => 'required|numeric|min:0|max:23',
+            'minute' => 'required|numeric|min:0|max:59',
+            'second' => 'required|numeric|min:0|max:59',
+            'query1' => 'required|string',
+            'query2' => 'required|string',
+            'query3' => 'required|string',
+        ]);
+
+
+// Log::info('Validation passed');
+
+
+        $kundali = Kundali::findOrFail($id);
+
+        // Convert day, month, year to a date string (assuming month is a month name or number)
+        // If month is name like "March", convert to number:
+        $monthNum = date('m', strtotime($request->month));
+
+        $dob = $request->year . '-' . $monthNum . '-' . str_pad($request->day, 2, '0', STR_PAD_LEFT);
+
+        // Convert time parts to HH:MM:SS
+        $hour = str_pad($request->hour, 2, '0', STR_PAD_LEFT);
+        $minute = str_pad($request->minute, 2, '0', STR_PAD_LEFT);
+        $second = str_pad($request->second ?? '00', 2, '0', STR_PAD_LEFT);
+        $time = $hour . ':' . $minute . ':' . $second;
+
+        $kundali->personName = $request->personName;
+        $kundali->personDateOfBirth = $dob;
+        $kundali->personPlaceOfBirth = $request->personPlaceOfBirth;
+        $kundali->personTimeOfBirth = $time;
+        $kundali->Query1 = $request->query1;
+        $kundali->Query2 = $request->query2;
+        $kundali->Query3 = $request->query3;
+
+        $kundali->save();
+
+        return redirect()->back()->with('success', 'Kundali updated successfully.');
+    }
+
+    public function frontendDelete($id)
+    {
+        $kundali = Kundali::findOrFail($id);
+        $kundali->delete();
+
+        return redirect()->route('jobseeker.kundali')->with('success', 'Kundali deleted successfully.');
+    }
 }

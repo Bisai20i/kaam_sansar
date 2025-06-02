@@ -78,6 +78,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\AdminMessageController;
 use App\Http\Controllers\BecomeMoneyExchangerController;
 
+
 Route::get('/horoscope', [JyotishController::class, 'showJyotishPage'])->name('frontend.horoscope');
 
 // Authentication Routes
@@ -176,7 +177,7 @@ Route::middleware(['auth:admin', 'role:superAdmin'])->prefix('superadmin')->grou
 
     Route::resource('astrologer', AstrologerController::class);
 
-    Route::resource('kundalimatching', KundaliMatchingController::class)->except('store');
+    // Route::resource('kundalimatching', KundaliMatchingController::class);
     Route::get('/astrologer/show/{type}/{id}', [AstrologerController::class, 'view'])->name('astrologer.view');
 
     Route::resource('visaCountryList', VisaCountryListController::class);
@@ -370,6 +371,27 @@ Route::middleware(['auth:job_seekers'])->prefix('jobseeker')->group(function () 
     Route::get('/bookmark/remove/{jobId}', [JobSeekerController::class, 'removeBookmark'])->name('jobBookmark.remove');
     // Route::get('/myblogs', [JobSeekerController::class, 'myblogs'])->name('jobseeker.myblogs');
     Route::get('/forms', [FormSubmissionController::class, 'index'])->name('jobseeker.forms');
+
+    Route::get('/profile/kundali', [KundaliController::class, 'frontendKundaliList'])->name('jobseeker.kundali');
+
+    Route::get('/profile/kundali/edit/{id}', [KundaliController::class, 'frontendKundaliEdit'])->name('jobseeker.kundali.edit');
+
+    Route::put('/profile/kundali/update/{id}', [KundaliController::class, 'frontendUpdate'])->name('jobseeker.kundali.update');
+
+    Route::delete('/profile/kundali/delete/{id}', [KundaliController::class, 'frontendDelete'])->name('jobseeker.kundali.delete');
+    
+    // Route::get('/kundalimatching', [KundaliMatchingController::class, 'index'])->name('jobseeker.kundalimatching');
+
+
+    Route::get('/profile/kundalimatching', [KundaliMatchingController::class, 'frontendKundaliMatchingList'])->name('jobseeker.kundalimatching.list');
+
+    Route::get('/profile/kundalimatching/edit/{id}', [KundaliMatchingController::class, 'frontendKundaliMatchingEdit'])->name('jobseeker.kundalimatching.edit');
+
+    Route::put('/profile/kundalimatching/update/{id}', [KundaliMatchingController::class, 'frontendKundaliMatchingUpdate'])->name('jobseeker.kundalimatching.update');
+
+    Route::delete('/profile/kundalimatching/delete/{id}', [KundaliMatchingController::class, 'frontendKundaliMatchingDelete'])->name('jobseeker.kundalimatching.delete');
+
+
     Route::get('/mynews', [JobSeekerController::class, 'mynews'])->name('jobseeker.mynews');
     Route::get('/form/complete/{id}', [FormSubmissionController::class, 'findForm'])->name('form.complete');
     // Route::put('updateProfile/{user_id}', [JobSeekerController::class, 'updateProfile']);
@@ -546,8 +568,13 @@ Route::resource('aboardcomment', ProductCommentController::class);
 //route related  to frontend horoscope and kundali
 
 //Route for kundali
-Route::resource('kundalidetail', KundaliController::class);
-Route::post('kundalimatching', [KundaliMatchingController::class, 'store'])->name('kundalimatching.store');
+Route::middleware(['auth:job_seekers'])->group(function () {
+    Route::resource('kundalidetail', KundaliController::class);
+            Route::resource('kundalimatching', KundaliMatchingController::class);
+
+
+});
+// Route::post('kundalimatching', [KundaliMatchingController::class, 'store'])->name('kundalimatching.store');
 //Route fro astrolger
 
 // Route::post('/set-redirect', function (Request $request) {

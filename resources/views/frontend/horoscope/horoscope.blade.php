@@ -500,12 +500,14 @@
                     <div class="card mb-5">
                         <div class="card-body">
                             <h5 class="card-title">Person Details</h5>
-                            <form>
+                            <form id="person-form-kundali" action="{{ route('kundali.store') }}" method="POST">
+                                @csrf
+
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        placeholder="Enter name" name="personName" required>
+                                    <input type="text" class="form-control abroad-deal-1" placeholder="Enter name"
+                                        name="personName" required>
                                 </div>
 
                                 <div class="mb-3">
@@ -531,15 +533,15 @@
                                     <div class="row g-2">
                                         <div class="col">
                                             <input type="number" class="form-control abroad-deal-1"
-                                                placeholder="Hour" name="hour" required>
+                                                placeholder="Hour" name="hour" min="0" max="23" step="1" required>
                                         </div>
                                         <div class="col">
                                             <input type="number" class="form-control abroad-deal-1"
-                                                placeholder="Minute" name="minute" required>
+                                                placeholder="Minute" name="minute" min="0" max="59" required>
                                         </div>
                                         <div class="col">
                                             <input type="number" class="form-control abroad-deal-1"
-                                                placeholder="Second" name="second" required>
+                                                placeholder="Second" name="second" min="0" max="59" required>
                                         </div>
                                     </div>
                                 </div>
@@ -547,12 +549,14 @@
                                 <div class="mb-3">
                                     <label for="place" class="form-label">Place of Birth<span
                                             class="text-danger">*</span></label>
-
-                                    <input type="text" class="form-control abroad-deal-1" name="personPlaceOfBirth" required>
+                                    <input type="text" name="personPlaceOfBirth" value=""
+                                        class="form-control abroad-deal-1" required>
                                 </div>
 
                                 <button type="button" class="btn next-match-btn float-end"
                                     id="nextButton1">Next</button>
+                                <input type="hidden" name="personTimeOfBirth" id="personTimeOfBirth">
+
                             </form>
                         </div>
                     </div>
@@ -560,35 +564,6 @@
 
                 <!-- Question -->
 
-                <div class="Question-Section" id="Question-Section" style="display: none;">
-                    <h1 class="pb-3">Enter a Questions to ask</h1>
-                    <div class="card mb-5">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3"><i class="bi bi-chevron-left"
-                                    id="backButtonqen1"></i>Question you want to ask out Jyotish</h5>
-                            <form>
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Question 1</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query1" placeholder="Enter name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Question 2</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query2" placeholder="Enter name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Question 3</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query3" placeholder="Enter name" required>
-                                </div>
-
-                                <button type="button" class="btn next-match-btn float-end"
-                                    id="payButton">Pay</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
 
 
 
@@ -597,27 +572,27 @@
                     <h1 class="pb-3">Enter a Questions to ask</h1>
                     <div class="card mb-5">
                         <div class="card-body">
-                            <h5 class="card-title mb-3"><i class="bi bi-chevron-left"
-                                    id="backButtonqen1"></i>Question you want to ask out Jyotish</h5>
-                            <form>
+                            <h5 class="card-title mb-3" style="cursor: pointer;"><i class="bi bi-chevron-left"
+                                    id="backButtonqen11"></i>Question you want to ask out Jyotish</h5>
+                            <form id="question-form-kundali">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 1</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query-1" placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" name="Query-1"
+                                        placeholder="Enter Query" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 2</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query-2" placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" name="Query-2"
+                                        placeholder="Enter Query" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 3</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query-3" placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" name="Query-3"
+                                        placeholder="Enter Query" required>
                                 </div>
 
                                 <button type="button" class="btn next-match-btn float-end"
-                                    id="payButton-kundali">Submit Kundali Question</button>
+                                    id="payButton-kundali">Submit </button>
                             </form>
                         </div>
                     </div>
@@ -633,12 +608,12 @@
                     <div class="card mb-5">
                         <div class="card-body">
                             <h5 class="card-title">Girl’s Details</h5>
-                            <form>
+                            <form id="girlForm">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="girlName" placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" name="girlName"
+                                        placeholder="Enter name" required>
                                 </div>
 
                                 <div class="mb-3">
@@ -664,15 +639,15 @@
                                     <div class="row g-2">
                                         <div class="col">
                                             <input type="number" class="form-control abroad-deal-1"
-                                                placeholder="Hour" name="ghour" required>
+                                                placeholder="Hour" name="ghour" min="0" max="23" step="1" required>
                                         </div>
                                         <div class="col">
                                             <input type="number" class="form-control abroad-deal-1"
-                                                placeholder="Minute" name="gminute" required>
+                                                placeholder="Minute" name="gminute" min="0" max="59" required>
                                         </div>
                                         <div class="col">
                                             <input type="number" class="form-control abroad-deal-1"
-                                                placeholder="Second" name="gsecond" required>
+                                                placeholder="Second" name="gsecond" min="0" max="59" required>
                                         </div>
                                     </div>
                                 </div>
@@ -680,9 +655,8 @@
                                 <div class="mb-3">
                                     <label for="place" class="form-label">Place of Birth<span
                                             class="text-danger">*</span></label>
-
-                                    <input type="text" name="girlPlaceOfBirth" class="form-control abroad-deal-1" required>
-
+                                    <input type="text" name="girlPlaceOfBirth" value=""
+                                        class="form-control abroad-deal-1" required>
                                 </div>
 
                                 <button type="button" class="btn next-match-btn float-end"
@@ -697,14 +671,15 @@
                     <h1 class="pb-3">Enter Boy’s Birth Details</h1>
                     <div class="card mb-5">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-chevron-left" id="backButton"></i>Boy’s Details
+                            <h5 class="card-title"><i class="bi bi-chevron-left" id="backButton"
+                                    style="cursor: pointer;"></i>Boy’s Details
                             </h5>
-                            <form>
+                            <form id="boyForm">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="boyName" placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" name="boyName"
+                                        placeholder="Enter name" required>
                                 </div>
 
                                 <div class="mb-3">
@@ -746,7 +721,8 @@
                                 <div class="mb-3">
                                     <label for="place" class="form-label">Place of Birth<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" name="boyPlaceOfBirth" class="form-control abroad-deal-1" required>
+                                    <input type="text" name="boyPlaceOfBirth" value=""
+                                        class="form-control abroad-deal-1" required>
                                 </div>
 
                                 <button type="button" class="btn next-match-btn float-end"
@@ -756,35 +732,40 @@
                     </div>
                 </div>
                 <!-- Question -->
+
                 <div class="Question-Section" id="Question-Section" style="display: none;">
-                    <h1 class="pb-3">Enter Question to ask</h1>
+                    <h1 class="pb-3">Enter a Questions to ask</h1>
                     <div class="card mb-5">
                         <div class="card-body">
-                            <h5 class="card-title mb-3"><i class="bi bi-chevron-left"
-                                    id="backButtonqen2"></i>Question you want to ask out Jyotish</h5>
-                            <form>
+                            <h5 class="card-title mb-3"><i class="bi bi-chevron-left" id="backButtonqen1"
+                                    style="cursor: pointer;"></i>Question you want to ask out Jyotish</h5>
+                            <form id="question-form">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 1</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query1" placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" name="Query1"
+                                        placeholder="Enter Query" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 2</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query2" placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" name="Query2"
+                                        placeholder="Enter Query" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Question 3</label>
-                                    <input type="text" class="form-control abroad-deal-1" id="name"
-                                        name="Query3" placeholder="Enter name" required>
+                                    <input type="text" class="form-control abroad-deal-1" name="Query3"
+                                        placeholder="Enter Query" required>
                                 </div>
-                                <button type="button" class="btn next-match-btn float-end" id="payButton">Submit
-                                    Question</button>
+
+
+
+
+                                
+                                <button type="button" class="btn next-match-btn float-end"
+                                    id="payButton">Submit</button>
                             </form>
                         </div>
                     </div>
                 </div>
-
 
 
 
@@ -914,6 +895,15 @@
     </div>
     </div>
 
+    <style>
+        .is-invalid {
+            border: 1px solid red !important;
+        }
+
+        .validation-error {
+            font-size: 0.875rem;
+        }
+    </style>
 
 
 
@@ -930,6 +920,51 @@
             height: 250px;
         }
     </style>
+
+    <script>
+        var isJobseekerLoggedIn = {{ @Auth::guard('job_seekers')->check()}}
+    </script>
+
+
+
+   <script>
+    function validateNumberInput(inputElement, min, max, placeholderText) {
+        const value = parseInt(inputElement.value);
+        if (isNaN(value) || value < min || value > max) {
+            inputElement.classList.add('is-invalid');
+            inputElement.value = '';
+            inputElement.setAttribute('placeholder', placeholderText);
+        } else {
+            inputElement.classList.remove('is-invalid');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const timeFields = [
+            { type: 'hour', min: 0, max: 23, placeholder: 'Must be between 0 and 23.' },
+            { type: 'minute', min: 0, max: 59, placeholder: 'Must be between 0 and 59.' },
+            { type: 'second', min: 0, max: 59, placeholder: 'Must be between 0 and 59.' }
+        ];
+
+        const prefixes = ['', 'g', 'b']; 
+
+        timeFields.forEach(({ type, min, max, placeholder }) => {
+            prefixes.forEach(prefix => {
+                const name = prefix + type;
+                const input = document.querySelector(`[name="${name}"]`);
+                if (input) {
+                    input.addEventListener('change', function () {
+                        validateNumberInput(this, min, max, placeholder);
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const buttons = document.querySelectorAll(".button-container-horoscope button");
@@ -960,26 +995,87 @@
             document.getElementById("horoscopeDescription").innerText = description;
         }
 
-        // Show Boys Section in Kundali
+        // // Show Boys Section in Kundali
+        // document.getElementById("nextButton").addEventListener("click", function(event) {
+        //     event.preventDefault(); // Prevent form submission
+        //     document.getElementById("Girls-Section").style.display = "none"; // Hide Girls Section
+        //     document.getElementById("Boys-Section").style.display = "block"; // Show Boys Section
+        //     document.getElementById("Boys-Section").scrollIntoView({
+        //         behavior: "smooth"
+        //     });
+        // });
+
+        // // Show Thanks Section
+        // document.getElementById("MatchButton").addEventListener("click", function(event) {
+        //     event.preventDefault(); // Prevent form submission
+        //     document.getElementById("Girls-Section").style.display = "none"; // Hide Girls Section
+        //     document.getElementById("Boys-Section").style.display = "none"; // Hide Boys Section
+        //     document.getElementById("Question-Section").style.display = "block"; // Show Question Section
+        //     document.getElementById("Question-Section").scrollIntoView({
+        //         behavior: "smooth"
+        //     });
+        // });
+
+
+
+
+        function validateFormInputs(formId) {
+            const form = document.getElementById(formId);
+            const requiredInputs = form.querySelectorAll("[required]");
+            let isValid = true;
+
+            // Clear previous messages
+            form.querySelectorAll(".validation-error").forEach(el => el.remove());
+
+            requiredInputs.forEach(input => {
+                input.classList.remove("is-invalid");
+
+                if (!input.value.trim()) {
+                    isValid = false;
+
+                    input.classList.add("is-invalid");
+
+                    // Create error message
+                    const errorMsg = document.createElement("div");
+                    errorMsg.className = "validation-error text-danger mt-1";
+                    errorMsg.innerText = "This field is required.";
+                    input.parentNode.appendChild(errorMsg);
+                }
+            });
+
+            return isValid;
+        }
+
+        // Show Boys Section only if girl's form is valid
         document.getElementById("nextButton").addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent form submission
-            document.getElementById("Girls-Section").style.display = "none"; // Hide Girls Section
-            document.getElementById("Boys-Section").style.display = "block"; // Show Boys Section
+            event.preventDefault();
+            if (!isJobseekerLoggedIn) {
+                window.location.href = "{{ route('jobseeker.login') }}"; // Redirect to login
+                return;
+            }
+            if (!validateFormInputs("girlForm")) return;
+
+            document.getElementById("Girls-Section").style.display = "none";
+            document.getElementById("Boys-Section").style.display = "block";
             document.getElementById("Boys-Section").scrollIntoView({
                 behavior: "smooth"
             });
         });
 
-        // Show Thanks Section
+        // Show Questions Section only if boy's form is valid
         document.getElementById("MatchButton").addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent form submission
-            document.getElementById("Girls-Section").style.display = "none"; // Hide Girls Section
-            document.getElementById("Boys-Section").style.display = "none"; // Hide Boys Section
-            document.getElementById("Question-Section").style.display = "block"; // Show Question Section
+            event.preventDefault();
+
+            if (!validateFormInputs("boyForm")) return;
+
+            document.getElementById("Girls-Section").style.display = "none";
+            document.getElementById("Boys-Section").style.display = "none";
+            document.getElementById("Question-Section").style.display = "block";
             document.getElementById("Question-Section").scrollIntoView({
                 behavior: "smooth"
             });
         });
+
 
         // Go back to Girls Section when clicking the arrow icon
         document.getElementById("backButton").addEventListener("click", function(event) {
@@ -1010,12 +1106,16 @@
             const paymentSection = document.getElementById("payment-section");
             const questionSection = document.getElementById("Question-Section");
 
+
+            const questionSectionKundali = document.getElementById("Question-Section-kundali");
+
             function showSection(activeSection) {
                 girlsSection.style.display = activeSection === girlsSection ? "block" : "none";
                 boysSection.style.display = activeSection === boysSection ? "block" : "none";
                 personalDetailsSection.style.display = activeSection === personalDetailsSection ? "block" : "none";
                 paymentSection.style.display = activeSection === paymentSection ? "block" : "none";
                 questionSection.style.display = activeSection === questionSection ? "block" : "none";
+                questionSectionKundali.style.display = activeSection === questionSectionKundali ? "block" : "none";
             }
 
             function toggleActiveButton(activeBtn, inactiveBtn) {
@@ -1043,23 +1143,28 @@
             const nextButton = document.getElementById(
                 "payButton"); // You might have this button in the Girl's section
             nextButton.addEventListener("click", function() {
+
+
+                if (!validateFormInputs("question-form")) return;
                 const girlName = document.querySelector('input[name="girlName"]').value;
                 const girlDateOfBirth =
                     `${document.querySelector('input[name="gday"]').value}-${document.querySelector('input[name="gmonth"]').value}-${document.querySelector('input[name="gyear"]').value}`;
                 const girlTimeOfBirth =
-                    `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
-                const girlPlaceOfBirth = document.querySelector('select[name="girlPlaceOfBirth"]').value;
+                    `${document.querySelector('input[name="ghour"]').value}:${document.querySelector('input[name="gminute"]').value}:${document.querySelector('input[name="gsecond"]').value}`;
+                const girlPlaceOfBirth = document.querySelector('input[name="girlPlaceOfBirth"]').value;
 
                 const boyName = document.querySelector('input[name="boyName"]').value;
                 const boyDateOfBirth =
                     `${document.querySelector('input[name="bday"]').value}-${document.querySelector('input[name="bmonth"]').value}-${document.querySelector('input[name="byear"]').value}`;
                 const boyTimeOfBirth =
-                    `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
-                const boyPlaceOfBirth = document.querySelector('select[name="boyPlaceOfBirth"]').value;
+                    `${document.querySelector('input[name="bhour"]').value}:${document.querySelector('input[name="bminute"]').value}:${document.querySelector('input[name="bsecond"]').value}`;
+                const boyPlaceOfBirth = document.querySelector('input[name="boyPlaceOfBirth"]').value;
 
                 const query1 = document.querySelector('input[name="Query1"]').value;
                 const query2 = document.querySelector('input[name="Query2"]').value;
                 const query3 = document.querySelector('input[name="Query3"]').value;
+
+                console.log(girlTimeOfBirth)
 
                 // Collect data in an object
                 const formData = {
@@ -1086,7 +1191,9 @@
                     },
                     success: function(response) {
                         console.log(response);
+                        document.getElementById("Question-Section").style.display = "none";
                         document.getElementById("Thanks-Section").style.display = "block";
+
                         // alert('Data saved successfully');
                         // showSection(questionSection); // Optionally, switch to another section after successful submission
                     },
@@ -1105,12 +1212,13 @@
 
 
             document.getElementById("payButton-kundali").addEventListener("click", function() {
+                if (!validateFormInputs("question-form-kundali")) return;
                 const personName = document.querySelector('input[name="personName"]').value;
                 const personDateOfBirth =
                     `${document.querySelector('input[name="day"]').value}-${document.querySelector('input[name="month"]').value}-${document.querySelector('input[name="year"]').value}`;
                 const personTimeOfBirth =
                     `${document.querySelector('input[name="hour"]').value}:${document.querySelector('input[name="minute"]').value}:${document.querySelector('input[name="second"]').value}`;
-                const personPlaceOfBirth = document.querySelector('select[name="personPlaceOfBirth"]')
+                const personPlaceOfBirth = document.querySelector('input[name="personPlaceOfBirth"]')
                     .value;
 
                 const query1 = document.querySelector('input[name="Query-1"]').value;
@@ -1128,7 +1236,6 @@
                     query2,
                     query3
                 };
-
                 $.ajax({
                     url: "{{ route('kundalidetail.store') }}",
                     type: "POST",
@@ -1138,7 +1245,10 @@
                     },
                     success: function(response) {
                         console.log(response);
+                        document.getElementById("Question-Section-kundali").style.display =
+                            "none";
                         document.getElementById("Thanks-Section").style.display = "block";
+
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
@@ -1147,8 +1257,6 @@
                     }
                 });
             });
-
-
 
         });
 
@@ -1161,6 +1269,25 @@
         // Navigate to Question Section
         document.getElementById("nextButton1").addEventListener("click", function(event) {
             event.preventDefault();
+            if (!isJobseekerLoggedIn) {
+                window.location.href = "{{ route('jobseeker.login') }}"; // Redirect to login
+                return;
+            }
+            if (!validateFormInputs("person-form-kundali")) return;
+
+
+
+            const form = document.getElementById("person-form-kundali");
+            const hour = form.querySelector('[name="hour"]').value.padStart(2, '0');
+            const minute = form.querySelector('[name="minute"]').value.padStart(2, '0');
+            const second = form.querySelector('[name="second"]').value.padStart(2, '0');
+            const timeOfBirth = `${hour}:${minute}:${second}`;
+            document.getElementById("personTimeOfBirth").value = timeOfBirth;
+
+
+
+
+
             document.getElementById("Personal-Section").style.display = "none";
             document.getElementById("Question-Section-kundali").style.display = "block";
             document.getElementById("Question-Section").scrollIntoView({
@@ -1169,18 +1296,18 @@
         });
 
         // Back to Personal Section from Question Section
-        document.getElementById("backButtonqen1").addEventListener("click", function(event) {
+        document.getElementById("backButtonqen11").addEventListener("click", function(event) {
             event.preventDefault();
             document.getElementById("Personal-Section").style.display = "block";
-            document.getElementById("Question-Section").style.display = "none";
+            document.getElementById("Question-Section-kundali").style.display = "none";
             document.getElementById("Personal-Section").scrollIntoView({
                 behavior: "smooth"
             });
         });
 
 
-        // Back to Boys Section from Question Section
-        document.getElementById("backButtonqen2").addEventListener("click", function(event) {
+
+        document.getElementById("backButtonqen1").addEventListener("click", function(event) {
             event.preventDefault();
             document.getElementById("Boys-Section").style.display = "block";
             document.getElementById("Question-Section").style.display = "none";
@@ -1188,6 +1315,18 @@
                 behavior: "smooth"
             });
         });
+
+
+
+        // Back to Boys Section from Question Section
+        // document.getElementById("backButtonqen2").addEventListener("click", function(event) {
+        //     event.preventDefault();
+        //     document.getElementById("Boys-Section").style.display = "block";
+        //     document.getElementById("Question-Section").style.display = "none";
+        //     document.getElementById("Boys-Section").scrollIntoView({
+        //         behavior: "smooth"
+        //     });
+        // });
 
 
         // Show Payment Section when Pay Button is Clicked

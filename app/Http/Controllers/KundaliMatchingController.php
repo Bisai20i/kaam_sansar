@@ -19,15 +19,15 @@ class KundaliMatchingController extends Controller
     public function index()
     {
         // Check if the request is from mobile
-     
-    
+
+
         // Retrieve kundali data
-        $kundali = KundaliMatching::orderBy('created_at','desc')->simplePaginate(10);
-      
-    
+        $kundali = KundaliMatching::orderBy('created_at', 'desc')->simplePaginate(10);
+
+
         return view('backend.kundalimatching.lists', compact('kundali'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -49,7 +49,7 @@ class KundaliMatchingController extends Controller
     {
         $mobile = $request->has('request_type') && $request->input('request_type') === 'mobile';
         $user = $mobile ? $request->user() : Auth::guard('job_seekers')->user();
-        
+
         if (!$user) {
             if ($request->ajax() || $mobile) {
                 return response()->json([
@@ -60,9 +60,10 @@ class KundaliMatchingController extends Controller
             }
             return redirect()->route('login')->with('error', 'Unauthorized access.');
         }
-    
+
         $jobSeekerId = $user->id;
-    
+
+
         $validator = Validator::make($request->all(), [
             'girlDateOfBirth' => 'required',
             'girlPlaceOfBirth' => 'required|string|max:255',
@@ -76,7 +77,9 @@ class KundaliMatchingController extends Controller
             'Query2' => 'nullable|string|max:255',
             'Query3' => 'nullable|string|max:255',
         ]);
-    
+
+
+
         if ($validator->fails()) {
             if ($mobile) {
                 return response()->json([
@@ -87,7 +90,7 @@ class KundaliMatchingController extends Controller
             }
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
-    
+
         $kundali = new KundaliMatching();
         $kundali->jobSeekerId = $jobSeekerId;
         $kundali->girlDateOfBirth = $request->girlDateOfBirth;
@@ -102,7 +105,7 @@ class KundaliMatchingController extends Controller
         $kundali->Query2 = $request->input('query2', '');
         $kundali->Query3 = $request->input('query3', '');
         $kundali->save();
-    
+
         if ($request->ajax() || $mobile) {
             return response()->json([
                 'success' => true,
@@ -118,14 +121,14 @@ class KundaliMatchingController extends Controller
      * @param  \App\Models\KundaliMatching  $kundaliMatching
      * @return \Illuminate\Http\Response
      */
-  
-     public function show(Request $request, $id)
-     {
-         $kundali = KundaliMatching::findOrFail($id);
-         $astrologer = Astrologer::where('kundaliMatchingId', $id)->first();
 
-         return view('backend.kundalimatching.show', compact('kundali','astrologer'));
-     }
+    public function show(Request $request, $id)
+    {
+        $kundali = KundaliMatching::findOrFail($id);
+        $astrologer = Astrologer::where('kundaliMatchingId', $id)->first();
+
+        return view('backend.kundalimatching.show', compact('kundali', 'astrologer'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -164,11 +167,11 @@ class KundaliMatchingController extends Controller
         $kundali = KundaliMatching::findOrFail($id);
         $kundali->girlDateOfBirth = $request->girlDateOfBirth;
         $kundali->girlPlaceOfBirth = $request->girlPlaceOfBirth;
-        $kundali->girlTimeOfBirth = $request->girlTimeOfBirth;
+        $kundali->girlTimeOfBirth = $request->girlTimeOfBirth ? $request->girlTimeOfBirth . ':00' : null;
         $kundali->boyName = $request->boyName;
         $kundali->boyDateOfBirth = $request->boyDateOfBirth;
         $kundali->boyPlaceOfBirth = $request->boyPlaceOfBirth;
-        $kundali->boyTimeOfBirth = $request->boyTimeOfBirth;
+        $kundali->boyTimeOfBirth = $request->boyTimeOfBirth ? $request->boyTimeOfBirth . ':00' : null;
         $kundali->Query1 = $request->input('Query1');
         $kundali->Query2 = $request->input('Query2');
         $kundali->Query3 = $request->input('Query3');
@@ -206,5 +209,106 @@ class KundaliMatchingController extends Controller
             'message' => $message,
             'data' => $data,
         ], $statusCode);
+    }
+
+
+    public function frontendKundaliMatchingList()
+    {
+        $kundaliMatchings = KundaliMatching::all();
+        return view('frontend.profile.partials.my-kundalimatching', compact('kundaliMatchings'));
+    }
+
+    // Show edit form for a specific kundali matching record
+    public function frontendKundaliMatchingEdit($id)
+    {
+        $kundaliMatching = KundaliMatching::findOrFail($id);
+        return view('frontend.profile.partials.my-kundalimatching', compact('kundaliMatching'));
+    }
+
+    public function frontendKundaliMatchingUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'girlName' => 'required|string|max:255',
+            'girlDOBDay' => 'required|numeric|min:1|max:31',
+            'girlDOBMonth' => 'required|string|max:20',
+            'girlDOBYear' => 'required|numeric|min:1900|max:2100',
+            'girlTimeHour' => 'required|numeric|min:0|max:23',
+            'girlTimeMinute' => 'required|numeric|min:0|max:59',
+            'girlTimeSecond' => 'required|numeric|min:0|max:59',
+            'girlPlaceOfBirth' => 'required|string|max:255',
+
+            'boyName' => 'required|string|max:255',
+            'boyDOBDay' => 'required|numeric|min:1|max:31',
+            'boyDOBMonth' => 'required|string|max:20',
+            'boyDOBYear' => 'required|numeric|min:1900|max:2100',
+            'boyTimeHour' => 'required|numeric|min:0|max:23',
+            'boyTimeMinute' => 'required|numeric|min:0|max:59',
+            'boyTimeSecond' => 'required|numeric|min:0|max:59',
+            'boyPlaceOfBirth' => 'required|string|max:255',
+
+            'query1' => 'nullable|string',
+            'query2' => 'nullable|string',
+            'query3' => 'nullable|string',
+        ]);
+
+        $kundaliMatching = KundaliMatching::findOrFail($id);
+
+        // Build dates and times
+        $girlDateOfBirth = sprintf(
+            '%d %s %d',
+            $request->girlDOBDay,
+            $request->girlDOBMonth,
+            $request->girlDOBYear
+        );
+
+        $girlTimeOfBirth = sprintf(
+            '%02d:%02d:%02d',
+            $request->girlTimeHour,
+            $request->girlTimeMinute,
+            $request->girlTimeSecond
+        );
+
+        $boyDateOfBirth = sprintf(
+            '%d %s %d',
+            $request->boyDOBDay,
+            $request->boyDOBMonth,
+            $request->boyDOBYear
+        );
+
+        $boyTimeOfBirth = sprintf(
+            '%02d:%02d:%02d',
+            $request->boyTimeHour,
+            $request->boyTimeMinute,
+            $request->boyTimeSecond
+        );
+
+        // Update the record
+        $kundaliMatching->update([
+            'girlName' => $request->girlName,
+            'girlDateOfBirth' => $girlDateOfBirth,
+            'girlTimeOfBirth' => $girlTimeOfBirth,
+            'girlPlaceOfBirth' => $request->girlPlaceOfBirth,
+
+            'boyName' => $request->boyName,
+            'boyDateOfBirth' => $boyDateOfBirth,
+            'boyTimeOfBirth' => $boyTimeOfBirth,
+            'boyPlaceOfBirth' => $request->boyPlaceOfBirth,
+
+            'Query1' => $request->query1,
+            'Query2' => $request->query2,
+            'Query3' => $request->query3,
+        ]);
+
+        return redirect()->route('jobseeker.kundalimatching.list')
+            ->with('success', 'Kundali matching updated successfully.');
+    }
+
+    // Delete kundali matching record
+    public function frontendKundaliMatchingDelete($id)
+    {
+        $kundaliMatching = KundaliMatching::findOrFail($id);
+        $kundaliMatching->delete();
+
+        return redirect()->route('jobseeker.kundalimatching.list')->with('success', 'Kundali matching deleted successfully.');
     }
 }
