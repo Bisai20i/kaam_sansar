@@ -40,16 +40,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($leaderboard as $index => $entry)
-                        <tr class="{{ Auth::guard('job_seekers')->user()->id === $entry->user_id ? 'table-info fw-semibold' : 'fw-normal' }}"
+                        @foreach($leaderboard as $entry)
+                        <tr class="{{ Auth::guard('job_seekers')->user()->id === $entry->id ? 'table-info fw-semibold' : 'fw-normal' }}"
                             style="font-size: 18px; color: #515151;">
-                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $entry->rank }}</td>
                             <td>{{ $entry->firstName }} {{ $entry->lastName }}
-                                @if(Auth::guard('job_seekers')->user()->id === $entry->user_id)
+                                @if(Auth::guard('job_seekers')->user()->id === $entry->id)
                                 (You)
                                 @endif
                             </td>
-                            <td>{{ $entry->correctAnswers }}/{{$totalQuestions }}</td>
+                            <td>{{ $entry->correct_answers }}/{{ $totalQuestions }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -74,7 +74,7 @@
 
             <div class="modal-body p-2" style="height: 350px; overflow: hidden;">
                 @php
-                    $chunks = array_chunk($questions, 5);
+                    $chunks = array_chunk($questions->toArray(), 5);
                 @endphp
 
                 <div id="pagesContainer" style="display: flex; width: {{ count($chunks) * 100 }}%; height: 100%; transition: transform 0.4s ease;">
@@ -127,7 +127,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

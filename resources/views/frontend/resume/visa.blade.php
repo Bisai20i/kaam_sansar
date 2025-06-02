@@ -22,7 +22,7 @@
                 <div class="col-md-12 mb-3">
                     <label for="visaImage" class="form-label fs-6">Visa Photo  <span class="text-danger">*</span></label><br>
                     <input type="file" class="form-control form-control-da fs-6 w-100" id="visaImage" name="visaImage" accept=".jpg,.jpeg,.png,.pdf" required>
-                    <div id="visaPreview" class="d-flex mt-1" style="height: 80px;"></div>
+                    <div id="visaPreview" class="d-flex mt-1"></div>
                 </div>
             </div>
 

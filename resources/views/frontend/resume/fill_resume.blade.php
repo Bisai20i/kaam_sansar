@@ -6,12 +6,6 @@ Resume Maker
 <main>
     <div>
         <style>
-            .custom-input {
-                background-color: #E6E7E7;
-                height: 50px;
-                cursor: pointer;
-            }
-
             .profile-picture {
                 width: 80px;
                 height: 80px;

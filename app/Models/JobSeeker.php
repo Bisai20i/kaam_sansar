@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\UserAnswer;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Http;
+use Laravel\Sanctum\HasApiTokens;
 
 
 
@@ -65,11 +66,10 @@ class JobSeeker extends Authenticatable implements MustVerifyEmail
         'otpVerified' => 'boolean', // Boolean
         'userThumbnail' => 'array',
     ];
-
-
-
-    
-
+    public function userAnswers()
+    {
+        return $this->hasMany(UserAnswer::class, 'user_id');
+    }
     public function getCountryCodeAttribute()
     {
         // Check if the country name exists

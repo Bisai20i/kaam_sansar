@@ -8,8 +8,20 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="input-group">
-                        <input type="text" class="form-control rounded custom-input border-end-0" id="skillName" name="skillName" placeholder=" Enter Skill" required>
-                        <select class="form-select custom-input border-start-0 text-end text-center me-1" id="skillProficiency" name="skillProficiency" required>
+                        <input
+                            type="text"
+                            class="form-control rounded border-end-0"
+                            id="skillName"
+                            name="skillName"
+                            placeholder=" Enter Skill"
+                            required
+                            style="background-color: #E6E7E7; height: 50px; cursor: pointer;">
+                        <select
+                            class="form-select border-start-0 text-end text-center me-1"
+                            id="skillProficiency"
+                            name="skillProficiency"
+                            required
+                            style="background-color: #E6E7E7; height: 50px; cursor: pointer;">
                             <option value="Beginner">Beginner</option>
                             <option value="Intermediate">Intermediate</option>
                             <option value="Advanced">Advanced</option>
@@ -19,10 +31,11 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addSkill">+ Add Skill</button>
                 <div class="text-end">
                     <button type="button" class="btn text-center skip-btn mx-2" data-current="skill" data-next="achievement" data-link="achievementLink">Skip</button>
                 </div>
+                <button type="button" class="btn add-project float-start" id="addSkill">+ Add Skill</button>
+
             </div>
         </form>
     </div>

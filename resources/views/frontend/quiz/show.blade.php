@@ -17,7 +17,7 @@
     }
 
     .question-header {
-        font-size: 22px;
+        font-size: 29px;
         font-weight: 500;
         text-align: center;
         margin-bottom: 25px;
@@ -34,7 +34,7 @@
         object-fit: cover;
         border-radius: 8px;
         margin-bottom: 25px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     }
 
     /* Answer Options */
@@ -79,12 +79,12 @@
     }
 
     /* Selected State */
-    .form-check-input:checked + .form-check-label {
+    .form-check-input:checked+.form-check-label {
         border-color: #0064A7;
         background-color: rgba(0, 100, 167, 0.05);
     }
 
-    .form-check-input:checked + .form-check-label .quiz-option {
+    .form-check-input:checked+.form-check-label .quiz-option {
         background-color: #0064A7;
         color: #fff;
     }
@@ -104,7 +104,8 @@
         color: #666;
     }
 
-    #next-btn, #submit-btn {
+    #next-btn,
+    #submit-btn {
         padding: 10px 25px;
         font-weight: 500;
         border-radius: 8px;
@@ -114,7 +115,8 @@
         transition: all 0.3s ease;
     }
 
-    #next-btn.active, #submit-btn.active {
+    #next-btn.active,
+    #submit-btn.active {
         background-color: #0064A7;
         color: #fff;
         border-color: #0064A7;
@@ -181,28 +183,27 @@
         transition: all 0.3s ease;
     }
 </style>
-
-<div class="container">
+<div class="container" style="margin-top:70px">
     <div class="quiz-card">
-        <div class="question-header">
-            Fantasy Quiz #1
-        </div>
-
         <form id="quiz-form" action="{{ route('quiz.submit') }}" method="POST">
             @csrf
 
             @foreach ($questions as $index => $question)
-            <div class="question-slide question-body" style="{{ $index === 0 ? '' : 'display:none;' }}">
-                <strong>Q{{ $index + 1 }} of {{ count($questions) }}</strong>
-                <div class="mt-3 mb-4">
-                    @if($question->image)
-                    <img src="{{ asset($question->image) }}" class="img-fluid" alt="Question Image">
-                    @endif
-                    {!! $question->question !!}
+            <div class="question-slide question-body" style="{{ $index === 0 ? '' : 'display:none' }}">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <strong class="fs-4">Fantasy Quiz #{{ $index + 1 }}</strong>
+                    <div class="mt-3 mb-4" style="max-width: 800px;">
+                        @if($question->image)
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ asset($question->image) }}" class="img-fluid" alt="Question Image">
+                        </div>
+                        @endif
+                        <p class="mt-3">{!! $question->question !!}</p>
+                    </div>
                 </div>
 
                 @foreach ($question->answers as $answer)
-                <div class="form-check">
+                <div class="form-check" style="font-size: 19px;">
                     <input class="form-check-input" type="radio"
                         name="question_{{ $question->id }}"
                         value="{{ $answer->id }}"
@@ -217,8 +218,8 @@
             @endforeach
 
             <div class="quiz-footer d-flex justify-content-between">
-                <button type="button" id="next-btn" class="btn">Next</button>
                 <span class="quiz-progress">Question 1 of {{ count($questions) }}</span>
+                <button type="button" id="next-btn" class="btn" style="">Next</button>
                 <button type="submit" id="submit-btn" class="btn btn-success">Submit Quiz</button>
             </div>
         </form>

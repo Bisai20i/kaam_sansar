@@ -20,9 +20,9 @@
                     <input type="date" class="form-control custom-input" id="training-date" name="completionDate" required>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label for="certificate" class="form-label fs-6">Training Certificate</label><br>
+                    <label for="certificate" class="form-label fs-6">Training Certificate<span class="text-danger">*</span></label><br>
                     <input type="file" class="form-control form-control-da fs-6 w-100" id="certificate" name="certificate" accept=".jpg,.jpeg,.png,.pdf">
-                    <div id="certificatePreview" class="d-flex mt-1" style="height: 80px;"></div>
+                    <div id="certificatePreview" class="d-flex mt-1"></div>
                 </div>
             </div>
 

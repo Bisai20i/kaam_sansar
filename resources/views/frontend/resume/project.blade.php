@@ -24,10 +24,10 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addProject">+ Add Project</button>
                 <div class="text-end">
                     <button type="button" class="btn text-center skip-btn mx-2" data-current="project" data-next="skill" data-link="skillLink">Skip</button>
                 </div>
+                <button type="button" class="btn add-project float-start" id="addProject">+ Add Project</button>
             </div>
         </form>
     </div>
@@ -47,10 +47,10 @@
                     </div>
                 </div>
                 <div class="text-black-50">
-                    @if($project->pl)
+                    @if($project->projectLink)
                     <p class="m-0">
-                        <a href="{{ $project->pl }}" target="_blank" style="color: #0064A7;">
-                            {{ $project->pl }}
+                        <a href="{{ $project->projectLink }}" target="_blank" style="color: #0064A7;">
+                            {{ $project->projectLink }}
                         </a>
                     </p>
                     @endif
@@ -192,8 +192,8 @@
                 <div class="text-black-50">
                     ${project.projectLink ? `
                     <p class="m-0">
-                        <a href="${project.pl}" target="_blank" style="color: #0064A7;">
-                            ${project.pl}
+                        <a href="${project.projectLink}" target="_blank" style="color: #0064A7;">
+                            ${project.projectLink}
                         </a>
                     </p>` : ''}
                     <p class="m-0">${project.projectDescription}</p>

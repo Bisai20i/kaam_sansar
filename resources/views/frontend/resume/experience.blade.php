@@ -8,7 +8,7 @@
       <h3>Job Title</h3>
       <div class="row mb-3">
         <div class="col-md-12">
-          <label for="jobTitle" class="form-label">Job Title</label>
+          <label for="jobTitle" class="form-label">Job Title<span class="text-danger">*</span></label>
           <input type="text" class="form-control custom-input"
             id="jobTitle" name="jobTitle"
             placeholder="enter job title" required />
@@ -100,8 +100,7 @@
         </div>
       </div>
 
-      <button type="button" class="btn add-project float-start" id="addExperience">+ Add Experience</button>
-      <div class="text-end">
+   <div class="d-flex justify-content-between ">    <div class="text-end">
         <button type="submit"
           class="btn text-center skip-btn mx-2"
           data-current="experience"
@@ -110,6 +109,8 @@
           Skip
         </button>
       </div>
+      <button type="button" class="btn add-project float-start" id="addExperience">+ Add Experience</button>
+     </div>
     </form>
   </div>
 

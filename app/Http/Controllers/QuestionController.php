@@ -215,67 +215,100 @@ class QuestionController extends Controller
     }
 
     public function thankYou()
-    {
-        $jobseeker = Auth::guard('job_seekers')->user();
+{
+    $jobseeker = Auth::guard('job_seekers')->user();
 
-        // Check if user has any answers at all (first time or not)
-        $hasAnyAnswers = UserAnswer::where('user_id', $jobseeker->id)->exists();
-
-        if (!$hasAnyAnswers) {
-            return view('frontend.resultnotfound', ['message' => 'quiz']);
-        }
-
-        $latestRound = UserAnswer::where('user_id', $jobseeker->id)->max('round');
-
-        // Total questions answered by this user in latest round
-        $totalQuestions = UserAnswer::where('user_id', $jobseeker->id)
-            ->where('round', $latestRound)
-            ->count();
-
-        // Number of correct answers by this user in latest round
-        $correctAnswers = UserAnswer::join('answers', 'user_answers.answer_id', '=', 'answers.id')
-            ->where('user_answers.user_id', $jobseeker->id)
-            ->where('user_answers.round', $latestRound)
-            ->where('answers.is_correct', true)
-            ->count();
-
-        // 🟢 Build leaderboard for ALL participants in this round
-        $leaderboard = JobSeeker::join('user_answers', function ($join) use ($latestRound) {
-            $join->on('job_seekers.id', '=', 'user_answers.user_id')
-                ->where('user_answers.round', '=', $latestRound);
-        })
-            ->leftJoin('answers', 'user_answers.answer_id', '=', 'answers.id')
-            ->selectRaw('job_seekers.id as user_id, job_seekers.firstName, job_seekers.lastName, COUNT(CASE WHEN answers.is_correct = 1 THEN 1 END) as correctAnswers')
-            ->groupBy('job_seekers.id', 'job_seekers.firstName', 'job_seekers.lastName')
-            ->orderByDesc('correctAnswers')
-            ->get();
-
-        // 🟢 Get detailed answers for current user in this round
-        $userAnswers = UserAnswer::with(['question.answers', 'answer'])
-            ->where('user_id', $jobseeker->id)
-            ->where('round', $latestRound)
-            ->get();
-
-        $questions = [];
-
-        foreach ($userAnswers as $userAnswer) {
-            $question = $userAnswer->question;
-            $selectedAnswer = $userAnswer->answer;
-            $correctAnswer = $question->answers->firstWhere('is_correct', true);
-
-            $questions[] = [
-                'text' => $question->question,
-                'user_answer' => $selectedAnswer->answer ?? 'N/A',
-                'correct_answer' => $correctAnswer->answer ?? 'N/A',
-                'is_correct' => $selectedAnswer->is_correct ?? false,
-            ];
-        }
-
-        return view('frontend.quiz.thankyou', [
-            'leaderboard' => $leaderboard,
-            'totalQuestions' => $totalQuestions,
-            'correctAnswers' => $correctAnswers,
-            'questions' => $questions,
-        ]);
+    // Check if user has any answers
+    if (!UserAnswer::where('user_id', $jobseeker->id)->exists()) {
+        return view('frontend.resultnotfound', ['message' => 'quiz']);
     }
+
+    // Get user's latest round and question IDs
+    $latestRound = UserAnswer::where('user_id', $jobseeker->id)->max('round');
+    $userQuestionIds = UserAnswer::where('user_id', $jobseeker->id)
+        ->where('round', $latestRound)
+        ->pluck('question_id')
+        ->sort()
+        ->values();
+
+    $totalQuestions = $userQuestionIds->count();
+
+    // Get current user's correct answers
+    $correctAnswers = UserAnswer::where('user_id', $jobseeker->id)
+        ->where('round', $latestRound)
+        ->whereHas('answer', function($q) {
+            $q->where('is_correct', true);
+        })
+        ->count();
+
+    // Find comparable users who answered the exact same questions
+    $comparableUserIds = DB::table('user_answers')
+        ->select('user_id')
+        ->where('user_id', '!=', $jobseeker->id)
+        ->whereIn('question_id', $userQuestionIds)
+        ->groupBy('user_id')
+        ->havingRaw('COUNT(DISTINCT question_id) = ?', [$totalQuestions])
+        ->pluck('user_id');
+
+    // Get comparable users' scores
+    $leaderboard = JobSeeker::whereIn('id', $comparableUserIds)
+        ->withCount(['userAnswers as correct_answers' => function($query) use ($userQuestionIds) {
+            $query->whereIn('question_id', $userQuestionIds)
+                ->whereHas('answer', function($q) {
+                    $q->where('is_correct', true);
+                });
+        }])
+        ->orderByDesc('correct_answers')
+        ->get();
+
+    // Add current user to leaderboard
+    $currentUserData = (object) [
+        'id' => $jobseeker->id,
+        'firstName' => $jobseeker->firstName,
+        'lastName' => $jobseeker->lastName,
+        'correct_answers' => $correctAnswers,
+        'rank' => 0
+    ];
+
+    $leaderboard->push($currentUserData);
+
+    // Calculate ranks
+    $leaderboard = $leaderboard->sortByDesc('correct_answers')->values();
+    
+    $rank = 1;
+    $prevScore = null;
+    $leaderboardWithRank = $leaderboard->map(function ($user) use (&$rank, &$prevScore) {
+        $user->rank = ($prevScore !== null && $user->correct_answers === $prevScore) 
+            ? $rank - 1 
+            : $rank;
+        $prevScore = $user->correct_answers;
+        $rank++;
+        return $user;
+    });
+
+    // Get detailed answers with questions and correct answers
+    $userAnswers = UserAnswer::with(['question', 'answer', 'question.answers' => function($q) {
+        $q->where('is_correct', true);
+    }])
+    ->where('user_id', $jobseeker->id)
+    ->where('round', $latestRound)
+    ->get();
+
+    $questions = $userAnswers->map(function ($userAnswer) {
+        return [
+            'text' => $userAnswer->question->question,
+            'user_answer' => $userAnswer->answer->answer,
+            'correct_answer' => $userAnswer->question->answers->first()->answer ?? 'N/A',
+            'is_correct' => $userAnswer->answer->is_correct,
+        ];
+    });
+
+    return view('frontend.quiz.thankyou', [
+        'leaderboard' => $leaderboardWithRank,
+        'totalQuestions' => $totalQuestions,
+        'correctAnswers' => $correctAnswers,
+        'questions' => $questions,
+        'latestRound' => $latestRound,
+    ]);
+}
 }

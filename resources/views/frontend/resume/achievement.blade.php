@@ -7,7 +7,7 @@
             <h3>Achievements</h3>
             <div class="row mb-3">
                 <div class="col-md-12 mb-3">
-                    <label for="achievement-title" class="form-label">Achievement Title</label>
+                    <label for="achievement-title" class="form-label">Achievement Title<span class="text-danger">*</span></label>
                     <input type="text" class="form-control custom-input" name="achievementTitle"
                         id="achievement-title" placeholder="Enter Achievement Title" required>
                 </div>
@@ -20,10 +20,10 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addAchievement">+ Add Achievement</button>
                 <div class="text-end">
                     <button type="submit" class="btn text-center skip-btn mx-2" data-current="achievement" data-next="experience" data-link="experienceLink">Skip</button>
                 </div>
+                <button type="button" class="btn add-project float-start" id="addAchievement">+ Add Achievement</button>
             </div>
         </form>
     </div>
