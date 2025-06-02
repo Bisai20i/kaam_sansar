@@ -8,8 +8,20 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="input-group">
-                        <input type="text" class="form-control rounded custom-input border-end-0" id="languageName" name="languageName" placeholder="Enter Language" required>
-                        <select class="form-select custom-input border-start-0 text-end text-center me-1" id="languageProficiency" name="languageProficiency" required>
+                        <input
+                            type="text"
+                            class="form-control rounded border-end-0"
+                            id="languageName"
+                            name="languageName"
+                            placeholder="Enter Language"
+                            required
+                            style="background-color: #E6E7E7; height: 50px; cursor: pointer;">
+                        <select
+                            class="form-select border-start-0 text-end text-center me-1"
+                            id="languageProficiency"
+                            name="languageProficiency"
+                            required
+                            style="background-color: #E6E7E7; height: 50px; cursor: pointer;">
                             <option value="Beginner">Beginner</option>
                             <option value="Intermediate">Intermediate</option>
                             <option value="Proficient">Proficient</option>
@@ -19,10 +31,10 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addLanguage">+ Add Language</button>
                 <div class="text-end">
-                    <button type="button" class="btn text-center skip-btn mx-2" data-current="language" data-next="certification" data-link="certificationLink">Submit</button>
+                    <a href="{{ route('jobseeker.getCV',Auth::guard('job_seekers')->user()->id) }}" target="_blank" class="btn text-center skip-btn mx-2">View CV</a>
                 </div>
+                <button type="button" class="btn add-project float-start" id="addLanguage">+ Add Language</button>
             </div>
         </form>
     </div>
@@ -75,7 +87,7 @@
 </div>
 
 <!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content p-4 rounded-4 border-0 shadow-lg text-center">
             <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -91,7 +103,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 @push('scripts')
 <script>
@@ -265,34 +277,34 @@
             }
         });
 
-        // Handle submit button click
-        document.querySelector('.skip-btn[data-current="language"]').addEventListener('click', async function(e) {
-            e.preventDefault();
+        // // Handle submit button click
+        // document.querySelector('.skip-btn[data-current="language"]').addEventListener('click', async function(e) {
+        //     e.preventDefault();
 
-            try {
-                // Optional: Submit any unsaved data first
-                const data = collectLanguageData();
-                if (data.languageName && data.languageProficiency) {
-                    await saveLanguageData(data);
-                }
+        //     try {
+        //         // Optional: Submit any unsaved data first
+        //         const data = collectLanguageData();
+        //         if (data.languageName && data.languageProficiency) {
+        //             await saveLanguageData(data);
+        //         }
 
-                // Show the success modal
-                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-                successModal.show();
+        //         // Show the success modal
+        //         const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        //         successModal.show();
 
-                // Set up the redirect handlers
-                document.getElementById('successModalButton').addEventListener('click', function() {
-                    window.location.href = "{{ route('jobseeker.resume-maker') }}"; // Replace with your actual back route
-                });
+        //         // Set up the redirect handlers
+        //         document.getElementById('successModalButton').addEventListener('click', function() {
+        //             window.location.href = "{{ route('jobseeker.resume-maker') }}"; // Replace with your actual back route
+        //         });
 
-                document.getElementById('successModal').addEventListener('hidden.bs.modal', function() {
-                    window.location.href = "{{ route('jobseeker.resume-maker') }}"; // Replace with your actual back route
-                });
-            } catch (error) {
-                console.error(error);
-                console.error('something wents worng')
-            }
-        });
+        //         document.getElementById('successModal').addEventListener('hidden.bs.modal', function() {
+        //             window.location.href = "{{ route('jobseeker.resume-maker') }}"; // Replace with your actual back route
+        //         });
+        //     } catch (error) {
+        //         console.error(error);
+        //         console.error('something wents worng')
+        //     }
+        // });
     });
 </script>
 @endpush

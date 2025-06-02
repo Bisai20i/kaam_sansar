@@ -20,17 +20,18 @@
                     <input type="date" class="form-control custom-input" id="training-date" name="completionDate" required>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label for="certificate" class="form-label fs-6">Training Certificate</label><br>
+                    <label for="certificate" class="form-label fs-6">Training Certificate<span class="text-danger">*</span></label><br>
                     <input type="file" class="form-control form-control-da fs-6 w-100" id="certificate" name="certificate" accept=".jpg,.jpeg,.png,.pdf">
                     <div id="certificatePreview" class="d-flex mt-1"></div>
                 </div>
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn add-project float-start" id="addTraining">+ Add Training</button>
                 <div class="text-end">
                     <button type="button" class="btn text-center skip-btn mx-2" data-current="training" data-next="language" data-link="languageLink">Skip</button>
                 </div>
+                <button type="button" class="btn add-project float-start" id="addTraining">+ Add Training</button>
+
             </div>
         </form>
     </div>

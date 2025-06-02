@@ -106,22 +106,45 @@
     // Function to preview selected image
     function previewProfileImage(event) {
         const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('profilePreview').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profilePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
     // Save profile data including image
     document.addEventListener('DOMContentLoaded', function() {
-        // Load temporary image if exists
-        const tempImage = localStorage.getItem('tempProfileImage');
-        if (tempImage) {
-            document.getElementById('profilePreview').src = tempImage;
-        }
-
         document.getElementById('saveProfile').addEventListener('click', function() {
+
+            const requiredFields = [
+                'firstname',
+                'last-name',
+                'designation',
+                'address',
+                'country',
+                'email',
+                'phone',
+                'summary'
+            ];
+
+            let isValid = true;
+
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field && !field.value.trim()) {
+                    field.style.border = '1px solid red';
+                    field.style.transition = 'border 0.3s ease-in-out';
+                    isValid = false;
+                } else if (field) {
+                    field.style.border = '';
+                }
+            });
+
+            if (!isValid) return;
+
             const form = document.getElementById('profilesForm');
             const formData = new FormData(form);
 
@@ -143,14 +166,12 @@
                 })
                 .then(data => {
                     if (data.success) {
-                        // Clear temporary image storage
-                        localStorage.removeItem('tempProfileImage');
-                        // Show success message
+                        // Optionally show success notification
+                        console.log('Profile saved successfully');
                     }
                 })
                 .catch(error => {
                     console.error(error);
-                    console.error('something wents worng')
                 });
         });
     });
