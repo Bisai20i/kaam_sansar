@@ -28,7 +28,7 @@
 
             <div class="d-flex justify-content-between">
                 <div class="text-end">
-                    <button type="button" class="btn text-center skip-btn mx-2" data-current="visa" data-next="education" data-link="educationLink">skip</button>
+                    <button type="button" class="btn text-center skip-btn mx-2" data-current="visa" data-next="education" data-link="educationLink">Skip</button>
                 </div>
                 <button type="button" class="btn add-project float-start" id="addVisa">+Add Visa</button>
             </div>
