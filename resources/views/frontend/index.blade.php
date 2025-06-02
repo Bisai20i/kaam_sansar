@@ -556,9 +556,6 @@
                                 <img src="{{ $item->imageUrl ?? asset('frontend/assets/Images/default.png') }}"
                                     class="h-100 w-100 card-img-top rounded-1" alt="..." style="object-fit:cover;">
 
-                                <img src="{{ $item->imageUrl ?? asset('frontend/assets/Images/default.png') }}"
-                                    class="h-100 w-100 card-img-top rounded-1" alt="..." style="object-fit:cover;">
-
                                 <div class="pio">
                                     <h1><i class="fa-solid fa-circle-play fs-1 text-white"></i></h1>
                                 </div>
