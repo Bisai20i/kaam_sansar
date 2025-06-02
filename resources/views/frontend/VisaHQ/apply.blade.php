@@ -147,7 +147,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-next mb-3" onclick="saveAndProceed()">Next</button>
+                        <button type="button" class="btn-apply mb-3" onclick="saveAndProceed()">Next</button>
                     </div>
                 </form>
 
@@ -178,7 +178,7 @@
                                 class="img-fluid img-payment">
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                            <button type="button" class="btn btn-pay w-92 h-34 rounded"
+                            <button type="button" class="btn-apply w-92 h-34 rounded"
                                 onclick="submitForm()">Pay</button>
                         </div>
                     </div>

@@ -303,19 +303,11 @@
                             <button class="btn-apply-1 mt-0 mb-3">Apply Now</button>
                         </form>
                     @else
-                        @php
-                            $queryParams = request()->query();
-                            $redirectUrl = url()->current() . '?' . http_build_query($queryParams);
-                        @endphp
 
-                        <form id="redirectForm" action="{{ route('set.redirect') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="redirect_url" value="{{ $redirectUrl }}">
-                        </form>
 
-                        <a href="#" onclick="document.getElementById('redirectForm').submit(); " class="apply-button">
+                        <button class="apply-button" data-bs-toggle="modal" data-bs-target="#loginModal" onclick="setRedirectUrl()">
                             Apply Now
-                        </a>
+                        </button>
                     @endauth
 
                 </div>

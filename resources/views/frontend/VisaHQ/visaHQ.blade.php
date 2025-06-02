@@ -15,7 +15,7 @@
 
 
     <form action="{{ route('visaDetails') }}" id="visaForm" method="GET">
-        @csrf
+        
         <div class="profile-header visahq py-5 mt-5">
             <div class="container d-flex flex-column align-items-center justify-content-center">
                 <div class="d-flex flex-wrap justify-content-center form-container" style="margin-top: 150px!important;">
