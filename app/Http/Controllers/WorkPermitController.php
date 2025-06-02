@@ -33,37 +33,55 @@ class WorkPermitController extends Controller
      */
     public function create()
     {
-        $nepal = PassportCountryList::where('countryName', 'Nepal')->firstOrFail();
+        // Try to get Nepal
+        $nepal = PassportCountryList::where('countryName', 'Nepal')->first();
 
+        // If no Nepal, set all as empty and load view safely
+        if (!$nepal) {
+            return view('frontend.workPermit.create', [
+                'nepal' => null,
+                'provinces' => collect(),
+                'districts' => collect(),
+                'locations' => collect(),
+            ]);
+        }
+
+        // Get provinces (can be empty)
         $provinces = PassportProvience::where('country_id', $nepal->id)
             ->where('publishStatus', true)
             ->get();
 
-        // Load districts with their province relationship
-        $districts = WorkPermitDistrict::with('province')
-            ->whereIn('provience_id', $provinces->pluck('id'))
-            ->get()
-            ->map(function ($district) {
-                return [
-                    'id' => $district->id,
-                    'districtName' => $district->districtName,
-                    'provience_id' => $district->provience_id,
-                    'provienceName' => $district->province->provienceName // Add province name
-                ];
-            });
+        // Get districts only if provinces exist
+        $districts = collect();
+        if ($provinces->isNotEmpty()) {
+            $districts = WorkPermitDistrict::with('province')
+                ->whereIn('provience_id', $provinces->pluck('id'))
+                ->get()
+                ->map(function ($district) {
+                    return [
+                        'id' => $district->id,
+                        'districtName' => $district->districtName,
+                        'provience_id' => $district->provience_id,
+                        'provienceName' => optional($district->province)->provienceName,
+                    ];
+                });
+        }
 
-        // Load locations with their district relationship
-        $locations = WorkPermitLocation::with('district')
-            ->whereIn('district_id', $districts->pluck('id'))
-            ->get()
-            ->map(function ($location) {
-                return [
-                    'id' => $location->id,
-                    'locationName' => $location->locationName,
-                    'district_id' => $location->district_id,
-                    'districtName' => $location->district->districtName // Add district name
-                ];
-            });
+        // Get locations only if districts exist
+        $locations = collect();
+        if ($districts->isNotEmpty()) {
+            $locations = WorkPermitLocation::with('district')
+                ->whereIn('district_id', $districts->pluck('id'))
+                ->get()
+                ->map(function ($location) {
+                    return [
+                        'id' => $location->id,
+                        'locationName' => $location->locationName,
+                        'district_id' => $location->district_id,
+                        'districtName' => optional($location->district)->districtName,
+                    ];
+                });
+        }
 
         return view('frontend.workPermit.create', compact(
             'nepal',
@@ -72,6 +90,7 @@ class WorkPermitController extends Controller
             'locations'
         ));
     }
+
     /**
      * Store a newly created resource in storage.
      *

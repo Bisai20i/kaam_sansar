@@ -88,9 +88,6 @@
     </div>
 </section>
 
-
-@endsection
-
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {

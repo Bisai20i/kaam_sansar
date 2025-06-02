@@ -9,7 +9,7 @@ class UserAnswer extends Model
 {
     use HasFactory;
 
-     protected $guarded=[];
+    protected $guarded = [];
     public function question()
     {
         return $this->belongsTo(Question::class);
@@ -20,5 +20,8 @@ class UserAnswer extends Model
         return $this->belongsTo(Answer::class);
     }
 
-
+    public function jobSeeker()
+    {
+        return $this->belongsTo(JobSeeker::class, 'user_id');
+    }
 }
