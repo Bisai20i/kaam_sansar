@@ -42,7 +42,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <a class="dropdown-item text-primary" href="{{ route('superadmin.moneyexchangers.show', $exchanger->id) }}">
+                                                        <a class="dropdown-item text-primary" href="{{ route('moneyexchangers.show', $exchanger->id) }}">
                                                             <i class="bx bx-show me-1"></i> View
                                                         </a>
                                                     </li>
@@ -98,7 +98,7 @@
 <script>
     function setDeleteFormAction(id) {
         const deleteForm = document.getElementById('deleteForm');
-        const deleteUrl = "{{ route('superadmin.moneyexchangers.destroy', '__ID__') }}";
+        const deleteUrl = "{{ route('moneyexchangers.destroy', '__ID__') }}";
         const updatedUrl = deleteUrl.replace('__ID__', id);
         deleteForm.action = updatedUrl;
 

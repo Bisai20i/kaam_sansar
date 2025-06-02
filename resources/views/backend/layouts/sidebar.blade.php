@@ -143,8 +143,8 @@
                 </li>
 
                 <!-- money exchanger -->
-                <li class="menu-item {{ request()->routeIs('superadmin.moneyexchangers.index') ? 'active' : '' }}">
-                    <a href="{{ route('superadmin.moneyexchangers.index') }}" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('moneyexchangers.index') ? 'active' : '' }}">
+                    <a href="{{ route('moneyexchangers.index') }}" class="menu-link">
                         <div data-i18n="Become Money Exchanger">Become Money Exchanger</div>
                     </a>
                 </li>
